@@ -27,13 +27,14 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public String getTextureFile() {
-		return "/infinitealloys/gfx/blocks.png";
+		return IAValues.BLOCKS_PNG;
 	}
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int i, float f, float f1, float f2) {
 		if(entityplayer.isSneaking()) return false;
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
+		if(tem.upgrade(entityplayer.inventory)) return true;
 		if(tem instanceof TileEntityComputer)
 			entityplayer.openGui(InfiniteAlloys.instance, 0, world, x, y, z);
 		else if(tem instanceof TileEntityMetalForge)
@@ -67,7 +68,7 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public void getSubBlocks(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < InfiniteAlloys.machineCount; i++)
+		for(int i = 0; i < IAValues.machineCount; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 

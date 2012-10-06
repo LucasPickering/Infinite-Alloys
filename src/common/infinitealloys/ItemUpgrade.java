@@ -19,13 +19,13 @@ public class ItemUpgrade extends ItemIA {
 
 	@Override
 	public String getItemNameIS(ItemStack itemstack) {
-		return "IA Upgrade " + itemstack.itemID + "x" + itemstack.getItemDamage();
+		return "IA Upgrade";
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getIconIndex(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-		return InfiniteAlloys.log2(stack.getItemDamage()) + 7;
+		return (int)InfiniteAlloys.logn(2, stack.getItemDamage()) + 7;
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class ItemUpgrade extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < InfiniteAlloys.upgradeCount; i++)
+		for(int i = 0; i < IAValues.upgradeCount; i++)
 			list.add(new ItemStack(id, 1, (int)Math.pow(2D, (double)i)));
 	}
 }

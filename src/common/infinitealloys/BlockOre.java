@@ -14,7 +14,7 @@ public class BlockOre extends BlockIA {
 
 	@Override
 	public void getSubBlocks(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < InfiniteAlloys.oreCount; i++)
+		for(int i = 0; i < IAValues.oreCount; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 

@@ -23,13 +23,6 @@ public class InfiniteAlloys {
 	public static InfiniteAlloys instance;
 	@SidedProxy(clientSide = "infinitealloys.client.ClientProxy", serverSide = "infinitealloys.CommonProxy")
 	public static CommonProxy proxy;
-	public static int oreCount = 8;
-	public static int metalCount = 9;
-	public static int machineCount = 3;
-	public static int upgradeCount = 13;
-	public static float[] densities = { 7.874F,8.96F, 7.365F, 2.7F, 1.738F, 7.14F, 4.506F, 16.69F, 1 };
-	public static int[] validAlloyIngots = { 0, 1, 2, 3, 4, 5 };
-	public static int alloyPossibilities = 16777208;
 	public static int oreID;
 	public static int machineID;
 	public static int ingotID;
@@ -66,16 +59,15 @@ public class InfiniteAlloys {
 	public void postInit(FMLPostInitializationEvent event) {
 	}
 
-	public static int intAtPositionOctal(long l, int pos) {
-		String octal = Long.toOctalString(l);
-		int length=octal.length();
-		for(int i = 0; i < metalCount - length; i++)
+	public static int intAtPositionOctal(int strlen, int n, int pos) {
+		String octal = Integer.toOctalString(n);
+		int length = octal.length();
+		for(int i = 0; i < strlen - length; i++)
 			octal = "0" + octal;
 		return new Integer(String.valueOf(octal.charAt(pos)));
 	}
 
-	public static int log2(long l) {
-		if(l <= 0) throw new IllegalArgumentException();
-		return 63 - Long.numberOfLeadingZeros(l);
+	public static double logn(int base, double num) {
+		return Math.log(num) / Math.log(base);
 	}
 }

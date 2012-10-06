@@ -1,6 +1,7 @@
 package infinitealloys.client;
 
 import infinitealloys.CommonProxy;
+import infinitealloys.IAValues;
 import infinitealloys.TileEntityComputer;
 import infinitealloys.TileEntityMetalForge;
 import org.lwjgl.opengl.GL11;
@@ -34,12 +35,12 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 	public void initRendering() {
 		renderId = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(renderId, this);
-		MinecraftForgeClient.preloadTexture("/infinitealloys/gfx/blocks.png");
-		MinecraftForgeClient.preloadTexture("/infinitealloys/gfx/items.png");
-		MinecraftForgeClient.preloadTexture("/infinitealloys/gfx/computer.png");
-		MinecraftForgeClient.preloadTexture("/infinitealloys/gfx/metalforge.png");
-		MinecraftForgeClient.preloadTexture("/infinitealloys/gfx/guicomputer.png");
-		MinecraftForgeClient.preloadTexture("/infinitealloys/gfx/guimetalforge.png");
+		MinecraftForgeClient.preloadTexture(IAValues.BLOCKS_PNG);
+		MinecraftForgeClient.preloadTexture(IAValues.ITEMS_PNG);
+		MinecraftForgeClient.preloadTexture(IAValues.TEXTURE_PATH + "computer.png");
+		MinecraftForgeClient.preloadTexture(IAValues.TEXTURE_PATH + "metalforge.png");
+		MinecraftForgeClient.preloadTexture(IAValues.TEXTURE_PATH + "guicomputer.png");
+		MinecraftForgeClient.preloadTexture(IAValues.TEXTURE_PATH + "guimetalforge.png");
 	}
 
 	@Override

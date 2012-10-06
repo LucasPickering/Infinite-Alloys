@@ -42,7 +42,7 @@ public abstract class TileEntityMachine extends TileEntity {
 		int damage = upgrade.getItemDamage();
 		if((damage | upgrades) != upgrades && (((damage >> 1) | upgrades) == upgrades || damage == 1 || damage == 32 || damage == 256 || damage == 2048)) {
 			if(damage <= 16)
-				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, InfiniteAlloys.log2(damage) + 1);
+				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, (int)InfiniteAlloys.logn(2,damage) + 1);
 			upgrades = damage | upgrades;
 			inventoryPlayer.decrStackSize(inventoryPlayer.currentItem, 1);
 			getBlockType().updateTick(worldObj, xCoord, yCoord, zCoord, null);
@@ -58,7 +58,7 @@ public abstract class TileEntityMachine extends TileEntity {
 	 * @param random
 	 */
 	public void dropUpgrades(Random random) {
-		for(int i = 0; i <= InfiniteAlloys.upgradeCount; i++) {
+		for(int i = 0; i <= IAValues.upgradeCount; i++) {
 			int upg = (int)Math.pow(2D, (double)i);
 			if((upg & upgrades) == upg) {
 				float f = random.nextFloat() * 0.8F + 0.1F;

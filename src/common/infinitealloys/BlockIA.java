@@ -15,7 +15,7 @@ public class BlockIA extends Block {
 
 	@Override
 	public String getTextureFile() {
-		return "/infinitealloys/gfx/blocks.png";
+		return IAValues.BLOCKS_PNG;
 	}
 
 	@Override

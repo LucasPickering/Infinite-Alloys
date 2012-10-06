@@ -136,7 +136,7 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	private boolean shouldBurn() {
 		int ingotTypesInInv = 0;
 		int ingotsInInv = 0;
-		for(int i = 0; i < InfiniteAlloys.metalCount; i++)
+		for(int i = 0; i < IAValues.metalCount; i++)
 			if(inventoryStacks[i + 1] != null) {
 				ingotTypesInInv++;
 				ingotsInInv += inventoryStacks[i + 1].stackSize;
@@ -195,7 +195,7 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 		int ingotNum = 0;
 		if(ingot.itemID == Item.ingotIron.shiftedIndex)
 			ingotNum = 1;
-		else if(ingot.itemID == InfiniteAlloys.ingot.shiftedIndex && ingot.getItemDamage() < InfiniteAlloys.metalCount)
+		else if(ingot.itemID == InfiniteAlloys.ingot.shiftedIndex && ingot.getItemDamage() < IAValues.metalCount)
 			ingotNum = ingot.getItemDamage() + 2;
 		return ingotNum;
 	}
@@ -208,7 +208,7 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	private ItemStack getIngotResult() {
 		int damage = 0;
 		ItemStack itemstack = new ItemStack(InfiniteAlloys.alloyIngot);
-		for(int i = 0; i < InfiniteAlloys.metalCount; i++)
+		for(int i = 0; i < IAValues.metalCount; i++)
 			if(inventoryStacks[i + 1] != null)
 				damage += Math.pow(8D, getIngotNum(inventoryStacks[i + 1])) * inventoryStacks[i + 1].stackSize;
 		return new ItemStack(InfiniteAlloys.alloyIngot, 1, damage);
@@ -224,7 +224,7 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 
 	private int getIngotsInInv() {
 		int ingots = 0;
-		for(int i = 0; i < InfiniteAlloys.metalCount; i++)
+		for(int i = 0; i < IAValues.metalCount; i++)
 			if(inventoryStacks[i + 1] != null)
 				ingots += inventoryStacks[i + 1].stackSize;
 		return ingots;

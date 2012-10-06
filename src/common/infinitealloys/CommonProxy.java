@@ -35,8 +35,8 @@ public class CommonProxy implements IGuiHandler, IPacketHandler {
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 3), "Aluminum Ore");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 4), "Magnesium Ore");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 5), "Titanium Ore");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 6), "Awesome Ore");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 7), "Amazing Ore");
+		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 6), "Tantalum Ore");
+		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 7), "Swagtanium Ore");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 0), "Computer");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 1), "Metal Forge");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 2), "Crafter");
@@ -44,7 +44,7 @@ public class CommonProxy implements IGuiHandler, IPacketHandler {
 
 	public void initItems() {
 		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 0);
-		InfiniteAlloys.alloyIngot = new ItemIngot(InfiniteAlloys.alloyIngotID, 10);
+		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 0);
 		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 7);
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 0), "Copper Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 1), "Tin Ingot");
@@ -53,9 +53,9 @@ public class CommonProxy implements IGuiHandler, IPacketHandler {
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 4), "Zinc Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 5), "Titanium Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 6), "Tantalum Ingot");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 7), "Amazing Ingot");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.alloyIngot, 1, 0), "Alloy Ingot");
-		LanguageRegistry.addName(InfiniteAlloys.upgrade, "Upgrade");
+		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 7), "Swagtanium Ingot");
+		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.alloyIngot), "Alloy Ingot");
+		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.upgrade), "Upgrade");
 	}
 
 	public void initTileEntities() {
@@ -87,11 +87,11 @@ public class CommonProxy implements IGuiHandler, IPacketHandler {
 		}
 		return null;
 	}
-	
+
 	public World getClientWorld() {
 		return null;
 	}
-	
+
 	@Override
 	public void onPacketData(NetworkManager manager, Packet250CustomPayload packet, Player player) {
 		ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);

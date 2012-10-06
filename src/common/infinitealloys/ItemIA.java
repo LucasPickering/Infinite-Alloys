@@ -12,11 +12,11 @@ public class ItemIA extends Item {
 
 	@Override
 	public String getTextureFile() {
-		return "/infinitealloys/gfx/items.png";
+		return IAValues.ITEMS_PNG;
 	}
 
 	@Override
 	public String getItemNameIS(ItemStack itemstack) {
-		return "IA Item " + itemstack.itemID;
+		return "IA Item " + itemstack.itemID + "x" + itemstack.getItemDamage();
 	}
 }
