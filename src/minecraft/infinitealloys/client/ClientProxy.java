@@ -1,0 +1,81 @@
+package infinitealloys.client;
+
+import infinitealloys.CommonProxy;
+import infinitealloys.TileEntityComputer;
+import infinitealloys.TileEntityMetalForge;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraft.src.Block;
+import net.minecraft.src.IBlockAccess;
+import net.minecraft.src.RenderBlocks;
+import net.minecraft.src.TileEntity;
+import net.minecraft.src.TileEntityRenderer;
+import net.minecraft.src.World;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHandler {
+
+	public static int renderId;
+	private TileEntityComputer tec = new TileEntityComputer(0);
+	private TileEntityMetalForge temf = new TileEntityMetalForge(0);
+
+	@Override
+	public void initTileEntities() {
+		super.initTileEntities();
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMetalForge.class, new RendererMetalForge());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityComputer.class, new RendererComputer());
+	}
+
+	@Override
+	public void initRendering() {
+		renderId = RenderingRegistry.getNextAvailableRenderId();
+		RenderingRegistry.registerBlockHandler(renderId, this);
+		MinecraftForgeClient.preloadTexture("/infinitealloys/gfx/blocks.png");
+		MinecraftForgeClient.preloadTexture("/infinitealloys/gfx/items.png");
+		MinecraftForgeClient.preloadTexture("/infinitealloys/gfx/computer.png");
+		MinecraftForgeClient.preloadTexture("/infinitealloys/gfx/metalforge.png");
+		MinecraftForgeClient.preloadTexture("/infinitealloys/gfx/guicomputer.png");
+		MinecraftForgeClient.preloadTexture("/infinitealloys/gfx/guimetalforge.png");
+	}
+
+	@Override
+	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
+		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+		TileEntity te = null;
+		switch(metadata) {
+			case 0:
+				te = tec;
+				break;
+			case 1:
+				te = temf;
+				break;
+		}
+		TileEntityRenderer.instance.renderTileEntityAt(te, 0, 0, 0, 0);
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+	}
+
+	@Override
+	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+		return true;
+	}
+
+	@Override
+	public boolean shouldRender3DInInventory() {
+		return true;
+	}
+
+	@Override
+	public int getRenderId() {
+		return renderId;
+	}
+
+	@Override
+	public World getClientWorld() {
+		return FMLClientHandler.instance().getClient().theWorld;
+	}
+}
