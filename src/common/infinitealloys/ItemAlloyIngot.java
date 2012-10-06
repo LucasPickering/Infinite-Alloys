@@ -46,9 +46,10 @@ public class ItemAlloyIngot extends ItemIA {
 		ArrayList<Integer> blueVals = new ArrayList<Integer>();
 		for(int i = 0; i < IAValues.metalCount; i++) {
 			for(int j = 0; j < InfiniteAlloys.intAtPositionOctal(9, damage, i); j++) {
-				redVals.add(Integer.parseInt(Integer.toString(IAValues.ingotColors[i]).substring(0, 2), 16));
-				blueVals.add(Integer.parseInt(Integer.toString(IAValues.ingotColors[i]).substring(2, 4), 16));
-				greenVals.add(Integer.parseInt(Integer.toString(IAValues.ingotColors[i]).substring(4), 16));
+				String ingotColor = InfiniteAlloys.addLeadingZeros(Integer.toString(IAValues.ingotColors[i]), 6);
+				redVals.add(Integer.parseInt(ingotColor.substring(0, 2), 16));
+				greenVals.add(Integer.parseInt(ingotColor.substring(2, 4), 16));
+				blueVals.add(Integer.parseInt(ingotColor.substring(4), 16));
 			}
 		}
 		int redAvg = 0, greenAvg = 0, blueAvg = 0;
@@ -67,6 +68,8 @@ public class ItemAlloyIngot extends ItemIA {
 				blueAvg += blue;
 			blueAvg /= blueVals.size();
 		}
+		if(damage == 9)
+			System.out.println("Damage: " + damage + " Color: " + Integer.toHexString(redAvg) + Integer.toHexString(greenAvg) + Integer.toHexString(blueAvg));
 		return Integer.parseInt(Integer.toHexString(redAvg) + Integer.toHexString(greenAvg) + Integer.toHexString(blueAvg), 16);
 	}
 

@@ -60,14 +60,17 @@ public class InfiniteAlloys {
 	}
 
 	public static int intAtPositionOctal(int strlen, int n, int pos) {
-		String octal = Integer.toOctalString(n);
-		int length = octal.length();
-		for(int i = 0; i < strlen - length; i++)
-			octal = "0" + octal;
-		return new Integer(String.valueOf(octal.charAt(pos)));
+		return new Integer(String.valueOf(addLeadingZeros(Integer.toOctalString(n), strlen).charAt(pos)));
 	}
 
 	public static double logn(int base, double num) {
 		return Math.log(num) / Math.log(base);
+	}
+
+	public static String addLeadingZeros(String s, int finalSize) {
+		int length = s.length();
+		for(int i = 0; i < finalSize - length; i++)
+			s = "0" + s;
+		return s;
 	}
 }
