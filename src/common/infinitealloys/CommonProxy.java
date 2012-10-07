@@ -29,14 +29,8 @@ public class CommonProxy implements IGuiHandler, IPacketHandler {
 		InfiniteAlloys.machine = new BlockMachine(InfiniteAlloys.machineID, 6).setBlockName("IAMachine");
 		GameRegistry.registerBlock(InfiniteAlloys.ore, ItemBlockIA.class);
 		GameRegistry.registerBlock(InfiniteAlloys.machine, ItemBlockIA.class);
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 0), "Copper Ore");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 1), "Tin Ore");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 2), "Zinc Ore");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 3), "Aluminum Ore");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 4), "Magnesium Ore");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 5), "Titanium Ore");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 6), "Tantalum Ore");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, 7), "Swagtanium Ore");
+		for(int i = 0; i < IAValues.oreCount; i++)
+			LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 0, i), IAValues.metalNames[i + 1] + " Ore");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 0), "Computer");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 1), "Metal Forge");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 2), "Crafter");
@@ -46,14 +40,8 @@ public class CommonProxy implements IGuiHandler, IPacketHandler {
 		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 0);
 		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 0);
 		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 7);
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 0), "Copper Ingot");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 1), "Tin Ingot");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 2), "Aluminum Ingot");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 3), "Magnesium Ingot");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 4), "Zinc Ingot");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 5), "Titanium Ingot");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 6), "Tantalum Ingot");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 1, 7), "Swagtanium Ingot");
+		for(int i = 0; i < IAValues.oreCount; i++)
+			LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 0, i), IAValues.metalNames[i + 1] + " Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.alloyIngot), "Alloy Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.upgrade), "Upgrade");
 	}
@@ -108,7 +96,7 @@ public class CommonProxy implements IGuiHandler, IPacketHandler {
 	}
 
 	public static Packet getPacket(TileEntityMachine tem) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream(140);
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);
 		int x = tem.xCoord;
 		int y = tem.yCoord;

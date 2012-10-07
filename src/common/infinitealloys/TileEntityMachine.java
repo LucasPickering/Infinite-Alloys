@@ -41,11 +41,8 @@ public abstract class TileEntityMachine extends TileEntity {
 			return false;
 		int damage = upgrade.getItemDamage();
 		if((damage | upgrades) != upgrades && (((damage >> 1) | upgrades) == upgrades || damage == 1 || damage == 32 || damage == 256 || damage == 2048)) {
-			if(damage <= 16)
-				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, (int)InfiniteAlloys.logn(2,damage) + 1);
-			upgrades = damage | upgrades;
+			upgrades |= damage;
 			inventoryPlayer.decrStackSize(inventoryPlayer.currentItem, 1);
-			getBlockType().updateTick(worldObj, xCoord, yCoord, zCoord, null);
 			return true;
 		}
 		return false;

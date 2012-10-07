@@ -20,8 +20,7 @@ public class ItemAlloyIngot extends ItemIA {
 		float[] metalMasses = new float[IAValues.metalCount];
 		float totalMass = 0;
 		for(int i = 0; i < IAValues.metalCount; i++) {
-			metalMasses[i] = InfiniteAlloys.intAtPositionOctal(IAValues.metalCount, itemstack.getItemDamage(), i);// *
-																													// IAValues.densities[i];
+			metalMasses[i] = InfiniteAlloys.intAtPositionOctal(IAValues.metalCount, itemstack.getItemDamage(), i) * IAValues.densities[i];
 			totalMass += metalMasses[i];
 		}
 		for(int i = 0; i < IAValues.metalCount; i++) {
@@ -34,8 +33,7 @@ public class ItemAlloyIngot extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < 100; i++)
-			list.add(new ItemStack(id, 1, i));
+		list.add(new ItemStack(id, 1, 9));
 	}
 
 	@Override
@@ -46,7 +44,7 @@ public class ItemAlloyIngot extends ItemIA {
 		ArrayList<Integer> blueVals = new ArrayList<Integer>();
 		for(int i = 0; i < IAValues.metalCount; i++) {
 			for(int j = 0; j < InfiniteAlloys.intAtPositionOctal(9, damage, i); j++) {
-				String ingotColor = InfiniteAlloys.addLeadingZeros(Integer.toString(IAValues.ingotColors[i]), 6);
+				String ingotColor = InfiniteAlloys.addLeadingZeros(Integer.toHexString(IAValues.ingotColors[i]), 6);
 				redVals.add(Integer.parseInt(ingotColor.substring(0, 2), 16));
 				greenVals.add(Integer.parseInt(ingotColor.substring(2, 4), 16));
 				blueVals.add(Integer.parseInt(ingotColor.substring(4), 16));
@@ -68,8 +66,6 @@ public class ItemAlloyIngot extends ItemIA {
 				blueAvg += blue;
 			blueAvg /= blueVals.size();
 		}
-		if(damage == 9)
-			System.out.println("Damage: " + damage + " Color: " + Integer.toHexString(redAvg) + Integer.toHexString(greenAvg) + Integer.toHexString(blueAvg));
 		return Integer.parseInt(Integer.toHexString(redAvg) + Integer.toHexString(greenAvg) + Integer.toHexString(blueAvg), 16);
 	}
 
