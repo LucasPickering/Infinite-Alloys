@@ -37,9 +37,9 @@ public class CommonProxy implements IGuiHandler, IPacketHandler {
 	}
 
 	public void initItems() {
-		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 0);
-		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 0);
-		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 1);
+		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 0).setItemName("IAIngot");
+		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 0).setItemName("IAAlloyIngot");
+		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 1).setItemName("IAUpgrade");
 		for(int i = 0; i < IAValues.oreCount; i++)
 			LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 0, i), IAValues.metalNames[i + 1] + " Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.alloyIngot), "Alloy Ingot");

@@ -1,6 +1,7 @@
 package infinitealloys;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
@@ -41,7 +42,7 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	/**
 	 * Ticks it takes to finish smelting one ingot.
 	 */
-	public int ticksToFinish = 200;
+	public int ticksToFinish = 12800;
 
 	/**
 	 * The smelting progress
@@ -114,9 +115,9 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 			}
 		}
 		if(shouldBurn()) {
-			smeltProgress++;
-			heatLeft -= getIngotsInInv();
-			if(smeltProgress == ticksToFinish) {
+			smeltProgress += 64 - getIngotsInRecipe();
+			heatLeft -= getIngotsInRecipe();
+			if(smeltProgress >= ticksToFinish) {
 				smeltProgress = 0;
 				smeltItem();
 				invChanged = true;
@@ -147,15 +148,18 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	}
 
 	private boolean shouldBurn() {
-		int ingotTypesInInv = 0;
-		int ingotsInInv = 0;
-		for(int i = 0; i < IAValues.metalCount; i++) {
-			if(inventoryStacks[i + 1] != null) {
-				ingotTypesInInv++;
-				ingotsInInv += inventoryStacks[i + 1].stackSize;
-			}
+		int typesInRecipe = 0;
+		ArrayList<Boolean> sufficientIngots = new ArrayList<Boolean>();
+		for(int amt : recipeAmts)
+			if(amt > 0)
+				typesInRecipe++;
+		for(int i = 0; i < getIngotAmts().length; i++) {
+			if(getIngotAmts()[i] >= recipeAmts[i])
+				sufficientIngots.add(true);
+			else
+				sufficientIngots.add(false);
 		}
-		if(ingotTypesInInv > 1 && (heatLeft > ingotsInInv || currentFuelBurnTime != 0) && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= getIngotsInInv())))
+		if(typesInRecipe > 1 && !sufficientIngots.contains(false) && (heatLeft > getIngotsInRecipe() || currentFuelBurnTime != 0) && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= getIngotsInRecipe())))
 			return true;
 		return false;
 	}
@@ -176,8 +180,22 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	}
 
 	private void smeltItem() {
-		for(int slot : getSlotsWithIngot())
-			inventoryStacks[slot] = null;
+		byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
+		for(int slot : getSlotsWithIngot()) {
+
+			// Gives ingot a number 0-8
+			int ingotNum = getIngotNum(inventoryStacks[slot]);
+
+			// If there are more ingots in inv than need to be removed,
+			// ingotsToRemove[ingotNum] = 0, else ingotsToRemove[ingotNum] -= stack.stackSize
+			ingotsToRemove[ingotNum] -= Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize);
+
+			// If there are more ingots that need to be removed than in inv,
+			// slot.stackSize = 0, else stack.stackSize -= ingotsToRemove[ingotNum]
+			decrStackSize(slot, Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize));
+			if(inventoryStacks[slot].stackSize <= 0)
+				inventoryStacks[slot] = null;
+		}
 		ItemStack ingotResult = getIngotResult();
 		if(inventoryStacks[10] == null)
 			inventoryStacks[10] = ingotResult;
@@ -202,15 +220,13 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	 * @return Scaled burn time
 	 */
 	public int getBurnTimeRemainingScaled(int i) {
-		return heatLeft * i / currentFuelBurnTime;
+		return currentFuelBurnTime != 0 ? heatLeft * i / currentFuelBurnTime : 0;
 	}
 
 	public int getIngotNum(ItemStack ingot) {
 		int ingotNum = 0;
-		if(ingot.itemID == Item.ingotIron.shiftedIndex)
-			ingotNum = 1;
-		else if(ingot.itemID == InfiniteAlloys.ingot.shiftedIndex && ingot.getItemDamage() < IAValues.metalCount)
-			ingotNum = ingot.getItemDamage() + 2;
+		if(ingot.itemID == InfiniteAlloys.ingot.shiftedIndex && ingot.getItemDamage() < IAValues.metalCount)
+			ingotNum = ingot.getItemDamage() + 1;
 		return ingotNum;
 	}
 
@@ -222,25 +238,30 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	private ItemStack getIngotResult() {
 		int damage = 0;
 		ItemStack itemstack = new ItemStack(InfiniteAlloys.alloyIngot);
-		for(int i = 0; i < IAValues.metalCount; i++)
-			if(inventoryStacks[i + 1] != null)
-				damage += Math.pow(8D, getIngotNum(inventoryStacks[i + 1])) * inventoryStacks[i + 1].stackSize;
-		return new ItemStack(InfiniteAlloys.alloyIngot, getIngotsInInv(), damage);
+		for(int i = 0; i < recipeAmts.length; i++)
+			damage += Math.pow(8D, i) * recipeAmts[i];
+		return new ItemStack(InfiniteAlloys.alloyIngot, getIngotsInRecipe(), damage);
 	}
 
 	private ArrayList<Integer> getSlotsWithIngot() {
 		ArrayList<Integer> slots = new ArrayList<Integer>();
-		for(int i = 1; i <= 9; i++)
+		for(int i = 11; i < 29; i++)
 			if(inventoryStacks[i] != null)
 				slots.add(i);
 		return slots;
 	}
 
-	private int getIngotsInInv() {
+	private int[] getIngotAmts() {
+		int[] amts = new int[IAValues.metalCount];
+		for(int slot : getSlotsWithIngot())
+			amts[getIngotNum(inventoryStacks[slot])] += inventoryStacks[slot].stackSize;
+		return amts;
+	}
+
+	private int getIngotsInRecipe() {
 		int ingots = 0;
-		for(int i = 0; i < IAValues.metalCount; i++)
-			if(inventoryStacks[i + 1] != null)
-				ingots += inventoryStacks[i + 1].stackSize;
+		for(int amt : recipeAmts)
+			ingots += amt;
 		return ingots;
 	}
 }

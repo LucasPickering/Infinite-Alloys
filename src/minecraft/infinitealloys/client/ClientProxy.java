@@ -27,8 +27,8 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 	@Override
 	public void initTileEntities() {
 		super.initTileEntities();
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMetalForge.class, new RendererMetalForge());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityComputer.class, new RendererComputer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMetalForge.class, new RendererMetalForge());
 	}
 
 	@Override

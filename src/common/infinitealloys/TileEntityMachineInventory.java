@@ -22,18 +22,19 @@ public abstract class TileEntityMachineInventory extends TileEntityMachine imple
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		if(inventoryStacks[i] != null) {
+	public ItemStack decrStackSize(int slot, int amt) {
+		System.out.println("Slot: "+inventoryStacks[slot]);
+		if(inventoryStacks[slot] != null) {
 			ItemStack itemstack;
-			if(inventoryStacks[i].stackSize <= j) {
-				itemstack = inventoryStacks[i];
-				inventoryStacks[i] = null;
+			if(inventoryStacks[slot].stackSize <= amt) {
+				itemstack = inventoryStacks[slot];
+				inventoryStacks[slot] = null;
 				return itemstack;
 			}
 			else {
-				itemstack = inventoryStacks[i].splitStack(j);
-				if(inventoryStacks[i].stackSize == 0)
-					inventoryStacks[i] = null;
+				itemstack = inventoryStacks[slot].splitStack(amt);
+				if(inventoryStacks[slot].stackSize == 0)
+					inventoryStacks[slot] = null;
 				return itemstack;
 			}
 		}
