@@ -30,8 +30,15 @@ public class GuiMetalForge extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer() {
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		fontRenderer.drawString("Inventory", 42, ySize - 94, 4210752);
 		fontRenderer.drawString(new Integer(temf.networkID).toString(), 133, ySize - 204, 4210752);
+		for(int y = 0; y < 3; y++)
+			for(int x = 0; x < 3; x++)
+				fontRenderer.drawStringWithShadow(new Byte(temf.recipeAmts[y * 3 + x]).toString(), x * 18 + 55, y * 18 + 25, 0xffffff);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override
@@ -55,9 +62,9 @@ public class GuiMetalForge extends GuiContainer {
 	protected void actionPerformed(GuiButton guibutton) {
 		if(guibutton.enabled) {
 			if(guibutton.id == 0)
-				temf.networkID = Math.min(++temf.networkID, Byte.MAX_VALUE);
+				temf.networkID = (byte)Math.min(temf.networkID + 1, Byte.MAX_VALUE);
 			if(guibutton.id == 1)
-				temf.networkID = Math.max(--temf.networkID, 0);
+				temf.networkID = (byte)Math.max(temf.networkID - 1, 0);
 		}
 	}
 }

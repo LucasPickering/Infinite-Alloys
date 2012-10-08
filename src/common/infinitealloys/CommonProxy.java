@@ -39,7 +39,7 @@ public class CommonProxy implements IGuiHandler, IPacketHandler {
 	public void initItems() {
 		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 0);
 		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 0);
-		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 7);
+		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 1);
 		for(int i = 0; i < IAValues.oreCount; i++)
 			LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 0, i), IAValues.metalNames[i + 1] + " Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.alloyIngot), "Alloy Ingot");
@@ -86,27 +86,40 @@ public class CommonProxy implements IGuiHandler, IPacketHandler {
 		int x = data.readInt();
 		int y = data.readInt();
 		int z = data.readInt();
+		byte networkID = data.readByte();
 		byte orientation = data.readByte();
 		World world = InfiniteAlloys.proxy.getClientWorld();
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if(te instanceof TileEntityMachine) {
 			TileEntityMachine tem = (TileEntityMachine)te;
-			tem.handlePacketData(orientation);
+			tem.handlePacketData(orientation, networkID);
+			if(te instanceof TileEntityMetalForge) {
+				int heatLeft = data.readInt();
+				int smeltProgress = data.readInt();
+				byte[] recipeAmts = new byte[IAValues.metalCount];
+				for(int i = 0; i < recipeAmts.length; i++)
+					recipeAmts[i] = data.readByte();
+				((TileEntityMetalForge)te).handlePacketData(heatLeft, smeltProgress, recipeAmts);
+			}
 		}
 	}
 
 	public static Packet getPacket(TileEntityMachine tem) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);
-		int x = tem.xCoord;
-		int y = tem.yCoord;
-		int z = tem.zCoord;
-		byte orientation = (byte)tem.orientation;
 		try {
-			dos.writeInt(x);
-			dos.writeInt(y);
-			dos.writeInt(z);
-			dos.writeByte(orientation);
+			dos.writeInt(tem.xCoord);
+			dos.writeInt(tem.yCoord);
+			dos.writeInt(tem.zCoord);
+			dos.writeByte(tem.networkID);
+			dos.writeByte(tem.orientation);
+			if(tem instanceof TileEntityMetalForge) {
+				TileEntityMetalForge temf = (TileEntityMetalForge)tem;
+				dos.writeInt(temf.heatLeft);
+				dos.writeInt(temf.smeltProgress);
+				for(byte amt : temf.recipeAmts)
+					dos.writeByte(amt);
+			}
 		}
 		catch(IOException e) {
 			e.printStackTrace();

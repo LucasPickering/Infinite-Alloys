@@ -40,7 +40,7 @@ public class GuiComputer extends GuiScreen {
 		super.drawScreen(i, j, f);
 		if(tec.init)
 			for(int l = 0; l < tec.selectedIDs.length; l++)
-				fontRenderer.drawString(new Integer(tec.selectedIDs[l]).toString(),left+ 44 + (l / 5 * 58), top+19 + (l % 5 * 28), 4210752);
+				fontRenderer.drawString(new Integer(tec.selectedIDs[l]).toString(), left + 44 + (l / 5 * 58), top + 19 + (l % 5 * 28), 4210752);
 	}
 
 	@Override
@@ -52,9 +52,9 @@ public class GuiComputer extends GuiScreen {
 	public void actionPerformed(GuiButton guibutton) {
 		if(guibutton.enabled) {
 			if(guibutton.id % 2 == 0)
-				tec.selectedIDs[guibutton.id / 2] = Math.max(--tec.selectedIDs[guibutton.id / 2], 0);
+				tec.selectedIDs[guibutton.id / 2] = Math.max(tec.selectedIDs[guibutton.id / 2] - 1, 0);
 			else if(guibutton.id % 2 == 1)
-				tec.selectedIDs[guibutton.id / 2] = Math.min(++tec.selectedIDs[guibutton.id / 2], 100000);
+				tec.selectedIDs[guibutton.id / 2] = Math.min(tec.selectedIDs[guibutton.id / 2] + 1, 100000);
 			tec.updateNetwork();
 		}
 	}

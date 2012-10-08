@@ -52,7 +52,7 @@ public class TileEntityComputer extends TileEntityMachine {
 
 	public TileEntityComputer(int facing) {
 		this();
-		orientation = facing;
+		orientation = (byte)facing;
 	}
 
 	public TileEntityComputer() {

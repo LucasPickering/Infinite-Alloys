@@ -15,7 +15,7 @@ public abstract class TileEntityMachine extends TileEntity {
 	/**
 	 * This block's current network ID
 	 */
-	public int networkID;
+	public byte networkID;
 
 	/**
 	 * A binary integer used to determine what upgrades have been installed.
@@ -23,10 +23,9 @@ public abstract class TileEntityMachine extends TileEntity {
 	public int upgrades;
 
 	/**
-	 * Int corresponding to the block's orientation on placement. 0, 1, 2, 3 =
-	 * SWNE
+	 * Byte corresponding to the block's orientation on placement. 0123 = SWNE
 	 */
-	public int orientation;
+	public byte orientation;
 
 	/**
 	 * Determines if the current item is capable of upgrading the machine. If it
@@ -81,23 +80,26 @@ public abstract class TileEntityMachine extends TileEntity {
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-		networkID = nbttagcompound.getShort("NetworkID");
+		networkID = nbttagcompound.getByte("NetworkID");
+		upgrades = nbttagcompound.getShort("Upgrades");
 		orientation = nbttagcompound.getByte("Orientation");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-		nbttagcompound.setShort("NetworkID", (short)networkID);
+		nbttagcompound.setByte("NetworkID", networkID);
+		nbttagcompound.setShort("Upgrades", (short)upgrades);
 		nbttagcompound.setByte("Orientation", (byte)orientation);
 	}
-	
+
 	@Override
 	public Packet getDescriptionPacket() {
 		return CommonProxy.getPacket(this);
 	}
 
-	public void handlePacketData(byte orientation) {
+	public void handlePacketData(byte orientation, byte networkID) {
 		this.orientation = orientation;
+		this.networkID = networkID;
 	}
 }

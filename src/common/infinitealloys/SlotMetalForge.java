@@ -19,13 +19,13 @@ public class SlotMetalForge extends Slot {
 	@Override
 	public int getSlotStackLimit() {
 		if(slotIndex >= 1 && slotIndex <= 9)
-			return 1;
+			return 8;
 		return inventory.getInventoryStackLimit();
 	}
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
 		int ingotNum = ((TileEntityMetalForge)inventory).getIngotNum(itemstack);
-		return slotIndex == 0 && TileEntityFurnace.isItemFuel(itemstack) || (slotIndex >= 1 && slotIndex <= 9 && slotIndex == ingotNum) || (slotIndex > 10 && ingotNum != 0);
+		return slotIndex == 0 && TileEntityFurnace.isItemFuel(itemstack) || (slotIndex > 10 && ingotNum != 0);
 	}
 }

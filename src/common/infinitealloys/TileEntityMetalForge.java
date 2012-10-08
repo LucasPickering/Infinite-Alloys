@@ -14,6 +14,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
+import net.minecraft.src.Packet;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntityFurnace;
 import net.minecraft.src.World;
@@ -47,9 +48,14 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	 */
 	public int smeltProgress;
 
+	/**
+	 * An array for the "stack sizes" of each ingot in the recipe setting
+	 */
+	public byte[] recipeAmts = new byte[IAValues.metalCount];
+
 	public TileEntityMetalForge(int facing) {
 		this();
-		orientation = facing;
+		orientation = (byte)facing;
 	}
 
 	public TileEntityMetalForge() {
@@ -70,18 +76,25 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-		heatLeft = nbttagcompound.getShort("BurnTime");
+		heatLeft = nbttagcompound.getShort("HeatLeft");
 		smeltProgress = nbttagcompound.getShort("SmeltProgress");
-		networkID = nbttagcompound.getShort("NetworkID");
+		for(int i = 0; i < recipeAmts.length; i++)
+			recipeAmts[i] = nbttagcompound.getByte("Recipe Amount " + i);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-		nbttagcompound.setShort("Upgrades", (short)upgrades);
-		nbttagcompound.setShort("BurnTime", (short)heatLeft);
+		nbttagcompound.setShort("HeatLeft", (short)heatLeft);
 		nbttagcompound.setShort("SmeltProgress", (short)smeltProgress);
-		nbttagcompound.setShort("NetworkID", (short)networkID);
+		for(int i = 0; i < recipeAmts.length; i++)
+			nbttagcompound.setByte("Recipe Amount " + i, recipeAmts[i]);
+	}
+
+	public void handlePacketData(int heatLeft, int smeltProgress, byte[] recipeAmts) {
+		this.heatLeft = heatLeft;
+		this.smeltProgress = smeltProgress;
+		this.recipeAmts = recipeAmts;
 	}
 
 	@Override
@@ -136,11 +149,12 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	private boolean shouldBurn() {
 		int ingotTypesInInv = 0;
 		int ingotsInInv = 0;
-		for(int i = 0; i < IAValues.metalCount; i++)
+		for(int i = 0; i < IAValues.metalCount; i++) {
 			if(inventoryStacks[i + 1] != null) {
 				ingotTypesInInv++;
 				ingotsInInv += inventoryStacks[i + 1].stackSize;
 			}
+		}
 		if(ingotTypesInInv > 1 && (heatLeft > ingotsInInv || currentFuelBurnTime != 0) && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= getIngotsInInv())))
 			return true;
 		return false;
@@ -163,12 +177,12 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 
 	private void smeltItem() {
 		for(int slot : getSlotsWithIngot())
-			if(--inventoryStacks[slot].stackSize <= 0)
-				inventoryStacks[slot] = null;
+			inventoryStacks[slot] = null;
+		ItemStack ingotResult = getIngotResult();
 		if(inventoryStacks[10] == null)
-			inventoryStacks[10] = getIngotResult();
-		else if(inventoryStacks[10].isItemEqual(getIngotResult()))
-			inventoryStacks[10].stackSize++;
+			inventoryStacks[10] = ingotResult;
+		else if(inventoryStacks[10].isItemEqual(ingotResult))
+			inventoryStacks[10].stackSize += ingotResult.stackSize;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -211,7 +225,7 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 		for(int i = 0; i < IAValues.metalCount; i++)
 			if(inventoryStacks[i + 1] != null)
 				damage += Math.pow(8D, getIngotNum(inventoryStacks[i + 1])) * inventoryStacks[i + 1].stackSize;
-		return new ItemStack(InfiniteAlloys.alloyIngot, 1, damage);
+		return new ItemStack(InfiniteAlloys.alloyIngot, getIngotsInInv(), damage);
 	}
 
 	private ArrayList<Integer> getSlotsWithIngot() {

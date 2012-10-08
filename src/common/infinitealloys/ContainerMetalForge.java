@@ -89,4 +89,16 @@ public class ContainerMetalForge extends Container {
 		}
 		return itemstack;
 	}
+
+	@Override
+	public ItemStack slotClick(int slot, int mouseButton, boolean holdingShift, EntityPlayer player) {
+		if((mouseButton == 0 || mouseButton == 1) && slot >= 1 && slot <= 9) {
+			if(mouseButton == 0)
+				inventory.recipeAmts[slot - 1] = (byte)Math.min(inventory.recipeAmts[slot - 1] + 1, 8);
+			else if(mouseButton == 1)
+				inventory.recipeAmts[slot - 1] = (byte)Math.max(inventory.recipeAmts[slot - 1] - 1, 0);
+			return null;
+		}
+		return super.slotClick(slot, mouseButton, holdingShift, player);
+	}
 }

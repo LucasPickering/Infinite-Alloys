@@ -124,7 +124,7 @@ public class BlockMachine extends BlockContainer {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityliving) {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
-			tem.orientation = MathHelper.floor_double((double)(entityliving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			tem.orientation = (byte)(MathHelper.floor_double((double)(entityliving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
 			world.markBlockNeedsUpdate(x, y, z);
 		}
 	}
@@ -140,7 +140,6 @@ public class BlockMachine extends BlockContainer {
 		switch(world.getBlockMetadata(x, y, z)) {
 			case 0:
 				minX = 0.0625D;
-				minY = 0;
 				minZ = 0.0625D;
 				maxX = 0.9375D;
 				maxY = 0.75D;
