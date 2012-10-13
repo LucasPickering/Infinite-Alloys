@@ -26,6 +26,6 @@ public class SlotMetalForge extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
 		int ingotNum = ((TileEntityMetalForge)inventory).getIngotNum(itemstack);
-		return slotIndex == 0 && TileEntityFurnace.isItemFuel(itemstack) || (slotIndex > 10 && ingotNum != 0);
+		return slotIndex == 0 && TileEntityFurnace.isItemFuel(itemstack) || (slotIndex > 10 && ingotNum != -1);
 	}
 }

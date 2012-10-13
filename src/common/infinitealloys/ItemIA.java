@@ -7,6 +7,7 @@ public class ItemIA extends Item {
 
 	public ItemIA(int id, int texture) {
 		super(id);
+		setHasSubtypes(true);
 		setIconIndex(texture);
 	}
 

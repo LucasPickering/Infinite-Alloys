@@ -86,20 +86,20 @@ public class CommonProxy implements IGuiHandler, IPacketHandler {
 		int x = data.readInt();
 		int y = data.readInt();
 		int z = data.readInt();
-		byte networkID = data.readByte();
-		byte orientation = data.readByte();
 		World world = InfiniteAlloys.proxy.getClientWorld();
 		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if(te instanceof TileEntityMachine) {
-			TileEntityMachine tem = (TileEntityMachine)te;
-			tem.handlePacketData(orientation, networkID);
+			byte networkID = data.readByte();
+			byte orientation = data.readByte();
+			((TileEntityMachine)te).handlePacketData(orientation, networkID);
 			if(te instanceof TileEntityMetalForge) {
-				int heatLeft = data.readInt();
-				int smeltProgress = data.readInt();
+				int currentFuelBurnTime = data.readShort();
+				int heatLeft = data.readShort();
+				int smeltProgress = data.readShort();
 				byte[] recipeAmts = new byte[IAValues.metalCount];
 				for(int i = 0; i < recipeAmts.length; i++)
 					recipeAmts[i] = data.readByte();
-				((TileEntityMetalForge)te).handlePacketData(heatLeft, smeltProgress, recipeAmts);
+				((TileEntityMetalForge)te).handlePacketData(currentFuelBurnTime, heatLeft, smeltProgress, recipeAmts);
 			}
 		}
 	}
@@ -115,8 +115,9 @@ public class CommonProxy implements IGuiHandler, IPacketHandler {
 			dos.writeByte(tem.orientation);
 			if(tem instanceof TileEntityMetalForge) {
 				TileEntityMetalForge temf = (TileEntityMetalForge)tem;
-				dos.writeInt(temf.heatLeft);
-				dos.writeInt(temf.smeltProgress);
+				dos.writeShort(temf.currentFuelBurnTime);
+				dos.writeShort(temf.heatLeft);
+				dos.writeShort(temf.smeltProgress);
 				for(byte amt : temf.recipeAmts)
 					dos.writeByte(amt);
 			}

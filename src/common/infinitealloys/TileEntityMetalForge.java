@@ -77,6 +77,7 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
+		currentFuelBurnTime = nbttagcompound.getShort("CurrentFuelBurnTime");
 		heatLeft = nbttagcompound.getShort("HeatLeft");
 		smeltProgress = nbttagcompound.getShort("SmeltProgress");
 		for(int i = 0; i < recipeAmts.length; i++)
@@ -86,13 +87,15 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
+		nbttagcompound.setShort("CurrentFuelBurnTime", (short)currentFuelBurnTime);
 		nbttagcompound.setShort("HeatLeft", (short)heatLeft);
 		nbttagcompound.setShort("SmeltProgress", (short)smeltProgress);
 		for(int i = 0; i < recipeAmts.length; i++)
 			nbttagcompound.setByte("Recipe Amount " + i, recipeAmts[i]);
 	}
 
-	public void handlePacketData(int heatLeft, int smeltProgress, byte[] recipeAmts) {
+	public void handlePacketData(int currentFuelBurnTime, int heatLeft, int smeltProgress, byte[] recipeAmts) {
+		this.currentFuelBurnTime = currentFuelBurnTime;
 		this.heatLeft = heatLeft;
 		this.smeltProgress = smeltProgress;
 		this.recipeAmts = recipeAmts;
@@ -102,7 +105,7 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	public void updateEntity() {
 		updateUpgrades();
 		boolean invChanged = false;
-		if(heatLeft <= 0) {
+		if(heatLeft < getIngotsInRecipe()) {
 			currentFuelBurnTime = 0;
 			if(inventoryStacks[0] != null)
 				currentFuelBurnTime = (int)((float)TileEntityFurnace.getItemBurnTime(inventoryStacks[0]) * fuelBonus);
@@ -182,19 +185,10 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	private void smeltItem() {
 		byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
 		for(int slot : getSlotsWithIngot()) {
-
-			// Gives ingot a number 0-8
 			int ingotNum = getIngotNum(inventoryStacks[slot]);
-
-			// If there are more ingots in inv than need to be removed,
-			// ingotsToRemove[ingotNum] = 0, else ingotsToRemove[ingotNum] -= stack.stackSize
+			int ingots = ingotsToRemove[ingotNum];
 			ingotsToRemove[ingotNum] -= Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize);
-
-			// If there are more ingots that need to be removed than in inv,
-			// slot.stackSize = 0, else stack.stackSize -= ingotsToRemove[ingotNum]
-			decrStackSize(slot, Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize));
-			if(inventoryStacks[slot].stackSize <= 0)
-				inventoryStacks[slot] = null;
+			decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
 		}
 		ItemStack ingotResult = getIngotResult();
 		if(inventoryStacks[10] == null)
@@ -220,14 +214,15 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	 * @return Scaled burn time
 	 */
 	public int getBurnTimeRemainingScaled(int i) {
-		return currentFuelBurnTime != 0 ? heatLeft * i / currentFuelBurnTime : 0;
+		return heatLeft * i / currentFuelBurnTime;
 	}
 
 	public int getIngotNum(ItemStack ingot) {
-		int ingotNum = 0;
-		if(ingot.itemID == InfiniteAlloys.ingot.shiftedIndex && ingot.getItemDamage() < IAValues.metalCount)
-			ingotNum = ingot.getItemDamage() + 1;
-		return ingotNum;
+		if(ingot.itemID == Item.ingotIron.shiftedIndex)
+			return 0;
+		else if(ingot.itemID == InfiniteAlloys.ingot.shiftedIndex && ingot.getItemDamage() < IAValues.metalCount)
+			return ingot.getItemDamage() + 1;
+		return -1;
 	}
 
 	/**

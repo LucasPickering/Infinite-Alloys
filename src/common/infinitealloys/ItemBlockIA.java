@@ -5,8 +5,8 @@ import net.minecraft.src.ItemStack;
 
 public class ItemBlockIA extends ItemBlock {
 
-	public ItemBlockIA(int i) {
-		super(i);
+	public ItemBlockIA(int id) {
+		super(id);
 		setHasSubtypes(true);
 	}
 
@@ -17,6 +17,6 @@ public class ItemBlockIA extends ItemBlock {
 
 	@Override
 	public String getItemNameIS(ItemStack itemstack) {
-		return "IA Block " + itemstack.itemID + "x" + itemstack.getItemDamage();
+		return "IA Block " + itemstack.itemID + "@" + itemstack.getItemDamage();
 	}
 }
