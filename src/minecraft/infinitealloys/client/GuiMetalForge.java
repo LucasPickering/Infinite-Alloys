@@ -6,8 +6,10 @@ import java.util.List;
 import infinitealloys.ContainerMetalForge;
 import infinitealloys.IAValues;
 import infinitealloys.TileEntityMetalForge;
+import infinitealloys.network.PacketHandler;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.InventoryPlayer;
@@ -81,6 +83,7 @@ public class GuiMetalForge extends GuiContainer {
 				temf.networkID = (byte)Math.min(temf.networkID + 1, Byte.MAX_VALUE);
 			if(guibutton.id == 1)
 				temf.networkID = (byte)Math.max(temf.networkID - 1, 0);
+			PacketDispatcher.sendPacketToServer(PacketHandler.getPacketToServer(((ContainerMetalForge)inventorySlots).inventory));
 		}
 	}
 
@@ -124,9 +127,7 @@ public class GuiMetalForge extends GuiContainer {
 			drawGradientRect(mouseX - 3, mouseY - 3, mouseX + var5 + 3, mouseY - 3 + 1, var11, var11);
 			drawGradientRect(mouseX - 3, mouseY + var9 + 2, mouseX + var5 + 3, mouseY + var9 + 3, var12, var12);
 			for(int var13 = 0; var13 < text.size(); ++var13) {
-				String var14 = (String)text.get(var13);
-				var14 = "\u00a77" + var14;
-				fontRenderer.drawStringWithShadow(var14, mouseX, mouseY, -1);
+				fontRenderer.drawStringWithShadow("\u00a7f" + (String)text.get(var13), mouseX, mouseY, -1);
 				if(var13 == 0)
 					mouseY += 2;
 				mouseY += 10;

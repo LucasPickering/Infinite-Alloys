@@ -1,5 +1,6 @@
 package infinitealloys;
 
+import infinitealloys.network.PacketHandler;
 import java.util.Random;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;
@@ -95,11 +96,15 @@ public abstract class TileEntityMachine extends TileEntity {
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return CommonProxy.getPacket(this);
+		return PacketHandler.getPacketToClient(this);
 	}
 
 	public void handlePacketData(byte orientation, byte networkID) {
 		this.orientation = orientation;
+		this.networkID = networkID;
+	}
+
+	public void handlePacketData(byte networkID) {
 		this.networkID = networkID;
 	}
 }

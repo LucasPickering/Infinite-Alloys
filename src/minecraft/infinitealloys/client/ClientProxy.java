@@ -74,9 +74,4 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 	public int getRenderId() {
 		return renderId;
 	}
-
-	@Override
-	public World getClientWorld() {
-		return FMLClientHandler.instance().getClient().theWorld;
-	}
 }
