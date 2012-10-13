@@ -6,6 +6,7 @@ import net.minecraft.src.ICrafting;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
+import net.minecraft.src.TileEntityFurnace;
 
 public class ContainerMetalForge extends Container {
 
@@ -60,25 +61,27 @@ public class ContainerMetalForge extends Container {
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
 			ItemStack stackInSlotCopy = stackInSlot.getStack();
 			itemstack = stackInSlotCopy.copy();
-			if(slot == 2) {
-				if(!mergeItemStack(stackInSlotCopy, 3, 39, true))
+			if(slot >= 10 && slot <= 28 || slot == 0) {
+				if(!mergeItemStack(stackInSlotCopy, 29, 65, false))
 					return null;
 				stackInSlot.onSlotChange(stackInSlotCopy, itemstack);
 			}
-			else if(slot != 1 && slot != 0) {
-				if(stackInSlotCopy.itemID == InfiniteAlloys.ingot.shiftedIndex && stackInSlotCopy.getItemDamage() < 5) {
+			else if(slot > 28) {
+				if(TileEntityFurnace.isItemFuel(stackInSlotCopy)) {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}
-				else if(slot >= 3 && slot < 30) {
-					if(!mergeItemStack(stackInSlotCopy, 30, 39, false))
+				else if(inventory.getIngotNum(stackInSlotCopy) != -1) {
+					if(!mergeItemStack(stackInSlotCopy, 11, 28, false))
 						return null;
 				}
-				else if(slot >= 30 && slot < 39 && !this.mergeItemStack(stackInSlotCopy, 3, 30, false))
+				else if(slot > 28 && slot <= 55) {
+					if(!this.mergeItemStack(stackInSlotCopy, 56, 65, false))
+						return null;
+				}
+				else if(slot > 55 && !this.mergeItemStack(stackInSlotCopy, 29, 55, false))
 					return null;
 			}
-			else if(!mergeItemStack(stackInSlotCopy, 3, 39, false))
-				return null;
 			if(stackInSlotCopy.stackSize == 0)
 				stackInSlot.putStack((ItemStack)null);
 			else

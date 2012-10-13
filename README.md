@@ -11,8 +11,8 @@ Machines
 Metal Forge  
 \-Texture  
 \-Animation  
-\-Smelt progress client sync  
-\-Shift-clicking  
+\-Server heatLeft sync  
+\-Saving wrong damage value
   
 Computer  
 \-Make network system  

@@ -1,8 +1,10 @@
 package infinitealloys;
 
 import infinitealloys.client.ClientProxy;
+import infinitealloys.network.PacketHandler;
 import java.util.List;
 import java.util.Random;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.CreativeTabs;
@@ -34,6 +36,7 @@ public class BlockMachine extends BlockContainer {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int i, float f, float f1, float f2) {
 		if(entityplayer.isSneaking()) return false;
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
+		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getPacketToClient(tem));
 		if(tem.upgrade(entityplayer.inventory)) return true;
 		if(tem instanceof TileEntityComputer)
 			entityplayer.openGui(InfiniteAlloys.instance, 0, world, x, y, z);

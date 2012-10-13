@@ -23,12 +23,13 @@ public class PacketHandler implements IPacketHandler {
 	@Override
 	public void onPacketData(NetworkManager manager, Packet250CustomPayload packet, Player player) {
 		ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
+		World world = ((EntityPlayer)player).worldObj;
 		boolean toClient = data.readBoolean();
 		if(toClient) {
 			int x = data.readInt();
 			int y = data.readInt();
 			int z = data.readInt();
-			TileEntity te = ((EntityPlayer)player).worldObj.getBlockTileEntity(x, y, z);
+			TileEntity te = world.getBlockTileEntity(x, y, z);
 			if(te instanceof TileEntityMachine) {
 				byte networkID = data.readByte();
 				byte orientation = data.readByte();
@@ -48,7 +49,7 @@ public class PacketHandler implements IPacketHandler {
 			int x = data.readInt();
 			int y = data.readInt();
 			int z = data.readInt();
-			TileEntity te = ((EntityPlayer)player).worldObj.getBlockTileEntity(x, y, z);
+			TileEntity te = world.getBlockTileEntity(x, y, z);
 			if(te instanceof TileEntityMachine) {
 				byte networkID = data.readByte();
 				((TileEntityMachine)te).handlePacketData(networkID);
