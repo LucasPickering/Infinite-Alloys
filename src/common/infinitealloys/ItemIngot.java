@@ -24,7 +24,7 @@ public class ItemIngot extends ItemIA {
 	@SideOnly(Side.CLIENT)
 	public int getColorFromDamage(int damage, int renderPass) {
 		if(damage < 8)
-			return IAValues.ingotColors[damage + 1];
+			return IAValues.metalColors[damage + 1];
 		return 0xffffff;
 	}
 }

@@ -33,7 +33,7 @@ public class IAValues {
 	/**
 	 * The colors used to colorize the ingots
 	 */
-	public static int[] ingotColors = new int[metalCount];
+	public static int[] metalColors = new int[metalCount];
 
 	/**
 	 * The names of each metal that can be used to make alloys

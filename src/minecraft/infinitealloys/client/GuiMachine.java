@@ -39,17 +39,17 @@ public abstract class GuiMachine extends GuiContainer {
 		super.drawScreen(mouseX, mouseY, f);
 		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
 		if(idButton.isMouseOver(mouseX, mouseY))
-			drawTextBox("Network ID", mouseX, mouseY);
+			drawTextBox("Network ID", 0xffffff, mouseX, mouseY);
 		if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY)) {
 			ArrayList<String> texts = new ArrayList<String>();
-			ArrayList<String> colors = new ArrayList<String>();
+			ArrayList<Integer> colors = new ArrayList<Integer>();
 			texts.add("Upgrades");
-			colors.add("f");
+			colors.add(0xffffff);
 			for(int i = 0; i < IAValues.upgradeCount; i++) {
 				int damage = (int)Math.pow(2, i);
 				if(tem.isPrereqUpgrade(new ItemStack(InfiniteAlloys.upgrade, 1, damage)) && (tem.upgrades << 1 | damage) == tem.upgrades || (tem.upgrades | damage) != tem.upgrades) continue;
 				texts.add(IAValues.upgradeNames[i]);
-				colors.add("6");
+				colors.add(0xaaaaaa);
 			}
 			drawTextBox(texts, colors, mouseX, mouseY);
 		}
@@ -70,15 +70,15 @@ public abstract class GuiMachine extends GuiContainer {
 		}
 	}
 
-	protected void drawTextBox(String text, int mouseX, int mouseY) {
+	protected void drawTextBox(String text, int color, int mouseX, int mouseY) {
 		ArrayList<String> texts = new ArrayList<String>();
-		ArrayList<String> colors = new ArrayList<String>();
+		ArrayList<Integer> colors = new ArrayList<Integer>();
 		texts.add(text);
-		colors.add("f");
+		colors.add(color);
 		drawTextBox(texts, colors, mouseX, mouseY);
 	}
 
-	protected void drawTextBox(List<String> text, List<String> colors, int mouseX, int mouseY) {
+	protected void drawTextBox(List<String> text, List<Integer> colors, int mouseX, int mouseY) {
 		GL11.glPushMatrix();
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -112,7 +112,7 @@ public abstract class GuiMachine extends GuiContainer {
 			drawGradientRect(mouseX - 3, mouseY - 3, mouseX + var5 + 3, mouseY - 3 + 1, var11, var11);
 			drawGradientRect(mouseX - 3, mouseY + var9 + 2, mouseX + var5 + 3, mouseY + var9 + 3, var12, var12);
 			for(int i = 0; i < text.size(); i++) {
-				fontRenderer.drawStringWithShadow("\u00a7" + colors.get(i) + text.get(i), mouseX, mouseY, -1);
+				fontRenderer.drawStringWithShadow(text.get(i), mouseX, mouseY, colors.get(i));
 				if(i == 0)
 					mouseY += 2;
 				mouseY += 10;

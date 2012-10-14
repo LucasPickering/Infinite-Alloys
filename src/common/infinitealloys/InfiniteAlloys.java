@@ -44,9 +44,10 @@ public class InfiniteAlloys {
 		ingotID = config.getItem("Ingot", Configuration.CATEGORY_ITEM, 14000).getInt();
 		alloyIngotID = config.getItem("Alloy Ingot", Configuration.CATEGORY_ITEM, 14001).getInt();
 		upgradeID = config.getItem("Upgrade", Configuration.CATEGORY_ITEM, 14002).getInt();
-		int[] colors = { 0xffffff, 0xc5763d, 0x858586, 0xd2cda3, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
+
+		int[] metalColors = { 0xffffff, 0xc5763d, 0x858586, 0xd2cda3, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
 		for(int i = 0; i < IAValues.metalCount; i++)
-			IAValues.ingotColors[i] = config.get("Ingot Colors", IAValues.metalNames[i], colors[i]).getInt();
+			IAValues.metalColors[i] = config.get("Metal Colors", IAValues.metalNames[i], metalColors[i]).getInt();
 		config.save();
 	}
 

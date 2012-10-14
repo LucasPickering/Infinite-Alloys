@@ -24,7 +24,7 @@ public class GuiMetalForge extends GuiMachine {
 		for(int i = 0; i < IAValues.metalCount; i++) {
 			Slot slot = inventorySlots.getSlot(i + 1);
 			if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY) && 0 <= i && i <= 8)
-				drawTextBox(IAValues.metalNames[i], mouseX, mouseY);
+				drawTextBox(IAValues.metalNames[i], 0xffffff, mouseX, mouseY);
 		}
 	}
 
