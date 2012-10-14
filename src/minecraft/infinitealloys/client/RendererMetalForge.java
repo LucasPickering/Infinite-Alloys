@@ -2,7 +2,6 @@ package infinitealloys.client;
 
 import infinitealloys.TileEntityMetalForge;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import net.minecraft.src.ModelBase;
 import net.minecraft.src.ModelRenderer;
 import net.minecraft.src.TileEntity;

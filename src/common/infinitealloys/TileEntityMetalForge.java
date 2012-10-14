@@ -2,27 +2,15 @@ package infinitealloys;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import net.minecraft.src.BlockFurnace;
-import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.IInventory;
-import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NBTTagList;
-import net.minecraft.src.Packet;
-import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntityFurnace;
-import net.minecraft.src.World;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntityMetalForge extends TileEntityMachineInventory {
+public class TileEntityMetalForge extends TileEntityMachine {
 
 	/**
 	 * The amount of ticks that the fuel in the slot will burn for.
@@ -60,7 +48,8 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	}
 
 	public TileEntityMetalForge() {
-		inventoryStacks = new ItemStack[29];
+		super(10);
+		inventoryStacks = new ItemStack[30];
 		orientation = 2;
 	}
 
@@ -103,22 +92,22 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 
 	@Override
 	public void updateEntity() {
+		super.updateEntity();
 		updateUpgrades();
 		boolean invChanged = false;
 		if(heatLeft < getIngotsInRecipe()) {
 			currentFuelBurnTime = 0;
 			if(inventoryStacks[0] != null)
-				currentFuelBurnTime = (int)((float)TileEntityFurnace.getItemBurnTime(inventoryStacks[0]) * fuelBonus);
+				currentFuelBurnTime = (int)(TileEntityFurnace.getItemBurnTime(inventoryStacks[0]) * fuelBonus);
 			if(shouldBurn()) {
 				heatLeft = currentFuelBurnTime;
 				invChanged = true;
-				if(inventoryStacks[0] != null)
-					if(--inventoryStacks[0].stackSize <= 0)
-						inventoryStacks[0] = null;
+				if(--inventoryStacks[0].stackSize <= 0)
+					inventoryStacks[0] = null;
 			}
 		}
 		if(shouldBurn()) {
-			smeltProgress += 64 - getIngotsInRecipe();
+			smeltProgress += getInventoryStackLimit() - getIngotsInRecipe() + 1;
 			heatLeft -= getIngotsInRecipe();
 			if(smeltProgress >= ticksToFinish) {
 				smeltProgress = 0;
@@ -162,7 +151,7 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 			else
 				sufficientIngots.add(false);
 		}
-		if(typesInRecipe > 1 && !sufficientIngots.contains(false) && (heatLeft > getIngotsInRecipe() || currentFuelBurnTime != 0) && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= getIngotsInRecipe())))
+		if(typesInRecipe > 1 && !sufficientIngots.contains(false) && (heatLeft > getIngotsInRecipe() || currentFuelBurnTime != 0) && (inventoryStacks[11] == null || (inventoryStacks[11].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[11].stackSize >= getIngotsInRecipe())))
 			return true;
 		return false;
 	}
@@ -171,7 +160,7 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	 * Updates the settings based on the speed, capacity, and efficiency
 	 * upgrades.
 	 */
-	private void updateUpgrades() {
+	protected void updateUpgrades() {
 		if((upgrades & 32) == 32)
 			ticksToFinish = 150;
 		if((upgrades & 64) == 64)
@@ -191,10 +180,10 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 			decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
 		}
 		ItemStack ingotResult = getIngotResult();
-		if(inventoryStacks[10] == null)
-			inventoryStacks[10] = ingotResult;
-		else if(inventoryStacks[10].isItemEqual(ingotResult))
-			inventoryStacks[10].stackSize += ingotResult.stackSize;
+		if(inventoryStacks[11] == null)
+			inventoryStacks[11] = ingotResult;
+		else if(inventoryStacks[11].isItemEqual(ingotResult))
+			inventoryStacks[11].stackSize += ingotResult.stackSize;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -232,7 +221,6 @@ public class TileEntityMetalForge extends TileEntityMachineInventory {
 	 */
 	private ItemStack getIngotResult() {
 		int damage = 0;
-		ItemStack itemstack = new ItemStack(InfiniteAlloys.alloyIngot);
 		for(int i = 0; i < recipeAmts.length; i++)
 			damage += Math.pow(8D, i) * recipeAmts[i];
 		return new ItemStack(InfiniteAlloys.alloyIngot, getIngotsInRecipe(), damage);

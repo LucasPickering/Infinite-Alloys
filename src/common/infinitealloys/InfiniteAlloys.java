@@ -1,6 +1,6 @@
 package infinitealloys;
 
-import infinitealloys.network.GuiHandler;
+import infinitealloys.handlers.GuiHandler;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraftforge.common.Configuration;
@@ -17,7 +17,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 
 @Mod(modid = "InfiniteAlloys", name = "InfiniteAlloys", version = "0.0.0")
-@NetworkMod(channels = { "InfiniteAlloys" }, clientSideRequired = true, serverSideRequired = false, packetHandler = infinitealloys.network.PacketHandler.class)
+@NetworkMod(channels = { "InfiniteAlloys" }, clientSideRequired = true, serverSideRequired = false, packetHandler = infinitealloys.handlers.PacketHandler.class)
 public class InfiniteAlloys {
 
 	@Instance("InfiniteAlloys")

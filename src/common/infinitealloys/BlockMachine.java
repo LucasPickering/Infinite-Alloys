@@ -1,7 +1,7 @@
 package infinitealloys;
 
 import infinitealloys.client.ClientProxy;
-import infinitealloys.network.PacketHandler;
+import infinitealloys.handlers.PacketHandler;
 import java.util.List;
 import java.util.Random;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -37,7 +37,6 @@ public class BlockMachine extends BlockContainer {
 		if(entityplayer.isSneaking()) return false;
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getPacketToClient(tem));
-		if(tem.upgrade(entityplayer.inventory)) return true;
 		if(tem instanceof TileEntityComputer)
 			entityplayer.openGui(InfiniteAlloys.instance, 0, world, x, y, z);
 		else if(tem instanceof TileEntityMetalForge)
@@ -80,27 +79,24 @@ public class BlockMachine extends BlockContainer {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
 			tem.dropUpgrades(random);
-			if(tem instanceof TileEntityMachineInventory) {
-				TileEntityMachineInventory temi = (TileEntityMachineInventory)tem;
-				for(int i = 0; i < temi.getSizeInventory(); i++) {
-					ItemStack itemstack = temi.getStackInSlot(i);
-					if(itemstack != null) {
-						float f = random.nextFloat() * 0.8F + 0.1F;
-						float f1 = random.nextFloat() * 0.8F + 0.1F;
-						float f2 = random.nextFloat() * 0.8F + 0.1F;
-						while(itemstack.stackSize > 0) {
-							int j = random.nextInt(21) + 10;
-							if(j > itemstack.stackSize)
-								j = itemstack.stackSize;
-							itemstack.stackSize -= j;
-							EntityItem entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(itemstack.itemID, j, itemstack.getItemDamage()));
-							if(itemstack.hasTagCompound())
-								entityitem.item.setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
-							entityitem.motionX = (double)((float)random.nextGaussian() * 0.05F);
-							entityitem.motionY = (double)((float)random.nextGaussian() * 0.05F + 0.2F);
-							entityitem.motionZ = (double)((float)random.nextGaussian() * 0.05F);
-							world.spawnEntityInWorld(entityitem);
-						}
+			for(int i = 0; i < tem.getSizeInventory(); i++) {
+				ItemStack itemstack = tem.getStackInSlot(i);
+				if(itemstack != null) {
+					float f = random.nextFloat() * 0.8F + 0.1F;
+					float f1 = random.nextFloat() * 0.8F + 0.1F;
+					float f2 = random.nextFloat() * 0.8F + 0.1F;
+					while(itemstack.stackSize > 0) {
+						int j = random.nextInt(21) + 10;
+						if(j > itemstack.stackSize)
+							j = itemstack.stackSize;
+						itemstack.stackSize -= j;
+						EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, new ItemStack(itemstack.itemID, j, itemstack.getItemDamage()));
+						if(itemstack.hasTagCompound())
+							entityitem.item.setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
+						entityitem.motionX = (float)random.nextGaussian() * 0.05F;
+						entityitem.motionY = (float)random.nextGaussian() * 0.05F + 0.2F;
+						entityitem.motionZ = (float)random.nextGaussian() * 0.05F;
+						world.spawnEntityInWorld(entityitem);
 					}
 				}
 			}
@@ -127,7 +123,7 @@ public class BlockMachine extends BlockContainer {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityliving) {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
-			tem.orientation = (byte)(MathHelper.floor_double((double)(entityliving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3);
+			tem.orientation = (byte)(MathHelper.floor_double(entityliving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3);
 			world.markBlockNeedsUpdate(x, y, z);
 		}
 	}

@@ -1,7 +1,6 @@
-package infinitealloys.network;
+package infinitealloys.handlers;
 
 import infinitealloys.IAValues;
-import infinitealloys.InfiniteAlloys;
 import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityMetalForge;
 import java.io.ByteArrayOutputStream;

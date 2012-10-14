@@ -1,15 +1,6 @@
 package infinitealloys;
 
-import infinitealloys.client.GuiComputer;
-import infinitealloys.client.GuiMetalForge;
-import infinitealloys.client.RendererMetalForge;
-import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
-import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 

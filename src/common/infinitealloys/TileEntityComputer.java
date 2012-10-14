@@ -1,16 +1,10 @@
 package infinitealloys;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 import net.minecraft.src.Block;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
 
 public class TileEntityComputer extends TileEntityMachine {
 
@@ -57,6 +51,7 @@ public class TileEntityComputer extends TileEntityMachine {
 
 	public TileEntityComputer() {
 		super();
+		inventoryStacks = new ItemStack[1];
 		orientation = 2;
 	}
 
@@ -68,7 +63,7 @@ public class TileEntityComputer extends TileEntityMachine {
 			int x = networkMachineInfo[i][1];
 			int y = networkMachineInfo[i][1];
 			int z = networkMachineInfo[i][1];
-			if(!isMachine(Block.blocksList[worldObj.getBlockId(x, y, z)], x, y, z))
+			if(!isMachine(Block.blocksList[worldObj.getBlockId(x, y, z)]))
 				Arrays.fill(networkMachineInfo[i], -1);
 		}
 		if(networkFull()) return;
@@ -97,8 +92,8 @@ public class TileEntityComputer extends TileEntityMachine {
 								TileEntity te = worldObj.getBlockTileEntity(searchX, searchY, searchZ);
 								if(te == null)
 									continue;
-								int networkID = ((TileEntityMachineInventory)te).networkID;
-								if(isMachine(block, x, y, z) && rangeCheck(searchX, searchY, searchZ))
+								int networkID = ((TileEntityMachine)te).networkID;
+								if(isMachine(block) && rangeCheck(searchX, searchY, searchZ))
 									addMachine(getSpotForId(networkID), networkID, searchX, searchY, searchZ);
 							}
 	}
@@ -121,6 +116,7 @@ public class TileEntityComputer extends TileEntityMachine {
 
 	@Override
 	public void updateEntity() {
+		super.updateEntity();
 		if(!init) {
 			maxIdCount = maxIdCountA[getBlockMetadata()];
 			networkRange = networkRangeA[getBlockMetadata()];
@@ -131,10 +127,9 @@ public class TileEntityComputer extends TileEntityMachine {
 			updateNetwork();
 			init = true;
 		}
-		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 	}
 
-	private boolean isMachine(Block block, int x, int y, int z) {
+	private boolean isMachine(Block block) {
 		return block instanceof BlockMachine;
 	}
 
@@ -173,7 +168,7 @@ public class TileEntityComputer extends TileEntityMachine {
 	 * Updates the settings based on the speed, capacity, and efficiency
 	 * upgrades.
 	 */
-	private void updateUpgrades() {
+	protected void updateUpgrades() {
 		if((upgrades & 1) == 1)
 			maxIdCount = maxIdCountA[1];
 		if((upgrades & 2) == 2)
@@ -201,5 +196,10 @@ public class TileEntityComputer extends TileEntityMachine {
 	@Override
 	public boolean isUpgradeValid(ItemStack upgrade) {
 		return false;
+	}
+
+	@Override
+	public String getInvName() {
+		return "Computer";
 	}
 }

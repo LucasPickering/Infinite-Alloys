@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
-import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.ItemStack;
 
 public class ItemAlloyIngot extends ItemIA {
@@ -24,7 +23,7 @@ public class ItemAlloyIngot extends ItemIA {
 		float[] metalMasses = new float[IAValues.metalCount];
 		float totalMass = 0;
 		for(int i = 0; i < IAValues.metalCount; i++) {
-			metalMasses[i] = InfiniteAlloys.intAtPositionOctal(IAValues.metalCount, itemstack.getItemDamage(), i) * IAValues.densities[i];
+			metalMasses[i] = InfiniteAlloys.intAtPositionOctal(IAValues.metalCount, itemstack.getItemDamage(), i);
 			totalMass += metalMasses[i];
 		}
 		for(int i = 0; i < IAValues.metalCount; i++) {

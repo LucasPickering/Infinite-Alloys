@@ -1,7 +1,9 @@
-package infinitealloys.network;
+package infinitealloys.handlers;
 
 import cpw.mods.fml.common.network.IGuiHandler;
+import infinitealloys.ContainerMachine;
 import infinitealloys.ContainerMetalForge;
+import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityComputer;
 import infinitealloys.TileEntityMetalForge;
 import infinitealloys.client.GuiComputer;
@@ -16,6 +18,8 @@ public class GuiHandler implements IGuiHandler {
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 		switch(id) {
+			case 0:
+				return new ContainerMachine(player.inventory, (TileEntityMachine)tileEntity);
 			case 1:
 				return new ContainerMetalForge(player.inventory, (TileEntityMetalForge)tileEntity);
 		}
@@ -27,7 +31,7 @@ public class GuiHandler implements IGuiHandler {
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 		switch(id) {
 			case 0:
-				return new GuiComputer((TileEntityComputer)tileEntity);
+				return new GuiComputer(player.inventory, (TileEntityComputer)tileEntity);
 			case 1:
 				return new GuiMetalForge(player.inventory, (TileEntityMetalForge)tileEntity);
 		}

@@ -6,7 +6,6 @@ import infinitealloys.TileEntityComputer;
 import infinitealloys.TileEntityMetalForge;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
@@ -15,7 +14,6 @@ import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.RenderBlocks;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntityRenderer;
-import net.minecraft.src.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHandler {
