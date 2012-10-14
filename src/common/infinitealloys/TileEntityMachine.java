@@ -22,7 +22,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public byte networkID;
 
 	/**
-	 * A binary integer used to determine what upgrades have been installed.
+	 * A binary integer used to determine what upgrades have been installed
 	 */
 	public int upgrades;
 
@@ -32,7 +32,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public byte orientation;
 
 	/**
-	 * The index of the slot that upgrades are placed in.
+	 * The index of the slot that upgrades are placed in
 	 */
 	public int upgradeSlotIndex = 0;
 
@@ -46,14 +46,16 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	@Override
 	public void updateEntity() {
 		updateUpgrades();
-		if(inventoryStacks[upgradeSlotIndex] != null)
-
-			BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
+		if(inventoryStacks[upgradeSlotIndex] != null) {
+			upgrade(inventoryStacks[upgradeSlotIndex]);
+			inventoryStacks[upgradeSlotIndex] = null;
+		}
+		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	/**
-	 * Determines if the current item is capable of upgrading the machine. If it
-	 * is, it will upgrade.
+	 * Determines if the current item is capable of upgrading the machine and
+	 * upgrades if it is
 	 * 
 	 * @param inventoryPlayer
 	 * @return Upgrade valid
@@ -62,7 +64,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		if(!isUpgradeValid(upgrade))
 			return false;
 		int damage = upgrade.getItemDamage();
-		if((damage | upgrades) != upgrades && (((damage >> 1) | upgrades) == upgrades || damage == 1 || damage == 32 || damage == 256 || damage == 2048)) {
+		if(!hasPrereqUpgrade(upgrade) || ((damage >> 1) | upgrades) == upgrades && (damage | upgrades) != upgrades) {
 			upgrades |= damage;
 			return true;
 		}
@@ -104,6 +106,28 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 */
 	protected abstract void updateUpgrades();
 
+	/**
+	 * Is the upgrade a prerequisite for another
+	 * 
+	 * @param upgrade
+	 * @return true if it is a prereq
+	 */
+	public boolean isPrereqUpgrade(ItemStack upgrade) {
+		int damage = upgrade.getItemDamage();
+		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex || damage == 1 || damage == 4 || damage == 16 || damage == 64;
+	}
+
+	/**
+	 * Does the upgrade require another to work?
+	 * 
+	 * @param upgrade
+	 * @return true if it has a prereq
+	 */
+	public boolean hasPrereqUpgrade(ItemStack upgrade) {
+		int damage = upgrade.getItemDamage();
+		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex || damage == 2 || damage == 8 || damage == 32 || damage == 128;
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
@@ -143,8 +167,9 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return PacketHandler.getPacketToClient(this);
 	}
 
-	public void handlePacketData(byte orientation, byte networkID) {
+	public void handlePacketData(byte orientation, int upgrades, byte networkID) {
 		this.orientation = orientation;
+		this.upgrades = upgrades;
 		this.networkID = networkID;
 	}
 
@@ -172,6 +197,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return 0;
 	}
 
+	@Override
 	public ItemStack decrStackSize(int slot, int amt) {
 		if(inventoryStacks[slot] != null) {
 			ItemStack stack;

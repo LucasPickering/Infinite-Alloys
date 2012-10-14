@@ -13,12 +13,12 @@ import net.minecraftforge.common.ForgeDirection;
 public class TileEntityMetalForge extends TileEntityMachine {
 
 	/**
-	 * The amount of ticks that the fuel in the slot will burn for.
+	 * The amount of ticks that the fuel in the slot will burn for
 	 */
 	public int currentFuelBurnTime;
 
 	/**
-	 * The ticks that the metal forge can burn for before using more fuel.
+	 * The ticks that the metal forge can burn for before using more fuel
 	 */
 	public int heatLeft;
 
@@ -28,7 +28,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	public float fuelBonus = 1F;
 
 	/**
-	 * Ticks it takes to finish smelting one ingot.
+	 * Ticks it takes to finish smelting one ingot
 	 */
 	public int ticksToFinish = 12800;
 
@@ -136,7 +136,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 
 	@Override
 	public boolean isUpgradeValid(ItemStack upgrade) {
-		return false;
+		return true;
 	}
 
 	private boolean shouldBurn() {
@@ -188,7 +188,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 
 	@SideOnly(Side.CLIENT)
 	/**
-	 * Get a scaled cook progress, used for the gui progress bar.
+	 * Get a scaled cook progress, used for the gui progress bar
 	 * @param i Scale
 	 * @return Scaled progress
 	 */
@@ -198,7 +198,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 
 	@SideOnly(Side.CLIENT)
 	/**
-	 * Get a scaled burn time, used for the gui flames.
+	 * Get a scaled burn time, used for the gui flames
 	 * @param i Scale
 	 * @return Scaled burn time
 	 */
@@ -215,7 +215,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	/**
-	 * Return the resulting ingot for the smelted ingots.
+	 * Return the resulting ingot for the smelted ingots
 	 * 
 	 * @return The resulting ingot.
 	 */

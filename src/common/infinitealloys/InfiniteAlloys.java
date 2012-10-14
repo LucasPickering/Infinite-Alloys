@@ -54,6 +54,7 @@ public class InfiniteAlloys {
 	public void load(FMLInitializationEvent event) {
 		proxy.initBlocks();
 		proxy.initItems();
+		proxy.initRecipes();
 		proxy.initTileEntities();
 		proxy.initRendering();
 		NetworkRegistry.instance().registerGuiHandler(instance, new GuiHandler());

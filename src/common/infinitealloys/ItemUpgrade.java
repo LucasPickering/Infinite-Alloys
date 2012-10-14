@@ -31,47 +31,7 @@ public class ItemUpgrade extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, List list) {
-		switch(itemstack.getItemDamage()) {
-			case 1:
-				list.add("Speed I");
-				break;
-			case 2:
-				list.add("Speed II");
-				break;
-			case 4:
-				list.add("Efficiency I");
-				break;
-			case 8:
-				list.add("Efficiency II");
-				break;
-			case 16:
-				list.add("Pressure I");
-				break;
-			case 32:
-				list.add("Acidity I");
-				break;
-			case 64:
-				list.add("Heat II");
-				break;
-			case 128:
-				list.add("Pressure II");
-				break;
-			case 256:
-				list.add("Acidity II");
-				break;
-			case 512:
-				list.add("Connections I");
-				break;
-			case 1024:
-				list.add("Connections II");
-				break;
-			case 2048:
-				list.add("Range I");
-				break;
-			case 4096:
-				list.add("Range II");
-				break;
-		}
+		list.add(IAValues.upgradeNames[(int)InfiniteAlloys.logn(2, itemstack.getItemDamage())]);
 	}
 
 	@Override

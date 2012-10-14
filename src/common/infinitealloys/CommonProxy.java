@@ -1,5 +1,6 @@
 package infinitealloys;
 
+import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -26,6 +27,17 @@ public class CommonProxy {
 			LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 0, i), IAValues.metalNames[i + 1] + " Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.alloyIngot), "Alloy Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.upgrade), "Upgrade");
+	}
+
+	public void initRecipes() {
+		FurnaceRecipes.smelting().addSmelting(InfiniteAlloys.ore.blockID, 0, new ItemStack(InfiniteAlloys.ingot, 1, 0));
+		FurnaceRecipes.smelting().addSmelting(InfiniteAlloys.ore.blockID, 1, new ItemStack(InfiniteAlloys.ingot, 1, 1));
+		FurnaceRecipes.smelting().addSmelting(InfiniteAlloys.ore.blockID, 2, new ItemStack(InfiniteAlloys.ingot, 1, 2));
+		FurnaceRecipes.smelting().addSmelting(InfiniteAlloys.ore.blockID, 3, new ItemStack(InfiniteAlloys.ingot, 1, 3));
+		FurnaceRecipes.smelting().addSmelting(InfiniteAlloys.ore.blockID, 4, new ItemStack(InfiniteAlloys.ingot, 1, 4));
+		FurnaceRecipes.smelting().addSmelting(InfiniteAlloys.ore.blockID, 5, new ItemStack(InfiniteAlloys.ingot, 1, 5));
+		FurnaceRecipes.smelting().addSmelting(InfiniteAlloys.ore.blockID, 6, new ItemStack(InfiniteAlloys.ingot, 1, 6));
+		FurnaceRecipes.smelting().addSmelting(InfiniteAlloys.ore.blockID, 7, new ItemStack(InfiniteAlloys.ingot, 1, 7));
 	}
 
 	public void initTileEntities() {

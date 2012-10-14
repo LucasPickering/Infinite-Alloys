@@ -31,8 +31,9 @@ public class PacketHandler implements IPacketHandler {
 			TileEntity te = world.getBlockTileEntity(x, y, z);
 			if(te instanceof TileEntityMachine) {
 				byte networkID = data.readByte();
+				int upgrades = data.readInt();
 				byte orientation = data.readByte();
-				((TileEntityMachine)te).handlePacketData(orientation, networkID);
+				((TileEntityMachine)te).handlePacketData(orientation, upgrades, networkID);
 				if(te instanceof TileEntityMetalForge) {
 					int currentFuelBurnTime = data.readShort();
 					int heatLeft = data.readShort();
@@ -65,6 +66,7 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(tem.yCoord);
 			dos.writeInt(tem.zCoord);
 			dos.writeByte(tem.networkID);
+			dos.writeInt(tem.upgrades);
 			dos.writeByte(tem.orientation);
 			if(tem instanceof TileEntityMetalForge) {
 				TileEntityMetalForge temf = (TileEntityMetalForge)tem;
