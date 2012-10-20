@@ -36,12 +36,11 @@ public class ItemAlloyIngot extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getColorFromDamage(int damage, int renderPass) {
-		damage += IAValues.alloyDamageOffset;
 		ArrayList<Integer> redVals = new ArrayList<Integer>();
 		ArrayList<Integer> greenVals = new ArrayList<Integer>();
 		ArrayList<Integer> blueVals = new ArrayList<Integer>();
 		for(int i = 0; i < IAValues.metalCount; i++) {
-			for(int j = 0; j < InfiniteAlloys.intAtPositionRadix(4, IAValues.metalCount, damage, i); j++) {
+			for(int j = 0; j < InfiniteAlloys.intAtPositionRadix(4, IAValues.metalCount, damage + IAValues.alloyDamageOffset, i); j++) {
 				String ingotColor = InfiniteAlloys.addLeadingZeros(Integer.toHexString(IAValues.metalColors[IAValues.metalCount - 1 - i]), 6);
 				redVals.add(Integer.parseInt(ingotColor.substring(0, 2), 16));
 				greenVals.add(Integer.parseInt(ingotColor.substring(2, 4), 16));

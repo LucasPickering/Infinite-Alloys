@@ -1,7 +1,6 @@
 package infinitealloys;
 
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ICrafting;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
