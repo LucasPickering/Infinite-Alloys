@@ -10,44 +10,24 @@ import net.minecraft.src.TileEntityFurnace;
 public class ContainerMetalForge extends ContainerMachine {
 
 	public TileEntityMetalForge inventory;
-	private int lastSmeltProgress;
-	private int lastBurnTime;
-	private int lastFuelBurnTime;
 
 	public ContainerMetalForge(InventoryPlayer inventoryPlayer, TileEntityMetalForge tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
-		addSlotToContainer(new SlotMetalForge(inventory, 0, 16, 35));
-		for(int y = 0; y < 3; y++)
-			for(int x = 0; x < 3; x++)
-				addSlotToContainer(new SlotMetalForge(inventory, y * 3 + x + 1, x * 18 + 44, y * 18 + 16));
-		addSlotToContainer(new SlotUpgrade(inventory, 10, 128, 8));
-		addSlotToContainer(new SlotMetalForge(inventory, 11, 140, 34));
+		addSlotToContainer(new SlotMetalForge(inventory, 0, 8, 35));
+		for(int y = 0; y < 2; y++)
+			for(int x = 0; x < 4; x++)
+				addSlotToContainer(new SlotMetalForge(inventory, y * 2 + x + 1, x * 18 + 34, y * 18 + 26));
+		addSlotToContainer(new SlotUpgrade(inventory, 9, 128, 8));
+		addSlotToContainer(new SlotMetalForge(inventory, 10, 148, 34));
 		for(int y = 0; y < 2; y++)
 			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new SlotMetalForge(inventory, y * 9 + x + 12, x * 18 + 8, y * 18 + 82));
+				addSlotToContainer(new SlotMetalForge(inventory, y * 9 + x + 11, x * 18 + 8, y * 18 + 82));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
 				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 134 + y * 18));
 		for(int x = 0; x < 9; x++)
 			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 192));
-	}
-
-	@Override
-	public void updateCraftingResults() {
-		super.updateCraftingResults();
-		for(int i = 0; i < crafters.size(); i++) {
-			ICrafting crafting = (ICrafting)crafters.get(i);
-			if(lastSmeltProgress != inventory.smeltProgress)
-				crafting.updateCraftingInventoryInfo(this, 0, inventory.heatLeft);
-			if(lastBurnTime != inventory.heatLeft)
-				crafting.updateCraftingInventoryInfo(this, 1, inventory.heatLeft);
-			if(lastFuelBurnTime != inventory.currentFuelBurnTime)
-				crafting.updateCraftingInventoryInfo(this, 2, inventory.currentFuelBurnTime);
-		}
-		lastSmeltProgress = inventory.smeltProgress;
-		lastBurnTime = inventory.heatLeft;
-		lastFuelBurnTime = inventory.currentFuelBurnTime;
 	}
 
 	@Override
@@ -57,25 +37,25 @@ public class ContainerMetalForge extends ContainerMachine {
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
 			ItemStack stackInSlotCopy = stackInSlot.getStack();
 			itemstack = stackInSlotCopy.copy();
-			if(slot >= 11 && slot <= 29 || slot == 0) {
-				if(!mergeItemStack(stackInSlotCopy, 30, 66, false))
+			if(slot >= 11 && slot <= 28 || slot == 0) {
+				if(!mergeItemStack(stackInSlotCopy, 29, 65, false))
 					return null;
 				stackInSlot.onSlotChange(stackInSlotCopy, itemstack);
 			}
-			else if(slot > 29) {
+			else if(slot > 28) {
 				if(TileEntityFurnace.isItemFuel(stackInSlotCopy)) {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}
 				else if(inventory.getIngotNum(stackInSlotCopy) != -1) {
-					if(!mergeItemStack(stackInSlotCopy, 12, 29, false))
+					if(!mergeItemStack(stackInSlotCopy, 11, 28, false))
 						return null;
 				}
-				else if(slot > 29 && slot <= 56) {
+				else if(slot > 28 && slot <= 56) {
 					if(!this.mergeItemStack(stackInSlotCopy, 57, 66, false))
 						return null;
 				}
-				else if(slot > 56 && !this.mergeItemStack(stackInSlotCopy, 30, 56, false))
+				else if(slot > 56 && !this.mergeItemStack(stackInSlotCopy, 29, 55, false))
 					return null;
 			}
 			if(stackInSlotCopy.stackSize == 0)
@@ -91,9 +71,9 @@ public class ContainerMetalForge extends ContainerMachine {
 
 	@Override
 	public ItemStack slotClick(int slot, int mouseButton, boolean holdingShift, EntityPlayer player) {
-		if((mouseButton == 0 || mouseButton == 1) && slot >= 1 && slot <= 9) {
+		if((mouseButton == 0 || mouseButton == 1) && slot >= 1 && slot <= 8) {
 			if(mouseButton == 0)
-				inventory.recipeAmts[slot - 1] = (byte)Math.min(inventory.recipeAmts[slot - 1] + 1, 8);
+				inventory.recipeAmts[slot - 1] = (byte)Math.min(inventory.recipeAmts[slot - 1] + 1, 3);
 			else if(mouseButton == 1)
 				inventory.recipeAmts[slot - 1] = (byte)Math.max(inventory.recipeAmts[slot - 1] - 1, 0);
 			return null;

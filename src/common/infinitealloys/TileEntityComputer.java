@@ -195,7 +195,7 @@ public class TileEntityComputer extends TileEntityMachine {
 
 	@Override
 	public boolean isUpgradeValid(ItemStack upgrade) {
-		return false;
+		return super.isUpgradeValid(upgrade);
 	}
 
 	@Override

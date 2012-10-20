@@ -46,7 +46,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	@Override
 	public void updateEntity() {
 		updateUpgrades();
-		if(inventoryStacks[upgradeSlotIndex] != null) {
+		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
 			upgrade(inventoryStacks[upgradeSlotIndex]);
 			inventoryStacks[upgradeSlotIndex] = null;
 		}
@@ -60,15 +60,9 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 * @param inventoryPlayer
 	 * @return Upgrade valid
 	 */
-	public boolean upgrade(ItemStack upgrade) {
-		if(!isUpgradeValid(upgrade))
-			return false;
-		int damage = upgrade.getItemDamage();
-		if(!hasPrereqUpgrade(upgrade) || ((damage >> 1) | upgrades) == upgrades && (damage | upgrades) != upgrades) {
-			upgrades |= damage;
-			return true;
-		}
-		return false;
+	public void upgrade(ItemStack upgrade) {
+		if(isUpgradeValid(upgrade))
+			upgrades |= upgrade.getItemDamage();
 	}
 
 	/**
@@ -99,7 +93,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 * @param upgrade
 	 * @return true if valid
 	 */
-	public abstract boolean isUpgradeValid(ItemStack upgrade);
+	public boolean isUpgradeValid(ItemStack upgrade) {
+		int damage = upgrade.getItemDamage();
+		return (!hasPrereqUpgrade(upgrade) || ((damage >> 1) | upgrades) == upgrades) && (damage | upgrades) != upgrades;
+	}
 
 	/**
 	 * Updates all values that are dependent on upgrades
@@ -114,7 +111,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 */
 	public boolean isPrereqUpgrade(ItemStack upgrade) {
 		int damage = upgrade.getItemDamage();
-		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex || damage == 1 || damage == 4 || damage == 16 || damage == 64;
+		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex & (damage == 1 || damage == 4 || damage == 16 || damage == 64);
 	}
 
 	/**
@@ -125,7 +122,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 */
 	public boolean hasPrereqUpgrade(ItemStack upgrade) {
 		int damage = upgrade.getItemDamage();
-		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex || damage == 2 || damage == 8 || damage == 32 || damage == 128;
+		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex && (damage == 2 || damage == 8 || damage == 32 || damage == 128);
 	}
 
 	@Override

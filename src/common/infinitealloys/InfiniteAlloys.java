@@ -45,7 +45,7 @@ public class InfiniteAlloys {
 		alloyIngotID = config.getItem("Alloy Ingot", Configuration.CATEGORY_ITEM, 14001).getInt();
 		upgradeID = config.getItem("Upgrade", Configuration.CATEGORY_ITEM, 14002).getInt();
 
-		int[] metalColors = { 0xffffff, 0xc5763d, 0x858586, 0xd2cda3, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
+		int[] metalColors = { 0xc5763d, 0x858586, 0xd2cda3, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
 		for(int i = 0; i < IAValues.metalCount; i++)
 			IAValues.metalColors[i] = config.get("Metal Colors", IAValues.metalNames[i], metalColors[i]).getInt();
 		config.save();
@@ -65,8 +65,8 @@ public class InfiniteAlloys {
 	public void postInit(FMLPostInitializationEvent event) {
 	}
 
-	public static int intAtPositionOctal(int strlen, int n, int pos) {
-		return new Integer(String.valueOf(addLeadingZeros(Integer.toOctalString(n), strlen).charAt(pos)));
+	public static int intAtPositionRadix(int radix, int strlen, int n, int pos) {
+		return new Integer(String.valueOf(addLeadingZeros(new Integer(n).toString(radix), strlen).charAt(pos)));
 	}
 
 	public static double logn(int base, double num) {

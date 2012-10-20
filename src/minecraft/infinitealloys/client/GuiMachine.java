@@ -37,6 +37,7 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
+		GL11.glDisable(GL11.GL_LIGHTING);
 		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
 		if(idButton.isMouseOver(mouseX, mouseY))
 			drawTextBox("Network ID", 0xffffff, mouseX, mouseY);
@@ -81,7 +82,6 @@ public abstract class GuiMachine extends GuiContainer {
 	protected void drawTextBox(List<String> text, List<Integer> colors, int mouseX, int mouseY) {
 		GL11.glPushMatrix();
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		if(!text.isEmpty()) {
 			int var5 = 0;
@@ -121,10 +121,5 @@ public abstract class GuiMachine extends GuiContainer {
 			itemRenderer.zLevel = 0.0F;
 		}
 		GL11.glPopMatrix();
-	}
-
-	@Override
-	public boolean doesGuiPauseGame() {
-		return false;
 	}
 }

@@ -1,6 +1,6 @@
 ## Welcome to Infinite Alloys
 
-Infinite Alloys is all about using natural metals to create millions of different alloys. While a very large majority
+Infinite Alloys is all about using natural metals to create thousands of different alloys. While a very large majority
 of these alloys won't have a purpose, many still will. These alloys will then be used to create machines, tools,
 upgrades, etc. If you want to help, look through the issues tab for unresolved issues. If you don't know how to
 use github, visit https://help.github.com/ for help.

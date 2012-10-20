@@ -23,7 +23,7 @@ public class GuiMetalForge extends GuiMachine {
 		super.drawScreen(mouseX, mouseY, f);
 		for(int i = 0; i < IAValues.metalCount; i++) {
 			Slot slot = inventorySlots.getSlot(i + 1);
-			if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY) && 0 <= i && i <= 8)
+			if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY) && 0 <= i && i <= 7)
 				drawTextBox(IAValues.metalNames[i], 0xffffff, mouseX, mouseY);
 		}
 	}
@@ -33,9 +33,9 @@ public class GuiMetalForge extends GuiMachine {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		fontRenderer.drawString("Inventory", 42, ySize - 94, 4210752);
-		for(int y = 0; y < 3; y++)
-			for(int x = 0; x < 3; x++)
-				fontRenderer.drawStringWithShadow(new Byte(temf.recipeAmts[y * 3 + x]).toString(), x * 18 + 55, y * 18 + 25, 0xffffff);
+		for(int y = 0; y < 2; y++)
+			for(int x = 0; x < 4; x++)
+				fontRenderer.drawStringWithShadow(new Byte(temf.recipeAmts[y * 4 + x]).toString(), x * 18 + 45, y * 18 + 35, 0xffffff);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
@@ -51,9 +51,9 @@ public class GuiMetalForge extends GuiMachine {
 		int l;
 		if(temf.heatLeft > 0) {
 			l = temf.getBurnTimeRemainingScaled(12);
-			drawTexturedModalRect(left + 16, top + 30 - l, 176, 12 - l, 14, l + 2);
+			drawTexturedModalRect(left + 8, top + 30 - l, 176, 12 - l, 14, l + 2);
 		}
 		l = temf.getCookProgressScaled(24);
-		drawTexturedModalRect(left + 104, top + 34, 176, 14, l + 1, 16);
+		drawTexturedModalRect(left + 112, top + 34, 176, 14, l + 1, 16);
 	}
 }

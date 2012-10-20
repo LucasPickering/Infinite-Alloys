@@ -48,8 +48,8 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	public TileEntityMetalForge() {
-		super(10);
-		inventoryStacks = new ItemStack[30];
+		super(9);
+		inventoryStacks = new ItemStack[29];
 		orientation = 2;
 	}
 
@@ -136,7 +136,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 
 	@Override
 	public boolean isUpgradeValid(ItemStack upgrade) {
-		return true;
+		return super.isUpgradeValid(upgrade);
 	}
 
 	private boolean shouldBurn() {
@@ -145,13 +145,9 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		for(int amt : recipeAmts)
 			if(amt > 0)
 				typesInRecipe++;
-		for(int i = 0; i < getIngotAmts().length; i++) {
-			if(getIngotAmts()[i] >= recipeAmts[i])
-				sufficientIngots.add(true);
-			else
-				sufficientIngots.add(false);
-		}
-		if(typesInRecipe > 1 && !sufficientIngots.contains(false) && (heatLeft > getIngotsInRecipe() || currentFuelBurnTime != 0) && (inventoryStacks[11] == null || (inventoryStacks[11].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[11].stackSize >= getIngotsInRecipe())))
+		for(int i = 0; i < getIngotAmts().length; i++)
+			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
+		if(typesInRecipe > 1 && !sufficientIngots.contains(false) && (heatLeft > getIngotsInRecipe() || currentFuelBurnTime != 0) && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= getIngotsInRecipe())))
 			return true;
 		return false;
 	}
@@ -161,14 +157,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 * upgrades.
 	 */
 	protected void updateUpgrades() {
-		if((upgrades & 32) == 32)
-			ticksToFinish = 150;
-		if((upgrades & 64) == 64)
-			ticksToFinish = 100;
-		if((upgrades & 128) == 256)
-			fuelBonus = 1.5F;
-		if((upgrades & 256) == 512)
-			fuelBonus = 2F;
 	}
 
 	private void smeltItem() {
@@ -180,10 +168,10 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
 		}
 		ItemStack ingotResult = getIngotResult();
-		if(inventoryStacks[11] == null)
-			inventoryStacks[11] = ingotResult;
-		else if(inventoryStacks[11].isItemEqual(ingotResult))
-			inventoryStacks[11].stackSize += ingotResult.stackSize;
+		if(inventoryStacks[10] == null)
+			inventoryStacks[10] = ingotResult;
+		else if(inventoryStacks[10].isItemEqual(ingotResult))
+			inventoryStacks[10].stackSize += ingotResult.stackSize;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -207,10 +195,8 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	public int getIngotNum(ItemStack ingot) {
-		if(ingot.itemID == Item.ingotIron.shiftedIndex)
-			return 0;
-		else if(ingot.itemID == InfiniteAlloys.ingot.shiftedIndex && ingot.getItemDamage() < IAValues.metalCount)
-			return ingot.getItemDamage() + 1;
+		if(ingot.itemID == InfiniteAlloys.ingot.shiftedIndex && ingot.getItemDamage() < IAValues.metalCount)
+			return ingot.getItemDamage();
 		return -1;
 	}
 
@@ -222,8 +208,8 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	private ItemStack getIngotResult() {
 		int damage = 0;
 		for(int i = 0; i < recipeAmts.length; i++)
-			damage += Math.pow(8D, i) * recipeAmts[i];
-		return new ItemStack(InfiniteAlloys.alloyIngot, getIngotsInRecipe(), damage);
+			damage += Math.pow(4D, i) * recipeAmts[i];
+		return new ItemStack(InfiniteAlloys.alloyIngot, getIngotsInRecipe(), damage - IAValues.alloyDamageOffset);
 	}
 
 	private ArrayList<Integer> getSlotsWithIngot() {

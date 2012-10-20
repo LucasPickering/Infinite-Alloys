@@ -16,7 +16,7 @@ public class ItemIngot extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < IAValues.oreCount; i++)
+		for(int i = 0; i < IAValues.metalCount; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 
@@ -24,7 +24,7 @@ public class ItemIngot extends ItemIA {
 	@SideOnly(Side.CLIENT)
 	public int getColorFromDamage(int damage, int renderPass) {
 		if(damage < 8)
-			return IAValues.metalColors[damage + 1];
+			return IAValues.metalColors[damage];
 		return 0xffffff;
 	}
 }
