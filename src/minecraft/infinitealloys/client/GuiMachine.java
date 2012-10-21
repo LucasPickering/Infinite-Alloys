@@ -65,7 +65,7 @@ public abstract class GuiMachine extends GuiContainer {
 				tem.networkID = (byte)Math.max(tem.networkID - 1, 0);
 				mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
 			}
-			PacketDispatcher.sendPacketToServer(PacketHandler.getPacketToServer(((ContainerMachine)inventorySlots).inventory));
+			PacketDispatcher.sendPacketToServer(PacketHandler.getPacketToServer(tem));
 			idButton.displayString = new Byte(tem.networkID).toString();
 		}
 	}

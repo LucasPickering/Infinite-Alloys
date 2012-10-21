@@ -1,6 +1,8 @@
 package infinitealloys;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
@@ -31,13 +33,13 @@ public class TileEntityComputer extends TileEntityMachine {
 	/**
 	 * 2D array, storing ID, x, y, and z for each connected machine
 	 */
-	private int[][] networkMachineInfo;
+	public ArrayList<NetworkMachineInfo> networkMachineInfo;
 
 	/**
 	 * Array of IDs selected by the player, set using the "+" and "-" buttons on
 	 * the GUI
 	 */
-	public int[] selectedIDs;
+	public byte[] selectedIDs;
 
 	/**
 	 * Has been initialized
@@ -59,43 +61,32 @@ public class TileEntityComputer extends TileEntityMachine {
 	 * Update the network to add and remove machines
 	 */
 	public void updateNetwork() {
-		for(int i = 0; i < networkMachineInfo.length; i++) {
-			int x = networkMachineInfo[i][1];
-			int y = networkMachineInfo[i][1];
-			int z = networkMachineInfo[i][1];
-			if(!isMachine(Block.blocksList[worldObj.getBlockId(x, y, z)]))
-				Arrays.fill(networkMachineInfo[i], -1);
+		if(networkMachineInfo.size() != maxIdCount) {
+			for(int x = 0; x < networkRange; x++)
+				for(int y = 0; y < networkRange; y++)
+					for(int z = 0; z < networkRange; z++)
+						for(int i = 0; i < 2; i++)
+							for(int j = 0; j < 2; j++)
+								for(int k = 0; k < 2; k++) {
+									int searchX = xCoord + i == 0 ? x : -x;
+									int searchY = yCoord + j == 0 ? y : -y;
+									int searchZ = zCoord + k == 0 ? z : -z;
+									Block block = Block.blocksList[worldObj.getBlockId(searchX, searchY, searchZ)];
+									TileEntity te = worldObj.getBlockTileEntity(searchX, searchY, searchZ);
+									if(te == null)
+										continue;
+									byte networkID = ((TileEntityMachine)te).networkID;
+									if(block instanceof BlockMachine && rangeCheck(searchX, searchY, searchZ) && getSpotForId(networkID) != -1)
+										networkMachineInfo.add(getSpotForId(networkID), new NetworkMachineInfo(networkID, searchX, searchY, searchZ));
+								}
 		}
-		if(networkFull()) return;
-		for(int x = 0; x < networkRange; x++)
-			for(int y = 0; y < networkRange; y++)
-				for(int z = 0; z < networkRange; z++)
-					for(int i = 0; i < 2; i++)
-						for(int j = 0; j < 2; j++)
-							for(int k = 0; k < 2; k++) {
-								int searchX = xCoord;
-								int searchY = xCoord;
-								int searchZ = xCoord;
-								if(i == 0)
-									searchX += x;
-								else
-									searchX -= x;
-								if(j == 0)
-									searchY += y;
-								else
-									searchY -= y;
-								if(k == 0)
-									searchZ += z;
-								else
-									searchZ -= z;
-								Block block = Block.blocksList[worldObj.getBlockId(searchX, searchY, searchZ)];
-								TileEntity te = worldObj.getBlockTileEntity(searchX, searchY, searchZ);
-								if(te == null)
-									continue;
-								int networkID = ((TileEntityMachine)te).networkID;
-								if(isMachine(block) && rangeCheck(searchX, searchY, searchZ))
-									addMachine(getSpotForId(networkID), networkID, searchX, searchY, searchZ);
-							}
+		for(int i = 0; i < networkMachineInfo.size(); i++) {
+			NetworkMachineInfo info = networkMachineInfo.get(i);
+			Block block = Block.blocksList[worldObj.getBlockId(info.x, info.y, info.z)];
+			TileEntity te = worldObj.getBlockTileEntity(info.x, info.y, info.z);
+			if(!(block instanceof BlockMachine) || info.id == ((TileEntityMachine)te).networkID)
+				networkMachineInfo.remove(i);
+		}
 	}
 
 	/**
@@ -118,37 +109,13 @@ public class TileEntityComputer extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 		if(!init) {
-			maxIdCount = maxIdCountA[getBlockMetadata()];
-			networkRange = networkRangeA[getBlockMetadata()];
-			networkMachineInfo = new int[maxIdCount][4];
-			selectedIDs = new int[maxIdCount];
-			for(int i = 0; i < networkMachineInfo.length; i++)
-				Arrays.fill(networkMachineInfo[i], -1);
-			updateNetwork();
+			maxIdCount = maxIdCountA[2];
+			networkRange = networkRangeA[0];
+			networkMachineInfo = new ArrayList<NetworkMachineInfo>(maxIdCount);
+			selectedIDs = new byte[maxIdCount];
 			init = true;
 		}
-	}
-
-	private boolean isMachine(Block block) {
-		return block instanceof BlockMachine;
-	}
-
-	/**
-	 * @return True if no machines can connect, false if there is space on the
-	 *         network
-	 */
-	private boolean networkFull() {
-		for(int i = 0; i < networkMachineInfo.length; i++)
-			if(networkMachineInfo[i][0] == -1) return false;
-		return true;
-	}
-
-	private void addMachine(int computerSpot, int id, int x, int y, int z) {
-		if(computerSpot == -1) return;
-		networkMachineInfo[computerSpot][0] = id;
-		networkMachineInfo[computerSpot][1] = x;
-		networkMachineInfo[computerSpot][2] = y;
-		networkMachineInfo[computerSpot][3] = z;
+		updateNetwork();
 	}
 
 	/**
@@ -157,40 +124,33 @@ public class TileEntityComputer extends TileEntityMachine {
 	 * @param id
 	 * @return Slot on the computer with the given id, or -1 if there is none
 	 */
-	private int getSpotForId(int id) {
+	private int getSpotForId(byte id) {
 		for(int i = 0; i < selectedIDs.length; i++)
 			if(selectedIDs[i] == id)
 				return i;
 		return -1;
 	}
 
-	/**
-	 * Updates the settings based on the speed, capacity, and efficiency
-	 * upgrades.
-	 */
-	protected void updateUpgrades() {
-		if((upgrades & 1) == 1)
-			maxIdCount = maxIdCountA[1];
-		if((upgrades & 2) == 2)
-			maxIdCount = maxIdCountA[2];
-		if((upgrades & 4) == 4)
-			networkRange = networkRangeA[1];
-		if((upgrades & 8) == 8)
-			networkRange = networkRangeA[1];
+	public void handlePacketDataFromClient(byte[] ids) {
+		selectedIDs = ids;
+	}
+
+	public void handlePacketDataFromServer(byte[] ids) {
+		selectedIDs = ids;
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 		for(int i = 0; i < maxIdCount; i++)
-			selectedIDs[i] = nbttagcompound.getShort("SelectedID" + i);
+			selectedIDs[i] = nbttagcompound.getByte("SelectedID" + i);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 		for(int i = 0; i < maxIdCount; i++)
-			nbttagcompound.setShort("SelectedID" + i, (short)selectedIDs[i]);
+			nbttagcompound.setByte("SelectedID" + i, selectedIDs[i]);
 	}
 
 	@Override
@@ -201,5 +161,9 @@ public class TileEntityComputer extends TileEntityMachine {
 	@Override
 	public String getInvName() {
 		return "Computer";
+	}
+
+	@Override
+	protected void updateUpgrades() {
 	}
 }

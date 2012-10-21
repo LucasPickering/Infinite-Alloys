@@ -82,7 +82,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			nbttagcompound.setByte("Recipe Amount " + i, recipeAmts[i]);
 	}
 
-	public void handlePacketData(int currentFuelBurnTime, int heatLeft, int smeltProgress, byte[] recipeAmts) {
+	public void handlePacketDataFromServer(int currentFuelBurnTime, int heatLeft, int smeltProgress, byte[] recipeAmts) {
 		this.currentFuelBurnTime = currentFuelBurnTime;
 		this.heatLeft = heatLeft;
 		this.smeltProgress = smeltProgress;

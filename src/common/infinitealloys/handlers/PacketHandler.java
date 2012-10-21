@@ -1,7 +1,9 @@
 package infinitealloys.handlers;
 
 import infinitealloys.IAValues;
+import infinitealloys.NetworkMachineInfo;
 import infinitealloys.TileEntityMachine;
+import infinitealloys.TileEntityComputer;
 import infinitealloys.TileEntityMetalForge;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -33,7 +35,7 @@ public class PacketHandler implements IPacketHandler {
 				byte networkID = data.readByte();
 				int upgrades = data.readInt();
 				byte orientation = data.readByte();
-				((TileEntityMachine)te).handlePacketData(orientation, upgrades, networkID);
+				((TileEntityMachine)te).handlePacketDataFromServer(orientation, upgrades, networkID);
 				if(te instanceof TileEntityMetalForge) {
 					int currentFuelBurnTime = data.readShort();
 					int heatLeft = data.readShort();
@@ -41,7 +43,7 @@ public class PacketHandler implements IPacketHandler {
 					byte[] recipeAmts = new byte[IAValues.metalCount];
 					for(int i = 0; i < recipeAmts.length; i++)
 						recipeAmts[i] = data.readByte();
-					((TileEntityMetalForge)te).handlePacketData(currentFuelBurnTime, heatLeft, smeltProgress, recipeAmts);
+					((TileEntityMetalForge)te).handlePacketDataFromServer(currentFuelBurnTime, heatLeft, smeltProgress, recipeAmts);
 				}
 			}
 		}
@@ -52,7 +54,11 @@ public class PacketHandler implements IPacketHandler {
 			TileEntity te = world.getBlockTileEntity(x, y, z);
 			if(te instanceof TileEntityMachine) {
 				byte networkID = data.readByte();
-				((TileEntityMachine)te).handlePacketData(networkID);
+				((TileEntityMachine)te).handlePacketDataFromClient(networkID);
+				if(te instanceof TileEntityComputer) {
+					byte[] ids = new byte[((TileEntityComputer)te).maxIdCount];
+					((TileEntityComputer)te).handlePacketDataFromClient(ids);
+				}
 			}
 		}
 	}
@@ -68,6 +74,8 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeByte(tem.networkID);
 			dos.writeInt(tem.upgrades);
 			dos.writeByte(tem.orientation);
+			if(tem instanceof TileEntityComputer)
+				dos.write(((TileEntityComputer)tem).selectedIDs, 0, ((TileEntityComputer)tem).maxIdCount);
 			if(tem instanceof TileEntityMetalForge) {
 				TileEntityMetalForge temf = (TileEntityMetalForge)tem;
 				dos.writeShort(temf.currentFuelBurnTime);
@@ -94,6 +102,8 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(tem.yCoord);
 			dos.writeInt(tem.zCoord);
 			dos.writeByte(tem.networkID);
+			if(tem instanceof TileEntityComputer)
+				dos.write(((TileEntityComputer)tem).selectedIDs, 0, ((TileEntityComputer)tem).maxIdCount);
 		}
 		catch(IOException e) {
 			e.printStackTrace();

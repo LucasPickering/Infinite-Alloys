@@ -164,13 +164,13 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return PacketHandler.getPacketToClient(this);
 	}
 
-	public void handlePacketData(byte orientation, int upgrades, byte networkID) {
+	public void handlePacketDataFromServer(byte orientation, int upgrades, byte networkID) {
 		this.orientation = orientation;
 		this.upgrades = upgrades;
 		this.networkID = networkID;
 	}
 
-	public void handlePacketData(byte networkID) {
+	public void handlePacketDataFromClient(byte networkID) {
 		this.networkID = networkID;
 	}
 
@@ -181,7 +181,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return worldObj.getBlockTileEntity(xCoord, yCoord, zCoord) != this ? false : entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64.0D;
+		return true;
 	}
 
 	@Override
