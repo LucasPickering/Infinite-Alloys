@@ -19,7 +19,7 @@ public class ItemUpgrade extends ItemIA {
 
 	@Override
 	public String getItemNameIS(ItemStack itemstack) {
-		return "IA Upgrade";
+		return "iaUpgrade";
 	}
 
 	@Override

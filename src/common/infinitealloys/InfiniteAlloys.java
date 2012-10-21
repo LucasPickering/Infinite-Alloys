@@ -1,8 +1,10 @@
 package infinitealloys;
 
 import infinitealloys.handlers.GuiHandler;
+import net.minecraft.src.Achievement;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
+import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.Mod;
@@ -34,6 +36,8 @@ public class InfiniteAlloys {
 	public static Item ingot;
 	public static Item alloyIngot;
 	public static Item upgrade;
+	public static Achievement smeltAlloy;
+	public static AchievementPage achPage;
 
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
@@ -44,7 +48,6 @@ public class InfiniteAlloys {
 		ingotID = config.getItem("Ingot", Configuration.CATEGORY_ITEM, 14000).getInt();
 		alloyIngotID = config.getItem("Alloy Ingot", Configuration.CATEGORY_ITEM, 14001).getInt();
 		upgradeID = config.getItem("Upgrade", Configuration.CATEGORY_ITEM, 14002).getInt();
-
 		int[] metalColors = { 0xc5763d, 0x858586, 0xd2cda3, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
 		for(int i = 0; i < IAValues.metalCount; i++)
 			IAValues.metalColors[i] = config.get("Metal Colors", IAValues.metalNames[i], metalColors[i]).getInt();
@@ -57,6 +60,7 @@ public class InfiniteAlloys {
 		proxy.initItems();
 		proxy.initRecipes();
 		proxy.initTileEntities();
+		proxy.initAchievements();
 		proxy.initRendering();
 		NetworkRegistry.instance().registerGuiHandler(instance, new GuiHandler());
 	}
@@ -66,7 +70,7 @@ public class InfiniteAlloys {
 	}
 
 	public static int intAtPositionRadix(int radix, int strlen, int n, int pos) {
-		return new Integer(String.valueOf(addLeadingZeros(new Integer(n).toString(radix), strlen).charAt(pos)));
+		return new Integer(String.valueOf(addLeadingZeros(Integer.toString(n, radix), strlen).charAt(pos)));
 	}
 
 	public static double logn(int base, double num) {

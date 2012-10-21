@@ -36,7 +36,7 @@ public class ContainerMetalForge extends ContainerMachine {
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
 			ItemStack stackInSlotCopy = stackInSlot.getStack();
 			itemstack = stackInSlotCopy.copy();
-			if(slot >= 11 && slot <= 28 || slot == 0) {
+			if(slot >= 10 && slot <= 28 || slot == 0) {
 				if(!mergeItemStack(stackInSlotCopy, 29, 65, false))
 					return null;
 				stackInSlot.onSlotChange(stackInSlotCopy, itemstack);
@@ -54,7 +54,7 @@ public class ContainerMetalForge extends ContainerMachine {
 					if(!this.mergeItemStack(stackInSlotCopy, 57, 66, false))
 						return null;
 				}
-				else if(slot > 56 && !this.mergeItemStack(stackInSlotCopy, 29, 55, false))
+				else if(slot > 56 && !mergeItemStack(stackInSlotCopy, 29, 55, false))
 					return null;
 			}
 			if(stackInSlotCopy.stackSize == 0)

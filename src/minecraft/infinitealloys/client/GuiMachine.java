@@ -1,6 +1,5 @@
 package infinitealloys.client;
 
-import infinitealloys.ContainerMachine;
 import infinitealloys.IAValues;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.TileEntityMachine;

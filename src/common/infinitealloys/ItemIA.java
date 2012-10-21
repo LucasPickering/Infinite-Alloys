@@ -18,6 +18,6 @@ public class ItemIA extends Item {
 
 	@Override
 	public String getItemNameIS(ItemStack itemstack) {
-		return "IA Item " + itemstack.itemID + "@" + itemstack.getItemDamage();
+		return "iaItem" + itemstack.itemID + "@" + itemstack.getItemDamage();
 	}
 }

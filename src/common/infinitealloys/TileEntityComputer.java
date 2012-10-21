@@ -1,8 +1,6 @@
 package infinitealloys;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
 import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
