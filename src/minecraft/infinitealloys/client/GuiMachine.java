@@ -18,7 +18,6 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 public abstract class GuiMachine extends GuiContainer {
 
 	protected TileEntityMachine tem;
-	protected GuiButtonID idButton;
 
 	public GuiMachine(TileEntityMachine tileEntity, Container container) {
 		super(container);
@@ -26,19 +25,10 @@ public abstract class GuiMachine extends GuiContainer {
 	}
 
 	@Override
-	public void initGui() {
-		super.initGui();
-		controlList.clear();
-		controlList.add(idButton = new GuiButtonID(0, width / 2 + 61, height / 2 - 102, new Byte(tem.networkID).toString()));
-	}
-
-	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
-		if(idButton.isMouseOver(mouseX, mouseY))
-			drawTextBox("Network ID", 0xffffff, mouseX, mouseY);
 		if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY)) {
 			ArrayList<String> texts = new ArrayList<String>();
 			ArrayList<Integer> colors = new ArrayList<Integer>();
@@ -51,21 +41,6 @@ public abstract class GuiMachine extends GuiContainer {
 				colors.add(0xaaaaaa);
 			}
 			drawTextBox(texts, colors, mouseX, mouseY);
-		}
-	}
-
-	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-		super.mouseClicked(mouseX, mouseY, mouseButton);
-		if(idButton.mousePressed(mc, mouseX, mouseY)) {
-			if(mouseButton == 0)
-				tem.networkID = (byte)Math.min(tem.networkID + 1, Byte.MAX_VALUE);
-			else if(mouseButton == 1) {
-				tem.networkID = (byte)Math.max(tem.networkID - 1, 0);
-				mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-			}
-			PacketDispatcher.sendPacketToServer(PacketHandler.getPacketToServer(tem));
-			idButton.displayString = new Byte(tem.networkID).toString();
 		}
 	}
 

@@ -190,7 +190,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 * @return Scaled burn time
 	 */
 	public int getBurnTimeRemainingScaled(int i) {
-		return heatLeft * i / currentFuelBurnTime;
+		return heatLeft * i / (currentFuelBurnTime == 0 ? 0 : currentFuelBurnTime);
 	}
 
 	public int getIngotNum(ItemStack ingot) {

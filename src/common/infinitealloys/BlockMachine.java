@@ -33,14 +33,21 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer entityplayer, int i, float f, float f1, float f2) {
-		if(entityplayer.isSneaking()) return false;
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int i, float f, float f1, float f2) {
+		if(player.inventory.getCurrentItem().itemID == InfiniteAlloys.gps.shiftedIndex) {
+			if(player.isSneaking() && world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer)
+				return false;
+			else
+				return false;
+		}
+		if(player.isSneaking())
+			return false;
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getPacketToClient(tem));
 		if(tem instanceof TileEntityComputer)
-			entityplayer.openGui(InfiniteAlloys.instance, 0, world, x, y, z);
+			player.openGui(InfiniteAlloys.instance, 0, world, x, y, z);
 		else if(tem instanceof TileEntityMetalForge)
-			entityplayer.openGui(InfiniteAlloys.instance, 1, world, x, y, z);
+			player.openGui(InfiniteAlloys.instance, 1, world, x, y, z);
 		return true;
 	}
 

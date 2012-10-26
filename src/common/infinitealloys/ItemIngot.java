@@ -10,6 +10,7 @@ public class ItemIngot extends ItemIA {
 
 	public ItemIngot(int id, int texture) {
 		super(id, texture);
+		setHasSubtypes(true);
 		setCreativeTab(CreativeTabs.tabMaterials);
 	}
 
@@ -22,9 +23,9 @@ public class ItemIngot extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getColorFromDamage(int damage, int renderPass) {
-		if(damage < 8)
-			return IAValues.metalColors[damage];
+	public int func_82790_a(ItemStack itemstack, int renderPass) {
+		if(itemstack.getItemDamage() < 8)
+			return IAValues.metalColors[itemstack.getItemDamage()];
 		return 0xffffff;
 	}
 }

@@ -1,7 +1,6 @@
 package infinitealloys.handlers;
 
 import infinitealloys.IAValues;
-import infinitealloys.NetworkMachineInfo;
 import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityComputer;
 import infinitealloys.TileEntityMetalForge;
@@ -9,7 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.NetworkManager;
+import net.minecraft.src.INetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
@@ -22,7 +21,7 @@ import cpw.mods.fml.common.network.Player;
 public class PacketHandler implements IPacketHandler {
 
 	@Override
-	public void onPacketData(NetworkManager manager, Packet250CustomPayload packet, Player player) {
+	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
 		World world = ((EntityPlayer)player).worldObj;
 		boolean toClient = data.readBoolean();
@@ -55,10 +54,6 @@ public class PacketHandler implements IPacketHandler {
 			if(te instanceof TileEntityMachine) {
 				byte networkID = data.readByte();
 				((TileEntityMachine)te).handlePacketDataFromClient(networkID);
-				if(te instanceof TileEntityComputer) {
-					byte[] ids = new byte[((TileEntityComputer)te).maxIdCount];
-					((TileEntityComputer)te).handlePacketDataFromClient(ids);
-				}
 			}
 		}
 	}
@@ -74,8 +69,6 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeByte(tem.networkID);
 			dos.writeInt(tem.upgrades);
 			dos.writeByte(tem.orientation);
-			if(tem instanceof TileEntityComputer)
-				dos.write(((TileEntityComputer)tem).selectedIDs, 0, ((TileEntityComputer)tem).maxIdCount);
 			if(tem instanceof TileEntityMetalForge) {
 				TileEntityMetalForge temf = (TileEntityMetalForge)tem;
 				dos.writeShort(temf.currentFuelBurnTime);
@@ -102,8 +95,6 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(tem.yCoord);
 			dos.writeInt(tem.zCoord);
 			dos.writeByte(tem.networkID);
-			if(tem instanceof TileEntityComputer)
-				dos.write(((TileEntityComputer)tem).selectedIDs, 0, ((TileEntityComputer)tem).maxIdCount);
 		}
 		catch(IOException e) {
 			e.printStackTrace();

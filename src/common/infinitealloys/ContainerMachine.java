@@ -29,8 +29,11 @@ public class ContainerMachine extends Container {
 		return true;
 	}
 
+	/**
+	 * transferStackInSlot
+	 */
 	@Override
-	public ItemStack transferStackInSlot(int slot) {
+	public ItemStack func_82846_b(EntityPlayer player, int slot) {
 		ItemStack itemstack = null;
 		Slot stackInSlot = (Slot)this.inventorySlots.get(slot);
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
@@ -48,7 +51,7 @@ public class ContainerMachine extends Container {
 				stackInSlot.onSlotChanged();
 			if(stackInSlotCopy.stackSize == itemstack.stackSize)
 				return null;
-			stackInSlot.onPickupFromSlot(stackInSlotCopy);
+			stackInSlot.func_82870_a(player, stackInSlotCopy);
 		}
 		return itemstack;
 	}

@@ -13,7 +13,8 @@ public class ItemUpgrade extends ItemIA {
 
 	public ItemUpgrade(int id, int texture) {
 		super(id, texture);
-		maxStackSize = 1;
+		setMaxStackSize(1);
+		setHasSubtypes(true);
 		setCreativeTab(CreativeTabs.tabMisc);
 	}
 
@@ -30,7 +31,7 @@ public class ItemUpgrade extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, List list) {
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
 		list.add(IAValues.upgradeNames[(int)InfiniteAlloys.logn(2, itemstack.getItemDamage())]);
 	}
 

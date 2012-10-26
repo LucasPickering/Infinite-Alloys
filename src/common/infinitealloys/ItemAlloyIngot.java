@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 
 public class ItemAlloyIngot extends ItemIA {
 
 	public ItemAlloyIngot(int id, int texture) {
 		super(id, texture);
+		setHasSubtypes(true);
 	}
 
 	@Override
@@ -19,7 +21,7 @@ public class ItemAlloyIngot extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, List list) {
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
 		float[] metalMasses = new float[IAValues.metalCount];
 		float totalMass = 0;
 		for(int i = 0; i < IAValues.metalCount; i++) {
@@ -35,12 +37,12 @@ public class ItemAlloyIngot extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getColorFromDamage(int damage, int renderPass) {
+	public int func_82790_a(ItemStack itemstack, int renderPass) {
 		ArrayList<Integer> redVals = new ArrayList<Integer>();
 		ArrayList<Integer> greenVals = new ArrayList<Integer>();
 		ArrayList<Integer> blueVals = new ArrayList<Integer>();
 		for(int i = 0; i < IAValues.metalCount; i++) {
-			for(int j = 0; j < InfiniteAlloys.intAtPositionRadix(4, IAValues.metalCount, damage + IAValues.alloyDamageOffset, i); j++) {
+			for(int j = 0; j < InfiniteAlloys.intAtPositionRadix(4, IAValues.metalCount, itemstack.getItemDamage() + IAValues.alloyDamageOffset, i); j++) {
 				String ingotColor = InfiniteAlloys.addLeadingZeros(Integer.toHexString(IAValues.metalColors[IAValues.metalCount - 1 - i]), 6);
 				redVals.add(Integer.parseInt(ingotColor.substring(0, 2), 16));
 				greenVals.add(Integer.parseInt(ingotColor.substring(2, 4), 16));

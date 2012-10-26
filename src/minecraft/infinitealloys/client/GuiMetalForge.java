@@ -29,7 +29,7 @@ public class GuiMetalForge extends GuiMachine {
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer() {
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		fontRenderer.drawString("Inventory", 42, ySize - 94, 4210752);

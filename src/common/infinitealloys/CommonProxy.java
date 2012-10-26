@@ -25,10 +25,12 @@ public class CommonProxy {
 		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 0).setItemName("iaIngot");
 		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 0).setItemName("iaAlloyIngot");
 		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 1).setItemName("iaUpgrade");
+		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 2).setItemName("iaGps");
 		for(int i = 0; i < IAValues.metalCount; i++)
 			LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 0, i), IAValues.metalNames[i] + " Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.alloyIngot), "Alloy Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.upgrade), "Upgrade");
+		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.gps), "GPS");
 	}
 
 	public void initRecipes() {
@@ -51,8 +53,8 @@ public class CommonProxy {
 		InfiniteAlloys.smeltAlloy = new Achievement(2001, "smeltAlloy", 1, -2, InfiniteAlloys.alloyIngot, null).registerAchievement();
 		InfiniteAlloys.achPage = new AchievementPage("Infinite Alloys", InfiniteAlloys.smeltAlloy);
 		AchievementPage.registerAchievementPage(InfiniteAlloys.achPage);
-		addLocalization("achievement.smeltAlloy", "en_US", "Created An Alloy!");
-		addLocalization("achievement.smeltAlloy.desc", "en_US", "You're Cool!");
+		addLocalization("achievement.smeltAlloy", "en_US", "");
+		addLocalization("achievement.smeltAlloy.desc", "en_US", "Created Yo");
 	}
 
 	public void initRendering() {

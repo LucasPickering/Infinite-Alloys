@@ -30,7 +30,7 @@ public class ContainerMetalForge extends ContainerMachine {
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(int slot) {
+	public ItemStack func_82846_b(EntityPlayer player, int slot) {
 		ItemStack itemstack = null;
 		Slot stackInSlot = (Slot)this.inventorySlots.get(slot);
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
@@ -63,20 +63,21 @@ public class ContainerMetalForge extends ContainerMachine {
 				stackInSlot.onSlotChanged();
 			if(stackInSlotCopy.stackSize == itemstack.stackSize)
 				return null;
-			stackInSlot.onPickupFromSlot(stackInSlotCopy);
+			stackInSlot.func_82870_a(player,stackInSlotCopy);
 		}
 		return itemstack;
 	}
 
 	@Override
-	public ItemStack slotClick(int slot, int mouseButton, boolean holdingShift, EntityPlayer player) {
+	public ItemStack slotClick(int slot, int mouseButton, int i, EntityPlayer player) {
 		if((mouseButton == 0 || mouseButton == 1) && slot >= 1 && slot <= 8) {
+			inventory.smeltProgress = 0;
 			if(mouseButton == 0)
 				inventory.recipeAmts[slot - 1] = (byte)Math.min(inventory.recipeAmts[slot - 1] + 1, 3);
 			else if(mouseButton == 1)
 				inventory.recipeAmts[slot - 1] = (byte)Math.max(inventory.recipeAmts[slot - 1] - 1, 0);
 			return null;
 		}
-		return super.slotClick(slot, mouseButton, holdingShift, player);
+		return super.slotClick(slot, mouseButton, i, player);
 	}
 }
