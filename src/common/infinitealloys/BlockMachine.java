@@ -24,7 +24,6 @@ public class BlockMachine extends BlockContainer {
 
 	public BlockMachine(int id, int texture) {
 		super(id, texture, Material.iron);
-		setCreativeTab(CreativeTabs.tabBlock);
 	}
 
 	@Override
@@ -34,11 +33,27 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int i, float f, float f1, float f2) {
-		if(player.inventory.getCurrentItem().itemID == InfiniteAlloys.gps.shiftedIndex) {
-			if(player.isSneaking() && world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer)
-				return false;
-			else
-				return false;
+		ItemStack currentItem = player.inventory.getCurrentItem();
+		if(currentItem != null && currentItem.itemID == InfiniteAlloys.gps.shiftedIndex) {
+			if(player.isSneaking() && world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer) {
+				if(currentItem.hasTagCompound()) {
+					NBTTagCompound tagCompound = currentItem.getTagCompound();
+					int[] coords = tagCompound.getIntArray("coords");
+					if(((TileEntityComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
+						if(world.isRemote)
+							player.addChatMessage("Adding machine at " + coords[0] + ", " + coords[1] + ", " + coords[2]);
+						currentItem.setTagCompound(null);
+					}
+				}
+			}
+			else {
+				NBTTagCompound tagCompound = currentItem.hasTagCompound() ? currentItem.getTagCompound() : new NBTTagCompound();
+				tagCompound.setIntArray("coords", new int[] { x, y, z });
+				currentItem.setTagCompound(tagCompound);
+				if(world.isRemote)
+					player.addChatMessage("Tracking machine at " + x + ", " + y + ", " + z);
+			}
+			return true;
 		}
 		if(player.isSneaking())
 			return false;

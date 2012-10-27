@@ -10,7 +10,6 @@ public class BlockIA extends Block {
 
 	public BlockIA(int id, int texture, Material material) {
 		super(id, texture, material);
-		setCreativeTab(CreativeTabs.tabBlock);
 	}
 
 	@Override

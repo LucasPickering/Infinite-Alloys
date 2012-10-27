@@ -13,9 +13,7 @@ public class ItemUpgrade extends ItemIA {
 
 	public ItemUpgrade(int id, int texture) {
 		super(id, texture);
-		setMaxStackSize(1);
 		setHasSubtypes(true);
-		setCreativeTab(CreativeTabs.tabMisc);
 	}
 
 	@Override

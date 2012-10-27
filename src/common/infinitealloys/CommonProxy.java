@@ -1,6 +1,7 @@
 package infinitealloys;
 
 import net.minecraft.src.Achievement;
+import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.AchievementPage;
@@ -10,8 +11,8 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class CommonProxy {
 
 	public void initBlocks() {
-		InfiniteAlloys.ore = new BlockOre(InfiniteAlloys.oreID, 0).setBlockName("iaOre");
-		InfiniteAlloys.machine = new BlockMachine(InfiniteAlloys.machineID, 6).setBlockName("iaMachine");
+		InfiniteAlloys.ore = new BlockOre(InfiniteAlloys.oreID, 0).setCreativeTab(CreativeTabs.tabBlock).setBlockName("iaOre");
+		InfiniteAlloys.machine = new BlockMachine(InfiniteAlloys.machineID, 6).setCreativeTab(CreativeTabs.tabBlock).setBlockName("iaMachine");
 		GameRegistry.registerBlock(InfiniteAlloys.ore, ItemBlockIA.class);
 		GameRegistry.registerBlock(InfiniteAlloys.machine, ItemBlockIA.class);
 		for(int i = 0; i < IAValues.metalCount; i++)
@@ -22,10 +23,10 @@ public class CommonProxy {
 	}
 
 	public void initItems() {
-		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 0).setItemName("iaIngot");
-		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 0).setItemName("iaAlloyIngot");
-		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 1).setItemName("iaUpgrade");
-		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 2).setItemName("iaGps");
+		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 0).setCreativeTab(CreativeTabs.tabMaterials).setItemName("iaIngot");
+		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 0).setCreativeTab(CreativeTabs.tabMaterials).setItemName("iaAlloyIngot");
+		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 1).setMaxStackSize(1).setCreativeTab(CreativeTabs.tabMisc).setItemName("iaUpgrade");
+		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 2).setMaxStackSize(1).setCreativeTab(CreativeTabs.tabMisc).setItemName("iaGps");
 		for(int i = 0; i < IAValues.metalCount; i++)
 			LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 0, i), IAValues.metalNames[i] + " Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.alloyIngot), "Alloy Ingot");

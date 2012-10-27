@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
+import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 
@@ -66,5 +67,10 @@ public class ItemAlloyIngot extends ItemIA {
 			blueAvg /= blueVals.size();
 		}
 		return Integer.parseInt(Integer.toHexString(redAvg) + Integer.toHexString(greenAvg) + Integer.toHexString(blueAvg), 16);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(int id, CreativeTabs creativetabs, List list) {
 	}
 }

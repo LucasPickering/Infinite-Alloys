@@ -2,6 +2,7 @@ package infinitealloys;
 
 import java.util.ArrayList;
 import net.minecraft.src.Block;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
@@ -12,7 +13,7 @@ public class TileEntityComputer extends TileEntityMachine {
 	/**
 	 * Array of preset values of max connected machines for each tier
 	 */
-	private static int[] maxIdCountA = { 3, 6, 10 };
+	private static int[] networkCapacityA = { 3, 6, 10 };
 
 	/**
 	 * Array of preset values of network range for each tier
@@ -20,9 +21,9 @@ public class TileEntityComputer extends TileEntityMachine {
 	private static int[] networkRangeA = { 5, 10, 15 };
 
 	/**
-	 * That amount of IDs that the computer can connect to
+	 * That amount of machines that the computer can control
 	 */
-	public int maxConnectionAmt;
+	public int networkCapacity;
 
 	/**
 	 * The range of the computer's wireless communication
@@ -48,12 +49,14 @@ public class TileEntityComputer extends TileEntityMachine {
 		super();
 		inventoryStacks = new ItemStack[1];
 		orientation = 2;
+		networkCapacity = networkCapacityA[0];
+		networkRange = networkRangeA[0];
+		networkCoords = new ArrayList<Vec3>(networkCapacity);
 	}
 
-	/**
-	 * Update the network to add and remove machines
-	 */
-	public void updateNetwork() {
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
 		for(int i = 0; i < networkCoords.size(); i++) {
 			Vec3 coords = networkCoords.get(i);
 			Block block = Block.blocksList[worldObj.getBlockId((int)coords.xCoord, (int)coords.yCoord, (int)coords.zCoord)];
@@ -63,36 +66,57 @@ public class TileEntityComputer extends TileEntityMachine {
 		}
 	}
 
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		if(!init) {
-			maxConnectionAmt = maxIdCountA[0];
-			networkRange = networkRangeA[0];
-			networkCoords = new ArrayList<Vec3>(maxConnectionAmt);
-			init = true;
-		}
-	}
-
-	public void addMachine(int machX, int machY, int machZ) {
+	public boolean addMachine(EntityPlayer player, int machX, int machY, int machZ) {
+		for(Vec3 coords : networkCoords)
+			if(coords.xCoord == machX && coords.yCoord == machY && coords.zCoord == machZ) {
+				if(worldObj.isRemote)
+					player.addChatMessage("Error: Machine already in network");
+				return false;
+			}
 		Vec3 vec = Vec3.createVectorHelper(machX, machY, machZ);
-		boolean isMachine = worldObj.getBlockId(machX, machY, machZ) == InfiniteAlloys.machine.blockID;
-		boolean inRange = vec.distanceTo(Vec3.createVectorHelper(xCoord, yCoord, zCoord)) <= networkRange;
-		if(networkCoords.size() < maxConnectionAmt && isMachine && inRange)
+		if(machX == xCoord && machY == yCoord && machZ == zCoord) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Cannot add self to network");
+		}
+		else if(networkCoords.size() >= networkCapacity) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Network full");
+		}
+		else if(worldObj.getBlockId(machX, machY, machZ) != InfiniteAlloys.machine.blockID) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Can only add machines");
+		}
+		else if(vec.distanceTo(Vec3.createVectorHelper(xCoord, yCoord, zCoord)) > networkRange) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Machine out of range");
+		}
+		else {
 			networkCoords.add(vec);
+			return true;
+		}
+		return false;
 	}
 
 	public void handlePacketDataFromServer() {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		for(int i = 0; i < tagCompound.getInteger("NetworkSize"); i++) {
+			int[] coords = tagCompound.getIntArray("Coords" + i);
+			networkCoords.add(Vec3.createVectorHelper(coords[0], coords[1], coords[2]));
+		}
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		tagCompound.setInteger("NetworkSize", networkCoords.size());
+		for(int i = 0; i < networkCoords.size(); i++) {
+			Vec3 vec = networkCoords.get(i);
+			tagCompound.setIntArray("Coords" + i, new int[] { (int)vec.xCoord, (int)vec.yCoord, (int)vec.zCoord });
+		}
 	}
 
 	@Override

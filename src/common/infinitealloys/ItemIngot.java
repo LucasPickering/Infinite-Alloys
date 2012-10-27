@@ -11,7 +11,6 @@ public class ItemIngot extends ItemIA {
 	public ItemIngot(int id, int texture) {
 		super(id, texture);
 		setHasSubtypes(true);
-		setCreativeTab(CreativeTabs.tabMaterials);
 	}
 
 	@Override

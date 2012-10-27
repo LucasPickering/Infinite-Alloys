@@ -3,7 +3,6 @@ package infinitealloys.client;
 import infinitealloys.IAValues;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.TileEntityMachine;
-import infinitealloys.handlers.PacketHandler;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,7 +12,6 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import cpw.mods.fml.common.network.PacketDispatcher;
 
 public abstract class GuiMachine extends GuiContainer {
 

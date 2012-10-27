@@ -9,7 +9,6 @@ public class BlockOre extends BlockIA {
 
 	public BlockOre(int id, int texture) {
 		super(id, texture, Material.rock);
-		setCreativeTab(CreativeTabs.tabBlock);
 	}
 
 	@Override
