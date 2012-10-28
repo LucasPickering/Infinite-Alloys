@@ -1,25 +1,39 @@
 package infinitealloys;
 
+import infinitealloys.handlers.WorldGenHandler;
 import net.minecraft.src.Achievement;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.AchievementPage;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class CommonProxy {
 
 	public void initBlocks() {
-		InfiniteAlloys.ore = new BlockOre(InfiniteAlloys.oreID, 0).setCreativeTab(CreativeTabs.tabBlock).setBlockName("iaOre");
-		InfiniteAlloys.machine = new BlockMachine(InfiniteAlloys.machineID, 6).setCreativeTab(CreativeTabs.tabBlock).setBlockName("iaMachine");
+		InfiniteAlloys.ore = new BlockOre(InfiniteAlloys.oreID, 0).setCreativeTab(CreativeTabs.tabBlock).setHardness(2F).setBlockName("iaOre");
+		InfiniteAlloys.machine = new BlockMachine(InfiniteAlloys.machineID, 6).setCreativeTab(CreativeTabs.tabBlock).setHardness(2F).setBlockName("iaMachine");
 		GameRegistry.registerBlock(InfiniteAlloys.ore, ItemBlockIA.class);
 		GameRegistry.registerBlock(InfiniteAlloys.machine, ItemBlockIA.class);
+		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 0, "pickaxe", 1);
+		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 1, "pickaxe", 1);
+		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 2, "pickaxe", 1);
+		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 3, "pickaxe", 1);
+		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 4, "pickaxe", 2);
+		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 5, "pickaxe", 2);
+		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 6, "pickaxe", 2);
+		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 7, "pickaxe", 3);
+		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.machine, 0, "pickaxe", 0);
+		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.machine, 1, "pickaxe", 0);
+		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.machine, 2, "pickaxe", 0);
 		for(int i = 0; i < IAValues.metalCount; i++)
 			LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, i), IAValues.metalNames[i] + " Ore");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 0), "Computer");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 1), "Metal Forge");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 2), "Crafter");
+		GameRegistry.registerWorldGenerator(new WorldGenHandler());
 	}
 
 	public void initItems() {

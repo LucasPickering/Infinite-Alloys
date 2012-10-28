@@ -179,4 +179,9 @@ public class BlockMachine extends BlockContainer {
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		return getSelectedBoundingBoxFromPool(world, x, y, z);
 	}
+	
+	@Override
+	public int damageDropped(int damage) {
+		return damage;
+	}
 }

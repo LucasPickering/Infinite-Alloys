@@ -16,9 +16,9 @@ public class BlockIA extends Block {
 	public String getTextureFile() {
 		return IAValues.BLOCKS_PNG;
 	}
-
+	
 	@Override
-	public void getSubBlocks(int id, CreativeTabs creativetabs, List list) {
-		list.add(new ItemStack(Block.blocksList[id]));
+	public int damageDropped(int damage) {
+		return damage;
 	}
 }
