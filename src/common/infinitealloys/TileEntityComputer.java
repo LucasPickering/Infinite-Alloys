@@ -1,12 +1,16 @@
 package infinitealloys;
 
 import java.util.ArrayList;
+import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 public class TileEntityComputer extends TileEntityMachine {
 
@@ -35,22 +39,16 @@ public class TileEntityComputer extends TileEntityMachine {
 	 */
 	public ArrayList<Vec3> networkCoords;
 
-	/**
-	 * Has been initialized
-	 */
-	public boolean init;
-
 	public TileEntityComputer(int facing) {
 		this();
 		orientation = (byte)facing;
 	}
 
 	public TileEntityComputer() {
-		super();
 		inventoryStacks = new ItemStack[1];
 		orientation = 2;
-		networkCapacity = networkCapacityA[0];
-		networkRange = networkRangeA[0];
+		networkCapacity = networkCapacityA[2];
+		networkRange = networkRangeA[2];
 		networkCoords = new ArrayList<Vec3>(networkCapacity);
 	}
 
@@ -97,7 +95,8 @@ public class TileEntityComputer extends TileEntityMachine {
 		return false;
 	}
 
-	public void handlePacketDataFromServer() {
+	public void handlePacketDataFromServer(ArrayList networkCoords) {
+		this.networkCoords = networkCoords;
 	}
 
 	@Override

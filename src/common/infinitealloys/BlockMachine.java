@@ -4,6 +4,9 @@ import infinitealloys.client.ClientProxy;
 import infinitealloys.handlers.PacketHandler;
 import java.util.List;
 import java.util.Random;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.BlockContainer;
@@ -58,7 +61,7 @@ public class BlockMachine extends BlockContainer {
 		if(player.isSneaking())
 			return false;
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
-		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getPacketToClient(tem));
+		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(tem));
 		if(tem instanceof TileEntityComputer)
 			player.openGui(InfiniteAlloys.instance, 0, world, x, y, z);
 		else if(tem instanceof TileEntityMetalForge)
@@ -151,6 +154,7 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
 		minX = 0;
 		minY = 0;
@@ -171,6 +175,7 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		return getSelectedBoundingBoxFromPool(world, x, y, z);
 	}

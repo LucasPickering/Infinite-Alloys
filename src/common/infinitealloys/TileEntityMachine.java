@@ -17,11 +17,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	protected ItemStack[] inventoryStacks;
 
 	/**
-	 * This block's current network ID
-	 */
-	public byte networkID;
-
-	/**
 	 * A binary integer used to determine what upgrades have been installed
 	 */
 	public int upgrades;
@@ -128,7 +123,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
-		networkID = nbttagcompound.getByte("NetworkID");
 		upgrades = nbttagcompound.getShort("Upgrades");
 		orientation = nbttagcompound.getByte("Orientation");
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
@@ -144,7 +138,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
-		nbttagcompound.setByte("NetworkID", networkID);
 		nbttagcompound.setShort("Upgrades", (short)upgrades);
 		nbttagcompound.setByte("Orientation", orientation);
 		NBTTagList nbttaglist = new NBTTagList();
@@ -161,17 +154,12 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return PacketHandler.getPacketToClient(this);
+		return PacketHandler.getTEPacketToClient(this);
 	}
 
-	public void handlePacketDataFromServer(byte orientation, int upgrades, byte networkID) {
+	public void handlePacketDataFromServer(byte orientation, int upgrades) {
 		this.orientation = orientation;
 		this.upgrades = upgrades;
-		this.networkID = networkID;
-	}
-
-	public void handlePacketDataFromClient(byte networkID) {
-		this.networkID = networkID;
 	}
 
 	@Override

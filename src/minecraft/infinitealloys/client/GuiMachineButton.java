@@ -25,11 +25,10 @@ public class GuiMachineButton extends GuiScreen {
 	public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, minecraft.renderEngine.getTexture(IAValues.TEXTURE_PATH + "guicomputer.png"));
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		drawTexturedModalRect(xPos, yPos, 0, 176 + minecraft.theWorld.getBlockMetadata(blockX, blockY, blockZ) * 16, width / 2, height);
-		drawTexturedModalRect(xPos + width / 2, yPos, 200 - width / 2, 46 + minecraft.theWorld.getBlockMetadata(blockX, blockY, blockZ) * 20, width / 2, height);
+		drawTexturedModalRect(xPos, yPos, 192 + minecraft.theWorld.getBlockMetadata(blockX, blockY, blockZ) * 16, 0, width, height);
 	}
 
-	public boolean mousePressed(Minecraft minecraft, int mouseX, int mouseY) {
+	public boolean mousePressed(int mouseX, int mouseY) {
 		return mouseX >= xPos && mouseY >= yPos && mouseX < xPos + width && mouseY < yPos + height;
 	}
 }
