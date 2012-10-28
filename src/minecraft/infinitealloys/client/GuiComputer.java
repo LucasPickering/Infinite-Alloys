@@ -16,8 +16,11 @@ import net.minecraft.src.World;
 
 public class GuiComputer extends GuiMachine {
 
-	private TileEntityComputer tec;
+	public TileEntityComputer tec;
 	private ArrayList<GuiConnectMachineButton> machineButtons = new ArrayList<GuiConnectMachineButton>();
+	private GuiAddMachineButton addButton;
+	public GuiAddMachine addGui;
+	public boolean drawAddGui;
 
 	public GuiComputer(InventoryPlayer inventoryPlayer, TileEntityComputer tileEntity) {
 		super(tileEntity, new ContainerMachine(inventoryPlayer, tileEntity));
@@ -33,11 +36,14 @@ public class GuiComputer extends GuiMachine {
 		for(int i = 0; i < tec.networkCoords.size(); i++) {
 			Vec3 coords = tec.networkCoords.get(i);
 			machineButtons.add(new GuiConnectMachineButton(width / 2 - 73 + i % 5 * 24, height / 2 - 60 + i / 5 * 24, (int)coords.xCoord, (int)coords.yCoord, (int)coords.zCoord));
+			machineButtons.get(i).drawButton(mc, mouseX, mouseY);
 		}
-		for(GuiConnectMachineButton button : machineButtons)
-			button.drawButton(mc, mouseX, mouseY);
-		for(int i = machineButtons.size(); i < tec.networkCapacity; i++)
-			new GuiAddMachineButton(width / 2 - 73 + i % 5 * 24, height / 2 - 60 + i / 5 * 24).drawButton(mc, mouseX, mouseY);
+		if(machineButtons.size() < tec.networkCapacity) {
+			addButton = new GuiAddMachineButton(width / 2 - 73 + machineButtons.size() % 5 * 24, height / 2 - 60 + machineButtons.size() / 5 * 24);
+			addButton.drawButton(mc, mouseX, mouseY);
+		}
+		if(drawAddGui)
+			addGui.drawGui(mouseX, mouseY);
 	}
 
 	@Override
@@ -53,15 +59,34 @@ public class GuiComputer extends GuiMachine {
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
-		for(GuiConnectMachineButton button : machineButtons)
+		if(drawAddGui) {
+			addGui.mouseClicked(mouseX, mouseY, mouseButton);
+			return;
+		}
+		if(addButton != null && addButton.mousePressed(mouseX, mouseY)) {
+			addGui = new GuiAddMachine(mc, this, (width - xSize) / 2 + 14, (height - ySize) / 2 - 36);
+			drawAddGui = true;
+			return;
+		}
+		for(GuiConnectMachineButton button : machineButtons) {
 			if(button.mousePressed(mouseX, mouseY)) {
 				World world = Minecraft.getMinecraft().theWorld;
 				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 				int x = button.blockX;
 				int y = button.blockY;
 				int z = button.blockZ;
-				PacketDispatcher.sendPacketToServer(PacketHandler.getComputerPacketOpenGui(x, y, z));
 				Block.blocksList[world.getBlockId(x, y, z)].onBlockActivated(world, x, y, z, player, 0, 0, 0, 0);
+				PacketDispatcher.sendPacketToServer(PacketHandler.getComputerPacketOpenGui(x, y, z));
+				return;
 			}
+		}
+	}
+
+	@Override
+	protected void keyTyped(char key, int eventKey) {
+		if(!drawAddGui || eventKey != 1)
+			super.keyTyped(key, eventKey);
+		if(drawAddGui)
+			addGui.keyTyped(key, eventKey);
 	}
 }

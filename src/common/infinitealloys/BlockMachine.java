@@ -156,6 +156,11 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
+		return getCollisionBoundingBoxFromPool(world, x, y, z);
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
 		minX = 0;
 		minY = 0;
 		minZ = 0;
@@ -171,15 +176,9 @@ public class BlockMachine extends BlockContainer {
 				maxZ = 0.9374D;
 				break;
 		}
-		return super.getSelectedBoundingBoxFromPool(world, x, y, z);
+		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		return getSelectedBoundingBoxFromPool(world, x, y, z);
-	}
-	
 	@Override
 	public int damageDropped(int damage) {
 		return damage;

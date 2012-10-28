@@ -18,8 +18,8 @@ public class GuiAddMachineButton extends GuiScreen {
 	/**
 	 * Draws this button to the screen.
 	 */
-	public void drawButton(Minecraft minecraft, int mouseX, int mouseY) {
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, minecraft.renderEngine.getTexture(IAValues.TEXTURE_PATH + "guicomputer.png"));
+	public void drawButton(Minecraft mc, int mouseX, int mouseY) {
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, mc.renderEngine.getTexture(IAValues.TEXTURE_PATH + "guicomputer.png"));
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		drawTexturedModalRect(xPos, yPos, 176, 0, width, height);
 	}

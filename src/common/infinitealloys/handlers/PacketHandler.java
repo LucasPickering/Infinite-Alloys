@@ -26,7 +26,8 @@ public class PacketHandler implements IPacketHandler {
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
 		// 0: TE server -> client
-		// 1: Computer open GUI
+		// 1: Computer add machine
+		// 2: Computer open GUI
 		int packetIndex = data.readInt();
 		World world = ((EntityPlayer)player).worldObj;
 		int x = data.readInt();
@@ -62,6 +63,15 @@ public class PacketHandler implements IPacketHandler {
 				}
 				break;
 			case 1:
+				TileEntity te1 = world.getBlockTileEntity(x, y, z);
+				if(te1 instanceof TileEntityComputer) {
+					int machX = data.readInt();
+					int machY = data.readInt();
+					int machZ = data.readInt();
+					((TileEntityComputer)te1).addMachine((EntityPlayer)player, machX, machY, machZ);
+				}
+				break;
+			case 2:
 				Block.blocksList[world.getBlockId(x, y, z)].onBlockActivated(world, x, y, z, (EntityPlayer)player, 0, 0, 0, 0);
 				break;
 		}
@@ -103,11 +113,31 @@ public class PacketHandler implements IPacketHandler {
 		return packet;
 	}
 
-	public static Packet getComputerPacketOpenGui(int x, int y, int z) {
+	public static Packet getComputerPacketAddMachine(int compX, int compY, int compZ, int machX, int machY, int machZ) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);
 		try {
 			dos.writeInt(1);
+			dos.writeInt(compX);
+			dos.writeInt(compY);
+			dos.writeInt(compZ);
+			dos.writeInt(machX);
+			dos.writeInt(machY);
+			dos.writeInt(machZ);
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
+		packet.length = bos.size();
+		return packet;
+	}
+
+	public static Packet getComputerPacketOpenGui(int x, int y, int z) {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		DataOutputStream dos = new DataOutputStream(bos);
+		try {
+			dos.writeInt(2);
 			dos.writeInt(x);
 			dos.writeInt(y);
 			dos.writeInt(z);
