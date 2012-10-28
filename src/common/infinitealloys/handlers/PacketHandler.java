@@ -1,8 +1,6 @@
 package infinitealloys.handlers;
 
-import infinitealloys.BlockMachine;
 import infinitealloys.IAValues;
-import infinitealloys.InfiniteAlloys;
 import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityComputer;
 import infinitealloys.TileEntityMetalForge;
@@ -64,7 +62,6 @@ public class PacketHandler implements IPacketHandler {
 				}
 				break;
 			case 1:
-				((EntityPlayer)player).closeScreen();
 				Block.blocksList[world.getBlockId(x, y, z)].onBlockActivated(world, x, y, z, (EntityPlayer)player, 0, 0, 0, 0);
 				break;
 		}

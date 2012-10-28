@@ -16,12 +16,12 @@ public class ContainerMachine extends Container {
 
 	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine tileEntity) {
 		inventory = tileEntity;
-		addSlotToContainer(new SlotUpgrade(inventory, 0, 128, 8));
+		addSlotToContainer(new SlotUpgrade(inventory, 0, 140, 27));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 134 + y * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 68 + y * 18));
 		for(int x = 0; x < 9; x++)
-			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 192));
+			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 126));
 	}
 
 	@Override
@@ -35,15 +35,15 @@ public class ContainerMachine extends Container {
 	@Override
 	public ItemStack func_82846_b(EntityPlayer player, int slot) {
 		ItemStack itemstack = null;
-		Slot stackInSlot = (Slot)this.inventorySlots.get(slot);
+		Slot stackInSlot = (Slot)inventorySlots.get(slot);
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
 			ItemStack stackInSlotCopy = stackInSlot.getStack();
 			itemstack = stackInSlotCopy.copy();
 			if(slot > 0 && slot <= 27) {
-				if(!this.mergeItemStack(stackInSlotCopy, 28, 37, false))
+				if(!mergeItemStack(stackInSlotCopy, 28, 37, false))
 					return null;
 			}
-			else if(slot > 27 && !this.mergeItemStack(stackInSlotCopy, 1, 27, false))
+			else if(slot > 27 && !mergeItemStack(stackInSlotCopy, 1, 27, false))
 				return null;
 			if(stackInSlotCopy.stackSize == 0)
 				stackInSlot.putStack((ItemStack)null);

@@ -5,11 +5,11 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
 
-public class GuiMachineButton extends GuiScreen {
+public class GuiConnectMachineButton extends GuiScreen {
 
 	public int xPos, yPos, blockX, blockY, blockZ;
 
-	public GuiMachineButton(int xPos, int yPos, int blockX, int blockY, int blockZ) {
+	public GuiConnectMachineButton(int xPos, int yPos, int blockX, int blockY, int blockZ) {
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.blockX = blockX;
