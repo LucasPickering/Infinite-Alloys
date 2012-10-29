@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import infinitealloys.ContainerMachine;
 import infinitealloys.IAValues;
 import infinitealloys.TileEntityComputer;
+import infinitealloys.TileEntityMachine;
 import infinitealloys.handlers.PacketHandler;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;

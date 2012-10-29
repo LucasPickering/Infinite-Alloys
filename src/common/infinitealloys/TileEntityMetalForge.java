@@ -156,6 +156,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 * upgrades.
 	 */
 	protected void updateUpgrades() {
+		canNetwork = (upgrades & 256) == 256;
 	}
 
 	private void smeltItem() {

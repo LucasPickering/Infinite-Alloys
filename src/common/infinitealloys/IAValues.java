@@ -19,10 +19,10 @@ public class IAValues {
 	/**
 	 * Amount of upgrades that can be made and used on machines
 	 */
-	public static int upgradeCount = 8;
+	public static int upgradeCount = 9;
 
 	/**
-	 * The damage offset for alloy ingots, so it is saved as -32768 but used as 0
+	 * The damage offset for alloy ingots, so it's saved as -32768 but used as 0
 	 */
 	public static int alloyDamageOffset = 32769;
 
@@ -44,5 +44,5 @@ public class IAValues {
 	/**
 	 * The names of each upgrade that can be used on machines
 	 */
-	public static String[] upgradeNames = { "Speed I", "Speed II", "Efficiency I", "Efficiency II", "Capacity I", "Capacity II", "Range I", "Range II" };
+	public static String[] upgradeNames = { "Speed I", "Speed II", "Efficiency I", "Efficiency II", "Capacity I", "Capacity II", "Range I", "Range II", "Wireless Networking" };
 }

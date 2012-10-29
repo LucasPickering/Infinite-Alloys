@@ -31,6 +31,11 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 */
 	public int upgradeSlotIndex = 0;
 
+	/**
+	 * True if this machine can be accessed wirelessly
+	 */
+	public boolean canNetwork;
+
 	public TileEntityMachine(int index) {
 		upgradeSlotIndex = index;
 	}

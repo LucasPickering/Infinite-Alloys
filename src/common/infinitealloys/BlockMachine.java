@@ -37,7 +37,7 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int i, float f, float f1, float f2) {
 		ItemStack currentItem = player.inventory.getCurrentItem();
-		if(currentItem != null && currentItem.itemID == InfiniteAlloys.gps.shiftedIndex) {
+		if(currentItem != null && currentItem.itemID == InfiniteAlloys.gps.shiftedIndex && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).canNetwork) {
 			if(player.isSneaking() && world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer) {
 				if(currentItem.hasTagCompound()) {
 					NBTTagCompound tagCompound = currentItem.getTagCompound();

@@ -43,6 +43,7 @@ public class TileEntityComputer extends TileEntityMachine {
 	public TileEntityComputer() {
 		inventoryStacks = new ItemStack[1];
 		orientation = 2;
+		canNetwork = true;
 		networkCapacity = networkCapacityA[2];
 		networkRange = networkRangeA[2];
 		networkCoords = new ArrayList<Vec3>(networkCapacity);
@@ -68,7 +69,11 @@ public class TileEntityComputer extends TileEntityMachine {
 				return false;
 			}
 		Vec3 vec = Vec3.createVectorHelper(machX, machY, machZ);
-		if(machX == xCoord && machY == yCoord && machZ == zCoord) {
+		if(!((TileEntityMachine)worldObj.getBlockTileEntity(machX, machY, machZ)).canNetwork) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Machine not capable of networking");
+		}
+		else if(machX == xCoord && machY == yCoord && machZ == zCoord) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Cannot add self to network");
 		}
@@ -116,7 +121,7 @@ public class TileEntityComputer extends TileEntityMachine {
 
 	@Override
 	public boolean isUpgradeValid(ItemStack upgrade) {
-		return super.isUpgradeValid(upgrade);
+		return super.isUpgradeValid(upgrade) && upgrade.getItemDamage() != 256;
 	}
 
 	@Override
