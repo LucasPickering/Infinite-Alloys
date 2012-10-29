@@ -16,12 +16,12 @@ public class ContainerMachine extends Container {
 
 	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine tileEntity) {
 		inventory = tileEntity;
-		addSlotToContainer(new SlotUpgrade(inventory, 0, 140, 27));
+		addSlotToContainer(new SlotUpgrade(inventory, 0, 140, 43));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 68 + y * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
 		for(int x = 0; x < 9; x++)
-			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 126));
+			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 142));
 	}
 
 	@Override
