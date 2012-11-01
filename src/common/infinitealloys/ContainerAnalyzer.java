@@ -6,11 +6,11 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import net.minecraft.src.TileEntityFurnace;
 
-public class ContainerMetalForge extends ContainerMachine {
+public class ContainerAnalyzer extends ContainerMachine {
 
-	public TileEntityMetalForge inventory;
+	public TileEntityAnalyzer inventory;
 
-	public ContainerMetalForge(InventoryPlayer inventoryPlayer, TileEntityMetalForge tileEntity) {
+	public ContainerAnalyzer(InventoryPlayer inventoryPlayer, TileEntityAnalyzer tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
 		addSlotToContainer(new SlotMetalForge(inventory, 0, 8, 35));
@@ -46,10 +46,6 @@ public class ContainerMetalForge extends ContainerMachine {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}
-				else if(inventory.getIngotNum(stackInSlotCopy) != -1) {
-					if(!mergeItemStack(stackInSlotCopy, 11, 28, false))
-						return null;
-				}
 				else if(slot > 28 && slot <= 56) {
 					if(!this.mergeItemStack(stackInSlotCopy, 57, 66, false))
 						return null;
@@ -66,18 +62,5 @@ public class ContainerMetalForge extends ContainerMachine {
 			stackInSlot.func_82870_a(player, stackInSlotCopy);
 		}
 		return itemstack;
-	}
-
-	@Override
-	public ItemStack slotClick(int slot, int mouseButton, int i, EntityPlayer player) {
-		if((mouseButton == 0 || mouseButton == 1) && slot >= 1 && slot <= 8) {
-			inventory.smeltProgress = 0;
-			if(mouseButton == 0)
-				inventory.recipeAmts[slot - 1] = (byte)Math.min(inventory.recipeAmts[slot - 1] + 1, References.alloyRadix - 1);
-			else if(mouseButton == 1)
-				inventory.recipeAmts[slot - 1] = (byte)Math.max(inventory.recipeAmts[slot - 1] - 1, 0);
-			return null;
-		}
-		return super.slotClick(slot, mouseButton, i, player);
 	}
 }

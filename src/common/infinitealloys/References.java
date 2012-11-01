@@ -1,10 +1,8 @@
 package infinitealloys;
 
-public class IAValues {
+public class References {
 
 	public static String TEXTURE_PATH = "/infinitealloys/gfx/";
-	public static String BLOCKS_PNG = TEXTURE_PATH + "blocks.png";
-	public static String ITEMS_PNG = TEXTURE_PATH + "items.png";
 
 	/**
 	 * Amount of metals usable in creating alloys
@@ -22,14 +20,14 @@ public class IAValues {
 	public static int upgradeCount = 9;
 
 	/**
-	 * The damage offset for alloy ingots, so it's saved as -32768 but used as 0
-	 */
-	public static int alloyDamageOffset = 32769;
-
-	/**
 	 * Alloys that are actually usable
 	 */
 	public static int[] validAlloyIngots = { 0, 1, 2, 3, 4, 5 };
+
+	/**
+	 * The radix of the number system used for the alloys
+	 */
+	public static int alloyRadix = 9;
 
 	/**
 	 * The colors used to colorize the ingots

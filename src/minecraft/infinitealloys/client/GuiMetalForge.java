@@ -1,7 +1,7 @@
 package infinitealloys.client;
 
 import infinitealloys.ContainerMetalForge;
-import infinitealloys.IAValues;
+import infinitealloys.References;
 import infinitealloys.TileEntityMetalForge;
 import org.lwjgl.opengl.GL11;
 import net.minecraft.src.InventoryPlayer;
@@ -21,10 +21,10 @@ public class GuiMetalForge extends GuiMachine {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
-		for(int i = 0; i < IAValues.metalCount; i++) {
+		for(int i = 0; i < References.metalCount; i++) {
 			Slot slot = inventorySlots.getSlot(i + 1);
 			if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY) && 0 <= i && i <= 7)
-				drawTextBox(IAValues.metalNames[i], 0xffffff, mouseX, mouseY);
+				drawTextBox(References.metalNames[i], 0xffffff, mouseX, mouseY);
 		}
 	}
 

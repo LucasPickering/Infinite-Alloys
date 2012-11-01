@@ -3,7 +3,7 @@ package infinitealloys.client;
 import java.lang.Character;
 import java.util.ArrayList;
 import infinitealloys.ContainerMachine;
-import infinitealloys.IAValues;
+import infinitealloys.References;
 import infinitealloys.TileEntityComputer;
 import infinitealloys.TileEntityMachine;
 import infinitealloys.handlers.PacketHandler;
@@ -66,7 +66,7 @@ public class GuiComputer extends GuiMachine {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
-		int k = mc.renderEngine.getTexture(IAValues.TEXTURE_PATH + "guicomputer.png");
+		int k = mc.renderEngine.getTexture(References.TEXTURE_PATH + "guicomputer.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(k);
 		int left = (width - xSize) / 2;

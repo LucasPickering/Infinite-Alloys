@@ -15,10 +15,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 * The amount of ticks that the fuel in the slot will burn for
 	 */
 	public int currentFuelBurnTime;
-
-	/**
-	 * The ticks that the metal forge can burn for before using more fuel
-	 */
 	public int heatLeft;
 
 	/**
@@ -39,7 +35,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	/**
 	 * An array for the "stack sizes" of each ingot in the recipe setting
 	 */
-	public byte[] recipeAmts = new byte[IAValues.metalCount];
+	public byte[] recipeAmts = new byte[References.metalCount];
 
 	public TileEntityMetalForge(int facing) {
 		this();
@@ -55,11 +51,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	@Override
 	public String getInvName() {
 		return "Metal Forge";
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 64;
 	}
 
 	@Override
@@ -146,9 +137,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 				typesInRecipe++;
 		for(int i = 0; i < getIngotAmts().length; i++)
 			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
-		if(typesInRecipe > 1 && !sufficientIngots.contains(false) && (heatLeft > getIngotsInRecipe() || currentFuelBurnTime != 0) && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= getIngotsInRecipe())))
-			return true;
-		return false;
+		return typesInRecipe > 1 && !sufficientIngots.contains(false) && (heatLeft > getIngotsInRecipe() || currentFuelBurnTime != 0) && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= getIngotsInRecipe()));
 	}
 
 	/**
@@ -195,7 +184,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	public int getIngotNum(ItemStack ingot) {
-		if(ingot.itemID == InfiniteAlloys.ingot.shiftedIndex && ingot.getItemDamage() < IAValues.metalCount)
+		if(ingot.itemID == InfiniteAlloys.ingot.shiftedIndex && ingot.getItemDamage() < References.metalCount)
 			return ingot.getItemDamage();
 		return -1;
 	}
@@ -206,10 +195,14 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 * @return The resulting ingot.
 	 */
 	private ItemStack getIngotResult() {
-		int damage = 0;
+		int alloy = 0;
 		for(int i = 0; i < recipeAmts.length; i++)
-			damage += Math.pow(4D, i) * recipeAmts[i];
-		return new ItemStack(InfiniteAlloys.alloyIngot, getIngotsInRecipe(), damage - IAValues.alloyDamageOffset);
+			alloy += Math.pow(References.alloyRadix, i) * recipeAmts[i];
+		ItemStack result = new ItemStack(InfiniteAlloys.alloyIngot, getIngotsInRecipe());
+		NBTTagCompound tagCompound = new NBTTagCompound();
+		tagCompound.setInteger("alloy", alloy);
+		result.setTagCompound(tagCompound);
+		return result;
 	}
 
 	private ArrayList<Integer> getSlotsWithIngot() {
@@ -221,7 +214,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	private int[] getIngotAmts() {
-		int[] amts = new int[IAValues.metalCount];
+		int[] amts = new int[References.metalCount];
 		for(int slot : getSlotsWithIngot())
 			amts[getIngotNum(inventoryStacks[slot])] += inventoryStacks[slot].stackSize;
 		return amts;

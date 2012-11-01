@@ -30,11 +30,6 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	public String getTextureFile() {
-		return IAValues.BLOCKS_PNG;
-	}
-
-	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int i, float f, float f1, float f2) {
 		ItemStack currentItem = player.inventory.getCurrentItem();
 		if(currentItem != null && currentItem.itemID == InfiniteAlloys.gps.shiftedIndex && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).canNetwork) {
@@ -76,6 +71,8 @@ public class BlockMachine extends BlockContainer {
 				return new TileEntityComputer(0);
 			case 1:
 				return new TileEntityMetalForge(0);
+			case 2:
+				return new TileEntityAnalyzer(0);
 		}
 		return null;
 	}
@@ -95,7 +92,7 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public void getSubBlocks(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < IAValues.machineCount; i++)
+		for(int i = 0; i < References.machineCount; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 
@@ -161,12 +158,12 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		minX = 0;
-		minY = 0;
-		minZ = 0;
-		maxX = 1;
-		maxY = 1;
-		maxZ = 1;
+		minX = 0D;
+		minY = 0D;
+		minZ = 0D;
+		maxX = 1D;
+		maxY = 1D;
+		maxZ = 1D;
 		switch(world.getBlockMetadata(x, y, z)) {
 			case 0:
 				minX = 0.0625D;

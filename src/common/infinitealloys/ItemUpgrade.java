@@ -30,13 +30,13 @@ public class ItemUpgrade extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		list.add(IAValues.upgradeNames[(int)InfiniteAlloys.logn(2, itemstack.getItemDamage())]);
+		list.add(References.upgradeNames[(int)InfiniteAlloys.logn(2, itemstack.getItemDamage())]);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < IAValues.upgradeCount; i++)
+		for(int i = 0; i < References.upgradeCount; i++)
 			list.add(new ItemStack(id, 1, (int)Math.pow(2D, i)));
 	}
 }

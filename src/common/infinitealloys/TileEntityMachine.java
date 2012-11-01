@@ -72,7 +72,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 * @param random
 	 */
 	public void dropUpgrades(Random random) {
-		for(int i = 0; i <= IAValues.upgradeCount; i++) {
+		for(int i = 0; i <= References.upgradeCount; i++) {
 			int upg = (int)Math.pow(2D, i);
 			if((upg & upgrades) == upg) {
 				float f = random.nextFloat() * 0.8F + 0.1F;

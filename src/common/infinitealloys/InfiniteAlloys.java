@@ -52,8 +52,8 @@ public class InfiniteAlloys {
 		upgradeID = config.getItem("Upgrade", Configuration.CATEGORY_ITEM, 14002).getInt();
 		gpsID = config.getItem("GPS", Configuration.CATEGORY_ITEM, 14003).getInt();
 		int[] metalColors = { 0xc5763d, 0x858586, 0xd2cda3, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
-		for(int i = 0; i < IAValues.metalCount; i++)
-			IAValues.metalColors[i] = config.get("Metal Colors", IAValues.metalNames[i], metalColors[i]).getInt();
+		for(int i = 0; i < References.metalCount; i++)
+			References.metalColors[i] = config.get("Metal Colors", References.metalNames[i], metalColors[i]).getInt();
 		config.save();
 	}
 

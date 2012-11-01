@@ -11,9 +11,9 @@ public class BlockIA extends Block {
 
 	@Override
 	public String getTextureFile() {
-		return IAValues.BLOCKS_PNG;
+		return References.TEXTURE_PATH + "blocks.png";
 	}
-	
+
 	@Override
 	public int damageDropped(int damage) {
 		return damage;

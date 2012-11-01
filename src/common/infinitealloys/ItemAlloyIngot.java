@@ -21,18 +21,24 @@ public class ItemAlloyIngot extends ItemIA {
 	}
 
 	@Override
+	public boolean getShareTag() {
+		return true;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		float[] metalMasses = new float[IAValues.metalCount];
+		float[] metalMasses = new float[References.metalCount];
 		float totalMass = 0;
-		for(int i = 0; i < IAValues.metalCount; i++) {
-			metalMasses[i] = InfiniteAlloys.intAtPositionRadix(4, IAValues.metalCount, itemstack.getItemDamage() + IAValues.alloyDamageOffset, i);
+		int alloy = itemstack.getTagCompound().getInteger("alloy");
+		for(int i = 0; i < References.metalCount; i++) {
+			metalMasses[i] = InfiniteAlloys.intAtPositionRadix(References.alloyRadix, References.metalCount, alloy, i);
 			totalMass += metalMasses[i];
 		}
-		for(int i = 0; i < IAValues.metalCount; i++) {
+		for(int i = 0; i < References.metalCount; i++) {
 			float percentage = Math.round(metalMasses[i] / totalMass * 10000F) / 100F;
 			if(percentage != 0)
-				list.add(percentage + "% " + IAValues.metalNames[IAValues.metalCount - 1 - i]);
+				list.add(percentage + "% " + References.metalNames[References.metalCount - 1 - i]);
 		}
 	}
 
@@ -42,9 +48,10 @@ public class ItemAlloyIngot extends ItemIA {
 		ArrayList<Integer> redVals = new ArrayList<Integer>();
 		ArrayList<Integer> greenVals = new ArrayList<Integer>();
 		ArrayList<Integer> blueVals = new ArrayList<Integer>();
-		for(int i = 0; i < IAValues.metalCount; i++) {
-			for(int j = 0; j < InfiniteAlloys.intAtPositionRadix(4, IAValues.metalCount, itemstack.getItemDamage() + IAValues.alloyDamageOffset, i); j++) {
-				String ingotColor = InfiniteAlloys.addLeadingZeros(Integer.toHexString(IAValues.metalColors[IAValues.metalCount - 1 - i]), 6);
+		int alloy = itemstack.getTagCompound().getInteger("alloy");
+		for(int i = 0; i < References.metalCount; i++) {
+			for(int j = 0; j < InfiniteAlloys.intAtPositionRadix(References.alloyRadix, References.metalCount, alloy, i); j++) {
+				String ingotColor = InfiniteAlloys.addLeadingZeros(Integer.toHexString(References.metalColors[References.metalCount - 1 - i]), 6);
 				redVals.add(Integer.parseInt(ingotColor.substring(0, 2), 16));
 				greenVals.add(Integer.parseInt(ingotColor.substring(2, 4), 16));
 				blueVals.add(Integer.parseInt(ingotColor.substring(4), 16));

@@ -1,7 +1,8 @@
 package infinitealloys.client;
 
 import infinitealloys.CommonProxy;
-import infinitealloys.IAValues;
+import infinitealloys.References;
+import infinitealloys.TileEntityAnalyzer;
 import infinitealloys.TileEntityComputer;
 import infinitealloys.TileEntityMetalForge;
 import org.lwjgl.opengl.GL11;
@@ -21,24 +22,27 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 	public static int renderId;
 	private TileEntityComputer tec = new TileEntityComputer(0);
 	private TileEntityMetalForge temf = new TileEntityMetalForge(0);
+	private TileEntityAnalyzer tea = new TileEntityAnalyzer(0);
 
 	@Override
 	public void initTileEntities() {
 		super.initTileEntities();
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityComputer.class, new RendererComputer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMetalForge.class, new RendererMetalForge());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAnalyzer.class, new RendererAnalyzer());
 	}
 
 	@Override
 	public void initRendering() {
 		renderId = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(renderId, this);
-		MinecraftForgeClient.preloadTexture(IAValues.BLOCKS_PNG);
-		MinecraftForgeClient.preloadTexture(IAValues.ITEMS_PNG);
-		MinecraftForgeClient.preloadTexture(IAValues.TEXTURE_PATH + "computer.png");
-		MinecraftForgeClient.preloadTexture(IAValues.TEXTURE_PATH + "metalforge.png");
-		MinecraftForgeClient.preloadTexture(IAValues.TEXTURE_PATH + "guicomputer.png");
-		MinecraftForgeClient.preloadTexture(IAValues.TEXTURE_PATH + "guimetalforge.png");
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "blocks.png");
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "items.png");
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "computer.png");
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "metalforge.png");
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "analyzer.png");
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "guicomputer.png");
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "guimetalforge.png");
 	}
 
 	@Override
@@ -52,6 +56,9 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 				break;
 			case 1:
 				te = temf;
+				break;
+			case 2:
+				te = tea;
 				break;
 		}
 		TileEntityRenderer.instance.renderTileEntityAt(te, 0, 0, 0, 0);

@@ -1,6 +1,6 @@
 package infinitealloys.handlers;
 
-import infinitealloys.IAValues;
+import infinitealloys.References;
 import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityComputer;
 import infinitealloys.TileEntityMetalForge;
@@ -55,7 +55,7 @@ public class PacketHandler implements IPacketHandler {
 						int currentFuelBurnTime = data.readShort();
 						int heatLeft = data.readShort();
 						int smeltProgress = data.readShort();
-						byte[] recipeAmts = new byte[IAValues.metalCount];
+						byte[] recipeAmts = new byte[References.metalCount];
 						for(int i = 0; i < recipeAmts.length; i++)
 							recipeAmts[i] = data.readByte();
 						((TileEntityMetalForge)te).handlePacketDataFromServer(currentFuelBurnTime, heatLeft, smeltProgress, recipeAmts);

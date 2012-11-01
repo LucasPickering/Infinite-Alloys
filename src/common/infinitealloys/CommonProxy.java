@@ -28,11 +28,11 @@ public class CommonProxy {
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.machine, 0, "pickaxe", 0);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.machine, 1, "pickaxe", 0);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.machine, 2, "pickaxe", 0);
-		for(int i = 0; i < IAValues.metalCount; i++)
-			LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, i), IAValues.metalNames[i] + " Ore");
+		for(int i = 0; i < References.metalCount; i++)
+			LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ore, 1, i), References.metalNames[i] + " Ore");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 0), "Computer");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 1), "Metal Forge");
-		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 2), "Crafter");
+		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 2), "Analyzer");
 		GameRegistry.registerWorldGenerator(new WorldGenHandler());
 	}
 
@@ -40,28 +40,29 @@ public class CommonProxy {
 		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 0).setCreativeTab(CreativeTabs.tabMaterials).setItemName("iaIngot");
 		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 0).setCreativeTab(CreativeTabs.tabMaterials).setItemName("iaAlloyIngot");
 		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 1).setMaxStackSize(1).setCreativeTab(CreativeTabs.tabMisc).setItemName("iaUpgrade");
-		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 2).setMaxStackSize(1).setCreativeTab(CreativeTabs.tabMisc).setItemName("iaGps");
-		for(int i = 0; i < IAValues.metalCount; i++)
-			LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 0, i), IAValues.metalNames[i] + " Ingot");
+		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 2).setMaxStackSize(10).setCreativeTab(CreativeTabs.tabMisc).setItemName("iaGps");
+		for(int i = 0; i < References.metalCount; i++)
+			LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 0, i), References.metalNames[i] + " Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.alloyIngot), "Alloy Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.upgrade), "Upgrade");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.gps), "GPS");
 	}
 
 	public void initRecipes() {
-		addSmelting(InfiniteAlloys.ore.blockID, 0, new ItemStack(InfiniteAlloys.ingot, 1, 0));
-		addSmelting(InfiniteAlloys.ore.blockID, 1, new ItemStack(InfiniteAlloys.ingot, 1, 1));
-		addSmelting(InfiniteAlloys.ore.blockID, 2, new ItemStack(InfiniteAlloys.ingot, 1, 2));
-		addSmelting(InfiniteAlloys.ore.blockID, 3, new ItemStack(InfiniteAlloys.ingot, 1, 3));
-		addSmelting(InfiniteAlloys.ore.blockID, 4, new ItemStack(InfiniteAlloys.ingot, 1, 4));
-		addSmelting(InfiniteAlloys.ore.blockID, 5, new ItemStack(InfiniteAlloys.ingot, 1, 5));
-		addSmelting(InfiniteAlloys.ore.blockID, 6, new ItemStack(InfiniteAlloys.ingot, 1, 6));
-		addSmelting(InfiniteAlloys.ore.blockID, 7, new ItemStack(InfiniteAlloys.ingot, 1, 7));
+		addSmelting(InfiniteAlloys.ore.blockID, 0, new ItemStack(InfiniteAlloys.ingot, 1, 0), 0.6F);
+		addSmelting(InfiniteAlloys.ore.blockID, 1, new ItemStack(InfiniteAlloys.ingot, 1, 1), 0.6F);
+		addSmelting(InfiniteAlloys.ore.blockID, 2, new ItemStack(InfiniteAlloys.ingot, 1, 2), 0.7F);
+		addSmelting(InfiniteAlloys.ore.blockID, 3, new ItemStack(InfiniteAlloys.ingot, 1, 3), 0.7F);
+		addSmelting(InfiniteAlloys.ore.blockID, 4, new ItemStack(InfiniteAlloys.ingot, 1, 4), 0.85F);
+		addSmelting(InfiniteAlloys.ore.blockID, 5, new ItemStack(InfiniteAlloys.ingot, 1, 5), 0.85F);
+		addSmelting(InfiniteAlloys.ore.blockID, 6, new ItemStack(InfiniteAlloys.ingot, 1, 6), 0.85F);
+		addSmelting(InfiniteAlloys.ore.blockID, 7, new ItemStack(InfiniteAlloys.ingot, 1, 7), 1.0F);
 	}
 
 	public void initTileEntities() {
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "Computer");
 		GameRegistry.registerTileEntity(TileEntityMetalForge.class, "MetalForge");
+		GameRegistry.registerTileEntity(TileEntityAnalyzer.class, "Analyzer");
 	}
 
 	public void initAchievements() {
@@ -79,7 +80,7 @@ public class CommonProxy {
 		LanguageRegistry.instance().addStringLocalization(key, lang, value);
 	}
 
-	private void addSmelting(int inputID, int inputDamage, ItemStack output) {
-		FurnaceRecipes.smelting().addSmelting(inputID, inputDamage, output);
+	private void addSmelting(int inputID, int inputDamage, ItemStack output, float experience) {
+		FurnaceRecipes.smelting().addSmelting(inputID, inputDamage, output, experience);
 	}
 }
