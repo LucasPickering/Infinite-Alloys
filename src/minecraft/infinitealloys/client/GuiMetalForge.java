@@ -42,7 +42,7 @@ public class GuiMetalForge extends GuiMachine {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-		int k = mc.renderEngine.getTexture("/infinitealloys/gfx/guimetalforge.png");
+		int k = mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/metalforge.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(k);
 		int left = (width - xSize) / 2;

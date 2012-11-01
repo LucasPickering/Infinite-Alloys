@@ -13,24 +13,20 @@ public class ContainerAnalyzer extends ContainerMachine {
 	public ContainerAnalyzer(InventoryPlayer inventoryPlayer, TileEntityAnalyzer tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
-		addSlotToContainer(new SlotMetalForge(inventory, 0, 8, 35));
-		for(int y = 0; y < 2; y++)
-			for(int x = 0; x < 4; x++)
-				addSlotToContainer(new SlotMetalForge(inventory, y * 2 + x + 1, x * 18 + 34, y * 18 + 26));
-		addSlotToContainer(new SlotUpgrade(inventory, 9, 148, 8));
-		addSlotToContainer(new SlotMetalForge(inventory, 10, 148, 34));
-		for(int y = 0; y < 2; y++)
-			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new SlotMetalForge(inventory, y * 9 + x + 11, x * 18 + 8, y * 18 + 82));
+		addSlotToContainer(new SlotAnalyzer(inventory, 0, 56, 17));
+		addSlotToContainer(new SlotAnalyzer(inventory, 1, 56, 53));
+		addSlotToContainer(new SlotAnalyzer(inventory, 2, 116, 35));
+		addSlotToContainer(new SlotUpgrade(inventory, 3, 152, 8));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 134 + y * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
 		for(int x = 0; x < 9; x++)
-			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 192));
+			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 142));
 	}
 
 	@Override
 	public ItemStack func_82846_b(EntityPlayer player, int slot) {
+		super.func_82846_b(player, slot);
 		ItemStack itemstack = null;
 		Slot stackInSlot = (Slot)this.inventorySlots.get(slot);
 		if(stackInSlot != null && stackInSlot.getHasStack()) {

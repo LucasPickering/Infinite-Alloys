@@ -61,6 +61,8 @@ public class BlockMachine extends BlockContainer {
 			player.openGui(InfiniteAlloys.instance, 0, world, x, y, z);
 		else if(tem instanceof TileEntityMetalForge)
 			player.openGui(InfiniteAlloys.instance, 1, world, x, y, z);
+		else if(tem instanceof TileEntityAnalyzer)
+			player.openGui(InfiniteAlloys.instance, 2, world, x, y, z);
 		return true;
 	}
 
@@ -171,6 +173,9 @@ public class BlockMachine extends BlockContainer {
 				maxX = 0.9375D;
 				maxY = 0.75D;
 				maxZ = 0.9374D;
+				break;
+			case 2:
+				maxY = 0.5D;
 				break;
 		}
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);

@@ -1,14 +1,8 @@
 package infinitealloys;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
-import net.minecraft.client.Minecraft;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntityFurnace;
-import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityAnalyzer extends TileEntityMachine {
 
@@ -44,6 +38,7 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	}
 
 	public TileEntityAnalyzer() {
+		super(3);
 		inventoryStacks = new ItemStack[4];
 		orientation = 2;
 	}

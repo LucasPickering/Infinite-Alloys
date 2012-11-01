@@ -1,11 +1,14 @@
 package infinitealloys.handlers;
 
 import cpw.mods.fml.common.network.IGuiHandler;
+import infinitealloys.ContainerAnalyzer;
 import infinitealloys.ContainerMachine;
 import infinitealloys.ContainerMetalForge;
+import infinitealloys.TileEntityAnalyzer;
 import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityComputer;
 import infinitealloys.TileEntityMetalForge;
+import infinitealloys.client.GuiAnalyzer;
 import infinitealloys.client.GuiComputer;
 import infinitealloys.client.GuiMetalForge;
 import net.minecraft.src.EntityPlayer;
@@ -22,6 +25,8 @@ public class GuiHandler implements IGuiHandler {
 				return new ContainerMachine(player.inventory, (TileEntityMachine)tileEntity);
 			case 1:
 				return new ContainerMetalForge(player.inventory, (TileEntityMetalForge)tileEntity);
+			case 2:
+				return new ContainerAnalyzer(player.inventory, (TileEntityAnalyzer)tileEntity);
 		}
 		return null;
 	}
@@ -34,6 +39,8 @@ public class GuiHandler implements IGuiHandler {
 				return new GuiComputer(player.inventory, (TileEntityComputer)tileEntity);
 			case 1:
 				return new GuiMetalForge(player.inventory, (TileEntityMetalForge)tileEntity);
+			case 2:
+				return new GuiAnalyzer(player.inventory, (TileEntityAnalyzer)tileEntity);
 		}
 		return null;
 	}

@@ -1,10 +1,10 @@
 package infinitealloys.client;
 
 import infinitealloys.ContainerAnalyzer;
+import infinitealloys.References;
 import infinitealloys.TileEntityAnalyzer;
 import org.lwjgl.opengl.GL11;
 import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.Slot;
 
 public class GuiAnalyzer extends GuiMachine {
 
@@ -12,8 +12,6 @@ public class GuiAnalyzer extends GuiMachine {
 
 	public GuiAnalyzer(InventoryPlayer inventoryPlayer, TileEntityAnalyzer tileEntity) {
 		super(tileEntity, new ContainerAnalyzer(inventoryPlayer, tileEntity));
-		xSize = 176;
-		ySize = 216;
 		tea = tileEntity;
 	}
 
@@ -28,7 +26,7 @@ public class GuiAnalyzer extends GuiMachine {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-		int k = mc.renderEngine.getTexture("/infinitealloys/gfx/guimetalforge.png");
+		int k = mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/analyzer.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(k);
 		int left = (width - xSize) / 2;

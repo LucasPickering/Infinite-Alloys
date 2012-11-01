@@ -39,9 +39,15 @@ public class ContainerMachine extends Container {
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
 			ItemStack stackInSlotCopy = stackInSlot.getStack();
 			itemstack = stackInSlotCopy.copy();
-			if(slot > 0 && slot <= 27) {
-				if(!mergeItemStack(stackInSlotCopy, 28, 37, false))
-					return null;
+			if(slot > 0) {
+				if(stackInSlotCopy.itemID == InfiniteAlloys.upgrade.shiftedIndex) {
+					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
+						return null;
+				}
+				else if(slot <= 27) {
+					if(!mergeItemStack(stackInSlotCopy, 28, 37, false))
+						return null;
+				}
 			}
 			else if(slot > 27 && !mergeItemStack(stackInSlotCopy, 1, 27, false))
 				return null;

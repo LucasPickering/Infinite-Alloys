@@ -1,21 +1,11 @@
 package infinitealloys.client;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import infinitealloys.References;
 import infinitealloys.TileEntityAnalyzer;
-import infinitealloys.TileEntityMetalForge;
 import org.lwjgl.opengl.GL11;
-import com.overminddl1.minecraft.libs.NMT.NMTModelCylinder;
-import com.overminddl1.minecraft.libs.NMT.NMTModelFileOBJ;
 import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
 import com.overminddl1.minecraft.libs.NMT.NMTModelSphere;
-import net.minecraft.client.Minecraft;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.ModelBase;
-import net.minecraft.src.ModelRenderer;
-import net.minecraft.src.Tessellator;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntitySpecialRenderer;
 

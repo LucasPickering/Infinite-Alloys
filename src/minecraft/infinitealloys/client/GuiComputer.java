@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import infinitealloys.ContainerMachine;
 import infinitealloys.References;
 import infinitealloys.TileEntityComputer;
-import infinitealloys.TileEntityMachine;
 import infinitealloys.handlers.PacketHandler;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -66,7 +65,7 @@ public class GuiComputer extends GuiMachine {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
-		int k = mc.renderEngine.getTexture(References.TEXTURE_PATH + "guicomputer.png");
+		int k = mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/computer.png");
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(k);
 		int left = (width - xSize) / 2;
