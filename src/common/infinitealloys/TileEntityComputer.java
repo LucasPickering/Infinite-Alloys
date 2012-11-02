@@ -69,25 +69,25 @@ public class TileEntityComputer extends TileEntityMachine {
 				return false;
 			}
 		Vec3 vec = Vec3.createVectorHelper(machX, machY, machZ);
-		if(!((TileEntityMachine)worldObj.getBlockTileEntity(machX, machY, machZ)).canNetwork) {
+		if(networkCoords.size() >= networkCapacity) {
 			if(worldObj.isRemote)
-				player.addChatMessage("Error: Machine not capable of networking");
+				player.addChatMessage("Error: Network full");
 		}
 		else if(machX == xCoord && machY == yCoord && machZ == zCoord) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Cannot add self to network");
 		}
-		else if(networkCoords.size() >= networkCapacity) {
+		else if(vec.distanceTo(Vec3.createVectorHelper(xCoord, yCoord, zCoord)) > networkRange) {
 			if(worldObj.isRemote)
-				player.addChatMessage("Error: Network full");
+				player.addChatMessage("Error: Machine out of range");
 		}
 		else if(worldObj.getBlockId(machX, machY, machZ) != InfiniteAlloys.machine.blockID) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Can only add machines");
 		}
-		else if(vec.distanceTo(Vec3.createVectorHelper(xCoord, yCoord, zCoord)) > networkRange) {
+		else if(!((TileEntityMachine)worldObj.getBlockTileEntity(machX, machY, machZ)).canNetwork) {
 			if(worldObj.isRemote)
-				player.addChatMessage("Error: Machine out of range");
+				player.addChatMessage("Error: Machine not capable of networking");
 		}
 		else {
 			networkCoords.add(vec);

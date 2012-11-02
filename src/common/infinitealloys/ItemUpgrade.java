@@ -23,8 +23,8 @@ public class ItemUpgrade extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getIconIndex(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining) {
-		return (int)InfiniteAlloys.logn(2, stack.getItemDamage()) + 1;
+	public int getIconFromDamage(int damage) {
+		return (int)InfiniteAlloys.logn(2, damage) + 129;
 	}
 
 	@Override

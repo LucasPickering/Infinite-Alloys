@@ -1,6 +1,7 @@
 package infinitealloys.handlers;
 
 import infinitealloys.References;
+import infinitealloys.TileEntityAnalyzer;
 import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityComputer;
 import infinitealloys.TileEntityMetalForge;
@@ -60,6 +61,12 @@ public class PacketHandler implements IPacketHandler {
 							recipeAmts[i] = data.readByte();
 						((TileEntityMetalForge)te).handlePacketDataFromServer(currentFuelBurnTime, heatLeft, smeltProgress, recipeAmts);
 					}
+					if(te instanceof TileEntityAnalyzer) {
+						int analysisProgress = data.readShort();
+						int ticksSinceStart = data.readShort();
+						int ticksSinceFinish = data.readShort();
+						((TileEntityAnalyzer)te).handlePacketDataFromServer(analysisProgress, ticksSinceStart, ticksSinceFinish);
+					}
 				}
 				break;
 			case 1:
@@ -96,13 +103,19 @@ public class PacketHandler implements IPacketHandler {
 					dos.writeInt((int)vec.zCoord);
 				}
 			}
-			if(tem instanceof TileEntityMetalForge) {
+			else if(tem instanceof TileEntityMetalForge) {
 				TileEntityMetalForge temf = (TileEntityMetalForge)tem;
 				dos.writeShort(temf.currentFuelBurnTime);
 				dos.writeShort(temf.heatLeft);
 				dos.writeShort(temf.smeltProgress);
 				for(byte amt : temf.recipeAmts)
 					dos.writeByte(amt);
+			}
+			else if(tem instanceof TileEntityAnalyzer) {
+				TileEntityAnalyzer tea = (TileEntityAnalyzer)tem;
+				dos.writeShort(tea.analysisProgress);
+				dos.writeShort(tea.ticksSinceStart);
+				dos.writeShort(tea.ticksSinceFinish);
 			}
 		}
 		catch(IOException e) {

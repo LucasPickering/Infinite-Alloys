@@ -22,7 +22,7 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 	public static int renderId;
 	private TileEntityComputer tec = new TileEntityComputer(0);
 	private TileEntityMetalForge temf = new TileEntityMetalForge(0);
-	private TileEntityAnalyzer tea = new TileEntityAnalyzer(0);
+	private TileEntityAnalyzer tea = new TileEntityAnalyzer();
 
 	@Override
 	public void initTileEntities() {

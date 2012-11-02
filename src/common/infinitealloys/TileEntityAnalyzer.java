@@ -28,11 +28,6 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	 */
 	public int ticksSinceFinish;
 
-	public TileEntityAnalyzer(int facing) {
-		this();
-		orientation = (byte)facing;
-	}
-
 	public TileEntityAnalyzer() {
 		super(2);
 		inventoryStacks = new ItemStack[3];
@@ -60,7 +55,11 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 		tagCompound.setInteger("TicksSinceFinish", ticksSinceFinish);
 	}
 
-	public void handlePacketDataFromServer(int currentFuelBurnTime, int heatLeft, int smeltProgress, byte[] recipeAmts) {}
+	public void handlePacketDataFromServer(int analysisProgress, int ticksSinceStart, int ticksSinceFinish) {
+		this.analysisProgress = analysisProgress;
+		this.ticksSinceStart = ticksSinceStart;
+		this.ticksSinceFinish = ticksSinceFinish;
+	}
 
 	@Override
 	public void updateEntity() {

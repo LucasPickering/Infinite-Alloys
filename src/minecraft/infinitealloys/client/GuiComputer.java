@@ -112,11 +112,21 @@ public class GuiComputer extends GuiMachine {
 	@Override
 	protected void keyTyped(char key, int eventKey) {
 		super.keyTyped(key, eventKey);
-		if(!Character.isDigit(key) && eventKey != Keyboard.KEY_BACK)
-			return;
-		xInput.textboxKeyTyped(key, eventKey);
-		yInput.textboxKeyTyped(key, eventKey);
-		zInput.textboxKeyTyped(key, eventKey);
+		if(eventKey == Keyboard.KEY_TAB) {
+			if(xInput.isFocused())
+				mouseClicked(width / 2 - 38, height / 2 - 81, 0);
+			else if(yInput.isFocused())
+				mouseClicked(width / 2 + 4, height / 2 - 81, 0);
+			else if(!zInput.isFocused())
+				mouseClicked(width / 2 - 80, height / 2 - 81, 0);
+		}
+		if(eventKey == Keyboard.KEY_RETURN)
+			actionPerformed(addMachine);
+		if(Character.isDigit(key) || eventKey == Keyboard.KEY_BACK) {
+			xInput.textboxKeyTyped(key, eventKey);
+			yInput.textboxKeyTyped(key, eventKey);
+			zInput.textboxKeyTyped(key, eventKey);
+		}
 	}
 
 	@Override

@@ -80,11 +80,11 @@ public class BlockMachine extends BlockContainer {
 	public TileEntity createNewTileEntity(World world, int metadata) {
 		switch(metadata) {
 			case 0:
-				return new TileEntityComputer(0);
+				return new TileEntityComputer();
 			case 1:
-				return new TileEntityMetalForge(0);
+				return new TileEntityMetalForge();
 			case 2:
-				return new TileEntityAnalyzer(0);
+				return new TileEntityAnalyzer();
 		}
 		return null;
 	}

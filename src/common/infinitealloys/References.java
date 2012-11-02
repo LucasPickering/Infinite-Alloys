@@ -20,9 +20,19 @@ public class References {
 	public static final int upgradeCount = 9;
 
 	/**
+	 * Amount of "good" alloys, that can actually be used
+	 */
+	public static final int validAlloyCount = 6;
+
+	/**
 	 * Alloys that are actually usable
 	 */
-	public static int[] validAlloyIngots = { 0, 1, 2, 3, 4, 5 };
+	public static int[] validAlloys = new int[validAlloyCount];
+
+	/**
+	 * Starting points for randomly genned alloy values
+	 */
+	public static final int[] validAlloyTargets = { 0 };
 
 	/**
 	 * The radix of the number system used for the alloys

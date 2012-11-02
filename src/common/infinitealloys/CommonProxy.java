@@ -40,7 +40,7 @@ public class CommonProxy {
 		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 128).setCreativeTab(CreativeTabs.tabMaterials).setItemName("iaIngot");
 		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 128).setCreativeTab(CreativeTabs.tabMaterials).setItemName("iaAlloyIngot");
 		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 129).setMaxStackSize(1).setCreativeTab(CreativeTabs.tabMisc).setItemName("iaUpgrade");
-		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 130).setMaxStackSize(10).setCreativeTab(CreativeTabs.tabMisc).setItemName("iaGps");
+		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 138).setMaxStackSize(10).setCreativeTab(CreativeTabs.tabMisc).setItemName("iaGps");
 		for(int i = 0; i < References.metalCount; i++)
 			LanguageRegistry.addName(new ItemStack(InfiniteAlloys.ingot, 0, i), References.metalNames[i] + " Ingot");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.alloyIngot), "Alloy Ingot");
