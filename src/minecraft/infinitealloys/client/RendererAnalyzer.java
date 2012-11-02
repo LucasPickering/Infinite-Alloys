@@ -20,12 +20,7 @@ public class RendererAnalyzer extends TileEntitySpecialRenderer {
 
 	public RendererAnalyzer() {
 		staticModelRenderer = new NMTModelRenderer(model);
-		try {
-			staticModelRenderer.addModelOBJ(new File(References.OBJ_PATH + "analyzer.obj").toURI().toURL().toString());
-		}
-		catch(MalformedURLException e) {
-			System.out.println("Infinite Alloys is missing file ./InfiniteAlloys/obj/analyzer.obj");
-		}
+		staticModelRenderer.addModelOBJ(getClass().getResource("obj/analyzer.obj").toString());
 		animModelRenderer = new NMTModelRenderer(model);
 		double pi = Math.PI;
 		// Adds spheres at 45, 135, 225, and 315 degrees

@@ -19,12 +19,7 @@ public class RendererMetalForge extends TileEntitySpecialRenderer {
 
 	public RendererMetalForge() {
 		modelRenderer = new NMTModelRenderer(model);
-		try {
-			modelRenderer.addModelOBJ(new File(References.OBJ_PATH + "metalforge.obj").toURI().toURL().toString());
-		}
-		catch(MalformedURLException e) {
-			System.out.println("Infinite Alloys is missing file ./InfiniteAlloys/obj/metalforge.obj");
-		}
+		modelRenderer.addModelOBJ(getClass().getResource("obj/metalforge.obj").toString());
 	}
 
 	public void render(TileEntityMetalForge temf, double x, double y, double z, float partialTick) {

@@ -17,17 +17,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class CommonProxy {
 
-	public void initLocalization() {
-		/*for(String langFile : References.langFiles) {
-			try {
-				System.out.println(new File(langFile).toURI().toURL().toString());
-				LanguageRegistry.instance().loadLocalization(langFile, langFile.substring(langFile.lastIndexOf('/') + 1, langFile.lastIndexOf('.')), true);
-			}
-			catch(MalformedURLException e) {
-				System.out.println("Infinite Alloys is missing file " + langFile);
-			}
-		}*/
-	}
+	public void initLocalization() {}
 
 	public void initBlocks() {
 		InfiniteAlloys.ore = new BlockOre(InfiniteAlloys.oreID, 0).setCreativeTab(CreativeTabs.tabBlock).setHardness(2F).setBlockName("iaOre");
@@ -45,11 +35,6 @@ public class CommonProxy {
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.machine, 0, "pickaxe", 0);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.machine, 1, "pickaxe", 0);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.machine, 2, "pickaxe", 0);
-		for(int i = 0; i < References.metalCount; i++)
-			addName(new ItemStack(InfiniteAlloys.ore, 0, i), "metal." + References.metalNames[i] + ".name", "tile.iaOre.name");
-		addName(new ItemStack(InfiniteAlloys.machine, 1, 0), "machine.computer.name");
-		addName(new ItemStack(InfiniteAlloys.machine, 1, 0), "machine.metalforge.name");
-		addName(new ItemStack(InfiniteAlloys.machine, 1, 0), "machine.analyzer.name");
 	}
 
 	public void initItems() {
@@ -57,11 +42,6 @@ public class CommonProxy {
 		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 128).setCreativeTab(CreativeTabs.tabMaterials).setItemName("iaAlloyIngot");
 		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 129).setMaxStackSize(1).setCreativeTab(CreativeTabs.tabMisc).setItemName("iaUpgrade");
 		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 138).setMaxStackSize(10).setCreativeTab(CreativeTabs.tabMisc).setItemName("iaGps");
-		for(int i = 0; i < References.metalCount; i++)
-			addName(new ItemStack(InfiniteAlloys.ingot, 0, i), "metal." + References.metalNames[i] + ".name", "item.iaIngot.name");
-		addName(new ItemStack(InfiniteAlloys.alloyIngot), "item.iaAlloyIngot.name");
-		addName(new ItemStack(InfiniteAlloys.upgrade), "item.iaUpgrade.name");
-		addName(new ItemStack(InfiniteAlloys.gps), "item.iaGps.name");
 	}
 
 	public void initRecipes() {
@@ -95,7 +75,7 @@ public class CommonProxy {
 
 	public void initRendering() {}
 
-	private void addName(Object obj, String key, String... extraKeys) {
+	protected void addName(Object obj, String key, String... extraKeys) {
 		String name = LanguageRegistry.instance().getStringLocalization(key);
 		for(String extraKey : extraKeys)
 			name = name + LanguageRegistry.instance().getStringLocalization(extraKey);

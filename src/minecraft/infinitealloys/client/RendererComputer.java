@@ -19,12 +19,7 @@ public class RendererComputer extends TileEntitySpecialRenderer {
 
 	public RendererComputer() {
 		modelRenderer = new NMTModelRenderer(model);
-		try {
-			modelRenderer.addModelOBJ(new File(References.OBJ_PATH + "computer.obj").toURI().toURL().toString());
-		}
-		catch(MalformedURLException e) {
-			System.out.println("Infinite Alloys is missing file ./InfiniteAlloys/obj/computer.obj");
-		}
+		modelRenderer.addModelOBJ(getClass().getResource("obj/computer.obj").toString());
 	}
 
 	public void render(TileEntityComputer tec, double x, double y, double z, float partialTick) {
