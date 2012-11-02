@@ -20,9 +20,11 @@ public class ItemGPS extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		if(itemstack.hasTagCompound()) {
-			int[] coords = itemstack.getTagCompound().getIntArray("coords");
-			list.add(coords[0] + ", " + coords[1] + ", " + coords[2]);
+		for(int i = 0; i < References.gpsMaxCoords; i++) {
+			if(itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey("coords" + i)) {
+				int[] coords = itemstack.getTagCompound().getIntArray("coords" + i);
+				list.add(coords[0] + ", " + coords[1] + ", " + coords[2]);
+			}
 		}
 	}
 }

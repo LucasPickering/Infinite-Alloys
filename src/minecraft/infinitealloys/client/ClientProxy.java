@@ -34,20 +34,17 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 
 	@Override
 	public void initRendering() {
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "tex.png");
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/computer.png");
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/metalforge.png");
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/analyzer.png");
 		renderId = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(renderId, this);
-		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "blocks.png");
-		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "items.png");
-		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "computer.png");
-		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "metalforge.png");
-		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "analyzer.png");
-		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "guicomputer.png");
-		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "guimetalforge.png");
 	}
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
-		GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+		GL11.glRotatef(-90F, 0F, 1F, 0F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		TileEntity te = null;
 		switch(metadata) {

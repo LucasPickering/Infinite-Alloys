@@ -30,26 +30,36 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int i, float f, float f1, float f2) {
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
 		ItemStack currentItem = player.inventory.getCurrentItem();
 		if(currentItem != null && currentItem.itemID == InfiniteAlloys.gps.shiftedIndex && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).canNetwork) {
 			if(player.isSneaking() && world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer) {
 				if(currentItem.hasTagCompound()) {
 					NBTTagCompound tagCompound = currentItem.getTagCompound();
-					int[] coords = tagCompound.getIntArray("coords");
-					if(((TileEntityComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
-						if(world.isRemote)
-							player.addChatMessage("Adding machine at " + coords[0] + ", " + coords[1] + ", " + coords[2]);
-						currentItem.setTagCompound(null);
+					for(int i = 0; i < References.gpsMaxCoords; i++) {
+						if(!tagCompound.hasKey("coords" + i))
+							continue;
+						int[] coords = tagCompound.getIntArray("coords" + i);
+						if(((TileEntityComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
+							if(world.isRemote)
+								player.addChatMessage("Adding machine at " + coords[0] + ", " + coords[1] + ", " + coords[2]);
+							tagCompound.func_82580_o("coords" + i);
+						}
 					}
 				}
 			}
 			else {
 				NBTTagCompound tagCompound = currentItem.hasTagCompound() ? currentItem.getTagCompound() : new NBTTagCompound();
-				tagCompound.setIntArray("coords", new int[] { x, y, z });
-				currentItem.setTagCompound(tagCompound);
-				if(world.isRemote)
-					player.addChatMessage("Tracking machine at " + x + ", " + y + ", " + z);
+				int size = 0;
+				for(int i = 0; i < References.gpsMaxCoords; i++)
+					if(!tagCompound.hasKey("coords" + i))
+						size = i;
+				if(size < References.gpsMaxCoords) {
+					tagCompound.setIntArray("coords" + size, new int[] { x, y, z });
+					currentItem.setTagCompound(tagCompound);
+					if(world.isRemote)
+						player.addChatMessage("Tracking machine at " + x + ", " + y + ", " + z);
+				}
 			}
 			return true;
 		}

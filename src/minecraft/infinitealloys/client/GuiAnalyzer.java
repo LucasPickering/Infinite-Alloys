@@ -32,5 +32,6 @@ public class GuiAnalyzer extends GuiMachine {
 		int left = (width - xSize) / 2;
 		int top = (height - ySize) / 2;
 		drawTexturedModalRect(left, top, 0, 0, xSize, ySize);
+		drawTexturedModalRect(left + 34, top + 34, 0, 166, tea.getAnalysisProgressScaled(106) + 1, 18);
 	}
 }

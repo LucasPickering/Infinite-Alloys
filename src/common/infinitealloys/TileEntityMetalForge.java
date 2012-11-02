@@ -54,23 +54,23 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		currentFuelBurnTime = nbttagcompound.getShort("CurrentFuelBurnTime");
-		heatLeft = nbttagcompound.getShort("HeatLeft");
-		smeltProgress = nbttagcompound.getShort("SmeltProgress");
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		currentFuelBurnTime = tagCompound.getShort("CurrentFuelBurnTime");
+		heatLeft = tagCompound.getShort("HeatLeft");
+		smeltProgress = tagCompound.getShort("SmeltProgress");
 		for(int i = 0; i < recipeAmts.length; i++)
-			recipeAmts[i] = nbttagcompound.getByte("Recipe Amount " + i);
+			recipeAmts[i] = tagCompound.getByte("Recipe Amount " + i);
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
-		nbttagcompound.setShort("CurrentFuelBurnTime", (short)currentFuelBurnTime);
-		nbttagcompound.setShort("HeatLeft", (short)heatLeft);
-		nbttagcompound.setShort("SmeltProgress", (short)smeltProgress);
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		tagCompound.setShort("CurrentFuelBurnTime", (short)currentFuelBurnTime);
+		tagCompound.setShort("HeatLeft", (short)heatLeft);
+		tagCompound.setShort("SmeltProgress", (short)smeltProgress);
 		for(int i = 0; i < recipeAmts.length; i++)
-			nbttagcompound.setByte("Recipe Amount " + i, recipeAmts[i]);
+			tagCompound.setByte("Recipe Amount " + i, recipeAmts[i]);
 	}
 
 	public void handlePacketDataFromServer(int currentFuelBurnTime, int heatLeft, int smeltProgress, byte[] recipeAmts) {
@@ -137,7 +137,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 				typesInRecipe++;
 		for(int i = 0; i < getIngotAmts().length; i++)
 			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
-		return typesInRecipe > 1 && !sufficientIngots.contains(false) && (heatLeft > getIngotsInRecipe() || currentFuelBurnTime != 0) && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= getIngotsInRecipe()));
+		return typesInRecipe > 1 && !sufficientIngots.contains(false) && (heatLeft >= getIngotsInRecipe() || currentFuelBurnTime > 0) && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= getIngotsInRecipe()));
 	}
 
 	/**

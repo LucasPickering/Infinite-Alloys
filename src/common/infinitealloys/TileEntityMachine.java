@@ -126,11 +126,11 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		upgrades = nbttagcompound.getShort("Upgrades");
-		orientation = nbttagcompound.getByte("Orientation");
-		NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		upgrades = tagCompound.getShort("Upgrades");
+		orientation = tagCompound.getByte("Orientation");
+		NBTTagList nbttaglist = tagCompound.getTagList("Items");
 		inventoryStacks = new ItemStack[getSizeInventory()];
 		for(int i = 0; i < nbttaglist.tagCount(); i++) {
 			NBTTagCompound nbttag = (NBTTagCompound)nbttaglist.tagAt(i);
@@ -141,10 +141,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
-		nbttagcompound.setShort("Upgrades", (short)upgrades);
-		nbttagcompound.setByte("Orientation", orientation);
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		tagCompound.setShort("Upgrades", (short)upgrades);
+		tagCompound.setByte("Orientation", orientation);
 		NBTTagList nbttaglist = new NBTTagList();
 		for(int i = 0; i < inventoryStacks.length; i++) {
 			if(inventoryStacks[i] != null) {
@@ -154,7 +154,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 				nbttaglist.appendTag(nbt);
 			}
 		}
-		nbttagcompound.setTag("Items", nbttaglist);
+		tagCompound.setTag("Items", nbttaglist);
 	}
 
 	@Override

@@ -43,4 +43,9 @@ public class References {
 	 * The names of each upgrade that can be used on machines
 	 */
 	public static final String[] upgradeNames = { "Speed I", "Speed II", "Efficiency I", "Efficiency II", "Capacity I", "Capacity II", "Range I", "Range II", "Wireless Networking" };
+
+	/**
+	 * The amount of coords that the gps can hold
+	 */
+	public static final int gpsMaxCoords = 10;
 }

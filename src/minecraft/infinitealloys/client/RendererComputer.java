@@ -1,5 +1,6 @@
 package infinitealloys.client;
 
+import infinitealloys.References;
 import infinitealloys.TileEntityComputer;
 import org.lwjgl.opengl.GL11;
 import com.overminddl1.minecraft.libs.NMT.NMTModelFileOBJ;
@@ -20,7 +21,7 @@ public class RendererComputer extends TileEntitySpecialRenderer {
 	}
 
 	public void render(TileEntityComputer tec, double x, double y, double z, float partialTick) {
-		bindTextureByName("/infinitealloys/gfx/replace.png");
+		bindTextureByName(References.TEXTURE_PATH + "replace.png");
 		GL11.glPushMatrix();
 		GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

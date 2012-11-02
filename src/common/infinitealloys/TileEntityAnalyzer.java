@@ -1,5 +1,7 @@
 package infinitealloys;
 
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntityFurnace;
@@ -7,15 +9,9 @@ import net.minecraft.src.TileEntityFurnace;
 public class TileEntityAnalyzer extends TileEntityMachine {
 
 	/**
-	 * The amount of ticks that the fuel in the slot will burn for
-	 */
-	public int currentFuelBurnTime;
-	public int heatLeft;
-
-	/**
 	 * Ticks it takes to finish analyzing one ingot
 	 */
-	public int ticksToAnalyze = 2000;
+	public final int ticksToAnalyze = 2400;
 
 	/**
 	 * The analyzing progress
@@ -38,8 +34,8 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	}
 
 	public TileEntityAnalyzer() {
-		super(3);
-		inventoryStacks = new ItemStack[4];
+		super(2);
+		inventoryStacks = new ItemStack[3];
 		orientation = 2;
 	}
 
@@ -49,15 +45,19 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
-		analysisProgress = nbttagcompound.getShort("AnalysisProgress");
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		analysisProgress = tagCompound.getShort("AnalysisProgress");
+		ticksSinceStart = tagCompound.getInteger("TicksSinceStart");
+		ticksSinceFinish = tagCompound.getInteger("TicksSinceFinish");
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
-		nbttagcompound.setShort("AnalysisProgress", (short)analysisProgress);
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		tagCompound.setShort("AnalysisProgress", (short)analysisProgress);
+		tagCompound.setInteger("TicksSinceStart", ticksSinceStart);
+		tagCompound.setInteger("TicksSinceFinish", ticksSinceFinish);
 	}
 
 	public void handlePacketDataFromServer(int currentFuelBurnTime, int heatLeft, int smeltProgress, byte[] recipeAmts) {}
@@ -67,22 +67,10 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 		super.updateEntity();
 		updateUpgrades();
 		boolean invChanged = false;
-		if(heatLeft <= 0) {
-			currentFuelBurnTime = 0;
-			if(inventoryStacks[0] != null)
-				currentFuelBurnTime = TileEntityFurnace.getItemBurnTime(inventoryStacks[0]);
-			if(shouldBurn()) {
-				heatLeft = currentFuelBurnTime;
-				invChanged = true;
-				if(--inventoryStacks[0].stackSize <= 0)
-					inventoryStacks[0] = null;
-			}
-		}
-		if(shouldBurn()) {
+		if(inventoryStacks[0] != null) {
 			ticksSinceFinish = 0;
 			ticksSinceStart++;
 			analysisProgress++;
-			heatLeft--;
 			if(analysisProgress >= ticksToAnalyze) {
 				analysisProgress = 0;
 				analyzeItem();
@@ -99,12 +87,18 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 			onInventoryChanged();
 	}
 
-	private boolean shouldBurn() {
-		return (heatLeft > 0 || currentFuelBurnTime > 0) && (inventoryStacks[1] == null);
-	}
-
 	private void analyzeItem() {
 
+	}
+
+	@SideOnly(Side.CLIENT)
+	/**
+	 * Get a scaled analysis progress, used for the gui progress bar
+	 * @param i Scale
+	 * @return Scaled progress
+	 */
+	public int getAnalysisProgressScaled(int i) {
+		return analysisProgress * i / ticksToAnalyze;
 	}
 
 	@Override

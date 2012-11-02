@@ -46,21 +46,22 @@ public class ContainerMetalForge extends ContainerMachine {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}
-				else if(stackInSlotCopy.itemID == InfiniteAlloys.upgrade.shiftedIndex) {
-					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
+				else if(stackInSlotCopy.itemID == InfiniteAlloys.upgrade.shiftedIndex && inventory.isUpgradeValid(stackInSlotCopy)) {
+					if(!mergeItemStack(stackInSlotCopy, 9, 10, false))
 						return null;
 				}
 				else if(inventory.getIngotNum(stackInSlotCopy) != -1) {
 					if(!mergeItemStack(stackInSlotCopy, 11, 28, false))
 						return null;
 				}
-
-				else if(slot > 28 && slot <= 56) {
-					if(!mergeItemStack(stackInSlotCopy, 57, 66, false))
+				else if(slot > 28 && slot < 56) {
+					if(!mergeItemStack(stackInSlotCopy, 56, 65, false))
 						return null;
 				}
-				else if(slot > 56 && !mergeItemStack(stackInSlotCopy, 29, 55, false))
-					return null;
+				else if(slot >= 56) {
+					if(!mergeItemStack(stackInSlotCopy, 29, 56, false))
+						return null;
+				}
 			}
 			if(stackInSlotCopy.stackSize == 0)
 				stackInSlot.putStack((ItemStack)null);
