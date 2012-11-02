@@ -174,13 +174,11 @@ pip-log.txt
 /reobf/*
 /runtime/*
 /temp/*
-
-/src/minecraft/*
-/src/minecraft_server/*
-/src/common/*
+/src/*
 !/src/common/infinitealloys/
 !/src/common/mcmod.info
 !/src/minecraft/infinitealloys/
+!/jars/InfiniteAlloys/
 
 *.bat
 *.sh

@@ -60,14 +60,14 @@ public class InfiniteAlloys {
 
 	@Init
 	public void load(FMLInitializationEvent event) {
+		proxy.initLocalization();
 		proxy.initBlocks();
 		proxy.initItems();
 		proxy.initRecipes();
 		proxy.initTileEntities();
+		proxy.initHandlers();
 		proxy.initAchievements();
-		proxy.initWorld();
 		proxy.initRendering();
-		NetworkRegistry.instance().registerGuiHandler(instance, new GuiHandler());
 	}
 
 	@PostInit

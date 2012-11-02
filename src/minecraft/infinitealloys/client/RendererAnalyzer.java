@@ -1,5 +1,7 @@
 package infinitealloys.client;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import infinitealloys.References;
 import infinitealloys.TileEntityAnalyzer;
 import org.lwjgl.opengl.GL11;
@@ -18,7 +20,12 @@ public class RendererAnalyzer extends TileEntitySpecialRenderer {
 
 	public RendererAnalyzer() {
 		staticModelRenderer = new NMTModelRenderer(model);
-		staticModelRenderer.addModelOBJ("file:///E:/Files/github/Infinite-Alloys/src/common/infinitealloys/gfx/analyzer.obj");
+		try {
+			staticModelRenderer.addModelOBJ(new File(References.OBJ_PATH + "analyzer.obj").toURI().toURL().toString());
+		}
+		catch(MalformedURLException e) {
+			System.out.println("Infinite Alloys is missing file ./InfiniteAlloys/obj/analyzer.obj");
+		}
 		animModelRenderer = new NMTModelRenderer(model);
 		double pi = Math.PI;
 		// Adds spheres at 45, 135, 225, and 315 degrees

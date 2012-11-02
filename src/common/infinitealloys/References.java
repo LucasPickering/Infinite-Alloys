@@ -1,8 +1,13 @@
 package infinitealloys;
 
+import net.minecraft.client.Minecraft;
+
 public class References {
 
 	public static final String TEXTURE_PATH = "/infinitealloys/gfx/";
+	public static final String OBJ_PATH = "./InfiniteAlloys/obj/";
+	public static final String LANG_PATH = "./InfiniteAlloys/lang/";
+	public static final String[] langFiles = { LANG_PATH + "en_US.xml" };
 
 	/**
 	 * Amount of metals usable in creating alloys
@@ -52,7 +57,7 @@ public class References {
 	/**
 	 * The names of each metal that can be used to make alloys
 	 */
-	public static final String[] metalNames = { "Copper", "Zinc", "Magnesium", "Tantalum", "Flamium", "Vegetanium", "Aquatilum", "Swagtanium" };
+	public static final String[] metalNames = { "copper", "zinc", "magnesium", "tantalum", "flamium", "vegetanium", "aquatilum", "swagtanium" };
 
 	/**
 	 * The names of each upgrade that can be used on machines

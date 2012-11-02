@@ -1,5 +1,7 @@
 package infinitealloys.client;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import infinitealloys.References;
 import infinitealloys.TileEntityMetalForge;
 import org.lwjgl.opengl.GL11;
@@ -17,7 +19,12 @@ public class RendererMetalForge extends TileEntitySpecialRenderer {
 
 	public RendererMetalForge() {
 		modelRenderer = new NMTModelRenderer(model);
-		modelRenderer.addModelOBJ("file:///E:/Files/github/Infinite-Alloys/src/common/infinitealloys/gfx/metalforge.obj");
+		try {
+			modelRenderer.addModelOBJ(new File(References.OBJ_PATH + "metalforge.obj").toURI().toURL().toString());
+		}
+		catch(MalformedURLException e) {
+			System.out.println("Infinite Alloys is missing file ./InfiniteAlloys/obj/metalforge.obj");
+		}
 	}
 
 	public void render(TileEntityMetalForge temf, double x, double y, double z, float partialTick) {

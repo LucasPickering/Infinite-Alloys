@@ -1,5 +1,7 @@
 package infinitealloys.client;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import infinitealloys.References;
 import infinitealloys.TileEntityComputer;
 import org.lwjgl.opengl.GL11;
@@ -17,7 +19,12 @@ public class RendererComputer extends TileEntitySpecialRenderer {
 
 	public RendererComputer() {
 		modelRenderer = new NMTModelRenderer(model);
-		modelRenderer.addModelOBJ("file:///E:/Files/github/Infinite-Alloys/src/common/infinitealloys/gfx/computer.obj");
+		try {
+			modelRenderer.addModelOBJ(new File(References.OBJ_PATH + "computer.obj").toURI().toURL().toString());
+		}
+		catch(MalformedURLException e) {
+			System.out.println("Infinite Alloys is missing file ./InfiniteAlloys/obj/computer.obj");
+		}
 	}
 
 	public void render(TileEntityComputer tec, double x, double y, double z, float partialTick) {

@@ -25,14 +25,6 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 	private TileEntityAnalyzer tea = new TileEntityAnalyzer();
 
 	@Override
-	public void initTileEntities() {
-		super.initTileEntities();
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityComputer.class, new RendererComputer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMetalForge.class, new RendererMetalForge());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAnalyzer.class, new RendererAnalyzer());
-	}
-
-	@Override
 	public void initRendering() {
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "tex.png");
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/computer.png");
@@ -40,6 +32,9 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/analyzer.png");
 		renderId = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(renderId, this);
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityComputer.class, new RendererComputer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMetalForge.class, new RendererMetalForge());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAnalyzer.class, new RendererAnalyzer());
 	}
 
 	@Override
