@@ -1,5 +1,6 @@
 package infinitealloys.handlers;
 
+import infinitealloys.IAWorldData;
 import infinitealloys.References;
 import infinitealloys.InfiniteAlloys;
 import java.util.Random;
@@ -22,5 +23,9 @@ public class WorldGenHandler implements IWorldGenerator {
 				new WorldGenMinable(InfiniteAlloys.ore.blockID, i, 10).generate(world, random, x, y, z);
 			}
 		}
+		int[] validAlloys = new int[References.validAlloyCount];
+		for(int i = 0; i < References.validAlloyCount; i++)
+			validAlloys[i] = References.validAlloyMins[i] + random.nextInt(References.validAlloyMaxes[i] - References.validAlloyMins[i]);
+		InfiniteAlloys.instance.worldData = new IAWorldData(validAlloys);
 	}
 }

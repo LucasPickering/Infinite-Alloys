@@ -159,7 +159,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		ItemStack ingotResult = getIngotResult();
 		if(inventoryStacks[10] == null)
 			inventoryStacks[10] = ingotResult;
-		else if(inventoryStacks[10].isItemEqual(ingotResult))
+		else if(inventoryStacks[10].getTagCompound().getInteger("alloy") == ingotResult.getTagCompound().getInteger("alloy"))
 			inventoryStacks[10].stackSize += ingotResult.stackSize;
 	}
 

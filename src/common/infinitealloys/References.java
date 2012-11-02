@@ -30,14 +30,19 @@ public class References {
 	public static int[] validAlloys = new int[validAlloyCount];
 
 	/**
-	 * Starting points for randomly genned alloy values
+	 * The min for each metal in each valid alloy
 	 */
-	public static final int[] validAlloyTargets = { 0 };
+	public static final int[] validAlloyMins = { 00000011, 00001111, 00011111, 00111111, 11111111, 44444444 };
+
+	/**
+	 * The max for each metal in each valid alloy
+	 */
+	public static final int[] validAlloyMaxes = { 00000055, 00024477, 356688, 557799, 44446688, 99999999 };
 
 	/**
 	 * The radix of the number system used for the alloys
 	 */
-	public static final int alloyRadix = 9;
+	public static final int alloyRadix = 10;
 
 	/**
 	 * The colors used to colorize the ingots

@@ -40,6 +40,7 @@ public class InfiniteAlloys {
 	public static Item gps;
 	public static Achievement smeltAlloy;
 	public static AchievementPage achPage;
+	public IAWorldData worldData;
 
 	@PreInit
 	public void preInit(FMLPreInitializationEvent event) {
@@ -64,6 +65,7 @@ public class InfiniteAlloys {
 		proxy.initRecipes();
 		proxy.initTileEntities();
 		proxy.initAchievements();
+		proxy.initWorld();
 		proxy.initRendering();
 		NetworkRegistry.instance().registerGuiHandler(instance, new GuiHandler());
 	}

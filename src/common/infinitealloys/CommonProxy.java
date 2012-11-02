@@ -1,5 +1,6 @@
 package infinitealloys;
 
+import infinitealloys.handlers.EventHandler;
 import infinitealloys.handlers.WorldGenHandler;
 import net.minecraft.src.Achievement;
 import net.minecraft.src.CreativeTabs;
@@ -33,7 +34,6 @@ public class CommonProxy {
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 0), "Computer");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 1), "Metal Forge");
 		LanguageRegistry.addName(new ItemStack(InfiniteAlloys.machine, 1, 2), "Analyzer");
-		GameRegistry.registerWorldGenerator(new WorldGenHandler());
 	}
 
 	public void initItems() {
@@ -73,8 +73,12 @@ public class CommonProxy {
 		addLocalization("achievement.smeltAlloy.desc", "en_US", "Created Yo");
 	}
 
-	public void initRendering() {
+	public void initWorld() {
+		GameRegistry.registerWorldGenerator(new WorldGenHandler());
+		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
+
+	public void initRendering() {}
 
 	private void addLocalization(String key, String lang, String value) {
 		LanguageRegistry.instance().addStringLocalization(key, lang, value);
