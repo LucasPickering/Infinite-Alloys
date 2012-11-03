@@ -67,6 +67,7 @@ pip-log.txt
 /runtime/*
 /temp/*
 /src/*
+
 !/src/common/infinitealloys/
 !/src/common/mcmod.info
 !/src/minecraft/infinitealloys/

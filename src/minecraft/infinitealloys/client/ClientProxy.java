@@ -2,10 +2,6 @@ package infinitealloys.client;
 
 import infinitealloys.CommonProxy;
 import infinitealloys.InfiniteAlloys;
-import infinitealloys.ItemAlloyIngot;
-import infinitealloys.ItemGPS;
-import infinitealloys.ItemIngot;
-import infinitealloys.ItemUpgrade;
 import infinitealloys.References;
 import infinitealloys.TileEntityAnalyzer;
 import infinitealloys.TileEntityComputer;
@@ -17,7 +13,6 @@ import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.src.Block;
-import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.RenderBlocks;
@@ -44,8 +39,8 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 		for(int i = 0; i < References.metalCount; i++)
 			addName(new ItemStack(InfiniteAlloys.ore, 0, i), "metal." + References.metalNames[i] + ".name", "tile.iaOre.name");
 		addName(new ItemStack(InfiniteAlloys.machine, 1, 0), "machine.computer.name");
-		addName(new ItemStack(InfiniteAlloys.machine, 1, 0), "machine.metalforge.name");
-		addName(new ItemStack(InfiniteAlloys.machine, 1, 0), "machine.analyzer.name");
+		addName(new ItemStack(InfiniteAlloys.machine, 1, 1), "machine.metalforge.name");
+		addName(new ItemStack(InfiniteAlloys.machine, 1, 2), "machine.analyzer.name");
 	}
 
 	@Override

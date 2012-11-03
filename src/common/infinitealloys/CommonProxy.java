@@ -1,14 +1,15 @@
 package infinitealloys;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import infinitealloys.handlers.EventHandler;
 import infinitealloys.handlers.GuiHandler;
 import infinitealloys.handlers.WorldGenHandler;
 import net.minecraft.src.Achievement;
+import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.FurnaceRecipes;
+import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.NBTTagCompound;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.network.NetworkRegistry;
@@ -35,6 +36,7 @@ public class CommonProxy {
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.machine, 0, "pickaxe", 0);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.machine, 1, "pickaxe", 0);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.machine, 2, "pickaxe", 0);
+		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.machine, 3, "pickaxe", 0);
 	}
 
 	public void initItems() {
@@ -45,6 +47,7 @@ public class CommonProxy {
 	}
 
 	public void initRecipes() {
+		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 1), "BBB", "BDB", "BBB", 'B', Block.brick, 'D', Item.doorSteel);
 		addSmelting(InfiniteAlloys.ore.blockID, 0, new ItemStack(InfiniteAlloys.ingot, 1, 0), 0.6F);
 		addSmelting(InfiniteAlloys.ore.blockID, 1, new ItemStack(InfiniteAlloys.ingot, 1, 1), 0.6F);
 		addSmelting(InfiniteAlloys.ore.blockID, 2, new ItemStack(InfiniteAlloys.ingot, 1, 2), 0.7F);
@@ -68,18 +71,27 @@ public class CommonProxy {
 	}
 
 	public void initAchievements() {
-		InfiniteAlloys.smeltAlloy = new Achievement(2001, "smeltAlloy", 1, -2, InfiniteAlloys.alloyIngot, null).registerAchievement();
-		InfiniteAlloys.achPage = new AchievementPage("Infinite Alloys", InfiniteAlloys.smeltAlloy);
+		ItemStack alloyIngot = new ItemStack(InfiniteAlloys.alloyIngot);
+		NBTTagCompound tagCompound = new NBTTagCompound();
+		tagCompound.setInteger("alloy", 11);
+		alloyIngot.setTagCompound(tagCompound);
+		InfiniteAlloys.craftMetalForge = new Achievement(2000, "craftMetalForge", 0, 0, new ItemStack(InfiniteAlloys.machine, 1, 1), null).registerAchievement();
+		InfiniteAlloys.smeltAlloy = new Achievement(2001, "smeltAlloy", 2, 0, alloyIngot, InfiniteAlloys.craftMetalForge).registerAchievement();
+		InfiniteAlloys.achPage = new AchievementPage("Infinite Alloys", InfiniteAlloys.craftMetalForge, InfiniteAlloys.smeltAlloy);
 		AchievementPage.registerAchievementPage(InfiniteAlloys.achPage);
 	}
 
 	public void initRendering() {}
 
-	protected void addName(Object obj, String key, String... extraKeys) {
-		String name = LanguageRegistry.instance().getStringLocalization(key);
-		for(String extraKey : extraKeys)
-			name = name + LanguageRegistry.instance().getStringLocalization(extraKey);
+	protected void addName(Object obj, String... keys) {
+		String name = "";
+		for(String key : keys)
+			name = name + LanguageRegistry.instance().getStringLocalization(key);
 		LanguageRegistry.addName(obj, name);
+	}
+
+	private void addRecipe(ItemStack result, Object... params) {
+		GameRegistry.addRecipe(result, params);
 	}
 
 	private void addSmelting(int inputID, int inputDamage, ItemStack output, float experience) {

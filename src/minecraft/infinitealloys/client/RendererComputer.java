@@ -1,11 +1,8 @@
 package infinitealloys.client;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import infinitealloys.References;
 import infinitealloys.TileEntityComputer;
 import org.lwjgl.opengl.GL11;
-import com.overminddl1.minecraft.libs.NMT.NMTModelFileOBJ;
 import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
 import net.minecraft.src.ModelBase;
 import net.minecraft.src.TileEntity;
@@ -15,7 +12,6 @@ public class RendererComputer extends TileEntitySpecialRenderer {
 
 	private ModelBase model = new ModelBase() {};
 	private NMTModelRenderer modelRenderer;
-	private NMTModelFileOBJ objFile;
 
 	public RendererComputer() {
 		modelRenderer = new NMTModelRenderer(model);
@@ -23,7 +19,7 @@ public class RendererComputer extends TileEntitySpecialRenderer {
 	}
 
 	public void render(TileEntityComputer tec, double x, double y, double z, float partialTick) {
-		bindTextureByName(References.TEXTURE_PATH + "replace.png");
+		bindTextureByName(References.TEXTURE_PATH+"tex.png");
 		GL11.glPushMatrix();
 		GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

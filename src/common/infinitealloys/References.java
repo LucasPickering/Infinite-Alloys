@@ -1,7 +1,5 @@
 package infinitealloys;
 
-import net.minecraft.client.Minecraft;
-
 public class References {
 
 	public static final String TEXTURE_PATH = "/infinitealloys/gfx/";
@@ -62,7 +60,7 @@ public class References {
 	/**
 	 * The names of each upgrade that can be used on machines
 	 */
-	public static final String[] upgradeNames = { "Speed I", "Speed II", "Efficiency I", "Efficiency II", "Capacity I", "Capacity II", "Range I", "Range II", "Wireless Networking" };
+	public static final String[] upgradeNames = { "speed1", "speed2", "efficiency1", "efficiency2", "capacity1", "capacity2", "range1", "range2", "wireless" };
 
 	/**
 	 * The amount of coords that the gps can hold

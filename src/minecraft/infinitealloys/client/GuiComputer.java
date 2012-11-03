@@ -54,7 +54,7 @@ public class GuiComputer extends GuiMachine {
 		for(int i = 0; i < tec.networkCoords.size(); i++) {
 			Vec3 coords = tec.networkCoords.get(i);
 			machineButtons.add(new GuiMachineButton(width / 2 - 73 + i % 5 * 24, height / 2 - 60 + i / 5 * 24, (int)coords.xCoord, (int)coords.yCoord, (int)coords.zCoord));
-			machineButtons.get(i).drawButton(mc, mouseX, mouseY);
+			machineButtons.get(i).drawButton(mc);
 		}
 		boolean full = machineButtons.size() < tec.networkCapacity;
 		addMachine.enabled = full;

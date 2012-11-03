@@ -4,7 +4,6 @@ import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.TileEntityFurnace;
 
 public class TileEntityAnalyzer extends TileEntityMachine {
 

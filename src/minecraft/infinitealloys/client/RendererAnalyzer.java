@@ -1,7 +1,5 @@
 package infinitealloys.client;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import infinitealloys.References;
 import infinitealloys.TileEntityAnalyzer;
 import org.lwjgl.opengl.GL11;
@@ -31,7 +29,7 @@ public class RendererAnalyzer extends TileEntitySpecialRenderer {
 	}
 
 	public void render(TileEntityAnalyzer tea, double x, double y, double z, float partialTick) {
-		bindTextureByName(References.TEXTURE_PATH + "replace.png");
+		bindTextureByName(References.TEXTURE_PATH+"tex.png");
 		GL11.glPushMatrix();
 		GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -39,8 +37,8 @@ public class RendererAnalyzer extends TileEntitySpecialRenderer {
 		GL11.glRotatef(90, 1F, 0F, 0F);
 		staticModelRenderer.render(0.5F);
 		GL11.glPushMatrix();
-		GL11.glTranslatef(0F, 0F, (float)(tea.ticksSinceStart <= 90 ? tea.ticksSinceStart : 90) / -270F);
-		GL11.glTranslatef(0F, 0F, (float)(tea.ticksSinceStart > 90 ? MathHelper.sin(tea.ticksSinceStart / 5F) / 20F : 0));
+		GL11.glTranslatef(0F, 0F, (tea.ticksSinceStart <= 90 ? tea.ticksSinceStart : 90) / -270F);
+		GL11.glTranslatef(0F, 0F, tea.ticksSinceStart > 90 ? MathHelper.sin(tea.ticksSinceStart / 5F) / 20F : 0);
 		GL11.glRotatef((tea.ticksSinceStart > 90 ? tea.ticksSinceStart : 0) * 10F, 0F, 0F, 1F);
 		animModelRenderer.render(0.5F);
 		GL11.glPopMatrix();

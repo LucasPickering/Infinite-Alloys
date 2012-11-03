@@ -3,6 +3,7 @@ package infinitealloys;
 import java.util.List;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
@@ -30,7 +31,7 @@ public class ItemUpgrade extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		list.add(References.upgradeNames[(int)InfiniteAlloys.logn(2, itemstack.getItemDamage())]);
+		list.add(LanguageRegistry.instance().getStringLocalization("upgrade." + References.upgradeNames[(int)InfiniteAlloys.logn(2, itemstack.getItemDamage())] + ".name"));
 	}
 
 	@Override

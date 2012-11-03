@@ -1,12 +1,10 @@
 package infinitealloys;
 
-import infinitealloys.handlers.GuiHandler;
 import net.minecraft.src.Achievement;
 import net.minecraft.src.Block;
 import net.minecraft.src.Item;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.Configuration;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PreInit;
@@ -38,6 +36,7 @@ public class InfiniteAlloys {
 	public static Item alloyIngot;
 	public static Item upgrade;
 	public static Item gps;
+	public static Achievement craftMetalForge;
 	public static Achievement smeltAlloy;
 	public static AchievementPage achPage;
 	public IAWorldData worldData;

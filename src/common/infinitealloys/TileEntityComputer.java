@@ -5,7 +5,6 @@ import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.TileEntity;
 import net.minecraft.src.Vec3;
 
 public class TileEntityComputer extends TileEntityMachine {
@@ -55,7 +54,6 @@ public class TileEntityComputer extends TileEntityMachine {
 		for(int i = 0; i < networkCoords.size(); i++) {
 			Vec3 coords = networkCoords.get(i);
 			Block block = Block.blocksList[worldObj.getBlockId((int)coords.xCoord, (int)coords.yCoord, (int)coords.zCoord)];
-			TileEntity te = worldObj.getBlockTileEntity((int)coords.xCoord, (int)coords.yCoord, (int)coords.zCoord);
 			if(!(block instanceof BlockMachine))
 				networkCoords.remove(i);
 		}

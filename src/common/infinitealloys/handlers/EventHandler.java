@@ -2,7 +2,6 @@ package infinitealloys.handlers;
 
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.IAWorldData;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,7 +27,6 @@ public class EventHandler {
 		}
 		catch(ClassNotFoundException e) {
 			System.out.println("Error while deserializing Infinite Alloys world data");
-			return;
 		}
 	}
 
@@ -43,7 +41,6 @@ public class EventHandler {
 		}
 		catch(IOException e) {
 			System.out.println("Error while serializing Infinite Alloys world data");
-			e.printStackTrace();
 		}
 	}
 }
