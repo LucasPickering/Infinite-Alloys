@@ -4,6 +4,7 @@ import infinitealloys.client.ClientProxy;
 import infinitealloys.handlers.PacketHandler;
 import java.util.List;
 import java.util.Random;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -66,13 +67,16 @@ public class BlockMachine extends BlockContainer {
 		if(player.isSneaking())
 			return false;
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
-		PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEPacketToClient(tem), (Player)player);
 		if(tem instanceof TileEntityComputer)
 			player.openGui(InfiniteAlloys.instance, 0, world, x, y, z);
-		else if(tem instanceof TileEntityMetalForge)
+		else if(tem instanceof TileEntityMetalForge) {
+			if(!world.isRemote)
+				((TileEntityMetalForge)tem).numUsingPlayers++;
 			player.openGui(InfiniteAlloys.instance, 1, world, x, y, z);
+		}
 		else if(tem instanceof TileEntityAnalyzer)
 			player.openGui(InfiniteAlloys.instance, 2, world, x, y, z);
+		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(tem));
 		return true;
 	}
 
@@ -157,7 +161,7 @@ public class BlockMachine extends BlockContainer {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityliving) {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
-			tem.orientation = (byte)(MathHelper.floor_double(entityliving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3);
+			tem.orientation = (byte)(4 - (MathHelper.floor_double(entityliving.rotationYaw / 90F + 0.5D)));
 			world.markBlockNeedsUpdate(x, y, z);
 		}
 	}

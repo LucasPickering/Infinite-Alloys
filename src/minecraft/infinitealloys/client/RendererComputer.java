@@ -15,21 +15,16 @@ public class RendererComputer extends TileEntitySpecialRenderer {
 
 	public RendererComputer() {
 		modelRenderer = new NMTModelRenderer(model);
-		modelRenderer.addModelOBJ(getClass().getResource("obj/computer.obj").toString());
+		modelRenderer.addModelOBJ(getClass().getResource(References.OBJ_PATH + "computer.obj").toString());
 	}
 
 	public void render(TileEntityComputer tec, double x, double y, double z, float partialTick) {
-		bindTextureByName(References.TEXTURE_PATH+"tex.png");
+		bindTextureByName(References.TEXTURE_PATH + "computer.png");
 		GL11.glPushMatrix();
-		GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glTranslatef((float)x + 0.5F, (float)y, (float)z + 0.5F);
-		GL11.glRotatef(180, 0F, 1F, 1F);
-		GL11.glRotatef((tec.orientation - 1) * -90, 0F, 0F, 1F);
+		GL11.glTranslatef((float)x, (float)y, (float)z);
+		GL11.glRotatef(tec.orientation * 90, 0F, 1F, 0F);
 		modelRenderer.render(0.5F);
-		GL11.glDisable(32826 /* GL_RESCALE_NORMAL_EXT */);
 		GL11.glPopMatrix();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

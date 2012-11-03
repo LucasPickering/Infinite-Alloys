@@ -37,6 +37,16 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 */
 	public byte[] recipeAmts = new byte[References.metalCount];
 
+	/**
+	 * Current angle of the door, only used for rendering
+	 */
+	public int doorAngle;
+
+	/**
+	 * Amount of players using the metal forge, only used for rendering
+	 */
+	public int numUsingPlayers;
+
 	public TileEntityMetalForge(int facing) {
 		this();
 		orientation = (byte)facing;
@@ -73,11 +83,12 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			tagCompound.setByte("Recipe Amount " + i, recipeAmts[i]);
 	}
 
-	public void handlePacketDataFromServer(int currentFuelBurnTime, int heatLeft, int smeltProgress, byte[] recipeAmts) {
+	public void handlePacketDataFromServer(int currentFuelBurnTime, int heatLeft, int smeltProgress, byte[] recipeAmts, int numUsingPlayers) {
 		this.currentFuelBurnTime = currentFuelBurnTime;
 		this.heatLeft = heatLeft;
 		this.smeltProgress = smeltProgress;
 		this.recipeAmts = recipeAmts;
+		this.numUsingPlayers = numUsingPlayers;
 	}
 
 	@Override
@@ -85,6 +96,13 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		super.updateEntity();
 		updateUpgrades();
 		boolean invChanged = false;
+		if(numUsingPlayers > 0) {
+			if(doorAngle < 120) {
+				doorAngle += 6;
+			}
+		}
+		else if(doorAngle > 0)
+			doorAngle -= 6;
 		if(heatLeft < getIngotsInRecipe()) {
 			currentFuelBurnTime = 0;
 			if(inventoryStacks[0] != null)

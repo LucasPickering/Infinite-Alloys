@@ -18,7 +18,7 @@ public class RendererAnalyzer extends TileEntitySpecialRenderer {
 
 	public RendererAnalyzer() {
 		staticModelRenderer = new NMTModelRenderer(model);
-		staticModelRenderer.addModelOBJ(getClass().getResource("obj/analyzer.obj").toString());
+		staticModelRenderer.addModelOBJ(getClass().getResource(References.OBJ_PATH + "analyzer.obj").toString());
 		animModelRenderer = new NMTModelRenderer(model);
 		double pi = Math.PI;
 		// Adds spheres at 45, 135, 225, and 315 degrees
@@ -29,7 +29,7 @@ public class RendererAnalyzer extends TileEntitySpecialRenderer {
 	}
 
 	public void render(TileEntityAnalyzer tea, double x, double y, double z, float partialTick) {
-		bindTextureByName(References.TEXTURE_PATH+"tex.png");
+		bindTextureByName(References.TEXTURE_PATH + "tex.png");
 		GL11.glPushMatrix();
 		GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

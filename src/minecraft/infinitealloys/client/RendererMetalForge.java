@@ -2,35 +2,38 @@ package infinitealloys.client;
 
 import infinitealloys.References;
 import infinitealloys.TileEntityMetalForge;
-import org.lwjgl.opengl.GL11;
-import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
 import net.minecraft.src.ModelBase;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntitySpecialRenderer;
+import org.lwjgl.opengl.GL11;
+import com.overminddl1.minecraft.libs.NMT.NMTModelBox;
+import com.overminddl1.minecraft.libs.NMT.NMTModelRenderer;
 
 public class RendererMetalForge extends TileEntitySpecialRenderer {
 
 	private ModelBase model = new ModelBase() {};
-	private NMTModelRenderer modelRenderer;
+	private NMTModelRenderer staticModelRenderer;
+	private NMTModelRenderer animModelRenderer;
 
 	public RendererMetalForge() {
-		modelRenderer = new NMTModelRenderer(model);
-		modelRenderer.addModelOBJ(getClass().getResource("obj/metalforge.obj").toString());
+		staticModelRenderer = new NMTModelRenderer(model);
+		staticModelRenderer.addModelOBJ(getClass().getResource(References.OBJ_PATH + "metalforge.obj").toString());
+		animModelRenderer = new NMTModelRenderer(model);
+		animModelRenderer.addModel(new NMTModelBox(animModelRenderer, -1.4375F, -6F, -4.4375F, 1, 12, 11, 0F, 0.125F, false));
 	}
 
 	public void render(TileEntityMetalForge temf, double x, double y, double z, float partialTick) {
-		bindTextureByName(References.TEXTURE_PATH+"tex.png");
+		bindTextureByName(References.TEXTURE_PATH + "tex.png");
 		GL11.glPushMatrix();
-		GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glTranslatef((float)x + 0.5F, (float)y, (float)z + 0.5F);
-		GL11.glRotatef(90, 1F, 0F, 0F);
-		GL11.glRotatef(180, 0F, 1F, 0F);
+		GL11.glTranslatef((float)x, (float)y, (float)z);
 		GL11.glRotatef((temf.orientation - 1) * -90, 0F, 0F, 1F);
-		modelRenderer.render(0.5F);
-		GL11.glDisable(32826 /* GL_RESCALE_NORMAL_EXT */);
+		staticModelRenderer.render(0.5F);
+		/*GL11.glPushMatrix();
+		GL11.glRotatef(temf.doorAngle, 0F, 0F, 1F);
+		GL11.glTranslatef(-0.12F, (float)temf.doorAngle / 120F, 0F);
+		animModelRenderer.render(0.5F);
+		GL11.glPopMatrix();*/
 		GL11.glPopMatrix();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

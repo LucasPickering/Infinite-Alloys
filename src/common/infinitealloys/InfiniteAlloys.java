@@ -32,12 +32,14 @@ public class InfiniteAlloys {
 	public static int alloyIngotID;
 	public static int upgradeID;
 	public static int gpsID;
+	public static int alloyBookID;
 	public static Block ore;
 	public static Block machine;
 	public static Item ingot;
 	public static Item alloyIngot;
 	public static Item upgrade;
 	public static Item gps;
+	public static Item alloyBook;
 	public static CreativeTabs tabIA;
 	public static Achievement craftMetalForge;
 	public static Achievement smeltAlloy;
@@ -54,6 +56,7 @@ public class InfiniteAlloys {
 		alloyIngotID = config.getItem("Alloy Ingot", Configuration.CATEGORY_ITEM, 14001).getInt();
 		upgradeID = config.getItem("Upgrade", Configuration.CATEGORY_ITEM, 14002).getInt();
 		gpsID = config.getItem("GPS", Configuration.CATEGORY_ITEM, 14003).getInt();
+		alloyBookID = config.getItem("Alloy Book", Configuration.CATEGORY_ITEM, 14004).getInt();
 		int[] metalColors = { 0xc5763d, 0x858586, 0xd2cda3, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
 		for(int i = 0; i < References.metalCount; i++)
 			References.metalColors[i] = config.get("Metal Colors", References.metalNames[i], metalColors[i]).getInt();

@@ -59,7 +59,8 @@ public class PacketHandler implements IPacketHandler {
 						byte[] recipeAmts = new byte[References.metalCount];
 						for(int i = 0; i < recipeAmts.length; i++)
 							recipeAmts[i] = data.readByte();
-						((TileEntityMetalForge)te).handlePacketDataFromServer(currentFuelBurnTime, heatLeft, smeltProgress, recipeAmts);
+						int numUsingPlayers = data.readShort();
+						((TileEntityMetalForge)te).handlePacketDataFromServer(currentFuelBurnTime, heatLeft, smeltProgress, recipeAmts, numUsingPlayers);
 					}
 					if(te instanceof TileEntityAnalyzer) {
 						int analysisProgress = data.readShort();
@@ -110,6 +111,7 @@ public class PacketHandler implements IPacketHandler {
 				dos.writeShort(temf.smeltProgress);
 				for(byte amt : temf.recipeAmts)
 					dos.writeByte(amt);
+				dos.writeShort(temf.numUsingPlayers);
 			}
 			else if(tem instanceof TileEntityAnalyzer) {
 				TileEntityAnalyzer tea = (TileEntityAnalyzer)tem;

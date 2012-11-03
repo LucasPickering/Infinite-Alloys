@@ -56,6 +56,7 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 	@Override
 	public void initRendering() {
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "tex.png");
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "computer.png");
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/computer.png");
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/metalforge.png");
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/analyzer.png");
