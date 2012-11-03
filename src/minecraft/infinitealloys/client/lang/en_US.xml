@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties version="1.0">
+	<comment>Amurican English Localization File</comment>
+	<entry key="item.iaIngot.name"> Ingot</entry>
+	<entry key="item.iaAlloyIngot.name">Alloy Ingot</entry>
+	<entry key="item.iaUpgrade.name">Upgrade</entry>
+	<entry key="item.iaGps.name">GPS</entry>
+	<entry key="metal.copper.name">Copper</entry>
+	<entry key="metal.zinc.name">Zinc</entry>
+	<entry key="metal.magnesium.name">Magnesium</entry>
+	<entry key="metal.tantalum.name">Tantalum</entry>
+	<entry key="metal.flamium.name">Flamium</entry>
+	<entry key="metal.vegetanium.name">Vegetanium</entry>
+	<entry key="metal.aquatilum.name">Aquatilum</entry>
+	<entry key="metal.swagtanium.name">Swagtanium</entry>
+	<entry key="upgrade.speed1.name">Speed I</entry>
+	<entry key="upgrade.speed2.name">Speed II</entry>
+	<entry key="upgrade.efficiency1.name">Efficiency I</entry>
+	<entry key="upgrade.efficiency2.name">Efficiency II</entry>
+	<entry key="upgrade.capacity1.name">Capacity I</entry>
+	<entry key="upgrade.capacity2.name">Capacity II</entry>
+	<entry key="upgrade.range1.name">Range I</entry>
+	<entry key="upgrade.range2.name">Range II</entry>
+	<entry key="upgrade.wireless.name">Wireless Networking</entry>
+	<entry key="tile.iaOre.name"> Ore</entry>
+	<entry key="machine.computer.name">Computer</entry>
+	<entry key="machine.metalforge.name">Metal Forge</entry>
+	<entry key="machine.analyzer.name">Analyzer</entry>
+	<entry key="achievement.craftMetalForge">Your First Machine</entry>
+	<entry key="achievement.craftMetalForge.desc">Craft A Metal Forge</entry>
+	<entry key="achievement.smeltAlloy">Mixing Metals</entry>
+	<entry key="achievement.smeltAlloy.desc">Create An Alloy</entry>
+</properties>
