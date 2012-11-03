@@ -5,7 +5,6 @@ import infinitealloys.handlers.GuiHandler;
 import infinitealloys.handlers.WorldGenHandler;
 import net.minecraft.src.Achievement;
 import net.minecraft.src.Block;
-import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.FurnaceRecipes;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
@@ -21,8 +20,8 @@ public class CommonProxy {
 	public void initLocalization() {}
 
 	public void initBlocks() {
-		InfiniteAlloys.ore = new BlockOre(InfiniteAlloys.oreID, 0).setCreativeTab(CreativeTabs.tabBlock).setHardness(2F).setBlockName("iaOre");
-		InfiniteAlloys.machine = new BlockMachine(InfiniteAlloys.machineID, 6).setCreativeTab(CreativeTabs.tabBlock).setHardness(2F).setBlockName("iaMachine");
+		InfiniteAlloys.ore = new BlockOre(InfiniteAlloys.oreID, 0).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("iaOre");
+		InfiniteAlloys.machine = new BlockMachine(InfiniteAlloys.machineID, 6).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("iaMachine");
 		GameRegistry.registerBlock(InfiniteAlloys.ore, ItemBlockIA.class);
 		GameRegistry.registerBlock(InfiniteAlloys.machine, ItemBlockIA.class);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 0, "pickaxe", 1);
@@ -40,10 +39,10 @@ public class CommonProxy {
 	}
 
 	public void initItems() {
-		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 128).setCreativeTab(CreativeTabs.tabMaterials).setItemName("iaIngot");
-		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 128).setCreativeTab(CreativeTabs.tabMaterials).setItemName("iaAlloyIngot");
-		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 129).setMaxStackSize(1).setCreativeTab(CreativeTabs.tabMisc).setItemName("iaUpgrade");
-		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 138).setMaxStackSize(10).setCreativeTab(CreativeTabs.tabMisc).setItemName("iaGps");
+		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 128).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaIngot");
+		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 128).setItemName("iaAlloyIngot");
+		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 129).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaUpgrade");
+		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 138).setMaxStackSize(10).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaGps");
 	}
 
 	public void initRecipes() {

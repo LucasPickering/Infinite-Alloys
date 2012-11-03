@@ -2,6 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
 	<comment>Amurican English Localization File</comment>
+	<entry key="itemGroup.main">Infinite Alloys</entry>
 	<entry key="item.iaIngot.name"> Ingot</entry>
 	<entry key="item.iaAlloyIngot.name">Alloy Ingot</entry>
 	<entry key="item.iaUpgrade.name">Upgrade</entry>

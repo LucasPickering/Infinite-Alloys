@@ -2,6 +2,7 @@ package infinitealloys;
 
 import net.minecraft.src.Achievement;
 import net.minecraft.src.Block;
+import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.Item;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.Configuration;
@@ -12,6 +13,7 @@ import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -36,6 +38,7 @@ public class InfiniteAlloys {
 	public static Item alloyIngot;
 	public static Item upgrade;
 	public static Item gps;
+	public static CreativeTabs tabIA;
 	public static Achievement craftMetalForge;
 	public static Achievement smeltAlloy;
 	public static AchievementPage achPage;
@@ -59,6 +62,7 @@ public class InfiniteAlloys {
 
 	@Init
 	public void load(FMLInitializationEvent event) {
+		tabIA = new CreativeTabIA(CreativeTabs.getNextID(), "main");
 		proxy.initLocalization();
 		proxy.initBlocks();
 		proxy.initItems();
@@ -70,8 +74,7 @@ public class InfiniteAlloys {
 	}
 
 	@PostInit
-	public void postInit(FMLPostInitializationEvent event) {
-	}
+	public void postInit(FMLPostInitializationEvent event) {}
 
 	public static int intAtPositionRadix(int radix, int strlen, int n, int pos) {
 		return new Integer(String.valueOf(addLeadingZeros(Integer.toString(n, radix), strlen).charAt(pos)));
@@ -86,5 +89,9 @@ public class InfiniteAlloys {
 		for(int i = 0; i < finalSize - length; i++)
 			s = "0" + s;
 		return s;
+	}
+
+	public static String getStringLocalization(String key) {
+		return LanguageRegistry.instance().getStringLocalization(key);
 	}
 }
