@@ -18,7 +18,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 
-@Mod(modid = "InfiniteAlloys", name = "Infinite Alloys", version = "0.0.0")
+@Mod(modid = "InfiniteAlloys", name = "Infinite Alloys", version = "0.0.1")
 @NetworkMod(channels = { "InfiniteAlloys" }, clientSideRequired = true, serverSideRequired = false, packetHandler = infinitealloys.handlers.PacketHandler.class)
 public class InfiniteAlloys {
 
@@ -33,6 +33,7 @@ public class InfiniteAlloys {
 	public static int upgradeID;
 	public static int gpsID;
 	public static int alloyBookID;
+	public static boolean[] spawnOres = new boolean[References.metalCount];
 	public static Block ore;
 	public static Block machine;
 	public static Item ingot;
@@ -60,6 +61,8 @@ public class InfiniteAlloys {
 		int[] metalColors = { 0xc5763d, 0x858586, 0xd2cda3, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
 		for(int i = 0; i < References.metalCount; i++)
 			References.metalColors[i] = config.get("Metal Colors", References.metalNames[i], metalColors[i]).getInt();
+		for(int i = 0; i < References.metalCount; i++)
+			spawnOres[i] = config.get("World Gen", References.metalNames[i], true).getBoolean(true);
 		config.save();
 	}
 

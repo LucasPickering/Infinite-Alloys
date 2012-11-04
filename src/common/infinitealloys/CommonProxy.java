@@ -11,6 +11,7 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.oredict.OreDictionary;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -24,6 +25,7 @@ public class CommonProxy {
 		InfiniteAlloys.machine = new BlockMachine(InfiniteAlloys.machineID, 6).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("iaMachine");
 		GameRegistry.registerBlock(InfiniteAlloys.ore, ItemBlockIA.class);
 		GameRegistry.registerBlock(InfiniteAlloys.machine, ItemBlockIA.class);
+		OreDictionary.registerOre("copper", new ItemStack(InfiniteAlloys.ore, 1, 0));
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 0, "pickaxe", 1);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 1, "pickaxe", 1);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 2, "pickaxe", 1);
@@ -44,6 +46,7 @@ public class CommonProxy {
 		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 129).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaUpgrade");
 		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 138).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaGps");
 		InfiniteAlloys.alloyBook = new ItemAlloyBook(InfiniteAlloys.alloyBookID, 139).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaAlloyBook");
+		OreDictionary.registerOre("ingotCopper", new ItemStack(InfiniteAlloys.ingot, 1, 0));
 	}
 
 	public void initRecipes() {
@@ -62,6 +65,7 @@ public class CommonProxy {
 		GameRegistry.registerTileEntity(TileEntityComputer.class, "Computer");
 		GameRegistry.registerTileEntity(TileEntityMetalForge.class, "MetalForge");
 		GameRegistry.registerTileEntity(TileEntityAnalyzer.class, "Analyzer");
+		GameRegistry.registerTileEntity(TileEntityPrinter.class, "Printer");
 	}
 
 	public void initHandlers() {
