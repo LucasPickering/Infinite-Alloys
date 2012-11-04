@@ -16,6 +16,6 @@ public class SlotAnalyzer extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return (slotIndex == 0 && itemstack.itemID == InfiniteAlloys.alloyIngot.shiftedIndex) || (slotIndex == 1 && TileEntityFurnace.isItemFuel(itemstack));
+		return (slotIndex < 2 && itemstack.itemID == InfiniteAlloys.alloyIngot.shiftedIndex) || (slotIndex == 2 && itemstack.itemID == InfiniteAlloys.alloyBook.shiftedIndex);
 	}
 }

@@ -12,9 +12,10 @@ public class ContainerAnalyzer extends ContainerMachine {
 	public ContainerAnalyzer(InventoryPlayer inventoryPlayer, TileEntityAnalyzer tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
-		addSlotToContainer(new SlotAnalyzer(inventory, 0, 12, 35));
-		addSlotToContainer(new SlotAnalyzer(inventory, 1, 148, 35));
-		addSlotToContainer(new SlotUpgrade(inventory, 2, 152, 8));
+		addSlotToContainer(new SlotAnalyzer(inventory, 0, 12, 58));
+		addSlotToContainer(new SlotAnalyzer(inventory, 1, 148, 58));
+		addSlotToContainer(new SlotAnalyzer(inventory, 2, 148, 33));
+		addSlotToContainer(new SlotUpgrade(inventory, 3, 148, 8));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
 				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
@@ -29,8 +30,8 @@ public class ContainerAnalyzer extends ContainerMachine {
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
 			ItemStack stackInSlotCopy = stackInSlot.getStack();
 			itemstack = stackInSlotCopy.copy();
-			if(slot<3) {
-				if(!mergeItemStack(stackInSlotCopy, 3, 39, false))
+			if(slot < 3) {
+				if(!mergeItemStack(stackInSlotCopy, 4, 39, false))
 					return null;
 			}
 			if(slot > 3) {
@@ -39,7 +40,7 @@ public class ContainerAnalyzer extends ContainerMachine {
 						return null;
 				}
 				else if(stackInSlotCopy.itemID == InfiniteAlloys.upgrade.shiftedIndex && inventory.isUpgradeValid(stackInSlotCopy)) {
-					if(!mergeItemStack(stackInSlotCopy, 1, 2, false))
+					if(!mergeItemStack(stackInSlotCopy, 3, 4, false))
 						return null;
 				}
 				else if(slot > 3 && slot < 30) {

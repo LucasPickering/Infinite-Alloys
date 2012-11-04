@@ -42,7 +42,8 @@ public class CommonProxy {
 		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 128).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaIngot");
 		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 128).setItemName("iaAlloyIngot");
 		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 129).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaUpgrade");
-		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 138).setMaxStackSize(10).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaGps");
+		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 138).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaGps");
+		InfiniteAlloys.alloyBook = new ItemAlloyBook(InfiniteAlloys.alloyBookID, 139).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaAlloyBook");
 	}
 
 	public void initRecipes() {

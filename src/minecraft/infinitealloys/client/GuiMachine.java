@@ -1,7 +1,7 @@
 package infinitealloys.client;
 
-import infinitealloys.References;
 import infinitealloys.InfiniteAlloys;
+import infinitealloys.References;
 import infinitealloys.TileEntityMachine;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,12 +30,12 @@ public abstract class GuiMachine extends GuiContainer {
 		if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY)) {
 			ArrayList<String> texts = new ArrayList<String>();
 			ArrayList<Integer> colors = new ArrayList<Integer>();
-			texts.add("Upgrades");
+			texts.add(InfiniteAlloys.getStringLocalization("upgrade.name"));
 			colors.add(0xffffff);
 			for(int i = 0; i < References.upgradeCount; i++) {
 				int damage = (int)Math.pow(2, i);
 				if(tem.isPrereqUpgrade(new ItemStack(InfiniteAlloys.upgrade, 1, damage)) && (tem.upgrades << 1 | damage) == tem.upgrades || (tem.upgrades | damage) != tem.upgrades) continue;
-				texts.add(References.upgradeNames[i]);
+				texts.add(InfiniteAlloys.getStringLocalization("upgrade." + References.upgradeNames[i] + ".name"));
 				colors.add(0xaaaaaa);
 			}
 			drawTextBox(texts, colors, mouseX, mouseY);

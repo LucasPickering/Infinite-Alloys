@@ -1,6 +1,7 @@
 package infinitealloys.client;
 
 import infinitealloys.ContainerMetalForge;
+import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.TileEntityMetalForge;
 import org.lwjgl.opengl.GL11;
@@ -24,7 +25,7 @@ public class GuiMetalForge extends GuiMachine {
 		for(int i = 0; i < References.metalCount; i++) {
 			Slot slot = inventorySlots.getSlot(i + 1);
 			if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY) && 0 <= i && i <= 7)
-				drawTextBox(References.metalNames[i], 0xffffff, mouseX, mouseY);
+				drawTextBox(InfiniteAlloys.getStringLocalization("metal." + References.metalNames[i] + ".name"), 0xffffff, mouseX, mouseY);
 		}
 	}
 
@@ -32,7 +33,6 @@ public class GuiMetalForge extends GuiMachine {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		fontRenderer.drawString("Inventory", 42, ySize - 94, 4210752);
 		for(int y = 0; y < 2; y++)
 			for(int x = 0; x < 4; x++)
 				fontRenderer.drawStringWithShadow(new Byte(temf.recipeAmts[y * 4 + x]).toString(), x * 18 + 45, y * 18 + 35, 0xffffff);

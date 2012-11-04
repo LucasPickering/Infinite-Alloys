@@ -50,8 +50,8 @@ public class InfiniteAlloys {
 	public void preInit(FMLPreInitializationEvent event) {
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
-		oreID = config.getBlock("Ore", 200).getInt();
-		machineID = config.getBlock("Machine", 201).getInt();
+		oreID = config.getBlock("Ore", 3000).getInt();
+		machineID = config.getBlock("Machine", 3001).getInt();
 		ingotID = config.getItem("Ingot", Configuration.CATEGORY_ITEM, 14000).getInt();
 		alloyIngotID = config.getItem("Alloy Ingot", Configuration.CATEGORY_ITEM, 14001).getInt();
 		upgradeID = config.getItem("Upgrade", Configuration.CATEGORY_ITEM, 14002).getInt();

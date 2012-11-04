@@ -66,4 +66,9 @@ public class References {
 	 * The amount of coords that the gps can hold
 	 */
 	public static final int gpsMaxCoords = 10;
+
+	/**
+	 * The amount of analyses that an alloy book can store
+	 */
+	public static final int alloyBookMaxSaves = 20;
 }

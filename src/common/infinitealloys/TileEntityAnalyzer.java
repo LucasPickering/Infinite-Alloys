@@ -1,5 +1,7 @@
 package infinitealloys;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.ItemStack;
@@ -10,12 +12,17 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	/**
 	 * Ticks it takes to finish analyzing one ingot
 	 */
-	public final int ticksToAnalyze = 2400;
+	public final int ticksToAnalyze = 20;
 
 	/**
 	 * The analyzing progress
 	 */
 	public int analysisProgress;
+
+	/**
+	 * The report of the last analysis
+	 */
+	public String alloyReport = "";
 
 	/**
 	 * Ticks since machine first started, only used for animation
@@ -28,8 +35,8 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	public int ticksSinceFinish;
 
 	public TileEntityAnalyzer() {
-		super(2);
-		inventoryStacks = new ItemStack[3];
+		super(3);
+		inventoryStacks = new ItemStack[4];
 		orientation = 2;
 	}
 
@@ -65,7 +72,7 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 		super.updateEntity();
 		updateUpgrades();
 		boolean invChanged = false;
-		if(inventoryStacks[0] != null) {
+		if(inventoryStacks[0] != null && inventoryStacks[1] == null) {
 			ticksSinceFinish = 0;
 			ticksSinceStart++;
 			analysisProgress++;
@@ -86,7 +93,28 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	}
 
 	private void analyzeItem() {
-
+		if(inventoryStacks[2] != null) {
+			ArrayList<Integer> validAlloys = new ArrayList<Integer>();
+			for(int validAlloy : References.validAlloys)
+				validAlloys.add(validAlloy);
+			int alloy = inventoryStacks[0].getTagCompound().getInteger("alloy");
+			NBTTagCompound tagCompound;
+			ArrayList<Integer> savedAlloys = new ArrayList<Integer>();
+			if(inventoryStacks[2].hasTagCompound()) {
+				tagCompound = inventoryStacks[2].getTagCompound();
+				for(int savedAlloy : tagCompound.getIntArray("savedAlloys"))
+					savedAlloys.add(savedAlloy);
+			}
+			else
+				tagCompound = new NBTTagCompound();
+			if(savedAlloys.size() < References.alloyBookMaxSaves || validAlloys.contains(alloy) && inventoryStacks[2] != null) {
+				savedAlloys.add(alloy);
+				inventoryStacks[2].setTagCompound(tagCompound);
+			}
+		}
+		inventoryStacks[1] = inventoryStacks[0];
+		inventoryStacks[0] = null;
+		alloyReport = "I'm an idiot. Ask someone else. Actually, you know what? You're an idiot too. How could you expect me to answer that? Just go away before I cry.";
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -102,6 +130,11 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	@Override
 	public boolean isUpgradeValid(ItemStack upgrade) {
 		return super.isUpgradeValid(upgrade);
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return 1;
 	}
 
 	/**
