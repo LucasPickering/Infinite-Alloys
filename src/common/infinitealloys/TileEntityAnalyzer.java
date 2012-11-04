@@ -20,11 +20,6 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	public int analysisProgress;
 
 	/**
-	 * The report of the last analysis
-	 */
-	public String alloyReport = "";
-
-	/**
 	 * Ticks since machine first started, only used for animation
 	 */
 	public int ticksSinceStart;
@@ -70,7 +65,6 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		updateUpgrades();
 		boolean invChanged = false;
 		if(inventoryStacks[0] != null && inventoryStacks[1] == null) {
 			ticksSinceFinish = 0;
@@ -87,7 +81,6 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 			ticksSinceFinish++;
 			analysisProgress = 0;
 		}
-		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 		if(invChanged)
 			onInventoryChanged();
 	}
@@ -114,7 +107,6 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 		}
 		inventoryStacks[1] = inventoryStacks[0];
 		inventoryStacks[0] = null;
-		alloyReport = "I'm an idiot. Ask someone else. Actually, you know what? You're an idiot too. How could you expect me to answer that? Just go away before I cry.";
 	}
 
 	@SideOnly(Side.CLIENT)

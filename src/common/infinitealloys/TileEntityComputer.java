@@ -34,14 +34,13 @@ public class TileEntityComputer extends TileEntityMachine {
 	 */
 	public ArrayList<Vec3> networkCoords;
 
-	public TileEntityComputer(int facing) {
+	public TileEntityComputer(byte facing) {
 		this();
-		orientation = (byte)facing;
+		orientation = facing;
 	}
 
 	public TileEntityComputer() {
 		inventoryStacks = new ItemStack[1];
-		orientation = 2;
 		canNetwork = true;
 		networkCapacity = networkCapacityA[2];
 		networkRange = networkRangeA[2];

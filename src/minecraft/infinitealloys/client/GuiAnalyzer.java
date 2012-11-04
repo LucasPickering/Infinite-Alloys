@@ -2,6 +2,7 @@ package infinitealloys.client;
 
 import java.util.ArrayList;
 import infinitealloys.ContainerAnalyzer;
+import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.TileEntityAnalyzer;
 import org.lwjgl.opengl.GL11;
@@ -14,32 +15,35 @@ public class GuiAnalyzer extends GuiMachine {
 	public GuiAnalyzer(InventoryPlayer inventoryPlayer, TileEntityAnalyzer tileEntity) {
 		super(tileEntity, new ContainerAnalyzer(inventoryPlayer, tileEntity));
 		tea = tileEntity;
+		xSize = 184;
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		for(int i = 0; i < tea.alloyReport.length(); i += 24) {
-			int lastSpace = 0;
-			for(int j = i; j < i + 24; j++)
-				if(tea.alloyReport.charAt(j) == ' ')
-					lastSpace = i;
-			System.out.println(tea.alloyReport.substring(i, lastSpace).trim());
-			fontRenderer.drawString(tea.alloyReport.substring(i, lastSpace).trim(), 14, 0, 4210752);
-		}
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-	}
-
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-		int k = mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/analyzer.png");
+	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(k);
+		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/analyzer.png"));
 		int left = (width - xSize) / 2;
 		int top = (height - ySize) / 2;
 		drawTexturedModalRect(left, top, 0, 0, xSize, ySize);
-		drawTexturedModalRect(left + 34, top + 57, 0, 166, tea.getAnalysisProgressScaled(106) + 1, 18);
+		drawTexturedModalRect(left + 38, top + 57, 0, 166, tea.getAnalysisProgressScaled(106) + 1, 18);
+		if(tea.inventoryStacks[1] != null) {
+			int currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");
+			int nearestValidAlloy = 2147483647;
+			for(int i = 0; i < References.validAlloyCount; i++)
+				if(getAlloyDiff(currentAlloy, nearestValidAlloy) > getAlloyDiff(currentAlloy, References.validAlloys[i]))
+					nearestValidAlloy = References.validAlloys[i];
+			for(int i = 0; i < References.metalCount; i++) {
+				int currentValue = InfiniteAlloys.intAtPosRadix(10, References.metalCount, currentAlloy, i);
+				int nearestValue = InfiniteAlloys.intAtPosRadix(10, References.metalCount, nearestValidAlloy, i);
+				drawTexturedModalRect(left + i * 18 + 8, top + 26, nearestValue > currentValue ? 184 : nearestValue < currentValue ? 200 : 216, 0, 16, 16);
+			}
+		}
+	}
+
+	private int getAlloyDiff(int alloy1, int alloy2) {
+		int diff = 0;
+		for(int i = 0; i < References.metalCount; i++)
+			diff += Math.abs(InfiniteAlloys.intAtPosRadix(10, References.metalCount, alloy1, i) - InfiniteAlloys.intAtPosRadix(10, References.metalCount, alloy2, i));
+		return diff;
 	}
 }

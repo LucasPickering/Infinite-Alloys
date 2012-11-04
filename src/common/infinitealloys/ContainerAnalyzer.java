@@ -13,14 +13,14 @@ public class ContainerAnalyzer extends ContainerMachine {
 		super(tileEntity);
 		inventory = tileEntity;
 		addSlotToContainer(new SlotAnalyzer(inventory, 0, 12, 58));
-		addSlotToContainer(new SlotAnalyzer(inventory, 1, 148, 58));
-		addSlotToContainer(new SlotAnalyzer(inventory, 2, 148, 33));
-		addSlotToContainer(new SlotUpgrade(inventory, 3, 148, 8));
+		addSlotToContainer(new SlotAnalyzer(inventory, 1, 156, 58));
+		addSlotToContainer(new SlotAnalyzer(inventory, 2, 156, 33));
+		addSlotToContainer(new SlotUpgrade(inventory, 3, 156, 8));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 12 + x * 18, 84 + y * 18));
 		for(int x = 0; x < 9; x++)
-			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 142));
+			addSlotToContainer(new Slot(inventoryPlayer, x, 12 + x * 18, 142));
 	}
 
 	@Override

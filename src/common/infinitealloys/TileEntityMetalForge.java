@@ -25,7 +25,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	/**
 	 * Ticks it takes to finish smelting one ingot
 	 */
-	public int ticksToFinish = 12800;
+	private final int ticksToFinish = 12800;
 
 	/**
 	 * The smelting progress
@@ -47,15 +47,14 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 */
 	public int numUsingPlayers;
 
-	public TileEntityMetalForge(int facing) {
+	public TileEntityMetalForge(byte facing) {
 		this();
-		orientation = (byte)facing;
+		orientation = facing;
 	}
 
 	public TileEntityMetalForge() {
 		super(9);
 		inventoryStacks = new ItemStack[29];
-		orientation = 2;
 	}
 
 	@Override
@@ -94,7 +93,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		updateUpgrades();
 		boolean invChanged = false;
 		if(numUsingPlayers > 0) {
 			if(doorAngle < 120) {
@@ -125,7 +123,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		}
 		else
 			smeltProgress = 0;
-		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 		if(invChanged)
 			onInventoryChanged();
 	}

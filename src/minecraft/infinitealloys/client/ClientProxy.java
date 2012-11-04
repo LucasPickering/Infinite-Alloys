@@ -6,6 +6,7 @@ import infinitealloys.References;
 import infinitealloys.TileEntityAnalyzer;
 import infinitealloys.TileEntityComputer;
 import infinitealloys.TileEntityMetalForge;
+import infinitealloys.TileEntityPrinter;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -23,9 +24,9 @@ import net.minecraftforge.client.MinecraftForgeClient;
 public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHandler {
 
 	public static int renderId;
-	private TileEntityComputer tec = new TileEntityComputer(0);
-	private TileEntityMetalForge temf = new TileEntityMetalForge(0);
-	private TileEntityAnalyzer tea = new TileEntityAnalyzer();
+	private TileEntityComputer tec = new TileEntityComputer();
+	private TileEntityMetalForge temf = new TileEntityMetalForge();
+	private TileEntityPrinter tep = new TileEntityPrinter();
 
 	@Override
 	public void initLocalization() {
@@ -51,6 +52,7 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 		addName(new ItemStack(InfiniteAlloys.alloyIngot), "item.iaAlloyIngot.name");
 		addName(new ItemStack(InfiniteAlloys.upgrade), "item.iaUpgrade.name");
 		addName(new ItemStack(InfiniteAlloys.gps), "item.iaGps.name");
+		addName(new ItemStack(InfiniteAlloys.alloyBook), "item.iaAlloyBook.name");
 	}
 
 	@Override
@@ -62,9 +64,7 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/analyzer.png");
 		renderId = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(renderId, this);
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityComputer.class, new RendererComputer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMetalForge.class, new RendererMetalForge());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAnalyzer.class, new RendererAnalyzer());
+
 	}
 
 	@Override
@@ -79,12 +79,10 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 			case 1:
 				te = temf;
 				break;
-			case 2:
-				te = tea;
+			case 3:
+				te = tep;
 				break;
 		}
-		TileEntityRenderer.instance.renderTileEntityAt(te, 0, 0, 0, 0);
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 	}
 
 	@Override

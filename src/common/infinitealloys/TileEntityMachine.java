@@ -14,7 +14,7 @@ import net.minecraftforge.common.ISidedInventory;
 
 public abstract class TileEntityMachine extends TileEntity implements ISidedInventory {
 
-	protected ItemStack[] inventoryStacks;
+	public ItemStack[] inventoryStacks;
 
 	/**
 	 * A binary integer used to determine what upgrades have been installed
@@ -24,7 +24,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/**
 	 * Byte corresponding to the block's orientation on placement. 0123 = SWNE
 	 */
-	public byte orientation;
+	public byte orientation = 2;
 
 	/**
 	 * The index of the slot that upgrades are placed in
@@ -40,8 +40,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		upgradeSlotIndex = index;
 	}
 
-	public TileEntityMachine() {
-	}
+	public TileEntityMachine() {}
 
 	@Override
 	public void updateEntity() {
@@ -232,10 +231,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 }

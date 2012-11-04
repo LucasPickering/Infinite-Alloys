@@ -32,13 +32,13 @@ public class ItemAlloyIngot extends ItemIA {
 		float totalMass = 0;
 		int alloy = itemstack.getTagCompound().getInteger("alloy");
 		for(int i = 0; i < References.metalCount; i++) {
-			metalMasses[i] = InfiniteAlloys.intAtPositionRadix(References.alloyRadix, References.metalCount, alloy, i);
+			metalMasses[i] = InfiniteAlloys.intAtPosRadix(References.alloyRadix, References.metalCount, alloy, i);
 			totalMass += metalMasses[i];
 		}
 		for(int i = 0; i < References.metalCount; i++) {
 			float percentage = Math.round(metalMasses[i] / totalMass * 10000F) / 100F;
 			if(percentage != 0)
-				list.add(percentage + "% " + References.metalNames[References.metalCount - 1 - i]);
+				list.add(percentage + "% " + InfiniteAlloys.getStringLocalization("metal." + References.metalNames[References.metalCount - 1 - i] + ".name"));
 		}
 	}
 
@@ -50,7 +50,7 @@ public class ItemAlloyIngot extends ItemIA {
 		ArrayList<Integer> blueVals = new ArrayList<Integer>();
 		int alloy = itemstack.getTagCompound().getInteger("alloy");
 		for(int i = 0; i < References.metalCount; i++) {
-			for(int j = 0; j < InfiniteAlloys.intAtPositionRadix(References.alloyRadix, References.metalCount, alloy, i); j++) {
+			for(int j = 0; j < InfiniteAlloys.intAtPosRadix(References.alloyRadix, References.metalCount, alloy, i); j++) {
 				String ingotColor = InfiniteAlloys.addLeadingZeros(Integer.toHexString(References.metalColors[References.metalCount - 1 - i]), 6);
 				redVals.add(Integer.parseInt(ingotColor.substring(0, 2), 16));
 				greenVals.add(Integer.parseInt(ingotColor.substring(2, 4), 16));
@@ -78,6 +78,5 @@ public class ItemAlloyIngot extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int id, CreativeTabs creativetabs, List list) {
-	}
+	public void getSubItems(int id, CreativeTabs creativetabs, List list) {}
 }

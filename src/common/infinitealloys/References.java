@@ -3,7 +3,6 @@ package infinitealloys;
 public class References {
 
 	public static final String TEXTURE_PATH = "/infinitealloys/gfx/";
-	public static final String OBJ_PATH = "obj/";
 	public static final String LANG_PATH = "lang/";
 	public static final String[] langFiles = { LANG_PATH + "en_US.xml" };
 
@@ -15,7 +14,7 @@ public class References {
 	/**
 	 * Amount of machines added by the mod
 	 */
-	public static final int machineCount = 3;
+	public static final int machineCount = 4;
 
 	/**
 	 * Amount of upgrades that can be made and used on machines

@@ -31,6 +31,11 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
+	public String getTextureFile() {
+		return References.TEXTURE_PATH + "tex.png";
+	}
+
+	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
 		ItemStack currentItem = player.inventory.getCurrentItem();
 		if(currentItem != null && currentItem.itemID == InfiniteAlloys.gps.shiftedIndex && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).canNetwork) {
@@ -89,6 +94,8 @@ public class BlockMachine extends BlockContainer {
 				return new TileEntityMetalForge();
 			case 2:
 				return new TileEntityAnalyzer();
+			case 3:
+				return new TileEntityPrinter();
 		}
 		return null;
 	}
@@ -143,21 +150,6 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
-
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
-
-	@Override
-	public int getRenderType() {
-		return ClientProxy.renderId;
-	}
-
-	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityliving) {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
@@ -188,9 +180,6 @@ public class BlockMachine extends BlockContainer {
 				maxY = 0.75D;
 				maxZ = 0.9374D;
 				break;
-			case 2:
-				maxY = 0.5D;
-				break;
 		}
 		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
 	}
@@ -198,5 +187,10 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public int damageDropped(int damage) {
 		return damage;
+	}
+
+	@Override
+	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
+		return 0;
 	}
 }
