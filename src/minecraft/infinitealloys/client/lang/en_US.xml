@@ -30,6 +30,7 @@
 	<entry key="machine.computer.name">Computer</entry>
 	<entry key="machine.metalforge.name">Metal Forge</entry>
 	<entry key="machine.analyzer.name">Analyzer</entry>
+	<entry key="machine.printer.name">Printer</entry>
 	<entry key="achievement.craftMetalForge">Your First Machine</entry>
 	<entry key="achievement.craftMetalForge.desc">Craft A Metal Forge</entry>
 	<entry key="achievement.smeltAlloy">Mixing Metals</entry>

@@ -1,5 +1,7 @@
 package infinitealloys;
 
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.ItemStack;
 
 public class TileEntityPrinter extends TileEntityMachine {
@@ -25,6 +27,7 @@ public class TileEntityPrinter extends TileEntityMachine {
 			if(printProgress >= ticksToPrint) {
 				inventoryStacks[2] = inventoryStacks[0];
 				inventoryStacks[1].stackSize--;
+				printProgress = 0;
 			}
 		}
 	}
@@ -36,4 +39,9 @@ public class TileEntityPrinter extends TileEntityMachine {
 
 	@Override
 	protected void updateUpgrades() {}
+
+	@SideOnly(Side.CLIENT)
+	public int getPrintProgressScaled(int i) {
+		return printProgress * i / ticksToPrint;
+	}
 }

@@ -53,11 +53,11 @@ public class InfiniteAlloys {
 		config.load();
 		oreID = config.getBlock("Ore", 3000).getInt();
 		machineID = config.getBlock("Machine", 3001).getInt();
-		ingotID = config.getItem("Ingot", Configuration.CATEGORY_ITEM, 14000).getInt();
-		alloyIngotID = config.getItem("Alloy Ingot", Configuration.CATEGORY_ITEM, 14001).getInt();
-		upgradeID = config.getItem("Upgrade", Configuration.CATEGORY_ITEM, 14002).getInt();
-		gpsID = config.getItem("GPS", Configuration.CATEGORY_ITEM, 14003).getInt();
-		alloyBookID = config.getItem("Alloy Book", Configuration.CATEGORY_ITEM, 14004).getInt();
+		ingotID = config.getItem(Configuration.CATEGORY_ITEM, "Ingot", 14000).getInt();
+		alloyIngotID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyIngot", 14001).getInt();
+		upgradeID = config.getItem(Configuration.CATEGORY_ITEM, "Upgrade", 14002).getInt();
+		gpsID = config.getItem(Configuration.CATEGORY_ITEM, "GPS", 14003).getInt();
+		alloyBookID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyBook", 14004).getInt();
 		int[] metalColors = { 0xc5763d, 0x858586, 0xd2cda3, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
 		for(int i = 0; i < References.metalCount; i++)
 			References.metalColors[i] = config.get("Metal Colors", References.metalNames[i], metalColors[i]).getInt();

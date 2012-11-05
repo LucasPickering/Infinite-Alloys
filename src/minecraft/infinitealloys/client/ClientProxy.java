@@ -42,6 +42,7 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 		addName(new ItemStack(InfiniteAlloys.machine, 1, 0), "machine.computer.name");
 		addName(new ItemStack(InfiniteAlloys.machine, 1, 1), "machine.metalforge.name");
 		addName(new ItemStack(InfiniteAlloys.machine, 1, 2), "machine.analyzer.name");
+		addName(new ItemStack(InfiniteAlloys.machine, 1, 3), "machine.printer.name");
 	}
 
 	@Override

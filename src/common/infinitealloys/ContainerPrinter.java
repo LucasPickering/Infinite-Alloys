@@ -7,26 +7,26 @@ import net.minecraft.src.Slot;
 
 public class ContainerPrinter extends ContainerMachine {
 
-	public TileEntityAnalyzer inventory;
+	public TileEntityPrinter inventory;
 
-	public ContainerPrinter(InventoryPlayer inventoryPlayer, TileEntityAnalyzer tileEntity) {
+	public ContainerPrinter(InventoryPlayer inventoryPlayer, TileEntityPrinter tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
-		addSlotToContainer(new SlotPrinter(inventory, 0, 12, 58));
-		addSlotToContainer(new SlotPrinter(inventory, 1, 156, 58));
-		addSlotToContainer(new SlotPrinter(inventory, 2, 156, 33));
-		addSlotToContainer(new SlotUpgrade(inventory, 3, 156, 8));
+		addSlotToContainer(new SlotPrinter(inventory, 0, 12, 26));
+		addSlotToContainer(new SlotPrinter(inventory, 1, 80, 26));
+		addSlotToContainer(new SlotPrinter(inventory, 2, 148, 26));
+		addSlotToContainer(new SlotUpgrade(inventory, 3, 148, 6));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 12 + x * 18, 84 + y * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 66 + y * 18));
 		for(int x = 0; x < 9; x++)
-			addSlotToContainer(new Slot(inventoryPlayer, x, 12 + x * 18, 142));
+			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 124));
 	}
 
 	@Override
 	public ItemStack func_82846_b(EntityPlayer player, int slot) {
 		ItemStack itemstack = null;
-		Slot stackInSlot = (Slot)this.inventorySlots.get(slot);
+		Slot stackInSlot = (Slot)inventorySlots.get(slot);
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
 			ItemStack stackInSlotCopy = stackInSlot.getStack();
 			itemstack = stackInSlotCopy.copy();

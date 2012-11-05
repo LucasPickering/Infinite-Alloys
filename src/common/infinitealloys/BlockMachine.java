@@ -81,6 +81,8 @@ public class BlockMachine extends BlockContainer {
 		}
 		else if(tem instanceof TileEntityAnalyzer)
 			player.openGui(InfiniteAlloys.instance, 2, world, x, y, z);
+		else if(tem instanceof TileEntityPrinter)
+			player.openGui(InfiniteAlloys.instance, 3, world, x, y, z);
 		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(tem));
 		return true;
 	}
@@ -159,38 +161,11 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-		return getCollisionBoundingBoxFromPool(world, x, y, z);
-	}
-
-	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-		minX = 0D;
-		minY = 0D;
-		minZ = 0D;
-		maxX = 1D;
-		maxY = 1D;
-		maxZ = 1D;
-		switch(world.getBlockMetadata(x, y, z)) {
-			case 0:
-				minX = 0.0625D;
-				minZ = 0.0625D;
-				maxX = 0.9375D;
-				maxY = 0.75D;
-				maxZ = 0.9374D;
-				break;
-		}
-		return super.getCollisionBoundingBoxFromPool(world, x, y, z);
-	}
-
-	@Override
-	public int damageDropped(int damage) {
-		return damage;
-	}
-
-	@Override
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
+		if(metadata == 0)
+			return 8;
+		if(metadata == 1)
+			return 12;
 		return 0;
 	}
 }
