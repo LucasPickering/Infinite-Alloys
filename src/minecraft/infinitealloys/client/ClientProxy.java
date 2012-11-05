@@ -21,12 +21,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraft.src.TileEntityRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 
-public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHandler {
-
-	public static int renderId;
-	private TileEntityComputer tec = new TileEntityComputer();
-	private TileEntityMetalForge temf = new TileEntityMetalForge();
-	private TileEntityPrinter tep = new TileEntityPrinter();
+public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void initLocalization() {
@@ -58,46 +53,10 @@ public class ClientProxy extends CommonProxy implements ISimpleBlockRenderingHan
 
 	@Override
 	public void initRendering() {
-		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "tex.png");
-		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "computer.png");
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "sprites.png");
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/computer.png");
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/metalforge.png");
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/analyzer.png");
-		renderId = RenderingRegistry.getNextAvailableRenderId();
-		RenderingRegistry.registerBlockHandler(renderId, this);
-
-	}
-
-	@Override
-	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
-		GL11.glRotatef(-90F, 0F, 1F, 0F);
-		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-		TileEntity te = null;
-		switch(metadata) {
-			case 0:
-				te = tec;
-				break;
-			case 1:
-				te = temf;
-				break;
-			case 3:
-				te = tep;
-				break;
-		}
-	}
-
-	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-		return true;
-	}
-
-	@Override
-	public boolean shouldRender3DInInventory() {
-		return true;
-	}
-
-	@Override
-	public int getRenderId() {
-		return renderId;
+		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/printer.png");
 	}
 }

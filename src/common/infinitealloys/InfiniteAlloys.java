@@ -28,6 +28,7 @@ public class InfiniteAlloys {
 	public static CommonProxy proxy;
 	public static int oreID;
 	public static int machineID;
+	public static int herbID;
 	public static int ingotID;
 	public static int alloyIngotID;
 	public static int upgradeID;
@@ -36,6 +37,7 @@ public class InfiniteAlloys {
 	public static boolean[] spawnOres = new boolean[References.metalCount];
 	public static Block ore;
 	public static Block machine;
+	public static Block herb;
 	public static Item ingot;
 	public static Item alloyIngot;
 	public static Item upgrade;
@@ -53,6 +55,7 @@ public class InfiniteAlloys {
 		config.load();
 		oreID = config.getBlock("Ore", 3000).getInt();
 		machineID = config.getBlock("Machine", 3001).getInt();
+		herbID = config.getBlock("Herb", 3002).getInt();
 		ingotID = config.getItem(Configuration.CATEGORY_ITEM, "Ingot", 14000).getInt();
 		alloyIngotID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyIngot", 14001).getInt();
 		upgradeID = config.getItem(Configuration.CATEGORY_ITEM, "Upgrade", 14002).getInt();

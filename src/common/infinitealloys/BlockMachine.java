@@ -32,7 +32,7 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public String getTextureFile() {
-		return References.TEXTURE_PATH + "tex.png";
+		return References.TEXTURE_PATH + "sprites.png";
 	}
 
 	@Override
@@ -163,9 +163,13 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
 		if(metadata == 0)
-			return 8;
-		if(metadata == 1)
-			return 12;
+			return side < 2 ? 8 : side == 3 ? 9 : 10;
+		else if(metadata == 1)
+			return side < 2 ? 11 : side == 3 ? 12 : 13;
+		else if(metadata == 2)
+			return 14;
+		else if(metadata == 3)
+			return 16;
 		return 0;
 	}
 }

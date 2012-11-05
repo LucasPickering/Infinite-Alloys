@@ -88,7 +88,7 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	private void analyzeItem() {
 		if(inventoryStacks[2] != null) {
 			ArrayList<Integer> validAlloys = new ArrayList<Integer>();
-			for(int validAlloy : References.validAlloys)
+			for(int validAlloy : InfiniteAlloys.instance.worldData.validAlloys)
 				validAlloys.add(validAlloy);
 			int alloy = inventoryStacks[0].getTagCompound().getInteger("alloy");
 			NBTTagCompound tagCompound;

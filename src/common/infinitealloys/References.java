@@ -27,11 +27,6 @@ public class References {
 	public static final int validAlloyCount = 6;
 
 	/**
-	 * Alloys that are actually usable
-	 */
-	public static int[] validAlloys = new int[validAlloyCount];
-
-	/**
 	 * The min for each metal in each valid alloy
 	 */
 	public static final int[] validAlloyMins = { 00000011, 00001111, 00011111, 00111111, 11111111, 44444444 };

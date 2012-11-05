@@ -12,7 +12,7 @@ public class ItemIA extends Item {
 
 	@Override
 	public String getTextureFile() {
-		return References.TEXTURE_PATH + "tex.png";
+		return References.TEXTURE_PATH + "sprites.png";
 	}
 
 	@Override

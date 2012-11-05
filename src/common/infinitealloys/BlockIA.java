@@ -11,7 +11,7 @@ public class BlockIA extends Block {
 
 	@Override
 	public String getTextureFile() {
-		return References.TEXTURE_PATH + "tex.png";
+		return References.TEXTURE_PATH + "sprites.png";
 	}
 
 	@Override
