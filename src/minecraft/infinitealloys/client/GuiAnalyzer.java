@@ -35,7 +35,7 @@ public class GuiAnalyzer extends GuiMachine {
 			for(int i = 0; i < References.metalCount; i++) {
 				int currentValue = InfiniteAlloys.intAtPosRadix(10, References.metalCount, currentAlloy, i);
 				int nearestValue = InfiniteAlloys.intAtPosRadix(10, References.metalCount, nearestValidAlloy, i);
-				drawTexturedModalRect(left + i * 18 + 8, top + 26, nearestValue > currentValue ? 184 : nearestValue < currentValue ? 200 : 216, 0, 16, 16);
+				drawTexturedModalRect(left + (References.validAlloyCount - i) * 18 + 26, top + 26, nearestValue > currentValue ? 184 : nearestValue < currentValue ? 200 : 216, 0, 16, 16);
 			}
 		}
 	}

@@ -29,7 +29,7 @@ public class EventHandler {
 				Random random = new Random();
 				int[] validAlloys = new int[References.validAlloyCount];
 				for(int i = 0; i < References.validAlloyCount; i++)
-					System.out.println(validAlloys[i] = References.validAlloyMins[i] + random.nextInt(References.validAlloyMaxes[i] - References.validAlloyMins[i]));
+					validAlloys[i] = References.validAlloyMins[i] + random.nextInt(References.validAlloyMaxes[i] - References.validAlloyMins[i]);
 				InfiniteAlloys.instance.worldData = new IAWorldData(validAlloys);
 			}
 		}
@@ -50,5 +50,6 @@ public class EventHandler {
 		catch(IOException e) {
 			System.out.println("Error while serializing Infinite Alloys world data");
 		}
+		InfiniteAlloys.instance.worldData = null;
 	}
 }
