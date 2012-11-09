@@ -1,7 +1,5 @@
 package infinitealloys;
 
-import infinitealloys.handlers.PacketHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
@@ -48,7 +46,7 @@ public class ContainerMetalForge extends ContainerMachine {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}
-				else if(stackInSlotCopy.itemID == InfiniteAlloys.upgrade.shiftedIndex && inventory.isUpgradeValid(stackInSlotCopy)) {
+				else if(inventory.isUpgradeValid(stackInSlotCopy)) {
 					if(!mergeItemStack(stackInSlotCopy, 9, 10, false))
 						return null;
 				}
@@ -87,13 +85,5 @@ public class ContainerMetalForge extends ContainerMachine {
 			return null;
 		}
 		return super.slotClick(slot, mouseButton, i, player);
-	}
-
-	@Override
-	public void onCraftGuiClosed(EntityPlayer player) {
-		if(inventory.worldObj.isRemote)
-			return;
-		inventory.numUsingPlayers--;
-		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(inventory));
 	}
 }

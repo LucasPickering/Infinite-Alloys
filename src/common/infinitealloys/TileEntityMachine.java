@@ -94,7 +94,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 */
 	public boolean isUpgradeValid(ItemStack upgrade) {
 		int damage = upgrade.getItemDamage();
-		return (!hasPrereqUpgrade(upgrade) || ((damage >> 1) | upgrades) == upgrades) && (damage | upgrades) != upgrades;
+		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex && (!hasPrereqUpgrade(upgrade) || ((damage >> 1) | upgrades) == upgrades) && (damage | upgrades) != upgrades;
 	}
 
 	/**

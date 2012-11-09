@@ -28,7 +28,6 @@ public class InfiniteAlloys {
 	public static CommonProxy proxy;
 	public static int oreID;
 	public static int machineID;
-	public static int herbID;
 	public static int ingotID;
 	public static int alloyIngotID;
 	public static int upgradeID;
@@ -37,7 +36,6 @@ public class InfiniteAlloys {
 	public static boolean[] spawnOres = new boolean[References.metalCount];
 	public static Block ore;
 	public static Block machine;
-	public static Block herb;
 	public static Item ingot;
 	public static Item alloyIngot;
 	public static Item upgrade;
@@ -55,12 +53,11 @@ public class InfiniteAlloys {
 		config.load();
 		oreID = config.getBlock("Ore", 3000).getInt();
 		machineID = config.getBlock("Machine", 3001).getInt();
-		herbID = config.getBlock("Herb", 3002).getInt();
-		ingotID = config.getItem(Configuration.CATEGORY_ITEM, "Ingot", 14000).getInt();
-		alloyIngotID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyIngot", 14001).getInt();
-		upgradeID = config.getItem(Configuration.CATEGORY_ITEM, "Upgrade", 14002).getInt();
-		gpsID = config.getItem(Configuration.CATEGORY_ITEM, "GPS", 14003).getInt();
-		alloyBookID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyBook", 14004).getInt();
+		ingotID = config.getItem(Configuration.CATEGORY_ITEM, "Ingot", 15000).getInt();
+		alloyIngotID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyIngot", 15001).getInt();
+		upgradeID = config.getItem(Configuration.CATEGORY_ITEM, "Upgrade", 15002).getInt();
+		gpsID = config.getItem(Configuration.CATEGORY_ITEM, "GPS", 15003).getInt();
+		alloyBookID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyBook", 15004).getInt();
 		int[] metalColors = { 0xc5763d, 0x858586, 0xd2cda3, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
 		for(int i = 0; i < References.metalCount; i++)
 			References.metalColors[i] = config.get("Metal Colors", References.metalNames[i], metalColors[i]).getInt();

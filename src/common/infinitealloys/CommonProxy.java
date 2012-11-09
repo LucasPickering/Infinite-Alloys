@@ -21,8 +21,8 @@ public class CommonProxy {
 	public void initLocalization() {}
 
 	public void initBlocks() {
-		InfiniteAlloys.ore = new BlockOre(InfiniteAlloys.oreID, 0).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("iaOre");
-		InfiniteAlloys.machine = new BlockMachine(InfiniteAlloys.machineID, 6).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("iaMachine");
+		InfiniteAlloys.ore = new BlockOre(InfiniteAlloys.oreID, 0).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("ore");
+		InfiniteAlloys.machine = new BlockMachine(InfiniteAlloys.machineID, 6).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("machine");
 		GameRegistry.registerBlock(InfiniteAlloys.ore, ItemBlockIA.class);
 		GameRegistry.registerBlock(InfiniteAlloys.machine, ItemBlockIA.class);
 		OreDictionary.registerOre("copper", new ItemStack(InfiniteAlloys.ore, 1, 0));
@@ -41,11 +41,11 @@ public class CommonProxy {
 	}
 
 	public void initItems() {
-		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 128).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaIngot");
-		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 128).setItemName("iaAlloyIngot");
-		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 129).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaUpgrade");
-		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 138).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaGps");
-		InfiniteAlloys.alloyBook = new ItemAlloyBook(InfiniteAlloys.alloyBookID, 139).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("iaAlloyBook");
+		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 128).setCreativeTab(InfiniteAlloys.tabIA).setItemName("ingot");
+		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 128).setItemName("alloyIngot");
+		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 129).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("upgrade");
+		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 138).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("gps");
+		InfiniteAlloys.alloyBook = new ItemAlloyBook(InfiniteAlloys.alloyBookID, 139).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("alloyBook");
 		OreDictionary.registerOre("ingotCopper", new ItemStack(InfiniteAlloys.ingot, 1, 0));
 	}
 
@@ -66,6 +66,7 @@ public class CommonProxy {
 		GameRegistry.registerTileEntity(TileEntityMetalForge.class, "MetalForge");
 		GameRegistry.registerTileEntity(TileEntityAnalyzer.class, "Analyzer");
 		GameRegistry.registerTileEntity(TileEntityPrinter.class, "Printer");
+		GameRegistry.registerTileEntity(TileEntityXray.class, "Xray");
 	}
 
 	public void initHandlers() {

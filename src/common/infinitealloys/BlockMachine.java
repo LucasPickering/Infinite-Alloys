@@ -1,15 +1,9 @@
 package infinitealloys;
 
-import infinitealloys.client.ClientProxy;
 import infinitealloys.handlers.PacketHandler;
 import java.util.List;
 import java.util.Random;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
-import net.minecraft.src.AxisAlignedBB;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityItem;
@@ -74,15 +68,14 @@ public class BlockMachine extends BlockContainer {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem instanceof TileEntityComputer)
 			player.openGui(InfiniteAlloys.instance, 0, world, x, y, z);
-		else if(tem instanceof TileEntityMetalForge) {
-			if(!world.isRemote)
-				((TileEntityMetalForge)tem).numUsingPlayers++;
+		else if(tem instanceof TileEntityMetalForge)
 			player.openGui(InfiniteAlloys.instance, 1, world, x, y, z);
-		}
 		else if(tem instanceof TileEntityAnalyzer)
 			player.openGui(InfiniteAlloys.instance, 2, world, x, y, z);
 		else if(tem instanceof TileEntityPrinter)
 			player.openGui(InfiniteAlloys.instance, 3, world, x, y, z);
+		else if(tem instanceof TileEntityXray)
+			player.openGui(InfiniteAlloys.instance, 4, world, x, y, z);
 		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(tem));
 		return true;
 	}
@@ -98,6 +91,8 @@ public class BlockMachine extends BlockContainer {
 				return new TileEntityAnalyzer();
 			case 3:
 				return new TileEntityPrinter();
+			case 4:
+				return new TileEntityXray();
 		}
 		return null;
 	}

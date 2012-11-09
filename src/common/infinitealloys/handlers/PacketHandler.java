@@ -1,5 +1,6 @@
 package infinitealloys.handlers;
 
+import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.TileEntityAnalyzer;
 import infinitealloys.TileEntityMachine;
@@ -14,7 +15,6 @@ import net.minecraft.src.INetworkManager;
 import net.minecraft.src.Packet;
 import net.minecraft.src.Packet250CustomPayload;
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
@@ -49,7 +49,7 @@ public class PacketHandler implements IPacketHandler {
 							int machX = data.readInt();
 							int machY = data.readInt();
 							int machZ = data.readInt();
-							tec.networkCoords.add(Vec3.createVectorHelper(machX, machY, machZ));
+							tec.networkCoords.add(new Point(machX, machY, machZ));
 						}
 					}
 					if(te instanceof TileEntityMetalForge) {
@@ -60,13 +60,13 @@ public class PacketHandler implements IPacketHandler {
 						for(int i = 0; i < recipeAmts.length; i++)
 							recipeAmts[i] = data.readByte();
 						int numUsingPlayers = data.readShort();
-						((TileEntityMetalForge)te).handlePacketDataFromServer(currentFuelBurnTime, heatLeft, smeltProgress, recipeAmts, numUsingPlayers);
+						((TileEntityMetalForge)te).handlePacketDataFromServer(currentFuelBurnTime, heatLeft, smeltProgress, recipeAmts);
 					}
 					if(te instanceof TileEntityAnalyzer) {
 						int analysisProgress = data.readShort();
 						int ticksSinceStart = data.readShort();
 						int ticksSinceFinish = data.readShort();
-						((TileEntityAnalyzer)te).handlePacketDataFromServer(analysisProgress, ticksSinceStart, ticksSinceFinish);
+						((TileEntityAnalyzer)te).handlePacketDataFromServer(analysisProgress);
 					}
 				}
 				break;
@@ -98,10 +98,10 @@ public class PacketHandler implements IPacketHandler {
 			if(tem instanceof TileEntityComputer) {
 				TileEntityComputer tec = (TileEntityComputer)tem;
 				dos.writeInt(tec.networkCoords.size());
-				for(Vec3 vec : tec.networkCoords) {
-					dos.writeInt((int)vec.xCoord);
-					dos.writeInt((int)vec.yCoord);
-					dos.writeInt((int)vec.zCoord);
+				for(Point coords : tec.networkCoords) {
+					dos.writeInt((int)coords.x);
+					dos.writeInt((int)coords.y);
+					dos.writeInt((int)coords.z);
 				}
 			}
 			else if(tem instanceof TileEntityMetalForge) {
@@ -111,13 +111,10 @@ public class PacketHandler implements IPacketHandler {
 				dos.writeShort(temf.smeltProgress);
 				for(byte amt : temf.recipeAmts)
 					dos.writeByte(amt);
-				dos.writeShort(temf.numUsingPlayers);
 			}
 			else if(tem instanceof TileEntityAnalyzer) {
 				TileEntityAnalyzer tea = (TileEntityAnalyzer)tem;
 				dos.writeShort(tea.analysisProgress);
-				dos.writeShort(tea.ticksSinceStart);
-				dos.writeShort(tea.ticksSinceFinish);
 			}
 		}
 		catch(IOException e) {

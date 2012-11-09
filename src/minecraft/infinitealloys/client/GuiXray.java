@@ -1,18 +1,18 @@
 package infinitealloys.client;
 
-import infinitealloys.ContainerPrinter;
+import infinitealloys.ContainerXray;
 import infinitealloys.References;
-import infinitealloys.TileEntityPrinter;
+import infinitealloys.TileEntityXray;
 import org.lwjgl.opengl.GL11;
 import net.minecraft.src.InventoryPlayer;
 
-public class GuiPrinter extends GuiMachine {
+public class GuiXray extends GuiMachine {
 
-	private TileEntityPrinter tep;
+	private TileEntityXray tex;
 
-	public GuiPrinter(InventoryPlayer inventoryPlayer, TileEntityPrinter tileEntity) {
-		super(tileEntity, new ContainerPrinter(inventoryPlayer, tileEntity));
-		tep = tileEntity;
+	public GuiXray(InventoryPlayer inventoryPlayer, TileEntityXray tileEntity) {
+		super(tileEntity, new ContainerXray(inventoryPlayer, tileEntity));
+		tex = tileEntity;
 		ySize = 148;
 	}
 
@@ -23,6 +23,5 @@ public class GuiPrinter extends GuiMachine {
 		int left = (width - xSize) / 2;
 		int top = (height - ySize) / 2;
 		drawTexturedModalRect(left, top, 0, 0, xSize, ySize);
-		drawTexturedModalRect(left + 33, top + 25, 0, 148, tep.getPrintProgressScaled(110), 16);
 	}
 }

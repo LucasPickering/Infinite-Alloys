@@ -32,7 +32,7 @@ public class TileEntityComputer extends TileEntityMachine {
 	/**
 	 * 3D coords for each machine
 	 */
-	public ArrayList<Vec3> networkCoords;
+	public ArrayList<Point> networkCoords;
 
 	public TileEntityComputer(byte facing) {
 		this();
@@ -44,28 +44,28 @@ public class TileEntityComputer extends TileEntityMachine {
 		canNetwork = true;
 		networkCapacity = networkCapacityA[2];
 		networkRange = networkRangeA[2];
-		networkCoords = new ArrayList<Vec3>(networkCapacity);
+		networkCoords = new ArrayList<Point>(networkCapacity);
 	}
 
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		for(int i = 0; i < networkCoords.size(); i++) {
-			Vec3 coords = networkCoords.get(i);
-			Block block = Block.blocksList[worldObj.getBlockId((int)coords.xCoord, (int)coords.yCoord, (int)coords.zCoord)];
+			Point coords = networkCoords.get(i);
+			Block block = Block.blocksList[worldObj.getBlockId((int)coords.x, (int)coords.y, (int)coords.z)];
 			if(!(block instanceof BlockMachine))
 				networkCoords.remove(i);
 		}
 	}
 
 	public boolean addMachine(EntityPlayer player, int machX, int machY, int machZ) {
-		for(Vec3 coords : networkCoords)
-			if(coords.xCoord == machX && coords.yCoord == machY && coords.zCoord == machZ) {
+		for(Point coords : networkCoords) {
+			if(coords.x == machX && coords.y == machY && coords.z == machZ) {
 				if(worldObj.isRemote)
 					player.addChatMessage("Error: Machine already in network");
 				return false;
 			}
-		Vec3 vec = Vec3.createVectorHelper(machX, machY, machZ);
+		}
 		if(networkCoords.size() >= networkCapacity) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Network full");
@@ -74,7 +74,7 @@ public class TileEntityComputer extends TileEntityMachine {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Cannot add self to network");
 		}
-		else if(vec.distanceTo(Vec3.createVectorHelper(xCoord, yCoord, zCoord)) > networkRange) {
+		else if(Vec3.createVectorHelper(machX, machY, machZ).distanceTo(Vec3.createVectorHelper(xCoord, yCoord, zCoord)) > networkRange) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Machine out of range");
 		}
@@ -87,7 +87,7 @@ public class TileEntityComputer extends TileEntityMachine {
 				player.addChatMessage("Error: Machine not capable of networking");
 		}
 		else {
-			networkCoords.add(vec);
+			networkCoords.add(new Point(machX, machY, machZ));
 			return true;
 		}
 		return false;
@@ -102,7 +102,7 @@ public class TileEntityComputer extends TileEntityMachine {
 		super.readFromNBT(tagCompound);
 		for(int i = 0; i < tagCompound.getInteger("NetworkSize"); i++) {
 			int[] coords = tagCompound.getIntArray("Coords" + i);
-			networkCoords.add(Vec3.createVectorHelper(coords[0], coords[1], coords[2]));
+			networkCoords.add(new Point(coords[0], coords[1], coords[2]));
 		}
 	}
 
@@ -111,8 +111,8 @@ public class TileEntityComputer extends TileEntityMachine {
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("NetworkSize", networkCoords.size());
 		for(int i = 0; i < networkCoords.size(); i++) {
-			Vec3 vec = networkCoords.get(i);
-			tagCompound.setIntArray("Coords" + i, new int[] { (int)vec.xCoord, (int)vec.yCoord, (int)vec.zCoord });
+			Point coords = networkCoords.get(i);
+			tagCompound.setIntArray("Coords" + i, new int[] { (int)coords.x, (int)coords.y, (int)coords.z });
 		}
 	}
 
@@ -127,6 +127,5 @@ public class TileEntityComputer extends TileEntityMachine {
 	}
 
 	@Override
-	protected void updateUpgrades() {
-	}
+	protected void updateUpgrades() {}
 }

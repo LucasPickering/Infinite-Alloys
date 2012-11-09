@@ -3,6 +3,7 @@ package infinitealloys.client;
 import java.lang.Character;
 import java.util.ArrayList;
 import infinitealloys.ContainerMachine;
+import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.TileEntityComputer;
 import infinitealloys.handlers.PacketHandler;
@@ -15,7 +16,6 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiTextField;
 import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.Vec3;
 import net.minecraft.src.World;
 
 public class GuiComputer extends GuiMachine {
@@ -52,8 +52,8 @@ public class GuiComputer extends GuiMachine {
 		zInput.drawTextBox();
 		machineButtons.clear();
 		for(int i = 0; i < tec.networkCoords.size(); i++) {
-			Vec3 coords = tec.networkCoords.get(i);
-			machineButtons.add(new GuiMachineButton(width / 2 - 73 + i % 5 * 24, height / 2 - 60 + i / 5 * 24, (int)coords.xCoord, (int)coords.yCoord, (int)coords.zCoord));
+			Point coords = tec.networkCoords.get(i);
+			machineButtons.add(new GuiMachineButton(width / 2 - 73 + i % 5 * 24, height / 2 - 60 + i / 5 * 24, (int)coords.x, (int)coords.y, (int)coords.z));
 			machineButtons.get(i).drawButton(mc);
 		}
 		boolean full = machineButtons.size() < tec.networkCapacity;

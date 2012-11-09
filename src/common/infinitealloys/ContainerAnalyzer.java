@@ -39,7 +39,7 @@ public class ContainerAnalyzer extends ContainerMachine {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}
-				else if(stackInSlotCopy.itemID == InfiniteAlloys.upgrade.shiftedIndex && inventory.isUpgradeValid(stackInSlotCopy)) {
+				else if(inventory.isUpgradeValid(stackInSlotCopy)) {
 					if(!mergeItemStack(stackInSlotCopy, 3, 4, false))
 						return null;
 				}

@@ -1,11 +1,9 @@
 package infinitealloys.client;
 
-import java.util.ArrayList;
 import infinitealloys.ContainerAnalyzer;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.TileEntityAnalyzer;
-import org.lwjgl.opengl.GL11;
 import net.minecraft.src.InventoryPlayer;
 
 public class GuiAnalyzer extends GuiMachine {
@@ -20,7 +18,6 @@ public class GuiAnalyzer extends GuiMachine {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/analyzer.png"));
 		int left = (width - xSize) / 2;
 		int top = (height - ySize) / 2;

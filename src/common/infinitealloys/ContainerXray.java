@@ -5,11 +5,11 @@ import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 
-public class ContainerPrinter extends ContainerMachine {
+public class ContainerXray extends ContainerMachine {
 
-	public TileEntityPrinter inventory;
+	public TileEntityXray inventory;
 
-	public ContainerPrinter(InventoryPlayer inventoryPlayer, TileEntityPrinter tileEntity) {
+	public ContainerXray(InventoryPlayer inventoryPlayer, TileEntityXray tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
 		addSlotToContainer(new SlotPrinter(inventory, 0, 12, 26));
@@ -30,26 +30,19 @@ public class ContainerPrinter extends ContainerMachine {
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
 			ItemStack stackInSlotCopy = stackInSlot.getStack();
 			itemstack = stackInSlotCopy.copy();
-			if(slot < 3) {
-				if(!mergeItemStack(stackInSlotCopy, 4, 39, false))
+			if(slot < 2) {
+				if(!mergeItemStack(stackInSlotCopy, 2, 37, false))
 					return null;
 			}
-			if(slot > 3) {
-				if(stackInSlotCopy.itemID == InfiniteAlloys.alloyIngot.shiftedIndex) {
+			else {
+				if(inventory.isDetectable(stackInSlotCopy)) {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}
 				else if(inventory.isUpgradeValid(stackInSlotCopy)) {
-					if(!mergeItemStack(stackInSlotCopy, 3, 4, false))
+					if(!mergeItemStack(stackInSlotCopy, 1, 2, false))
 						return null;
 				}
-				else if(slot > 3 && slot < 30) {
-					if(!mergeItemStack(stackInSlotCopy, 30, 39, false))
-						return null;
-				}
-				else if(slot >= 30)
-					if(!mergeItemStack(stackInSlotCopy, 3, 30, false))
-						return null;
 			}
 			if(stackInSlotCopy.stackSize == 0)
 				stackInSlot.putStack((ItemStack)null);

@@ -12,9 +12,9 @@ public class References {
 	public static final int metalCount = 8;
 
 	/**
-	 * Amount of machines added by the mod
+	 * Amount of machines
 	 */
-	public static final int machineCount = 4;
+	public static final int machineCount = 5;
 
 	/**
 	 * Amount of upgrades that can be made and used on machines

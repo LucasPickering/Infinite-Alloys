@@ -1,6 +1,5 @@
 package infinitealloys.handlers;
 
-import infinitealloys.IAWorldData;
 import infinitealloys.References;
 import infinitealloys.InfiniteAlloys;
 import java.util.Random;

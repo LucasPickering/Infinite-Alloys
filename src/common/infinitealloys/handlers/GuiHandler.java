@@ -5,15 +5,20 @@ import infinitealloys.ContainerAnalyzer;
 import infinitealloys.ContainerMachine;
 import infinitealloys.ContainerMetalForge;
 import infinitealloys.ContainerPrinter;
+import infinitealloys.ContainerXray;
+import infinitealloys.References;
 import infinitealloys.TileEntityAnalyzer;
 import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityComputer;
 import infinitealloys.TileEntityMetalForge;
 import infinitealloys.TileEntityPrinter;
+import infinitealloys.TileEntityXray;
+import infinitealloys.client.GuiAlloyBook;
 import infinitealloys.client.GuiAnalyzer;
 import infinitealloys.client.GuiComputer;
 import infinitealloys.client.GuiMetalForge;
 import infinitealloys.client.GuiPrinter;
+import infinitealloys.client.GuiXray;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
@@ -32,6 +37,8 @@ public class GuiHandler implements IGuiHandler {
 				return new ContainerAnalyzer(player.inventory, (TileEntityAnalyzer)tileEntity);
 			case 3:
 				return new ContainerPrinter(player.inventory, (TileEntityPrinter)tileEntity);
+			case 4:
+				return new ContainerXray(player.inventory, (TileEntityXray)tileEntity);
 		}
 		return null;
 	}
@@ -48,6 +55,10 @@ public class GuiHandler implements IGuiHandler {
 				return new GuiAnalyzer(player.inventory, (TileEntityAnalyzer)tileEntity);
 			case 3:
 				return new GuiPrinter(player.inventory, (TileEntityPrinter)tileEntity);
+			case 4:
+				return new GuiXray(player.inventory, (TileEntityXray)tileEntity);
+			case References.machineCount:
+				return new GuiAlloyBook(player.getHeldItem());
 		}
 		return null;
 	}

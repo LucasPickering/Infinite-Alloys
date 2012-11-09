@@ -4,7 +4,6 @@ import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
-import net.minecraft.src.TileEntityFurnace;
 
 public class SlotPrinter extends Slot {
 

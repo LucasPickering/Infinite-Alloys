@@ -1,7 +1,6 @@
 package infinitealloys;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.ItemStack;
@@ -19,16 +18,6 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	 */
 	public int analysisProgress;
 
-	/**
-	 * Ticks since machine first started, only used for animation
-	 */
-	public int ticksSinceStart;
-
-	/**
-	 * Ticks since the machine stopped running, only used for animation
-	 */
-	public int ticksSinceFinish;
-
 	public TileEntityAnalyzer() {
 		super(3);
 		inventoryStacks = new ItemStack[4];
@@ -44,22 +33,16 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		analysisProgress = tagCompound.getShort("AnalysisProgress");
-		ticksSinceStart = tagCompound.getInteger("TicksSinceStart");
-		ticksSinceFinish = tagCompound.getInteger("TicksSinceFinish");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setShort("AnalysisProgress", (short)analysisProgress);
-		tagCompound.setInteger("TicksSinceStart", ticksSinceStart);
-		tagCompound.setInteger("TicksSinceFinish", ticksSinceFinish);
 	}
 
-	public void handlePacketDataFromServer(int analysisProgress, int ticksSinceStart, int ticksSinceFinish) {
+	public void handlePacketDataFromServer(int analysisProgress) {
 		this.analysisProgress = analysisProgress;
-		this.ticksSinceStart = ticksSinceStart;
-		this.ticksSinceFinish = ticksSinceFinish;
 	}
 
 	@Override
@@ -67,8 +50,6 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 		super.updateEntity();
 		boolean invChanged = false;
 		if(inventoryStacks[0] != null && inventoryStacks[1] == null) {
-			ticksSinceFinish = 0;
-			ticksSinceStart++;
 			analysisProgress++;
 			if(analysisProgress >= ticksToAnalyze) {
 				analysisProgress = 0;
@@ -76,11 +57,8 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 				invChanged = true;
 			}
 		}
-		else {
-			ticksSinceStart = 0;
-			ticksSinceFinish++;
+		else
 			analysisProgress = 0;
-		}
 		if(invChanged)
 			onInventoryChanged();
 	}
