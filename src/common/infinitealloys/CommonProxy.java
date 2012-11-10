@@ -25,7 +25,7 @@ public class CommonProxy {
 		InfiniteAlloys.machine = new BlockMachine(InfiniteAlloys.machineID, 6).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("machine");
 		GameRegistry.registerBlock(InfiniteAlloys.ore, ItemBlockIA.class);
 		GameRegistry.registerBlock(InfiniteAlloys.machine, ItemBlockIA.class);
-		OreDictionary.registerOre("copper", new ItemStack(InfiniteAlloys.ore, 1, 0));
+		OreDictionary.registerOre("oreCopper", new ItemStack(InfiniteAlloys.ore, 1, 0));
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 0, "pickaxe", 1);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 1, "pickaxe", 1);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 2, "pickaxe", 1);
