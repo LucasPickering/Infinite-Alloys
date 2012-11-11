@@ -75,7 +75,7 @@ public class BlockMachine extends BlockContainer {
 		else if(tem instanceof TileEntityPrinter)
 			player.openGui(InfiniteAlloys.instance, 3, world, x, y, z);
 		else if(tem instanceof TileEntityXray)
-			player.openGui(InfiniteAlloys.instance, 4, world, x, y, z);
+			((TileEntityXray)tem).search();
 		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(tem));
 		return true;
 	}

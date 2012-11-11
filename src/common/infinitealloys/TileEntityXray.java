@@ -1,6 +1,7 @@
 package infinitealloys;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import net.minecraft.src.ItemStack;
 
@@ -9,6 +10,7 @@ public class TileEntityXray extends TileEntityMachine {
 	private static HashMap<ItemStack, Integer> detectables = new HashMap<ItemStack, Integer>();
 	private ArrayList<Point> detectedBlocks = new ArrayList<Point>();
 	public int range;
+	private Point lastSearch;
 
 	public TileEntityXray(byte facing) {
 		this();
@@ -18,7 +20,8 @@ public class TileEntityXray extends TileEntityMachine {
 	public TileEntityXray() {
 		super(1);
 		inventoryStacks = new ItemStack[2];
-		range = 10;
+		range = 3;
+		lastSearch = new Point(0, 0, 0);
 	}
 
 	public static void addDetectable(ItemStack detectable, int value) {
@@ -32,28 +35,36 @@ public class TileEntityXray extends TileEntityMachine {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
+		if(!lastSearch.equals(0, 0, 0))
+			search();
 	}
 
 	public void search() {
-		if(inventoryStacks[0] == null)
-			return;
+		if(inventoryStacks[0] == null) return;
 		int targetID = inventoryStacks[0].itemID;
 		int targetMetadata = inventoryStacks[0].getItemDamage();
-		for(int y = yCoord - 1; y >= 0; y++) {
-			for(int x = 0; x < range; x++) {
-				for(int z = 0; z < range; z++) {
-					for(int i = 0; i < 2; i++) {
-						for(int j = 0; j < 2; j++) {
-							int searchX = xCoord + (i == 0 ? x : -x);
-							int searchZ = zCoord + (j == 0 ? z : -z);
-							if(worldObj.getBlockId(searchX, y, searchZ) != targetID || worldObj.getBlockMetadata(searchX, y, searchZ) != targetMetadata)
-								continue;
-							detectedBlocks.add(new Point(searchX, y, searchZ));
+		int blocksSearched = 0;
+		for(int y = lastSearch.y; y >= -yCoord; y--) {
+			for(int x = Math.abs(lastSearch.x); x <= range; x++) {
+				for(int z = Math.abs(lastSearch.z); z <= range; z++) {
+					for(int i = lastSearch.x >= 0 ? 0 : 1; i < 2; i++) {
+						for(int j = lastSearch.z >= 0 ? 0 : 1; j < 2; j++) {
+							int xRel = i == 0 ? x : -x;
+							int zRel = j == 0 ? z : -z;
+							if(worldObj.getBlockId(xCoord + xRel, yCoord + y, zCoord + zRel) == targetID && worldObj.getBlockMetadata(xCoord + xRel, yCoord + y, zCoord + zRel) == targetMetadata)
+								detectedBlocks.add(new Point(xCoord + xRel, yCoord + y, zCoord + zRel));
+							if(++blocksSearched == 20) {
+								lastSearch.set(xRel, y, zRel);
+								return;
+							}
 						}
 					}
 				}
+				lastSearch.z = 0;
 			}
+			lastSearch.x = 0;
 		}
+		lastSearch.y = 0;
 	}
 
 	@Override

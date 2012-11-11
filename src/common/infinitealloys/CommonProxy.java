@@ -26,6 +26,9 @@ public class CommonProxy {
 		GameRegistry.registerBlock(InfiniteAlloys.ore, ItemBlockIA.class);
 		GameRegistry.registerBlock(InfiniteAlloys.machine, ItemBlockIA.class);
 		OreDictionary.registerOre("oreCopper", new ItemStack(InfiniteAlloys.ore, 1, 0));
+		OreDictionary.registerOre("oreZinc", new ItemStack(InfiniteAlloys.ore, 1, 1));
+		OreDictionary.registerOre("oreMagnesium", new ItemStack(InfiniteAlloys.ore, 1, 2));
+		OreDictionary.registerOre("oreTantalum", new ItemStack(InfiniteAlloys.ore, 1, 3));
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 0, "pickaxe", 1);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 1, "pickaxe", 1);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 2, "pickaxe", 1);
@@ -47,6 +50,9 @@ public class CommonProxy {
 		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 138).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("gps");
 		InfiniteAlloys.alloyBook = new ItemAlloyBook(InfiniteAlloys.alloyBookID, 139).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("alloyBook");
 		OreDictionary.registerOre("ingotCopper", new ItemStack(InfiniteAlloys.ingot, 1, 0));
+		OreDictionary.registerOre("ingotZinc", new ItemStack(InfiniteAlloys.ingot, 1, 1));
+		OreDictionary.registerOre("ingotMagnesium", new ItemStack(InfiniteAlloys.ingot, 1, 2));
+		OreDictionary.registerOre("ingotTantalum", new ItemStack(InfiniteAlloys.ingot, 1, 3));
 	}
 
 	public void initRecipes() {
