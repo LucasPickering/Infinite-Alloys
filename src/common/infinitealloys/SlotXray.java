@@ -12,6 +12,6 @@ public class SlotXray extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return false;
+		return TileEntityXray.isDetectable(itemstack);
 	}
 }

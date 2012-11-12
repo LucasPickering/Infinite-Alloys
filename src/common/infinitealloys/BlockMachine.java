@@ -75,7 +75,7 @@ public class BlockMachine extends BlockContainer {
 		else if(tem instanceof TileEntityPrinter)
 			player.openGui(InfiniteAlloys.instance, 3, world, x, y, z);
 		else if(tem instanceof TileEntityXray)
-			((TileEntityXray)tem).search();
+			player.openGui(InfiniteAlloys.instance, 4, world, x, y, z);
 		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(tem));
 		return true;
 	}
@@ -157,14 +157,6 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
-		if(metadata == 0)
-			return side < 2 ? 8 : side == 3 ? 9 : 10;
-		else if(metadata == 1)
-			return side < 2 ? 11 : side == 3 ? 12 : 13;
-		else if(metadata == 2)
-			return 14;
-		else if(metadata == 3)
-			return 16;
-		return 0;
+		return metadata * 3 + (side < 2 ? 8 : side == 3 ? 9 : 10);
 	}
 }

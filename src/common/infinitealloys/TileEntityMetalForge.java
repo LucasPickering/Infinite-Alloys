@@ -111,19 +111,16 @@ public class TileEntityMetalForge extends TileEntityMachine {
 
 	@Override
 	public int getStartInventorySide(ForgeDirection side) {
-		if(side == ForgeDirection.DOWN) return 1;
-		if(side == ForgeDirection.UP) return 0;
+		if(side == ForgeDirection.DOWN)
+			return 1;
+		if(side == ForgeDirection.UP)
+			return 0;
 		return 2;
 	}
 
 	@Override
 	public int getSizeInventorySide(ForgeDirection side) {
 		return 1;
-	}
-
-	@Override
-	public boolean isUpgradeValid(ItemStack upgrade) {
-		return super.isUpgradeValid(upgrade);
 	}
 
 	private boolean shouldBurn() {
@@ -142,7 +139,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 * upgrades.
 	 */
 	protected void updateUpgrades() {
-		canNetwork = (upgrades & 256) == 256;
+		canNetwork = hasUpgrade(WIRELESS);
 	}
 
 	private void smeltItem() {
@@ -222,5 +219,16 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		for(int amt : recipeAmts)
 			ingots += amt;
 		return ingots;
+	}
+
+	@Override
+	protected void populateValidUpgrades() {
+		validUpgrades.add(SPEED1);
+		validUpgrades.add(SPEED2);
+		validUpgrades.add(EFFICIENCY1);
+		validUpgrades.add(EFFICIENCY2);
+		validUpgrades.add(CAPACITY1);
+		validUpgrades.add(CAPACITY2);
+		validUpgrades.add(WIRELESS);
 	}
 }

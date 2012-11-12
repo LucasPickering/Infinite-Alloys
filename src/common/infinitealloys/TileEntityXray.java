@@ -1,13 +1,13 @@
 package infinitealloys;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
 
 public class TileEntityXray extends TileEntityMachine {
 
-	private static HashMap<ItemStack, Integer> detectables = new HashMap<ItemStack, Integer>();
+	private static HashMap<String, Integer> detectables = new HashMap<String, Integer>();
 	private ArrayList<Point> detectedBlocks = new ArrayList<Point>();
 	public int range;
 	private Point lastSearch;
@@ -20,16 +20,20 @@ public class TileEntityXray extends TileEntityMachine {
 	public TileEntityXray() {
 		super(1);
 		inventoryStacks = new ItemStack[2];
-		range = 3;
+		range = 10;
 		lastSearch = new Point(0, 0, 0);
 	}
 
-	public static void addDetectable(ItemStack detectable, int value) {
-		detectables.put(detectable, new Integer(value));
+	public static void addDetectable(Block block, int worth) {
+		addDetectable(new ItemStack(block), worth);
 	}
 
-	public static boolean isDetectable(ItemStack stack) {
-		return detectables.containsKey(stack);
+	public static void addDetectable(ItemStack block, int worth) {
+		detectables.put(block.itemID + "@" + block.getItemDamage(), worth);
+	}
+
+	public static boolean isDetectable(ItemStack block) {
+		return detectables.containsKey(block.itemID + "@" + block.getItemDamage());
 	}
 
 	@Override
@@ -40,7 +44,8 @@ public class TileEntityXray extends TileEntityMachine {
 	}
 
 	public void search() {
-		if(inventoryStacks[0] == null) return;
+		if(inventoryStacks[0] == null)
+			return;
 		int targetID = inventoryStacks[0].itemID;
 		int targetMetadata = inventoryStacks[0].getItemDamage();
 		int blocksSearched = 0;
@@ -69,9 +74,27 @@ public class TileEntityXray extends TileEntityMachine {
 
 	@Override
 	public String getInvName() {
-		return "Xray";
+		return "X-ray";
 	}
 
 	@Override
-	protected void updateUpgrades() {}
+	public int getInventoryStackLimit() {
+		return 1;
+	}
+
+	@Override
+	protected void updateUpgrades() {
+		canNetwork = hasUpgrade(WIRELESS);
+	}
+
+	@Override
+	protected void populateValidUpgrades() {
+		validUpgrades.add(SPEED1);
+		validUpgrades.add(SPEED2);
+		validUpgrades.add(EFFICIENCY1);
+		validUpgrades.add(EFFICIENCY2);
+		validUpgrades.add(RANGE1);
+		validUpgrades.add(RANGE2);
+		validUpgrades.add(WIRELESS);
+	}
 }

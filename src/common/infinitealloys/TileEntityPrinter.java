@@ -38,10 +38,23 @@ public class TileEntityPrinter extends TileEntityMachine {
 	}
 
 	@Override
-	protected void updateUpgrades() {}
+	protected void updateUpgrades() {
+		canNetwork = hasUpgrade(WIRELESS);
+	}
 
 	@SideOnly(Side.CLIENT)
 	public int getPrintProgressScaled(int i) {
 		return printProgress * i / ticksToPrint;
+	}
+
+	@Override
+	protected void populateValidUpgrades() {
+		validUpgrades.add(SPEED1);
+		validUpgrades.add(SPEED2);
+		validUpgrades.add(EFFICIENCY1);
+		validUpgrades.add(EFFICIENCY2);
+		validUpgrades.add(CAPACITY1);
+		validUpgrades.add(CAPACITY2);
+		validUpgrades.add(WIRELESS);
 	}
 }

@@ -93,7 +93,7 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(tem.xCoord);
 			dos.writeInt(tem.yCoord);
 			dos.writeInt(tem.zCoord);
-			dos.writeInt(tem.upgrades);
+			dos.writeInt(tem.getUpgrades());
 			dos.writeByte(tem.orientation);
 			if(tem instanceof TileEntityComputer) {
 				TileEntityComputer tec = (TileEntityComputer)tem;

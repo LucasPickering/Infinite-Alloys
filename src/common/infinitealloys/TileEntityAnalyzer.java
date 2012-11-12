@@ -98,11 +98,6 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	}
 
 	@Override
-	public boolean isUpgradeValid(ItemStack upgrade) {
-		return super.isUpgradeValid(upgrade);
-	}
-
-	@Override
 	public int getInventoryStackLimit() {
 		return 1;
 	}
@@ -112,6 +107,15 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	 * upgrades.
 	 */
 	protected void updateUpgrades() {
-		canNetwork = (upgrades & 256) == 256;
+		canNetwork = hasUpgrade(WIRELESS);
+	}
+
+	@Override
+	protected void populateValidUpgrades() {
+		validUpgrades.add(SPEED1);
+		validUpgrades.add(SPEED2);
+		validUpgrades.add(EFFICIENCY1);
+		validUpgrades.add(EFFICIENCY2);
+		validUpgrades.add(WIRELESS);
 	}
 }

@@ -73,6 +73,7 @@ public class CommonProxy {
 		GameRegistry.registerTileEntity(TileEntityAnalyzer.class, "Analyzer");
 		GameRegistry.registerTileEntity(TileEntityPrinter.class, "Printer");
 		GameRegistry.registerTileEntity(TileEntityXray.class, "Xray");
+		TileEntityXray.addDetectable(Block.oreIron, 1);
 	}
 
 	public void initHandlers() {

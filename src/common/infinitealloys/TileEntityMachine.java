@@ -1,6 +1,7 @@
 package infinitealloys;
 
 import infinitealloys.handlers.PacketHandler;
+import java.util.ArrayList;
 import java.util.Random;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;
@@ -14,12 +15,37 @@ import net.minecraftforge.common.ISidedInventory;
 
 public abstract class TileEntityMachine extends TileEntity implements ISidedInventory {
 
+	public static final int SPEED1 = 1;
+	public static final int SPEED2 = 2;
+	public static final int EFFICIENCY1 = 4;
+	public static final int EFFICIENCY2 = 8;
+	public static final int CAPACITY1 = 16;
+	public static final int CAPACITY2 = 32;
+	public static final int RANGE1 = 64;
+	public static final int RANGE2 = 128;
+	public static final int WIRELESS = 256;
+
 	public ItemStack[] inventoryStacks;
+
+	/**
+	 * A list of upgrades that are prerequisites for other upgrades
+	 */
+	private ArrayList<Integer> prereqUpgrades = new ArrayList<Integer>();
+
+	/**
+	 * A list of upgrades that require other upgrades to work
+	 */
+	private ArrayList<Integer> prereqNeedingUpgrades = new ArrayList<Integer>();
 
 	/**
 	 * A binary integer used to determine what upgrades have been installed
 	 */
-	public int upgrades;
+	private int upgrades;
+
+	/**
+	 * A list of the upgrades that can be used on this machine
+	 */
+	protected ArrayList<Integer> validUpgrades = new ArrayList<Integer>();
 
 	/**
 	 * Byte corresponding to the block's orientation on placement. 0123 = SWNE
@@ -37,31 +63,35 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public boolean canNetwork;
 
 	public TileEntityMachine(int index) {
+		this();
 		upgradeSlotIndex = index;
 	}
 
-	public TileEntityMachine() {}
+	public TileEntityMachine() {
+		prereqUpgrades.add(SPEED1);
+		prereqUpgrades.add(EFFICIENCY1);
+		prereqUpgrades.add(CAPACITY1);
+		prereqUpgrades.add(RANGE1);
+		prereqNeedingUpgrades.add(SPEED2);
+		prereqNeedingUpgrades.add(EFFICIENCY2);
+		prereqNeedingUpgrades.add(CAPACITY2);
+		prereqNeedingUpgrades.add(RANGE2);
+		populateValidUpgrades();
+	}
 
 	@Override
 	public void updateEntity() {
 		updateUpgrades();
 		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
-			upgrade(inventoryStacks[upgradeSlotIndex]);
+			if(isUpgradeValid(inventoryStacks[upgradeSlotIndex]))
+				upgrades |= inventoryStacks[upgradeSlotIndex].getItemDamage();
 			inventoryStacks[upgradeSlotIndex] = null;
 		}
 		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 	}
 
-	/**
-	 * Determines if the current item is capable of upgrading the machine and
-	 * upgrades if it is
-	 * 
-	 * @param inventoryPlayer
-	 * @return Upgrade valid
-	 */
-	public void upgrade(ItemStack upgrade) {
-		if(isUpgradeValid(upgrade))
-			upgrades |= upgrade.getItemDamage();
+	public int getUpgrades() {
+		return upgrades;
 	}
 
 	/**
@@ -94,7 +124,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 */
 	public boolean isUpgradeValid(ItemStack upgrade) {
 		int damage = upgrade.getItemDamage();
-		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex && (!hasPrereqUpgrade(upgrade) || ((damage >> 1) | upgrades) == upgrades) && (damage | upgrades) != upgrades;
+		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex && (!hasPrereqUpgrade(upgrade) || hasUpgrade(damage >> 1)) && !hasUpgrade(damage) && validUpgrades.contains(damage);
 	}
 
 	/**
@@ -103,14 +133,28 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	protected abstract void updateUpgrades();
 
 	/**
+	 * Add the valid upgrades for each machine
+	 */
+	protected abstract void populateValidUpgrades();
+
+	/**
+	 * Does the machine have the upgrade
+	 * 
+	 * @param upgrade
+	 * @return true if the machine has the upgrade
+	 */
+	public boolean hasUpgrade(int upgrade) {
+		return (upgrades & upgrade) == upgrade;
+	}
+
+	/**
 	 * Is the upgrade a prerequisite for another
 	 * 
 	 * @param upgrade
 	 * @return true if it is a prereq
 	 */
 	public boolean isPrereqUpgrade(ItemStack upgrade) {
-		int damage = upgrade.getItemDamage();
-		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex & (damage == 1 || damage == 4 || damage == 16 || damage == 64);
+		return prereqUpgrades.contains(upgrade.getItemDamage());
 	}
 
 	/**
@@ -120,8 +164,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 * @return true if it has a prereq
 	 */
 	public boolean hasPrereqUpgrade(ItemStack upgrade) {
-		int damage = upgrade.getItemDamage();
-		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex && (damage == 2 || damage == 8 || damage == 32 || damage == 128);
+		return prereqNeedingUpgrades.contains(upgrade.getItemDamage());
 	}
 
 	@Override

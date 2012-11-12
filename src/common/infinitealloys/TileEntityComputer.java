@@ -40,6 +40,7 @@ public class TileEntityComputer extends TileEntityMachine {
 	}
 
 	public TileEntityComputer() {
+		super();
 		inventoryStacks = new ItemStack[1];
 		canNetwork = true;
 		networkCapacity = networkCapacityA[2];
@@ -117,15 +118,16 @@ public class TileEntityComputer extends TileEntityMachine {
 	}
 
 	@Override
-	public boolean isUpgradeValid(ItemStack upgrade) {
-		return super.isUpgradeValid(upgrade) && upgrade.getItemDamage() != 256;
-	}
-
-	@Override
 	public String getInvName() {
 		return "Computer";
 	}
 
 	@Override
 	protected void updateUpgrades() {}
+
+	@Override
+	protected void populateValidUpgrades() {
+		validUpgrades.add(RANGE1);
+		validUpgrades.add(RANGE2);
+	}
 }
