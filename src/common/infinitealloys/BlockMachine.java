@@ -1,14 +1,17 @@
 package infinitealloys;
 
 import infinitealloys.handlers.PacketHandler;
+import net.minecraftforge.common.ForgeDirection;
 import java.util.List;
 import java.util.Random;
+import universalelectricity.core.Vector3;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.Material;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.MathHelper;
@@ -150,7 +153,8 @@ public class BlockMachine extends BlockContainer {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityliving) {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
-			tem.orientation = (byte)(4 - (MathHelper.floor_double(entityliving.rotationYaw / 90F + 0.5D)));
+			int dir = MathHelper.floor_double(entityliving.rotationYaw * 4.0F / 360.0F + 0.5D) % 4;
+			tem.front = ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4);
 			world.markBlockNeedsUpdate(x, y, z);
 		}
 	}
@@ -158,5 +162,11 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
 		return metadata * 3 + (side < 2 ? 8 : side == 3 ? 9 : 10);
+	}
+
+	@Override
+	public int getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
+		side = Vector3.getOrientationFromSide(((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z)).front, ForgeDirection.getOrientation(side)).ordinal();
+		return blockAccess.getBlockMetadata(x, y, z) * 3 + (side < 2 ? 8 : side == 3 ? 9 : 10);
 	}
 }

@@ -3,15 +3,16 @@ package infinitealloys;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.ItemStack;
+import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityPrinter extends TileEntityMachine {
 
 	private final int ticksToPrint = 20;
 	private int printProgress;
 
-	public TileEntityPrinter(byte facing) {
+	public TileEntityPrinter(ForgeDirection facing) {
 		this();
-		orientation = facing;
+		front = facing;
 	}
 
 	public TileEntityPrinter() {

@@ -49,9 +49,9 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	protected ArrayList<Integer> validUpgrades = new ArrayList<Integer>();
 
 	/**
-	 * Byte corresponding to the block's orientation on placement. 0123 = SWNE
+	 * The compass direction that the block is facing
 	 */
-	public byte orientation = 2;
+	public ForgeDirection front;
 
 	/**
 	 * The index of the slot that upgrades are placed in
@@ -86,10 +86,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public void updateEntity() {
-		updateUpgrades();
 		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
 			upgrades |= inventoryStacks[upgradeSlotIndex].getItemDamage();
 			inventoryStacks[upgradeSlotIndex] = null;
+			updateUpgrades();
 		}
 		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 	}
@@ -175,7 +175,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		upgrades = tagCompound.getShort("Upgrades");
-		orientation = tagCompound.getByte("Orientation");
+		front = ForgeDirection.getOrientation(tagCompound.getByte("Orientation"));
 		NBTTagList nbttaglist = tagCompound.getTagList("Items");
 		inventoryStacks = new ItemStack[getSizeInventory()];
 		for(int i = 0; i < nbttaglist.tagCount(); i++) {
@@ -190,7 +190,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setShort("Upgrades", (short)upgrades);
-		tagCompound.setByte("Orientation", orientation);
+		tagCompound.setByte("Orientation", (byte)front.ordinal());
 		NBTTagList nbttaglist = new NBTTagList();
 		for(int i = 0; i < inventoryStacks.length; i++) {
 			if(inventoryStacks[i] != null) {
@@ -209,7 +209,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	public void handlePacketDataFromServer(byte orientation, int upgrades) {
-		this.orientation = orientation;
+		front = ForgeDirection.getOrientation(orientation);
 		this.upgrades = upgrades;
 	}
 
@@ -295,7 +295,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public boolean canReceiveFromSide(ForgeDirection side) {
-		return true;
+		return !side.equals(front);
 	}
 
 	@Override
@@ -308,7 +308,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public boolean canConnect(ForgeDirection side) {
-		return true;
+		return !side.equals(front);
 	}
 
 	@Override

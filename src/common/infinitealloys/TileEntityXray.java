@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
+import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityXray extends TileEntityMachine {
 
@@ -12,10 +13,11 @@ public class TileEntityXray extends TileEntityMachine {
 	public int range;
 	private Point lastSearch;
 
-	public TileEntityXray(byte facing) {
+	public TileEntityXray(ForgeDirection facing) {
 		this();
-		orientation = facing;
+		front = facing;
 	}
+
 
 	public TileEntityXray() {
 		super(1);

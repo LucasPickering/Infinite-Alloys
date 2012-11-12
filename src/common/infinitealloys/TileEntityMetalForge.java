@@ -37,10 +37,11 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 */
 	public byte[] recipeAmts = new byte[References.metalCount];
 
-	public TileEntityMetalForge(byte facing) {
+	public TileEntityMetalForge(ForgeDirection facing) {
 		this();
-		orientation = facing;
+		front = facing;
 	}
+
 
 	public TileEntityMetalForge() {
 		super(9);

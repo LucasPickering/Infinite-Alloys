@@ -19,10 +19,14 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	 */
 	public int analysisProgress;
 
+	public TileEntityAnalyzer(ForgeDirection facing) {
+		this();
+		front = facing;
+	}
+
 	public TileEntityAnalyzer() {
 		super(3);
 		inventoryStacks = new ItemStack[4];
-		orientation = 2;
 		ticksToAnalyze = 3600;
 		joulesUsedPerTick = 15;
 	}

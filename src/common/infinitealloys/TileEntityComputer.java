@@ -6,6 +6,7 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.Vec3;
+import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityComputer extends TileEntityMachine {
 
@@ -24,9 +25,9 @@ public class TileEntityComputer extends TileEntityMachine {
 	 */
 	public ArrayList<Point> networkCoords;
 
-	public TileEntityComputer(byte facing) {
+	public TileEntityComputer(ForgeDirection facing) {
 		this();
-		orientation = facing;
+		front = facing;
 	}
 
 	public TileEntityComputer() {

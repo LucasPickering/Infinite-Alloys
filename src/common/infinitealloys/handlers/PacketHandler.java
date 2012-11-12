@@ -59,7 +59,6 @@ public class PacketHandler implements IPacketHandler {
 						byte[] recipeAmts = new byte[References.metalCount];
 						for(int i = 0; i < recipeAmts.length; i++)
 							recipeAmts[i] = data.readByte();
-						int numUsingPlayers = data.readShort();
 						((TileEntityMetalForge)te).handlePacketDataFromServer(currentFuelBurnTime, heatLeft, smeltProgress, recipeAmts);
 					}
 					if(te instanceof TileEntityAnalyzer) {
@@ -94,7 +93,7 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(tem.yCoord);
 			dos.writeInt(tem.zCoord);
 			dos.writeInt(tem.getUpgrades());
-			dos.writeByte(tem.orientation);
+			dos.writeByte(tem.front.ordinal());
 			if(tem instanceof TileEntityComputer) {
 				TileEntityComputer tec = (TileEntityComputer)tem;
 				dos.writeInt(tec.networkCoords.size());
@@ -116,8 +115,7 @@ public class PacketHandler implements IPacketHandler {
 				TileEntityAnalyzer tea = (TileEntityAnalyzer)tem;
 				dos.writeShort(tea.analysisProgress);
 			}
-		}
-		catch(IOException e) {
+		}catch(IOException e) {
 			e.printStackTrace();
 		}
 		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
@@ -136,8 +134,7 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(machX);
 			dos.writeInt(machY);
 			dos.writeInt(machZ);
-		}
-		catch(IOException e) {
+		}catch(IOException e) {
 			e.printStackTrace();
 		}
 		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
@@ -153,8 +150,7 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(x);
 			dos.writeInt(y);
 			dos.writeInt(z);
-		}
-		catch(IOException e) {
+		}catch(IOException e) {
 			e.printStackTrace();
 		}
 		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
