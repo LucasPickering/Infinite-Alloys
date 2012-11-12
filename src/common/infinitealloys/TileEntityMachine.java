@@ -3,6 +3,7 @@ package infinitealloys;
 import infinitealloys.handlers.PacketHandler;
 import java.util.ArrayList;
 import java.util.Random;
+import universalelectricity.implement.IElectricityReceiver;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
@@ -13,7 +14,7 @@ import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
-public abstract class TileEntityMachine extends TileEntity implements ISidedInventory {
+public abstract class TileEntityMachine extends TileEntity implements ISidedInventory, IElectricityReceiver {
 
 	public static final int SPEED1 = 1;
 	public static final int SPEED2 = 2;
@@ -62,6 +63,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 */
 	public boolean canNetwork;
 
+	private double maxJoules = 1000;
+	protected double joules = 0;
+	protected double joulesUsedPerTick = 360;
+
 	public TileEntityMachine(int index) {
 		this();
 		upgradeSlotIndex = index;
@@ -83,8 +88,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public void updateEntity() {
 		updateUpgrades();
 		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
-			if(isUpgradeValid(inventoryStacks[upgradeSlotIndex]))
-				upgrades |= inventoryStacks[upgradeSlotIndex].getItemDamage();
+			upgrades |= inventoryStacks[upgradeSlotIndex].getItemDamage();
 			inventoryStacks[upgradeSlotIndex] = null;
 		}
 		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
@@ -278,4 +282,37 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public void closeChest() {}
+
+	@Override
+	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side) {
+		joules = Math.min(joules + amps * voltage, maxJoules);
+	}
+
+	@Override
+	public double wattRequest() {
+		return maxJoules;
+	}
+
+	@Override
+	public boolean canReceiveFromSide(ForgeDirection side) {
+		return true;
+	}
+
+	@Override
+	public void onDisable(int duration) {}
+
+	@Override
+	public boolean isDisabled() {
+		return false;
+	}
+
+	@Override
+	public boolean canConnect(ForgeDirection side) {
+		return true;
+	}
+
+	@Override
+	public double getVoltage() {
+		return 120;
+	}
 }

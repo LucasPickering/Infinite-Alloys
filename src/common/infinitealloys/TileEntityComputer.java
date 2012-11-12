@@ -10,16 +10,6 @@ import net.minecraft.src.Vec3;
 public class TileEntityComputer extends TileEntityMachine {
 
 	/**
-	 * Array of preset values of max connected machines for each tier
-	 */
-	private static int[] networkCapacityA = { 3, 6, 10 };
-
-	/**
-	 * Array of preset values of network range for each tier
-	 */
-	private static int[] networkRangeA = { 5, 10, 15 };
-
-	/**
 	 * That amount of machines that the computer can control
 	 */
 	public int networkCapacity;
@@ -43,8 +33,8 @@ public class TileEntityComputer extends TileEntityMachine {
 		super();
 		inventoryStacks = new ItemStack[1];
 		canNetwork = true;
-		networkCapacity = networkCapacityA[2];
-		networkRange = networkRangeA[2];
+		networkCapacity = 3;
+		networkRange = 10;
 		networkCoords = new ArrayList<Point>(networkCapacity);
 	}
 
@@ -123,10 +113,21 @@ public class TileEntityComputer extends TileEntityMachine {
 	}
 
 	@Override
-	protected void updateUpgrades() {}
+	protected void updateUpgrades() {
+		if(hasUpgrade(CAPACITY1))
+			networkCapacity = 6;
+		if(hasUpgrade(CAPACITY2))
+			networkCapacity = 10;
+		if(hasUpgrade(RANGE1))
+			networkRange = 15;
+		if(hasUpgrade(RANGE2))
+			networkRange = 20;
+	}
 
 	@Override
 	protected void populateValidUpgrades() {
+		validUpgrades.add(CAPACITY1);
+		validUpgrades.add(CAPACITY2);
 		validUpgrades.add(RANGE1);
 		validUpgrades.add(RANGE2);
 	}
