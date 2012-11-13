@@ -3,6 +3,8 @@ package infinitealloys;
 import infinitealloys.handlers.PacketHandler;
 import java.util.ArrayList;
 import java.util.Random;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import universalelectricity.implement.IElectricityReceiver;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;
@@ -47,10 +49,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 * A list of the upgrades that can be used on this machine
 	 */
 	protected ArrayList<Integer> validUpgrades = new ArrayList<Integer>();
-
-	/**
-	 * The compass direction that the block is facing
-	 */
 	public ForgeDirection front;
 
 	/**
@@ -63,9 +61,9 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 */
 	public boolean canNetwork;
 
-	private double maxJoules = 1000;
-	protected double joules = 0;
-	protected double joulesUsedPerTick = 360;
+	protected double maxJoules = 100000D;
+	public double joules = 0D;
+	protected double joulesUsedPerTick = 360D;
 
 	public TileEntityMachine(int index) {
 		this();
@@ -171,11 +169,18 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return prereqNeedingUpgrades.contains(upgrade.getItemDamage());
 	}
 
+	@SideOnly(Side.CLIENT)
+	public int getJoulesScaled(int scale) {
+		System.out.println(joules);
+		return (int)(joules * scale / maxJoules);
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		upgrades = tagCompound.getShort("Upgrades");
 		front = ForgeDirection.getOrientation(tagCompound.getByte("Orientation"));
+		joules = tagCompound.getDouble("Joules");
 		NBTTagList nbttaglist = tagCompound.getTagList("Items");
 		inventoryStacks = new ItemStack[getSizeInventory()];
 		for(int i = 0; i < nbttaglist.tagCount(); i++) {
@@ -191,6 +196,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		super.writeToNBT(tagCompound);
 		tagCompound.setShort("Upgrades", (short)upgrades);
 		tagCompound.setByte("Orientation", (byte)front.ordinal());
+		tagCompound.setDouble("Joules", joules);
 		NBTTagList nbttaglist = new NBTTagList();
 		for(int i = 0; i < inventoryStacks.length; i++) {
 			if(inventoryStacks[i] != null) {
@@ -208,9 +214,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return PacketHandler.getTEPacketToClient(this);
 	}
 
-	public void handlePacketDataFromServer(byte orientation, int upgrades) {
+	public void handlePacketDataFromServer(byte orientation, int upgrades, double joules) {
 		front = ForgeDirection.getOrientation(orientation);
 		this.upgrades = upgrades;
+		this.joules = joules;
 	}
 
 	@Override
@@ -290,7 +297,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public double wattRequest() {
-		return maxJoules;
+		return maxJoules - joules;
 	}
 
 	@Override
@@ -308,7 +315,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public boolean canConnect(ForgeDirection side) {
-		return !side.equals(front);
+		return canReceiveFromSide(side);
 	}
 
 	@Override

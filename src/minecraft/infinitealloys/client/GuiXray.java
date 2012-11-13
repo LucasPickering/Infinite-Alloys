@@ -11,17 +11,13 @@ public class GuiXray extends GuiMachine {
 	private TileEntityXray tex;
 
 	public GuiXray(InventoryPlayer inventoryPlayer, TileEntityXray tileEntity) {
-		super(tileEntity, new ContainerXray(inventoryPlayer, tileEntity));
+		super(176, 238, tileEntity, new ContainerXray(inventoryPlayer, tileEntity));
 		tex = tileEntity;
-		ySize = 238;
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/xray.png"));
-		int left = (width - xSize) / 2;
-		int top = (height - ySize) / 2;
-		drawTexturedModalRect(left, top, 0, 0, xSize, ySize);
+		bindTexture("xray");
+		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 	}
 }

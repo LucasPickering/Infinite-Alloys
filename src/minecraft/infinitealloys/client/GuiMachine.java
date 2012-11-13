@@ -3,6 +3,8 @@ package infinitealloys.client;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.TileEntityMachine;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,17 +17,31 @@ import org.lwjgl.opengl.GL12;
 
 public abstract class GuiMachine extends GuiContainer {
 
+	public static Rectangle ENERGY_METER = new Rectangle(0, 0, 10, 32);
+	public static Rectangle COMP_MACH_BG = new Rectangle(10, 0, 20, 20);
+	public static Rectangle PROGRESS_ARROW = new Rectangle(30, 0, 24, 17);
+
+	protected Point topLeft = new Point();
+	protected Point energyTopLeft = new Point();
 	protected TileEntityMachine tem;
 
-	public GuiMachine(TileEntityMachine tileEntity, Container container) {
+	public GuiMachine(int xSize, int ySize, TileEntityMachine tileEntity, Container container) {
 		super(container);
+		this.xSize = xSize;
+		this.ySize = ySize;
 		tem = tileEntity;
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float f) {
-		super.drawScreen(mouseX, mouseY, f);
+	public void drawScreen(int mouseX, int mouseY, float partialTick) {
+		topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
+		energyTopLeft.setLocation(topLeft.x + 10, topLeft.y + 10);
+		super.drawScreen(mouseX, mouseY, partialTick);
 		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		bindTexture("extras");
+		drawTexturedModalRect(energyTopLeft.x, energyTopLeft.y, ENERGY_METER.x, ENERGY_METER.y, ENERGY_METER.width, tem.getJoulesScaled(ENERGY_METER.height));
 		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
 		if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY)) {
 			ArrayList<String> texts = new ArrayList<String>();
@@ -41,6 +57,8 @@ public abstract class GuiMachine extends GuiContainer {
 			}
 			drawTextBox(texts, colors, mouseX, mouseY);
 		}
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	protected void drawTextBox(String text, int color, int mouseX, int mouseY) {
@@ -93,5 +111,9 @@ public abstract class GuiMachine extends GuiContainer {
 			itemRenderer.zLevel = 0.0F;
 		}
 		GL11.glPopMatrix();
+	}
+
+	protected void bindTexture(String texture) {
+		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/" + texture + ".png"));
 	}
 }

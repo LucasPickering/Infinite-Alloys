@@ -12,12 +12,6 @@ import net.minecraftforge.common.ForgeDirection;
 public class TileEntityMetalForge extends TileEntityMachine {
 
 	/**
-	 * The amount of ticks that the fuel in the slot will burn for
-	 */
-	public int currentFuelBurnTime;
-	public int heatLeft;
-
-	/**
 	 * The multiplier for the fuel burn time
 	 */
 	public float fuelBonus = 1F;
@@ -37,11 +31,12 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 */
 	public byte[] recipeAmts = new byte[References.metalCount];
 
+	private double energyUseMult = 1F;
+
 	public TileEntityMetalForge(ForgeDirection facing) {
 		this();
 		front = facing;
 	}
-
 
 	public TileEntityMetalForge() {
 		super(9);
@@ -56,8 +51,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		currentFuelBurnTime = tagCompound.getShort("CurrentFuelBurnTime");
-		heatLeft = tagCompound.getShort("HeatLeft");
 		smeltProgress = tagCompound.getShort("SmeltProgress");
 		for(int i = 0; i < recipeAmts.length; i++)
 			recipeAmts[i] = tagCompound.getByte("Recipe Amount " + i);
@@ -66,16 +59,12 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		tagCompound.setShort("CurrentFuelBurnTime", (short)currentFuelBurnTime);
-		tagCompound.setShort("HeatLeft", (short)heatLeft);
 		tagCompound.setShort("SmeltProgress", (short)smeltProgress);
 		for(int i = 0; i < recipeAmts.length; i++)
 			tagCompound.setByte("Recipe Amount " + i, recipeAmts[i]);
 	}
 
-	public void handlePacketDataFromServer(int currentFuelBurnTime, int heatLeft, int smeltProgress, byte[] recipeAmts) {
-		this.currentFuelBurnTime = currentFuelBurnTime;
-		this.heatLeft = heatLeft;
+	public void handlePacketDataFromServer(int smeltProgress, byte[] recipeAmts) {
 		this.smeltProgress = smeltProgress;
 		this.recipeAmts = recipeAmts;
 	}
@@ -84,20 +73,10 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 		boolean invChanged = false;
-		if(heatLeft < getIngotsInRecipe()) {
-			currentFuelBurnTime = 0;
-			if(inventoryStacks[0] != null)
-				currentFuelBurnTime = (int)(TileEntityFurnace.getItemBurnTime(inventoryStacks[0]) * fuelBonus);
-			if(shouldBurn()) {
-				heatLeft = currentFuelBurnTime;
-				invChanged = true;
-				if(--inventoryStacks[0].stackSize <= 0)
-					inventoryStacks[0] = null;
-			}
-		}
+		joulesUsedPerTick = (double)getIngotsInRecipe() * 5D;
 		if(shouldBurn()) {
 			smeltProgress += getInventoryStackLimit() - getIngotsInRecipe() + 1;
-			heatLeft -= getIngotsInRecipe();
+			joules -= joulesUsedPerTick;
 			if(smeltProgress >= ticksToFinish) {
 				smeltProgress = 0;
 				smeltItem();
@@ -132,7 +111,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 				typesInRecipe++;
 		for(int i = 0; i < getIngotAmts().length; i++)
 			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
-		return typesInRecipe > 1 && !sufficientIngots.contains(false) && (heatLeft >= getIngotsInRecipe() || currentFuelBurnTime > 0) && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= getIngotsInRecipe()));
+		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= getIngotsInRecipe()));
 	}
 
 	/**
@@ -140,6 +119,10 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 * upgrades.
 	 */
 	protected void updateUpgrades() {
+		if(hasUpgrade(EFFICIENCY1))
+			energyUseMult = 0.75F;
+		if(hasUpgrade(EFFICIENCY1))
+			energyUseMult = 0.5F;
 		canNetwork = hasUpgrade(WIRELESS);
 	}
 
@@ -164,18 +147,8 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 * @param i Scale
 	 * @return Scaled progress
 	 */
-	public int getCookProgressScaled(int i) {
+	public int getSmeltProgressScaled(int i) {
 		return smeltProgress * i / ticksToFinish;
-	}
-
-	@SideOnly(Side.CLIENT)
-	/**
-	 * Get a scaled burn time, used for the gui flames
-	 * @param i Scale
-	 * @return Scaled burn time
-	 */
-	public int getBurnTimeRemainingScaled(int i) {
-		return currentFuelBurnTime == 0 ? heatLeft * i / currentFuelBurnTime : 0;
 	}
 
 	public int getIngotNum(ItemStack ingot) {

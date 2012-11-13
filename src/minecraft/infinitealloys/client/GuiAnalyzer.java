@@ -11,18 +11,15 @@ public class GuiAnalyzer extends GuiMachine {
 	private TileEntityAnalyzer tea;
 
 	public GuiAnalyzer(InventoryPlayer inventoryPlayer, TileEntityAnalyzer tileEntity) {
-		super(tileEntity, new ContainerAnalyzer(inventoryPlayer, tileEntity));
+		super(184, 166, tileEntity, new ContainerAnalyzer(inventoryPlayer, tileEntity));
 		tea = tileEntity;
-		xSize = 184;
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/analyzer.png"));
-		int left = (width - xSize) / 2;
-		int top = (height - ySize) / 2;
-		drawTexturedModalRect(left, top, 0, 0, xSize, ySize);
-		drawTexturedModalRect(left + 38, top + 57, 0, 166, tea.getAnalysisProgressScaled(106) + 1, 18);
+		bindTexture("analyzer");
+		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
+		drawTexturedModalRect(topLeft.x + 38, topLeft.y + 57, 0, 166, tea.getAnalysisProgressScaled(106) + 1, 18);
 		if(tea.inventoryStacks[1] != null) {
 			int currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");
 			int nearestValidAlloy = 2147483647;
@@ -32,7 +29,7 @@ public class GuiAnalyzer extends GuiMachine {
 			for(int i = 0; i < References.metalCount; i++) {
 				int currentValue = InfiniteAlloys.intAtPosRadix(10, References.metalCount, currentAlloy, i);
 				int nearestValue = InfiniteAlloys.intAtPosRadix(10, References.metalCount, nearestValidAlloy, i);
-				drawTexturedModalRect(left + (References.validAlloyCount - i) * 18 + 26, top + 26, nearestValue > currentValue ? 184 : nearestValue < currentValue ? 200 : 216, 0, 16, 16);
+				drawTexturedModalRect(topLeft.x + (References.validAlloyCount - i) * 18 + 26, topLeft.y + 26, nearestValue > currentValue ? 184 : nearestValue < currentValue ? 200 : 216, 0, 16, 16);
 			}
 		}
 	}

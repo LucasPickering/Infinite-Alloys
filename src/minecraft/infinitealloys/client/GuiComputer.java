@@ -26,9 +26,7 @@ public class GuiComputer extends GuiMachine {
 	private GuiButton addMachine;
 
 	public GuiComputer(InventoryPlayer inventoryPlayer, TileEntityComputer tileEntity) {
-		super(tileEntity, new ContainerMachine(inventoryPlayer, tileEntity));
-		xSize = 176;
-		ySize = 176;
+		super(176, 176, tileEntity, new ContainerMachine(inventoryPlayer, tileEntity));
 		tec = tileEntity;
 	}
 
@@ -53,7 +51,7 @@ public class GuiComputer extends GuiMachine {
 		machineButtons.clear();
 		for(int i = 0; i < tec.networkCoords.size(); i++) {
 			Point coords = tec.networkCoords.get(i);
-			machineButtons.add(new GuiMachineButton(width / 2 - 73 + i % 5 * 24, height / 2 - 60 + i / 5 * 24, (int)coords.x, (int)coords.y, (int)coords.z));
+			machineButtons.add(new GuiMachineButton(itemRenderer, width / 2 - 76 + i % 5 * 24, height / 2 - 60 + i / 5 * 24, coords.x, coords.y, coords.z));
 			machineButtons.get(i).drawButton(mc);
 		}
 		boolean full = machineButtons.size() < tec.networkCapacity;
@@ -65,12 +63,8 @@ public class GuiComputer extends GuiMachine {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
-		int k = mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/computer.png");
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(k);
-		int left = (width - xSize) / 2;
-		int top = (height - ySize) / 2;
-		drawTexturedModalRect(left, top, 0, 0, xSize, ySize);
+		bindTexture("computer");
+		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 	}
 
 	@Override
@@ -138,9 +132,7 @@ public class GuiComputer extends GuiMachine {
 				int z = new Integer(zInput.getText());
 				tec.addMachine(mc.thePlayer, x, y, z);
 				PacketDispatcher.sendPacketToServer(PacketHandler.getComputerPacketAddMachine(tec.xCoord, tec.yCoord, tec.zCoord, x, y, z));
-			}
-			catch(NumberFormatException e) {
-			}
+			}catch(NumberFormatException e) {}
 		}
 	}
 }

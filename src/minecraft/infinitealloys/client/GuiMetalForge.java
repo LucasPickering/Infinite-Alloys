@@ -13,9 +13,7 @@ public class GuiMetalForge extends GuiMachine {
 	private TileEntityMetalForge temf;
 
 	public GuiMetalForge(InventoryPlayer inventoryPlayer, TileEntityMetalForge tileEntity) {
-		super(tileEntity, new ContainerMetalForge(inventoryPlayer, tileEntity));
-		xSize = 176;
-		ySize = 216;
+		super(176, 216, tileEntity, new ContainerMetalForge(inventoryPlayer, tileEntity));
 		temf = tileEntity;
 	}
 
@@ -31,29 +29,16 @@ public class GuiMetalForge extends GuiMachine {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		for(int y = 0; y < 2; y++)
 			for(int x = 0; x < 4; x++)
 				fontRenderer.drawStringWithShadow(new Byte(temf.recipeAmts[y * 4 + x]).toString(), x * 18 + 45, y * 18 + 35, 0xffffff);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-		int k = mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/metalforge.png");
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.renderEngine.bindTexture(k);
-		int left = (width - xSize) / 2;
-		int top = (height - ySize) / 2;
-		drawTexturedModalRect(left, top, 0, 0, xSize, ySize);
-		int l;
-		if(temf.heatLeft > 0) {
-			l = temf.getBurnTimeRemainingScaled(12);
-			drawTexturedModalRect(left + 8, top + 30 - l, 176, 12 - l, 14, l + 2);
-		}
-		l = temf.getCookProgressScaled(24);
-		drawTexturedModalRect(left + 112, top + 34, 176, 14, l + 1, 16);
+		bindTexture("metalforge");
+		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
+		bindTexture("extras");
+		drawTexturedModalRect(topLeft.x + 112, topLeft.y + 34, PROGRESS_ARROW.x, PROGRESS_ARROW.y, temf.getSmeltProgressScaled(PROGRESS_ARROW.width) + 1, PROGRESS_ARROW.height);
 	}
 }

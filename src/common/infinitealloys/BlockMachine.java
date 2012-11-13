@@ -36,7 +36,7 @@ public class BlockMachine extends BlockContainer {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
 		ItemStack currentItem = player.inventory.getCurrentItem();
 		if(currentItem != null && currentItem.itemID == InfiniteAlloys.gps.shiftedIndex && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).canNetwork) {
-			if(player.isSneaking() && world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer) {
+			if(player.isSneaking() && world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer && currentItem.hasTagCompound()) {
 				if(currentItem.hasTagCompound()) {
 					NBTTagCompound tagCompound = currentItem.getTagCompound();
 					for(int i = 0; i < References.gpsMaxCoords; i++) {
@@ -54,9 +54,17 @@ public class BlockMachine extends BlockContainer {
 			else {
 				NBTTagCompound tagCompound = currentItem.hasTagCompound() ? currentItem.getTagCompound() : new NBTTagCompound();
 				int size = 0;
-				for(int i = 0; i < References.gpsMaxCoords; i++)
-					if(!tagCompound.hasKey("coords" + i))
+				for(int i = 0; i < References.gpsMaxCoords; i++) {
+					if(!tagCompound.hasKey("coords" + i)) {
 						size = i;
+						break;
+					}
+					else {
+						int[] nbtCoords = tagCompound.getIntArray("coords" + i);
+						if(nbtCoords[0] == x && nbtCoords[1] == y && nbtCoords[2] == z)
+							return true;
+					}
+				}
 				if(size < References.gpsMaxCoords) {
 					tagCompound.setIntArray("coords" + size, new int[] { x, y, z });
 					currentItem.setTagCompound(tagCompound);

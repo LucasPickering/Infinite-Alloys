@@ -40,7 +40,8 @@ public class PacketHandler implements IPacketHandler {
 				if(te instanceof TileEntityMachine) {
 					int upgrades = data.readInt();
 					byte orientation = data.readByte();
-					((TileEntityMachine)te).handlePacketDataFromServer(orientation, upgrades);
+					double joules = data.readDouble();
+					((TileEntityMachine)te).handlePacketDataFromServer(orientation, upgrades, joules);
 					if(te instanceof TileEntityComputer) {
 						TileEntityComputer tec = (TileEntityComputer)te;
 						tec.networkCoords.clear();
@@ -53,13 +54,11 @@ public class PacketHandler implements IPacketHandler {
 						}
 					}
 					if(te instanceof TileEntityMetalForge) {
-						int currentFuelBurnTime = data.readShort();
-						int heatLeft = data.readShort();
 						int smeltProgress = data.readShort();
 						byte[] recipeAmts = new byte[References.metalCount];
 						for(int i = 0; i < recipeAmts.length; i++)
 							recipeAmts[i] = data.readByte();
-						((TileEntityMetalForge)te).handlePacketDataFromServer(currentFuelBurnTime, heatLeft, smeltProgress, recipeAmts);
+						((TileEntityMetalForge)te).handlePacketDataFromServer(smeltProgress, recipeAmts);
 					}
 					if(te instanceof TileEntityAnalyzer) {
 						int analysisProgress = data.readShort();
@@ -94,6 +93,7 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(tem.zCoord);
 			dos.writeInt(tem.getUpgrades());
 			dos.writeByte(tem.front.ordinal());
+			dos.writeDouble(tem.joules);
 			if(tem instanceof TileEntityComputer) {
 				TileEntityComputer tec = (TileEntityComputer)tem;
 				dos.writeInt(tec.networkCoords.size());
@@ -105,8 +105,6 @@ public class PacketHandler implements IPacketHandler {
 			}
 			else if(tem instanceof TileEntityMetalForge) {
 				TileEntityMetalForge temf = (TileEntityMetalForge)tem;
-				dos.writeShort(temf.currentFuelBurnTime);
-				dos.writeShort(temf.heatLeft);
 				dos.writeShort(temf.smeltProgress);
 				for(byte amt : temf.recipeAmts)
 					dos.writeByte(amt);
