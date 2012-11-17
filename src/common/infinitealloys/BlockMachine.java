@@ -5,7 +5,9 @@ import net.minecraftforge.common.ForgeDirection;
 import java.util.List;
 import java.util.Random;
 import universalelectricity.core.Vector3;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityItem;
@@ -76,19 +78,29 @@ public class BlockMachine extends BlockContainer {
 		}
 		if(player.isSneaking())
 			return false;
-		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
-		if(tem instanceof TileEntityComputer)
-			player.openGui(InfiniteAlloys.instance, 0, world, x, y, z);
-		else if(tem instanceof TileEntityMetalForge)
-			player.openGui(InfiniteAlloys.instance, 1, world, x, y, z);
-		else if(tem instanceof TileEntityAnalyzer)
-			player.openGui(InfiniteAlloys.instance, 2, world, x, y, z);
-		else if(tem instanceof TileEntityPrinter)
-			player.openGui(InfiniteAlloys.instance, 3, world, x, y, z);
-		else if(tem instanceof TileEntityXray)
-			player.openGui(InfiniteAlloys.instance, 4, world, x, y, z);
-		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(tem));
+		openGui(world, player, (TileEntityMachine)world.getBlockTileEntity(x, y, z), false);
 		return true;
+	}
+
+	public void openGui(World world, EntityPlayer player, TileEntityMachine tem, boolean fromComputer) {
+		if(!fromComputer && FMLCommonHandler.instance().getEffectiveSide().isClient())
+			TileEntityMachine.controller = null;
+		if(tem instanceof TileEntityComputer) {
+			player.openGui(InfiniteAlloys.instance, 0, world, tem.xCoord, tem.yCoord, tem.zCoord);
+			if(FMLCommonHandler.instance().getEffectiveSide().isServer()) {
+				TileEntityMachine.controllers.put(player.username, new Point(tem.xCoord, tem.yCoord, tem.zCoord));
+				PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEControllerPacket(player), (Player)player);
+			}
+		}
+		else if(tem instanceof TileEntityMetalForge)
+			player.openGui(InfiniteAlloys.instance, 1, world, tem.xCoord, tem.yCoord, tem.zCoord);
+		else if(tem instanceof TileEntityAnalyzer)
+			player.openGui(InfiniteAlloys.instance, 2, world, tem.xCoord, tem.yCoord, tem.zCoord);
+		else if(tem instanceof TileEntityPrinter)
+			player.openGui(InfiniteAlloys.instance, 3, world, tem.xCoord, tem.yCoord, tem.zCoord);
+		else if(tem instanceof TileEntityXray)
+			player.openGui(InfiniteAlloys.instance, 4, world, tem.xCoord, tem.yCoord, tem.zCoord);
+		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(tem));
 	}
 
 	@Override
@@ -125,36 +137,6 @@ public class BlockMachine extends BlockContainer {
 	public void getSubBlocks(int id, CreativeTabs creativetabs, List list) {
 		for(int i = 0; i < References.machineCount; i++)
 			list.add(new ItemStack(id, 1, i));
-	}
-
-	@Override
-	public void breakBlock(World world, int x, int y, int z, int id, int metadata) {
-		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
-		if(tem != null) {
-			tem.dropUpgrades(random);
-			for(int i = 0; i < tem.getSizeInventory(); i++) {
-				ItemStack itemstack = tem.getStackInSlot(i);
-				if(itemstack != null) {
-					float f = random.nextFloat() * 0.8F + 0.1F;
-					float f1 = random.nextFloat() * 0.8F + 0.1F;
-					float f2 = random.nextFloat() * 0.8F + 0.1F;
-					while(itemstack.stackSize > 0) {
-						int j = random.nextInt(21) + 10;
-						if(j > itemstack.stackSize)
-							j = itemstack.stackSize;
-						itemstack.stackSize -= j;
-						EntityItem entityitem = new EntityItem(world, x + f, y + f1, z + f2, new ItemStack(itemstack.itemID, j, itemstack.getItemDamage()));
-						if(itemstack.hasTagCompound())
-							entityitem.item.setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
-						entityitem.motionX = (float)random.nextGaussian() * 0.05F;
-						entityitem.motionY = (float)random.nextGaussian() * 0.05F + 0.2F;
-						entityitem.motionZ = (float)random.nextGaussian() * 0.05F;
-						world.spawnEntityInWorld(entityitem);
-					}
-				}
-			}
-		}
-		super.breakBlock(world, x, y, z, id, metadata);
 	}
 
 	@Override

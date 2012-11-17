@@ -1,29 +1,43 @@
 package infinitealloys.client;
 
+import infinitealloys.BlockMachine;
 import infinitealloys.InfiniteAlloys;
+import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.TileEntityMachine;
-import java.awt.Point;
+import infinitealloys.TileEntityComputer;
+import infinitealloys.handlers.PacketHandler;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import net.minecraft.client.Minecraft;
+import net.minecraft.src.Block;
 import net.minecraft.src.Container;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
+import net.minecraft.src.World;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public abstract class GuiMachine extends GuiContainer {
 
 	public static Rectangle ENERGY_METER = new Rectangle(0, 0, 10, 32);
-	public static Rectangle COMP_MACH_BG = new Rectangle(10, 0, 20, 20);
-	public static Rectangle PROGRESS_ARROW = new Rectangle(30, 0, 24, 17);
+	public static Rectangle TAB_LEFT_OFF = new Rectangle(10, 0, 24, 24);
+	public static Rectangle TAB_LEFT_ON = new Rectangle(34, 0, 28, 24);
+	public static Rectangle TAB_RIGHT_OFF = new Rectangle(62, 0, 29, 24);
+	public static Rectangle TAB_RIGHT_ON = new Rectangle(91, 0, 28, 24);
+	public static Rectangle PROGRESS_ARROW = new Rectangle(92, 0, 24, 17);
 
-	protected Point topLeft = new Point();
-	protected Point energyTopLeft = new Point();
+	protected java.awt.Point topLeft = new java.awt.Point();
+	protected java.awt.Point energyTopLeft = new java.awt.Point();
 	protected TileEntityMachine tem;
+	protected infinitealloys.Point controllingComputer = new infinitealloys.Point();
+	protected GuiMachineTab controllerTab;
+	protected ArrayList<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
 
 	public GuiMachine(int xSize, int ySize, TileEntityMachine tileEntity, Container container) {
 		super(container);
@@ -42,6 +56,18 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		bindTexture("extras");
 		drawTexturedModalRect(energyTopLeft.x, energyTopLeft.y, ENERGY_METER.x, ENERGY_METER.y, ENERGY_METER.width, tem.getJoulesScaled(ENERGY_METER.height));
+		machineTabs.clear();
+		Point cont = TileEntityMachine.controller;
+		if(cont != null) {
+			TileEntityComputer tec = ((TileEntityComputer)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z));
+			controllerTab = new GuiMachineTab(itemRenderer, topLeft.x - 24, topLeft.y + 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true, tem.coordsEquals(cont.x, cont.y, cont.z));
+			controllerTab.drawButton(mc);
+			for(int i = 0; i < tec.networkCoords.size(); i++) {
+				Point coords = tec.networkCoords.get(i);
+				machineTabs.add(new GuiMachineTab(itemRenderer, topLeft.x + i / 5 * 197 - 24, topLeft.y + i % 5 * 25 + 36, (TileEntityMachine)mc.theWorld.getBlockTileEntity(coords.x, coords.y, coords.z), i / 5 == 0, tem.coordsEquals(coords.x, coords.y, coords.z)));
+				machineTabs.get(i).drawButton(mc);
+			}
+		}
 		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
 		if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY)) {
 			ArrayList<String> texts = new ArrayList<String>();
@@ -115,5 +141,36 @@ public abstract class GuiMachine extends GuiContainer {
 
 	protected void bindTexture(String texture) {
 		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/" + texture + ".png"));
+	}
+
+	@Override
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+		super.mouseClicked(mouseX, mouseY, mouseButton);
+		if(controllerTab != null && controllerTab.mousePressed(mouseX, mouseY)) {
+			World world = Minecraft.getMinecraft().theWorld;
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			int x = controllerTab.tem.xCoord;
+			int y = controllerTab.tem.yCoord;
+			int z = controllerTab.tem.zCoord;
+			if(!tem.coordsEquals(x, y, z)) {
+				((BlockMachine)Block.blocksList[world.getBlockId(x, y, z)]).openGui(world, (EntityPlayer)player, controllerTab.tem, true);
+				PacketDispatcher.sendPacketToServer(PacketHandler.getPacketOpenGui(x, y, z));
+			}
+			return;
+		}
+		for(GuiMachineTab tab : machineTabs) {
+			if(tab.mousePressed(mouseX, mouseY)) {
+				World world = Minecraft.getMinecraft().theWorld;
+				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+				int x = tab.tem.xCoord;
+				int y = tab.tem.yCoord;
+				int z = tab.tem.zCoord;
+				if(!tem.coordsEquals(x, y, z)) {
+					((BlockMachine)Block.blocksList[world.getBlockId(x, y, z)]).openGui(world, (EntityPlayer)player, tab.tem, true);
+					PacketDispatcher.sendPacketToServer(PacketHandler.getPacketOpenGui(x, y, z));
+				}
+				return;
+			}
+		}
 	}
 }

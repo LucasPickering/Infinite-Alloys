@@ -66,11 +66,11 @@ public class TileEntityComputer extends TileEntityMachine {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Cannot add self to network");
 		}
-		else if(Vec3.createVectorHelper(machX, machY, machZ).distanceTo(Vec3.createVectorHelper(xCoord, yCoord, zCoord)) > networkRange) {
+		else if(new Point(machX, machY, machZ).distanceTo(xCoord, yCoord, zCoord) > networkRange) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Machine out of range");
 		}
-		else if(worldObj.getBlockId(machX, machY, machZ) != InfiniteAlloys.machine.blockID) {
+		else if(worldObj.getBlockId(machX, machY,machZ) != InfiniteAlloys.machine.blockID) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Can only add machines");
 		}

@@ -2,6 +2,7 @@ package infinitealloys;
 
 import infinitealloys.handlers.PacketHandler;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
@@ -27,6 +28,11 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public static final int RANGE1 = 64;
 	public static final int RANGE2 = 128;
 	public static final int WIRELESS = 256;
+
+	public static HashMap<String, Point> controllers = new HashMap<String, Point>();
+
+	@SideOnly(Side.CLIENT)
+	public static Point controller;
 
 	public ItemStack[] inventoryStacks;
 
@@ -171,8 +177,11 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@SideOnly(Side.CLIENT)
 	public int getJoulesScaled(int scale) {
-		System.out.println(joules);
 		return (int)(joules * scale / maxJoules);
+	}
+
+	public boolean coordsEquals(int x2, int y2, int z2) {
+		return xCoord == x2 && yCoord == y2 && zCoord == z2;
 	}
 
 	@Override

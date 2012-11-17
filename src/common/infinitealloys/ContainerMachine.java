@@ -61,4 +61,10 @@ public class ContainerMachine extends Container {
 		}
 		return itemstack;
 	}
+
+	@Override
+	public void onCraftGuiClosed(EntityPlayer player) {
+		super.onCraftGuiClosed(player);
+		TileEntityMachine.controllers.remove(player.username);
+	}
 }

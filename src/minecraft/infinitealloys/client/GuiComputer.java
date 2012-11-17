@@ -21,7 +21,6 @@ import net.minecraft.src.World;
 public class GuiComputer extends GuiMachine {
 
 	public TileEntityComputer tec;
-	private ArrayList<GuiMachineButton> machineButtons = new ArrayList<GuiMachineButton>();
 	private GuiTextField xInput, yInput, zInput;
 	private GuiButton addMachine;
 
@@ -48,13 +47,7 @@ public class GuiComputer extends GuiMachine {
 		xInput.drawTextBox();
 		yInput.drawTextBox();
 		zInput.drawTextBox();
-		machineButtons.clear();
-		for(int i = 0; i < tec.networkCoords.size(); i++) {
-			Point coords = tec.networkCoords.get(i);
-			machineButtons.add(new GuiMachineButton(itemRenderer, width / 2 - 76 + i % 5 * 24, height / 2 - 60 + i / 5 * 24, coords.x, coords.y, coords.z));
-			machineButtons.get(i).drawButton(mc);
-		}
-		boolean full = machineButtons.size() < tec.networkCapacity;
+		boolean full = machineTabs.size() < tec.networkCapacity;
 		addMachine.enabled = full;
 		xInput.func_82265_c(full);
 		yInput.func_82265_c(full);
@@ -70,18 +63,6 @@ public class GuiComputer extends GuiMachine {
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
-		for(GuiMachineButton button : machineButtons) {
-			if(button.mousePressed(mouseX, mouseY)) {
-				World world = Minecraft.getMinecraft().theWorld;
-				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-				int x = button.blockX;
-				int y = button.blockY;
-				int z = button.blockZ;
-				Block.blocksList[world.getBlockId(x, y, z)].onBlockActivated(world, x, y, z, player, 0, 0, 0, 0);
-				PacketDispatcher.sendPacketToServer(PacketHandler.getComputerPacketOpenGui(x, y, z));
-				return;
-			}
-		}
 		xInput.mouseClicked(mouseX, mouseY, mouseButton);
 		yInput.mouseClicked(mouseX, mouseY, mouseButton);
 		zInput.mouseClicked(mouseX, mouseY, mouseButton);
@@ -130,7 +111,7 @@ public class GuiComputer extends GuiMachine {
 				int x = new Integer(xInput.getText());
 				int y = new Integer(yInput.getText());
 				int z = new Integer(zInput.getText());
-				tec.addMachine(mc.thePlayer, x, y, z);
+				tec.addMachine(mc.thePlayer, new Integer(xInput.getText()), new Integer(yInput.getText()), new Integer(zInput.getText()));
 				PacketDispatcher.sendPacketToServer(PacketHandler.getComputerPacketAddMachine(tec.xCoord, tec.yCoord, tec.zCoord, x, y, z));
 			}catch(NumberFormatException e) {}
 		}
