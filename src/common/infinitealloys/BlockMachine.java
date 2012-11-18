@@ -1,25 +1,24 @@
 package infinitealloys;
 
 import infinitealloys.handlers.PacketHandler;
-import net.minecraftforge.common.ForgeDirection;
 import java.util.List;
 import java.util.Random;
-import universalelectricity.core.Vector3;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
-import net.minecraft.src.Material;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.Material;
 import net.minecraft.src.MathHelper;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import net.minecraftforge.common.ForgeDirection;
+import universalelectricity.core.vector.Vector3;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 
 public class BlockMachine extends BlockContainer {
 
@@ -48,7 +47,7 @@ public class BlockMachine extends BlockContainer {
 						if(((TileEntityComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
 							if(world.isRemote)
 								player.addChatMessage("Adding machine at " + coords[0] + ", " + coords[1] + ", " + coords[2]);
-							tagCompound.func_82580_o("coords" + i);
+							tagCompound.removeTag("coords" + i);
 						}
 					}
 				}
@@ -100,7 +99,10 @@ public class BlockMachine extends BlockContainer {
 			player.openGui(InfiniteAlloys.instance, 3, world, tem.xCoord, tem.yCoord, tem.zCoord);
 		else if(tem instanceof TileEntityXray)
 			player.openGui(InfiniteAlloys.instance, 4, world, tem.xCoord, tem.yCoord, tem.zCoord);
-		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(tem));
+		if(FMLCommonHandler.instance().getEffectiveSide().isServer()) {
+			tem.playersUsing.add(player.username);
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEPacketToClient(tem), (Player)player);
+		}
 	}
 
 	@Override

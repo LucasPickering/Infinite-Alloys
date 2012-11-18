@@ -22,7 +22,7 @@ public class ItemIngot extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int func_82790_a(ItemStack itemstack, int renderPass) {
+	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
 		if(itemstack.getItemDamage() < 8)
 			return References.metalColors[itemstack.getItemDamage()];
 		return 0xffffff;

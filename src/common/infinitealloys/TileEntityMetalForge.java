@@ -1,9 +1,12 @@
 package infinitealloys;
 
+import infinitealloys.handlers.PacketHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntityFurnace;
@@ -87,6 +90,8 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			smeltProgress = 0;
 		if(invChanged)
 			onInventoryChanged();
+		for(String playerName : playersUsing)
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEJoulesPacket(this), (Player)worldObj.getPlayerEntityByName(playerName));
 	}
 
 	@Override

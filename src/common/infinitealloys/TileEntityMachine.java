@@ -4,11 +4,9 @@ import infinitealloys.handlers.PacketHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
-import universalelectricity.implement.IElectricityReceiver;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
@@ -16,6 +14,9 @@ import net.minecraft.src.Packet;
 import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
+import universalelectricity.core.implement.IElectricityReceiver;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 public abstract class TileEntityMachine extends TileEntity implements ISidedInventory, IElectricityReceiver {
 
@@ -30,9 +31,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public static final int WIRELESS = 256;
 
 	public static HashMap<String, Point> controllers = new HashMap<String, Point>();
-
 	@SideOnly(Side.CLIENT)
 	public static Point controller;
+
+	public ArrayList<String> playersUsing = new ArrayList<String>();
 
 	public ItemStack[] inventoryStacks;
 
@@ -67,7 +69,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 */
 	public boolean canNetwork;
 
-	protected double maxJoules = 100000D;
+	protected double maxJoules = 1000000D;
 	public double joules = 0D;
 	protected double joulesUsedPerTick = 360D;
 
@@ -182,6 +184,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	public boolean coordsEquals(int x2, int y2, int z2) {
 		return xCoord == x2 && yCoord == y2 && zCoord == z2;
+	}
+
+	public static boolean isBook(ItemStack stack) {
+		return stack.itemID == InfiniteAlloys.alloyIngot.shiftedIndex || stack.itemID == Item.writableBook.shiftedIndex || stack.itemID == Item.writtenBook.shiftedIndex && stack.hasTagCompound();
 	}
 
 	@Override

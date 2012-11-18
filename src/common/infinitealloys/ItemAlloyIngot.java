@@ -44,7 +44,7 @@ public class ItemAlloyIngot extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int func_82790_a(ItemStack itemstack, int renderPass) {
+	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
 		ArrayList<Integer> redVals = new ArrayList<Integer>();
 		ArrayList<Integer> greenVals = new ArrayList<Integer>();
 		ArrayList<Integer> blueVals = new ArrayList<Integer>();

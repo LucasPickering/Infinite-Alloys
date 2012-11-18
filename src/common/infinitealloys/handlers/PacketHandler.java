@@ -25,12 +25,14 @@ import cpw.mods.fml.common.network.Player;
 public class PacketHandler implements IPacketHandler {
 
 	private static final int TE_SERVER_TO_CLIENT = 0;
-	private static final int TE_CONTROLLER = 1;
-	private static final int COMPUTER_ADD_MACHINE = 2;
-	private static final int OPEN_GUI = 3;
+	private static final int TE_JOULES = 1;
+	private static final int TE_CONTROLLER = 2;
+	private static final int COMPUTER_ADD_MACHINE = 3;
+	private static final int OPEN_GUI = 4;
 
 	@Override
-	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
+	public void onPacketData(INetworkManager manager,
+			Packet250CustomPayload packet, Player player) {
 		ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
 		int packetIndex = data.readInt();
 		World world = ((EntityPlayer)player).worldObj;
@@ -71,17 +73,24 @@ public class PacketHandler implements IPacketHandler {
 					}
 				}
 				break;
+			case TE_JOULES:
+				te = world.getBlockTileEntity(x, y, z);
+				if(te instanceof TileEntityMachine) {
+					double joules = data.readDouble();
+					((TileEntityMachine)te).joules = joules;
+				}
+				break;
 			case TE_CONTROLLER:
 				if(y >= 0)
 					TileEntityMachine.controller = new Point(x, y, z);
 				break;
 			case COMPUTER_ADD_MACHINE:
-				TileEntity te1 = world.getBlockTileEntity(x, y, z);
-				if(te1 instanceof TileEntityComputer) {
+				te = world.getBlockTileEntity(x, y, z);
+				if(te instanceof TileEntityComputer) {
 					int machX = data.readInt();
 					int machY = data.readInt();
 					int machZ = data.readInt();
-					((TileEntityComputer)te1).addMachine((EntityPlayer)player, machX, machY, machZ);
+					((TileEntityComputer)te).addMachine((EntityPlayer)player, machX, machY, machZ);
 				}
 				break;
 			case OPEN_GUI:
@@ -120,66 +129,55 @@ public class PacketHandler implements IPacketHandler {
 				TileEntityAnalyzer tea = (TileEntityAnalyzer)tem;
 				dos.writeShort(tea.analysisProgress);
 			}
-		}catch(IOException e) {
+		}
+		catch(IOException e) {
 			e.printStackTrace();
 		}
 		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
 		packet.length = bos.size();
 		return packet;
+	}
+
+	public static Packet getTEJoulesPacket(TileEntityMachine tem) {
+		return getPacket(TE_JOULES, tem.xCoord, tem.yCoord, tem.zCoord, tem.joules);
 	}
 
 	public static Packet getTEControllerPacket(EntityPlayer player) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		DataOutputStream dos = new DataOutputStream(bos);
-		try {
-			dos.writeInt(TE_CONTROLLER);
-			Point controller = TileEntityMachine.controllers.get(player.username);
-			if(controller != null) {
-				dos.writeInt(controller.x);
-				dos.writeInt(controller.y);
-				dos.writeInt(controller.z);
-			}
-			else {
-				dos.writeInt(0);
-				dos.writeInt(-1);
-				dos.writeInt(0);
-			}
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
-		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
-		packet.length = bos.size();
-		return packet;
+		Point controller = TileEntityMachine.controllers.get(player.username);
+		if(controller != null)
+			return getPacket(TE_CONTROLLER, controller.x, controller.y, controller.z);
+		else
+			return getPacket(TE_CONTROLLER, 0, -1, 0);
 	}
 
 	public static Packet getComputerPacketAddMachine(int compX, int compY, int compZ, int machX, int machY, int machZ) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		DataOutputStream dos = new DataOutputStream(bos);
-		try {
-			dos.writeInt(COMPUTER_ADD_MACHINE);
-			dos.writeInt(compX);
-			dos.writeInt(compY);
-			dos.writeInt(compZ);
-			dos.writeInt(machX);
-			dos.writeInt(machY);
-			dos.writeInt(machZ);
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
-		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
-		packet.length = bos.size();
-		return packet;
+		return getPacket(OPEN_GUI, compX, compY, compZ, machX, machY, machZ);
 	}
 
 	public static Packet getPacketOpenGui(int x, int y, int z) {
+		return getPacket(OPEN_GUI, x, y, z);
+	}
+
+	private static Packet getPacket(int id, int x, int y, int z, Object... data) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);
 		try {
-			dos.writeInt(OPEN_GUI);
+			dos.writeInt(id);
 			dos.writeInt(x);
 			dos.writeInt(y);
 			dos.writeInt(z);
-		}catch(IOException e) {
+			for(Object datum : data) {
+				if(datum instanceof Byte)
+					dos.writeByte((Byte)datum);
+				else if(datum instanceof Short)
+					dos.writeShort((Short)datum);
+				else if(datum instanceof Integer)
+					dos.writeInt((Integer)datum);
+				else if(datum instanceof Double)
+					dos.writeDouble((Double)datum);
+			}
+		}
+		catch(IOException e) {
 			e.printStackTrace();
 		}
 		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());

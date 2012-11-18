@@ -24,7 +24,7 @@ public class ContainerAnalyzer extends ContainerMachine {
 	}
 
 	@Override
-	public ItemStack func_82846_b(EntityPlayer player, int slot) {
+	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack itemstack = null;
 		Slot stackInSlot = (Slot)this.inventorySlots.get(slot);
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
@@ -57,7 +57,7 @@ public class ContainerAnalyzer extends ContainerMachine {
 				stackInSlot.onSlotChanged();
 			if(stackInSlotCopy.stackSize == itemstack.stackSize)
 				return null;
-			stackInSlot.func_82870_a(player, stackInSlotCopy);
+			stackInSlot.onPickupFromSlot(player, stackInSlotCopy);
 		}
 		return itemstack;
 	}

@@ -21,6 +21,7 @@ import net.minecraft.src.Slot;
 import net.minecraft.src.World;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+import universalelectricity.core.electricity.ElectricInfo;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public abstract class GuiMachine extends GuiContainer {
@@ -33,7 +34,7 @@ public abstract class GuiMachine extends GuiContainer {
 	public static Rectangle PROGRESS_ARROW = new Rectangle(92, 0, 24, 17);
 
 	protected java.awt.Point topLeft = new java.awt.Point();
-	protected java.awt.Point energyTopLeft = new java.awt.Point();
+	protected java.awt.Point energyMeter = new java.awt.Point();
 	protected TileEntityMachine tem;
 	protected infinitealloys.Point controllingComputer = new infinitealloys.Point();
 	protected GuiMachineTab controllerTab;
@@ -49,13 +50,13 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTick) {
 		topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
-		energyTopLeft.setLocation(topLeft.x + 10, topLeft.y + 10);
+		energyMeter.setLocation(topLeft.x + 13, topLeft.y + 27 + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height));
 		super.drawScreen(mouseX, mouseY, partialTick);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		bindTexture("extras");
-		drawTexturedModalRect(energyTopLeft.x, energyTopLeft.y, ENERGY_METER.x, ENERGY_METER.y, ENERGY_METER.width, tem.getJoulesScaled(ENERGY_METER.height));
+		drawTexturedModalRect(energyMeter.x, energyMeter.y, ENERGY_METER.x, ENERGY_METER.y + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height), ENERGY_METER.width, tem.getJoulesScaled(ENERGY_METER.height));
 		machineTabs.clear();
 		Point cont = TileEntityMachine.controller;
 		if(cont != null) {
@@ -83,6 +84,8 @@ public abstract class GuiMachine extends GuiContainer {
 			}
 			drawTextBox(texts, colors, mouseX, mouseY);
 		}
+		if(mouseInZone(mouseX, mouseY, energyMeter.x, energyMeter.y - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height))
+			drawTextBox(ElectricInfo.getDisplayShort(tem.joules, ElectricInfo.ElectricUnit.JOULES), 0xffffff, mouseX, mouseY);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
@@ -172,5 +175,9 @@ public abstract class GuiMachine extends GuiContainer {
 				return;
 			}
 		}
+	}
+
+	protected boolean mouseInZone(int mouseX, int mouseY, int xStart, int yStart, int width, int height) {
+		return mouseX >= xStart && mouseY >= yStart && mouseX < xStart + width && mouseY < yStart + height;
 	}
 }
