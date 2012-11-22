@@ -1,9 +1,7 @@
 package infinitealloys.client;
 
 import infinitealloys.ContainerPrinter;
-import infinitealloys.References;
 import infinitealloys.TileEntityPrinter;
-import org.lwjgl.opengl.GL11;
 import net.minecraft.src.InventoryPlayer;
 
 public class GuiPrinter extends GuiMachine {

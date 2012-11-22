@@ -1,9 +1,9 @@
 package infinitealloys.client;
 
 import infinitealloys.References;
-import org.lwjgl.opengl.GL11;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 public class GuiAlloyBook extends GuiScreen {
 

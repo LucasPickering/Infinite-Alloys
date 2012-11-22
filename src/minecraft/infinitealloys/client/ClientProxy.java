@@ -3,9 +3,9 @@ package infinitealloys.client;
 import infinitealloys.CommonProxy;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class ClientProxy extends CommonProxy {
 

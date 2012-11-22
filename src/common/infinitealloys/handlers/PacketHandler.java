@@ -1,11 +1,11 @@
 package infinitealloys.handlers;
 
+import infinitealloys.BlockMachine;
 import infinitealloys.Point;
 import infinitealloys.References;
-import infinitealloys.BlockMachine;
 import infinitealloys.TileEntityAnalyzer;
-import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityComputer;
+import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityMetalForge;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

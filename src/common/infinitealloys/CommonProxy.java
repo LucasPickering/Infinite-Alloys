@@ -18,7 +18,10 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class CommonProxy {
 
-	public void initLocalization() {}
+	private ItemStack[] alloys = new ItemStack[References.validAlloyCount];
+
+	public void initLocalization() {
+	}
 
 	public void initBlocks() {
 		InfiniteAlloys.ore = new BlockOre(InfiniteAlloys.oreID, 0).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("ore");
@@ -56,7 +59,13 @@ public class CommonProxy {
 	}
 
 	public void initRecipes() {
+		for(int i = 0; i < alloys.length; i++)
+			alloys[i] = new ItemStack(InfiniteAlloys.alloyIngot, 1, i);
+		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 0), "", 'A', alloys[3], 'B', alloys[4]);
 		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 1), "BBB", "BDB", "BBB", 'B', Block.brick, 'D', Item.doorSteel);
+		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 2), "", 'A', alloys[0]);
+		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 3), "", 'A', alloys[1], 'B', alloys[2]);
+		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 4), "XXX", "AXA", "AEA", 'A', alloys[5], 'E', Item.enderPearl, 'X', Block.cobblestone);
 		addSmelting(InfiniteAlloys.ore.blockID, 0, new ItemStack(InfiniteAlloys.ingot, 1, 0), 0.6F);
 		addSmelting(InfiniteAlloys.ore.blockID, 1, new ItemStack(InfiniteAlloys.ingot, 1, 1), 0.6F);
 		addSmelting(InfiniteAlloys.ore.blockID, 2, new ItemStack(InfiniteAlloys.ingot, 1, 2), 0.7F);
@@ -93,7 +102,8 @@ public class CommonProxy {
 		AchievementPage.registerAchievementPage(InfiniteAlloys.achPage);
 	}
 
-	public void initRendering() {}
+	public void initRendering() {
+	}
 
 	protected void addName(Object obj, String... keys) {
 		String name = "";

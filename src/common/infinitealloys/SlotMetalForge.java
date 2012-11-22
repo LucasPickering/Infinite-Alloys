@@ -3,7 +3,6 @@ package infinitealloys;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
-import net.minecraft.src.TileEntityFurnace;
 
 public class SlotMetalForge extends Slot {
 
@@ -16,6 +15,6 @@ public class SlotMetalForge extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return slotIndex == 0 && TileEntityFurnace.isItemFuel(itemstack) || (slotIndex > 10 && ((TileEntityMetalForge)inventory).getIngotNum(itemstack) != -1);
+		return slotIndex == 0 && TileEntityMachine.isBook(itemstack) || (slotIndex > 10 && ((TileEntityMetalForge)inventory).getIngotNum(itemstack) != -1);
 	}
 }

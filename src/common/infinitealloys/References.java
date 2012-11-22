@@ -5,25 +5,9 @@ public class References {
 	public static final String TEXTURE_PATH = "/infinitealloys/gfx/";
 	public static final String LANG_PATH = "lang/";
 	public static final String[] langFiles = { LANG_PATH + "en_US.xml" };
-
-	/**
-	 * Amount of metals usable in creating alloys
-	 */
 	public static final int metalCount = 8;
-
-	/**
-	 * Amount of machines
-	 */
 	public static final int machineCount = 5;
-
-	/**
-	 * Amount of upgrades that can be made and used on machines
-	 */
-	public static final int upgradeCount = 9;
-
-	/**
-	 * Amount of "good" alloys, that can actually be used
-	 */
+	public static final int upgradeCount = 11;
 	public static final int validAlloyCount = 6;
 
 	/**
@@ -54,7 +38,7 @@ public class References {
 	/**
 	 * The names of each upgrade that can be used on machines
 	 */
-	public static final String[] upgradeNames = { "speed1", "speed2", "efficiency1", "efficiency2", "capacity1", "capacity2", "range1", "range2", "wireless" };
+	public static final String[] upgradeNames = { "speed1", "speed2", "efficiency1", "efficiency2", "capacity1", "capacity2", "range1", "range2", "wireless", "eleccapacity1", "eleccapacity2" };
 
 	/**
 	 * The amount of coords that the gps can hold

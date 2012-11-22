@@ -1,13 +1,12 @@
 package infinitealloys.client;
 
-import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.TileEntityMachine;
-import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.RenderItem;
+import org.lwjgl.opengl.GL11;
 
 public class GuiMachineTab extends GuiScreen {
 

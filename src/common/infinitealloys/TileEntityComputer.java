@@ -5,7 +5,6 @@ import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.Vec3;
 import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityComputer extends TileEntityMachine {

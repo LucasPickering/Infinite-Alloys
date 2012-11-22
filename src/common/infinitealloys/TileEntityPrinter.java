@@ -1,9 +1,9 @@
 package infinitealloys;
 
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 
 public class TileEntityPrinter extends TileEntityMachine {
 

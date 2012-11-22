@@ -1,6 +1,5 @@
 package infinitealloys.handlers;
 
-import cpw.mods.fml.common.network.IGuiHandler;
 import infinitealloys.ContainerAnalyzer;
 import infinitealloys.ContainerMachine;
 import infinitealloys.ContainerMetalForge;
@@ -8,8 +7,8 @@ import infinitealloys.ContainerPrinter;
 import infinitealloys.ContainerXray;
 import infinitealloys.References;
 import infinitealloys.TileEntityAnalyzer;
-import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityComputer;
+import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityMetalForge;
 import infinitealloys.TileEntityPrinter;
 import infinitealloys.TileEntityXray;
@@ -22,6 +21,7 @@ import infinitealloys.client.GuiXray;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
+import cpw.mods.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler {
 

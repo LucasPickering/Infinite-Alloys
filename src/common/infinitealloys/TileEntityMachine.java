@@ -29,13 +29,15 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public static final int RANGE1 = 64;
 	public static final int RANGE2 = 128;
 	public static final int WIRELESS = 256;
+	public static final int ELECCAPACITY1 = 512;
+	public static final int ELECCAPACITY2 = 1024;
 
 	public static HashMap<String, Point> controllers = new HashMap<String, Point>();
 	@SideOnly(Side.CLIENT)
 	public static Point controller;
 
+	public Random random = new Random();
 	public ArrayList<String> playersUsing = new ArrayList<String>();
-
 	public ItemStack[] inventoryStacks;
 
 	/**
@@ -69,9 +71,12 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 */
 	public boolean canNetwork;
 
-	protected double maxJoules = 1000000D;
+	protected double maxJoules = 500000D;
 	public double joules = 0D;
 	protected double joulesUsedPerTick = 360D;
+	protected double joulesUseMult = 1D;
+	protected float speedMult = 1F;
+	protected int stackLimit = 64;
 
 	public TileEntityMachine(int index) {
 		this();
@@ -83,10 +88,12 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		prereqUpgrades.add(EFFICIENCY1);
 		prereqUpgrades.add(CAPACITY1);
 		prereqUpgrades.add(RANGE1);
+		prereqUpgrades.add(ELECCAPACITY1);
 		prereqNeedingUpgrades.add(SPEED2);
 		prereqNeedingUpgrades.add(EFFICIENCY2);
 		prereqNeedingUpgrades.add(CAPACITY2);
 		prereqNeedingUpgrades.add(RANGE2);
+		prereqNeedingUpgrades.add(ELECCAPACITY2);
 		populateValidUpgrades();
 	}
 
@@ -95,8 +102,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
 			upgrades |= inventoryStacks[upgradeSlotIndex].getItemDamage();
 			inventoryStacks[upgradeSlotIndex] = null;
-			updateUpgrades();
 		}
+		updateUpgrades();
 		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -105,25 +112,50 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	/**
-	 * Drops the upgrades that were used on the block as items, called when the
-	 * block is broken
-	 * 
-	 * @param random
+	 * Drops the items in the block's inventory
 	 */
-	public void dropUpgrades(Random random) {
+	public void dropItems() {
+		for(int i = 0; i < getSizeInventory(); i++) {
+			ItemStack stack = getStackInSlot(i);
+			if(stack != null) {
+				float f1 = random.nextFloat() * 0.8F + 0.1F;
+				float f2 = random.nextFloat() * 0.8F + 0.1F;
+				float f3 = random.nextFloat() * 0.8F + 0.1F;
+				while(stack.stackSize > 0) {
+					int j = random.nextInt(21) + 10;
+					if(j > stack.stackSize)
+						j = stack.stackSize;
+					stack.stackSize -= j;
+					EntityItem entityitem = new EntityItem(worldObj, (float)xCoord + f1, (float)yCoord + f2, (float)zCoord + f3, new ItemStack(stack.itemID, j, stack.getItemDamage()));
+					if(stack.hasTagCompound())
+						entityitem.item.setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
+					entityitem.motionX = random.nextGaussian() * 0.05F;
+					entityitem.motionY = random.nextGaussian() * 0.25F;
+					entityitem.motionZ = random.nextGaussian() * 0.05F;
+					worldObj.spawnEntityInWorld(entityitem);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Drops the upgrades that were used on the block as items
+	 */
+	public void dropUpgrades() {
 		for(int i = 0; i <= References.upgradeCount; i++) {
 			int upg = (int)Math.pow(2D, i);
-			if((upg & upgrades) == upg) {
+			if(hasUpgrade(upg)) {
 				float f = random.nextFloat() * 0.8F + 0.1F;
 				float f1 = random.nextFloat() * 0.8F + 0.1F;
 				float f2 = random.nextFloat() * 0.8F + 0.1F;
-				EntityItem entityitem = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(InfiniteAlloys.upgrade, 1, upg));
-				entityitem.motionX = (float)random.nextGaussian() * 0.05F;
-				entityitem.motionY = (float)random.nextGaussian() * 0.05F + 0.2F;
-				entityitem.motionZ = (float)random.nextGaussian() * 0.05F;
+				EntityItem entityitem = new EntityItem(worldObj, (float)xCoord + f, (float)yCoord + f1, (float)zCoord + f2, new ItemStack(InfiniteAlloys.upgrade, 1, upg));
+				entityitem.motionX = random.nextGaussian() * 0.05F;
+				entityitem.motionY = random.nextGaussian() * 0.25F;
+				entityitem.motionZ = random.nextGaussian() * 0.05F;
 				worldObj.spawnEntityInWorld(entityitem);
 			}
 		}
+		upgrades = 0;
 	}
 
 	/**
@@ -187,7 +219,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	public static boolean isBook(ItemStack stack) {
-		return stack.itemID == InfiniteAlloys.alloyIngot.shiftedIndex || stack.itemID == Item.writableBook.shiftedIndex || stack.itemID == Item.writtenBook.shiftedIndex && stack.hasTagCompound();
+		return stack.itemID == InfiniteAlloys.alloyBook.shiftedIndex || stack.itemID == Item.writableBook.shiftedIndex || stack.itemID == Item.writtenBook.shiftedIndex && stack.hasTagCompound();
 	}
 
 	@Override
@@ -237,7 +269,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public int getInventoryStackLimit() {
-		return 64;
+		return stackLimit;
 	}
 
 	@Override
@@ -300,10 +332,12 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@Override
-	public void openChest() {}
+	public void openChest() {
+	}
 
 	@Override
-	public void closeChest() {}
+	public void closeChest() {
+	}
 
 	@Override
 	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side) {
@@ -321,7 +355,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@Override
-	public void onDisable(int duration) {}
+	public void onDisable(int duration) {
+	}
 
 	@Override
 	public boolean isDisabled() {

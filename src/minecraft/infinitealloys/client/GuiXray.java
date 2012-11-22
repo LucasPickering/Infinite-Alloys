@@ -1,9 +1,7 @@
 package infinitealloys.client;
 
 import infinitealloys.ContainerXray;
-import infinitealloys.References;
 import infinitealloys.TileEntityXray;
-import org.lwjgl.opengl.GL11;
 import net.minecraft.src.InventoryPlayer;
 
 public class GuiXray extends GuiMachine {

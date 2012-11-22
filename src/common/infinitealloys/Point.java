@@ -1,7 +1,5 @@
 package infinitealloys;
 
-import net.minecraft.src.MathHelper;
-
 public class Point {
 
 	public int x, y, z;

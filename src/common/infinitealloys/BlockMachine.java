@@ -161,4 +161,13 @@ public class BlockMachine extends BlockContainer {
 		side = Vector3.getOrientationFromSide(((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z)).front, ForgeDirection.getOrientation(side)).ordinal();
 		return blockAccess.getBlockMetadata(x, y, z) * 3 + (side < 2 ? 8 : side == 3 ? 9 : 10);
 	}
+
+	@Override
+	public void breakBlock(World world, int x, int y, int z, int par5, int par6)
+	{
+		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
+		if(tem != null)
+			tem.dropItems();
+		super.breakBlock(world, x, y, z, par5, par6);
+	}
 }

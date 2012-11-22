@@ -1,22 +1,13 @@
 package infinitealloys.client;
 
-import java.lang.Character;
-import java.util.ArrayList;
 import infinitealloys.ContainerMachine;
-import infinitealloys.Point;
-import infinitealloys.References;
 import infinitealloys.TileEntityComputer;
 import infinitealloys.handlers.PacketHandler;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.Block;
-import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiTextField;
 import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.World;
+import org.lwjgl.input.Keyboard;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiComputer extends GuiMachine {
 

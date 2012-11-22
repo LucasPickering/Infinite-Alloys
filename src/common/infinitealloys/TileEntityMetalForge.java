@@ -3,14 +3,14 @@ package infinitealloys;
 import infinitealloys.handlers.PacketHandler;
 import java.util.ArrayList;
 import java.util.Arrays;
+import net.minecraft.src.ItemStack;
+import net.minecraft.src.NBTTagCompound;
+import net.minecraftforge.common.ForgeDirection;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.TileEntityFurnace;
-import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityMetalForge extends TileEntityMachine {
 
@@ -33,8 +33,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 * An array for the "stack sizes" of each ingot in the recipe setting
 	 */
 	public byte[] recipeAmts = new byte[References.metalCount];
-
-	private double energyUseMult = 1F;
 
 	public TileEntityMetalForge(ForgeDirection facing) {
 		this();
@@ -76,9 +74,9 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 		boolean invChanged = false;
-		joulesUsedPerTick = (double)getIngotsInRecipe() * 5D;
+		joulesUsedPerTick = (double)getIngotsInRecipe() * 360D * joulesUseMult;
 		if(shouldBurn()) {
-			smeltProgress += getInventoryStackLimit() - getIngotsInRecipe() + 1;
+			smeltProgress += (float)(getInventoryStackLimit() - getIngotsInRecipe() + 1) * speedMult;
 			joules -= joulesUsedPerTick;
 			if(smeltProgress >= ticksToFinish) {
 				smeltProgress = 0;
@@ -91,7 +89,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		if(invChanged)
 			onInventoryChanged();
 		for(String playerName : playersUsing)
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEJoulesPacket(this), (Player)worldObj.getPlayerEntityByName(playerName));
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEJoulesPacket(this), (Player)FMLCommonHandler.instance().getSidedDelegate().getServer().getConfigurationManager().getPlayerForUsername(playerName));
 	}
 
 	@Override
@@ -116,7 +114,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 				typesInRecipe++;
 		for(int i = 0; i < getIngotAmts().length; i++)
 			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
-		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= getIngotsInRecipe()));
+		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= 1));
 	}
 
 	/**
@@ -124,11 +122,36 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	 * upgrades.
 	 */
 	protected void updateUpgrades() {
-		if(hasUpgrade(EFFICIENCY1))
-			energyUseMult = 0.75F;
-		if(hasUpgrade(EFFICIENCY1))
-			energyUseMult = 0.5F;
+		if(hasUpgrade(SPEED2))
+			speedMult = 2F;
+		else if(hasUpgrade(SPEED1))
+			speedMult = 1.5F;
+		else
+			speedMult = 1F;
+
+		if(hasUpgrade(EFFICIENCY2))
+			joulesUseMult = 0.5D;
+		else if(hasUpgrade(EFFICIENCY1))
+			joulesUseMult = 0.75D;
+		else
+			joulesUseMult = 1D;
+
+		if(hasUpgrade(CAPACITY2))
+			stackLimit = 48;
+		else if(hasUpgrade(CAPACITY1))
+			stackLimit = 64;
+		else
+			stackLimit = 32;
+
 		canNetwork = hasUpgrade(WIRELESS);
+
+		if(hasUpgrade(ELECCAPACITY2))
+			maxJoules = 1000000D;
+		else if(hasUpgrade(ELECCAPACITY1))
+			maxJoules = 750000D;
+		else
+			maxJoules = 500000D;
+
 	}
 
 	private void smeltItem() {
@@ -171,10 +194,17 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		int alloy = 0;
 		for(int i = 0; i < recipeAmts.length; i++)
 			alloy += Math.pow(References.alloyRadix, i) * recipeAmts[i];
-		ItemStack result = new ItemStack(InfiniteAlloys.alloyIngot, getIngotsInRecipe());
+		ItemStack result = new ItemStack(InfiniteAlloys.alloyIngot);
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		tagCompound.setInteger("alloy", alloy);
 		result.setTagCompound(tagCompound);
+		int[] validAlloys = InfiniteAlloys.instance.worldData.validAlloys;
+		for(int i = 0; i < validAlloys.length; i++) {
+			if(alloy == validAlloys[i]) {
+				result.setItemDamage(i + 1);
+				break;
+			}
+		}
 		return result;
 	}
 
@@ -209,5 +239,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		validUpgrades.add(CAPACITY1);
 		validUpgrades.add(CAPACITY2);
 		validUpgrades.add(WIRELESS);
+		validUpgrades.add(ELECCAPACITY1);
+		validUpgrades.add(ELECCAPACITY2);
 	}
 }

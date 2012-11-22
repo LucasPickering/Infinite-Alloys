@@ -1,7 +1,7 @@
 package infinitealloys.handlers;
 
-import infinitealloys.References;
 import infinitealloys.InfiniteAlloys;
+import infinitealloys.References;
 import java.util.Random;
 import net.minecraft.src.IChunkProvider;
 import net.minecraft.src.World;

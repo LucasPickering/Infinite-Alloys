@@ -4,8 +4,8 @@ import infinitealloys.BlockMachine;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
 import infinitealloys.References;
-import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityComputer;
+import infinitealloys.TileEntityMachine;
 import infinitealloys.handlers.PacketHandler;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -50,7 +50,7 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTick) {
 		topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
-		energyMeter.setLocation(topLeft.x + 13, topLeft.y + 27 + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height));
+		energyMeter.setLocation(topLeft.x + 13, topLeft.y + 8 + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height));
 		super.drawScreen(mouseX, mouseY, partialTick);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -84,9 +84,9 @@ public abstract class GuiMachine extends GuiContainer {
 			}
 			drawTextBox(texts, colors, mouseX, mouseY);
 		}
-		if(mouseInZone(mouseX, mouseY, energyMeter.x, energyMeter.y - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height))
+		if(mouseInZone(mouseX, mouseY, energyMeter.x, energyMeter.y, ENERGY_METER.width, ENERGY_METER.height))
 			drawTextBox(ElectricInfo.getDisplayShort(tem.joules, ElectricInfo.ElectricUnit.JOULES), 0xffffff, mouseX, mouseY);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
