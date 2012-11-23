@@ -1,5 +1,6 @@
 package infinitealloys.client;
 
+import org.lwjgl.opengl.GL11;
 import infinitealloys.ContainerMetalForge;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
@@ -20,17 +21,22 @@ public class GuiMetalForge extends GuiMachine {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		for(int i = 0; i < References.metalCount; i++) {
-			Slot slot = inventorySlots.getSlot(i + 1);
-			if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY) && 0 <= i && i <= 7)
+			if(mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 39, topLeft.y + i / 4 * 18 + 42, 18, 18))
 				drawTextBox(InfiniteAlloys.getStringLocalization("metal." + References.metalNames[i] + ".name"), 0xffffff, mouseX, mouseY);
 		}
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		for(int i = 0; i < References.metalCount; i++)
-			fontRenderer.drawStringWithShadow(new Byte(temf.recipeAmts[i]).toString(), i % 4 * 18 + 45, i / 4 * 18 + 47, 0xffffff);
+			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.ingot, 1, i), i % 4 * 18 + 40, i / 4 * 18 + 43);
+		for(int i = 0; i < References.metalCount; i++)
+			fontRenderer.drawStringWithShadow(new Byte(temf.recipeAmts[i]).toString(), i % 4 * 18 + 51, i / 4 * 18 + 52, 0xffffff);
 	}
 
 	@Override
@@ -39,7 +45,19 @@ public class GuiMetalForge extends GuiMachine {
 		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 		bindTexture("extras");
 		drawTexturedModalRect(topLeft.x + 113, topLeft.y + 53, PROGRESS_ARROW.x, PROGRESS_ARROW.y, temf.getProcessProgressScaled(PROGRESS_ARROW.width) + 1, PROGRESS_ARROW.height);
-		for(int i = 0; i < References.metalCount; i++)
-			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.ingot, 1, i), topLeft.x + i % 4 * 18 + 34, topLeft.y + i / 4 * 18 + 38);
+	}
+
+	@Override
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+		for(int i = 0; i < References.metalCount; i++) {
+			if(mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 39, topLeft.y + i / 4 * 18 + 42, 18, 18)) {
+				temf.processProgress = 0;
+				if(mouseButton == 0)
+					temf.recipeAmts[i] = (byte)Math.min(temf.recipeAmts[i] + 1, References.alloyRadix - 1);
+				else if(mouseButton == 1)
+					temf.recipeAmts[i] = (byte)Math.max(temf.recipeAmts[i] - 1, 0);
+				break;
+			}
+		}
 	}
 }

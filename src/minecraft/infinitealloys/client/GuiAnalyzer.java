@@ -22,7 +22,7 @@ public class GuiAnalyzer extends GuiMachine {
 		drawTexturedModalRect(topLeft.x + 38, topLeft.y + 57, 0, 166, tea.getProcessProgressScaled(106) + 1, 18);
 		if(tea.inventoryStacks[1] != null) {
 			int currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");
-			int nearestValidAlloy = 2147483647;
+			int nearestValidAlloy = Integer.MAX_VALUE;
 			for(int i = 0; i < References.validAlloyCount; i++)
 				if(getAlloyDiff(currentAlloy, nearestValidAlloy) > getAlloyDiff(currentAlloy, InfiniteAlloys.instance.worldData.validAlloys[i]))
 					nearestValidAlloy = InfiniteAlloys.instance.worldData.validAlloys[i];

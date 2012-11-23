@@ -23,8 +23,8 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	public TileEntityMetalForge() {
-		super(9);
-		inventoryStacks = new ItemStack[29];
+		super(1);
+		inventoryStacks = new ItemStack[21];
 		ticksToProcess = 12800;
 	}
 
@@ -36,8 +36,8 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	@Override
 	public int getStartInventorySide(ForgeDirection side) {
 		if(side == ForgeDirection.UP || side == ForgeDirection.DOWN)
-			return 10;
-		return 11;
+			return 2;
+		return 3;
 	}
 
 	@Override
@@ -83,10 +83,10 @@ public class TileEntityMetalForge extends TileEntityMachine {
 					decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
 				}
 				ItemStack ingotResult = getIngotResult();
-				if(inventoryStacks[10] == null)
-					inventoryStacks[10] = ingotResult;
-				else if(inventoryStacks[10].getTagCompound().getInteger("alloy") == ingotResult.getTagCompound().getInteger("alloy"))
-					inventoryStacks[10].stackSize += ingotResult.stackSize;
+				if(inventoryStacks[2] == null)
+					inventoryStacks[2] = ingotResult;
+				else if(inventoryStacks[2].getTagCompound().getInteger("alloy") == ingotResult.getTagCompound().getInteger("alloy"))
+					inventoryStacks[2].stackSize += ingotResult.stackSize;
 				invChanged = true;
 			}
 		}
@@ -106,7 +106,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 				typesInRecipe++;
 		for(int i = 0; i < getIngotAmts().length; i++)
 			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
-		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= 1));
+		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick && (inventoryStacks[2] == null || (inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1));
 	}
 
 	public int getIngotNum(ItemStack ingot) {
@@ -138,7 +138,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 
 	private ArrayList<Integer> getSlotsWithIngot() {
 		ArrayList<Integer> slots = new ArrayList<Integer>();
-		for(int i = 11; i < 29; i++)
+		for(int i = 3; i < 21; i++)
 			if(inventoryStacks[i] != null)
 				slots.add(i);
 		return slots;

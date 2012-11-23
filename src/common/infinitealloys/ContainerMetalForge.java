@@ -13,14 +13,11 @@ public class ContainerMetalForge extends ContainerMachine {
 		super(tileEntity);
 		inventory = tileEntity;
 		addSlotToContainer(new SlotMetalForge(inventory, 0, 10, 47));
-		for(int y = 0; y < 2; y++)
-			for(int x = 0; x < 4; x++)
-				addSlotToContainer(new SlotMetalForge(inventory, y * 2 + x + 1, x * 18 + 34, y * 18 + 38));
-		addSlotToContainer(new SlotUpgrade(inventory, 9, 148, 8));
-		addSlotToContainer(new SlotMetalForge(inventory, 10, 148, 46));
+		addSlotToContainer(new SlotUpgrade(inventory, 1, 148, 8));
+		addSlotToContainer(new SlotMetalForge(inventory, 2, 148, 46));
 		for(int y = 0; y < 2; y++)
 			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new SlotMetalForge(inventory, y * 9 + x + 11, x * 18 + 8, y * 18 + 82));
+				addSlotToContainer(new SlotMetalForge(inventory, y * 9 + x + 3, x * 18 + 8, y * 18 + 82));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
 				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 134 + y * 18));
@@ -35,30 +32,30 @@ public class ContainerMetalForge extends ContainerMachine {
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
 			ItemStack stackInSlotCopy = stackInSlot.getStack();
 			itemstack = stackInSlotCopy.copy();
-			if(slot >= 10 && slot <= 28 || slot == 0) {
-				if(!mergeItemStack(stackInSlotCopy, 29, 65, false))
+			if(slot >= 2 && slot <= 20 || slot == 0) {
+				if(!mergeItemStack(stackInSlotCopy, 21, 57, false))
 					return null;
 				stackInSlot.onSlotChange(stackInSlotCopy, itemstack);
 			}
-			else if(slot > 28) {
+			else if(slot > 20) {
 				if(TileEntityMachine.isBook(stackInSlotCopy)) {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}
 				else if(inventory.isUpgradeValid(stackInSlotCopy)) {
-					if(!mergeItemStack(stackInSlotCopy, 9, 10, false))
+					if(!mergeItemStack(stackInSlotCopy, 1, 2, false))
 						return null;
 				}
 				else if(inventory.getIngotNum(stackInSlotCopy) != -1) {
-					if(!mergeItemStack(stackInSlotCopy, 11, 28, false))
+					if(!mergeItemStack(stackInSlotCopy, 3, 20, false))
 						return null;
 				}
-				else if(slot > 28 && slot < 56) {
-					if(!mergeItemStack(stackInSlotCopy, 56, 65, false))
+				else if(slot > 20 && slot < 48) {
+					if(!mergeItemStack(stackInSlotCopy, 48, 57, false))
 						return null;
 				}
-				else if(slot >= 56) {
-					if(!mergeItemStack(stackInSlotCopy, 29, 56, false))
+				else if(slot >= 48) {
+					if(!mergeItemStack(stackInSlotCopy, 21, 48, false))
 						return null;
 				}
 			}
@@ -71,18 +68,5 @@ public class ContainerMetalForge extends ContainerMachine {
 			stackInSlot.onPickupFromSlot(player, stackInSlotCopy);
 		}
 		return itemstack;
-	}
-
-	@Override
-	public ItemStack slotClick(int slot, int mouseButton, int i, EntityPlayer player) {
-		if((mouseButton == 0 || mouseButton == 1) && slot >= 1 && slot <= 8) {
-			inventory.processProgress = 0;
-			if(mouseButton == 0)
-				inventory.recipeAmts[slot - 1] = (byte)Math.min(inventory.recipeAmts[slot - 1] + 1, References.alloyRadix - 1);
-			else if(mouseButton == 1)
-				inventory.recipeAmts[slot - 1] = (byte)Math.max(inventory.recipeAmts[slot - 1] - 1, 0);
-			return null;
-		}
-		return super.slotClick(slot, mouseButton, i, player);
 	}
 }

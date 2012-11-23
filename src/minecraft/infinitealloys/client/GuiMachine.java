@@ -50,7 +50,7 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTick) {
 		topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
-		energyMeter.setLocation(topLeft.x + 13, topLeft.y + 8 + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height));
+		energyMeter.setLocation(topLeft.x + 13, topLeft.y + 7 + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height));
 		super.drawScreen(mouseX, mouseY, partialTick);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -84,7 +84,7 @@ public abstract class GuiMachine extends GuiContainer {
 			}
 			drawTextBox(texts, colors, mouseX, mouseY);
 		}
-		if(mouseInZone(mouseX, mouseY, energyMeter.x, energyMeter.y, ENERGY_METER.width, ENERGY_METER.height))
+		if(mouseInZone(mouseX, mouseY, energyMeter.x, energyMeter.y + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height), ENERGY_METER.width, tem.getJoulesScaled(ENERGY_METER.height)))
 			drawTextBox(ElectricInfo.getDisplayShort(tem.joules, ElectricInfo.ElectricUnit.JOULES), 0xffffff, mouseX, mouseY);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -99,37 +99,30 @@ public abstract class GuiMachine extends GuiContainer {
 	}
 
 	protected void drawTextBox(List<String> text, List<Integer> colors, int mouseX, int mouseY) {
-		GL11.glPushMatrix();
-		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		if(!text.isEmpty()) {
-			int var5 = 0;
-			Iterator var6 = text.iterator();
-			while(var6.hasNext()) {
-				String var7 = (String)var6.next();
-				int var8 = this.fontRenderer.getStringWidth(var7);
-				if(var8 > var5)
-					var5 = var8;
+			int boxWidth = 0;
+			for(String line : text) {
+				int lineWidth = fontRenderer.getStringWidth(line);
+				if(lineWidth > boxWidth)
+					boxWidth = lineWidth;
 			}
 			mouseX += 12;
 			mouseY -= 12;
 			int var9 = 8;
 			if(text.size() > 1)
 				var9 += 2 + (text.size() - 1) * 10;
-			zLevel = 300.0F;
-			itemRenderer.zLevel = 300.0F;
 			int var10 = -267386864;
-			drawGradientRect(mouseX - 3, mouseY - 4, mouseX + var5 + 3, mouseY - 3, var10, var10);
-			drawGradientRect(mouseX - 3, mouseY + var9 + 3, mouseX + var5 + 3, mouseY + var9 + 4, var10, var10);
-			drawGradientRect(mouseX - 3, mouseY - 3, mouseX + var5 + 3, mouseY + var9 + 3, var10, var10);
+			drawGradientRect(mouseX - 3, mouseY - 4, mouseX + boxWidth + 3, mouseY - 3, var10, var10);
+			drawGradientRect(mouseX - 3, mouseY + var9 + 3, mouseX + boxWidth + 3, mouseY + var9 + 4, var10, var10);
+			drawGradientRect(mouseX - 3, mouseY - 3, mouseX + boxWidth + 3, mouseY + var9 + 3, var10, var10);
 			drawGradientRect(mouseX - 4, mouseY - 3, mouseX - 3, mouseY + var9 + 3, var10, var10);
-			drawGradientRect(mouseX + var5 + 3, mouseY - 3, mouseX + var5 + 4, mouseY + var9 + 3, var10, var10);
+			drawGradientRect(mouseX + boxWidth + 3, mouseY - 3, mouseX + boxWidth + 4, mouseY + var9 + 3, var10, var10);
 			int var11 = 1347420415;
 			int var12 = (var11 & 16711422) >> 1 | var11 & -16777216;
 			drawGradientRect(mouseX - 3, mouseY - 3 + 1, mouseX - 3 + 1, mouseY + var9 + 3 - 1, var11, var12);
-			drawGradientRect(mouseX + var5 + 2, mouseY - 3 + 1, mouseX + var5 + 3, mouseY + var9 + 3 - 1, var11, var12);
-			drawGradientRect(mouseX - 3, mouseY - 3, mouseX + var5 + 3, mouseY - 3 + 1, var11, var11);
-			drawGradientRect(mouseX - 3, mouseY + var9 + 2, mouseX + var5 + 3, mouseY + var9 + 3, var12, var12);
+			drawGradientRect(mouseX + boxWidth + 2, mouseY - 3 + 1, mouseX + boxWidth + 3, mouseY + var9 + 3 - 1, var11, var12);
+			drawGradientRect(mouseX - 3, mouseY - 3, mouseX + boxWidth + 3, mouseY - 3 + 1, var11, var11);
+			drawGradientRect(mouseX - 3, mouseY + var9 + 2, mouseX + boxWidth + 3, mouseY + var9 + 3, var12, var12);
 			for(int i = 0; i < text.size(); i++) {
 				fontRenderer.drawStringWithShadow(text.get(i), mouseX, mouseY, colors.get(i));
 				if(i == 0)
@@ -139,7 +132,6 @@ public abstract class GuiMachine extends GuiContainer {
 			zLevel = 0.0F;
 			itemRenderer.zLevel = 0.0F;
 		}
-		GL11.glPopMatrix();
 	}
 
 	protected void bindTexture(String texture) {
