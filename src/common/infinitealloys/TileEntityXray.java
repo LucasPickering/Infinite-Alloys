@@ -21,6 +21,7 @@ public class TileEntityXray extends TileEntityMachine {
 	public TileEntityXray() {
 		super(1);
 		inventoryStacks = new ItemStack[2];
+		stackLimit = 1;
 		range = 10;
 		lastSearch = new Point(0, 0, 0);
 	}
@@ -35,6 +36,16 @@ public class TileEntityXray extends TileEntityMachine {
 
 	public static boolean isDetectable(ItemStack block) {
 		return detectables.containsKey(block.itemID + "@" + block.getItemDamage());
+	}
+
+	@Override
+	public String getInvName() {
+		return "X-ray";
+	}
+
+	@Override
+	public int getSizeInventorySide(ForgeDirection side) {
+		return 1;
 	}
 
 	@Override
@@ -74,17 +85,28 @@ public class TileEntityXray extends TileEntityMachine {
 	}
 
 	@Override
-	public String getInvName() {
-		return "X-ray";
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 1;
-	}
-
-	@Override
 	protected void updateUpgrades() {
+		if(hasUpgrade(SPEED2))
+			ticksToProcess = 500;
+		else if(hasUpgrade(SPEED1))
+			ticksToProcess = 750;
+		else
+			ticksToProcess = 1000;
+
+		if(hasUpgrade(EFFICIENCY2))
+			joulesUsedPerTick = 1800D;
+		else if(hasUpgrade(EFFICIENCY1))
+			joulesUsedPerTick = 2700D;
+		else
+			joulesUsedPerTick = 3600D;
+
+		if(hasUpgrade(RANGE2))
+			range = 20;
+		else if(hasUpgrade(RANGE1))
+			range = 15;
+		else
+			range = 10;
+
 		canNetwork = hasUpgrade(WIRELESS);
 
 		if(hasUpgrade(ELECCAPACITY2))

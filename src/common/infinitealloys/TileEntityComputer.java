@@ -9,19 +9,13 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityComputer extends TileEntityMachine {
 
-	/**
-	 * That amount of machines that the computer can control
-	 */
+	/** That amount of machines that the computer can control */
 	public int networkCapacity;
 
-	/**
-	 * The range of the computer's wireless communication
-	 */
+	/** The range of the computer's wireless communication */
 	public int networkRange;
 
-	/**
-	 * 3D coords for each machine
-	 */
+	/** 3D coords for each machine */
 	public ArrayList<Point> networkCoords;
 
 	public TileEntityComputer(ForgeDirection facing) {
@@ -36,6 +30,34 @@ public class TileEntityComputer extends TileEntityMachine {
 		networkCapacity = 3;
 		networkRange = 10;
 		networkCoords = new ArrayList<Point>(networkCapacity);
+	}
+
+	@Override
+	public String getInvName() {
+		return "Computer";
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		for(int i = 0; i < tagCompound.getInteger("NetworkSize"); i++) {
+			int[] coords = tagCompound.getIntArray("Coords" + i);
+			networkCoords.add(new Point(coords[0], coords[1], coords[2]));
+		}
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		tagCompound.setInteger("NetworkSize", networkCoords.size());
+		for(int i = 0; i < networkCoords.size(); i++) {
+			Point coords = networkCoords.get(i);
+			tagCompound.setIntArray("Coords" + i, new int[] { (int)coords.x, (int)coords.y, (int)coords.z });
+		}
+	}
+
+	public void handlePacketDataFromServer(ArrayList networkCoords) {
+		this.networkCoords = networkCoords;
 	}
 
 	@Override
@@ -84,50 +106,22 @@ public class TileEntityComputer extends TileEntityMachine {
 		return false;
 	}
 
-	public void handlePacketDataFromServer(ArrayList networkCoords) {
-		this.networkCoords = networkCoords;
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tagCompound) {
-		super.readFromNBT(tagCompound);
-		for(int i = 0; i < tagCompound.getInteger("NetworkSize"); i++) {
-			int[] coords = tagCompound.getIntArray("Coords" + i);
-			networkCoords.add(new Point(coords[0], coords[1], coords[2]));
-		}
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound tagCompound) {
-		super.writeToNBT(tagCompound);
-		tagCompound.setInteger("NetworkSize", networkCoords.size());
-		for(int i = 0; i < networkCoords.size(); i++) {
-			Point coords = networkCoords.get(i);
-			tagCompound.setIntArray("Coords" + i, new int[] { (int)coords.x, (int)coords.y, (int)coords.z });
-		}
-	}
-
-	@Override
-	public String getInvName() {
-		return "Computer";
-	}
-
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(CAPACITY2))
-			networkCapacity = 10;
-		else if(hasUpgrade(CAPACITY1))
-			networkCapacity = 6;
+		if(hasUpgrade(SPEED2))
+			ticksToProcess = 100;
+		else if(hasUpgrade(SPEED1))
+			ticksToProcess = 150;
 		else
-			networkCapacity = 3;
-		
-		if(hasUpgrade(CAPACITY2))
-			networkCapacity = 10;
-		else if(hasUpgrade(CAPACITY1))
-			networkCapacity = 6;
+			ticksToProcess = 200;
+
+		if(hasUpgrade(EFFICIENCY2))
+			joulesUsedPerTick = 180D;
+		else if(hasUpgrade(EFFICIENCY1))
+			joulesUsedPerTick = 270D;
 		else
-			networkCapacity = 3;
-		
+			joulesUsedPerTick = 360D;
+
 		if(hasUpgrade(CAPACITY2))
 			networkCapacity = 10;
 		else if(hasUpgrade(CAPACITY1))

@@ -26,8 +26,8 @@
 	<entry key="upgrade.range1.name">Range I</entry>
 	<entry key="upgrade.range2.name">Range II</entry>
 	<entry key="upgrade.wireless.name">Wireless Networking</entry>
-	<entry key="upgrade.capacitance1.name">Energy Capacity I</entry>
-	<entry key="upgrade.capacitance2.name">Energy Capacity II</entry>
+	<entry key="upgrade.eleccapacity1.name">Energy Capacity I</entry>
+	<entry key="upgrade.eleccapacity2.name">Energy Capacity II</entry>
 	<entry key="tile.ore.name"> Ore</entry>
 	<entry key="machine.computer.name">Computer</entry>
 	<entry key="machine.metalforge.name">Metal Forge</entry>

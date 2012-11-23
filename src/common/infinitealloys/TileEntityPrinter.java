@@ -21,6 +21,25 @@ public class TileEntityPrinter extends TileEntityMachine {
 	}
 
 	@Override
+	public String getInvName() {
+		return "Printer";
+	}
+
+	@Override
+	public int getStartInventorySide(ForgeDirection side) {
+		if(side == ForgeDirection.UP)
+			return 0;
+		if(side == ForgeDirection.DOWN)
+			return 2;
+		return 1;
+	}
+
+	@Override
+	public int getSizeInventorySide(ForgeDirection side) {
+		return 1;
+	}
+
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		if(inventoryStacks[0] != null && inventoryStacks[1] != null && inventoryStacks[2] == null) {
@@ -33,11 +52,6 @@ public class TileEntityPrinter extends TileEntityMachine {
 		}
 	}
 
-	@Override
-	public String getInvName() {
-		return "Printer";
-	}
-
 	@SideOnly(Side.CLIENT)
 	public int getPrintProgressScaled(int i) {
 		return printProgress * i / ticksToPrint;
@@ -45,6 +59,20 @@ public class TileEntityPrinter extends TileEntityMachine {
 
 	@Override
 	protected void updateUpgrades() {
+		if(hasUpgrade(SPEED2))
+			ticksToProcess = 100;
+		else if(hasUpgrade(SPEED1))
+			ticksToProcess = 150;
+		else
+			ticksToProcess = 200;
+
+		if(hasUpgrade(EFFICIENCY2))
+			joulesUsedPerTick = 180D;
+		else if(hasUpgrade(EFFICIENCY1))
+			joulesUsedPerTick = 270D;
+		else
+			joulesUsedPerTick = 360D;
+
 		canNetwork = hasUpgrade(WIRELESS);
 
 		if(hasUpgrade(ELECCAPACITY2))

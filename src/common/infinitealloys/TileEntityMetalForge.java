@@ -34,6 +34,20 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	@Override
+	public int getStartInventorySide(ForgeDirection side) {
+		if(side == ForgeDirection.UP || side == ForgeDirection.DOWN)
+			return 10;
+		return 11;
+	}
+
+	@Override
+	public int getSizeInventorySide(ForgeDirection side) {
+		if(side == ForgeDirection.UP || side == ForgeDirection.DOWN)
+			return 1;
+		return 18;
+	}
+
+	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		for(int i = 0; i < recipeAmts.length; i++)
@@ -55,13 +69,24 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 		boolean invChanged = false;
-		joulesUsedPerTick = (double)getIngotsInRecipe() * 360D * joulesUseMult;
+		joulesUsedPerTick *= (double)getIngotsInRecipe() * 360D;
 		if(shouldBurn()) {
 			processProgress += (float)(getInventoryStackLimit() - getIngotsInRecipe() + 1);
 			joules -= joulesUsedPerTick;
 			if(processProgress >= ticksToProcess) {
 				processProgress = 0;
-				smeltItem();
+				byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
+				for(int slot : getSlotsWithIngot()) {
+					int ingotNum = getIngotNum(inventoryStacks[slot]);
+					int ingots = ingotsToRemove[ingotNum];
+					ingotsToRemove[ingotNum] -= Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize);
+					decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
+				}
+				ItemStack ingotResult = getIngotResult();
+				if(inventoryStacks[10] == null)
+					inventoryStacks[10] = ingotResult;
+				else if(inventoryStacks[10].getTagCompound().getInteger("alloy") == ingotResult.getTagCompound().getInteger("alloy"))
+					inventoryStacks[10].stackSize += ingotResult.stackSize;
 				invChanged = true;
 			}
 		}
@@ -71,20 +96,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			onInventoryChanged();
 		for(String playerName : playersUsing)
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEJoulesPacket(this), (Player)FMLCommonHandler.instance().getSidedDelegate().getServer().getConfigurationManager().getPlayerForUsername(playerName));
-	}
-
-	@Override
-	public int getStartInventorySide(ForgeDirection side) {
-		if(side == ForgeDirection.DOWN)
-			return 1;
-		if(side == ForgeDirection.UP)
-			return 0;
-		return 2;
-	}
-
-	@Override
-	public int getSizeInventorySide(ForgeDirection side) {
-		return 1;
 	}
 
 	private boolean shouldBurn() {
@@ -98,32 +109,15 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= 1));
 	}
 
-	private void smeltItem() {
-		byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
-		for(int slot : getSlotsWithIngot()) {
-			int ingotNum = getIngotNum(inventoryStacks[slot]);
-			int ingots = ingotsToRemove[ingotNum];
-			ingotsToRemove[ingotNum] -= Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize);
-			decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
-		}
-		ItemStack ingotResult = getIngotResult();
-		if(inventoryStacks[10] == null)
-			inventoryStacks[10] = ingotResult;
-		else if(inventoryStacks[10].getTagCompound().getInteger("alloy") == ingotResult.getTagCompound().getInteger("alloy"))
-			inventoryStacks[10].stackSize += ingotResult.stackSize;
-	}
-
 	public int getIngotNum(ItemStack ingot) {
 		if(ingot.itemID == InfiniteAlloys.ingot.shiftedIndex && ingot.getItemDamage() < References.metalCount)
 			return ingot.getItemDamage();
 		return -1;
 	}
 
-	/**
-	 * Return the resulting ingot for the smelted ingots
+	/** Return the resulting ingot for the smelted ingots
 	 * 
-	 * @return The resulting ingot.
-	 */
+	 * @return The resulting ingot. */
 	private ItemStack getIngotResult() {
 		int alloy = 0;
 		for(int i = 0; i < recipeAmts.length; i++)
@@ -173,11 +167,11 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			ticksToProcess = 12800;
 
 		if(hasUpgrade(EFFICIENCY2))
-			joulesUseMult = 0.5D;
+			joulesUsedPerTick = 180D;
 		else if(hasUpgrade(EFFICIENCY1))
-			joulesUseMult = 0.75D;
+			joulesUsedPerTick = 270D;
 		else
-			joulesUseMult = 1D;
+			joulesUsedPerTick = 360D;
 
 		if(hasUpgrade(CAPACITY2))
 			stackLimit = 48;

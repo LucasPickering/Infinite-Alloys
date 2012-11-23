@@ -29,6 +29,20 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	}
 
 	@Override
+	public int getStartInventorySide(ForgeDirection side) {
+		if(side == ForgeDirection.UP)
+			return 0;
+		if(side == ForgeDirection.DOWN)
+			return 2;
+		return 1;
+	}
+
+	@Override
+	public int getSizeInventorySide(ForgeDirection side) {
+		return 1;
+	}
+
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		boolean invChanged = false;
@@ -81,16 +95,18 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 
 	protected void updateUpgrades() {
 		if(hasUpgrade(SPEED2))
-			ticksToProcess = 2400;
+			ticksToProcess = 1800;
 		else if(hasUpgrade(SPEED1))
-			ticksToProcess = 3200;
+			ticksToProcess = 2700;
 		else
 			ticksToProcess = 3600;
 
-		if(hasUpgrade(EFFICIENCY1))
-			joulesUsedPerTick = 240;
 		if(hasUpgrade(EFFICIENCY2))
-			joulesUsedPerTick = 120;
+			joulesUsedPerTick = 180D;
+		else if(hasUpgrade(EFFICIENCY1))
+			joulesUsedPerTick = 270D;
+		else
+			joulesUsedPerTick = 360D;
 
 		canNetwork = hasUpgrade(WIRELESS);
 

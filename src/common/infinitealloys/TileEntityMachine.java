@@ -68,11 +68,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/** Amount of joules this machine consumes per tick while working */
 	protected double joulesUsedPerTick = 360D;
 
-	/** Multiplier for joule usage, used for efficiency upgrades */
-	protected double joulesUseMult = 1F;
-
 	/** Amount of ticks it takes for this machine to finish one of its processes */
-	protected int ticksToProcess = 2000;
+	protected int ticksToProcess = 200;
 
 	/** Amount of ticks this machine has been running its process for, when this reaches ticksToFinish it is done */
 	public int processProgress;
@@ -156,12 +153,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		upgrades = 0;
 	}
 
-	/**
-	 * Determines if the given itemstack is a valid upgrade for the machine
+	/** Determines if the given itemstack is a valid upgrade for the machine
 	 * 
 	 * @param upgrade
-	 * @return true if valid
-	 */
+	 * @return true if valid */
 	public boolean isUpgradeValid(ItemStack upgrade) {
 		int damage = upgrade.getItemDamage();
 		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex && (!hasPrereqUpgrade(upgrade) || hasUpgrade(damage >> 1)) && !hasUpgrade(damage) && validUpgrades.contains(damage);
@@ -173,32 +168,26 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/** Add the valid upgrades for each machine */
 	protected abstract void populateValidUpgrades();
 
-	/**
-	 * Does the machine have the upgrade
+	/** Does the machine have the upgrade
 	 * 
 	 * @param upgrade
-	 * @return true if the machine has the upgrade
-	 */
+	 * @return true if the machine has the upgrade */
 	public boolean hasUpgrade(int upgrade) {
 		return (upgrades & upgrade) == upgrade;
 	}
 
-	/**
-	 * Is the upgrade a prerequisite for another
+	/** Is the upgrade a prerequisite for another
 	 * 
 	 * @param upgrade
-	 * @return true if it is a prereq
-	 */
+	 * @return true if it is a prereq */
 	public boolean isPrereqUpgrade(ItemStack upgrade) {
 		return prereqUpgrades.contains(upgrade.getItemDamage());
 	}
 
-	/**
-	 * Does the upgrade require another to work?
+	/** Does the upgrade require another to work?
 	 * 
 	 * @param upgrade
-	 * @return true if it has a prereq
-	 */
+	 * @return true if it has a prereq */
 	public boolean hasPrereqUpgrade(ItemStack upgrade) {
 		return prereqNeedingUpgrades.contains(upgrade.getItemDamage());
 	}
@@ -229,8 +218,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		if(tagCompound.hasKey("ProcessTicks"))
-			processProgress = tagCompound.getInteger("ProcessTicks");
+		processProgress = tagCompound.getInteger("ProcessProgress");
 		upgrades = tagCompound.getShort("Upgrades");
 		front = ForgeDirection.getOrientation(tagCompound.getByte("Orientation"));
 		joules = tagCompound.getDouble("Joules");
@@ -247,8 +235,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		if(processProgress > 0)
-			tagCompound.setInteger("ProcessTicks", processProgress);
+		tagCompound.setInteger("ProcessProgress", processProgress);
 		tagCompound.setShort("Upgrades", (short)upgrades);
 		tagCompound.setByte("Orientation", (byte)front.ordinal());
 		tagCompound.setDouble("Joules", joules);
@@ -262,6 +249,16 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 			}
 		}
 		tagCompound.setTag("Items", nbttaglist);
+	}
+
+	@Override
+	public int getStartInventorySide(ForgeDirection side) {
+		return 0;
+	}
+
+	@Override
+	public int getSizeInventorySide(ForgeDirection side) {
+		return 0;
 	}
 
 	@Override
@@ -284,16 +281,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
 		return true;
-	}
-
-	@Override
-	public int getStartInventorySide(ForgeDirection side) {
-		return 0;
-	}
-
-	@Override
-	public int getSizeInventorySide(ForgeDirection side) {
-		return 0;
 	}
 
 	@Override
