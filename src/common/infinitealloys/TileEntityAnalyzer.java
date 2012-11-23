@@ -1,6 +1,7 @@
 package infinitealloys;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
@@ -8,16 +9,6 @@ import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
 
 public class TileEntityAnalyzer extends TileEntityMachine {
-
-	/**
-	 * Ticks it takes to finish analyzing one ingot
-	 */
-	public int ticksToAnalyze;
-
-	/**
-	 * The analyzing progress
-	 */
-	public int analysisProgress;
 
 	public TileEntityAnalyzer(ForgeDirection facing) {
 		this();
@@ -27,29 +18,14 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	public TileEntityAnalyzer() {
 		super(3);
 		inventoryStacks = new ItemStack[4];
-		ticksToAnalyze = 3600;
-		joulesUsedPerTick = 15;
+		stackLimit = 1;
+		ticksToProcess = 3600;
+		joulesUsedPerTick = 15D;
 	}
 
 	@Override
 	public String getInvName() {
 		return "Analyzer";
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tagCompound) {
-		super.readFromNBT(tagCompound);
-		analysisProgress = tagCompound.getShort("AnalysisProgress");
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound tagCompound) {
-		super.writeToNBT(tagCompound);
-		tagCompound.setShort("AnalysisProgress", (short)analysisProgress);
-	}
-
-	public void handlePacketDataFromServer(int analysisProgress) {
-		this.analysisProgress = analysisProgress;
 	}
 
 	@Override
@@ -59,25 +35,35 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 		if(inventoryStacks[0] != null && inventoryStacks[1] == null) {
 			if(joules >= joulesUsedPerTick) {
 				joules -= joulesUsedPerTick;
-				analysisProgress++;
-				if(analysisProgress >= ticksToAnalyze) {
-					analysisProgress = 0;
+				processProgress++;
+				if(processProgress >= ticksToProcess) {
+					processProgress = 0;
 					if(inventoryStacks[2] != null) {
-						ArrayList<Integer> validAlloys = new ArrayList<Integer>();
-						for(int validAlloy : InfiniteAlloys.instance.worldData.validAlloys)
-							validAlloys.add(validAlloy);
 						int alloy = inventoryStacks[0].getTagCompound().getInteger("alloy");
 						NBTTagCompound tagCompound;
-						ArrayList<Integer> savedAlloys = new ArrayList<Integer>();
-						if(inventoryStacks[2].hasTagCompound()) {
+
+						// Create two arrays for storing the saved alloys.
+						// What's in there, and a copy to edit
+						int[] oldSave = new int[0];
+						int[] newSave;
+
+						// init the compounds
+						if(inventoryStacks[2].hasTagCompound())
 							tagCompound = inventoryStacks[2].getTagCompound();
-							for(int savedAlloy : tagCompound.getIntArray("savedAlloys"))
-								savedAlloys.add(savedAlloy);
-						}
 						else
 							tagCompound = new NBTTagCompound();
-						if(savedAlloys.size() < References.alloyBookMaxSaves || validAlloys.contains(alloy) && inventoryStacks[2] != null) {
-							savedAlloys.add(alloy);
+
+						// If it has a save, set oldSave to it
+						if(tagCompound.hasKey("savedAlloys"))
+							oldSave = tagCompound.getIntArray("savedAlloys");
+
+						// Make new save a copy of oldSave with one more spot
+						newSave = Arrays.copyOf(oldSave, oldSave.length + 1);
+
+						// Add the new alloy to newSave if there is room and set the compound to newSave
+						if(newSave.length < References.alloyBookMaxSaves) {
+							newSave[newSave.length - 1] = alloy;
+							tagCompound.setIntArray("savedAlloys", newSave);
 							inventoryStacks[2].setTagCompound(tagCompound);
 						}
 					}
@@ -88,40 +74,32 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 			}
 		}
 		else
-			analysisProgress = 0;
+			processProgress = 0;
 		if(invChanged)
 			onInventoryChanged();
 	}
 
-	@SideOnly(Side.CLIENT)
-	/**
-	 * Get a scaled analysis progress, used for the gui progress bar
-	 * @param i Scale
-	 * @return Scaled progress
-	 */
-	public int getAnalysisProgressScaled(int i) {
-		return analysisProgress * i / ticksToAnalyze;
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 1;
-	}
-
-	/**
-	 * Updates the settings based on the speed, capacity, and efficiency
-	 * upgrades.
-	 */
 	protected void updateUpgrades() {
-		if(hasUpgrade(SPEED1))
-			ticksToAnalyze = 2400;
 		if(hasUpgrade(SPEED2))
-			ticksToAnalyze = 3200;
+			ticksToProcess = 2400;
+		else if(hasUpgrade(SPEED1))
+			ticksToProcess = 3200;
+		else
+			ticksToProcess = 3600;
+
 		if(hasUpgrade(EFFICIENCY1))
 			joulesUsedPerTick = 240;
 		if(hasUpgrade(EFFICIENCY2))
 			joulesUsedPerTick = 120;
+
 		canNetwork = hasUpgrade(WIRELESS);
+
+		if(hasUpgrade(ELECCAPACITY2))
+			maxJoules = 1000000D;
+		else if(hasUpgrade(ELECCAPACITY1))
+			maxJoules = 750000D;
+		else
+			maxJoules = 500000D;
 	}
 
 	@Override
@@ -131,5 +109,7 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 		validUpgrades.add(EFFICIENCY1);
 		validUpgrades.add(EFFICIENCY2);
 		validUpgrades.add(WIRELESS);
+		validUpgrades.add(ELECCAPACITY1);
+		validUpgrades.add(ELECCAPACITY2);
 	}
 }

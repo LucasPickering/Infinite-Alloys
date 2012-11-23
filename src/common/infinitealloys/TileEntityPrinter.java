@@ -38,14 +38,21 @@ public class TileEntityPrinter extends TileEntityMachine {
 		return "Printer";
 	}
 
-	@Override
-	protected void updateUpgrades() {
-		canNetwork = hasUpgrade(WIRELESS);
-	}
-
 	@SideOnly(Side.CLIENT)
 	public int getPrintProgressScaled(int i) {
 		return printProgress * i / ticksToPrint;
+	}
+
+	@Override
+	protected void updateUpgrades() {
+		canNetwork = hasUpgrade(WIRELESS);
+
+		if(hasUpgrade(ELECCAPACITY2))
+			maxJoules = 1000000D;
+		else if(hasUpgrade(ELECCAPACITY1))
+			maxJoules = 750000D;
+		else
+			maxJoules = 500000D;
 	}
 
 	@Override

@@ -29,9 +29,6 @@ public class ContainerMachine extends Container {
 		return true;
 	}
 
-	/**
-	 * transferStackInSlot
-	 */
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack itemstack = null;

@@ -40,42 +40,44 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public ArrayList<String> playersUsing = new ArrayList<String>();
 	public ItemStack[] inventoryStacks;
 
-	/**
-	 * A list of upgrades that are prerequisites for other upgrades
-	 */
+	/** A list of upgrades that are prerequisites for other upgrades */
 	private ArrayList<Integer> prereqUpgrades = new ArrayList<Integer>();
 
-	/**
-	 * A list of upgrades that require other upgrades to work
-	 */
+	/** A list of upgrades that require other upgrades to work */
 	private ArrayList<Integer> prereqNeedingUpgrades = new ArrayList<Integer>();
 
-	/**
-	 * A binary integer used to determine what upgrades have been installed
-	 */
+	/** A binary integer used to determine what upgrades have been installed */
 	private int upgrades;
 
-	/**
-	 * A list of the upgrades that can be used on this machine
-	 */
+	/** A list of the upgrades that can be used on this machine */
 	protected ArrayList<Integer> validUpgrades = new ArrayList<Integer>();
 	public ForgeDirection front;
 
-	/**
-	 * The index of the slot that upgrades are placed in
-	 */
+	/** The index of the slot that upgrades are placed in */
 	public int upgradeSlotIndex = 0;
 
-	/**
-	 * True if this machine can be accessed wirelessly
-	 */
+	/** True if this machine can be accessed wirelessly */
 	public boolean canNetwork;
 
+	/** Maximum amount of joules this machine can store */
 	protected double maxJoules = 500000D;
+
+	/** Amount of joules stored in the machine currently */
 	public double joules = 0D;
+
+	/** Amount of joules this machine consumes per tick while working */
 	protected double joulesUsedPerTick = 360D;
-	protected double joulesUseMult = 1D;
-	protected float speedMult = 1F;
+
+	/** Multiplier for joule usage, used for efficiency upgrades */
+	protected double joulesUseMult = 1F;
+
+	/** Amount of ticks it takes for this machine to finish one of its processes */
+	protected int ticksToProcess = 2000;
+
+	/** Amount of ticks this machine has been running its process for, when this reaches ticksToFinish it is done */
+	public int processProgress;
+
+	/** The size limit for one stack in this machine */
 	protected int stackLimit = 64;
 
 	public TileEntityMachine(int index) {
@@ -111,9 +113,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return upgrades;
 	}
 
-	/**
-	 * Drops the items in the block's inventory
-	 */
+	/** Drops the items in the block's inventory */
 	public void dropItems() {
 		for(int i = 0; i < getSizeInventory(); i++) {
 			ItemStack stack = getStackInSlot(i);
@@ -138,9 +138,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		}
 	}
 
-	/**
-	 * Drops the upgrades that were used on the block as items
-	 */
+	/** Drops the upgrades that were used on the block as items */
 	public void dropUpgrades() {
 		for(int i = 0; i <= References.upgradeCount; i++) {
 			int upg = (int)Math.pow(2D, i);
@@ -169,14 +167,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex && (!hasPrereqUpgrade(upgrade) || hasUpgrade(damage >> 1)) && !hasUpgrade(damage) && validUpgrades.contains(damage);
 	}
 
-	/**
-	 * Updates all values that are dependent on upgrades
-	 */
+	/** Updates all values that are dependent on upgrades */
 	protected abstract void updateUpgrades();
 
-	/**
-	 * Add the valid upgrades for each machine
-	 */
+	/** Add the valid upgrades for each machine */
 	protected abstract void populateValidUpgrades();
 
 	/**
@@ -210,6 +204,16 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@SideOnly(Side.CLIENT)
+	/**
+	 * Get a scaled progress, used for the gui progress bar
+	 * @param i Scale
+	 * @return Scaled progress
+	 */
+	public int getProcessProgressScaled(int i) {
+		return processProgress * i / ticksToProcess;
+	}
+
+	@SideOnly(Side.CLIENT)
 	public int getJoulesScaled(int scale) {
 		return (int)(joules * scale / maxJoules);
 	}
@@ -225,6 +229,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
+		if(tagCompound.hasKey("ProcessTicks"))
+			processProgress = tagCompound.getInteger("ProcessTicks");
 		upgrades = tagCompound.getShort("Upgrades");
 		front = ForgeDirection.getOrientation(tagCompound.getByte("Orientation"));
 		joules = tagCompound.getDouble("Joules");
@@ -241,6 +247,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
+		if(processProgress > 0)
+			tagCompound.setInteger("ProcessTicks", processProgress);
 		tagCompound.setShort("Upgrades", (short)upgrades);
 		tagCompound.setByte("Orientation", (byte)front.ordinal());
 		tagCompound.setDouble("Joules", joules);
@@ -261,7 +269,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return PacketHandler.getTEPacketToClient(this);
 	}
 
-	public void handlePacketDataFromServer(byte orientation, int upgrades, double joules) {
+	public void handlePacketDataFromServer(int processProgress, byte orientation, int upgrades, double joules) {
+		this.processProgress = processProgress;
 		front = ForgeDirection.getOrientation(orientation);
 		this.upgrades = upgrades;
 		this.joules = joules;
@@ -332,12 +341,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 	@Override
 	public void onReceive(TileEntity sender, double amps, double voltage, ForgeDirection side) {
@@ -355,8 +362,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@Override
-	public void onDisable(int duration) {
-	}
+	public void onDisable(int duration) {}
 
 	@Override
 	public boolean isDisabled() {

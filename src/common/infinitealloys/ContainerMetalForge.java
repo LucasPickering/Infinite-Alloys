@@ -76,7 +76,7 @@ public class ContainerMetalForge extends ContainerMachine {
 	@Override
 	public ItemStack slotClick(int slot, int mouseButton, int i, EntityPlayer player) {
 		if((mouseButton == 0 || mouseButton == 1) && slot >= 1 && slot <= 8) {
-			inventory.smeltProgress = 0;
+			inventory.processProgress = 0;
 			if(mouseButton == 0)
 				inventory.recipeAmts[slot - 1] = (byte)Math.min(inventory.recipeAmts[slot - 1] + 1, References.alloyRadix - 1);
 			else if(mouseButton == 1)

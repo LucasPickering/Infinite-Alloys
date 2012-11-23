@@ -38,7 +38,7 @@ public class GuiMetalForge extends GuiMachine {
 		bindTexture("metalforge");
 		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 		bindTexture("extras");
-		drawTexturedModalRect(topLeft.x + 113, topLeft.y + 53, PROGRESS_ARROW.x, PROGRESS_ARROW.y, temf.getSmeltProgressScaled(PROGRESS_ARROW.width) + 1, PROGRESS_ARROW.height);
+		drawTexturedModalRect(topLeft.x + 113, topLeft.y + 53, PROGRESS_ARROW.x, PROGRESS_ARROW.y, temf.getProcessProgressScaled(PROGRESS_ARROW.width) + 1, PROGRESS_ARROW.height);
 		for(int i = 0; i < References.metalCount; i++)
 			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.ingot, 1, i), topLeft.x + i % 4 * 18 + 34, topLeft.y + i / 4 * 18 + 38);
 	}

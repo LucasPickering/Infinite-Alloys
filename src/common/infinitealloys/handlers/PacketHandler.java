@@ -43,10 +43,11 @@ public class PacketHandler implements IPacketHandler {
 			case TE_SERVER_TO_CLIENT:
 				TileEntity te = world.getBlockTileEntity(x, y, z);
 				if(te instanceof TileEntityMachine) {
-					int upgrades = data.readInt();
+					int processProgress = data.readInt();
 					byte orientation = data.readByte();
+					int upgrades = data.readInt();
 					double joules = data.readDouble();
-					((TileEntityMachine)te).handlePacketDataFromServer(orientation, upgrades, joules);
+					((TileEntityMachine)te).handlePacketDataFromServer(processProgress, orientation, upgrades, joules);
 					if(te instanceof TileEntityComputer) {
 						TileEntityComputer tec = (TileEntityComputer)te;
 						tec.networkCoords.clear();
@@ -59,17 +60,10 @@ public class PacketHandler implements IPacketHandler {
 						}
 					}
 					if(te instanceof TileEntityMetalForge) {
-						int smeltProgress = data.readShort();
 						byte[] recipeAmts = new byte[References.metalCount];
 						for(int i = 0; i < recipeAmts.length; i++)
 							recipeAmts[i] = data.readByte();
-						((TileEntityMetalForge)te).handlePacketDataFromServer(smeltProgress, recipeAmts);
-					}
-					if(te instanceof TileEntityAnalyzer) {
-						int analysisProgress = data.readShort();
-						int ticksSinceStart = data.readShort();
-						int ticksSinceFinish = data.readShort();
-						((TileEntityAnalyzer)te).handlePacketDataFromServer(analysisProgress);
+						((TileEntityMetalForge)te).handlePacketDataFromServer(recipeAmts);
 					}
 				}
 				break;
@@ -107,8 +101,9 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(tem.xCoord);
 			dos.writeInt(tem.yCoord);
 			dos.writeInt(tem.zCoord);
-			dos.writeInt(tem.getUpgrades());
+			dos.writeInt(tem.processProgress);
 			dos.writeByte(tem.front.ordinal());
+			dos.writeInt(tem.getUpgrades());
 			dos.writeDouble(tem.joules);
 			if(tem instanceof TileEntityComputer) {
 				TileEntityComputer tec = (TileEntityComputer)tem;
@@ -121,13 +116,8 @@ public class PacketHandler implements IPacketHandler {
 			}
 			else if(tem instanceof TileEntityMetalForge) {
 				TileEntityMetalForge temf = (TileEntityMetalForge)tem;
-				dos.writeShort(temf.smeltProgress);
 				for(byte amt : temf.recipeAmts)
 					dos.writeByte(amt);
-			}
-			else if(tem instanceof TileEntityAnalyzer) {
-				TileEntityAnalyzer tea = (TileEntityAnalyzer)tem;
-				dos.writeShort(tea.analysisProgress);
 			}
 		}
 		catch(IOException e) {

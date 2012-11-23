@@ -14,24 +14,7 @@ import cpw.mods.fml.common.network.Player;
 
 public class TileEntityMetalForge extends TileEntityMachine {
 
-	/**
-	 * The multiplier for the fuel burn time
-	 */
-	public float fuelBonus = 1F;
-
-	/**
-	 * Ticks it takes to finish smelting one ingot
-	 */
-	private final int ticksToFinish = 12800;
-
-	/**
-	 * The smelting progress
-	 */
-	public int smeltProgress;
-
-	/**
-	 * An array for the "stack sizes" of each ingot in the recipe setting
-	 */
+	/** An array for the "stack sizes" of each ingot in the recipe setting */
 	public byte[] recipeAmts = new byte[References.metalCount];
 
 	public TileEntityMetalForge(ForgeDirection facing) {
@@ -42,6 +25,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	public TileEntityMetalForge() {
 		super(9);
 		inventoryStacks = new ItemStack[29];
+		ticksToProcess = 12800;
 	}
 
 	@Override
@@ -52,7 +36,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		smeltProgress = tagCompound.getShort("SmeltProgress");
 		for(int i = 0; i < recipeAmts.length; i++)
 			recipeAmts[i] = tagCompound.getByte("Recipe Amount " + i);
 	}
@@ -60,13 +43,11 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		tagCompound.setShort("SmeltProgress", (short)smeltProgress);
 		for(int i = 0; i < recipeAmts.length; i++)
 			tagCompound.setByte("Recipe Amount " + i, recipeAmts[i]);
 	}
 
-	public void handlePacketDataFromServer(int smeltProgress, byte[] recipeAmts) {
-		this.smeltProgress = smeltProgress;
+	public void handlePacketDataFromServer(byte[] recipeAmts) {
 		this.recipeAmts = recipeAmts;
 	}
 
@@ -76,16 +57,16 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		boolean invChanged = false;
 		joulesUsedPerTick = (double)getIngotsInRecipe() * 360D * joulesUseMult;
 		if(shouldBurn()) {
-			smeltProgress += (float)(getInventoryStackLimit() - getIngotsInRecipe() + 1) * speedMult;
+			processProgress += (float)(getInventoryStackLimit() - getIngotsInRecipe() + 1);
 			joules -= joulesUsedPerTick;
-			if(smeltProgress >= ticksToFinish) {
-				smeltProgress = 0;
+			if(processProgress >= ticksToProcess) {
+				processProgress = 0;
 				smeltItem();
 				invChanged = true;
 			}
 		}
 		else
-			smeltProgress = 0;
+			processProgress = 0;
 		if(invChanged)
 			onInventoryChanged();
 		for(String playerName : playersUsing)
@@ -117,43 +98,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick && (inventoryStacks[10] == null || (inventoryStacks[10].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[10].stackSize >= 1));
 	}
 
-	/**
-	 * Updates the settings based on the speed, capacity, and efficiency
-	 * upgrades.
-	 */
-	protected void updateUpgrades() {
-		if(hasUpgrade(SPEED2))
-			speedMult = 2F;
-		else if(hasUpgrade(SPEED1))
-			speedMult = 1.5F;
-		else
-			speedMult = 1F;
-
-		if(hasUpgrade(EFFICIENCY2))
-			joulesUseMult = 0.5D;
-		else if(hasUpgrade(EFFICIENCY1))
-			joulesUseMult = 0.75D;
-		else
-			joulesUseMult = 1D;
-
-		if(hasUpgrade(CAPACITY2))
-			stackLimit = 48;
-		else if(hasUpgrade(CAPACITY1))
-			stackLimit = 64;
-		else
-			stackLimit = 32;
-
-		canNetwork = hasUpgrade(WIRELESS);
-
-		if(hasUpgrade(ELECCAPACITY2))
-			maxJoules = 1000000D;
-		else if(hasUpgrade(ELECCAPACITY1))
-			maxJoules = 750000D;
-		else
-			maxJoules = 500000D;
-
-	}
-
 	private void smeltItem() {
 		byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
 		for(int slot : getSlotsWithIngot()) {
@@ -167,16 +111,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			inventoryStacks[10] = ingotResult;
 		else if(inventoryStacks[10].getTagCompound().getInteger("alloy") == ingotResult.getTagCompound().getInteger("alloy"))
 			inventoryStacks[10].stackSize += ingotResult.stackSize;
-	}
-
-	@SideOnly(Side.CLIENT)
-	/**
-	 * Get a scaled cook progress, used for the gui progress bar
-	 * @param i Scale
-	 * @return Scaled progress
-	 */
-	public int getSmeltProgressScaled(int i) {
-		return smeltProgress * i / ticksToFinish;
 	}
 
 	public int getIngotNum(ItemStack ingot) {
@@ -228,6 +162,39 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		for(int amt : recipeAmts)
 			ingots += amt;
 		return ingots;
+	}
+
+	protected void updateUpgrades() {
+		if(hasUpgrade(SPEED2))
+			ticksToProcess = 6400;
+		else if(hasUpgrade(SPEED1))
+			ticksToProcess = 9600;
+		else
+			ticksToProcess = 12800;
+
+		if(hasUpgrade(EFFICIENCY2))
+			joulesUseMult = 0.5D;
+		else if(hasUpgrade(EFFICIENCY1))
+			joulesUseMult = 0.75D;
+		else
+			joulesUseMult = 1D;
+
+		if(hasUpgrade(CAPACITY2))
+			stackLimit = 48;
+		else if(hasUpgrade(CAPACITY1))
+			stackLimit = 64;
+		else
+			stackLimit = 32;
+
+		canNetwork = hasUpgrade(WIRELESS);
+
+		if(hasUpgrade(ELECCAPACITY2))
+			maxJoules = 1000000D;
+		else if(hasUpgrade(ELECCAPACITY1))
+			maxJoules = 750000D;
+		else
+			maxJoules = 500000D;
+
 	}
 
 	@Override

@@ -69,7 +69,7 @@ public class TileEntityComputer extends TileEntityMachine {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Machine out of range");
 		}
-		else if(worldObj.getBlockId(machX, machY,machZ) != InfiniteAlloys.machine.blockID) {
+		else if(worldObj.getBlockId(machX, machY, machZ) != InfiniteAlloys.machine.blockID) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Can only add machines");
 		}
@@ -114,14 +114,40 @@ public class TileEntityComputer extends TileEntityMachine {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(CAPACITY1))
-			networkCapacity = 6;
 		if(hasUpgrade(CAPACITY2))
 			networkCapacity = 10;
-		if(hasUpgrade(RANGE1))
-			networkRange = 15;
+		else if(hasUpgrade(CAPACITY1))
+			networkCapacity = 6;
+		else
+			networkCapacity = 3;
+		
+		if(hasUpgrade(CAPACITY2))
+			networkCapacity = 10;
+		else if(hasUpgrade(CAPACITY1))
+			networkCapacity = 6;
+		else
+			networkCapacity = 3;
+		
+		if(hasUpgrade(CAPACITY2))
+			networkCapacity = 10;
+		else if(hasUpgrade(CAPACITY1))
+			networkCapacity = 6;
+		else
+			networkCapacity = 3;
+
 		if(hasUpgrade(RANGE2))
 			networkRange = 20;
+		else if(hasUpgrade(RANGE1))
+			networkRange = 15;
+		else
+			networkRange = 10;
+
+		if(hasUpgrade(ELECCAPACITY2))
+			maxJoules = 1000000D;
+		else if(hasUpgrade(ELECCAPACITY1))
+			maxJoules = 750000D;
+		else
+			maxJoules = 500000D;
 	}
 
 	@Override

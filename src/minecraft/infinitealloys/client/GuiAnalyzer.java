@@ -19,7 +19,7 @@ public class GuiAnalyzer extends GuiMachine {
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		bindTexture("analyzer");
 		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
-		drawTexturedModalRect(topLeft.x + 38, topLeft.y + 57, 0, 166, tea.getAnalysisProgressScaled(106) + 1, 18);
+		drawTexturedModalRect(topLeft.x + 38, topLeft.y + 57, 0, 166, tea.getProcessProgressScaled(106) + 1, 18);
 		if(tea.inventoryStacks[1] != null) {
 			int currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");
 			int nearestValidAlloy = 2147483647;

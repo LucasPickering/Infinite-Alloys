@@ -18,7 +18,6 @@ public class TileEntityXray extends TileEntityMachine {
 		front = facing;
 	}
 
-
 	public TileEntityXray() {
 		super(1);
 		inventoryStacks = new ItemStack[2];
@@ -87,6 +86,13 @@ public class TileEntityXray extends TileEntityMachine {
 	@Override
 	protected void updateUpgrades() {
 		canNetwork = hasUpgrade(WIRELESS);
+
+		if(hasUpgrade(ELECCAPACITY2))
+			maxJoules = 1000000D;
+		else if(hasUpgrade(ELECCAPACITY1))
+			maxJoules = 750000D;
+		else
+			maxJoules = 500000D;
 	}
 
 	@Override

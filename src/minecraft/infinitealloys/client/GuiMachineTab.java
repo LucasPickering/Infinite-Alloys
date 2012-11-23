@@ -27,9 +27,7 @@ public class GuiMachineTab extends GuiScreen {
 		height = 20;
 	}
 
-	/**
-	 * Draws this button to the screen.
-	 */
+	/** Draws this button to the screen. */
 	public void drawButton(Minecraft mc) {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/extras.png"));
