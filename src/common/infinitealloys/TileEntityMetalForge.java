@@ -16,6 +16,8 @@ public class TileEntityMetalForge extends TileEntityMachine {
 
 	/** An array for the "stack sizes" of each ingot in the recipe setting */
 	public byte[] recipeAmts = new byte[References.metalCount];
+	public ArrayList<Integer> recipePresets = new ArrayList<Integer>();
+	public byte presetSelection = -1;
 
 	public TileEntityMetalForge(ForgeDirection facing) {
 		this();
@@ -50,18 +52,16 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		for(int i = 0; i < recipeAmts.length; i++)
-			recipeAmts[i] = tagCompound.getByte("Recipe Amount " + i);
+		recipeAmts = tagCompound.getByteArray("RecipeAmts");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		for(int i = 0; i < recipeAmts.length; i++)
-			tagCompound.setByte("Recipe Amount " + i, recipeAmts[i]);
+		tagCompound.setByteArray("RecipeAmts", recipeAmts);
 	}
 
-	public void handlePacketDataFromServer(byte[] recipeAmts) {
+	public void handlePacketData(byte[] recipeAmts) {
 		this.recipeAmts = recipeAmts;
 	}
 
@@ -69,7 +69,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 		boolean invChanged = false;
-		joulesUsedPerTick *= (double)getIngotsInRecipe() * 360D;
+		joulesUsedPerTick *= (double)getIngotsInRecipe();
 		if(shouldBurn()) {
 			processProgress += (float)(getInventoryStackLimit() - getIngotsInRecipe() + 1);
 			joules -= joulesUsedPerTick;
@@ -87,15 +87,16 @@ public class TileEntityMetalForge extends TileEntityMachine {
 					inventoryStacks[2] = ingotResult;
 				else if(inventoryStacks[2].getTagCompound().getInteger("alloy") == ingotResult.getTagCompound().getInteger("alloy"))
 					inventoryStacks[2].stackSize += ingotResult.stackSize;
+				ItemStack result = getIngotResult();
+				if(inventoryStacks[2] == null)
+					inventoryStacks[2] = result;
+				else if(inventoryStacks[2].getTagCompound().getInteger("alloy") == result.getTagCompound().getInteger("alloy"))
+					inventoryStacks[2].stackSize += result.stackSize;
 				invChanged = true;
 			}
 		}
-		else
-			processProgress = 0;
 		if(invChanged)
 			onInventoryChanged();
-		for(String playerName : playersUsing)
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEJoulesPacket(this), (Player)FMLCommonHandler.instance().getSidedDelegate().getServer().getConfigurationManager().getPlayerForUsername(playerName));
 	}
 
 	private boolean shouldBurn() {
@@ -106,6 +107,8 @@ public class TileEntityMetalForge extends TileEntityMachine {
 				typesInRecipe++;
 		for(int i = 0; i < getIngotAmts().length; i++)
 			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
+		if(sufficientIngots.contains(false))
+			processProgress = 0;
 		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick && (inventoryStacks[2] == null || (inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1));
 	}
 
@@ -126,14 +129,16 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		tagCompound.setInteger("alloy", alloy);
 		result.setTagCompound(tagCompound);
-		int[] validAlloys = InfiniteAlloys.instance.worldData.validAlloys;
-		for(int i = 0; i < validAlloys.length; i++) {
-			if(alloy == validAlloys[i]) {
-				result.setItemDamage(i + 1);
-				break;
-			}
-		}
+		result.setItemDamage(getDamageForAlloy(alloy));
 		return result;
+	}
+
+	public int getDamageForAlloy(int alloy) {
+		int[] validAlloys = InfiniteAlloys.instance.worldData.getValidAlloys();
+		for(int i = 0; i < validAlloys.length; i++)
+			if(alloy == validAlloys[i])
+				return i + 1;
+		return -1;
 	}
 
 	private ArrayList<Integer> getSlotsWithIngot() {
@@ -156,6 +161,18 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		for(int amt : recipeAmts)
 			ingots += amt;
 		return ingots;
+	}
+
+	public void updatePresets() {
+		if(inventoryStacks[0] != null) {
+			for(int alloy : inventoryStacks[0].getTagCompound().getIntArray("savedAlloys"))
+				for(int validAlloy : InfiniteAlloys.instance.worldData.getValidAlloys())
+					if(alloy == validAlloy)
+						recipePresets.add(alloy);
+		}
+		else
+			recipePresets.clear();
+		presetSelection = -1;
 	}
 
 	protected void updateUpgrades() {

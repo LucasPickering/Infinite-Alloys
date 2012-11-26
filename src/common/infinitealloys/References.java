@@ -11,10 +11,10 @@ public class References {
 	public static final int validAlloyCount = 6;
 
 	/** The min for each metal in each valid alloy */
-	public static final int[] validAlloyMins = { 00000011, 00001111, 00011111, 00111111, 11111111, 44444444 };
+	public static final int[] validAlloyMins = { 11, 1111, 11111, 111111, 11111111, 44444444 };
 
 	/** The max for each metal in each valid alloy */
-	public static final int[] validAlloyMaxes = { 00000055, 00024477, 356688, 557799, 44446688, 99999999 };
+	public static final int[] validAlloyMaxes = { 55, 24477, 356688, 557799, 44446688, 99999999 };
 
 	/** The radix of the number system used for the alloys */
 	public static final int alloyRadix = 10;

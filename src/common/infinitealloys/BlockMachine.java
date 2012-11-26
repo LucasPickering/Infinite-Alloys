@@ -3,6 +3,7 @@ package infinitealloys;
 import infinitealloys.handlers.PacketHandler;
 import java.util.List;
 import java.util.Random;
+import net.minecraft.client.Minecraft;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
@@ -83,7 +84,7 @@ public class BlockMachine extends BlockContainer {
 
 	public void openGui(World world, EntityPlayer player, TileEntityMachine tem, boolean fromComputer) {
 		if(!fromComputer && FMLCommonHandler.instance().getEffectiveSide().isClient())
-			TileEntityMachine.controller = null;
+			TileEntityMachine.controllers.put(Minecraft.getMinecraft().thePlayer.username, null);
 		if(tem instanceof TileEntityComputer) {
 			player.openGui(InfiniteAlloys.instance, 0, world, tem.xCoord, tem.yCoord, tem.zCoord);
 			if(FMLCommonHandler.instance().getEffectiveSide().isServer()) {

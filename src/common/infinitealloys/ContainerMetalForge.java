@@ -15,6 +15,9 @@ public class ContainerMetalForge extends ContainerMachine {
 		addSlotToContainer(new SlotMetalForge(inventory, 0, 10, 47));
 		addSlotToContainer(new SlotUpgrade(inventory, 1, 148, 8));
 		addSlotToContainer(new SlotMetalForge(inventory, 2, 148, 46));
+		addSlotToContainer(new SlotMetalForge(inventory, 0, 8, 52));
+		addSlotToContainer(new SlotUpgrade(inventory, 1, 148, 8));
+		addSlotToContainer(new SlotMetalForge(inventory, 2, 148, 52));
 		for(int y = 0; y < 2; y++)
 			for(int x = 0; x < 9; x++)
 				addSlotToContainer(new SlotMetalForge(inventory, y * 9 + x + 3, x * 18 + 8, y * 18 + 82));

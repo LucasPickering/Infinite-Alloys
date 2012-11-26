@@ -24,8 +24,8 @@ public class GuiAnalyzer extends GuiMachine {
 			int currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");
 			int nearestValidAlloy = Integer.MAX_VALUE;
 			for(int i = 0; i < References.validAlloyCount; i++)
-				if(getAlloyDiff(currentAlloy, nearestValidAlloy) > getAlloyDiff(currentAlloy, InfiniteAlloys.instance.worldData.validAlloys[i]))
-					nearestValidAlloy = InfiniteAlloys.instance.worldData.validAlloys[i];
+				if(getAlloyDiff(currentAlloy, nearestValidAlloy) > getAlloyDiff(currentAlloy, InfiniteAlloys.instance.worldData.getValidAlloys()[i]))
+					nearestValidAlloy = InfiniteAlloys.instance.worldData.getValidAlloys()[i];
 			for(int i = 0; i < References.metalCount; i++) {
 				int currentValue = InfiniteAlloys.intAtPosRadix(10, References.metalCount, currentAlloy, i);
 				int nearestValue = InfiniteAlloys.intAtPosRadix(10, References.metalCount, nearestValidAlloy, i);

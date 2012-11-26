@@ -15,8 +15,11 @@ import net.minecraft.src.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 import universalelectricity.core.implement.IElectricityReceiver;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 
 public abstract class TileEntityMachine extends TileEntity implements ISidedInventory, IElectricityReceiver {
 
@@ -32,9 +35,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public static final int ELECCAPACITY1 = 512;
 	public static final int ELECCAPACITY2 = 1024;
 
+	/** The controlling computer for each player */
 	public static HashMap<String, Point> controllers = new HashMap<String, Point>();
-	@SideOnly(Side.CLIENT)
-	public static Point controller;
 
 	public Random random = new Random();
 	public ArrayList<String> playersUsing = new ArrayList<String>();
@@ -103,6 +105,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 			inventoryStacks[upgradeSlotIndex] = null;
 		}
 		updateUpgrades();
+		for(String playerName : playersUsing)
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEJoulesPacket(this), (Player)FMLCommonHandler.instance().getSidedDelegate().getServer().getConfigurationManager().getPlayerForUsername(playerName));
 		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -209,6 +213,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	public boolean coordsEquals(int x2, int y2, int z2) {
 		return xCoord == x2 && yCoord == y2 && zCoord == z2;
+	}
+
+	public static boolean isAlloyBook(ItemStack stack) {
+		return stack.itemID == InfiniteAlloys.alloyBook.shiftedIndex && stack.hasTagCompound();
 	}
 
 	public static boolean isBook(ItemStack stack) {

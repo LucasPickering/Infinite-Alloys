@@ -15,6 +15,13 @@ public class SlotMetalForge extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return slotIndex == 0 && TileEntityMachine.isBook(itemstack) || (slotIndex > 10 && ((TileEntityMetalForge)inventory).getIngotNum(itemstack) != -1);
+		return slotIndex == 0 && TileEntityMachine.isAlloyBook(itemstack) || (slotIndex > 2 && ((TileEntityMetalForge)inventory).getIngotNum(itemstack) != -1);
+	}
+
+	@Override
+	public void onSlotChanged() {
+		super.onSlotChanged();
+		if(slotIndex == 0)
+			((TileEntityMetalForge)inventory).updatePresets();
 	}
 }

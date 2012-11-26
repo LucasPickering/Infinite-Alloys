@@ -10,6 +10,7 @@ import infinitealloys.TileEntityMetalForge;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import net.minecraft.client.Minecraft;
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.INetworkManager;
@@ -25,10 +26,11 @@ import cpw.mods.fml.common.network.Player;
 public class PacketHandler implements IPacketHandler {
 
 	private static final int TE_SERVER_TO_CLIENT = 0;
-	private static final int TE_JOULES = 1;
-	private static final int TE_CONTROLLER = 2;
-	private static final int COMPUTER_ADD_MACHINE = 3;
-	private static final int OPEN_GUI = 4;
+	private static final int TE_CLIENT_TO_SERVER = 1;
+	private static final int TE_JOULES = 2;
+	private static final int TE_CONTROLLER = 3;
+	private static final int COMPUTER_ADD_MACHINE = 4;
+	private static final int OPEN_GUI = 5;
 
 	@Override
 	public void onPacketData(INetworkManager manager,
@@ -63,8 +65,17 @@ public class PacketHandler implements IPacketHandler {
 						byte[] recipeAmts = new byte[References.metalCount];
 						for(int i = 0; i < recipeAmts.length; i++)
 							recipeAmts[i] = data.readByte();
-						((TileEntityMetalForge)te).handlePacketDataFromServer(recipeAmts);
+						((TileEntityMetalForge)te).handlePacketData(recipeAmts);
 					}
+				}
+				break;
+			case TE_CLIENT_TO_SERVER:
+				te = world.getBlockTileEntity(x, y, z);
+				if(te instanceof TileEntityMetalForge) {
+					byte[] recipeAmts = new byte[References.metalCount];
+					for(int i = 0; i < recipeAmts.length; i++)
+						recipeAmts[i] = data.readByte();
+					((TileEntityMetalForge)te).handlePacketData(recipeAmts);
 				}
 				break;
 			case TE_JOULES:
@@ -76,7 +87,7 @@ public class PacketHandler implements IPacketHandler {
 				break;
 			case TE_CONTROLLER:
 				if(y >= 0)
-					TileEntityMachine.controller = new Point(x, y, z);
+					TileEntityMachine.controllers.put(Minecraft.getMinecraft().thePlayer.username, new Point(x, y, z));
 				break;
 			case COMPUTER_ADD_MACHINE:
 				te = world.getBlockTileEntity(x, y, z);
@@ -128,6 +139,27 @@ public class PacketHandler implements IPacketHandler {
 		return packet;
 	}
 
+	public static Packet getTEPacketToServer(TileEntityMachine tem) {
+		if(!(tem instanceof TileEntityMetalForge))
+			return null;
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		DataOutputStream dos = new DataOutputStream(bos);
+		try {
+			dos.writeInt(TE_CLIENT_TO_SERVER);
+			dos.writeInt(tem.xCoord);
+			dos.writeInt(tem.yCoord);
+			dos.writeInt(tem.zCoord);
+			for(byte amt : ((TileEntityMetalForge)tem).recipeAmts)
+				dos.writeByte(amt);
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
+		packet.length = bos.size();
+		return packet;
+	}
+
 	public static Packet getTEJoulesPacket(TileEntityMachine tem) {
 		return getPacket(TE_JOULES, tem.xCoord, tem.yCoord, tem.zCoord, tem.joules);
 	}
@@ -141,7 +173,7 @@ public class PacketHandler implements IPacketHandler {
 	}
 
 	public static Packet getComputerPacketAddMachine(int compX, int compY, int compZ, int machX, int machY, int machZ) {
-		return getPacket(OPEN_GUI, compX, compY, compZ, machX, machY, machZ);
+		return getPacket(COMPUTER_ADD_MACHINE, compX, compY, compZ, machX, machY, machZ);
 	}
 
 	public static Packet getPacketOpenGui(int x, int y, int z) {

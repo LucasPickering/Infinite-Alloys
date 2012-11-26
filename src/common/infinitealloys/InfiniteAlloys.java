@@ -92,6 +92,7 @@ public class InfiniteAlloys {
 	}
 
 	public static String addLeadingZeros(String s, int finalSize) {
+		s.trim();
 		int length = s.length();
 		for(int i = 0; i < finalSize - length; i++)
 			s = "0" + s;

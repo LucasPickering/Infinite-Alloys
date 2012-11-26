@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class IAWorldData implements Serializable {
 
-	public int[] validAlloys = new int[References.validAlloyCount];
+	private int[] validAlloys = new int[References.validAlloyCount];
 
 	public IAWorldData(int[] va) {
 		validAlloys = va;
 	}
 
-	public int[] getValidAlloy() {
+	public int[] getValidAlloys() {
 		return validAlloys;
 	}
 }

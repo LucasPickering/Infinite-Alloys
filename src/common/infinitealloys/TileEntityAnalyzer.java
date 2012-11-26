@@ -19,8 +19,6 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 		super(3);
 		inventoryStacks = new ItemStack[4];
 		stackLimit = 1;
-		ticksToProcess = 3600;
-		joulesUsedPerTick = 15D;
 	}
 
 	@Override
@@ -99,7 +97,7 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 		else if(hasUpgrade(SPEED1))
 			ticksToProcess = 2700;
 		else
-			ticksToProcess = 3600;
+			ticksToProcess = 36;
 
 		if(hasUpgrade(EFFICIENCY2))
 			joulesUsedPerTick = 180D;

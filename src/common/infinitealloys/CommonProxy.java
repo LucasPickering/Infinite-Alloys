@@ -28,9 +28,9 @@ public class CommonProxy {
 		InfiniteAlloys.machine = new BlockMachine(InfiniteAlloys.machineID, 6).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("machine");
 		GameRegistry.registerBlock(InfiniteAlloys.ore, ItemBlockIA.class);
 		GameRegistry.registerBlock(InfiniteAlloys.machine, ItemBlockIA.class);
-		OreDictionary.registerOre("oreCopper", new ItemStack(InfiniteAlloys.ore, 1, 0));
-		OreDictionary.registerOre("oreZinc", new ItemStack(InfiniteAlloys.ore, 1, 1));
-		OreDictionary.registerOre("oreMagnesium", new ItemStack(InfiniteAlloys.ore, 1, 2));
+		OreDictionary.registerOre("oreZinc", new ItemStack(InfiniteAlloys.ore, 1, 0));
+		OreDictionary.registerOre("oreMagnesium", new ItemStack(InfiniteAlloys.ore, 1, 1));
+		OreDictionary.registerOre("oreScandium", new ItemStack(InfiniteAlloys.ore, 1, 2));
 		OreDictionary.registerOre("oreTantalum", new ItemStack(InfiniteAlloys.ore, 1, 3));
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 0, "pickaxe", 1);
 		MinecraftForge.setBlockHarvestLevel(InfiniteAlloys.ore, 1, "pickaxe", 1);
@@ -50,8 +50,8 @@ public class CommonProxy {
 		InfiniteAlloys.ingot = new ItemIngot(InfiniteAlloys.ingotID, 128).setCreativeTab(InfiniteAlloys.tabIA).setItemName("ingot");
 		InfiniteAlloys.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 128).setItemName("alloyIngot");
 		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 129).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("upgrade");
-		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 138).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("gps");
-		InfiniteAlloys.alloyBook = new ItemAlloyBook(InfiniteAlloys.alloyBookID, 139).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("alloyBook");
+		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 140).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("gps");
+		InfiniteAlloys.alloyBook = new ItemAlloyBook(InfiniteAlloys.alloyBookID, 141).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("alloyBook");
 		OreDictionary.registerOre("ingotCopper", new ItemStack(InfiniteAlloys.ingot, 1, 0));
 		OreDictionary.registerOre("ingotZinc", new ItemStack(InfiniteAlloys.ingot, 1, 1));
 		OreDictionary.registerOre("ingotMagnesium", new ItemStack(InfiniteAlloys.ingot, 1, 2));
