@@ -40,7 +40,7 @@ public class GuiMetalForge extends GuiMachine {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		if(temf.inventoryStacks[0] != null && temf.presetSelection > -1)
-			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.ingot, 1, temf.getDamageForAlloy(temf.recipePresets.get(temf.presetSelection))), 120, 52);
+			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.alloyIngot, 1, temf.getDamageForAlloy(temf.recipePresets.get(temf.presetSelection))), 120, 52);
 		for(int i = 0; i < References.metalCount; i++)
 			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.ingot, 1, i), i % 4 * 18 + 66, i / 4 * 18 + 43);
 		for(int i = 0; i < References.metalCount; i++)

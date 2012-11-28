@@ -12,9 +12,6 @@ public class ContainerMetalForge extends ContainerMachine {
 	public ContainerMetalForge(InventoryPlayer inventoryPlayer, TileEntityMetalForge tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
-		addSlotToContainer(new SlotMetalForge(inventory, 0, 10, 47));
-		addSlotToContainer(new SlotUpgrade(inventory, 1, 148, 8));
-		addSlotToContainer(new SlotMetalForge(inventory, 2, 148, 46));
 		addSlotToContainer(new SlotMetalForge(inventory, 0, 8, 52));
 		addSlotToContainer(new SlotUpgrade(inventory, 1, 148, 8));
 		addSlotToContainer(new SlotMetalForge(inventory, 2, 148, 52));
