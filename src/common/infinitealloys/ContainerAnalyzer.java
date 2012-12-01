@@ -12,15 +12,15 @@ public class ContainerAnalyzer extends ContainerMachine {
 	public ContainerAnalyzer(InventoryPlayer inventoryPlayer, TileEntityAnalyzer tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
-		addSlotToContainer(new SlotAnalyzer(inventory, 0, 12, 58));
-		addSlotToContainer(new SlotAnalyzer(inventory, 1, 156, 58));
-		addSlotToContainer(new SlotAnalyzer(inventory, 2, 156, 33));
-		addSlotToContainer(new SlotUpgrade(inventory, 3, 156, 8));
+		addSlotToContainer(new SlotAnalyzer(inventory, 0, 28, 58));
+		addSlotToContainer(new SlotAnalyzer(inventory, 1, 172, 58));
+		addSlotToContainer(new SlotAnalyzer(inventory, 2, 172, 33));
+		addSlotToContainer(new SlotUpgrade(inventory, 3, 172, 8));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 12 + x * 18, 84 + y * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 20 + x * 18, 84 + y * 18));
 		for(int x = 0; x < 9; x++)
-			addSlotToContainer(new Slot(inventoryPlayer, x, 12 + x * 18, 142));
+			addSlotToContainer(new Slot(inventoryPlayer, x, 20 + x * 18, 142));
 	}
 
 	@Override

@@ -27,10 +27,9 @@ public class GuiMetalForge extends GuiMachine {
 		super.drawScreen(mouseX, mouseY, f);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		for(int i = 0; i < References.metalCount; i++) {
+		for(int i = 0; i < References.metalCount; i++)
 			if(mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18))
 				drawTextBox(InfiniteAlloys.getStringLocalization("metal." + References.metalNames[i] + ".name"), 0xffffff, mouseX, mouseY);
-		}
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
@@ -39,6 +38,8 @@ public class GuiMetalForge extends GuiMachine {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		bindTexture("extras");
+		drawTexturedModalRect(31, 14, PROGRESS_BAR.x, PROGRESS_BAR.y, temf.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
 		if(temf.inventoryStacks[0] != null && temf.presetSelection > -1) {
 			int[] alloys = temf.inventoryStacks[0].getTagCompound().getIntArray("alloys");
 			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.alloyIngot, 1, temf.getDamageForAlloy(alloys[temf.presetSelection])), 40, 52);
@@ -55,8 +56,6 @@ public class GuiMetalForge extends GuiMachine {
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		bindTexture("metalforge");
 		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
-		bindTexture("extras");
-		drawTexturedModalRect(topLeft.x + 31, topLeft.y + 14, PROGRESS_BAR.x, PROGRESS_BAR.y, temf.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
 	}
 
 	@Override

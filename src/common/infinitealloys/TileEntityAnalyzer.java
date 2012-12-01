@@ -59,7 +59,7 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 						int[] oldSave = new int[0];
 						int[] newSave;
 
-						// init the compounds
+						// init the compound
 						if(inventoryStacks[2].hasTagCompound())
 							tagCompound = inventoryStacks[2].getTagCompound();
 						else
@@ -76,7 +76,7 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 						Arrays.sort(newSave);
 
 						// Add the new alloy to newSave if there is room and it is not a repeat then set the compound to newSave
-						if(newSave.length < References.alloyBookMaxSaves && Arrays.binarySearch(newSave, alloy) < 0) {
+						if(newSave.length < References.validAlloyCount && Arrays.binarySearch(newSave, alloy) < 0) {
 							newSave[newSave.length - 1] = alloy;
 							tagCompound.setIntArray("alloys", newSave);
 							inventoryStacks[2].setTagCompound(tagCompound);

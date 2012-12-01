@@ -36,6 +36,16 @@
 	<entry key="machine.xray.name">X-Ray</entry>
 	<entry key="achievement.craftMetalForge">Your First Machine</entry>
 	<entry key="achievement.craftMetalForge.desc">Craft A Metal Forge</entry>
-	<entry key="achievement.smeltAlloy">Mixing Metals</entry>
-	<entry key="achievement.smeltAlloy.desc">Create An Alloy</entry>
+	<entry key="achievement.smeltAlloy1">Mixing Metals 1</entry>
+	<entry key="achievement.smeltAlloy1.desc">Create A Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy2">Mixing Metals 2</entry>
+	<entry key="achievement.smeltAlloy2.desc">Create A Second Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy3">Mixing Metals 3</entry>
+	<entry key="achievement.smeltAlloy3.desc">Create A Third Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy4">Mixing Metals 4</entry>
+	<entry key="achievement.smeltAlloy4.desc">Create A Fourth Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy5">Mixing Metals 5</entry>
+	<entry key="achievement.smeltAlloy5.desc">Create A Fifth Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy6">Mixing Metals 6</entry>
+	<entry key="achievement.smeltAlloy6.desc">Create A Sixth Useable Alloy</entry>
 </properties>

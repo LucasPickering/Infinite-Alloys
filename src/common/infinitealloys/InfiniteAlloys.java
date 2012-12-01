@@ -42,8 +42,7 @@ public class InfiniteAlloys {
 	public static Item gps;
 	public static Item alloyBook;
 	public static CreativeTabs tabIA;
-	public static Achievement craftMetalForge;
-	public static Achievement smeltAlloy;
+	public static Achievement[] achievements = new Achievement[7];
 	public static AchievementPage achPage;
 	public IAWorldData worldData;
 
@@ -80,8 +79,7 @@ public class InfiniteAlloys {
 	}
 
 	@PostInit
-	public void postInit(FMLPostInitializationEvent event) {
-	}
+	public void postInit(FMLPostInitializationEvent event) {}
 
 	public static int intAtPos(int radix, int strlen, int n, int pos) {
 		return new Integer(String.valueOf(addLeadingZeros(Integer.toString(n, radix), strlen).charAt(pos)));

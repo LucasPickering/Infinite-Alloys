@@ -91,13 +91,10 @@ public class CommonProxy {
 	}
 
 	public void initAchievements() {
-		ItemStack alloyIngot = new ItemStack(InfiniteAlloys.alloyIngot);
-		NBTTagCompound tagCompound = new NBTTagCompound();
-		tagCompound.setInteger("alloy", 11);
-		alloyIngot.setTagCompound(tagCompound);
-		InfiniteAlloys.craftMetalForge = new Achievement(2000, "craftMetalForge", 0, 0, new ItemStack(InfiniteAlloys.machine, 1, 1), null).registerAchievement();
-		InfiniteAlloys.smeltAlloy = new Achievement(2001, "smeltAlloy", 2, 0, alloyIngot, InfiniteAlloys.craftMetalForge).registerAchievement();
-		InfiniteAlloys.achPage = new AchievementPage("Infinite Alloys", InfiniteAlloys.craftMetalForge, InfiniteAlloys.smeltAlloy);
+		InfiniteAlloys.achievements[0] = new Achievement(2000, "craftMetalForge", 0, 0, new ItemStack(InfiniteAlloys.machine, 1, 1), null).registerAchievement();
+		for(int i = 1; i <= References.validAlloyCount; i++)
+			InfiniteAlloys.achievements[i] = new Achievement(2000 + i, "smeltAlloy" + i, 2 * i, 0, new ItemStack(InfiniteAlloys.alloyIngot, 1, i), InfiniteAlloys.achievements[i - 1]).registerAchievement();
+		InfiniteAlloys.achPage = new AchievementPage("Infinite Alloys", InfiniteAlloys.achievements);
 		AchievementPage.registerAchievementPage(InfiniteAlloys.achPage);
 	}
 
