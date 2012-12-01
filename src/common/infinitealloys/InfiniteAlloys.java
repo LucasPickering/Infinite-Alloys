@@ -83,7 +83,7 @@ public class InfiniteAlloys {
 	public void postInit(FMLPostInitializationEvent event) {
 	}
 
-	public static int intAtPosRadix(int radix, int strlen, int n, int pos) {
+	public static int intAtPos(int radix, int strlen, int n, int pos) {
 		return new Integer(String.valueOf(addLeadingZeros(Integer.toString(n, radix), strlen).charAt(pos)));
 	}
 

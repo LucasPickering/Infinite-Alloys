@@ -66,16 +66,19 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 							tagCompound = new NBTTagCompound();
 
 						// If it has a save, set oldSave to it
-						if(tagCompound.hasKey("savedAlloys"))
-							oldSave = tagCompound.getIntArray("savedAlloys");
+						if(tagCompound.hasKey("alloys"))
+							oldSave = tagCompound.getIntArray("alloys");
 
 						// Make new save a copy of oldSave with one more spot
 						newSave = Arrays.copyOf(oldSave, oldSave.length + 1);
 
-						// Add the new alloy to newSave if there is room and set the compound to newSave
-						if(newSave.length < References.alloyBookMaxSaves) {
+						// Sort newSave so that it can be searched in the next step
+						Arrays.sort(newSave);
+
+						// Add the new alloy to newSave if there is room and it is not a repeat then set the compound to newSave
+						if(newSave.length < References.alloyBookMaxSaves && Arrays.binarySearch(newSave, alloy) < 0) {
 							newSave[newSave.length - 1] = alloy;
-							tagCompound.setIntArray("savedAlloys", newSave);
+							tagCompound.setIntArray("alloys", newSave);
 							inventoryStacks[2].setTagCompound(tagCompound);
 						}
 					}

@@ -32,7 +32,7 @@ public class ItemAlloyIngot extends ItemIA {
 		float totalMass = 0;
 		int alloy = itemstack.getTagCompound().getInteger("alloy");
 		for(int i = 0; i < References.metalCount; i++) {
-			metalMasses[i] = InfiniteAlloys.intAtPosRadix(References.alloyRadix, References.metalCount, alloy, i);
+			metalMasses[i] = InfiniteAlloys.intAtPos(References.alloyRadix, References.metalCount, alloy, i);
 			totalMass += metalMasses[i];
 		}
 		for(int i = 0; i < References.metalCount; i++) {
@@ -48,9 +48,13 @@ public class ItemAlloyIngot extends ItemIA {
 		ArrayList<Integer> redVals = new ArrayList<Integer>();
 		ArrayList<Integer> greenVals = new ArrayList<Integer>();
 		ArrayList<Integer> blueVals = new ArrayList<Integer>();
-		int alloy = itemstack.getTagCompound().getInteger("alloy");
+		int alloy = 0;
+		if(itemstack.hasTagCompound())
+			alloy = itemstack.getTagCompound().getInteger("alloy");
+		else if(itemstack.getItemDamage() > 0)
+			alloy = InfiniteAlloys.instance.worldData.getValidAlloys()[itemstack.getItemDamage() - 1];
 		for(int i = 0; i < References.metalCount; i++) {
-			for(int j = 0; j < InfiniteAlloys.intAtPosRadix(References.alloyRadix, References.metalCount, alloy, i); j++) {
+			for(int j = 0; j < InfiniteAlloys.intAtPos(References.alloyRadix, References.metalCount, alloy, i); j++) {
 				String ingotColor = InfiniteAlloys.addLeadingZeros(Integer.toHexString(References.metalColors[References.metalCount - 1 - i]), 6);
 				redVals.add(Integer.parseInt(ingotColor.substring(0, 2), 16));
 				greenVals.add(Integer.parseInt(ingotColor.substring(2, 4), 16));

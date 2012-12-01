@@ -12,7 +12,6 @@ import infinitealloys.TileEntityMachine;
 import infinitealloys.TileEntityMetalForge;
 import infinitealloys.TileEntityPrinter;
 import infinitealloys.TileEntityXray;
-import infinitealloys.client.GuiAlloyBook;
 import infinitealloys.client.GuiAnalyzer;
 import infinitealloys.client.GuiComputer;
 import infinitealloys.client.GuiMetalForge;
@@ -57,8 +56,6 @@ public class GuiHandler implements IGuiHandler {
 				return new GuiPrinter(player.inventory, (TileEntityPrinter)tileEntity);
 			case 4:
 				return new GuiXray(player.inventory, (TileEntityXray)tileEntity);
-			case References.machineCount:
-				return new GuiAlloyBook(player.getHeldItem());
 		}
 		return null;
 	}

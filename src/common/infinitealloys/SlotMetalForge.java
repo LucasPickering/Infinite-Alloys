@@ -22,6 +22,6 @@ public class SlotMetalForge extends Slot {
 	public void onSlotChanged() {
 		super.onSlotChanged();
 		if(slotIndex == 0)
-			((TileEntityMetalForge)inventory).updatePresets();
+			((TileEntityMetalForge)inventory).presetSelection = -1;
 	}
 }

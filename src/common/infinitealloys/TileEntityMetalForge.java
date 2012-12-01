@@ -16,7 +16,8 @@ public class TileEntityMetalForge extends TileEntityMachine {
 
 	/** An array for the "stack sizes" of each ingot in the recipe setting */
 	public byte[] recipeAmts = new byte[References.metalCount];
-	public ArrayList<Integer> recipePresets = new ArrayList<Integer>();
+	/** recipeAmts from last tick, used to tell if the recipe has changed to reset progress */
+	private byte[] lastRecipeAmts = new byte[References.metalCount];
 	public byte presetSelection = -1;
 
 	public TileEntityMetalForge(ForgeDirection facing) {
@@ -70,6 +71,10 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		super.updateEntity();
 		boolean invChanged = false;
 		joulesUsedPerTick *= (double)getIngotsInRecipe();
+		// System.out.println((worldObj.isRemote ? "Client: " : "Server: ") + Arrays.equals(lastRecipeAmts, recipeAmts));
+		if(!Arrays.equals(lastRecipeAmts, recipeAmts))
+			processProgress = 0;
+		lastRecipeAmts = recipeAmts;
 		if(shouldBurn()) {
 			processProgress += (float)(getInventoryStackLimit() - getIngotsInRecipe() + 1);
 			joules -= joulesUsedPerTick;
@@ -161,18 +166,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		for(int amt : recipeAmts)
 			ingots += amt;
 		return ingots;
-	}
-
-	public void updatePresets() {
-		if(inventoryStacks[0] != null) {
-			for(int alloy : inventoryStacks[0].getTagCompound().getIntArray("savedAlloys"))
-				for(int validAlloy : InfiniteAlloys.instance.worldData.getValidAlloys())
-					if(alloy == validAlloy)
-						recipePresets.add(alloy);
-		}
-		else
-			recipePresets.clear();
-		presetSelection = -1;
 	}
 
 	protected void updateUpgrades() {

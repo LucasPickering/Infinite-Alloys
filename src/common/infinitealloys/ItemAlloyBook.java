@@ -1,7 +1,11 @@
 package infinitealloys;
 
+import java.util.List;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.World;
 
 public class ItemAlloyBook extends ItemIA {
@@ -11,13 +15,16 @@ public class ItemAlloyBook extends ItemIA {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
-		player.openGui(InfiniteAlloys.instance, References.machineCount, world, 0, 0, 0);
-		return itemstack;
+	public boolean getShareTag() {
+		return true;
 	}
 
 	@Override
-	public boolean getShareTag() {
-		return true;
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
+		NBTTagCompound tagCompound = itemstack.getTagCompound();
+		if(tagCompound != null)// && tagCompound.hasKey("title"))
+			for(int alloy : tagCompound.getIntArray("alloys"))
+				list.add(Integer.toString(alloy));
 	}
 }

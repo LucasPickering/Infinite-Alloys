@@ -32,6 +32,9 @@ public abstract class GuiMachine extends GuiContainer {
 	public static Rectangle TAB_RIGHT_OFF = new Rectangle(62, 0, 29, 24);
 	public static Rectangle TAB_RIGHT_ON = new Rectangle(91, 0, 28, 24);
 	public static Rectangle PROGRESS_BAR = new Rectangle(119, 0, 108, 18);
+	public static Rectangle UP_ARROW = new Rectangle(10, 24, 16, 16);
+	public static Rectangle DOWN_ARROW = new Rectangle(26, 24, 16, 16);
+	public static Rectangle CHECK = new Rectangle(42, 24, 16, 16);
 
 	protected java.awt.Point topLeft = new java.awt.Point();
 	protected java.awt.Point energyMeter = new java.awt.Point();

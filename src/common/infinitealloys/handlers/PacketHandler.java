@@ -1,6 +1,8 @@
 package infinitealloys.handlers;
 
 import infinitealloys.BlockMachine;
+import infinitealloys.IAWorldData;
+import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.TileEntityAnalyzer;
@@ -25,24 +27,30 @@ import cpw.mods.fml.common.network.Player;
 
 public class PacketHandler implements IPacketHandler {
 
-	private static final int TE_SERVER_TO_CLIENT = 0;
-	private static final int TE_CLIENT_TO_SERVER = 1;
-	private static final int TE_JOULES = 2;
-	private static final int TE_CONTROLLER = 3;
-	private static final int COMPUTER_ADD_MACHINE = 4;
-	private static final int OPEN_GUI = 5;
+	private static final int WORLD_DATA = 0;
+	private static final int TE_SERVER_TO_CLIENT = 1;
+	private static final int TE_CLIENT_TO_SERVER = 2;
+	private static final int TE_JOULES = 3;
+	private static final int TE_CONTROLLER = 4;
+	private static final int COMPUTER_ADD_MACHINE = 5;
+	private static final int OPEN_GUI = 6;
 
 	@Override
-	public void onPacketData(INetworkManager manager,
-			Packet250CustomPayload packet, Player player) {
+	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
 		int packetIndex = data.readInt();
 		World world = ((EntityPlayer)player).worldObj;
-		int x = data.readInt();
-		int y = data.readInt();
-		int z = data.readInt();
 		switch(packetIndex) {
+			case WORLD_DATA:
+				int[] validAlloys = new int[References.validAlloyCount];
+				for(int i = 0; i < validAlloys.length; i++)
+					validAlloys[i] = data.readInt();
+				InfiniteAlloys.instance.worldData = new IAWorldData(validAlloys);
+				break;
 			case TE_SERVER_TO_CLIENT:
+				int x = data.readInt();
+				int y = data.readInt();
+				int z = data.readInt();
 				TileEntity te = world.getBlockTileEntity(x, y, z);
 				if(te instanceof TileEntityMachine) {
 					int processProgress = data.readInt();
@@ -70,6 +78,9 @@ public class PacketHandler implements IPacketHandler {
 				}
 				break;
 			case TE_CLIENT_TO_SERVER:
+				x = data.readInt();
+				y = data.readInt();
+				z = data.readInt();
 				te = world.getBlockTileEntity(x, y, z);
 				if(te instanceof TileEntityMetalForge) {
 					byte[] recipeAmts = new byte[References.metalCount];
@@ -79,6 +90,9 @@ public class PacketHandler implements IPacketHandler {
 				}
 				break;
 			case TE_JOULES:
+				x = data.readInt();
+				y = data.readInt();
+				z = data.readInt();
 				te = world.getBlockTileEntity(x, y, z);
 				if(te instanceof TileEntityMachine) {
 					double joules = data.readDouble();
@@ -86,10 +100,16 @@ public class PacketHandler implements IPacketHandler {
 				}
 				break;
 			case TE_CONTROLLER:
+				x = data.readInt();
+				y = data.readInt();
+				z = data.readInt();
 				if(y >= 0)
 					TileEntityMachine.controllers.put(Minecraft.getMinecraft().thePlayer.username, new Point(x, y, z));
 				break;
 			case COMPUTER_ADD_MACHINE:
+				x = data.readInt();
+				y = data.readInt();
+				z = data.readInt();
 				te = world.getBlockTileEntity(x, y, z);
 				if(te instanceof TileEntityComputer) {
 					int machX = data.readInt();
@@ -99,9 +119,16 @@ public class PacketHandler implements IPacketHandler {
 				}
 				break;
 			case OPEN_GUI:
+				x = data.readInt();
+				y = data.readInt();
+				z = data.readInt();
 				((BlockMachine)Block.blocksList[world.getBlockId(x, y, z)]).openGui(world, (EntityPlayer)player, (TileEntityMachine)world.getBlockTileEntity(x, y, z), true);
 				break;
 		}
+	}
+
+	public static Packet getWorldDataPacket() {
+		return getPacket(WORLD_DATA, InfiniteAlloys.instance.worldData.getValidAlloys());
 	}
 
 	public static Packet getTEPacketToClient(TileEntityMachine tem) {
@@ -142,22 +169,7 @@ public class PacketHandler implements IPacketHandler {
 	public static Packet getTEPacketToServer(TileEntityMachine tem) {
 		if(!(tem instanceof TileEntityMetalForge))
 			return null;
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		DataOutputStream dos = new DataOutputStream(bos);
-		try {
-			dos.writeInt(TE_CLIENT_TO_SERVER);
-			dos.writeInt(tem.xCoord);
-			dos.writeInt(tem.yCoord);
-			dos.writeInt(tem.zCoord);
-			for(byte amt : ((TileEntityMetalForge)tem).recipeAmts)
-				dos.writeByte(amt);
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-		}
-		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
-		packet.length = bos.size();
-		return packet;
+		return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityMetalForge)tem).recipeAmts);
 	}
 
 	public static Packet getTEJoulesPacket(TileEntityMachine tem) {
@@ -180,21 +192,24 @@ public class PacketHandler implements IPacketHandler {
 		return getPacket(OPEN_GUI, x, y, z);
 	}
 
-	private static Packet getPacket(int id, int x, int y, int z, Object... data) {
+	private static Packet getPacket(int id, Object... data) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);
 		try {
 			dos.writeInt(id);
-			dos.writeInt(x);
-			dos.writeInt(y);
-			dos.writeInt(z);
 			for(Object datum : data) {
 				if(datum instanceof Byte)
 					dos.writeByte((Byte)datum);
+				else if(datum instanceof byte[])
+					for(byte datum2 : (byte[])datum)
+						dos.writeByte((Byte)datum2);
 				else if(datum instanceof Short)
 					dos.writeShort((Short)datum);
 				else if(datum instanceof Integer)
 					dos.writeInt((Integer)datum);
+				else if(datum instanceof int[])
+					for(int datum2 : (int[])datum)
+						dos.writeInt((Integer)datum2);
 				else if(datum instanceof Double)
 					dos.writeDouble((Double)datum);
 			}

@@ -24,8 +24,6 @@ public class GuiMetalForge extends GuiMachine {
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		super.drawScreen(mouseX, mouseY, f);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -39,12 +37,18 @@ public class GuiMetalForge extends GuiMachine {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		if(temf.inventoryStacks[0] != null && temf.presetSelection > -1)
-			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.alloyIngot, 1, temf.getDamageForAlloy(temf.recipePresets.get(temf.presetSelection))), 120, 52);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		if(temf.inventoryStacks[0] != null && temf.presetSelection > -1) {
+			int[] alloys = temf.inventoryStacks[0].getTagCompound().getIntArray("alloys");
+			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.alloyIngot, 1, temf.getDamageForAlloy(alloys[temf.presetSelection])), 40, 52);
+		}
 		for(int i = 0; i < References.metalCount; i++)
 			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.ingot, 1, i), i % 4 * 18 + 66, i / 4 * 18 + 43);
 		for(int i = 0; i < References.metalCount; i++)
 			fontRenderer.drawStringWithShadow(new Byte(temf.recipeAmts[i]).toString(), i % 4 * 18 + 77, i / 4 * 18 + 52, 0xffffff);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override
@@ -59,19 +63,21 @@ public class GuiMetalForge extends GuiMachine {
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		if(mouseInZone(mouseX, mouseY, topLeft.x + 39, topLeft.y + 51, 18, 18)) {
+			int[] alloys = new int[0];
+			if(temf.inventoryStacks[0] != null)
+				alloys = temf.inventoryStacks[0].getTagCompound().getIntArray("alloys");
 			if(mouseButton == 0)
-				temf.presetSelection = (byte)Math.min(temf.presetSelection, temf.recipePresets.size() - 1);
+				temf.presetSelection = (byte)Math.min(temf.presetSelection + 1, alloys.length - 1);
 			else if(mouseButton == 1)
-				temf.presetSelection = (byte)Math.max(temf.presetSelection, -1);
+				temf.presetSelection = (byte)Math.max(temf.presetSelection - 1, -1);
 			if(temf.presetSelection > -1)
 				for(int i = 0; i < temf.recipeAmts.length; i++)
-					temf.recipeAmts[i] = (byte)InfiniteAlloys.intAtPosRadix(10, 8, temf.recipePresets.get(temf.presetSelection), i);
+					temf.recipeAmts[i] = (byte)InfiniteAlloys.intAtPos(References.alloyRadix, References.metalCount, alloys[temf.presetSelection], References.metalCount - i - 1);
 			PacketDispatcher.sendPacketToServer(PacketHandler.getTEPacketToServer(temf));
 		}
 		if(temf.presetSelection == -1) {
 			for(int i = 0; i < References.metalCount; i++) {
 				if(mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18)) {
-					temf.processProgress = 0;
 					if(mouseButton == 0)
 						temf.recipeAmts[i] = (byte)Math.min(temf.recipeAmts[i] + 1, References.alloyRadix - 1);
 					else if(mouseButton == 1)

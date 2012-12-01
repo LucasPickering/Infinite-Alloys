@@ -20,8 +20,7 @@ public class CommonProxy {
 
 	private ItemStack[] alloys = new ItemStack[References.validAlloyCount];
 
-	public void initLocalization() {
-	}
+	public void initLocalization() {}
 
 	public void initBlocks() {
 		InfiniteAlloys.ore = new BlockOre(InfiniteAlloys.oreID, 0).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("ore");
@@ -52,15 +51,15 @@ public class CommonProxy {
 		InfiniteAlloys.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 129).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("upgrade");
 		InfiniteAlloys.gps = new ItemGPS(InfiniteAlloys.gpsID, 140).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("gps");
 		InfiniteAlloys.alloyBook = new ItemAlloyBook(InfiniteAlloys.alloyBookID, 141).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("alloyBook");
-		OreDictionary.registerOre("ingotCopper", new ItemStack(InfiniteAlloys.ingot, 1, 0));
-		OreDictionary.registerOre("ingotZinc", new ItemStack(InfiniteAlloys.ingot, 1, 1));
-		OreDictionary.registerOre("ingotMagnesium", new ItemStack(InfiniteAlloys.ingot, 1, 2));
+		OreDictionary.registerOre("ingotZinc", new ItemStack(InfiniteAlloys.ingot, 1, 0));
+		OreDictionary.registerOre("ingotMagnesium", new ItemStack(InfiniteAlloys.ingot, 1, 1));
+		OreDictionary.registerOre("ingotScandium", new ItemStack(InfiniteAlloys.ingot, 1, 2));
 		OreDictionary.registerOre("ingotTantalum", new ItemStack(InfiniteAlloys.ingot, 1, 3));
+		for(int i = 0; i < alloys.length; i++)
+			alloys[i] = new ItemStack(InfiniteAlloys.alloyIngot, 1, i);
 	}
 
 	public void initRecipes() {
-		for(int i = 0; i < alloys.length; i++)
-			alloys[i] = new ItemStack(InfiniteAlloys.alloyIngot, 1, i);
 		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 0), "", 'A', alloys[3], 'B', alloys[4]);
 		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 1), "BBB", "BDB", "BBB", 'B', Block.brick, 'D', Item.doorSteel);
 		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 2), "", 'A', alloys[0]);
@@ -102,8 +101,7 @@ public class CommonProxy {
 		AchievementPage.registerAchievementPage(InfiniteAlloys.achPage);
 	}
 
-	public void initRendering() {
-	}
+	public void initRendering() {}
 
 	protected void addName(Object obj, String... keys) {
 		String name = "";
