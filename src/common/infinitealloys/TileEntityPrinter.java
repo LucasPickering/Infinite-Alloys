@@ -49,8 +49,6 @@ public class TileEntityPrinter extends TileEntityMachine {
 					if(inventoryStacks[1].stackSize == 0)
 						inventoryStacks[1] = null;
 					processProgress = 0;
-					System.out.println((worldObj.isRemote ? "Client" : "Server") + " 0: " + inventoryStacks[0]);
-					System.out.println((worldObj.isRemote ? "Client" : "Server") + " 2: " + inventoryStacks[2]);
 				}
 			}
 		}

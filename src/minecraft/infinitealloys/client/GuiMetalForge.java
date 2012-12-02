@@ -18,7 +18,7 @@ public class GuiMetalForge extends GuiMachine {
 	private TileEntityMetalForge temf;
 
 	public GuiMetalForge(InventoryPlayer inventoryPlayer, TileEntityMetalForge tileEntity) {
-		super(176, 216, tileEntity, new ContainerMetalForge(inventoryPlayer, tileEntity));
+		super(176, 216, tileEntity, new ContainerMetalForge(inventoryPlayer, tileEntity), "metalforge");
 		temf = tileEntity;
 	}
 
@@ -35,12 +35,11 @@ public class GuiMetalForge extends GuiMachine {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
-		bindTexture("metalforge");
-		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 		bindTexture("extras");
 		drawTexturedModalRect(31, 14, PROGRESS_BAR.x, PROGRESS_BAR.y, temf.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
 		if(temf.inventoryStacks[0] != null && temf.presetSelection > -1) {

@@ -16,7 +16,7 @@ public class GuiComputer extends GuiMachine {
 	private GuiButton addMachine;
 
 	public GuiComputer(InventoryPlayer inventoryPlayer, TileEntityComputer tileEntity) {
-		super(176, 176, tileEntity, new ContainerMachine(inventoryPlayer, tileEntity));
+		super(176, 176, tileEntity, new ContainerMachine(inventoryPlayer, tileEntity), "computer");
 		tec = tileEntity;
 	}
 
@@ -43,12 +43,6 @@ public class GuiComputer extends GuiMachine {
 		xInput.func_82265_c(full);
 		yInput.func_82265_c(full);
 		zInput.func_82265_c(full);
-	}
-
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
-		bindTexture("computer");
-		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 	}
 
 	@Override
@@ -104,7 +98,8 @@ public class GuiComputer extends GuiMachine {
 				int z = new Integer(zInput.getText());
 				tec.addMachine(mc.thePlayer, new Integer(xInput.getText()), new Integer(yInput.getText()), new Integer(zInput.getText()));
 				PacketDispatcher.sendPacketToServer(PacketHandler.getComputerPacketAddMachine(tec.xCoord, tec.yCoord, tec.zCoord, x, y, z));
-			}catch(NumberFormatException e) {}
+			}
+			catch(NumberFormatException e) {}
 		}
 	}
 }

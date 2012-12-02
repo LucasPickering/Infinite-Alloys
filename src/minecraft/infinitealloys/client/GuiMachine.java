@@ -36,6 +36,7 @@ public abstract class GuiMachine extends GuiContainer {
 	public static Rectangle DOWN_ARROW = new Rectangle(26, 24, 16, 16);
 	public static Rectangle CHECK = new Rectangle(42, 24, 16, 16);
 
+	private String texture;
 	protected java.awt.Point topLeft = new java.awt.Point();
 	protected java.awt.Point energyMeter = new java.awt.Point();
 	protected TileEntityMachine tem;
@@ -43,11 +44,12 @@ public abstract class GuiMachine extends GuiContainer {
 	protected GuiMachineTab controllerTab;
 	protected ArrayList<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
 
-	public GuiMachine(int xSize, int ySize, TileEntityMachine tileEntity, Container container) {
+	public GuiMachine(int xSize, int ySize, TileEntityMachine tileEntity, Container container, String texture) {
 		super(container);
 		this.xSize = xSize;
 		this.ySize = ySize;
 		tem = tileEntity;
+		this.texture = texture;
 	}
 
 	@Override
@@ -72,10 +74,17 @@ public abstract class GuiMachine extends GuiContainer {
 			}
 			drawTextBox(texts, colors, mouseX, mouseY);
 		}
-		if(mouseInZone(mouseX, mouseY, energyMeter.x + topLeft.x, energyMeter.y + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height) + topLeft.y, ENERGY_METER.width, tem.getJoulesScaled(ENERGY_METER.height)))
+		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
+		if(mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y + ENERGY_METER.height - joulesScaled, ENERGY_METER.width, joulesScaled))
 			drawTextBox(ElectricInfo.getDisplayShort(tem.joules, ElectricInfo.ElectricUnit.JOULES), 0xffffff, mouseX, mouseY);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
+	}
+
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float partialTick, int mouseX, int mouseY) {
+		bindTexture(texture);
+		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 	}
 
 	@Override
@@ -84,7 +93,8 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		bindTexture("extras");
-		drawTexturedModalRect(energyMeter.x, energyMeter.y, ENERGY_METER.x, ENERGY_METER.y + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height), ENERGY_METER.width, tem.getJoulesScaled(ENERGY_METER.height));
+		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
+		drawTexturedModalRect(energyMeter.x, energyMeter.y, ENERGY_METER.x, ENERGY_METER.y + ENERGY_METER.height - joulesScaled, ENERGY_METER.width, joulesScaled);
 		machineTabs.clear();
 		Point cont = TileEntityMachine.controllers.get(Minecraft.getMinecraft().thePlayer.username);
 		if(cont != null) {
@@ -102,26 +112,19 @@ public abstract class GuiMachine extends GuiContainer {
 	}
 
 	protected void drawTextBox(String text, int color, int mouseX, int mouseY) {
-		ArrayList<String> texts = new ArrayList<String>();
-		ArrayList<Integer> colors = new ArrayList<Integer>();
-		texts.add(text);
-		colors.add(color);
-		drawTextBox(texts, colors, mouseX, mouseY);
+		drawTextBox(new String[] { text }, new int[] { color }, mouseX, mouseY);
 	}
 
-	protected void drawTextBox(List<String> text, List<Integer> colors, int mouseX, int mouseY) {
-		if(!text.isEmpty()) {
+	protected void drawTextBox(String[] lines, int[] colors, int mouseX, int mouseY) {
+		if(lines.length > 0) {
 			int boxWidth = 0;
-			for(String line : text) {
-				int lineWidth = fontRenderer.getStringWidth(line);
-				if(lineWidth > boxWidth)
-					boxWidth = lineWidth;
-			}
+			for(String line : lines)
+				boxWidth = Math.max(boxWidth, fontRenderer.getStringWidth(line));
 			mouseX += 12;
 			mouseY -= 12;
 			int var9 = 8;
-			if(text.size() > 1)
-				var9 += 2 + (text.size() - 1) * 10;
+			if(lines.length > 1)
+				var9 += 2 + (lines.length - 1) * 10;
 			int var10 = -267386864;
 			drawGradientRect(mouseX - 3, mouseY - 4, mouseX + boxWidth + 3, mouseY - 3, var10, var10);
 			drawGradientRect(mouseX - 3, mouseY + var9 + 3, mouseX + boxWidth + 3, mouseY + var9 + 4, var10, var10);
@@ -134,14 +137,12 @@ public abstract class GuiMachine extends GuiContainer {
 			drawGradientRect(mouseX + boxWidth + 2, mouseY - 3 + 1, mouseX + boxWidth + 3, mouseY + var9 + 3 - 1, var11, var12);
 			drawGradientRect(mouseX - 3, mouseY - 3, mouseX + boxWidth + 3, mouseY - 3 + 1, var11, var11);
 			drawGradientRect(mouseX - 3, mouseY + var9 + 2, mouseX + boxWidth + 3, mouseY + var9 + 3, var12, var12);
-			for(int i = 0; i < text.size(); i++) {
-				fontRenderer.drawStringWithShadow(text.get(i), mouseX, mouseY, colors.get(i));
-				if(i == 0)
-					mouseY += 2;
-				mouseY += 10;
+			for(int i = 0; i < lines.length; i++) {
+				fontRenderer.drawStringWithShadow(lines[i], mouseX, mouseY, colors[i]);
+				mouseY += i == 0 ? 12 : 10;
 			}
-			zLevel = 0.0F;
-			itemRenderer.zLevel = 0.0F;
+			zLevel = 0F;
+			itemRenderer.zLevel = 0F;
 		}
 	}
 
