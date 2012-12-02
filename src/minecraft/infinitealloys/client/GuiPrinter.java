@@ -1,5 +1,6 @@
 package infinitealloys.client;
 
+import org.lwjgl.opengl.GL11;
 import infinitealloys.ContainerPrinter;
 import infinitealloys.TileEntityPrinter;
 import net.minecraft.src.InventoryPlayer;
@@ -14,9 +15,19 @@ public class GuiPrinter extends GuiMachine {
 	}
 
 	@Override
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glColor4f(1F, 1F, 1F, 1F);
+		bindTexture("extras");
+		drawTexturedModalRect(31, 14, PROGRESS_BAR.x, PROGRESS_BAR.y, tep.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+	}
+
+	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		bindTexture("printer");
 		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
-		drawTexturedModalRect(topLeft.x + 33, topLeft.y + 25, 0, 148, tep.getPrintProgressScaled(110), 16);
 	}
 }

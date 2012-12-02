@@ -35,9 +35,12 @@ public class GuiMetalForge extends GuiMachine {
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glColor4f(1F, 1F, 1F, 1F);
+		bindTexture("metalforge");
+		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 		bindTexture("extras");
 		drawTexturedModalRect(31, 14, PROGRESS_BAR.x, PROGRESS_BAR.y, temf.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
 		if(temf.inventoryStacks[0] != null && temf.presetSelection > -1) {
@@ -50,12 +53,6 @@ public class GuiMetalForge extends GuiMachine {
 			fontRenderer.drawStringWithShadow(new Byte(temf.recipeAmts[i]).toString(), i % 4 * 18 + 77, i / 4 * 18 + 52, 0xffffff);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
-	}
-
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {
-		bindTexture("metalforge");
-		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 	}
 
 	@Override

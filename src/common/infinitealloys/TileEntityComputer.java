@@ -151,4 +151,9 @@ public class TileEntityComputer extends TileEntityMachine {
 		validUpgrades.add(RANGE1);
 		validUpgrades.add(RANGE2);
 	}
+
+	@Override
+	public boolean canReceiveFromSide(ForgeDirection side) {
+		return false;
+	}
 }

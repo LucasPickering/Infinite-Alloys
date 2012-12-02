@@ -7,9 +7,6 @@ import cpw.mods.fml.common.asm.SideOnly;
 
 public class TileEntityPrinter extends TileEntityMachine {
 
-	private final int ticksToPrint = 20;
-	private int printProgress;
-
 	public TileEntityPrinter(ForgeDirection facing) {
 		this();
 		front = facing;
@@ -43,18 +40,22 @@ public class TileEntityPrinter extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 		if(inventoryStacks[0] != null && inventoryStacks[1] != null && inventoryStacks[2] == null) {
-			printProgress++;
-			if(printProgress >= ticksToPrint) {
-				inventoryStacks[2] = inventoryStacks[0];
-				inventoryStacks[1].stackSize--;
-				printProgress = 0;
+			if(joules >= joulesUsedPerTick) {
+				joules -= joulesUsedPerTick;
+				processProgress++;
+				if(processProgress >= ticksToProcess) {
+					inventoryStacks[2] = inventoryStacks[0].copy();
+					inventoryStacks[1].stackSize--;
+					if(inventoryStacks[1].stackSize == 0)
+						inventoryStacks[1] = null;
+					processProgress = 0;
+					System.out.println((worldObj.isRemote ? "Client" : "Server") + " 0: " + inventoryStacks[0]);
+					System.out.println((worldObj.isRemote ? "Client" : "Server") + " 2: " + inventoryStacks[2]);
+				}
 			}
 		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	public int getPrintProgressScaled(int i) {
-		return printProgress * i / ticksToPrint;
+		else
+			processProgress = 0;
 	}
 
 	@Override

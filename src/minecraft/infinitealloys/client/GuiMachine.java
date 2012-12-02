@@ -53,25 +53,10 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTick) {
 		topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
-		energyMeter.setLocation(topLeft.x + 13, topLeft.y + 7 + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height));
+		energyMeter.setLocation(13, 7 + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height));
 		super.drawScreen(mouseX, mouseY, partialTick);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		bindTexture("extras");
-		drawTexturedModalRect(energyMeter.x, energyMeter.y, ENERGY_METER.x, ENERGY_METER.y + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height), ENERGY_METER.width, tem.getJoulesScaled(ENERGY_METER.height));
-		machineTabs.clear();
-		Point cont = TileEntityMachine.controllers.get(Minecraft.getMinecraft().thePlayer.username);
-		if(cont != null) {
-			TileEntityComputer tec = ((TileEntityComputer)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z));
-			controllerTab = new GuiMachineTab(itemRenderer, topLeft.x - 24, topLeft.y + 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true, tem.coordsEquals(cont.x, cont.y, cont.z));
-			controllerTab.drawButton(mc);
-			for(int i = 0; i < tec.networkCoords.size(); i++) {
-				Point coords = tec.networkCoords.get(i);
-				machineTabs.add(new GuiMachineTab(itemRenderer, topLeft.x + i / 5 * 197 - 24, topLeft.y + i % 5 * 25 + 36, (TileEntityMachine)mc.theWorld.getBlockTileEntity(coords.x, coords.y, coords.z), i / 5 == 0, tem.coordsEquals(coords.x, coords.y, coords.z)));
-				machineTabs.get(i).drawButton(mc);
-			}
-		}
 		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
 		if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY)) {
 			ArrayList<String> texts = new ArrayList<String>();
@@ -87,8 +72,31 @@ public abstract class GuiMachine extends GuiContainer {
 			}
 			drawTextBox(texts, colors, mouseX, mouseY);
 		}
-		if(mouseInZone(mouseX, mouseY, energyMeter.x, energyMeter.y + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height), ENERGY_METER.width, tem.getJoulesScaled(ENERGY_METER.height)))
+		if(mouseInZone(mouseX, mouseY, energyMeter.x + topLeft.x, energyMeter.y + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height) + topLeft.y, ENERGY_METER.width, tem.getJoulesScaled(ENERGY_METER.height)))
 			drawTextBox(ElectricInfo.getDisplayShort(tem.joules, ElectricInfo.ElectricUnit.JOULES), 0xffffff, mouseX, mouseY);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_LIGHTING);
+	}
+
+	@Override
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		bindTexture("extras");
+		drawTexturedModalRect(energyMeter.x, energyMeter.y, ENERGY_METER.x, ENERGY_METER.y + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height), ENERGY_METER.width, tem.getJoulesScaled(ENERGY_METER.height));
+		machineTabs.clear();
+		Point cont = TileEntityMachine.controllers.get(Minecraft.getMinecraft().thePlayer.username);
+		if(cont != null) {
+			TileEntityComputer tec = ((TileEntityComputer)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z));
+			controllerTab = new GuiMachineTab(itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true, tem.coordsEquals(cont.x, cont.y, cont.z));
+			controllerTab.drawButton(mc);
+			for(int i = 0; i < tec.networkCoords.size(); i++) {
+				Point coords = tec.networkCoords.get(i);
+				machineTabs.add(new GuiMachineTab(itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityMachine)mc.theWorld.getBlockTileEntity(coords.x, coords.y, coords.z), i / 5 == 0, tem.coordsEquals(coords.x, coords.y, coords.z)));
+				machineTabs.get(i).drawButton(mc);
+			}
+		}
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
