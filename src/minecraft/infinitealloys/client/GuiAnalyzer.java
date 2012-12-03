@@ -3,6 +3,7 @@ package infinitealloys.client;
 import java.awt.Rectangle;
 import org.lwjgl.opengl.GL11;
 import infinitealloys.ContainerAnalyzer;
+import infinitealloys.IAWorldData;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.TileEntityAnalyzer;
@@ -26,21 +27,18 @@ public class GuiAnalyzer extends GuiMachine {
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		bindTexture("extras");
 		drawTexturedModalRect(54, 57, PROGRESS_BAR.x, PROGRESS_BAR.y, tea.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
-		for(int i = 0; i < References.metalCount; i++)
-			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.ingot, 1, i), i * 18 + 27, 8);
 		if(tea.inventoryStacks[1] != null) {
 			int currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");
-			int nearestValidAlloy = Integer.MAX_VALUE;
-			for(int i = 0; i < References.validAlloyCount; i++)
-				if(getAlloyDiff(currentAlloy, nearestValidAlloy) > getAlloyDiff(currentAlloy, InfiniteAlloys.instance.worldData.getValidAlloys()[i]))
-					nearestValidAlloy = InfiniteAlloys.instance.worldData.getValidAlloys()[i];
+			IAWorldData worldData = InfiniteAlloys.instance.worldData;
 			for(int i = 0; i < References.metalCount; i++) {
 				int currentValue = InfiniteAlloys.intAtPos(10, References.metalCount, currentAlloy, i);
-				int nearestValue = InfiniteAlloys.intAtPos(10, References.metalCount, nearestValidAlloy, i);
-				Rectangle symbol = nearestValue > currentValue ? UP_ARROW : nearestValue < currentValue ? DOWN_ARROW : CHECK;
+				int nextValue = InfiniteAlloys.intAtPos(10, References.metalCount, worldData.getValidAlloys()[worldData.alloysUnlocked], i);
+				Rectangle symbol = nextValue > currentValue ? DOWN_ARROW : nextValue < currentValue ? UP_ARROW : CHECK;
 				drawTexturedModalRect((References.validAlloyCount - i) * 18 + 45, 26, symbol.x, symbol.y, symbol.width, symbol.height);
 			}
 		}
+		for(int i = 0; i < References.metalCount; i++)
+			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.ingot, 1, i), i * 18 + 27, 8);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}

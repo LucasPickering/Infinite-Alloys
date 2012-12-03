@@ -49,6 +49,8 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 				joules -= joulesUsedPerTick;
 				processProgress++;
 				if(processProgress >= ticksToProcess) {
+					if(InfiniteAlloys.instance.worldData.alloysUnlocked == Math.min(inventoryStacks[0].getItemDamage() - 1, References.validAlloyCount))
+						InfiniteAlloys.instance.worldData.alloysUnlocked = inventoryStacks[0].getItemDamage();
 					processProgress = 0;
 					if(inventoryStacks[2] != null) {
 						int alloy = inventoryStacks[0].getTagCompound().getInteger("alloy");

@@ -26,15 +26,15 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 
 public abstract class GuiMachine extends GuiContainer {
 
-	public static Rectangle ENERGY_METER = new Rectangle(0, 0, 10, 32);
-	public static Rectangle TAB_LEFT_OFF = new Rectangle(10, 0, 24, 24);
-	public static Rectangle TAB_LEFT_ON = new Rectangle(34, 0, 28, 24);
-	public static Rectangle TAB_RIGHT_OFF = new Rectangle(62, 0, 29, 24);
-	public static Rectangle TAB_RIGHT_ON = new Rectangle(91, 0, 28, 24);
-	public static Rectangle PROGRESS_BAR = new Rectangle(119, 0, 108, 18);
-	public static Rectangle UP_ARROW = new Rectangle(10, 24, 16, 16);
-	public static Rectangle DOWN_ARROW = new Rectangle(26, 24, 16, 16);
-	public static Rectangle CHECK = new Rectangle(42, 24, 16, 16);
+	public static final Rectangle ENERGY_METER = new Rectangle(0, 0, 10, 32);
+	public static final Rectangle TAB_LEFT_OFF = new Rectangle(10, 0, 24, 24);
+	public static final Rectangle TAB_LEFT_ON = new Rectangle(34, 0, 28, 24);
+	public static final Rectangle TAB_RIGHT_OFF = new Rectangle(62, 0, 29, 24);
+	public static final Rectangle TAB_RIGHT_ON = new Rectangle(91, 0, 28, 24);
+	public static final Rectangle PROGRESS_BAR = new Rectangle(119, 0, 108, 18);
+	public static final Rectangle UP_ARROW = new Rectangle(10, 24, 16, 16);
+	public static final Rectangle DOWN_ARROW = new Rectangle(26, 24, 16, 16);
+	public static final Rectangle CHECK = new Rectangle(42, 24, 16, 16);
 
 	private String texture;
 	protected java.awt.Point topLeft = new java.awt.Point();
@@ -72,10 +72,13 @@ public abstract class GuiMachine extends GuiContainer {
 				texts.add(InfiniteAlloys.getStringLocalization("upgrade." + References.upgradeNames[i] + ".name"));
 				colors.add(0xaaaaaa);
 			}
-			drawTextBox(texts, colors, mouseX, mouseY);
+			int[] colorsA = new int[colors.size()];
+			for(int i = 0; i < colors.size(); i++)
+				colorsA[i] = colors.get(i);
+			drawTextBox(texts.toArray(new String[texts.size()]), colorsA, mouseX, mouseY);
 		}
 		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
-		if(mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y + ENERGY_METER.height - joulesScaled, ENERGY_METER.width, joulesScaled))
+		if(mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y, ENERGY_METER.width, joulesScaled))
 			drawTextBox(ElectricInfo.getDisplayShort(tem.joules, ElectricInfo.ElectricUnit.JOULES), 0xffffff, mouseX, mouseY);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);

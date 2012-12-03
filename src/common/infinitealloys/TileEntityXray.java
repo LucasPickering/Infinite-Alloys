@@ -87,11 +87,11 @@ public class TileEntityXray extends TileEntityMachine {
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(SPEED2))
-			ticksToProcess = 500;
+			ticksToProcess = 12000;
 		else if(hasUpgrade(SPEED1))
-			ticksToProcess = 750;
+			ticksToProcess = 18000;
 		else
-			ticksToProcess = 1000;
+			ticksToProcess = 24000;
 
 		if(hasUpgrade(EFFICIENCY2))
 			joulesUsedPerTick = 1800D;
