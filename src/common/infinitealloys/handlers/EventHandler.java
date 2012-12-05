@@ -50,7 +50,7 @@ public class EventHandler {
 					for(int digit : alloyDigits)
 						alloy = alloy + digit;
 					validAlloys[i] = new Integer(alloy);
-					System.out.println("Alloy " + i + ": " + validAlloys[i]);
+					System.out.println("SPOILER ALERT! Alloy " + i + ": " + validAlloys[i]);
 				}
 				InfiniteAlloys.instance.worldData = new IAWorldData(validAlloys);
 			}

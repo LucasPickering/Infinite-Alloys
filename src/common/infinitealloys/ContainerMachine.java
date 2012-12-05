@@ -65,4 +65,67 @@ public class ContainerMachine extends Container {
 		inventory.playersUsing.remove(player.username);
 		TileEntityMachine.controllers.remove(player.username);
 	}
+
+	@Override
+	protected boolean mergeItemStack(ItemStack itemstack, int slotStart, int slotEnd, boolean backwards)
+	{
+		boolean var5 = false;
+		int currentSlot = slotStart;
+		if(backwards)
+			currentSlot = slotEnd - 1;
+		Slot slot;
+		ItemStack stackInSlot;
+		int maxStackSize;
+		if(itemstack.isStackable()) {
+			while(itemstack.stackSize > 0 && (!backwards && currentSlot < slotEnd || backwards && currentSlot >= slotStart)) {
+				slot = (Slot)inventorySlots.get(currentSlot);
+				maxStackSize = Math.min(itemstack.getMaxStackSize(), slot.getSlotStackLimit());
+				stackInSlot = slot.getStack();
+				if(stackInSlot != null && stackInSlot.itemID == itemstack.itemID && (!itemstack.getHasSubtypes() || itemstack.getItemDamage() == stackInSlot.getItemDamage()) && ItemStack.areItemStackTagsEqual(itemstack, stackInSlot)) {
+					int var9 = stackInSlot.stackSize + itemstack.stackSize;
+					if(var9 <= maxStackSize) {
+						itemstack.stackSize = 0;
+						stackInSlot.stackSize = var9;
+						slot.onSlotChanged();
+						var5 = true;
+					}
+					else if(stackInSlot.stackSize < maxStackSize) {
+						itemstack.stackSize -= maxStackSize - stackInSlot.stackSize;
+						stackInSlot.stackSize = maxStackSize;
+						slot.onSlotChanged();
+						var5 = true;
+					}
+				}
+				if(backwards)
+					currentSlot--;
+				else
+					currentSlot++;
+			}
+		}
+		if(itemstack.stackSize > 0) {
+			if(backwards)
+				currentSlot = slotEnd - 1;
+			else
+				currentSlot = slotStart;
+			while(!backwards && currentSlot < slotEnd || backwards && currentSlot >= slotStart) {
+				slot = (Slot)inventorySlots.get(currentSlot);
+				maxStackSize = Math.min(itemstack.getMaxStackSize(), slot.getSlotStackLimit());
+				stackInSlot = slot.getStack();
+				if(stackInSlot == null) {
+					ItemStack itemstack2 = itemstack.copy();
+					itemstack2.stackSize = Math.min(itemstack2.stackSize, maxStackSize);
+					slot.putStack(itemstack2);
+					slot.onSlotChanged();
+					itemstack.stackSize -= itemstack2.stackSize;
+					var5 = true;
+					break;
+				}
+				if(backwards)
+					currentSlot--;
+				else
+					currentSlot++;
+			}
+		}
+		return var5;
+	}
 }

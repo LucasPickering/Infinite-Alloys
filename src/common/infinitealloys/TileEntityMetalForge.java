@@ -71,10 +71,9 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		super.updateEntity();
 		boolean invChanged = false;
 		joulesUsedPerTick *= (double)getIngotsInRecipe();
-		// System.out.println((worldObj.isRemote ? "Client: " : "Server: ") + Arrays.equals(lastRecipeAmts, recipeAmts));
 		if(!Arrays.equals(lastRecipeAmts, recipeAmts))
 			processProgress = 0;
-		lastRecipeAmts = recipeAmts;
+		lastRecipeAmts = Arrays.copyOf(recipeAmts, recipeAmts.length);
 		if(shouldBurn()) {
 			processProgress += (float)(getInventoryStackLimit() - getIngotsInRecipe() + 1);
 			joules -= joulesUsedPerTick;
