@@ -1,5 +1,9 @@
-package infinitealloys;
+package infinitealloys.tile;
 
+import infinitealloys.InfiniteAlloys;
+import infinitealloys.Point;
+import infinitealloys.References;
+import infinitealloys.block.BlockMachine;
 import infinitealloys.handlers.PacketHandler;
 import java.util.ArrayList;
 import java.util.HashMap;

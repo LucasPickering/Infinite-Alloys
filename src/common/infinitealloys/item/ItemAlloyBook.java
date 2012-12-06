@@ -1,4 +1,4 @@
-package infinitealloys;
+package infinitealloys.item;
 
 import java.util.List;
 import cpw.mods.fml.common.Side;

@@ -1,7 +1,7 @@
 package infinitealloys.client;
 
 import infinitealloys.References;
-import infinitealloys.TileEntityMachine;
+import infinitealloys.tile.TileEntityMachine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.ItemStack;

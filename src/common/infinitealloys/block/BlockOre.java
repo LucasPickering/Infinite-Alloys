@@ -1,5 +1,6 @@
-package infinitealloys;
+package infinitealloys.block;
 
+import infinitealloys.References;
 import java.util.List;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.ItemStack;

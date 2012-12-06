@@ -1,4 +1,4 @@
-package infinitealloys;
+package infinitealloys.item;
 
 import net.minecraft.src.ItemBlock;
 import net.minecraft.src.ItemStack;

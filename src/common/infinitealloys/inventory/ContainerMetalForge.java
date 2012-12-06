@@ -1,5 +1,7 @@
-package infinitealloys;
+package infinitealloys.inventory;
 
+import infinitealloys.tile.TileEntityMachine;
+import infinitealloys.tile.TileEntityMetalForge;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;

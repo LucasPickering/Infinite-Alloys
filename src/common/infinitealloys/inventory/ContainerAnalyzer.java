@@ -1,32 +1,34 @@
-package infinitealloys;
+package infinitealloys.inventory;
 
+import infinitealloys.InfiniteAlloys;
+import infinitealloys.tile.TileEntityAnalyzer;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 
-public class ContainerPrinter extends ContainerMachine {
+public class ContainerAnalyzer extends ContainerMachine {
 
-	public TileEntityPrinter inventory;
+	public TileEntityAnalyzer inventory;
 
-	public ContainerPrinter(InventoryPlayer inventoryPlayer, TileEntityPrinter tileEntity) {
+	public ContainerAnalyzer(InventoryPlayer inventoryPlayer, TileEntityAnalyzer tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
-		addSlotToContainer(new SlotPrinter(inventory, 0, 12, 44));
-		addSlotToContainer(new SlotPrinter(inventory, 1, 80, 44));
-		addSlotToContainer(new SlotPrinter(inventory, 2, 148, 44));
-		addSlotToContainer(new SlotUpgrade(inventory, 3, 148, 6));
+		addSlotToContainer(new SlotAnalyzer(inventory, 0, 28, 58));
+		addSlotToContainer(new SlotAnalyzer(inventory, 1, 172, 58));
+		addSlotToContainer(new SlotAnalyzer(inventory, 2, 172, 33));
+		addSlotToContainer(new SlotUpgrade(inventory, 3, 172, 8));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 66 + y * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 20 + x * 18, 84 + y * 18));
 		for(int x = 0; x < 9; x++)
-			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 124));
+			addSlotToContainer(new Slot(inventoryPlayer, x, 20 + x * 18, 142));
 	}
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack itemstack = null;
-		Slot stackInSlot = (Slot)inventorySlots.get(slot);
+		Slot stackInSlot = (Slot)this.inventorySlots.get(slot);
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
 			ItemStack stackInSlotCopy = stackInSlot.getStack();
 			itemstack = stackInSlotCopy.copy();

@@ -1,14 +1,14 @@
 package infinitealloys.handlers;
 
-import infinitealloys.BlockMachine;
 import infinitealloys.IAWorldData;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
 import infinitealloys.References;
-import infinitealloys.TileEntityAnalyzer;
-import infinitealloys.TileEntityComputer;
-import infinitealloys.TileEntityMachine;
-import infinitealloys.TileEntityMetalForge;
+import infinitealloys.block.BlockMachine;
+import infinitealloys.tile.TileEntityAnalyzer;
+import infinitealloys.tile.TileEntityComputer;
+import infinitealloys.tile.TileEntityMachine;
+import infinitealloys.tile.TileEntityMetalForge;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

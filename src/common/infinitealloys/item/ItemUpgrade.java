@@ -1,5 +1,7 @@
-package infinitealloys;
+package infinitealloys.item;
 
+import infinitealloys.InfiniteAlloys;
+import infinitealloys.References;
 import java.util.List;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityPlayer;

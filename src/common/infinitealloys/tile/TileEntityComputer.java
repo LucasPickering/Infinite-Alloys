@@ -1,5 +1,8 @@
-package infinitealloys;
+package infinitealloys.tile;
 
+import infinitealloys.InfiniteAlloys;
+import infinitealloys.Point;
+import infinitealloys.block.BlockMachine;
 import java.util.ArrayList;
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;

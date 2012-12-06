@@ -1,8 +1,8 @@
 package infinitealloys.client;
 
-import infinitealloys.ContainerMachine;
-import infinitealloys.TileEntityComputer;
 import infinitealloys.handlers.PacketHandler;
+import infinitealloys.inventory.ContainerMachine;
+import infinitealloys.tile.TileEntityComputer;
 import net.minecraft.src.GuiButton;
 import net.minecraft.src.GuiTextField;
 import net.minecraft.src.InventoryPlayer;

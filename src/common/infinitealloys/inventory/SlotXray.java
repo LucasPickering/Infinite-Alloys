@@ -1,5 +1,6 @@
-package infinitealloys;
+package infinitealloys.inventory;
 
+import infinitealloys.tile.TileEntityXray;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;

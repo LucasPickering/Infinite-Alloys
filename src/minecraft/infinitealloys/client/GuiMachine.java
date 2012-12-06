@@ -1,12 +1,12 @@
 package infinitealloys.client;
 
-import infinitealloys.BlockMachine;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
 import infinitealloys.References;
-import infinitealloys.TileEntityComputer;
-import infinitealloys.TileEntityMachine;
+import infinitealloys.block.BlockMachine;
 import infinitealloys.handlers.PacketHandler;
+import infinitealloys.tile.TileEntityComputer;
+import infinitealloys.tile.TileEntityMachine;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -32,6 +32,7 @@ public abstract class GuiMachine extends GuiContainer {
 	public static final Rectangle TAB_RIGHT_OFF = new Rectangle(62, 0, 29, 24);
 	public static final Rectangle TAB_RIGHT_ON = new Rectangle(91, 0, 28, 24);
 	public static final Rectangle PROGRESS_BAR = new Rectangle(119, 0, 108, 18);
+	public static final Rectangle XRAY_GRID = new Rectangle(227, 0, 16, 16);
 	public static final Rectangle UP_ARROW = new Rectangle(10, 24, 16, 16);
 	public static final Rectangle DOWN_ARROW = new Rectangle(26, 24, 16, 16);
 	public static final Rectangle CHECK = new Rectangle(42, 24, 16, 16);

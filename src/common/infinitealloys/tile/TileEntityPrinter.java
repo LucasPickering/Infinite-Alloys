@@ -1,4 +1,4 @@
-package infinitealloys;
+package infinitealloys.tile;
 
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.ForgeDirection;

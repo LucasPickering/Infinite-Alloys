@@ -1,5 +1,6 @@
-package infinitealloys;
+package infinitealloys.tile;
 
+import infinitealloys.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import net.minecraft.src.Block;
@@ -27,11 +28,11 @@ public class TileEntityXray extends TileEntityMachine {
 	}
 
 	public static void addDetectable(Block block, int worth) {
-		addDetectable(new ItemStack(block), worth);
+		addDetectable(block, worth);
 	}
 
-	public static void addDetectable(ItemStack block, int worth) {
-		detectables.put(block.itemID + "@" + block.getItemDamage(), worth);
+	public static void addDetectable(Block block, int metadata, int worth) {
+		detectables.put(block.blockID + "@" + metadata, worth);
 	}
 
 	public static boolean isDetectable(ItemStack block) {

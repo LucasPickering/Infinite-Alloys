@@ -2,11 +2,11 @@ package infinitealloys.client;
 
 import java.awt.Rectangle;
 import org.lwjgl.opengl.GL11;
-import infinitealloys.ContainerAnalyzer;
 import infinitealloys.IAWorldData;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
-import infinitealloys.TileEntityAnalyzer;
+import infinitealloys.inventory.ContainerAnalyzer;
+import infinitealloys.tile.TileEntityAnalyzer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 
