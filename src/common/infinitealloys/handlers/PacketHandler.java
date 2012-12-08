@@ -6,7 +6,6 @@ import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.tile.TEHelper;
-import infinitealloys.tile.TileEntityAnalyzer;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;

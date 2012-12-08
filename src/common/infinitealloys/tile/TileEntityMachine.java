@@ -1,12 +1,10 @@
 package infinitealloys.tile;
 
 import infinitealloys.InfiniteAlloys;
-import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.handlers.PacketHandler;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;

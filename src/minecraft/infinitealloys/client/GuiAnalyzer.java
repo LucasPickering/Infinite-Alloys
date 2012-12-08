@@ -1,14 +1,14 @@
 package infinitealloys.client;
 
-import java.awt.Rectangle;
-import org.lwjgl.opengl.GL11;
 import infinitealloys.IAWorldData;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.tile.TileEntityAnalyzer;
+import java.awt.Rectangle;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 public class GuiAnalyzer extends GuiMachine {
 
@@ -22,6 +22,8 @@ public class GuiAnalyzer extends GuiMachine {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+		for(int i = 0; i < References.metalCount; i++)
+			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.ingot, 1, i), i * 18 + 27, 8);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
@@ -37,8 +39,6 @@ public class GuiAnalyzer extends GuiMachine {
 				drawTexturedModalRect((References.validAlloyCount - i) * 18 + 45, 26, symbol.x, symbol.y, symbol.width, symbol.height);
 			}
 		}
-		for(int i = 0; i < References.metalCount; i++)
-			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.ingot, 1, i), i * 18 + 27, 8);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}

@@ -1,6 +1,5 @@
 package infinitealloys.handlers;
 
-import infinitealloys.References;
 import infinitealloys.client.GuiAnalyzer;
 import infinitealloys.client.GuiComputer;
 import infinitealloys.client.GuiMetalForge;

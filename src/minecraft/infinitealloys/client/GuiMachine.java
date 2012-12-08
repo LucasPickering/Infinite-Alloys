@@ -10,8 +10,6 @@ import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.Block;
 import net.minecraft.src.Container;
@@ -21,7 +19,6 @@ import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
 import net.minecraft.src.World;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import universalelectricity.core.electricity.ElectricInfo;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -37,6 +34,8 @@ public abstract class GuiMachine extends GuiContainer {
 	public static final Rectangle UP_ARROW = new Rectangle(10, 24, 16, 16);
 	public static final Rectangle DOWN_ARROW = new Rectangle(26, 24, 16, 16);
 	public static final Rectangle CHECK = new Rectangle(42, 24, 16, 16);
+	public static final Rectangle BLOCK_BG_OFF = new Rectangle(58, 24, 36, 18);
+	public static final Rectangle BLOCK_BG_ON = new Rectangle(94, 24, 36, 18);
 
 	private String texture;
 	protected java.awt.Point topLeft = new java.awt.Point();
@@ -101,15 +100,15 @@ public abstract class GuiMachine extends GuiContainer {
 		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
 		drawTexturedModalRect(energyMeter.x, energyMeter.y, ENERGY_METER.x, ENERGY_METER.y + ENERGY_METER.height - joulesScaled, ENERGY_METER.width, joulesScaled);
 		machineTabs.clear();
-		Point cont = TEHelper.controllers.get(Minecraft.getMinecraft().thePlayer.username);
+		Point cont = TEHelper.controllers.get(mc.thePlayer.username);
 		if(cont != null) {
 			TileEntityComputer tec = ((TileEntityComputer)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z));
-			controllerTab = new GuiMachineTab(itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true, tem.coordsEquals(cont.x, cont.y, cont.z));
-			controllerTab.drawButton(mc);
+			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true, tem.coordsEquals(cont.x, cont.y, cont.z));
+			controllerTab.drawButton();
 			for(int i = 0; i < tec.networkCoords.size(); i++) {
 				Point coords = tec.networkCoords.get(i);
-				machineTabs.add(new GuiMachineTab(itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityMachine)mc.theWorld.getBlockTileEntity(coords.x, coords.y, coords.z), i / 5 == 0, tem.coordsEquals(coords.x, coords.y, coords.z)));
-				machineTabs.get(i).drawButton(mc);
+				machineTabs.add(new GuiMachineTab(mc, itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityMachine)mc.theWorld.getBlockTileEntity(coords.x, coords.y, coords.z), i / 5 == 0, tem.coordsEquals(coords.x, coords.y, coords.z)));
+				machineTabs.get(i).drawButton();
 			}
 		}
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -151,14 +150,14 @@ public abstract class GuiMachine extends GuiContainer {
 		}
 	}
 
-	protected void bindTexture(String texture) {
-		mc.renderEngine.bindTexture(mc.renderEngine.getTexture(References.TEXTURE_PATH + "gui/" + texture + ".png"));
+	public static void bindTexture(String texture) {
+		Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(References.TEXTURE_PATH + "gui/" + texture + ".png"));
 	}
 
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
-		if(controllerTab != null && controllerTab.mousePressed(mouseX, mouseY)) {
+		if(controllerTab != null && controllerTab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
 			World world = Minecraft.getMinecraft().theWorld;
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			int x = controllerTab.tem.xCoord;
@@ -171,7 +170,7 @@ public abstract class GuiMachine extends GuiContainer {
 			return;
 		}
 		for(GuiMachineTab tab : machineTabs) {
-			if(tab.mousePressed(mouseX, mouseY)) {
+			if(tab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
 				World world = Minecraft.getMinecraft().theWorld;
 				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 				int x = tab.tem.xCoord;

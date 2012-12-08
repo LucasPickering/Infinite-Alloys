@@ -1,9 +1,5 @@
 package infinitealloys.client;
 
-import org.lwjgl.opengl.GL11;
-import java.util.ArrayList;
-import org.lwjgl.opengl.GL11;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.handlers.PacketHandler;
@@ -11,7 +7,8 @@ import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.tile.TileEntityMetalForge;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.Slot;
+import org.lwjgl.opengl.GL11;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiMetalForge extends GuiMachine {
 
@@ -37,17 +34,17 @@ public class GuiMetalForge extends GuiMachine {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glColor4f(1F, 1F, 1F, 1F);
-		bindTexture("extras");
-		drawTexturedModalRect(31, 14, PROGRESS_BAR.x, PROGRESS_BAR.y, temf.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
 		if(temf.inventoryStacks[0] != null && temf.presetSelection > -1) {
 			int[] alloys = temf.inventoryStacks[0].getTagCompound().getIntArray("alloys");
 			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.alloyIngot, 1, temf.getDamageForAlloy(alloys[temf.presetSelection])), 40, 52);
 		}
 		for(int i = 0; i < References.metalCount; i++)
 			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.ingot, 1, i), i % 4 * 18 + 66, i / 4 * 18 + 43);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glColor4f(1F, 1F, 1F, 1F);
+		bindTexture("extras");
+		drawTexturedModalRect(31, 14, PROGRESS_BAR.x, PROGRESS_BAR.y, temf.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
 		for(int i = 0; i < References.metalCount; i++)
 			fontRenderer.drawStringWithShadow(new Byte(temf.recipeAmts[i]).toString(), i % 4 * 18 + 77, i / 4 * 18 + 52, 0xffffff);
 		GL11.glEnable(GL11.GL_LIGHTING);

@@ -2,8 +2,6 @@ package infinitealloys.tile;
 
 import infinitealloys.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
-import net.minecraft.src.Block;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 
@@ -57,7 +55,7 @@ public class TileEntityXray extends TileEntityMachine {
 							int xRel = i == 0 ? x : -x;
 							int zRel = j == 0 ? z : -z;
 							if(worldObj.getBlockId(xCoord + xRel, yCoord + y, zCoord + zRel) == targetID && worldObj.getBlockMetadata(xCoord + xRel, yCoord + y, zCoord + zRel) == targetMetadata)
-								detectedBlocks.add(new Point(xCoord + xRel, yCoord + y, zCoord + zRel));
+								detectedBlocks.add(new Point(xRel, y, zRel));
 							if(++blocksSearched == 20) {
 								lastSearch.set(xRel, y, zRel);
 								return;
@@ -70,6 +68,10 @@ public class TileEntityXray extends TileEntityMachine {
 			lastSearch.x = 0;
 		}
 		lastSearch.y = 0;
+	}
+
+	public ArrayList<Point> getDetectedBlocks() {
+		return detectedBlocks;
 	}
 
 	@Override
