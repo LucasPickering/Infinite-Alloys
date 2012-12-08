@@ -4,6 +4,7 @@ import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.handlers.PacketHandler;
+import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityAnalyzer;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
@@ -11,7 +12,6 @@ import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
 import java.util.List;
-import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.CreativeTabs;
@@ -31,8 +31,6 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 public class BlockMachine extends BlockContainer {
-
-	private Random random = new Random();
 
 	public BlockMachine(int id, int texture) {
 		super(id, texture, Material.iron);
@@ -93,11 +91,11 @@ public class BlockMachine extends BlockContainer {
 
 	public void openGui(World world, EntityPlayer player, TileEntityMachine tem, boolean fromComputer) {
 		if(!fromComputer && FMLCommonHandler.instance().getEffectiveSide().isClient())
-			TileEntityMachine.controllers.put(Minecraft.getMinecraft().thePlayer.username, null);
+			TEHelper.controllers.put(Minecraft.getMinecraft().thePlayer.username, null);
 		if(tem instanceof TileEntityComputer) {
 			player.openGui(InfiniteAlloys.instance, 0, world, tem.xCoord, tem.yCoord, tem.zCoord);
 			if(FMLCommonHandler.instance().getEffectiveSide().isServer()) {
-				TileEntityMachine.controllers.put(player.username, new Point(tem.xCoord, tem.yCoord, tem.zCoord));
+				TEHelper.controllers.put(player.username, new Point(tem.xCoord, tem.yCoord, tem.zCoord));
 				PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEControllerPacket(player), (Player)player);
 			}
 		}

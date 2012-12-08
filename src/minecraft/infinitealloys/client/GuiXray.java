@@ -19,4 +19,9 @@ public class GuiXray extends GuiMachine {
 		tex = tileEntity;
 		blocks = new ItemStack[tex.yCoord][tex.range * 2 + 1][tex.range * 2 + 1];
 	}
+
+	@Override
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+
+	}
 }

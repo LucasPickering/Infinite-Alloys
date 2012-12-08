@@ -5,6 +5,7 @@ import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.block.BlockMachine;
+import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityAnalyzer;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
@@ -104,7 +105,7 @@ public class PacketHandler implements IPacketHandler {
 				y = data.readInt();
 				z = data.readInt();
 				if(y >= 0)
-					TileEntityMachine.controllers.put(Minecraft.getMinecraft().thePlayer.username, new Point(x, y, z));
+					TEHelper.controllers.put(Minecraft.getMinecraft().thePlayer.username, new Point(x, y, z));
 				break;
 			case COMPUTER_ADD_MACHINE:
 				x = data.readInt();
@@ -177,7 +178,7 @@ public class PacketHandler implements IPacketHandler {
 	}
 
 	public static Packet getTEControllerPacket(EntityPlayer player) {
-		Point controller = TileEntityMachine.controllers.get(player.username);
+		Point controller = TEHelper.controllers.get(player.username);
 		if(controller != null)
 			return getPacket(TE_CONTROLLER, controller.x, controller.y, controller.z);
 		else

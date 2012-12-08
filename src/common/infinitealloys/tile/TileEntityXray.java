@@ -9,7 +9,6 @@ import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityXray extends TileEntityMachine {
 
-	private static HashMap<String, Integer> detectables = new HashMap<String, Integer>();
 	private ArrayList<Point> detectedBlocks = new ArrayList<Point>();
 	public int range;
 	private Point lastSearch;
@@ -25,18 +24,6 @@ public class TileEntityXray extends TileEntityMachine {
 		stackLimit = 1;
 		range = 10;
 		lastSearch = new Point(0, 0, 0);
-	}
-
-	public static void addDetectable(Block block, int worth) {
-		addDetectable(block, worth);
-	}
-
-	public static void addDetectable(Block block, int metadata, int worth) {
-		detectables.put(block.blockID + "@" + metadata, worth);
-	}
-
-	public static boolean isDetectable(ItemStack block) {
-		return detectables.containsKey(block.itemID + "@" + block.getItemDamage());
 	}
 
 	@Override
@@ -87,32 +74,32 @@ public class TileEntityXray extends TileEntityMachine {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(SPEED2))
+		if(hasUpgrade(TEHelper.SPEED2))
 			ticksToProcess = 12000;
-		else if(hasUpgrade(SPEED1))
+		else if(hasUpgrade(TEHelper.SPEED1))
 			ticksToProcess = 18000;
 		else
 			ticksToProcess = 24000;
 
-		if(hasUpgrade(EFFICIENCY2))
+		if(hasUpgrade(TEHelper.EFFICIENCY2))
 			joulesUsedPerTick = 1800D;
-		else if(hasUpgrade(EFFICIENCY1))
+		else if(hasUpgrade(TEHelper.EFFICIENCY1))
 			joulesUsedPerTick = 2700D;
 		else
 			joulesUsedPerTick = 3600D;
 
-		if(hasUpgrade(RANGE2))
+		if(hasUpgrade(TEHelper.RANGE2))
 			range = 20;
-		else if(hasUpgrade(RANGE1))
+		else if(hasUpgrade(TEHelper.RANGE1))
 			range = 15;
 		else
 			range = 10;
 
-		canNetwork = hasUpgrade(WIRELESS);
+		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 
-		if(hasUpgrade(ELECCAPACITY2))
+		if(hasUpgrade(TEHelper.ELECCAPACITY2))
 			maxJoules = 1000000D;
-		else if(hasUpgrade(ELECCAPACITY1))
+		else if(hasUpgrade(TEHelper.ELECCAPACITY1))
 			maxJoules = 750000D;
 		else
 			maxJoules = 500000D;
@@ -120,12 +107,12 @@ public class TileEntityXray extends TileEntityMachine {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(SPEED1);
-		validUpgrades.add(SPEED2);
-		validUpgrades.add(EFFICIENCY1);
-		validUpgrades.add(EFFICIENCY2);
-		validUpgrades.add(RANGE1);
-		validUpgrades.add(RANGE2);
-		validUpgrades.add(WIRELESS);
+		validUpgrades.add(TEHelper.SPEED1);
+		validUpgrades.add(TEHelper.SPEED2);
+		validUpgrades.add(TEHelper.EFFICIENCY1);
+		validUpgrades.add(TEHelper.EFFICIENCY2);
+		validUpgrades.add(TEHelper.RANGE1);
+		validUpgrades.add(TEHelper.RANGE2);
+		validUpgrades.add(TEHelper.WIRELESS);
 	}
 }

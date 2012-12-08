@@ -27,30 +27,9 @@ import cpw.mods.fml.common.network.Player;
 
 public abstract class TileEntityMachine extends TileEntity implements ISidedInventory, IElectricityReceiver {
 
-	public static final int SPEED1 = 1;
-	public static final int SPEED2 = 2;
-	public static final int EFFICIENCY1 = 4;
-	public static final int EFFICIENCY2 = 8;
-	public static final int CAPACITY1 = 16;
-	public static final int CAPACITY2 = 32;
-	public static final int RANGE1 = 64;
-	public static final int RANGE2 = 128;
-	public static final int WIRELESS = 256;
-	public static final int ELECCAPACITY1 = 512;
-	public static final int ELECCAPACITY2 = 1024;
-
-	/** The controlling computer for each player */
-	public static HashMap<String, Point> controllers = new HashMap<String, Point>();
-
 	public Random random = new Random();
 	public ArrayList<String> playersUsing = new ArrayList<String>();
 	public ItemStack[] inventoryStacks;
-
-	/** A list of upgrades that are prerequisites for other upgrades */
-	private ArrayList<Integer> prereqUpgrades = new ArrayList<Integer>();
-
-	/** A list of upgrades that require other upgrades to work */
-	private ArrayList<Integer> prereqNeedingUpgrades = new ArrayList<Integer>();
 
 	/** A binary integer used to determine what upgrades have been installed */
 	private int upgrades;
@@ -89,16 +68,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	public TileEntityMachine() {
-		prereqUpgrades.add(SPEED1);
-		prereqUpgrades.add(EFFICIENCY1);
-		prereqUpgrades.add(CAPACITY1);
-		prereqUpgrades.add(RANGE1);
-		prereqUpgrades.add(ELECCAPACITY1);
-		prereqNeedingUpgrades.add(SPEED2);
-		prereqNeedingUpgrades.add(EFFICIENCY2);
-		prereqNeedingUpgrades.add(CAPACITY2);
-		prereqNeedingUpgrades.add(RANGE2);
-		prereqNeedingUpgrades.add(ELECCAPACITY2);
 		populateValidUpgrades();
 	}
 
@@ -189,7 +158,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 * @param upgrade
 	 * @return true if it is a prereq */
 	public boolean isPrereqUpgrade(ItemStack upgrade) {
-		return prereqUpgrades.contains(upgrade.getItemDamage());
+		return TEHelper.prereqUpgrades.contains(upgrade.getItemDamage());
 	}
 
 	/** Does the upgrade require another to work?
@@ -197,7 +166,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 * @param upgrade
 	 * @return true if it has a prereq */
 	public boolean hasPrereqUpgrade(ItemStack upgrade) {
-		return prereqNeedingUpgrades.contains(upgrade.getItemDamage());
+		return TEHelper.prereqNeedingUpgrades.contains(upgrade.getItemDamage());
 	}
 
 	@SideOnly(Side.CLIENT)

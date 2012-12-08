@@ -1,5 +1,6 @@
 package infinitealloys.inventory;
 
+import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityXray;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
@@ -13,6 +14,6 @@ public class SlotXray extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return TileEntityXray.isDetectable(itemstack);
+		return TEHelper.isDetectable(itemstack.itemID, itemstack.getItemDamage());
 	}
 }

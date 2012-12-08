@@ -1,5 +1,6 @@
 package infinitealloys.inventory;
 
+import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityXray;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
@@ -34,7 +35,7 @@ public class ContainerXray extends ContainerMachine {
 					return null;
 			}
 			else {
-				if(inventory.isDetectable(stackInSlotCopy)) {
+				if(TEHelper.isDetectable(stackInSlotCopy.itemID, stackInSlotCopy.getItemDamage())) {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}

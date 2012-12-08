@@ -11,6 +11,7 @@ import infinitealloys.item.ItemBlockIA;
 import infinitealloys.item.ItemGPS;
 import infinitealloys.item.ItemIngot;
 import infinitealloys.item.ItemUpgrade;
+import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityAnalyzer;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMetalForge;
@@ -94,18 +95,18 @@ public class CommonProxy {
 		GameRegistry.registerTileEntity(TileEntityAnalyzer.class, "Analyzer");
 		GameRegistry.registerTileEntity(TileEntityPrinter.class, "Printer");
 		GameRegistry.registerTileEntity(TileEntityXray.class, "Xray");
-		TileEntityXray.addDetectable(Block.oreCoal, 1);
-		TileEntityXray.addDetectable(Block.oreIron, 2);
-		TileEntityXray.addDetectable(Block.oreGold, 6);
-		TileEntityXray.addDetectable(Block.oreDiamond, 8);
-		TileEntityXray.addDetectable(InfiniteAlloys.ore, 0, 3);
-		TileEntityXray.addDetectable(InfiniteAlloys.ore, 1, 4);
-		TileEntityXray.addDetectable(InfiniteAlloys.ore, 2, 5);
-		TileEntityXray.addDetectable(InfiniteAlloys.ore, 3, 6);
-		TileEntityXray.addDetectable(InfiniteAlloys.ore, 4, 7);
-		TileEntityXray.addDetectable(InfiniteAlloys.ore, 5, 8);
-		TileEntityXray.addDetectable(InfiniteAlloys.ore, 6, 9);
-		TileEntityXray.addDetectable(InfiniteAlloys.ore, 7, 10);
+		TEHelper.addDetectable(Block.oreCoal, 1);
+		TEHelper.addDetectable(Block.oreIron, 2);
+		TEHelper.addDetectable(Block.oreGold, 6);
+		TEHelper.addDetectable(Block.oreDiamond, 8);
+		TEHelper.addDetectable(InfiniteAlloys.ore, 0, 3);
+		TEHelper.addDetectable(InfiniteAlloys.ore, 1, 4);
+		TEHelper.addDetectable(InfiniteAlloys.ore, 2, 5);
+		TEHelper.addDetectable(InfiniteAlloys.ore, 3, 6);
+		TEHelper.addDetectable(InfiniteAlloys.ore, 4, 7);
+		TEHelper.addDetectable(InfiniteAlloys.ore, 5, 8);
+		TEHelper.addDetectable(InfiniteAlloys.ore, 6, 9);
+		TEHelper.addDetectable(InfiniteAlloys.ore, 7, 10);
 	}
 
 	public void initHandlers() {

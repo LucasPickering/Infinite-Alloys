@@ -1,5 +1,6 @@
 package infinitealloys.inventory;
 
+import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityMachine;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
@@ -64,7 +65,7 @@ public class ContainerMachine extends Container {
 	public void onCraftGuiClosed(EntityPlayer player) {
 		super.onCraftGuiClosed(player);
 		inventory.playersUsing.remove(player.username);
-		TileEntityMachine.controllers.remove(player.username);
+		TEHelper.controllers.remove(player.username);
 	}
 
 	@Override

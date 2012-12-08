@@ -5,6 +5,7 @@ import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.handlers.PacketHandler;
+import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import java.awt.Rectangle;
@@ -100,7 +101,7 @@ public abstract class GuiMachine extends GuiContainer {
 		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
 		drawTexturedModalRect(energyMeter.x, energyMeter.y, ENERGY_METER.x, ENERGY_METER.y + ENERGY_METER.height - joulesScaled, ENERGY_METER.width, joulesScaled);
 		machineTabs.clear();
-		Point cont = TileEntityMachine.controllers.get(Minecraft.getMinecraft().thePlayer.username);
+		Point cont = TEHelper.controllers.get(Minecraft.getMinecraft().thePlayer.username);
 		if(cont != null) {
 			TileEntityComputer tec = ((TileEntityComputer)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z));
 			controllerTab = new GuiMachineTab(itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true, tem.coordsEquals(cont.x, cont.y, cont.z));

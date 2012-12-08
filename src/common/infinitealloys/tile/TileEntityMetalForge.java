@@ -170,32 +170,32 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	protected void updateUpgrades() {
-		if(hasUpgrade(SPEED2))
+		if(hasUpgrade(TEHelper.SPEED2))
 			ticksToProcess = 6400;
-		else if(hasUpgrade(SPEED1))
+		else if(hasUpgrade(TEHelper.SPEED1))
 			ticksToProcess = 9600;
 		else
 			ticksToProcess = 12800;
 
-		if(hasUpgrade(EFFICIENCY2))
+		if(hasUpgrade(TEHelper.EFFICIENCY2))
 			joulesUsedPerTick = 180D;
-		else if(hasUpgrade(EFFICIENCY1))
+		else if(hasUpgrade(TEHelper.EFFICIENCY1))
 			joulesUsedPerTick = 270D;
 		else
 			joulesUsedPerTick = 360D;
 
-		if(hasUpgrade(CAPACITY2))
+		if(hasUpgrade(TEHelper.CAPACITY2))
 			stackLimit = 48;
-		else if(hasUpgrade(CAPACITY1))
+		else if(hasUpgrade(TEHelper.CAPACITY1))
 			stackLimit = 64;
 		else
 			stackLimit = 32;
 
-		canNetwork = hasUpgrade(WIRELESS);
+		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 
-		if(hasUpgrade(ELECCAPACITY2))
+		if(hasUpgrade(TEHelper.ELECCAPACITY2))
 			maxJoules = 1000000D;
-		else if(hasUpgrade(ELECCAPACITY1))
+		else if(hasUpgrade(TEHelper.ELECCAPACITY1))
 			maxJoules = 750000D;
 		else
 			maxJoules = 500000D;
@@ -204,14 +204,14 @@ public class TileEntityMetalForge extends TileEntityMachine {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(SPEED1);
-		validUpgrades.add(SPEED2);
-		validUpgrades.add(EFFICIENCY1);
-		validUpgrades.add(EFFICIENCY2);
-		validUpgrades.add(CAPACITY1);
-		validUpgrades.add(CAPACITY2);
-		validUpgrades.add(WIRELESS);
-		validUpgrades.add(ELECCAPACITY1);
-		validUpgrades.add(ELECCAPACITY2);
+		validUpgrades.add(TEHelper.SPEED1);
+		validUpgrades.add(TEHelper.SPEED2);
+		validUpgrades.add(TEHelper.EFFICIENCY1);
+		validUpgrades.add(TEHelper.EFFICIENCY2);
+		validUpgrades.add(TEHelper.CAPACITY1);
+		validUpgrades.add(TEHelper.CAPACITY2);
+		validUpgrades.add(TEHelper.WIRELESS);
+		validUpgrades.add(TEHelper.ELECCAPACITY1);
+		validUpgrades.add(TEHelper.ELECCAPACITY2);
 	}
 }
