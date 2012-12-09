@@ -1,6 +1,6 @@
 package infinitealloys.inventory;
 
-import infinitealloys.InfiniteAlloys;
+import infinitealloys.item.Items;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
@@ -17,7 +17,7 @@ public class SlotPrinter extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		boolean isBook = itemstack.itemID == InfiniteAlloys.alloyIngot.shiftedIndex || itemstack.itemID == Item.writableBook.shiftedIndex || itemstack.itemID == Item.writtenBook.shiftedIndex && itemstack.hasTagCompound();
+		boolean isBook = itemstack.itemID == Items.alloyIngot.shiftedIndex || itemstack.itemID == Item.writableBook.shiftedIndex || itemstack.itemID == Item.writtenBook.shiftedIndex && itemstack.hasTagCompound();
 		return (slotIndex == 0 && isBook) || (slotIndex == 1 && itemstack.itemID == Item.book.shiftedIndex);
 	}
 }

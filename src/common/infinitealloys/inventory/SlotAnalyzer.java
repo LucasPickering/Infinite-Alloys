@@ -1,6 +1,7 @@
 package infinitealloys.inventory;
 
 import infinitealloys.InfiniteAlloys;
+import infinitealloys.item.Items;
 import net.minecraft.src.IInventory;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
@@ -16,6 +17,6 @@ public class SlotAnalyzer extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return (slotIndex == 0 && itemstack.itemID == InfiniteAlloys.alloyIngot.shiftedIndex) || (slotIndex == 2 && itemstack.itemID == InfiniteAlloys.alloyBook.shiftedIndex);
+		return (slotIndex == 0 && itemstack.itemID == Items.alloyIngot.shiftedIndex) || (slotIndex == 2 && itemstack.itemID == Items.alloyBook.shiftedIndex);
 	}
 }

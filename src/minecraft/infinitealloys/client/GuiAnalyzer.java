@@ -4,6 +4,7 @@ import infinitealloys.IAWorldData;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.inventory.ContainerAnalyzer;
+import infinitealloys.item.Items;
 import infinitealloys.tile.TileEntityAnalyzer;
 import java.awt.Rectangle;
 import net.minecraft.src.InventoryPlayer;
@@ -23,7 +24,7 @@ public class GuiAnalyzer extends GuiMachine {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		for(int i = 0; i < References.metalCount; i++)
-			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.ingot, 1, i), i * 18 + 27, 8);
+			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.ingot, 1, i), i * 18 + 27, 8);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1F, 1F, 1F, 1F);

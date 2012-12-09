@@ -2,6 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
+import infinitealloys.item.Items;
 import java.util.ArrayList;
 import java.util.Arrays;
 import net.minecraft.src.ItemStack;
@@ -113,7 +114,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	public int getIngotNum(ItemStack ingot) {
-		if(ingot.itemID == InfiniteAlloys.ingot.shiftedIndex && ingot.getItemDamage() < References.metalCount)
+		if(ingot.itemID == Items.ingot.shiftedIndex && ingot.getItemDamage() < References.metalCount)
 			return ingot.getItemDamage();
 		return -1;
 	}
@@ -125,7 +126,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		int alloy = 0;
 		for(int i = 0; i < recipeAmts.length; i++)
 			alloy += Math.pow(References.alloyRadix, i) * recipeAmts[i];
-		ItemStack result = new ItemStack(InfiniteAlloys.alloyIngot);
+		ItemStack result = new ItemStack(Items.alloyIngot);
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		tagCompound.setInteger("alloy", alloy);
 		result.setTagCompound(tagCompound);

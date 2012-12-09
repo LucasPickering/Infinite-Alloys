@@ -5,6 +5,7 @@ import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.handlers.PacketHandler;
+import infinitealloys.item.Items;
 import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
@@ -68,7 +69,7 @@ public abstract class GuiMachine extends GuiContainer {
 			colors.add(0xffffff);
 			for(int i = 0; i < References.upgradeCount; i++) {
 				int damage = (int)Math.pow(2, i);
-				if(tem.isPrereqUpgrade(new ItemStack(InfiniteAlloys.upgrade, 1, damage)) && tem.hasUpgrade(damage << 1) || !tem.hasUpgrade(damage))
+				if(tem.isPrereqUpgrade(new ItemStack(Items.upgrade, 1, damage)) && tem.hasUpgrade(damage << 1) || !tem.hasUpgrade(damage))
 					continue;
 				texts.add(InfiniteAlloys.getStringLocalization("upgrade." + References.upgradeNames[i] + ".name"));
 				colors.add(0xaaaaaa);

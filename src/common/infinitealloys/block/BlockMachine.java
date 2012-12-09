@@ -4,6 +4,7 @@ import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.handlers.PacketHandler;
+import infinitealloys.item.Items;
 import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityAnalyzer;
 import infinitealloys.tile.TileEntityComputer;
@@ -43,7 +44,7 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
 		ItemStack currentItem = player.inventory.getCurrentItem();
-		if(currentItem != null && currentItem.itemID == InfiniteAlloys.gps.shiftedIndex && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).canNetwork) {
+		if(currentItem != null && currentItem.itemID == Items.gps.shiftedIndex && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).canNetwork) {
 			if(player.isSneaking() && world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer && currentItem.hasTagCompound()) {
 				if(currentItem.hasTagCompound()) {
 					NBTTagCompound tagCompound = currentItem.getTagCompound();

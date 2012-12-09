@@ -34,13 +34,6 @@ public class InfiniteAlloys {
 	public static int gpsID;
 	public static int alloyBookID;
 	public static boolean[] spawnOres = new boolean[References.metalCount];
-	public static Block ore;
-	public static Block machine;
-	public static Item ingot;
-	public static Item alloyIngot;
-	public static Item upgrade;
-	public static Item gps;
-	public static Item alloyBook;
 	public static CreativeTabs tabIA;
 	public static Achievement[] achievements = new Achievement[7];
 	public static AchievementPage achPage;

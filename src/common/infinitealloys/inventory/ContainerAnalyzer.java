@@ -1,6 +1,6 @@
 package infinitealloys.inventory;
 
-import infinitealloys.InfiniteAlloys;
+import infinitealloys.item.Items;
 import infinitealloys.tile.TileEntityAnalyzer;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
@@ -37,7 +37,7 @@ public class ContainerAnalyzer extends ContainerMachine {
 					return null;
 			}
 			if(slot > 3) {
-				if(stackInSlotCopy.itemID == InfiniteAlloys.alloyIngot.shiftedIndex) {
+				if(stackInSlotCopy.itemID == Items.alloyIngot.shiftedIndex) {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}

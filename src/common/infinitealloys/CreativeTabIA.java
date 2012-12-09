@@ -1,5 +1,6 @@
 package infinitealloys;
 
+import infinitealloys.block.Blocks;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.ItemStack;
 import cpw.mods.fml.common.Side;
@@ -14,7 +15,7 @@ public class CreativeTabIA extends CreativeTabs {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getIconItemStack() {
-		return new ItemStack(InfiniteAlloys.machine, 1, 1);
+		return new ItemStack(Blocks.machine, 1, 1);
 	}
 
 	@Override

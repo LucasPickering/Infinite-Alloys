@@ -1,9 +1,9 @@
 package infinitealloys.tile;
 
-import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.handlers.PacketHandler;
+import infinitealloys.item.Items;
 import java.util.ArrayList;
 import java.util.Random;
 import net.minecraft.src.EntityItem;
@@ -118,7 +118,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 				float f = random.nextFloat() * 0.8F + 0.1F;
 				float f1 = random.nextFloat() * 0.8F + 0.1F;
 				float f2 = random.nextFloat() * 0.8F + 0.1F;
-				EntityItem entityitem = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(InfiniteAlloys.upgrade, 1, upg));
+				EntityItem entityitem = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(Items.upgrade, 1, upg));
 				entityitem.motionX = random.nextGaussian() * 0.05F;
 				entityitem.motionY = random.nextGaussian() * 0.25F;
 				entityitem.motionZ = random.nextGaussian() * 0.05F;
@@ -134,7 +134,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 * @return true if valid */
 	public boolean isUpgradeValid(ItemStack upgrade) {
 		int damage = upgrade.getItemDamage();
-		return upgrade.itemID == InfiniteAlloys.upgrade.shiftedIndex && (!hasPrereqUpgrade(upgrade) || hasUpgrade(damage >> 1)) && !hasUpgrade(damage) && validUpgrades.contains(damage);
+		return upgrade.itemID == Items.upgrade.shiftedIndex && (!hasPrereqUpgrade(upgrade) || hasUpgrade(damage >> 1)) && !hasUpgrade(damage) && validUpgrades.contains(damage);
 	}
 
 	/** Updates all values that are dependent on upgrades */
@@ -187,11 +187,11 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	public static boolean isAlloyBook(ItemStack stack) {
-		return stack.itemID == InfiniteAlloys.alloyBook.shiftedIndex && stack.hasTagCompound();
+		return stack.itemID == Items.alloyBook.shiftedIndex && stack.hasTagCompound();
 	}
 
 	public static boolean isBook(ItemStack stack) {
-		return stack.itemID == InfiniteAlloys.alloyBook.shiftedIndex || stack.itemID == Item.writableBook.shiftedIndex || stack.itemID == Item.writtenBook.shiftedIndex && stack.hasTagCompound();
+		return stack.itemID == Items.alloyBook.shiftedIndex || stack.itemID == Item.writableBook.shiftedIndex || stack.itemID == Item.writtenBook.shiftedIndex && stack.hasTagCompound();
 	}
 
 	@Override

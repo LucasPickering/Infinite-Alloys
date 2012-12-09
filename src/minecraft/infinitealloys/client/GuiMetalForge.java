@@ -4,6 +4,7 @@ import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.inventory.ContainerMetalForge;
+import infinitealloys.item.Items;
 import infinitealloys.tile.TileEntityMetalForge;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
@@ -36,10 +37,10 @@ public class GuiMetalForge extends GuiMachine {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		if(temf.inventoryStacks[0] != null && temf.presetSelection > -1) {
 			int[] alloys = temf.inventoryStacks[0].getTagCompound().getIntArray("alloys");
-			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.alloyIngot, 1, temf.getDamageForAlloy(alloys[temf.presetSelection])), 40, 52);
+			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.alloyIngot, 1, temf.getDamageForAlloy(alloys[temf.presetSelection])), 40, 52);
 		}
 		for(int i = 0; i < References.metalCount; i++)
-			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(InfiniteAlloys.ingot, 1, i), i % 4 * 18 + 66, i / 4 * 18 + 43);
+			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.ingot, 1, i), i % 4 * 18 + 66, i / 4 * 18 + 43);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1F, 1F, 1F, 1F);

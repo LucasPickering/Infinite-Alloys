@@ -1,8 +1,8 @@
 package infinitealloys.tile;
 
-import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
 import infinitealloys.block.BlockMachine;
+import infinitealloys.block.Blocks;
 import java.util.ArrayList;
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
@@ -94,7 +94,7 @@ public class TileEntityComputer extends TileEntityMachine {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Machine out of range");
 		}
-		else if(worldObj.getBlockId(machX, machY, machZ) != InfiniteAlloys.machine.blockID) {
+		else if(worldObj.getBlockId(machX, machY, machZ) != Blocks.machine.blockID) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Can only add machines");
 		}

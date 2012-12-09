@@ -2,6 +2,7 @@ package infinitealloys.handlers;
 
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
+import infinitealloys.block.Blocks;
 import java.util.Random;
 import net.minecraft.src.IChunkProvider;
 import net.minecraft.src.World;
@@ -21,7 +22,7 @@ public class WorldGenHandler implements IWorldGenerator {
 				int x = chunkX * 16 + random.nextInt(16);
 				int y = random.nextInt(heights[i]);
 				int z = chunkZ * 16 + random.nextInt(16);
-				new WorldGenMinable(InfiniteAlloys.ore.blockID, i, 10).generate(world, random, x, y, z);
+				new WorldGenMinable(Blocks.ore.blockID, i, 10).generate(world, random, x, y, z);
 			}
 		}
 	}
