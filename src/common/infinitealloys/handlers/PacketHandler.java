@@ -31,9 +31,8 @@ public class PacketHandler implements IPacketHandler {
 	private static final int TE_SERVER_TO_CLIENT = 1;
 	private static final int TE_CLIENT_TO_SERVER = 2;
 	private static final int TE_JOULES = 3;
-	private static final int TE_CONTROLLER = 4;
-	private static final int COMPUTER_ADD_MACHINE = 5;
-	private static final int OPEN_GUI = 6;
+	private static final int COMPUTER_ADD_MACHINE = 4;
+	private static final int OPEN_GUI = 5;
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
@@ -98,13 +97,6 @@ public class PacketHandler implements IPacketHandler {
 					double joules = data.readDouble();
 					((TileEntityMachine)te).joules = joules;
 				}
-				break;
-			case TE_CONTROLLER:
-				x = data.readInt();
-				y = data.readInt();
-				z = data.readInt();
-				if(y >= 0)
-					TEHelper.controllers.put(Minecraft.getMinecraft().thePlayer.username, new Point(x, y, z));
 				break;
 			case COMPUTER_ADD_MACHINE:
 				x = data.readInt();
@@ -174,14 +166,6 @@ public class PacketHandler implements IPacketHandler {
 
 	public static Packet getTEJoulesPacket(TileEntityMachine tem) {
 		return getPacket(TE_JOULES, tem.xCoord, tem.yCoord, tem.zCoord, tem.joules);
-	}
-
-	public static Packet getTEControllerPacket(EntityPlayer player) {
-		Point controller = TEHelper.controllers.get(player.username);
-		if(controller != null)
-			return getPacket(TE_CONTROLLER, controller.x, controller.y, controller.z);
-		else
-			return getPacket(TE_CONTROLLER, 0, -1, 0);
 	}
 
 	public static Packet getComputerPacketAddMachine(int compX, int compY, int compZ, int machX, int machY, int machZ) {

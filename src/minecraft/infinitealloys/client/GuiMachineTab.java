@@ -43,10 +43,7 @@ public class GuiMachineTab extends GuiScreen {
 			else
 				drawTexturedModalRect(xPos, yPos, GuiMachine.TAB_RIGHT_OFF.x, GuiMachine.TAB_RIGHT_OFF.y, GuiMachine.TAB_RIGHT_OFF.width, GuiMachine.TAB_RIGHT_OFF.height);
 		}
-		itemRenderer.renderItemIntoGUI(mc.fontRenderer,
-				mc.renderEngine,
-				new ItemStack(tem.getBlockType().blockID, 1, tem.getBlockMetadata()),
-				xPos + 5, yPos + 4);
+		itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(tem.getBlockType().blockID, 1, tem.getBlockMetadata()), xPos + 5, yPos + 4);
 	}
 
 	public boolean mousePressed(int mouseX, int mouseY) {

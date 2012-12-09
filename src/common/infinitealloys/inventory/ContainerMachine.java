@@ -1,5 +1,6 @@
 package infinitealloys.inventory;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityMachine;
 import net.minecraft.src.Container;
@@ -64,13 +65,12 @@ public class ContainerMachine extends Container {
 	@Override
 	public void onCraftGuiClosed(EntityPlayer player) {
 		super.onCraftGuiClosed(player);
-		inventory.playersUsing.remove(player.username);
-		TEHelper.controllers.remove(player.username);
+		if(FMLCommonHandler.instance().getEffectiveSide().isServer())
+			inventory.playersUsing.remove(player.username);
 	}
 
 	@Override
-	protected boolean mergeItemStack(ItemStack itemstack, int slotStart, int slotEnd, boolean backwards)
-	{
+	protected boolean mergeItemStack(ItemStack itemstack, int slotStart, int slotEnd, boolean backwards) {
 		boolean var5 = false;
 		int currentSlot = slotStart;
 		if(backwards)

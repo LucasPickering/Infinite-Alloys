@@ -91,13 +91,10 @@ public class BlockMachine extends BlockContainer {
 
 	public void openGui(World world, EntityPlayer player, TileEntityMachine tem, boolean fromComputer) {
 		if(!fromComputer && FMLCommonHandler.instance().getEffectiveSide().isClient())
-			TEHelper.controllers.put(Minecraft.getMinecraft().thePlayer.username, null);
+			TEHelper.controllers.remove(player.username);
 		if(tem instanceof TileEntityComputer) {
+			TEHelper.controllers.put(player.username, new Point(tem.xCoord, tem.yCoord, tem.zCoord));
 			player.openGui(InfiniteAlloys.instance, 0, world, tem.xCoord, tem.yCoord, tem.zCoord);
-			if(FMLCommonHandler.instance().getEffectiveSide().isServer()) {
-				TEHelper.controllers.put(player.username, new Point(tem.xCoord, tem.yCoord, tem.zCoord));
-				PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEControllerPacket(player), (Player)player);
-			}
 		}
 		else if(tem instanceof TileEntityMetalForge)
 			player.openGui(InfiniteAlloys.instance, 1, world, tem.xCoord, tem.yCoord, tem.zCoord);

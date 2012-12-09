@@ -46,7 +46,7 @@ public class GuiAnalyzer extends GuiMachine {
 	private int getAlloyDiff(int alloy1, int alloy2) {
 		int diff = 0;
 		for(int i = 0; i < References.metalCount; i++)
-			diff += Math.pow(Math.abs(InfiniteAlloys.intAtPos(10, References.metalCount, alloy1, i) - InfiniteAlloys.intAtPos(10, References.metalCount, alloy2, i)), References.alloyRadix);
+			diff += Math.abs(InfiniteAlloys.intAtPos(10, References.metalCount, alloy1, i) - InfiniteAlloys.intAtPos(10, References.metalCount, alloy2, i) * Math.pow(References.alloyRadix, i));
 		return diff;
 	}
 }
