@@ -42,11 +42,4 @@ public class GuiAnalyzer extends GuiMachine {
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
-
-	private int getAlloyDiff(int alloy1, int alloy2) {
-		int diff = 0;
-		for(int i = 0; i < References.metalCount; i++)
-			diff += Math.abs(InfiniteAlloys.intAtPos(10, References.metalCount, alloy1, i) - InfiniteAlloys.intAtPos(10, References.metalCount, alloy2, i) * Math.pow(References.alloyRadix, i));
-		return diff;
-	}
 }

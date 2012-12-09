@@ -66,7 +66,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 		boolean invChanged = false;
-		joulesUsedPerTick *= (double)getIngotsInRecipe();
+		joulesUsedPerTick *= getIngotsInRecipe();
 		if(!Arrays.equals(lastRecipeAmts, recipeAmts))
 			processProgress = 0;
 		lastRecipeAmts = Arrays.copyOf(recipeAmts, recipeAmts.length);

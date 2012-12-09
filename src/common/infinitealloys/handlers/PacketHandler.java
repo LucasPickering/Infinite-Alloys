@@ -5,14 +5,12 @@ import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.block.BlockMachine;
-import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import net.minecraft.client.Minecraft;
 import net.minecraft.src.Block;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.INetworkManager;
@@ -139,9 +137,9 @@ public class PacketHandler implements IPacketHandler {
 				TileEntityComputer tec = (TileEntityComputer)tem;
 				dos.writeInt(tec.networkCoords.size());
 				for(Point coords : tec.networkCoords) {
-					dos.writeInt((int)coords.x);
-					dos.writeInt((int)coords.y);
-					dos.writeInt((int)coords.z);
+					dos.writeInt(coords.x);
+					dos.writeInt(coords.y);
+					dos.writeInt(coords.z);
 				}
 			}
 			else if(tem instanceof TileEntityMetalForge) {
@@ -186,14 +184,14 @@ public class PacketHandler implements IPacketHandler {
 					dos.writeByte((Byte)datum);
 				else if(datum instanceof byte[])
 					for(byte datum2 : (byte[])datum)
-						dos.writeByte((Byte)datum2);
+						dos.writeByte(datum2);
 				else if(datum instanceof Short)
 					dos.writeShort((Short)datum);
 				else if(datum instanceof Integer)
 					dos.writeInt((Integer)datum);
 				else if(datum instanceof int[])
 					for(int datum2 : (int[])datum)
-						dos.writeInt((Integer)datum2);
+						dos.writeInt(datum2);
 				else if(datum instanceof Double)
 					dos.writeDouble((Double)datum);
 			}

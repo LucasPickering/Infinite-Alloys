@@ -98,7 +98,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 					if(j > stack.stackSize)
 						j = stack.stackSize;
 					stack.stackSize -= j;
-					EntityItem entityitem = new EntityItem(worldObj, (float)xCoord + f1, (float)yCoord + f2, (float)zCoord + f3, new ItemStack(stack.itemID, j, stack.getItemDamage()));
+					EntityItem entityitem = new EntityItem(worldObj, xCoord + f1, yCoord + f2, zCoord + f3, new ItemStack(stack.itemID, j, stack.getItemDamage()));
 					if(stack.hasTagCompound())
 						entityitem.item.setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
 					entityitem.motionX = random.nextGaussian() * 0.05F;
@@ -118,7 +118,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 				float f = random.nextFloat() * 0.8F + 0.1F;
 				float f1 = random.nextFloat() * 0.8F + 0.1F;
 				float f2 = random.nextFloat() * 0.8F + 0.1F;
-				EntityItem entityitem = new EntityItem(worldObj, (float)xCoord + f, (float)yCoord + f1, (float)zCoord + f2, new ItemStack(InfiniteAlloys.upgrade, 1, upg));
+				EntityItem entityitem = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(InfiniteAlloys.upgrade, 1, upg));
 				entityitem.motionX = random.nextGaussian() * 0.05F;
 				entityitem.motionY = random.nextGaussian() * 0.25F;
 				entityitem.motionZ = random.nextGaussian() * 0.05F;

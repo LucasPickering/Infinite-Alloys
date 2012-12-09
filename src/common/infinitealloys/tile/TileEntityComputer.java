@@ -55,7 +55,7 @@ public class TileEntityComputer extends TileEntityMachine {
 		tagCompound.setInteger("NetworkSize", networkCoords.size());
 		for(int i = 0; i < networkCoords.size(); i++) {
 			Point coords = networkCoords.get(i);
-			tagCompound.setIntArray("Coords" + i, new int[] { (int)coords.x, (int)coords.y, (int)coords.z });
+			tagCompound.setIntArray("Coords" + i, new int[] { coords.x, coords.y, coords.z });
 		}
 	}
 
@@ -68,7 +68,7 @@ public class TileEntityComputer extends TileEntityMachine {
 		super.updateEntity();
 		for(int i = 0; i < networkCoords.size(); i++) {
 			Point coords = networkCoords.get(i);
-			Block block = Block.blocksList[worldObj.getBlockId((int)coords.x, (int)coords.y, (int)coords.z)];
+			Block block = Block.blocksList[worldObj.getBlockId(coords.x, coords.y, coords.z)];
 			if(!(block instanceof BlockMachine))
 				networkCoords.remove(i);
 		}

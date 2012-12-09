@@ -12,7 +12,6 @@ import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
 import java.util.List;
-import net.minecraft.client.Minecraft;
 import net.minecraft.src.BlockContainer;
 import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityLiving;
@@ -68,11 +67,9 @@ public class BlockMachine extends BlockContainer {
 						size = i;
 						break;
 					}
-					else {
-						int[] nbtCoords = tagCompound.getIntArray("coords" + i);
-						if(nbtCoords[0] == x && nbtCoords[1] == y && nbtCoords[2] == z)
-							return true;
-					}
+					int[] nbtCoords = tagCompound.getIntArray("coords" + i);
+					if(nbtCoords[0] == x && nbtCoords[1] == y && nbtCoords[2] == z)
+						return true;
 				}
 				if(size < References.gpsMaxCoords) {
 					tagCompound.setIntArray("coords" + size, new int[] { x, y, z });
@@ -171,8 +168,10 @@ public class BlockMachine extends BlockContainer {
 	public void breakBlock(World world, int x, int y, int z, int par5, int par6)
 	{
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
-		if(tem != null)
+		if(tem != null) {
 			tem.dropItems();
+			tem.dropUpgrades();
+		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}
 }

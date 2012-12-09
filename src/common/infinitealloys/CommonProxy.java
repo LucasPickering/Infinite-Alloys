@@ -73,11 +73,11 @@ public class CommonProxy {
 	}
 
 	public void initRecipes() {
-		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 0), "", 'A', alloys[3], 'B', alloys[4]);
-		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 1), "BBB", "BDB", "BBB", 'B', Block.brick, 'D', Item.doorSteel);
-		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 2), "", 'A', alloys[0]);
-		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 3), "", 'A', alloys[1], 'B', alloys[2]);
-		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 4), "XXX", "AXA", "AEA", 'A', alloys[5], 'E', Item.enderPearl, 'X', Block.cobblestone);
+		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 0), "AWA", "SGS", "ABA", 'A', alloys[2], 'B', alloys[3], 'G', Block.thinGlass, 'S', Block.stoneButton, 'W', new ItemStack(InfiniteAlloys.upgrade, 1, TEHelper.WIRELESS));
+		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 1), "BBB", "BDB", "NNN", 'B', Block.brick, 'D', Item.doorSteel, 'N', Block.netherrack);
+		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 2), "III", "RGR", "XXX", 'G', Block.glowStone, 'I', Item.ingotIron, 'R', Item.redstone);
+		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 3), "APA", "BIB", "OOO", 'A', alloys[0], 'B', alloys[1], 'I', new ItemStack(Item.dyePowder, 1, 15), 'O', Block.obsidian, 'P', Block.pistonBase);
+		addRecipe(new ItemStack(InfiniteAlloys.machine, 1, 4), "ADA", "BGB", "RER", 'A', alloys[4], 'B', alloys[5], 'D', Item.diamond, 'E', Item.enderPearl, 'G', Block.thinGlass, 'R', Item.redstone);
 		addSmelting(InfiniteAlloys.ore.blockID, 0, new ItemStack(InfiniteAlloys.ingot, 1, 0), 0.6F);
 		addSmelting(InfiniteAlloys.ore.blockID, 1, new ItemStack(InfiniteAlloys.ingot, 1, 1), 0.6F);
 		addSmelting(InfiniteAlloys.ore.blockID, 2, new ItemStack(InfiniteAlloys.ingot, 1, 2), 0.7F);

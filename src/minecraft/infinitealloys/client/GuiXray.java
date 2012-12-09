@@ -46,6 +46,7 @@ public class GuiXray extends GuiMachine {
 
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+		super.mouseClicked(mouseX, mouseY, mouseButton);
 		if(mouseButton == 0) {
 			for(int i = 0; i < blockButtons.length; i++) {
 				// TODO: remove this line

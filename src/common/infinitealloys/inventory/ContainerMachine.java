@@ -1,13 +1,12 @@
 package infinitealloys.inventory;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityMachine;
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.InventoryPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.Slot;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public class ContainerMachine extends Container {
 
