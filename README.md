@@ -5,6 +5,6 @@ upgrades, etc. If you want to help, look through the issues tab for unresolved i
 use github, visit https://help.github.com/ for help. Join the #InfiniteAlloys IRC channel on EsperNet to talk and ask questions.
 
 ### Versions
-MC: 1.4.5
-MCP: 7.21
-Forge: #378
+MC: 1.4.5  
+MCP: 7.21  
+Forge: #378  
