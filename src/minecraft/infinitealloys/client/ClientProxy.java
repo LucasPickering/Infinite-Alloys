@@ -32,6 +32,8 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void initItems() {
 		super.initItems();
+		addName(new ItemStack(Items.multi), "multi.machineComp.name");
+		addName(new ItemStack(Items.multi, 1, 1), "multi.upgComp.name");
 		for(int i = 0; i < References.metalCount; i++)
 			addName(new ItemStack(Items.ingot, 1, i), "metal." + References.metalNames[i] + ".name", "item.ingot.name");
 		addName(new ItemStack(Items.alloyIngot), "item.alloyIngot.name");

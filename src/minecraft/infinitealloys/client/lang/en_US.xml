@@ -3,6 +3,8 @@
 <properties version="1.0">
 	<comment>Amurican English Localization File</comment>
 	<entry key="itemGroup.main">Infinite Alloys</entry>
+	<entry key="multi.machineComp.name">Machine Component</entry>
+	<entry key="multi.upgComp.name">Upgrade Component</entry>
 	<entry key="item.ingot.name"> Ingot</entry>
 	<entry key="item.alloyIngot.name">Alloy Ingot</entry>
 	<entry key="item.upgrade.name">Upgrade</entry>

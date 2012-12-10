@@ -20,13 +20,13 @@ public class ItemUpgrade extends ItemIA {
 
 	@Override
 	public String getItemNameIS(ItemStack itemstack) {
-		return "iaUpgrade";
+		return "IAupgrade";
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getIconFromDamage(int damage) {
-		return (int)InfiniteAlloys.logn(2, damage) + 129;
+		return iconIndex + (int)InfiniteAlloys.logn(2, damage);
 	}
 
 	@Override

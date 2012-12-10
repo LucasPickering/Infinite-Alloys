@@ -19,7 +19,7 @@ public class ItemAlloyIngot extends ItemIA {
 
 	@Override
 	public String getItemNameIS(ItemStack stack) {
-		return "iaAlloyIngot";
+		return "IAalloyIngot";
 	}
 
 	@Override

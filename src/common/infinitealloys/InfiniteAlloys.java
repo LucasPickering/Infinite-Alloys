@@ -1,9 +1,9 @@
 package infinitealloys;
 
+import infinitealloys.block.Blocks;
+import infinitealloys.item.Items;
 import net.minecraft.src.Achievement;
-import net.minecraft.src.Block;
 import net.minecraft.src.CreativeTabs;
-import net.minecraft.src.Item;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Mod;
@@ -26,13 +26,6 @@ public class InfiniteAlloys {
 	public static InfiniteAlloys instance;
 	@SidedProxy(clientSide = "infinitealloys.client.ClientProxy", serverSide = "infinitealloys.CommonProxy")
 	public static CommonProxy proxy;
-	public static int oreID;
-	public static int machineID;
-	public static int ingotID;
-	public static int alloyIngotID;
-	public static int upgradeID;
-	public static int gpsID;
-	public static int alloyBookID;
 	public static boolean[] spawnOres = new boolean[References.metalCount];
 	public static CreativeTabs tabIA;
 	public static Achievement[] achievements = new Achievement[7];
@@ -43,13 +36,14 @@ public class InfiniteAlloys {
 	public void preInit(FMLPreInitializationEvent event) {
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
-		oreID = config.getBlock("Ore", 3000).getInt();
-		machineID = config.getBlock("Machine", 3001).getInt();
-		ingotID = config.getItem(Configuration.CATEGORY_ITEM, "Ingot", 15000).getInt();
-		alloyIngotID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyIngot", 15001).getInt();
-		upgradeID = config.getItem(Configuration.CATEGORY_ITEM, "Upgrade", 15002).getInt();
-		gpsID = config.getItem(Configuration.CATEGORY_ITEM, "GPS", 15003).getInt();
-		alloyBookID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyBook", 15004).getInt();
+		Blocks.oreID = config.getBlock("Ore", 3000).getInt();
+		Blocks.machineID = config.getBlock("Machine", 3001).getInt();
+		Items.multiID = config.getItem(Configuration.CATEGORY_ITEM, "MultiItem", 15000).getInt();
+		Items.ingotID = config.getItem(Configuration.CATEGORY_ITEM, "Ingot", 15001).getInt();
+		Items.alloyIngotID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyIngot", 15002).getInt();
+		Items.upgradeID = config.getItem(Configuration.CATEGORY_ITEM, "Upgrade", 15003).getInt();
+		Items.gpsID = config.getItem(Configuration.CATEGORY_ITEM, "GPS", 15004).getInt();
+		Items.alloyBookID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyBook", 15005).getInt();
 		int[] metalColors = { 0x858586, 0xd2cda3, 0xccc34f, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
 		for(int i = 0; i < References.metalCount; i++)
 			References.metalColors[i] = config.get("Metal Colors", References.metalNames[i], metalColors[i]).getInt();

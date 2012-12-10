@@ -17,6 +17,6 @@ public class ItemBlockIA extends ItemBlock {
 
 	@Override
 	public String getItemNameIS(ItemStack itemstack) {
-		return "iaBlock" + itemstack.itemID + "@" + itemstack.getItemDamage();
+		return "IAblock" + itemstack.itemID + "@" + itemstack.getItemDamage();
 	}
 }

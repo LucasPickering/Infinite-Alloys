@@ -5,6 +5,7 @@ public class References {
 	public static final String TEXTURE_PATH = "/infinitealloys/gfx/";
 	public static final String LANG_PATH = "lang/";
 	public static final String[] langFiles = { LANG_PATH + "en_US.xml" };
+	public static final int multiItemCount = 2;
 	public static final int metalCount = 8;
 	public static final int machineCount = 5;
 	public static final int upgradeCount = 11;

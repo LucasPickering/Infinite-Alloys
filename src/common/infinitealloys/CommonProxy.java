@@ -11,6 +11,7 @@ import infinitealloys.item.ItemAlloyIngot;
 import infinitealloys.item.ItemBlockIA;
 import infinitealloys.item.ItemGPS;
 import infinitealloys.item.ItemIngot;
+import infinitealloys.item.ItemMulti;
 import infinitealloys.item.ItemUpgrade;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEHelper;
@@ -22,11 +23,13 @@ import infinitealloys.tile.TileEntityXray;
 import net.minecraft.src.Achievement;
 import net.minecraft.src.Block;
 import net.minecraft.src.FurnaceRecipes;
+import net.minecraft.src.IRecipe;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -39,8 +42,8 @@ public class CommonProxy {
 	public void initLocalization() {}
 
 	public void initBlocks() {
-		Blocks.ore = new BlockOre(InfiniteAlloys.oreID, 0).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("ore");
-		Blocks.machine = new BlockMachine(InfiniteAlloys.machineID, 6).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("machine");
+		Blocks.ore = new BlockOre(Blocks.oreID, 0).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("IAore");
+		Blocks.machine = new BlockMachine(Blocks.machineID, 6).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("IAmachine");
 		GameRegistry.registerBlock(Blocks.ore, ItemBlockIA.class);
 		GameRegistry.registerBlock(Blocks.machine, ItemBlockIA.class);
 		OreDictionary.registerOre("oreZinc", new ItemStack(Blocks.ore, 1, 0));
@@ -62,12 +65,13 @@ public class CommonProxy {
 	}
 
 	public void initItems() {
-		Items.ingot = new ItemIngot(InfiniteAlloys.ingotID, 128).setCreativeTab(InfiniteAlloys.tabIA).setItemName("ingot");
-		Items.alloyIngot = new ItemAlloyIngot(InfiniteAlloys.alloyIngotID, 128).setItemName("alloyIngot");
-		Items.upgrade = new ItemUpgrade(InfiniteAlloys.upgradeID, 129).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("upgrade");
-		Items.gps = new ItemGPS(InfiniteAlloys.gpsID, 140).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("gps");
-		Items.alloyBook = new ItemAlloyBook(InfiniteAlloys.alloyBookID, 141).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("alloyBook");
-		OreDictionary.registerOre("ingotZinc", new ItemStack(Items.ingot, 1, 0));
+		Items.multi = new ItemMulti(Items.multiID, 128).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAmulti");
+		Items.ingot = new ItemIngot(Items.ingotID, 130).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAingot");
+		Items.alloyIngot = new ItemAlloyIngot(Items.alloyIngotID, 130).setItemName("IAalloyIngot");
+		Items.upgrade = new ItemUpgrade(Items.upgradeID, 131).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAupgrade");
+		Items.gps = new ItemGPS(Items.gpsID, 142).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAgps");
+		Items.alloyBook = new ItemAlloyBook(Items.alloyBookID, 143).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAalloyBook");
+		OreDictionary.registerOre("ingotZinc", new ItemStack(Items.ingot));
 		OreDictionary.registerOre("ingotMagnesium", new ItemStack(Items.ingot, 1, 1));
 		OreDictionary.registerOre("ingotScandium", new ItemStack(Items.ingot, 1, 2));
 		OreDictionary.registerOre("ingotTantalum", new ItemStack(Items.ingot, 1, 3));
@@ -78,38 +82,39 @@ public class CommonProxy {
 	}
 
 	public void initRecipes() {
-		addRecipe(new ItemStack(Blocks.machine, 1, 0), "AWA", "SGS", "ABA", 'A', alloys[2], 'B', alloys[3], 'G', Block.thinGlass, 'S', Block.stoneButton, 'W', upgrades[8]);
-		addRecipe(new ItemStack(Blocks.machine, 1, 1), "BBB", "BDB", "NNN", 'B', Block.brick, 'D', Item.doorSteel, 'N', Block.netherrack);
+		addRecipe(new ShapedOreRecipe(new ItemStack(Items.multi), "CWC", " B ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire"));
+		addRecipe(new ShapedOreRecipe(new ItemStack(Items.multi, 1, 1), "CTC", "IWI", 'C', "ingotCopper", 'I', Item.ingotIron, 'T', "ingotTin", 'W', "copperWire"));
+		addRecipe(new ItemStack(Blocks.machine), "ASA", "WCG", "ABA", 'A', alloys[2], 'B', alloys[3], 'C', Items.multi, 'G', Block.thinGlass, 'S', Block.stoneButton, 'W', upgrades[8]);
+		addRecipe(new ItemStack(Blocks.machine, 1, 1), "BCB", "BDB", "NNN", 'B', Block.brick, 'C', Items.multi, 'D', Item.doorSteel, 'N', Block.netherrack);
+		addRecipe(new ItemStack(Blocks.machine, 1, 2), " C ", "RGR", "III", 'C', Items.multi, 'G', Block.glowStone, 'I', Item.ingotIron, 'R', Item.redstone);
+		addRecipe(new ItemStack(Blocks.machine, 1, 3), "APA", "BIB", "OOC", 'A', alloys[0], 'B', alloys[1], 'C', Items.multi, 'I', new ItemStack(Item.dyePowder, 1, 15), 'O', Block.obsidian, 'P', Block.pistonBase);
+		addRecipe(new ItemStack(Blocks.machine, 1, 4), "ADA", "BGB", "ECE", 'A', alloys[4], 'B', alloys[5], 'C', Items.multi, 'D', Item.diamond, 'E', Item.enderPearl, 'G', Block.thinGlass);
 		// TODO: Finish this recipe
-		addRecipe(new ItemStack(Blocks.machine, 1, 2), "III", "RGR", "XXX", 'G', Block.glowStone, 'I', Item.ingotIron, 'R', Item.redstone);
-		addRecipe(new ItemStack(Blocks.machine, 1, 3), "APA", "BIB", "OOO", 'A', alloys[0], 'B', alloys[1], 'I', new ItemStack(Item.dyePowder, 1, 15), 'O', Block.obsidian, 'P', Block.pistonBase);
-		addRecipe(new ItemStack(Blocks.machine, 1, 4), "ADA", "BGB", "RER", 'A', alloys[4], 'B', alloys[5], 'D', Item.diamond, 'E', Item.enderPearl, 'G', Block.thinGlass, 'R', Item.redstone);
-		// TODO: Finish this recipe
-		addRecipe(upgrades[0], "ASA", "XXX", "AXA", 'A', alloys[0], 'S', Item.sugar);
+		addRecipe(upgrades[0], "ASA", "XUX", "AXA", 'A', alloys[0], 'S', Item.sugar, 'U', new ItemStack(Items.multi, 1, 1));
 		// TODO: Finish this recipe
 		addRecipe(upgrades[1], "AXA", "XUX", "AXA", 'A', alloys[3], 'U', upgrades[0]);
 		// TODO: Finish this recipe
-		addRecipe(upgrades[2], "XXX", "XXX", "XXX");
+		addRecipe(upgrades[2], "XXX", "XUX", "XXX", 'U', new ItemStack(Items.multi, 1, 1));
 		// TODO: Finish this recipe
 		addRecipe(upgrades[3], "XXX", "XUX", "XXX", 'U', upgrades[2]);
 		// TODO: Finish this recipe
-		addRecipe(upgrades[4], "XXX", "XXX", "XXX");
+		addRecipe(upgrades[4], "XXX", "XUX", "XXX", 'U', new ItemStack(Items.multi, 1, 1));
 		// TODO: Finish this recipe
 		addRecipe(upgrades[5], "XXX", "XUX", "XXX", 'U', upgrades[4]);
 		// TODO: Finish this recipe
-		addRecipe(upgrades[6], "XXX", "XXX", "XXX");
+		addRecipe(upgrades[6], "XXX", "XUX", "XXX", 'U', new ItemStack(Items.multi, 1, 1));
 		// TODO: Finish this recipe
 		addRecipe(upgrades[7], "XXX", "XUX", "XXX", 'U', upgrades[6]);
 		// TODO: Finish this recipe
-		addRecipe(upgrades[8], "XEX", "XXX", "XXX", 'E', Item.enderPearl);
+		addRecipe(upgrades[8], "XEX", "XUX", "XXX", 'E', Item.enderPearl, 'U', new ItemStack(Items.multi, 1, 1));
 		// TODO: Finish this recipe
-		addRecipe(upgrades[9], "XXX", "XXX", "XXX");
+		addRecipe(upgrades[9], "XXX", "XUX", "XXX", 'U', new ItemStack(Items.multi, 1, 1));
 		// TODO: Finish this recipe
 		addRecipe(upgrades[10], "XXX", "XUX", "XXX", 'U', upgrades[9]);
 		// TODO: Finish this recipe
 		addRecipe(new ItemStack(Items.gps), "XWX", "RXR", "XXX", upgrades[8], 'R', Item.redstone);
 		addRecipe(new ItemStack(Items.alloyBook), "R", "B", 'B', Item.writableBook, 'R', Item.redstone);
-		addSmelting(Blocks.ore.blockID, 0, new ItemStack(Items.ingot, 1, 0), 0.6F);
+		addSmelting(Blocks.ore.blockID, 0, new ItemStack(Items.ingot), 0.6F);
 		addSmelting(Blocks.ore.blockID, 1, new ItemStack(Items.ingot, 1, 1), 0.6F);
 		addSmelting(Blocks.ore.blockID, 2, new ItemStack(Items.ingot, 1, 2), 0.7F);
 		addSmelting(Blocks.ore.blockID, 3, new ItemStack(Items.ingot, 1, 3), 0.7F);
@@ -164,6 +169,10 @@ public class CommonProxy {
 
 	private void addRecipe(ItemStack result, Object... params) {
 		GameRegistry.addRecipe(result, params);
+	}
+
+	private void addRecipe(IRecipe recipe) {
+		GameRegistry.addRecipe(recipe);
 	}
 
 	private void addSmelting(int inputID, int inputDamage, ItemStack output, float experience) {
