@@ -82,37 +82,37 @@ public class CommonProxy {
 	}
 
 	public void initRecipes() {
-		addRecipe(new ShapedOreRecipe(new ItemStack(Items.multi), "CWC", " B ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire"));
-		addRecipe(new ShapedOreRecipe(new ItemStack(Items.multi, 1, 1), "CTC", "IWI", 'C', "ingotCopper", 'I', Item.ingotIron, 'T', "ingotTin", 'W', "copperWire"));
-		addRecipe(new ItemStack(Blocks.machine), "ASA", "WCG", "ABA", 'A', alloys[2], 'B', alloys[3], 'C', Items.multi, 'G', Block.thinGlass, 'S', Block.stoneButton, 'W', upgrades[8]);
-		addRecipe(new ItemStack(Blocks.machine, 1, 1), "BCB", "BDB", "NNN", 'B', Block.brick, 'C', Items.multi, 'D', Item.doorSteel, 'N', Block.netherrack);
-		addRecipe(new ItemStack(Blocks.machine, 1, 2), " C ", "RGR", "III", 'C', Items.multi, 'G', Block.glowStone, 'I', Item.ingotIron, 'R', Item.redstone);
-		addRecipe(new ItemStack(Blocks.machine, 1, 3), "APA", "BIB", "OOC", 'A', alloys[0], 'B', alloys[1], 'C', Items.multi, 'I', new ItemStack(Item.dyePowder, 1, 15), 'O', Block.obsidian, 'P', Block.pistonBase);
-		addRecipe(new ItemStack(Blocks.machine, 1, 4), "ADA", "BGB", "ECE", 'A', alloys[4], 'B', alloys[5], 'C', Items.multi, 'D', Item.diamond, 'E', Item.enderPearl, 'G', Block.thinGlass);
+		addRecipeDict(new ItemStack(Items.multi), "CWC", " B ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire");
+		addRecipeDict(new ItemStack(Items.multi, 1, 1), "CTC", "IWI", 'C', "ingotCopper", 'I', Item.ingotIron, 'T', "ingotTin", 'W', "copperWire");
+		addRecipe(new ItemStack(Blocks.machine), "ASA", "WCG", "ABA", 'A', alloys[2], 'B', alloys[3], 'C', Items.multi, 'G', Block.thinGlass, 'S', Block.stoneButton, 'W', upgrades[8]); // Computer
+		addRecipe(new ItemStack(Blocks.machine, 1, 1), "BCB", "BDB", "NNN", 'B', Block.brick, 'C', Items.multi, 'D', Item.doorSteel, 'N', Block.netherrack); // Metal Forge
+		addRecipe(new ItemStack(Blocks.machine, 1, 2), " C ", "RGR", "III", 'C', Items.multi, 'G', Block.glowStone, 'I', Item.ingotIron, 'R', Item.redstone); // Analyzer
+		addRecipe(new ItemStack(Blocks.machine, 1, 3), "APA", "BIB", "OOC", 'A', alloys[0], 'B', alloys[1], 'C', Items.multi, 'I', new ItemStack(Item.dyePowder, 1, 15), 'O', Block.obsidian, 'P', Block.pistonBase); // Printer
+		addRecipe(new ItemStack(Blocks.machine, 1, 4), "ADA", "BGB", "ECE", 'A', alloys[4], 'B', alloys[5], 'C', Items.multi, 'D', Item.diamond, 'E', Item.enderPearl, 'G', Block.thinGlass); // X-ray
 		// TODO: Finish this recipe
-		addRecipe(upgrades[0], "ASA", "XUX", "AXA", 'A', alloys[0], 'S', Item.sugar, 'U', new ItemStack(Items.multi, 1, 1));
+		addRecipeDict(upgrades[0], "AGA", "XUX", "ACA", 'A', alloys[2], 'C', "basicCircuit", 'G', Item.ingotGold, 'U', new ItemStack(Items.multi, 1, 1)); // Speed I
 		// TODO: Finish this recipe
-		addRecipe(upgrades[1], "AXA", "XUX", "AXA", 'A', alloys[3], 'U', upgrades[0]);
+		addRecipeDict(upgrades[1], "ADA", "XUX", "ACA", 'A', alloys[5], 'C', "eliteCircuit", 'D', Item.diamond, 'U', upgrades[0]); // Speed II
 		// TODO: Finish this recipe
-		addRecipe(upgrades[2], "XXX", "XUX", "XXX", 'U', new ItemStack(Items.multi, 1, 1));
+		addRecipeDict(upgrades[2], "AXA", "XUX", "ACA", 'A', alloys[1], 'C', "basicCircuit", 'U', new ItemStack(Items.multi, 1, 1)); // Efficiency I
 		// TODO: Finish this recipe
-		addRecipe(upgrades[3], "XXX", "XUX", "XXX", 'U', upgrades[2]);
+		addRecipeDict(upgrades[3], "AXA", "XUX", "ACA", 'A', alloys[4], 'C', "advancedCircuit", 'U', upgrades[2]); // Efficiency II
 		// TODO: Finish this recipe
-		addRecipe(upgrades[4], "XXX", "XUX", "XXX", 'U', new ItemStack(Items.multi, 1, 1));
+		addRecipeDict(upgrades[4], "ASA", " U ", "ACA", 'A', alloys[0], 'C', "basicCircuit", 'S', Block.chest, 'U', new ItemStack(Items.multi, 1, 1)); // Capacity I
 		// TODO: Finish this recipe
-		addRecipe(upgrades[5], "XXX", "XUX", "XXX", 'U', upgrades[4]);
+		addRecipeDict(upgrades[5], "ASA", "XUX", "ACA", 'A', alloys[3], 'C', "advancedCircuit", 'S', Block.chest, 'U', upgrades[4]); // Capacity II
 		// TODO: Finish this recipe
-		addRecipe(upgrades[6], "XXX", "XUX", "XXX", 'U', new ItemStack(Items.multi, 1, 1));
+		addRecipeDict(upgrades[6], "AXA", "XUX", "ACA", 'A', alloys[3], 'C', "basicCircuit", 'U', new ItemStack(Items.multi, 1, 1)); // Range I
 		// TODO: Finish this recipe
-		addRecipe(upgrades[7], "XXX", "XUX", "XXX", 'U', upgrades[6]);
+		addRecipeDict(upgrades[7], "AXA", "XUX", "ACA", 'A', alloys[5], 'C', "eliteCircuit", 'U', upgrades[6]); // Range II
 		// TODO: Finish this recipe
-		addRecipe(upgrades[8], "XEX", "XUX", "XXX", 'E', Item.enderPearl, 'U', new ItemStack(Items.multi, 1, 1));
+		addRecipeDict(upgrades[8], "AEA", "XUX", "ACA", 'A', alloys[1], 'C', "basicCircuit", 'E', Item.enderPearl, 'U', new ItemStack(Items.multi, 1, 1)); // Wireless
 		// TODO: Finish this recipe
-		addRecipe(upgrades[9], "XXX", "XUX", "XXX", 'U', new ItemStack(Items.multi, 1, 1));
+		addRecipeDict(upgrades[9], "ABA", "XUX", "ACA", 'A', alloys[2], 'B', "battery", 'C', "basicCircuit", 'U', new ItemStack(Items.multi, 1, 1)); // Electricity Capacity I
 		// TODO: Finish this recipe
-		addRecipe(upgrades[10], "XXX", "XUX", "XXX", 'U', upgrades[9]);
+		addRecipeDict(upgrades[10], "ABA", "XUX", "ACA", 'B', alloys[4], "battery", 'C', "advancedCircuit", 'U', upgrades[9]); // Electricity Capacity II
 		// TODO: Finish this recipe
-		addRecipe(new ItemStack(Items.gps), "XWX", "RXR", "XXX", upgrades[8], 'R', Item.redstone);
+		addRecipeDict(new ItemStack(Items.gps), "XWX", "RSR", 'R', Item.redstone, 'S', "basicCircuit", 'W', upgrades[8]);
 		addRecipe(new ItemStack(Items.alloyBook), "R", "B", 'B', Item.writableBook, 'R', Item.redstone);
 		addSmelting(Blocks.ore.blockID, 0, new ItemStack(Items.ingot), 0.6F);
 		addSmelting(Blocks.ore.blockID, 1, new ItemStack(Items.ingot, 1, 1), 0.6F);
@@ -171,8 +171,8 @@ public class CommonProxy {
 		GameRegistry.addRecipe(result, params);
 	}
 
-	private void addRecipe(IRecipe recipe) {
-		GameRegistry.addRecipe(recipe);
+	private void addRecipeDict(ItemStack result, Object... params) {
+		GameRegistry.addRecipe(new ShapedOreRecipe(result, params));
 	}
 
 	private void addSmelting(int inputID, int inputDamage, ItemStack output, float experience) {
