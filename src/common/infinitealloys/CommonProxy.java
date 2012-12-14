@@ -76,7 +76,7 @@ public class CommonProxy {
 		OreDictionary.registerOre("ingotScandium", new ItemStack(Items.ingot, 1, 2));
 		OreDictionary.registerOre("ingotTantalum", new ItemStack(Items.ingot, 1, 3));
 		for(int i = 0; i < alloys.length; i++)
-			alloys[i] = new ItemStack(Items.alloyIngot, 1, i);
+			alloys[i] = new ItemStack(Items.alloyIngot, 1, i + 1);
 		for(int i = 0; i < upgrades.length; i++)
 			upgrades[i] = new ItemStack(Items.upgrade, 1, (int)Math.pow(2D, i));
 	}
@@ -89,28 +89,21 @@ public class CommonProxy {
 		addRecipe(new ItemStack(Blocks.machine, 1, 2), " C ", "RGR", "III", 'C', Items.multi, 'G', Block.glowStone, 'I', Item.ingotIron, 'R', Item.redstone); // Analyzer
 		addRecipe(new ItemStack(Blocks.machine, 1, 3), "APA", "BIB", "OOC", 'A', alloys[0], 'B', alloys[1], 'C', Items.multi, 'I', new ItemStack(Item.dyePowder, 1, 15), 'O', Block.obsidian, 'P', Block.pistonBase); // Printer
 		addRecipe(new ItemStack(Blocks.machine, 1, 4), "ADA", "BGB", "ECE", 'A', alloys[4], 'B', alloys[5], 'C', Items.multi, 'D', Item.diamond, 'E', Item.enderPearl, 'G', Block.thinGlass); // X-ray
+		addRecipeDict(upgrades[0], "AGA", " U ", "ACA", 'A', alloys[2], 'C', "basicCircuit", 'G', Item.ingotGold, 'U', new ItemStack(Items.multi, 1, 1)); // Speed I
+		addRecipeDict(upgrades[1], "ADA", " U ", "ACA", 'A', alloys[5], 'C', "eliteCircuit", 'D', Item.diamond, 'U', upgrades[0]); // Speed II
 		// TODO: Finish this recipe
-		addRecipeDict(upgrades[0], "AGA", "XUX", "ACA", 'A', alloys[2], 'C', "basicCircuit", 'G', Item.ingotGold, 'U', new ItemStack(Items.multi, 1, 1)); // Speed I
+		addRecipeDict(upgrades[2], "AXA", " U ", "ACA", 'A', alloys[1], 'C', "basicCircuit", 'U', new ItemStack(Items.multi, 1, 1)); // Efficiency I
 		// TODO: Finish this recipe
-		addRecipeDict(upgrades[1], "ADA", "XUX", "ACA", 'A', alloys[5], 'C', "eliteCircuit", 'D', Item.diamond, 'U', upgrades[0]); // Speed II
-		// TODO: Finish this recipe
-		addRecipeDict(upgrades[2], "AXA", "XUX", "ACA", 'A', alloys[1], 'C', "basicCircuit", 'U', new ItemStack(Items.multi, 1, 1)); // Efficiency I
-		// TODO: Finish this recipe
-		addRecipeDict(upgrades[3], "AXA", "XUX", "ACA", 'A', alloys[4], 'C', "advancedCircuit", 'U', upgrades[2]); // Efficiency II
-		// TODO: Finish this recipe
+		addRecipeDict(upgrades[3], "AXA", " U ", "ACA", 'A', alloys[4], 'C', "advancedCircuit", 'U', upgrades[2]); // Efficiency II
 		addRecipeDict(upgrades[4], "ASA", " U ", "ACA", 'A', alloys[0], 'C', "basicCircuit", 'S', Block.chest, 'U', new ItemStack(Items.multi, 1, 1)); // Capacity I
+		addRecipeDict(upgrades[5], "ASA", " U ", "ACA", 'A', alloys[3], 'C', "advancedCircuit", 'S', Block.chest, 'U', upgrades[4]); // Capacity II
 		// TODO: Finish this recipe
-		addRecipeDict(upgrades[5], "ASA", "XUX", "ACA", 'A', alloys[3], 'C', "advancedCircuit", 'S', Block.chest, 'U', upgrades[4]); // Capacity II
+		addRecipeDict(upgrades[6], "AXA", " U ", "ACA", 'A', alloys[3], 'C', "basicCircuit", 'U', new ItemStack(Items.multi, 1, 1)); // Range I
 		// TODO: Finish this recipe
-		addRecipeDict(upgrades[6], "AXA", "XUX", "ACA", 'A', alloys[3], 'C', "basicCircuit", 'U', new ItemStack(Items.multi, 1, 1)); // Range I
-		// TODO: Finish this recipe
-		addRecipeDict(upgrades[7], "AXA", "XUX", "ACA", 'A', alloys[5], 'C', "eliteCircuit", 'U', upgrades[6]); // Range II
-		// TODO: Finish this recipe
-		addRecipeDict(upgrades[8], "AEA", "XUX", "ACA", 'A', alloys[1], 'C', "basicCircuit", 'E', Item.enderPearl, 'U', new ItemStack(Items.multi, 1, 1)); // Wireless
-		// TODO: Finish this recipe
-		addRecipeDict(upgrades[9], "ABA", "XUX", "ACA", 'A', alloys[2], 'B', "battery", 'C', "basicCircuit", 'U', new ItemStack(Items.multi, 1, 1)); // Electricity Capacity I
-		// TODO: Finish this recipe
-		addRecipeDict(upgrades[10], "ABA", "XUX", "ACA", 'B', alloys[4], "battery", 'C', "advancedCircuit", 'U', upgrades[9]); // Electricity Capacity II
+		addRecipeDict(upgrades[7], "AXA", " U ", "ACA", 'A', alloys[5], 'C', "eliteCircuit", 'U', upgrades[6]); // Range II
+		addRecipeDict(upgrades[8], "AEA", " U ", "ACA", 'A', alloys[1], 'C', "basicCircuit", 'E', Item.enderPearl, 'U', new ItemStack(Items.multi, 1, 1)); // Wireless
+		addRecipeDict(upgrades[9], "ABA", " U ", "ACA", 'A', alloys[2], 'B', "battery", 'C', "basicCircuit", 'U', new ItemStack(Items.multi, 1, 1)); // Electricity Capacity I
+		addRecipeDict(upgrades[10], "ABA", " U ", "ACA", 'B', alloys[4], 'B', "battery", 'C', "advancedCircuit", 'U', upgrades[9]); // Electricity Capacity II
 		// TODO: Finish this recipe
 		addRecipeDict(new ItemStack(Items.gps), "XWX", "RSR", 'R', Item.redstone, 'S', "basicCircuit", 'W', upgrades[8]);
 		addRecipe(new ItemStack(Items.alloyBook), "R", "B", 'B', Item.writableBook, 'R', Item.redstone);

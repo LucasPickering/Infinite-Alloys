@@ -32,7 +32,14 @@ public class ItemAlloyIngot extends ItemIA {
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
 		float[] metalMasses = new float[References.metalCount];
 		float totalMass = 0;
-		int alloy = itemstack.getTagCompound().getInteger("alloy");
+		int alloy;
+		int damage = itemstack.getItemDamage() - 1;
+		if(itemstack.hasTagCompound())
+			alloy = itemstack.getTagCompound().getInteger("alloy");
+		else if(damage >= 0 && damage < References.validAlloyCount)
+			alloy = InfiniteAlloys.instance.worldData.getValidAlloys()[damage];
+		else
+			return;
 		for(int i = 0; i < References.metalCount; i++) {
 			metalMasses[i] = InfiniteAlloys.intAtPos(References.alloyRadix, References.metalCount, alloy, i);
 			totalMass += metalMasses[i];
