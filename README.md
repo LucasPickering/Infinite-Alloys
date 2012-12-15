@@ -5,7 +5,7 @@ upgrades, etc. If you want to help, look through the issues tab for unresolved i
 use github, visit https://help.github.com/ for help. Join the #InfiniteAlloys IRC channel on EsperNet to talk and ask questions.
 
 ### Dependencies
-Minecraft Forge
+Minecraft Forge  
 Universal Electricity Basic Components
 
 ### Versions
