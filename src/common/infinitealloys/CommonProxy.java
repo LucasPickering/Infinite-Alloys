@@ -82,7 +82,7 @@ public class CommonProxy {
 	}
 
 	public void initRecipes() {
-		addRecipeDict(new ItemStack(Items.multi), "CWC", " B ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire");
+		addRecipeDict(new ItemStack(Items.multi), " W ", "CBC"," W ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire");
 		addRecipeDict(new ItemStack(Items.multi, 1, 1), "CTC", "IWI", 'C', "ingotCopper", 'I', Item.ingotIron, 'T', "ingotTin", 'W', "copperWire");
 		addRecipe(new ItemStack(Blocks.machine), "ASA", "WCG", "ABA", 'A', alloys[2], 'B', alloys[3], 'C', Items.multi, 'G', Block.thinGlass, 'S', Block.stoneButton, 'W', upgrades[8]); // Computer
 		addRecipe(new ItemStack(Blocks.machine, 1, 1), "BCB", "BDB", "NNN", 'B', Block.brick, 'C', Items.multi, 'D', Item.doorSteel, 'N', Block.netherrack); // Metal Forge
