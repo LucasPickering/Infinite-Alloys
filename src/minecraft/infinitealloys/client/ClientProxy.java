@@ -1,11 +1,10 @@
 package infinitealloys.client;
 
 import infinitealloys.CommonProxy;
-import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.block.Blocks;
 import infinitealloys.item.Items;
-import net.minecraft.src.ItemStack;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 

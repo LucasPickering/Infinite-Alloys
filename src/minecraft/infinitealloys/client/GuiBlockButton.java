@@ -1,11 +1,13 @@
 package infinitealloys.client;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.src.GuiScreen;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.RenderItem;
-import org.lwjgl.opengl.GL11;
 import java.awt.Rectangle;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.item.ItemStack;
+
+import org.lwjgl.opengl.GL11;
 
 public class GuiBlockButton extends GuiScreen {
 

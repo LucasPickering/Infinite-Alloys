@@ -1,11 +1,13 @@
 package infinitealloys.client;
 
-import java.util.ArrayList;
 import infinitealloys.Point;
 import infinitealloys.inventory.ContainerXray;
 import infinitealloys.tile.TileEntityXray;
-import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.ItemStack;
+
+import java.util.ArrayList;
+
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 
 public class GuiXray extends GuiMachine {
 

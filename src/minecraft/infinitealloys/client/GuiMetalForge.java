@@ -6,9 +6,11 @@ import infinitealloys.handlers.PacketHandler;
 import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TileEntityMetalForge;
-import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.ItemStack;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
+
 import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiMetalForge extends GuiMachine {

@@ -6,9 +6,12 @@ import infinitealloys.References;
 import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TileEntityAnalyzer;
+
 import java.awt.Rectangle;
-import net.minecraft.src.InventoryPlayer;
-import net.minecraft.src.ItemStack;
+
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
+
 import org.lwjgl.opengl.GL11;
 
 public class GuiAnalyzer extends GuiMachine {

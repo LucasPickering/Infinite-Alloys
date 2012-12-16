@@ -3,10 +3,12 @@ package infinitealloys.client;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.inventory.ContainerMachine;
 import infinitealloys.tile.TileEntityComputer;
-import net.minecraft.src.GuiButton;
-import net.minecraft.src.GuiTextField;
-import net.minecraft.src.InventoryPlayer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.InventoryPlayer;
+
 import org.lwjgl.input.Keyboard;
+
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiComputer extends GuiMachine {

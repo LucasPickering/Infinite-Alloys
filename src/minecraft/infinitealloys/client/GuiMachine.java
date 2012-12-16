@@ -11,14 +11,14 @@ import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.Block;
-import net.minecraft.src.Container;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.GuiContainer;
-import net.minecraft.src.ItemStack;
-import net.minecraft.src.Slot;
-import net.minecraft.src.World;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import universalelectricity.core.electricity.ElectricInfo;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -80,7 +80,7 @@ public abstract class GuiMachine extends GuiContainer {
 			drawTextBox(texts.toArray(new String[texts.size()]), colorsA, mouseX, mouseY);
 		}
 		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
-		if(mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y, ENERGY_METER.width, joulesScaled))
+		if(mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height))
 			drawTextBox(ElectricInfo.getDisplayShort(tem.joules, ElectricInfo.ElectricUnit.JOULES), 0xffffff, mouseX, mouseY);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
