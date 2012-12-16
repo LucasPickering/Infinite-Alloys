@@ -82,7 +82,7 @@ public class CommonProxy {
 	}
 
 	public void initRecipes() {
-		addRecipeDict(new ItemStack(Items.multi), " W ", "CBC"," W ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire");
+		addRecipeDict(new ItemStack(Items.multi), " W ", "CBC", " W ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire");
 		addRecipeDict(new ItemStack(Items.multi, 1, 1), "CTC", "IWI", 'C', "ingotCopper", 'I', Item.ingotIron, 'T', "ingotTin", 'W', "copperWire");
 		addRecipe(new ItemStack(Blocks.machine), "ASA", "WCG", "ABA", 'A', alloys[2], 'B', alloys[3], 'C', Items.multi, 'G', Block.thinGlass, 'S', Block.stoneButton, 'W', upgrades[8]); // Computer
 		addRecipe(new ItemStack(Blocks.machine, 1, 1), "BCB", "BDB", "NNN", 'B', Block.brick, 'C', Items.multi, 'D', Item.doorSteel, 'N', Block.netherrack); // Metal Forge
@@ -122,14 +122,16 @@ public class CommonProxy {
 		TEHelper.addDetectable(Block.oreIron, 2);
 		TEHelper.addDetectable(Block.oreGold, 6);
 		TEHelper.addDetectable(Block.oreDiamond, 8);
-		TEHelper.addDetectable(Blocks.ore, 0, 3);
-		TEHelper.addDetectable(Blocks.ore, 1, 4);
-		TEHelper.addDetectable(Blocks.ore, 2, 5);
-		TEHelper.addDetectable(Blocks.ore, 3, 6);
+		TEHelper.addDictDetectables("oreZinc", 3);
+		TEHelper.addDictDetectables("oreMagnesium", 4);
+		TEHelper.addDictDetectables("oreScandium", 5);
+		TEHelper.addDictDetectables("oreTantalum", 6);
 		TEHelper.addDetectable(Blocks.ore, 4, 7);
 		TEHelper.addDetectable(Blocks.ore, 5, 8);
 		TEHelper.addDetectable(Blocks.ore, 6, 9);
 		TEHelper.addDetectable(Blocks.ore, 7, 10);
+		TEHelper.addDictDetectables("oreCopper", 2);
+		TEHelper.addDictDetectables("oreTin", 2);
 	}
 
 	public void initHandlers() {

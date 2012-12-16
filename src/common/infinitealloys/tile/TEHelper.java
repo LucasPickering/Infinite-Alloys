@@ -4,6 +4,8 @@ import infinitealloys.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import net.minecraft.src.Block;
+import net.minecraft.src.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class TEHelper {
 
@@ -50,6 +52,11 @@ public class TEHelper {
 
 	public static void addDetectable(Block block, int metadata, int worth) {
 		detectables.put(block.blockID + "@" + metadata, worth);
+	}
+
+	public static void addDictDetectables(String dictName, int worth) {
+		for(ItemStack block : OreDictionary.getOres(dictName))
+			detectables.put(block.itemID + "@" + block.getItemDamage(), worth);
 	}
 
 	public static boolean isDetectable(int id, int metadata) {
