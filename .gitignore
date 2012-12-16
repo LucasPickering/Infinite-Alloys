@@ -69,8 +69,7 @@ pip-log.txt
 /src/minecraft/*
 /src/minecraft_server/*
 /src/common/*
-!/src/common/infinitealloys/
-!/src/common/mcmod.info
+!/src/minecraft/mcmod.info
 !/src/minecraft/infinitealloys
 
 *.bat
