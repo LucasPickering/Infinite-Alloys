@@ -1,12 +1,11 @@
 package infinitealloys.block;
 
 import infinitealloys.References;
-
 import java.util.List;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.IBlockAccess;
 
 public class BlockOre extends BlockIA {
 
@@ -20,8 +19,9 @@ public class BlockOre extends BlockIA {
 			list.add(new ItemStack(id, 1, i));
 	}
 
-	@Override
-	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
-		return metadata;
+	public int getRenderColor(int metadata) {
+		if(metadata < References.metalCount)
+			return References.metalColors[metadata];
+		return 0xffffff;
 	}
 }

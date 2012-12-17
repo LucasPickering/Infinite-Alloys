@@ -41,7 +41,7 @@ public class CommonProxy {
 	public void initLocalization() {}
 
 	public void initBlocks() {
-		Blocks.ore = new BlockOre(Blocks.oreID, 0).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("IAore");
+		Blocks.ore = new BlockOre(Blocks.oreID, 23).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("IAore");
 		Blocks.machine = new BlockMachine(Blocks.machineID, 6).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("IAmachine");
 		GameRegistry.registerBlock(Blocks.ore, ItemBlockIA.class);
 		GameRegistry.registerBlock(Blocks.machine, ItemBlockIA.class);
@@ -67,7 +67,7 @@ public class CommonProxy {
 		Items.multi = new ItemMulti(Items.multiID, 128).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAmulti");
 		Items.ingot = new ItemIngot(Items.ingotID, 130).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAingot");
 		Items.alloyIngot = new ItemAlloyIngot(Items.alloyIngotID, 130).setItemName("IAalloyIngot");
-		Items.upgrade = new ItemUpgrade(Items.upgradeID, 131).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAupgrade");
+		Items.upgrade = new ItemUpgrade(Items.upgradeID, 131).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAupgrade");
 		Items.gps = new ItemGPS(Items.gpsID, 142).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAgps");
 		Items.alloyBook = new ItemAlloyBook(Items.alloyBookID, 143).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAalloyBook");
 		OreDictionary.registerOre("ingotZinc", new ItemStack(Items.ingot));

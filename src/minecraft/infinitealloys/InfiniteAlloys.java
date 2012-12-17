@@ -18,7 +18,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "InfiniteAlloys", name = "Infinite Alloys", version = "0.0.2")
+@Mod(modid = "InfiniteAlloys", name = "Infinite Alloys", version = "0.1.0.1")
 @NetworkMod(channels = { "InfiniteAlloys" }, clientSideRequired = true, serverSideRequired = false, packetHandler = infinitealloys.handlers.PacketHandler.class)
 public class InfiniteAlloys {
 
