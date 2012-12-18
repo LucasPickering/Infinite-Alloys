@@ -11,9 +11,9 @@ import cpw.mods.fml.common.IWorldGenerator;
 
 public class WorldGenHandler implements IWorldGenerator {
 
-	private final int[] spawnChance = { 0, 0, 0, 0, 1, 1, 2, 2 };
+	private final int[] spawnChance = { 1, 1, 1, 1, 2, 2, 3, 3 };
 	private final int[] heights = { 60, 55, 50, 45, 40, 35, 30, 25 };
-	private final int[] rarities = { 9, 8, 7, 6, 5, 4, 3, 2 };
+	private final int[] rarities = { 8, 7, 6, 5, 4, 3, 2, 1 };
 	private final int[] groupSizes = { 10, 9, 8, 7, 6, 5, 4, 3 };
 
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {

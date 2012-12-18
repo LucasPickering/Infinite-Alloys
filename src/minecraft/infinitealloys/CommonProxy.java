@@ -41,8 +41,8 @@ public class CommonProxy {
 	public void initLocalization() {}
 
 	public void initBlocks() {
-		Blocks.ore = new BlockOre(Blocks.oreID, 23).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("IAore");
-		Blocks.machine = new BlockMachine(Blocks.machineID, 6).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("IAmachine");
+		Blocks.ore = new BlockOre(Blocks.oreID, 0).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("IAore");
+		Blocks.machine = new BlockMachine(Blocks.machineID, 1).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("IAmachine");
 		GameRegistry.registerBlock(Blocks.ore, ItemBlockIA.class);
 		GameRegistry.registerBlock(Blocks.machine, ItemBlockIA.class);
 		OreDictionary.registerOre("oreZinc", new ItemStack(Blocks.ore, 1, 0));

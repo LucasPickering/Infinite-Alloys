@@ -163,13 +163,13 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
-		return metadata * 3 + (side < 2 ? 8 : side == 3 ? 9 : 10);
+		return blockIndexInTexture + metadata * 3 + (side < 2 ? 0 : side == 3 ? 1 : 2);
 	}
 
 	@Override
 	public int getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
 		side = Vector3.getOrientationFromSide(((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z)).front, ForgeDirection.getOrientation(side)).ordinal();
-		return blockAccess.getBlockMetadata(x, y, z) * 3 + (side < 2 ? 8 : side == 3 ? 9 : 10);
+		return blockIndexInTexture + blockAccess.getBlockMetadata(x, y, z) * 3 + (side < 2 ? 0 : side == 3 ? 1 : 2);
 	}
 
 	@Override
