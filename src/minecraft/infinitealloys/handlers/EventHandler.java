@@ -3,24 +3,26 @@ package infinitealloys.handlers;
 import infinitealloys.IAWorldData;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
-
+import infinitealloys.block.Blocks;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
-
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
-public class EventHandler {
+public class EventHandler implements ICraftingHandler {
 
 	private String world;
 
@@ -101,4 +103,15 @@ public class EventHandler {
 			return;
 		PacketDispatcher.sendPacketToPlayer(PacketHandler.getWorldDataPacket(), (Player)e.entity);
 	}
+
+	@Override
+	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
+		if(item.itemID == Blocks.machine.blockID && item.getItemDamage() == 1) {
+			System.out.println("hi");
+			player.addStat(InfiniteAlloys.instance.achievements[0], 1);
+		}
+	}
+
+	@Override
+	public void onSmelting(EntityPlayer player, ItemStack item) {}
 }

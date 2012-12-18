@@ -84,10 +84,10 @@ public class CommonProxy {
 		addRecipeDict(new ItemStack(Items.multi), " W ", "CBC", " W ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire");
 		addRecipeDict(new ItemStack(Items.multi, 1, 1), "CTC", "IWI", 'C', "ingotCopper", 'I', Item.ingotIron, 'T', "ingotTin", 'W', "copperWire");
 		addRecipe(new ItemStack(Blocks.machine), "ASA", "WCG", "ABA", 'A', alloys[2], 'B', alloys[3], 'C', Items.multi, 'G', Block.thinGlass, 'S', Block.stoneButton, 'W', upgrades[8]); // Computer
-		addRecipe(new ItemStack(Blocks.machine, 1, 1), "BCB", "BDB", "NNN", 'B', Block.brick, 'C', Items.multi, 'D', Item.doorSteel, 'N', Block.netherrack); // Metal Forge
-		addRecipe(new ItemStack(Blocks.machine, 1, 2), " C ", "RGR", "III", 'C', Items.multi, 'G', Block.glowStone, 'I', Item.ingotIron, 'R', Item.redstone); // Analyzer
-		addRecipe(new ItemStack(Blocks.machine, 1, 3), "APA", "BIB", "OOC", 'A', alloys[0], 'B', alloys[1], 'C', Items.multi, 'I', new ItemStack(Item.dyePowder, 1, 15), 'O', Block.obsidian, 'P', Block.pistonBase); // Printer
-		addRecipe(new ItemStack(Blocks.machine, 1, 4), "ADA", "BGB", "ECE", 'A', alloys[4], 'B', alloys[5], 'C', Items.multi, 'D', Item.diamond, 'E', Item.enderPearl, 'G', Block.thinGlass); // X-ray
+		addRecipe(new ItemStack(Blocks.machine, 1, 1), "BDB", "BCB", "NNN", 'B', Block.brick, 'C', Items.multi, 'D', Item.doorSteel, 'N', Block.netherrack); // Metal Forge
+		addRecipe(new ItemStack(Blocks.machine, 1, 2), " G ", "RCR", "III", 'C', Items.multi, 'G', Block.glowStone, 'I', Item.ingotIron, 'R', Item.redstone); // Analyzer
+		addRecipe(new ItemStack(Blocks.machine, 1, 3), "APA", "BCB", "OIO", 'A', alloys[0], 'B', alloys[1], 'C', Items.multi, 'I', new ItemStack(Item.dyePowder, 1, 15), 'O', Block.obsidian, 'P', Block.pistonBase); // Printer
+		addRecipe(new ItemStack(Blocks.machine, 1, 4), "ADA", "BCB", "EGE", 'A', alloys[4], 'B', alloys[5], 'C', Items.multi, 'D', Item.diamond, 'E', Item.enderPearl, 'G', Block.thinGlass); // X-ray
 		addRecipeDict(upgrades[0], "AGA", " U ", "ACA", 'A', alloys[2], 'C', "basicCircuit", 'G', Item.ingotGold, 'U', new ItemStack(Items.multi, 1, 1)); // Speed I
 		addRecipeDict(upgrades[1], "ADA", " U ", "ACA", 'A', alloys[5], 'C', "eliteCircuit", 'D', Item.diamond, 'U', upgrades[0]); // Speed II
 		addRecipeDict(upgrades[2], "AIA", " U ", "ACA", 'A', alloys[1], 'C', "basicCircuit", 'I', Item.shovelSteel, 'U', new ItemStack(Items.multi, 1, 1)); // Efficiency I
@@ -134,8 +134,10 @@ public class CommonProxy {
 	}
 
 	public void initHandlers() {
+		EventHandler eventHandler = new EventHandler();
+		MinecraftForge.EVENT_BUS.register(eventHandler);
+		GameRegistry.registerCraftingHandler(eventHandler);
 		GameRegistry.registerWorldGenerator(new WorldGenHandler());
-		MinecraftForge.EVENT_BUS.register(new EventHandler());
 		NetworkRegistry.instance().registerGuiHandler(InfiniteAlloys.instance, new GuiHandler());
 	}
 
