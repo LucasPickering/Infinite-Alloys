@@ -1,9 +1,7 @@
 package infinitealloys.item;
 
 import infinitealloys.References;
-
 import java.util.List;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.Side;
@@ -26,7 +24,7 @@ public class ItemIngot extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
-		if(itemstack.getItemDamage() < 8)
+		if(itemstack.getItemDamage() < References.metalCount)
 			return References.metalColors[itemstack.getItemDamage()];
 		return 0xffffff;
 	}

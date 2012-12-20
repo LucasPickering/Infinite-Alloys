@@ -23,6 +23,9 @@ public class TEHelper {
 	public static final int ELECCAPACITY1 = 512;
 	public static final int ELECCAPACITY2 = 1024;
 
+	public static final int WATTS_PER_TICK = 500;
+	public static final int SEARCH_PER_TICK = 200;
+
 	/** The controlling computer for each player */
 	public static HashMap<String, Point> controllers = new HashMap<String, Point>();
 
@@ -70,6 +73,22 @@ public class TEHelper {
 	}
 
 	public static boolean isBook(ItemStack stack) {
-		return stack.itemID == Items.alloyBook.shiftedIndex || stack.itemID == Item.writableBook.shiftedIndex || stack.itemID == Item.writtenBook.shiftedIndex && stack.hasTagCompound();
+		return (stack.itemID == Items.alloyBook.shiftedIndex || stack.itemID == Item.writableBook.shiftedIndex || stack.itemID == Item.writtenBook.shiftedIndex) && stack.hasTagCompound();
+	}
+
+	/** Is the upgrade a prerequisite for another
+	 * 
+	 * @param upgrade
+	 * @return true if it is a prereq */
+	public static boolean isPrereqUpgrade(ItemStack upgrade) {
+		return TEHelper.prereqUpgrades.contains(upgrade.getItemDamage());
+	}
+
+	/** Does the upgrade require another to work?
+	 * 
+	 * @param upgrade
+	 * @return true if it has a prereq */
+	public static boolean hasPrereqUpgrade(ItemStack upgrade) {
+		return TEHelper.prereqNeedingUpgrades.contains(upgrade.getItemDamage());
 	}
 }

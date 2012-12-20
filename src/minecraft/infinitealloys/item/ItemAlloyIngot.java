@@ -2,10 +2,8 @@ package infinitealloys.item;
 
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -56,9 +54,8 @@ public class ItemAlloyIngot extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
-		ArrayList<Integer> redVals = new ArrayList<Integer>();
-		ArrayList<Integer> greenVals = new ArrayList<Integer>();
-		ArrayList<Integer> blueVals = new ArrayList<Integer>();
+		int colorCount = 0;
+		int redTot = 0, blueTot = 0, greenTot = 0;
 		int alloy = 0;
 		if(itemstack.hasTagCompound())
 			alloy = itemstack.getTagCompound().getInteger("alloy");
@@ -66,29 +63,20 @@ public class ItemAlloyIngot extends ItemIA {
 			alloy = InfiniteAlloys.instance.worldData.getValidAlloys()[itemstack.getItemDamage() - 1];
 		for(int i = 0; i < References.metalCount; i++) {
 			for(int j = 0; j < InfiniteAlloys.intAtPos(References.alloyRadix, References.metalCount, alloy, i); j++) {
-				String ingotColor = InfiniteAlloys.addLeadingZeros(Integer.toHexString(References.metalColors[References.metalCount - 1 - i]), 6);
-				redVals.add(Integer.parseInt(ingotColor.substring(0, 2), 16));
-				greenVals.add(Integer.parseInt(ingotColor.substring(2, 4), 16));
-				blueVals.add(Integer.parseInt(ingotColor.substring(4), 16));
+				int ingotColor = References.metalColors[References.metalCount - 1 - i];
+				colorCount++;
+				redTot += ingotColor >> 16 & 255;
+				greenTot += ingotColor >> 8 & 255;
+				blueTot += ingotColor & 255;
 			}
 		}
 		int redAvg = 0, greenAvg = 0, blueAvg = 0;
-		if(!redVals.isEmpty()) {
-			for(int red : redVals)
-				redAvg += red;
-			redAvg /= redVals.size();
+		if(colorCount != 0) {
+			redAvg = redTot / colorCount;
+			greenAvg = greenTot / colorCount;
+			blueAvg = blueTot / colorCount;
 		}
-		if(!greenVals.isEmpty()) {
-			for(int green : greenVals)
-				greenAvg += green;
-			greenAvg /= greenVals.size();
-		}
-		if(!blueVals.isEmpty()) {
-			for(int blue : blueVals)
-				blueAvg += blue;
-			blueAvg /= blueVals.size();
-		}
-		return Integer.parseInt(Integer.toHexString(redAvg) + Integer.toHexString(greenAvg) + Integer.toHexString(blueAvg), 16);
+		return redAvg << 16 + greenAvg << 8 + blueAvg;
 	}
 
 	@Override

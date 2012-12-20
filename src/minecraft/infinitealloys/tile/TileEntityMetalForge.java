@@ -3,10 +3,8 @@ package infinitealloys.tile;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.item.Items;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
@@ -112,7 +110,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
 		if(sufficientIngots.contains(false))
 			processProgress = 0;
-		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick && (inventoryStacks[2] == null || (inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1));
+		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick && (inventoryStacks[2] == null || inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1);
 	}
 
 	public int getIngotNum(ItemStack ingot) {

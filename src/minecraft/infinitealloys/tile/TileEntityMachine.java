@@ -48,8 +48,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/** True if this machine can be accessed wirelessly */
 	public boolean canNetwork;
 
-	private final int WATTS_PER_TICK = 500;
-
 	/** Maximum amount of joules this machine can store */
 	protected double maxJoules = 500000D;
 
@@ -62,10 +60,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/** Amount of ticks it takes for this machine to finish one of its processes */
 	protected int ticksToProcess = 200;
 
-	/**
-	 * Amount of ticks this machine has been running its process for, when this
-	 * reaches ticksToFinish it is done
-	 */
+	/** Amount of ticks this machine has been running its process for, when this reaches ticksToFinish it is done */
 	public int processProgress;
 
 	/** The size limit for one stack in this machine */
@@ -97,8 +92,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 				if(network != null) {
 					if(joules < maxJoules) {
-						network.startRequesting(this, WATTS_PER_TICK / getVoltage(), getVoltage());
-						joules += Math.max(Math.min(network.consumeElectricity(this).getWatts(), WATTS_PER_TICK), 0);
+						network.startRequesting(this, TEHelper.WATTS_PER_TICK / getVoltage(), getVoltage());
+						joules += Math.max(Math.min(network.consumeElectricity(this).getWatts(), TEHelper.WATTS_PER_TICK), 0);
 					}
 					else
 						network.stopRequesting(this);
@@ -160,15 +155,13 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		upgrades = 0;
 	}
 
-	/**
-	 * Determines if the given itemstack is a valid upgrade for the machine
+	/** Determines if the given itemstack is a valid upgrade for the machine
 	 * 
 	 * @param upgrade
-	 * @return true if valid
-	 */
+	 * @return true if valid */
 	public boolean isUpgradeValid(ItemStack upgrade) {
 		int damage = upgrade.getItemDamage();
-		return upgrade.itemID == Items.upgrade.shiftedIndex && (!hasPrereqUpgrade(upgrade) || hasUpgrade(damage >> 1)) && !hasUpgrade(damage) && validUpgrades.contains(damage);
+		return upgrade.itemID == Items.upgrade.shiftedIndex && (!TEHelper.hasPrereqUpgrade(upgrade) || hasUpgrade(damage >> 1)) && !hasUpgrade(damage) && validUpgrades.contains(damage);
 	}
 
 	/** Updates all values that are dependent on upgrades */
@@ -177,34 +170,12 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/** Add the valid upgrades for each machine */
 	protected abstract void populateValidUpgrades();
 
-	/**
-	 * Does the machine have the upgrade
+	/** Does the machine have the upgrade
 	 * 
 	 * @param upgrade
-	 * @return true if the machine has the upgrade
-	 */
+	 * @return true if the machine has the upgrade */
 	public boolean hasUpgrade(int upgrade) {
 		return (upgrades & upgrade) == upgrade;
-	}
-
-	/**
-	 * Is the upgrade a prerequisite for another
-	 * 
-	 * @param upgrade
-	 * @return true if it is a prereq
-	 */
-	public boolean isPrereqUpgrade(ItemStack upgrade) {
-		return TEHelper.prereqUpgrades.contains(upgrade.getItemDamage());
-	}
-
-	/**
-	 * Does the upgrade require another to work?
-	 * 
-	 * @param upgrade
-	 * @return true if it has a prereq
-	 */
-	public boolean hasPrereqUpgrade(ItemStack upgrade) {
-		return TEHelper.prereqNeedingUpgrades.contains(upgrade.getItemDamage());
 	}
 
 	@SideOnly(Side.CLIENT)

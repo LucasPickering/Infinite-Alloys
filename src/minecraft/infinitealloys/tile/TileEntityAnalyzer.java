@@ -2,9 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
-
 import java.util.Arrays;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.ForgeDirection;
