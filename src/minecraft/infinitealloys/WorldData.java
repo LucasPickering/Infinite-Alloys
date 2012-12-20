@@ -2,12 +2,12 @@ package infinitealloys;
 
 import java.io.Serializable;
 
-public class IAWorldData implements Serializable {
+public class WorldData implements Serializable {
 
 	private int[] validAlloys = new int[References.validAlloyCount];
 	public int alloysUnlocked;
 
-	public IAWorldData(int[] va) {
+	public WorldData(int[] va) {
 		validAlloys = va;
 	}
 

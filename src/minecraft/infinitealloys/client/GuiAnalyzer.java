@@ -1,6 +1,6 @@
 package infinitealloys.client;
 
-import infinitealloys.IAWorldData;
+import infinitealloys.WorldData;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.inventory.ContainerAnalyzer;
@@ -35,7 +35,7 @@ public class GuiAnalyzer extends GuiMachine {
 		drawTexturedModalRect(54, 57, PROGRESS_BAR.x, PROGRESS_BAR.y, tea.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
 		if(tea.inventoryStacks[1] != null) {
 			int currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");
-			IAWorldData worldData = InfiniteAlloys.instance.worldData;
+			WorldData worldData = InfiniteAlloys.instance.worldData;
 			for(int i = 0; i < References.metalCount; i++) {
 				int currentValue = InfiniteAlloys.intAtPos(10, References.metalCount, currentAlloy, i);
 				int nextValue = InfiniteAlloys.intAtPos(10, References.metalCount, worldData.getValidAlloys()[worldData.alloysUnlocked], i);

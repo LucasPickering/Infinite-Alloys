@@ -1,6 +1,8 @@
 package infinitealloys.block;
 
+import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
+import infinitealloys.handlers.GfxHandler;
 import java.util.List;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.asm.SideOnly;
@@ -22,18 +24,15 @@ public class BlockOre extends BlockIA {
 			list.add(new ItemStack(id, 1, i));
 	}
 
-	@SideOnly(Side.CLIENT)
-	public int getRenderColor(int metadata) {
-		if(metadata < References.metalCount)
-			return References.metalColors[metadata];
-		return 0xffffff;
+	@Override
+	public int getRenderType() {
+		return InfiniteAlloys.instance.proxy.gfxHandler.renderID;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public int colorMultiplier(IBlockAccess blockAccess, int x, int y, int z) {
-		int metadata = blockAccess.getBlockMetadata(x, y, z);
+	@Override
+	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
 		if(metadata < References.metalCount)
-			return References.metalColors[metadata];
-		return 0xffffff;
+			return blockIndexInTexture;
+		return blockIndexInTexture + 1;
 	}
 }

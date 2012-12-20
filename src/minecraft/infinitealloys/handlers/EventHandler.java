@@ -1,6 +1,6 @@
 package infinitealloys.handlers;
 
-import infinitealloys.IAWorldData;
+import infinitealloys.WorldData;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
 import infinitealloys.block.Blocks;
@@ -36,7 +36,7 @@ public class EventHandler implements ICraftingHandler {
 		try {
 			fis = new FileInputStream(world + "/IAWorldData.dat");
 			ois = new ObjectInputStream(fis);
-			InfiniteAlloys.instance.worldData = (IAWorldData)ois.readObject();
+			InfiniteAlloys.instance.worldData = (WorldData)ois.readObject();
 		}
 		catch(IOException e) {
 			if(InfiniteAlloys.instance.worldData == null) {
@@ -56,7 +56,7 @@ public class EventHandler implements ICraftingHandler {
 					validAlloys[i] = new Integer(alloy);
 					System.out.println("SPOILER ALERT! Alloy " + i + ": " + validAlloys[i]);
 				}
-				InfiniteAlloys.instance.worldData = new IAWorldData(validAlloys);
+				InfiniteAlloys.instance.worldData = new WorldData(validAlloys);
 			}
 		}
 		catch(Exception e) {

@@ -1,6 +1,6 @@
 package infinitealloys.handlers;
 
-import infinitealloys.IAWorldData;
+import infinitealloys.WorldData;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
 import infinitealloys.References;
@@ -46,7 +46,7 @@ public class PacketHandler implements IPacketHandler {
 				int[] validAlloys = new int[References.validAlloyCount];
 				for(int i = 0; i < validAlloys.length; i++)
 					validAlloys[i] = data.readInt();
-				InfiniteAlloys.instance.worldData = new IAWorldData(validAlloys);
+				InfiniteAlloys.instance.worldData = new WorldData(validAlloys);
 				break;
 			case TE_SERVER_TO_CLIENT:
 				int x = data.readInt();

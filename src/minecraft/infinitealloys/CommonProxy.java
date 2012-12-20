@@ -4,7 +4,7 @@ import infinitealloys.block.BlockMachine;
 import infinitealloys.block.BlockOre;
 import infinitealloys.block.Blocks;
 import infinitealloys.handlers.EventHandler;
-import infinitealloys.handlers.GuiHandler;
+import infinitealloys.handlers.GfxHandler;
 import infinitealloys.handlers.WorldGenHandler;
 import infinitealloys.item.ItemAlloyBook;
 import infinitealloys.item.ItemAlloyIngot;
@@ -37,12 +37,13 @@ public class CommonProxy {
 
 	private ItemStack[] alloys = new ItemStack[References.validAlloyCount];
 	private ItemStack[] upgrades = new ItemStack[References.upgradeCount];
+	public GfxHandler gfxHandler;
 
 	public void initLocalization() {}
 
 	public void initBlocks() {
 		Blocks.ore = new BlockOre(Blocks.oreID, 0).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("IAore");
-		Blocks.machine = new BlockMachine(Blocks.machineID, 1).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("IAmachine");
+		Blocks.machine = new BlockMachine(Blocks.machineID, 2).setCreativeTab(InfiniteAlloys.tabIA).setHardness(2F).setBlockName("IAmachine");
 		GameRegistry.registerBlock(Blocks.ore, ItemBlockIA.class);
 		GameRegistry.registerBlock(Blocks.machine, ItemBlockIA.class);
 		OreDictionary.registerOre("oreZinc", new ItemStack(Blocks.ore, 1, 0));
@@ -134,11 +135,12 @@ public class CommonProxy {
 	}
 
 	public void initHandlers() {
+		gfxHandler = new GfxHandler();
 		EventHandler eventHandler = new EventHandler();
 		MinecraftForge.EVENT_BUS.register(eventHandler);
 		GameRegistry.registerCraftingHandler(eventHandler);
 		GameRegistry.registerWorldGenerator(new WorldGenHandler());
-		NetworkRegistry.instance().registerGuiHandler(InfiniteAlloys.instance, new GuiHandler());
+		NetworkRegistry.instance().registerGuiHandler(InfiniteAlloys.instance, gfxHandler);
 	}
 
 	public void initAchievements() {

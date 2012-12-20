@@ -3,9 +3,11 @@ package infinitealloys.client;
 import infinitealloys.CommonProxy;
 import infinitealloys.References;
 import infinitealloys.block.Blocks;
+import infinitealloys.handlers.GfxHandler;
 import infinitealloys.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class ClientProxy extends CommonProxy {
@@ -49,5 +51,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/analyzer.png");
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/printer.png");
 		MinecraftForgeClient.preloadTexture(References.TEXTURE_PATH + "gui/alloybook.png");
+		gfxHandler.renderID = RenderingRegistry.getNextAvailableRenderId();
+		RenderingRegistry.registerBlockHandler(gfxHandler);
 	}
 }
