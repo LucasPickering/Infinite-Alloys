@@ -1,5 +1,6 @@
 package infinitealloys.handlers;
 
+import infinitealloys.FuncHelper;
 import infinitealloys.WorldData;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
@@ -8,11 +9,9 @@ import infinitealloys.block.BlockMachine;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
-
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
@@ -20,10 +19,8 @@ import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
-
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 
@@ -116,7 +113,8 @@ public class PacketHandler implements IPacketHandler {
 				x = data.readInt();
 				y = data.readInt();
 				z = data.readInt();
-				((BlockMachine)Block.blocksList[world.getBlockId(x, y, z)]).openGui(world, (EntityPlayer)player, (TileEntityMachine)world.getBlockTileEntity(x, y, z), true);
+				boolean fromComputer = data.readBoolean();
+				((BlockMachine)FuncHelper.getBlock(world, x, y, z)).openGui(world, (EntityPlayer)player, (TileEntityMachine)world.getBlockTileEntity(x, y, z), fromComputer);
 				break;
 		}
 	}
@@ -174,8 +172,8 @@ public class PacketHandler implements IPacketHandler {
 		return getPacket(COMPUTER_ADD_MACHINE, compX, compY, compZ, machX, machY, machZ);
 	}
 
-	public static Packet getPacketOpenGui(int x, int y, int z) {
-		return getPacket(OPEN_GUI, x, y, z);
+	public static Packet getPacketOpenGui(int x, int y, int z, boolean fromComputer) {
+		return getPacket(OPEN_GUI, x, y, z, fromComputer);
 	}
 
 	private static Packet getPacket(int id, Object... data) {
@@ -198,6 +196,8 @@ public class PacketHandler implements IPacketHandler {
 						dos.writeInt(datum2);
 				else if(datum instanceof Double)
 					dos.writeDouble((Double)datum);
+				else if(datum instanceof Boolean)
+					dos.writeBoolean((Boolean)datum);
 			}
 		}
 		catch(IOException e) {

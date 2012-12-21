@@ -34,7 +34,7 @@ public class ItemUpgrade extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		list.add(InfiniteAlloys.getStringLocalization("upgrade." + References.upgradeNames[(int)InfiniteAlloys.logn(2, itemstack.getItemDamage())] + ".name"));
+		list.add(InfiniteAlloys.getLoc("upgrade." + References.upgradeNames[(int)InfiniteAlloys.logn(2, itemstack.getItemDamage())] + ".name"));
 	}
 
 	@Override

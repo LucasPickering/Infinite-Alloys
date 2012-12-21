@@ -84,7 +84,7 @@ public class InfiniteAlloys {
 		return s;
 	}
 
-	public static String getStringLocalization(String key) {
+	public static String getLoc(String key) {
 		return LanguageRegistry.instance().getStringLocalization(key);
 	}
 }

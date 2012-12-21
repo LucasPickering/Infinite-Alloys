@@ -47,7 +47,7 @@ public class ItemAlloyIngot extends ItemIA {
 		for(int i = 0; i < References.metalCount; i++) {
 			float percentage = Math.round(metalMasses[i] / totalMass * 10000F) / 100F;
 			if(percentage != 0)
-				list.add(percentage + "% " + InfiniteAlloys.getStringLocalization("metal." + References.metalNames[References.metalCount - 1 - i] + ".name"));
+				list.add(percentage + "% " + InfiniteAlloys.getLoc("metal." + References.metalNames[References.metalCount - 1 - i] + ".name"));
 		}
 	}
 

@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.FuncHelper;
 import infinitealloys.Point;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.block.Blocks;
@@ -29,6 +30,7 @@ public class TileEntityComputer extends TileEntityMachine {
 	public TileEntityComputer() {
 		super();
 		inventoryStacks = new ItemStack[1];
+		maxJoules = 0D;
 		canNetwork = true;
 		networkCapacity = 3;
 		networkRange = 10;
@@ -66,12 +68,9 @@ public class TileEntityComputer extends TileEntityMachine {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		for(int i = 0; i < networkCoords.size(); i++) {
-			Point coords = networkCoords.get(i);
-			Block block = Block.blocksList[worldObj.getBlockId(coords.x, coords.y, coords.z)];
-			if(!(block instanceof BlockMachine))
-				networkCoords.remove(i);
-		}
+		for(Point coords : networkCoords)
+			if(!(FuncHelper.getBlock(worldObj, coords.x, coords.y, coords.z) instanceof BlockMachine))
+				networkCoords.remove(coords);
 	}
 
 	public boolean addMachine(EntityPlayer player, int machX, int machY, int machZ) {
@@ -111,20 +110,6 @@ public class TileEntityComputer extends TileEntityMachine {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(TEHelper.SPEED2))
-			ticksToProcess = 100;
-		else if(hasUpgrade(TEHelper.SPEED1))
-			ticksToProcess = 150;
-		else
-			ticksToProcess = 200;
-
-		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			joulesUsedPerTick = 180D;
-		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			joulesUsedPerTick = 270D;
-		else
-			joulesUsedPerTick = 360D;
-
 		if(hasUpgrade(TEHelper.CAPACITY2))
 			networkCapacity = 10;
 		else if(hasUpgrade(TEHelper.CAPACITY1))
@@ -138,13 +123,6 @@ public class TileEntityComputer extends TileEntityMachine {
 			networkRange = 15;
 		else
 			networkRange = 10;
-
-		if(hasUpgrade(TEHelper.ELECCAPACITY2))
-			maxJoules = 1000000D;
-		else if(hasUpgrade(TEHelper.ELECCAPACITY1))
-			maxJoules = 750000D;
-		else
-			maxJoules = 500000D;
 	}
 
 	@Override

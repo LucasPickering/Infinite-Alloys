@@ -49,13 +49,13 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public boolean canNetwork;
 
 	/** Maximum amount of joules this machine can store */
-	protected double maxJoules = 500000D;
+	public double maxJoules = 500000D;
 
 	/** Amount of joules stored in the machine currently */
 	public double joules = 0D;
 
 	/** Amount of joules this machine consumes per tick while working */
-	protected double joulesUsedPerTick = 360D;
+	public double joulesUsedPerTick = 360D;
 
 	/** Amount of ticks it takes for this machine to finish one of its processes */
 	protected int ticksToProcess = 200;
@@ -77,8 +77,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public void updateEntity() {
-		if(inventoryStacks[upgradeSlotIndex] != null
-				&& isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
+		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
 			upgrades |= inventoryStacks[upgradeSlotIndex].getItemDamage();
 			inventoryStacks[upgradeSlotIndex] = null;
 		}
@@ -89,7 +88,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 			for(ForgeDirection inputDirection : inputDirections) {
 				TileEntity inputTile = Vector3.getTileEntityFromSide(worldObj, new Vector3(this), inputDirection);
 				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
-
 				if(network != null) {
 					if(joules < maxJoules) {
 						network.startRequesting(this, TEHelper.WATTS_PER_TICK / getVoltage(), getVoltage());

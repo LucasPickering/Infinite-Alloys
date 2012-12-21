@@ -1,5 +1,6 @@
 package infinitealloys.client;
 
+import infinitealloys.FuncHelper;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
 import infinitealloys.References;
@@ -65,13 +66,13 @@ public abstract class GuiMachine extends GuiContainer {
 		if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY)) {
 			ArrayList<String> texts = new ArrayList<String>();
 			ArrayList<Integer> colors = new ArrayList<Integer>();
-			texts.add(InfiniteAlloys.getStringLocalization("upgrade.name"));
+			texts.add(InfiniteAlloys.getLoc("upgrade.name"));
 			colors.add(0xffffff);
 			for(int i = 0; i < References.upgradeCount; i++) {
 				int damage = (int)Math.pow(2, i);
 				if(TEHelper.isPrereqUpgrade(new ItemStack(Items.upgrade, 1, damage)) && tem.hasUpgrade(damage << 1) || !tem.hasUpgrade(damage))
 					continue;
-				texts.add(InfiniteAlloys.getStringLocalization("upgrade." + References.upgradeNames[i] + ".name"));
+				texts.add(InfiniteAlloys.getLoc("upgrade." + References.upgradeNames[i] + ".name"));
 				colors.add(0xaaaaaa);
 			}
 			int[] colorsA = new int[colors.size()];
@@ -80,8 +81,10 @@ public abstract class GuiMachine extends GuiContainer {
 			drawTextBox(texts.toArray(new String[texts.size()]), colorsA, mouseX, mouseY);
 		}
 		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
-		if(mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height))
-			drawTextBox(ElectricInfo.getDisplayShort(tem.joules, ElectricInfo.ElectricUnit.JOULES), 0xffffff, mouseX, mouseY);
+		if(tem.maxJoules > 0 && mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height)) {
+			String[] texts = { ElectricInfo.getDisplayShort(tem.joules, ElectricInfo.ElectricUnit.JOULES), ElectricInfo.getDisplayShort(tem.joulesUsedPerTick, ElectricInfo.ElectricUnit.JOULES) + "/t" };
+			drawTextBox(texts, new int[] { 0xffffff, 0xffffff }, mouseX, mouseY);
+		}
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
@@ -158,28 +161,26 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
+		World world = Minecraft.getMinecraft().theWorld;
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if(controllerTab != null && controllerTab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
-			World world = Minecraft.getMinecraft().theWorld;
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 			int x = controllerTab.tem.xCoord;
 			int y = controllerTab.tem.yCoord;
 			int z = controllerTab.tem.zCoord;
 			if(!tem.coordsEquals(x, y, z)) {
-				((BlockMachine)Block.blocksList[world.getBlockId(x, y, z)]).openGui(world, player, controllerTab.tem, true);
-				PacketDispatcher.sendPacketToServer(PacketHandler.getPacketOpenGui(x, y, z));
+				((BlockMachine)FuncHelper.getBlock(world, x, y, z)).openGui(world, player, controllerTab.tem, false);
+				PacketDispatcher.sendPacketToServer(PacketHandler.getPacketOpenGui(x, y, z, false));
 			}
 			return;
 		}
 		for(GuiMachineTab tab : machineTabs) {
 			if(tab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
-				World world = Minecraft.getMinecraft().theWorld;
-				EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 				int x = tab.tem.xCoord;
 				int y = tab.tem.yCoord;
 				int z = tab.tem.zCoord;
 				if(!tem.coordsEquals(x, y, z)) {
-					((BlockMachine)Block.blocksList[world.getBlockId(x, y, z)]).openGui(world, player, tab.tem, true);
-					PacketDispatcher.sendPacketToServer(PacketHandler.getPacketOpenGui(x, y, z));
+					((BlockMachine)FuncHelper.getBlock(world, x, y, z)).openGui(world, player, tab.tem, true);
+					PacketDispatcher.sendPacketToServer(PacketHandler.getPacketOpenGui(x, y, z, true));
 				}
 				return;
 			}
