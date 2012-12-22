@@ -2,15 +2,12 @@ package infinitealloys.block;
 
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
-import infinitealloys.handlers.GfxHandler;
+
 import java.util.List;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.ColorizerFoliage;
-import net.minecraft.world.IBlockAccess;
 
 public class BlockOre extends BlockIA {
 

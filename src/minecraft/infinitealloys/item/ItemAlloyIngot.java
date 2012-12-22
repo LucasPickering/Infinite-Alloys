@@ -2,13 +2,14 @@ package infinitealloys.item;
 
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
-import java.util.ArrayList;
+
 import java.util.List;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemAlloyIngot extends ItemIA {
 

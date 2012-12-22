@@ -9,7 +9,6 @@ import java.util.EnumSet;
 import java.util.Random;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -24,10 +23,10 @@ import universalelectricity.core.implement.IJouleStorage;
 import universalelectricity.core.implement.IVoltage;
 import universalelectricity.core.vector.Vector3;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class TileEntityMachine extends TileEntity implements ISidedInventory, IJouleStorage, IVoltage, IDisableable {
 
@@ -123,13 +122,13 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 					if(j > stack.stackSize)
 						j = stack.stackSize;
 					stack.stackSize -= j;
-					EntityItem entityitem = new EntityItem(worldObj, xCoord + f1, yCoord + f2, zCoord + f3, new ItemStack(stack.itemID, j, stack.getItemDamage()));
+					EntityItem item = new EntityItem(worldObj, xCoord + f1, yCoord + f2, zCoord + f3, new ItemStack(stack.itemID, j, stack.getItemDamage()));
 					if(stack.hasTagCompound())
-						entityitem.item.setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
-					entityitem.motionX = random.nextGaussian() * 0.05F;
-					entityitem.motionY = random.nextGaussian() * 0.25F;
-					entityitem.motionZ = random.nextGaussian() * 0.05F;
-					worldObj.spawnEntityInWorld(entityitem);
+						item.func_92014_d().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
+					item.motionX = random.nextGaussian() * 0.05F;
+					item.motionY = random.nextGaussian() * 0.25F;
+					item.motionZ = random.nextGaussian() * 0.05F;
+					worldObj.spawnEntityInWorld(item);
 				}
 			}
 		}
@@ -143,11 +142,11 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 				float f = random.nextFloat() * 0.8F + 0.1F;
 				float f1 = random.nextFloat() * 0.8F + 0.1F;
 				float f2 = random.nextFloat() * 0.8F + 0.1F;
-				EntityItem entityitem = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(Items.upgrade, 1, upg));
-				entityitem.motionX = random.nextGaussian() * 0.05F;
-				entityitem.motionY = random.nextGaussian() * 0.25F;
-				entityitem.motionZ = random.nextGaussian() * 0.05F;
-				worldObj.spawnEntityInWorld(entityitem);
+				EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(Items.upgrade, 1, upg));
+				item.motionX = random.nextGaussian() * 0.05F;
+				item.motionY = random.nextGaussian() * 0.25F;
+				item.motionZ = random.nextGaussian() * 0.05F;
+				worldObj.spawnEntityInWorld(item);
 			}
 		}
 		upgrades = 0;
