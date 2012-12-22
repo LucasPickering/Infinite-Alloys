@@ -55,7 +55,8 @@ public class PacketHandler implements IPacketHandler {
 					byte orientation = data.readByte();
 					int upgrades = data.readInt();
 					double joules = data.readDouble();
-					((TileEntityMachine)te).handlePacketDataFromServer(processProgress, orientation, upgrades, joules);
+					boolean emittingLight = data.readBoolean();
+					((TileEntityMachine)te).handlePacketDataFromServer(processProgress, orientation, upgrades, joules, emittingLight);
 					if(te instanceof TileEntityComputer) {
 						TileEntityComputer tec = (TileEntityComputer)te;
 						tec.networkCoords.clear();
@@ -135,6 +136,7 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeByte(tem.front.ordinal());
 			dos.writeInt(tem.getUpgrades());
 			dos.writeDouble(tem.joules);
+			dos.writeBoolean(tem.emittingLight);
 			if(tem instanceof TileEntityComputer) {
 				TileEntityComputer tec = (TileEntityComputer)tem;
 				dos.writeInt(tec.networkCoords.size());

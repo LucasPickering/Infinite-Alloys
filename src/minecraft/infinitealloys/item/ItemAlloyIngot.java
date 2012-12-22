@@ -76,7 +76,7 @@ public class ItemAlloyIngot extends ItemIA {
 			greenAvg = greenTot / colorCount;
 			blueAvg = blueTot / colorCount;
 		}
-		return redAvg << 16 + greenAvg << 8 + blueAvg;
+		return (redAvg << 16) + (greenAvg << 8) + blueAvg;
 	}
 
 	@Override

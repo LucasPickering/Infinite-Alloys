@@ -71,7 +71,10 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		if(!Arrays.equals(lastRecipeAmts, recipeAmts))
 			processProgress = 0;
 		lastRecipeAmts = Arrays.copyOf(recipeAmts, recipeAmts.length);
-		if(shouldBurn()) {
+		boolean wasEmittingLight = emittingLight;
+		if(emittingLight = shouldBurn()) {
+			if(wasEmittingLight != emittingLight)
+				worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType().blockID);
 			processProgress += (float)(getInventoryStackLimit() - getIngotsInRecipe() + 1);
 			joules -= joulesUsedPerTick;
 			if(processProgress >= ticksToProcess) {
@@ -173,11 +176,11 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			ticksToProcess = 12800;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			joulesUsedPerTick = 180D;
+			joulesUsedPerTick = 90D;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			joulesUsedPerTick = 270D;
+			joulesUsedPerTick = 120D;
 		else
-			joulesUsedPerTick = 360D;
+			joulesUsedPerTick = 180D;
 
 		if(hasUpgrade(TEHelper.CAPACITY2))
 			stackLimit = 48;

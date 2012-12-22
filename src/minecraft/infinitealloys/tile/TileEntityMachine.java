@@ -66,6 +66,9 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/** The size limit for one stack in this machine */
 	protected int stackLimit = 64;
 
+	/** True if this block is emitting light, such as when burning */
+	public boolean emittingLight;
+
 	public TileEntityMachine(int index) {
 		this();
 		upgradeSlotIndex = index;
@@ -252,12 +255,12 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return PacketHandler.getTEPacketToClient(this);
 	}
 
-	public void handlePacketDataFromServer(int processProgress,
-			byte orientation, int upgrades, double joules) {
+	public void handlePacketDataFromServer(int processProgress, byte orientation, int upgrades, double joules, boolean emittingLight) {
 		this.processProgress = processProgress;
 		front = ForgeDirection.getOrientation(orientation);
 		this.upgrades = upgrades;
 		this.joules = joules;
+		this.emittingLight = emittingLight;
 	}
 
 	@Override

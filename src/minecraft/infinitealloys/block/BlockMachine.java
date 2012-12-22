@@ -29,6 +29,8 @@ import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.electricity.ElectricityConnections;
 import universalelectricity.core.vector.Vector3;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
@@ -173,8 +175,7 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, int par5, int par6)
-	{
+	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
 			tem.dropItems();
@@ -182,5 +183,14 @@ public class BlockMachine extends BlockContainer {
 			ElectricityConnections.unregisterConnector(tem);
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getLightValue(IBlockAccess world, int x, int y, int z) {
+		TileEntity te = world.getBlockTileEntity(x, y, z);
+		if(te instanceof TileEntityMachine && ((TileEntityMachine)te).emittingLight)
+			return 13;
+		return 0;
 	}
 }
