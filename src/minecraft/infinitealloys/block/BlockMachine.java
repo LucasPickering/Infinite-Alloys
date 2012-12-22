@@ -154,7 +154,7 @@ public class BlockMachine extends BlockContainer {
 		if(tem != null) {
 			int dir = MathHelper.floor_double(entityliving.rotationYaw * 4.0F / 360.0F + 0.5D) % 4;
 			tem.front = ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4);
-			if(!(tem instanceof TileEntityComputer)) {
+			if(tem.maxJoules > 0) {
 				EnumSet<ForgeDirection> set = EnumSet.allOf(ForgeDirection.class);
 				set.remove(tem.front);
 				ElectricityConnections.registerConnector(tem, set);

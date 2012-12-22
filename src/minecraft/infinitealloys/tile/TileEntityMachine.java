@@ -123,12 +123,9 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 					if(j > stack.stackSize)
 						j = stack.stackSize;
 					stack.stackSize -= j;
-					EntityItem entityitem = new EntityItem(worldObj, xCoord
-							+ f1, yCoord + f2, zCoord + f3, new ItemStack(
-							stack.itemID, j, stack.getItemDamage()));
+					EntityItem entityitem = new EntityItem(worldObj, xCoord + f1, yCoord + f2, zCoord + f3, new ItemStack(stack.itemID, j, stack.getItemDamage()));
 					if(stack.hasTagCompound())
-						entityitem.item.setTagCompound((NBTTagCompound)stack
-								.getTagCompound().copy());
+						entityitem.item.setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
 					entityitem.motionX = random.nextGaussian() * 0.05F;
 					entityitem.motionY = random.nextGaussian() * 0.25F;
 					entityitem.motionZ = random.nextGaussian() * 0.05F;
@@ -180,13 +177,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@SideOnly(Side.CLIENT)
-	/**
-	 * Get a scaled progress, used for the gui progress bar
-	 * @param i Scale
-	 * @return Scaled progress
-	 */
-	public int getProcessProgressScaled(int i) {
-		return processProgress * i / ticksToProcess;
+	public int getProcessProgressScaled(int scale) {
+		return processProgress * scale / ticksToProcess;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -203,8 +195,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		super.readFromNBT(tagCompound);
 		processProgress = tagCompound.getInteger("ProcessProgress");
 		upgrades = tagCompound.getShort("Upgrades");
-		front = ForgeDirection.getOrientation(tagCompound
-				.getByte("Orientation"));
+		front = ForgeDirection.getOrientation(tagCompound.getByte("Orientation"));
 		joules = tagCompound.getDouble("Joules");
 		NBTTagList nbttaglist = tagCompound.getTagList("Items");
 		inventoryStacks = new ItemStack[getSizeInventory()];
@@ -214,7 +205,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 			if(var5 >= 0 && var5 < inventoryStacks.length)
 				inventoryStacks[var5] = ItemStack.loadItemStackFromNBT(nbttag);
 		}
-		if(!(this instanceof TileEntityComputer)) {
+		if(maxJoules > 0) {
 			EnumSet<ForgeDirection> set = EnumSet.allOf(ForgeDirection.class);
 			set.remove(front);
 			ElectricityConnections.registerConnector(this, set);
