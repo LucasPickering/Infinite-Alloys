@@ -109,6 +109,14 @@ public class TileEntityComputer extends TileEntityMachine {
 	}
 
 	@Override
+	public boolean shouldProcess() {
+		return false;
+	}
+
+	@Override
+	public void finishProcessing() {}
+
+	@Override
 	public int getJoulesUsed() {
 		return 0;
 	}

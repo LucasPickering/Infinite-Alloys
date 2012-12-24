@@ -81,9 +81,8 @@ public abstract class GuiMachine extends GuiContainer {
 		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
 		if(tem.maxJoules > 0 && mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height)) {
 			double joulesGained = tem.joulesGained;
-			double joulesUsed = tem.joulesUsedPerTick;
-			System.out.println(joulesUsed);
-			drawTextBox(new String[] { joulesString(tem.joules), joulesString(joulesGained) + "/t IN", joulesString(joulesUsed) + "/t OUT" }, new int[] { 0xffffff, 0x00ff00, 0xff0000 }, mouseX, mouseY);
+			double joulesUsed = tem.getJoulesUsed();
+			drawTextBox(new String[] { joulesString(tem.getJoules()), joulesString(joulesGained) + "/t IN", joulesString(joulesUsed) + "/t OUT" }, new int[] { 0xffffff, 0x00ff00, 0xff0000 }, mouseX, mouseY);
 		}
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);

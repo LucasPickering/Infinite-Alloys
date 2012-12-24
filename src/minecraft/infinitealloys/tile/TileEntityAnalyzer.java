@@ -42,60 +42,57 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		boolean invChanged = false;
-		if(inventoryStacks[0] != null && inventoryStacks[1] == null) {
-			if(joules >= joulesUsedPerTick) {
-				processProgress++;
-				if(processProgress >= ticksToProcess) {
-					if(InfiniteAlloys.instance.worldData.alloysUnlocked == Math.min(inventoryStacks[0].getItemDamage() - 1, References.validAlloyCount))
-						InfiniteAlloys.instance.worldData.alloysUnlocked = inventoryStacks[0].getItemDamage();
-					processProgress = 0;
-					if(inventoryStacks[2] != null) {
-						int alloy = inventoryStacks[0].getTagCompound().getInteger("alloy");
-						NBTTagCompound tagCompound;
+		if(inventoryStacks[0] == null && inventoryStacks[1] != null)
+			processProgress = 0;
+	}
 
-						// Create two arrays for storing the saved alloys. What's in there, and a copy to edit
-						int[] oldSave = new int[0];
-						int[] newSave;
+	@Override
+	public boolean shouldProcess() {
+		return inventoryStacks[0] != null && inventoryStacks[1] == null && joules >= joulesUsedPerTick;
+	}
 
-						// init the compound
-						if(inventoryStacks[2].hasTagCompound())
-							tagCompound = inventoryStacks[2].getTagCompound();
-						else
-							tagCompound = new NBTTagCompound();
+	@Override
+	public void finishProcessing() {
+		if(InfiniteAlloys.instance.worldData.alloysUnlocked == Math.min(inventoryStacks[0].getItemDamage() - 1, References.validAlloyCount))
+			InfiniteAlloys.instance.worldData.alloysUnlocked = inventoryStacks[0].getItemDamage();
+		if(inventoryStacks[2] != null) {
+			int alloy = inventoryStacks[0].getTagCompound().getInteger("alloy");
+			NBTTagCompound tagCompound;
 
-						// If it has a save, set oldSave to it
-						if(tagCompound.hasKey("alloys"))
-							oldSave = tagCompound.getIntArray("alloys");
+			// Create two arrays for storing the saved alloys. What's in there, and a copy to edit
+			int[] oldSave = new int[0];
+			int[] newSave;
 
-						// Make new save a copy of oldSave with one more spot
-						newSave = Arrays.copyOf(oldSave, oldSave.length + 1);
+			// init the compound
+			if(inventoryStacks[2].hasTagCompound())
+				tagCompound = inventoryStacks[2].getTagCompound();
+			else
+				tagCompound = new NBTTagCompound();
 
-						// Sort newSave so that it can be searched in the next step
-						Arrays.sort(newSave);
+			// If it has a save, set oldSave to it
+			if(tagCompound.hasKey("alloys"))
+				oldSave = tagCompound.getIntArray("alloys");
 
-						// Add the new alloy to newSave if there is room and it is not a repeat then set the compound to newSave
-						if(newSave.length < References.validAlloyCount && Arrays.binarySearch(newSave, alloy) < 0) {
-							newSave[newSave.length - 1] = alloy;
-							tagCompound.setIntArray("alloys", newSave);
-							inventoryStacks[2].setTagCompound(tagCompound);
-						}
-					}
-					inventoryStacks[1] = inventoryStacks[0];
-					inventoryStacks[0] = null;
-					invChanged = true;
-				}
+			// Make new save a copy of oldSave with one more spot
+			newSave = Arrays.copyOf(oldSave, oldSave.length + 1);
+
+			// Sort newSave so that it can be searched in the next step
+			Arrays.sort(newSave);
+
+			// Add the new alloy to newSave if there is room and it is not a repeat then set the compound to newSave
+			if(newSave.length < References.validAlloyCount && Arrays.binarySearch(newSave, alloy) < 0) {
+				newSave[newSave.length - 1] = alloy;
+				tagCompound.setIntArray("alloys", newSave);
+				inventoryStacks[2].setTagCompound(tagCompound);
 			}
 		}
-		else
-			processProgress = 0;
-		if(invChanged)
-			onInventoryChanged();
+		inventoryStacks[1] = inventoryStacks[0];
+		inventoryStacks[0] = null;
 	}
 
 	@Override
 	public int getJoulesUsed() {
-		if(joules >= joulesUsedPerTick)
+		if(shouldProcess())
 			return joulesUsedPerTick;
 		return 0;
 	}

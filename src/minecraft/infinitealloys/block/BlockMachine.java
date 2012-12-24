@@ -12,10 +12,8 @@ import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
-
 import java.util.EnumSet;
 import java.util.List;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -185,14 +183,5 @@ public class BlockMachine extends BlockContainer {
 			ElectricityConnections.unregisterConnector(tem);
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getLightValue(IBlockAccess world, int x, int y, int z) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		if(te instanceof TileEntityMachine && ((TileEntityMachine)te).emittingLight)
-			return 13;
-		return 0;
 	}
 }

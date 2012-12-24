@@ -66,53 +66,9 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		boolean invChanged = false;
-		double joulesUsed = joulesUsedPerTick * getIngotsInRecipe();
 		if(!Arrays.equals(lastRecipeAmts, recipeAmts))
 			processProgress = 0;
 		lastRecipeAmts = Arrays.copyOf(recipeAmts, recipeAmts.length);
-		boolean wasEmittingLight = emittingLight;
-		if(emittingLight = shouldBurn()) {
-			if(wasEmittingLight != emittingLight)
-				worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType().blockID);
-			processProgress += (float)(getInventoryStackLimit() - getIngotsInRecipe() + 1);
-			if(processProgress >= ticksToProcess) {
-				processProgress = 0;
-				byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
-				for(int slot : getSlotsWithIngot()) {
-					int ingotNum = getIngotNum(inventoryStacks[slot]);
-					int ingots = ingotsToRemove[ingotNum];
-					ingotsToRemove[ingotNum] -= Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize);
-					decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
-				}
-				ItemStack ingotResult = getIngotResult();
-				if(inventoryStacks[2] == null)
-					inventoryStacks[2] = ingotResult;
-				else if(inventoryStacks[2].getTagCompound().getInteger("alloy") == ingotResult.getTagCompound().getInteger("alloy"))
-					inventoryStacks[2].stackSize += ingotResult.stackSize;
-				ItemStack result = getIngotResult();
-				if(inventoryStacks[2] == null)
-					inventoryStacks[2] = result;
-				else if(inventoryStacks[2].getTagCompound().getInteger("alloy") == result.getTagCompound().getInteger("alloy"))
-					inventoryStacks[2].stackSize += result.stackSize;
-				invChanged = true;
-			}
-		}
-		if(invChanged)
-			onInventoryChanged();
-	}
-
-	private boolean shouldBurn() {
-		int typesInRecipe = 0;
-		ArrayList<Boolean> sufficientIngots = new ArrayList<Boolean>();
-		for(int amt : recipeAmts)
-			if(amt > 0)
-				typesInRecipe++;
-		for(int i = 0; i < getIngotAmts().length; i++)
-			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
-		if(sufficientIngots.contains(false))
-			processProgress = 0;
-		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick && (inventoryStacks[2] == null || inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1);
 	}
 
 	public int getIngotNum(ItemStack ingot) {
@@ -167,8 +123,43 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	@Override
+	protected boolean shouldProcess() {
+		int typesInRecipe = 0;
+		ArrayList<Boolean> sufficientIngots = new ArrayList<Boolean>();
+		for(int amt : recipeAmts)
+			if(amt > 0)
+				typesInRecipe++;
+		for(int i = 0; i < getIngotAmts().length; i++)
+			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
+		if(sufficientIngots.contains(false))
+			processProgress = 0;
+		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick && (inventoryStacks[2] == null || inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1);
+	}
+
+	@Override
+	protected void finishProcessing() {
+		byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
+		for(int slot : getSlotsWithIngot()) {
+			int ingotNum = getIngotNum(inventoryStacks[slot]);
+			int ingots = ingotsToRemove[ingotNum];
+			ingotsToRemove[ingotNum] -= Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize);
+			decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
+		}
+		ItemStack ingotResult = getIngotResult();
+		if(inventoryStacks[2] == null)
+			inventoryStacks[2] = ingotResult;
+		else if(inventoryStacks[2].getTagCompound().getInteger("alloy") == ingotResult.getTagCompound().getInteger("alloy"))
+			inventoryStacks[2].stackSize += ingotResult.stackSize;
+		ItemStack result = getIngotResult();
+		if(inventoryStacks[2] == null)
+			inventoryStacks[2] = result;
+		else if(inventoryStacks[2].getTagCompound().getInteger("alloy") == result.getTagCompound().getInteger("alloy"))
+			inventoryStacks[2].stackSize += result.stackSize;
+	}
+
+	@Override
 	public int getJoulesUsed() {
-		if(shouldBurn())
+		if(shouldProcess())
 			return joulesUsedPerTick * getIngotsInRecipe();
 		return 0;
 	}

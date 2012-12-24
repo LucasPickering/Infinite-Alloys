@@ -90,6 +90,14 @@ public class TileEntityXray extends TileEntityMachine {
 	}
 
 	@Override
+	public boolean shouldProcess() {
+		return false;
+	}
+
+	@Override
+	public void finishProcessing() {}
+
+	@Override
 	public int getJoulesUsed() {
 		if(searching && inventoryStacks[0] != null)
 			return joulesUsedPerTick * TEHelper.getDetectableWorth(inventoryStacks[0]);

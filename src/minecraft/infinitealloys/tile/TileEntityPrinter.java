@@ -37,26 +37,27 @@ public class TileEntityPrinter extends TileEntityMachine {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if(inventoryStacks[0] != null && inventoryStacks[1] != null && inventoryStacks[2] == null) {
-			if(joules >= joulesUsedPerTick) {
-				joules -= joulesUsedPerTick;
-				processProgress++;
-				if(processProgress >= ticksToProcess) {
-					inventoryStacks[2] = inventoryStacks[0].copy();
-					inventoryStacks[1].stackSize--;
-					if(inventoryStacks[1].stackSize == 0)
-						inventoryStacks[1] = null;
-					processProgress = 0;
-				}
-			}
-		}
-		else
+		if(inventoryStacks[0] != null && inventoryStacks[1] != null && inventoryStacks[2] == null)
 			processProgress = 0;
 	}
 
 	@Override
+	public boolean shouldProcess() {
+		return inventoryStacks[0] != null && inventoryStacks[1] != null && inventoryStacks[2] == null && joules >= joulesUsedPerTick;
+	}
+
+	@Override
+	public void finishProcessing() {
+		inventoryStacks[2] = inventoryStacks[0].copy();
+		inventoryStacks[1].stackSize--;
+		if(inventoryStacks[1].stackSize == 0)
+			inventoryStacks[1] = null;
+		processProgress = 0;
+	}
+
+	@Override
 	public int getJoulesUsed() {
-		if(joules >= joulesUsedPerTick)
+		if(shouldProcess())
 			return joulesUsedPerTick;
 		return 0;
 	}

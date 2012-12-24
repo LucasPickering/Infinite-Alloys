@@ -57,7 +57,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public int joulesGained = 0;
 
 	/** Amount of joules this machine consumes per tick while working */
-	public int joulesUsedPerTick = 360;
+	protected int joulesUsedPerTick = 360;
 
 	/** Amount of ticks it takes for this machine to finish one of its processes */
 	protected int ticksToProcess = 200;
@@ -67,9 +67,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	/** The size limit for one stack in this machine */
 	protected int stackLimit = 64;
-
-	/** True if this block is emitting light, such as when burning */
-	public boolean emittingLight;
 
 	public TileEntityMachine(int index) {
 		this();
@@ -103,6 +100,11 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 						network.stopRequesting(this);
 				}
 			}
+		}
+		if(shouldProcess() && ++processProgress >= ticksToProcess) {
+			processProgress = 0;
+			finishProcessing();
+			onInventoryChanged();
 		}
 		joules -= getJoulesUsed();
 		for(String playerName : playersUsing)
@@ -166,8 +168,14 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return upgrade.itemID == Items.upgrade.shiftedIndex && (!TEHelper.hasPrereqUpgrade(upgrade) || hasUpgrade(damage >> 1)) && !hasUpgrade(damage) && validUpgrades.contains(damage);
 	}
 
+	/** Should the process tick be increased? */
+	protected abstract boolean shouldProcess();
+
+	/** Called when processProgress reeaches ticksToProgress */
+	protected abstract void finishProcessing();
+
 	/** Actual amount of joules used per tick, after certain calculations and conditions */
-	protected abstract int getJoulesUsed();
+	public abstract int getJoulesUsed();
 
 	/** Updates all values that are dependent on upgrades */
 	protected abstract void updateUpgrades();
@@ -253,12 +261,11 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return PacketHandler.getTEPacketToClient(this);
 	}
 
-	public void handlePacketDataFromServer(int processProgress, byte orientation, int upgrades, int joules, boolean emittingLight) {
+	public void handlePacketDataFromServer(int processProgress, byte orientation, int upgrades, int joules) {
 		this.processProgress = processProgress;
 		front = ForgeDirection.getOrientation(orientation);
 		this.upgrades = upgrades;
 		this.joules = joules;
-		this.emittingLight = emittingLight;
 	}
 
 	@Override
