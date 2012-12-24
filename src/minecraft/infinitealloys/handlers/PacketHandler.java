@@ -1,18 +1,18 @@
 package infinitealloys.handlers;
 
 import infinitealloys.FuncHelper;
-import infinitealloys.WorldData;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
 import infinitealloys.References;
+import infinitealloys.WorldData;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
+import infinitealloys.tile.TileEntityXray;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -54,7 +54,7 @@ public class PacketHandler implements IPacketHandler {
 					int processProgress = data.readInt();
 					byte orientation = data.readByte();
 					int upgrades = data.readInt();
-					double joules = data.readDouble();
+					int joules = data.readInt();
 					boolean emittingLight = data.readBoolean();
 					((TileEntityMachine)te).handlePacketDataFromServer(processProgress, orientation, upgrades, joules, emittingLight);
 					if(te instanceof TileEntityComputer) {
@@ -68,7 +68,7 @@ public class PacketHandler implements IPacketHandler {
 							tec.networkCoords.add(new Point(machX, machY, machZ));
 						}
 					}
-					if(te instanceof TileEntityMetalForge) {
+					else if(te instanceof TileEntityMetalForge) {
 						byte[] recipeAmts = new byte[References.metalCount];
 						for(int i = 0; i < recipeAmts.length; i++)
 							recipeAmts[i] = data.readByte();
@@ -87,6 +87,10 @@ public class PacketHandler implements IPacketHandler {
 						recipeAmts[i] = data.readByte();
 					((TileEntityMetalForge)te).handlePacketData(recipeAmts);
 				}
+				else if(te instanceof TileEntityXray) {
+					boolean searching = data.readBoolean();
+					((TileEntityXray)te).handlePacketDataFromClient(searching);
+				}
 				break;
 			case TE_JOULES:
 				x = data.readInt();
@@ -94,8 +98,10 @@ public class PacketHandler implements IPacketHandler {
 				z = data.readInt();
 				te = world.getBlockTileEntity(x, y, z);
 				if(te instanceof TileEntityMachine) {
-					double joules = data.readDouble();
+					int joules = data.readInt();
+					int joulesGained = data.readInt();
 					((TileEntityMachine)te).joules = joules;
+					((TileEntityMachine)te).joulesGained = joulesGained;
 				}
 				break;
 			case COMPUTER_ADD_MACHINE:
@@ -135,7 +141,7 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(tem.processProgress);
 			dos.writeByte(tem.front.ordinal());
 			dos.writeInt(tem.getUpgrades());
-			dos.writeDouble(tem.joules);
+			dos.writeInt(tem.joules);
 			dos.writeBoolean(tem.emittingLight);
 			if(tem instanceof TileEntityComputer) {
 				TileEntityComputer tec = (TileEntityComputer)tem;
@@ -161,13 +167,15 @@ public class PacketHandler implements IPacketHandler {
 	}
 
 	public static Packet getTEPacketToServer(TileEntityMachine tem) {
-		if(!(tem instanceof TileEntityMetalForge))
-			return null;
-		return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityMetalForge)tem).recipeAmts);
+		if(tem instanceof TileEntityMetalForge)
+			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityMetalForge)tem).recipeAmts);
+		if(tem instanceof TileEntityXray)
+			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityXray)tem).searching);
+		return null;
 	}
 
 	public static Packet getTEJoulesPacket(TileEntityMachine tem) {
-		return getPacket(TE_JOULES, tem.xCoord, tem.yCoord, tem.zCoord, tem.joules);
+		return getPacket(TE_JOULES, tem.xCoord, tem.yCoord, tem.zCoord, tem.joules, tem.joulesGained);
 	}
 
 	public static Packet getComputerPacketAddMachine(int compX, int compY, int compZ, int machX, int machY, int machZ) {

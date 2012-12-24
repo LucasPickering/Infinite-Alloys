@@ -1,8 +1,9 @@
 package infinitealloys.handlers;
 
-import infinitealloys.WorldData;
+import infinitealloys.FuncHelper;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
+import infinitealloys.WorldData;
 import infinitealloys.block.Blocks;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -34,9 +35,10 @@ public class EventHandler implements ICraftingHandler {
 		FileInputStream fis = null;
 		ObjectInputStream ois = null;
 		try {
-			fis = new FileInputStream(world + "/IAWorldData.dat");
+			fis = new FileInputStream(world + "/WorldData.dat");
 			ois = new ObjectInputStream(fis);
 			InfiniteAlloys.instance.worldData = (WorldData)ois.readObject();
+			System.out.println("Successfully loaded IA alloys");
 		}
 		catch(IOException e) {
 			if(InfiniteAlloys.instance.worldData == null) {
@@ -46,8 +48,8 @@ public class EventHandler implements ICraftingHandler {
 					int metalCount = References.metalCount;
 					byte[] alloyDigits = new byte[metalCount];
 					for(int j = 0; j < metalCount; j++) {
-						int min = InfiniteAlloys.intAtPos(References.alloyRadix, metalCount, References.validAlloyMins[i], j);
-						int max = InfiniteAlloys.intAtPos(References.alloyRadix, metalCount, References.validAlloyMaxes[i], j);
+						int min = FuncHelper.intAtPos(References.alloyRadix, metalCount, References.validAlloyMins[i], j);
+						int max = FuncHelper.intAtPos(References.alloyRadix, metalCount, References.validAlloyMaxes[i], j);
 						alloyDigits[j] = (byte)(min + (max == min ? 0 : random.nextInt(max - min)));
 					}
 					String alloy = "";
@@ -57,6 +59,7 @@ public class EventHandler implements ICraftingHandler {
 					System.out.println("SPOILER ALERT! Alloy " + i + ": " + validAlloys[i]);
 				}
 				InfiniteAlloys.instance.worldData = new WorldData(validAlloys);
+				System.out.println("Successfully generated IA alloys");
 			}
 		}
 		catch(Exception e) {
@@ -79,7 +82,7 @@ public class EventHandler implements ICraftingHandler {
 		FileOutputStream fos = null;
 		ObjectOutputStream oos = null;
 		try {
-			fos = new FileOutputStream(world + "/IAWorldData.dat");
+			fos = new FileOutputStream(world + "/WorldData.dat");
 			oos = new ObjectOutputStream(fos);
 			oos.writeObject(InfiniteAlloys.instance.worldData);
 		}

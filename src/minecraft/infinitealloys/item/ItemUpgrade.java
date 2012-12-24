@@ -1,10 +1,8 @@
 package infinitealloys.item;
 
-import infinitealloys.InfiniteAlloys;
+import infinitealloys.FuncHelper;
 import infinitealloys.References;
-
 import java.util.List;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -28,13 +26,13 @@ public class ItemUpgrade extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getIconFromDamage(int damage) {
-		return iconIndex + (int)InfiniteAlloys.logn(2, damage);
+		return iconIndex + (int)FuncHelper.logn(2, damage);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		list.add(InfiniteAlloys.getLoc("upgrade." + References.upgradeNames[(int)InfiniteAlloys.logn(2, itemstack.getItemDamage())] + ".name"));
+		list.add(FuncHelper.getLoc("upgrade." + References.upgradeNames[(int)FuncHelper.logn(2, itemstack.getItemDamage())] + ".name"));
 	}
 
 	@Override

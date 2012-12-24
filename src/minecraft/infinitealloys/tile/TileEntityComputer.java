@@ -30,7 +30,7 @@ public class TileEntityComputer extends TileEntityMachine {
 	public TileEntityComputer() {
 		super();
 		inventoryStacks = new ItemStack[1];
-		maxJoules = 0D;
+		maxJoules = 0;
 		canNetwork = true;
 		networkCapacity = 3;
 		networkRange = 10;
@@ -106,6 +106,11 @@ public class TileEntityComputer extends TileEntityMachine {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public int getJoulesUsed() {
+		return 0;
 	}
 
 	@Override

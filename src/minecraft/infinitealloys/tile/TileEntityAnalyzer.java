@@ -45,7 +45,6 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 		boolean invChanged = false;
 		if(inventoryStacks[0] != null && inventoryStacks[1] == null) {
 			if(joules >= joulesUsedPerTick) {
-				joules -= joulesUsedPerTick;
 				processProgress++;
 				if(processProgress >= ticksToProcess) {
 					if(InfiniteAlloys.instance.worldData.alloysUnlocked == Math.min(inventoryStacks[0].getItemDamage() - 1, References.validAlloyCount))
@@ -55,8 +54,7 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 						int alloy = inventoryStacks[0].getTagCompound().getInteger("alloy");
 						NBTTagCompound tagCompound;
 
-						// Create two arrays for storing the saved alloys.
-						// What's in there, and a copy to edit
+						// Create two arrays for storing the saved alloys. What's in there, and a copy to edit
 						int[] oldSave = new int[0];
 						int[] newSave;
 
@@ -95,29 +93,36 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 			onInventoryChanged();
 	}
 
+	@Override
+	public int getJoulesUsed() {
+		if(joules >= joulesUsedPerTick)
+			return joulesUsedPerTick;
+		return 0;
+	}
+
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.SPEED2))
 			ticksToProcess = 1800;
 		else if(hasUpgrade(TEHelper.SPEED1))
 			ticksToProcess = 2700;
 		else
-			ticksToProcess = 36;
+			ticksToProcess = 3600;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			joulesUsedPerTick = 180D;
+			joulesUsedPerTick = 180;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			joulesUsedPerTick = 270D;
+			joulesUsedPerTick = 270;
 		else
-			joulesUsedPerTick = 360D;
+			joulesUsedPerTick = 360;
 
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 
 		if(hasUpgrade(TEHelper.ELECCAPACITY2))
-			maxJoules = 1000000D;
+			maxJoules = 1000000;
 		else if(hasUpgrade(TEHelper.ELECCAPACITY1))
-			maxJoules = 750000D;
+			maxJoules = 750000;
 		else
-			maxJoules = 500000D;
+			maxJoules = 500000;
 	}
 
 	@Override

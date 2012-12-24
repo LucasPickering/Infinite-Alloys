@@ -21,6 +21,6 @@ public class CreativeTabIA extends CreativeTabs {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getTranslatedTabLabel() {
-		return InfiniteAlloys.getLoc("itemGroup." + getTabLabel());
+		return FuncHelper.getLoc("itemGroup." + getTabLabel());
 	}
 }

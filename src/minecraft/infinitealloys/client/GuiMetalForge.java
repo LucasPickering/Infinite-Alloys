@@ -1,6 +1,6 @@
 package infinitealloys.client;
 
-import infinitealloys.InfiniteAlloys;
+import infinitealloys.FuncHelper;
 import infinitealloys.References;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.inventory.ContainerMetalForge;
@@ -8,9 +8,7 @@ import infinitealloys.item.Items;
 import infinitealloys.tile.TileEntityMetalForge;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-
 import org.lwjgl.opengl.GL11;
-
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiMetalForge extends GuiMachine {
@@ -29,7 +27,7 @@ public class GuiMetalForge extends GuiMachine {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		for(int i = 0; i < References.metalCount; i++)
 			if(mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18))
-				drawTextBox(InfiniteAlloys.getLoc("metal." + References.metalNames[i] + ".name"), 0xffffff, mouseX, mouseY);
+				drawTextBox(FuncHelper.getLoc("metal." + References.metalNames[i] + ".name"), 0xffffff, mouseX, mouseY);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
@@ -67,7 +65,7 @@ public class GuiMetalForge extends GuiMachine {
 				temf.presetSelection = (byte)Math.max(temf.presetSelection - 1, -1);
 			if(temf.presetSelection > -1)
 				for(int i = 0; i < temf.recipeAmts.length; i++)
-					temf.recipeAmts[i] = (byte)InfiniteAlloys.intAtPos(References.alloyRadix, References.metalCount, alloys[temf.presetSelection], References.metalCount - i - 1);
+					temf.recipeAmts[i] = (byte)FuncHelper.intAtPos(References.alloyRadix, References.metalCount, alloys[temf.presetSelection], References.metalCount - i - 1);
 			PacketDispatcher.sendPacketToServer(PacketHandler.getTEPacketToServer(temf));
 		}
 		if(temf.presetSelection == -1) {

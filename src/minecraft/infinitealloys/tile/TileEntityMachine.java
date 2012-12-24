@@ -48,13 +48,16 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	public boolean canNetwork;
 
 	/** Maximum amount of joules this machine can store */
-	public double maxJoules = 500000D;
+	public int maxJoules = 500000;
 
 	/** Amount of joules stored in the machine currently */
-	public double joules = 0D;
+	public int joules = 0;
+
+	/** Joules gained this tick, for the GUI */
+	public int joulesGained = 0;
 
 	/** Amount of joules this machine consumes per tick while working */
-	public double joulesUsedPerTick = 360D;
+	public int joulesUsedPerTick = 360;
 
 	/** Amount of ticks it takes for this machine to finish one of its processes */
 	protected int ticksToProcess = 200;
@@ -75,6 +78,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	public TileEntityMachine() {
 		populateValidUpgrades();
+		updateUpgrades();
 	}
 
 	@Override
@@ -82,8 +86,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
 			upgrades |= inventoryStacks[upgradeSlotIndex].getItemDamage();
 			inventoryStacks[upgradeSlotIndex] = null;
+			updateUpgrades();
 		}
-		updateUpgrades();
 		if(!worldObj.isRemote) {
 			EnumSet<ForgeDirection> inputDirections = EnumSet.allOf(ForgeDirection.class);
 			inputDirections.remove(front);
@@ -93,13 +97,14 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 				if(network != null) {
 					if(joules < maxJoules) {
 						network.startRequesting(this, TEHelper.WATTS_PER_TICK / getVoltage(), getVoltage());
-						joules += Math.max(Math.min(network.consumeElectricity(this).getWatts(), TEHelper.WATTS_PER_TICK), 0);
+						joules += (joulesGained = (int)Math.max(Math.min(network.consumeElectricity(this).getWatts(), TEHelper.WATTS_PER_TICK), 0));
 					}
 					else
 						network.stopRequesting(this);
 				}
 			}
 		}
+		joules -= getJoulesUsed();
 		for(String playerName : playersUsing)
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEJoulesPacket(this), (Player)FMLCommonHandler.instance().getSidedDelegate().getServer().getConfigurationManager().getPlayerForUsername(playerName));
 		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
@@ -161,6 +166,9 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return upgrade.itemID == Items.upgrade.shiftedIndex && (!TEHelper.hasPrereqUpgrade(upgrade) || hasUpgrade(damage >> 1)) && !hasUpgrade(damage) && validUpgrades.contains(damage);
 	}
 
+	/** Actual amount of joules used per tick, after certain calculations and conditions */
+	protected abstract int getJoulesUsed();
+
 	/** Updates all values that are dependent on upgrades */
 	protected abstract void updateUpgrades();
 
@@ -195,7 +203,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		processProgress = tagCompound.getInteger("ProcessProgress");
 		upgrades = tagCompound.getShort("Upgrades");
 		front = ForgeDirection.getOrientation(tagCompound.getByte("Orientation"));
-		joules = tagCompound.getDouble("Joules");
+		joules = tagCompound.getInteger("Joules");
 		NBTTagList nbttaglist = tagCompound.getTagList("Items");
 		inventoryStacks = new ItemStack[getSizeInventory()];
 		for(int i = 0; i < nbttaglist.tagCount(); i++) {
@@ -217,7 +225,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		tagCompound.setInteger("ProcessProgress", processProgress);
 		tagCompound.setShort("Upgrades", (short)upgrades);
 		tagCompound.setByte("Orientation", (byte)front.ordinal());
-		tagCompound.setDouble("Joules", joules);
+		tagCompound.setInteger("Joules", joules);
 		NBTTagList nbttaglist = new NBTTagList();
 		for(int i = 0; i < inventoryStacks.length; i++) {
 			if(inventoryStacks[i] != null) {
@@ -245,7 +253,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		return PacketHandler.getTEPacketToClient(this);
 	}
 
-	public void handlePacketDataFromServer(int processProgress, byte orientation, int upgrades, double joules, boolean emittingLight) {
+	public void handlePacketDataFromServer(int processProgress, byte orientation, int upgrades, int joules, boolean emittingLight) {
 		this.processProgress = processProgress;
 		front = ForgeDirection.getOrientation(orientation);
 		this.upgrades = upgrades;
@@ -333,7 +341,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public void setJoules(double joules, Object... data) {
-		this.joules = joules;
+		this.joules = (int)joules;
 	}
 
 	@Override

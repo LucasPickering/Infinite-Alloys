@@ -18,7 +18,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid = "InfiniteAlloys", name = "Infinite Alloys", version = "0.1.1.2")
+@Mod(modid = "InfiniteAlloys", name = "Infinite Alloys", version = "0.1.2.3")
 @NetworkMod(channels = { "InfiniteAlloys" }, clientSideRequired = true, serverSideRequired = false, packetHandler = infinitealloys.handlers.PacketHandler.class)
 public class InfiniteAlloys {
 
@@ -67,24 +67,4 @@ public class InfiniteAlloys {
 
 	@PostInit
 	public void postInit(FMLPostInitializationEvent event) {}
-
-	public static int intAtPos(int radix, int strlen, int n, int pos) {
-		return Character.digit(addLeadingZeros(Integer.toString(n, radix), strlen).charAt(pos), radix);
-	}
-
-	public static double logn(int base, double num) {
-		return Math.log(num) / Math.log(base);
-	}
-
-	public static String addLeadingZeros(String s, int finalSize) {
-		s.trim();
-		int length = s.length();
-		for(int i = 0; i < finalSize - length; i++)
-			s = "0" + s;
-		return s;
-	}
-
-	public static String getLoc(String key) {
-		return LanguageRegistry.instance().getStringLocalization(key);
-	}
 }

@@ -1,10 +1,9 @@
 package infinitealloys.item;
 
+import infinitealloys.FuncHelper;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
-
 import java.util.List;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -42,13 +41,13 @@ public class ItemAlloyIngot extends ItemIA {
 		else
 			return;
 		for(int i = 0; i < References.metalCount; i++) {
-			metalMasses[i] = InfiniteAlloys.intAtPos(References.alloyRadix, References.metalCount, alloy, i);
+			metalMasses[i] = FuncHelper.intAtPos(References.alloyRadix, References.metalCount, alloy, i);
 			totalMass += metalMasses[i];
 		}
 		for(int i = 0; i < References.metalCount; i++) {
 			float percentage = Math.round(metalMasses[i] / totalMass * 10000F) / 100F;
 			if(percentage != 0)
-				list.add(percentage + "% " + InfiniteAlloys.getLoc("metal." + References.metalNames[References.metalCount - 1 - i] + ".name"));
+				list.add(percentage + "% " + FuncHelper.getLoc("metal." + References.metalNames[References.metalCount - 1 - i] + ".name"));
 		}
 	}
 
@@ -63,7 +62,7 @@ public class ItemAlloyIngot extends ItemIA {
 		else if(itemstack.getItemDamage() > 0)
 			alloy = InfiniteAlloys.instance.worldData.getValidAlloys()[itemstack.getItemDamage() - 1];
 		for(int i = 0; i < References.metalCount; i++) {
-			for(int j = 0; j < InfiniteAlloys.intAtPos(References.alloyRadix, References.metalCount, alloy, i); j++) {
+			for(int j = 0; j < FuncHelper.intAtPos(References.alloyRadix, References.metalCount, alloy, i); j++) {
 				int ingotColor = References.metalColors[References.metalCount - 1 - i];
 				colorCount++;
 				redTot += ingotColor >> 16 & 255;

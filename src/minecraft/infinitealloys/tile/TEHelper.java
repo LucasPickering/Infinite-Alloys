@@ -64,8 +64,16 @@ public class TEHelper {
 			detectables.put(block.itemID + "@" + block.getItemDamage(), worth);
 	}
 
-	public static boolean isDetectable(int id, int metadata) {
-		return detectables.containsKey(id + "@" + metadata);
+	public static boolean isDetectable(ItemStack stack) {
+		return detectables.containsKey(stack.itemID + "@" + stack.getItemDamage());
+	}
+
+	public static int getDetectableWorth(int id, int metadata) {
+		return detectables.get(id + "@" + metadata);
+	}
+
+	public static int getDetectableWorth(ItemStack stack) {
+		return detectables.get(stack.itemID + "@" + stack.getItemDamage());
 	}
 
 	public static boolean isAlloyBook(ItemStack stack) {

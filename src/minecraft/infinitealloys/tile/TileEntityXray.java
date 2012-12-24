@@ -11,6 +11,9 @@ public class TileEntityXray extends TileEntityMachine {
 	public int range;
 	private Point lastSearch;
 
+	/** Is it searching client-side. Does not necessarily mean the x-ray is running a search, only that the user sees a loading progress bar */
+	public boolean searching;
+
 	public TileEntityXray(ForgeDirection facing) {
 		this();
 		front = facing;
@@ -31,7 +34,9 @@ public class TileEntityXray extends TileEntityMachine {
 
 	@Override
 	public int getSizeInventorySide(ForgeDirection side) {
-		return 1;
+		if(side != front && (side == ForgeDirection.NORTH || side == ForgeDirection.SOUTH || side == ForgeDirection.EAST || side == ForgeDirection.WEST))
+			return 1;
+		return 0;
 	}
 
 	@Override
@@ -39,6 +44,12 @@ public class TileEntityXray extends TileEntityMachine {
 		super.updateEntity();
 		if(!lastSearch.equals(0, 0, 0))
 			search();
+		if(searching) {
+			if(++processProgress >= ticksToProcess) {
+				processProgress = 0;
+				searching = false;
+			}
+		}
 	}
 
 	public void search() {
@@ -74,6 +85,17 @@ public class TileEntityXray extends TileEntityMachine {
 		return detectedBlocks;
 	}
 
+	public void handlePacketDataFromClient(boolean searching) {
+		this.searching = searching;
+	}
+
+	@Override
+	public int getJoulesUsed() {
+		if(searching && inventoryStacks[0] != null)
+			return joulesUsedPerTick * TEHelper.getDetectableWorth(inventoryStacks[0]);
+		return 0;
+	}
+
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.SPEED2))
@@ -84,11 +106,11 @@ public class TileEntityXray extends TileEntityMachine {
 			ticksToProcess = 24000;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			joulesUsedPerTick = 1800D;
+			joulesUsedPerTick = 1800;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			joulesUsedPerTick = 2700D;
+			joulesUsedPerTick = 2700;
 		else
-			joulesUsedPerTick = 3600D;
+			joulesUsedPerTick = 3600;
 
 		if(hasUpgrade(TEHelper.RANGE2))
 			range = 20;
@@ -100,11 +122,11 @@ public class TileEntityXray extends TileEntityMachine {
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 
 		if(hasUpgrade(TEHelper.ELECCAPACITY2))
-			maxJoules = 1000000D;
+			maxJoules = 1000000;
 		else if(hasUpgrade(TEHelper.ELECCAPACITY1))
-			maxJoules = 750000D;
+			maxJoules = 750000;
 		else
-			maxJoules = 500000D;
+			maxJoules = 500000;
 	}
 
 	@Override

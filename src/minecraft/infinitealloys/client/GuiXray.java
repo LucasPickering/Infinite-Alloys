@@ -3,9 +3,8 @@ package infinitealloys.client;
 import infinitealloys.Point;
 import infinitealloys.inventory.ContainerXray;
 import infinitealloys.tile.TileEntityXray;
-
 import java.util.ArrayList;
-
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 
@@ -16,6 +15,7 @@ public class GuiXray extends GuiMachine {
 	/** Whether or not each coord set has the correct block to display. y, x, z */
 	private boolean[][][] blockLocs;
 	private GuiBlockButton[] blockButtons;
+	private GuiButton searchButton;
 	private int selectedButton;
 
 	public GuiXray(InventoryPlayer inventoryPlayer, TileEntityXray tileEntity) {
@@ -29,6 +29,7 @@ public class GuiXray extends GuiMachine {
 	public void initGui() {
 		super.initGui();
 		setButtons();
+		controlList.add(searchButton = new GuiButton(0, width / 2 + 0, height / 2 + 0, 80, 20, "Search"));
 	}
 
 	@Override

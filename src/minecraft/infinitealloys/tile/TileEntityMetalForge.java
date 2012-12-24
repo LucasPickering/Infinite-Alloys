@@ -67,7 +67,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 		boolean invChanged = false;
-		joulesUsedPerTick *= getIngotsInRecipe();
+		double joulesUsed = joulesUsedPerTick * getIngotsInRecipe();
 		if(!Arrays.equals(lastRecipeAmts, recipeAmts))
 			processProgress = 0;
 		lastRecipeAmts = Arrays.copyOf(recipeAmts, recipeAmts.length);
@@ -76,7 +76,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			if(wasEmittingLight != emittingLight)
 				worldObj.notifyBlockChange(xCoord, yCoord, zCoord, getBlockType().blockID);
 			processProgress += (float)(getInventoryStackLimit() - getIngotsInRecipe() + 1);
-			joules -= joulesUsedPerTick;
 			if(processProgress >= ticksToProcess) {
 				processProgress = 0;
 				byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
@@ -167,6 +166,13 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		return ingots;
 	}
 
+	@Override
+	public int getJoulesUsed() {
+		if(shouldBurn())
+			return joulesUsedPerTick * getIngotsInRecipe();
+		return 0;
+	}
+
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.SPEED2))
 			ticksToProcess = 6400;
@@ -176,11 +182,11 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			ticksToProcess = 12800;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			joulesUsedPerTick = 90D;
+			joulesUsedPerTick = 90;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			joulesUsedPerTick = 120D;
+			joulesUsedPerTick = 120;
 		else
-			joulesUsedPerTick = 180D;
+			joulesUsedPerTick = 180;
 
 		if(hasUpgrade(TEHelper.CAPACITY2))
 			stackLimit = 48;
@@ -192,11 +198,11 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 
 		if(hasUpgrade(TEHelper.ELECCAPACITY2))
-			maxJoules = 1000000D;
+			maxJoules = 1000000;
 		else if(hasUpgrade(TEHelper.ELECCAPACITY1))
-			maxJoules = 750000D;
+			maxJoules = 750000;
 		else
-			maxJoules = 500000D;
+			maxJoules = 500000;
 
 	}
 

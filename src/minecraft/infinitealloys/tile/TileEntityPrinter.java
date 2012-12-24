@@ -55,6 +55,13 @@ public class TileEntityPrinter extends TileEntityMachine {
 	}
 
 	@Override
+	public int getJoulesUsed() {
+		if(joules >= joulesUsedPerTick)
+			return joulesUsedPerTick;
+		return 0;
+	}
+
+	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.SPEED2))
 			ticksToProcess = 100;
@@ -64,20 +71,20 @@ public class TileEntityPrinter extends TileEntityMachine {
 			ticksToProcess = 200;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			joulesUsedPerTick = 180D;
+			joulesUsedPerTick = 180;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			joulesUsedPerTick = 270D;
+			joulesUsedPerTick = 270;
 		else
-			joulesUsedPerTick = 360D;
+			joulesUsedPerTick = 360;
 
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 
 		if(hasUpgrade(TEHelper.ELECCAPACITY2))
-			maxJoules = 1000000D;
+			maxJoules = 1000000;
 		else if(hasUpgrade(TEHelper.ELECCAPACITY1))
-			maxJoules = 750000D;
+			maxJoules = 750000;
 		else
-			maxJoules = 500000D;
+			maxJoules = 500000;
 	}
 
 	@Override

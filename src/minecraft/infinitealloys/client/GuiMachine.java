@@ -1,7 +1,6 @@
 package infinitealloys.client;
 
 import infinitealloys.FuncHelper;
-import infinitealloys.InfiniteAlloys;
 import infinitealloys.Point;
 import infinitealloys.References;
 import infinitealloys.block.BlockMachine;
@@ -12,7 +11,6 @@ import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -66,13 +64,13 @@ public abstract class GuiMachine extends GuiContainer {
 		if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY)) {
 			ArrayList<String> texts = new ArrayList<String>();
 			ArrayList<Integer> colors = new ArrayList<Integer>();
-			texts.add(InfiniteAlloys.getLoc("upgrade.name"));
+			texts.add(FuncHelper.getLoc("upgrade.name"));
 			colors.add(0xffffff);
 			for(int i = 0; i < References.upgradeCount; i++) {
 				int damage = (int)Math.pow(2, i);
 				if(TEHelper.isPrereqUpgrade(new ItemStack(Items.upgrade, 1, damage)) && tem.hasUpgrade(damage << 1) || !tem.hasUpgrade(damage))
 					continue;
-				texts.add(InfiniteAlloys.getLoc("upgrade." + References.upgradeNames[i] + ".name"));
+				texts.add(FuncHelper.getLoc("upgrade." + References.upgradeNames[i] + ".name"));
 				colors.add(0xaaaaaa);
 			}
 			int[] colorsA = new int[colors.size()];
@@ -82,8 +80,10 @@ public abstract class GuiMachine extends GuiContainer {
 		}
 		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
 		if(tem.maxJoules > 0 && mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height)) {
-			String[] texts = { ElectricInfo.getDisplayShort(tem.joules, ElectricInfo.ElectricUnit.JOULES), ElectricInfo.getDisplayShort(tem.joulesUsedPerTick, ElectricInfo.ElectricUnit.JOULES) + "/t" };
-			drawTextBox(texts, new int[] { 0xffffff, 0xffffff }, mouseX, mouseY);
+			double joulesGained = tem.joulesGained;
+			double joulesUsed = tem.joulesUsedPerTick;
+			System.out.println(joulesUsed);
+			drawTextBox(new String[] { joulesString(tem.joules), joulesString(joulesGained) + "/t IN", joulesString(joulesUsed) + "/t OUT" }, new int[] { 0xffffff, 0x00ff00, 0xff0000 }, mouseX, mouseY);
 		}
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -189,5 +189,9 @@ public abstract class GuiMachine extends GuiContainer {
 
 	protected boolean mouseInZone(int mouseX, int mouseY, int xStart, int yStart, int width, int height) {
 		return mouseX >= xStart && mouseY >= yStart && mouseX < xStart + width && mouseY < yStart + height;
+	}
+
+	protected String joulesString(double joules) {
+		return ElectricInfo.getDisplayShort(joules, ElectricInfo.ElectricUnit.JOULES);
 	}
 }

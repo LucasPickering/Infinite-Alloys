@@ -1,17 +1,15 @@
 package infinitealloys.client;
 
-import infinitealloys.WorldData;
+import infinitealloys.FuncHelper;
 import infinitealloys.InfiniteAlloys;
 import infinitealloys.References;
+import infinitealloys.WorldData;
 import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TileEntityAnalyzer;
-
 import java.awt.Rectangle;
-
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-
 import org.lwjgl.opengl.GL11;
 
 public class GuiAnalyzer extends GuiMachine {
@@ -37,8 +35,8 @@ public class GuiAnalyzer extends GuiMachine {
 			int currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");
 			WorldData worldData = InfiniteAlloys.instance.worldData;
 			for(int i = 0; i < References.metalCount; i++) {
-				int currentValue = InfiniteAlloys.intAtPos(10, References.metalCount, currentAlloy, i);
-				int nextValue = InfiniteAlloys.intAtPos(10, References.metalCount, worldData.getValidAlloys()[worldData.alloysUnlocked], i);
+				int currentValue = FuncHelper.intAtPos(10, References.metalCount, currentAlloy, i);
+				int nextValue = FuncHelper.intAtPos(10, References.metalCount, worldData.getValidAlloys()[worldData.alloysUnlocked], i);
 				Rectangle symbol = nextValue > currentValue ? DOWN_ARROW : nextValue < currentValue ? UP_ARROW : CHECK;
 				drawTexturedModalRect((References.validAlloyCount - i) * 18 + 45, 26, symbol.x, symbol.y, symbol.width, symbol.height);
 			}

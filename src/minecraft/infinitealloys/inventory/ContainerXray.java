@@ -35,7 +35,7 @@ public class ContainerXray extends ContainerMachine {
 					return null;
 			}
 			else {
-				if(TEHelper.isDetectable(stackInSlotCopy.itemID, stackInSlotCopy.getItemDamage())) {
+				if(TEHelper.isDetectable(stackInSlotCopy)) {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}
