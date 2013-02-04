@@ -131,7 +131,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 					stack.stackSize -= j;
 					EntityItem item = new EntityItem(worldObj, xCoord + f1, yCoord + f2, zCoord + f3, new ItemStack(stack.itemID, j, stack.getItemDamage()));
 					if(stack.hasTagCompound())
-						item.func_92014_d().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
+						item.getEntityItem().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
 					item.motionX = random.nextGaussian() * 0.05F;
 					item.motionY = random.nextGaussian() * 0.25F;
 					item.motionZ = random.nextGaussian() * 0.05F;
@@ -164,7 +164,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 * @return true if valid */
 	public boolean isUpgradeValid(ItemStack upgrade) {
 		int damage = upgrade.getItemDamage();
-		return upgrade.itemID == Items.upgrade.shiftedIndex && (!TEHelper.hasPrereqUpgrade(upgrade) || hasUpgrade(damage >> 1)) && !hasUpgrade(damage) && validUpgrades.contains(damage);
+		return upgrade.itemID == Items.upgrade.itemID && (!TEHelper.hasPrereqUpgrade(upgrade) || hasUpgrade(damage >> 1)) && !hasUpgrade(damage) && validUpgrades.contains(damage);
 	}
 
 	/** Should the process tick be increased? */
@@ -340,17 +340,17 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@Override
-	public double getJoules(Object... data) {
+	public double getJoules() {
 		return joules;
 	}
 
 	@Override
-	public void setJoules(double joules, Object... data) {
+	public void setJoules(double joules) {
 		this.joules = (int)joules;
 	}
 
 	@Override
-	public double getMaxJoules(Object... data) {
+	public double getMaxJoules() {
 		return maxJoules;
 	}
 }

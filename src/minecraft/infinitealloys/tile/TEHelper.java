@@ -77,11 +77,11 @@ public class TEHelper {
 	}
 
 	public static boolean isAlloyBook(ItemStack stack) {
-		return stack.itemID == Items.alloyBook.shiftedIndex && stack.hasTagCompound();
+		return stack.itemID == Items.alloyBook.itemID && stack.hasTagCompound();
 	}
 
 	public static boolean isBook(ItemStack stack) {
-		return (stack.itemID == Items.alloyBook.shiftedIndex || stack.itemID == Item.writableBook.shiftedIndex || stack.itemID == Item.writtenBook.shiftedIndex) && stack.hasTagCompound();
+		return (stack.itemID == Items.alloyBook.itemID || stack.itemID == Item.writableBook.itemID || stack.itemID == Item.writtenBook.itemID) && stack.hasTagCompound();
 	}
 
 	/** Is the upgrade a prerequisite for another

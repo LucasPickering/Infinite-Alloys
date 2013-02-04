@@ -19,7 +19,7 @@ public class SlotAnalyzer extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return (slotIndex == 0 && itemstack.itemID == Items.alloyIngot.shiftedIndex) || (slotIndex == 2 && itemstack.itemID == Items.alloyBook.shiftedIndex);
+		return (slotIndex == 0 && itemstack.itemID == Items.alloyIngot.itemID) || (slotIndex == 2 && itemstack.itemID == Items.alloyBook.itemID);
 	}
 
 	@Override

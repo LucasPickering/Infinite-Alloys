@@ -174,37 +174,37 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		var24 = var12 * (float)(mult & 255) / 255F;
 		var25 = var13 * (float)(mult & 255) / 255F;
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y - 1, z, 0)) {
-			tess.setBrightness(renderer.customMinY > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y - 1, z));
+			tess.setBrightness(renderer.renderMinY > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y - 1, z));
 			tess.setColorOpaque_F(var17, var20, var23);
 			renderer.renderBottomFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(0, References.metalCount));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y + 1, z, 1)) {
-			tess.setBrightness(renderer.customMaxY < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y + 1, z));
+			tess.setBrightness(renderer.renderMaxY < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y + 1, z));
 			tess.setColorOpaque_F(var14, var15, var16);
 			renderer.renderTopFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(1, References.metalCount));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z - 1, 2)) {
-			tess.setBrightness(renderer.customMinZ > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z - 1));
+			tess.setBrightness(renderer.renderMinZ > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z - 1));
 			tess.setColorOpaque_F(var18, var21, var24);
 			renderer.renderEastFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(2, References.metalCount));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z + 1, 3)) {
-			tess.setBrightness(renderer.customMaxZ < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z + 1));
+			tess.setBrightness(renderer.renderMaxZ < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z + 1));
 			tess.setColorOpaque_F(var18, var21, var24);
 			renderer.renderWestFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(3, References.metalCount));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x - 1, y, z, 4)) {
-			tess.setBrightness(renderer.customMinX > 0D ? brightness : block.getMixedBrightnessForBlock(world, x - 1, y, z));
+			tess.setBrightness(renderer.renderMinX > 0D ? brightness : block.getMixedBrightnessForBlock(world, x - 1, y, z));
 			tess.setColorOpaque_F(var19, var22, var25);
 			renderer.renderNorthFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(4, References.metalCount));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x + 1, y, z, 5)) {
-			tess.setBrightness(renderer.customMaxX < 1D ? brightness : block.getMixedBrightnessForBlock(world, x + 1, y, z));
+			tess.setBrightness(renderer.renderMaxX < 1D ? brightness : block.getMixedBrightnessForBlock(world, x + 1, y, z));
 			tess.setColorOpaque_F(var19, var22, var25);
 			renderer.renderSouthFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(5, References.metalCount));
 			rendered = true;

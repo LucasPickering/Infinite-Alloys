@@ -37,7 +37,7 @@ public class ContainerPrinter extends ContainerMachine {
 					return null;
 			}
 			if(slot > 3) {
-				if(stackInSlotCopy.itemID == Items.alloyIngot.shiftedIndex) {
+				if(stackInSlotCopy.itemID == Items.alloyIngot.itemID) {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}

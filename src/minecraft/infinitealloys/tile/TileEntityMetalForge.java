@@ -72,7 +72,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	public int getIngotNum(ItemStack ingot) {
-		if(ingot.itemID == Items.ingot.shiftedIndex && ingot.getItemDamage() < References.metalCount)
+		if(ingot.itemID == Items.ingot.itemID && ingot.getItemDamage() < References.metalCount)
 			return ingot.getItemDamage();
 		return -1;
 	}

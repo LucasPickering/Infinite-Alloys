@@ -17,7 +17,7 @@ public class SlotPrinter extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		boolean isBook = itemstack.itemID == Items.alloyIngot.shiftedIndex || itemstack.itemID == Item.writableBook.shiftedIndex || itemstack.itemID == Item.writtenBook.shiftedIndex && itemstack.hasTagCompound();
-		return (slotIndex == 0 && isBook) || (slotIndex == 1 && itemstack.itemID == Item.book.shiftedIndex);
+		boolean isBook = itemstack.itemID == Items.alloyIngot.itemID || itemstack.itemID == Item.writableBook.itemID || itemstack.itemID == Item.writtenBook.itemID && itemstack.hasTagCompound();
+		return (slotIndex == 0 && isBook) || (slotIndex == 1 && itemstack.itemID == Item.book.itemID);
 	}
 }

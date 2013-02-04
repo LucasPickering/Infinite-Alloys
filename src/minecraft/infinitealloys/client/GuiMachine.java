@@ -62,7 +62,7 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
-		if(func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY)) {
+		if(mouseInZone(mouseX, mouseY, slot.xDisplayPosition, slot.yDisplayPosition, 16, 16)) {
 			ArrayList<String> texts = new ArrayList<String>();
 			ArrayList<Integer> colors = new ArrayList<Integer>();
 			texts.add(FuncHelper.getLoc("upgrade.name"));
