@@ -10,6 +10,9 @@ import net.minecraft.item.ItemStack;
 
 public class GuiXray extends GuiMachine {
 
+	private final int BUTTON_LIST_X = 7;
+	private final int BUTTON_LIST_Y = 50;
+
 	private TileEntityXray tex;
 
 	/** Whether or not each coord set has the correct block to display. y, x, z */
@@ -19,8 +22,9 @@ public class GuiXray extends GuiMachine {
 	private int selectedButton;
 
 	public GuiXray(InventoryPlayer inventoryPlayer, TileEntityXray tileEntity) {
-		super(176, 238, tileEntity, new ContainerXray(inventoryPlayer, tileEntity), "xray");
+		super(196, 238, tileEntity, new ContainerXray(inventoryPlayer, tileEntity), "xray");
 		tex = tileEntity;
+		progressBar.setLocation(54, 5);
 		blockLocs = new boolean[tem.yCoord][tex.range * 2 + 1][tex.range * 2 + 1];
 		blockButtons = new GuiBlockButton[tem.yCoord];
 	}
@@ -79,6 +83,6 @@ public class GuiXray extends GuiMachine {
 				blockButtons[i] = new GuiBlockButton(mc, itemRenderer, 7, i * 20 + 27, tex.inventoryStacks[0].itemID, blockCounts[i], tex.inventoryStacks[0].getItemDamage(), i);
 		}
 		// TODO: remove this line
-		blockButtons[0] = new GuiBlockButton(mc, itemRenderer, 7, 27, 45, 10, 0, 42);
+		blockButtons[0] = new GuiBlockButton(mc, itemRenderer, BUTTON_LIST_X, BUTTON_LIST_Y, 45, 10, 0, 42);
 	}
 }

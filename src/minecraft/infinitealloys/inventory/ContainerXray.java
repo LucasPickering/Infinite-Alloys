@@ -14,13 +14,13 @@ public class ContainerXray extends ContainerMachine {
 	public ContainerXray(InventoryPlayer inventoryPlayer, TileEntityXray tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
-		addSlotToContainer(new SlotXray(inventory, 0, 12, 6));
-		addSlotToContainer(new SlotUpgrade(inventory, 1, 148, 6));
+		addSlotToContainer(new SlotXray(inventory, 0, 32, 6));
+		addSlotToContainer(new SlotUpgrade(inventory, 1, 168, 6));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 156 + y * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 18 + x * 18, 156 + y * 18));
 		for(int x = 0; x < 9; x++)
-			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 214));
+			addSlotToContainer(new Slot(inventoryPlayer, x, 18 + x * 18, 214));
 	}
 
 	@Override

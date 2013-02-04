@@ -1,12 +1,10 @@
 package infinitealloys.client;
 
 import java.awt.Rectangle;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
-
 import org.lwjgl.opengl.GL11;
 
 public class GuiBlockButton extends GuiScreen {
@@ -42,12 +40,13 @@ public class GuiBlockButton extends GuiScreen {
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glColor4f(1F, 1F, 1F, 1F);
 			drawTexturedModalRect(xPos, yPos, bg.x, bg.y, bg.width, bg.height);
+			// Draw the yValue string
 			String display = Integer.toString(yValue);
-			mc.fontRenderer.drawStringWithShadow(display, 17 - (mc.fontRenderer.getStringWidth(display) / 2), 32, 0xffffff);
-            GL11.glEnable(GL11.GL_LIGHTING);
-            GL11.glEnable(GL11.GL_DEPTH_TEST);
-            itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(blockID, 1, blockMeta), xPos + 19, yPos + 1);
-            itemRenderer.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(blockID, blockAmount, blockMeta), xPos + 19, yPos + 1);
+			mc.fontRenderer.drawStringWithShadow(display, xPos + 10 - (mc.fontRenderer.getStringWidth(display) / 2), yPos + 6, 0xffffff);
+			GL11.glEnable(GL11.GL_LIGHTING);
+			GL11.glEnable(GL11.GL_DEPTH_TEST);
+			itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(blockID, 1, blockMeta), xPos + 19, yPos + 1);
+			itemRenderer.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(blockID, blockAmount, blockMeta), xPos + 19, yPos + 1);
 		}
 	}
 

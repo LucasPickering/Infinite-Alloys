@@ -60,7 +60,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	protected int joulesUsedPerTick = 360;
 
 	/** Amount of ticks it takes for this machine to finish one of its processes */
-	protected int ticksToProcess = 200;
+	public int ticksToProcess = 200;
 
 	/** Amount of ticks this machine has been running its process for, when this reaches ticksToFinish it is done */
 	public int processProgress;
@@ -160,7 +160,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	/** Determines if the given itemstack is a valid upgrade for the machine
-	 * 
 	 * @param upgrade
 	 * @return true if valid */
 	public boolean isUpgradeValid(ItemStack upgrade) {
@@ -184,7 +183,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	protected abstract void populateValidUpgrades();
 
 	/** Does the machine have the upgrade
-	 * 
 	 * @param upgrade
 	 * @return true if the machine has the upgrade */
 	public boolean hasUpgrade(int upgrade) {

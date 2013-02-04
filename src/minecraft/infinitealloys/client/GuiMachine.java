@@ -40,6 +40,7 @@ public abstract class GuiMachine extends GuiContainer {
 	private String texture;
 	protected java.awt.Point topLeft = new java.awt.Point();
 	protected java.awt.Point energyMeter = new java.awt.Point();
+	protected java.awt.Point progressBar = new java.awt.Point();
 	protected TileEntityMachine tem;
 	protected infinitealloys.Point controllingComputer = new infinitealloys.Point();
 	protected GuiMachineTab controllerTab;
@@ -80,10 +81,12 @@ public abstract class GuiMachine extends GuiContainer {
 		}
 		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
 		if(tem.maxJoules > 0 && mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height)) {
-			double joulesGained = tem.joulesGained;
-			double joulesUsed = tem.getJoulesUsed();
+			int joulesGained = tem.joulesGained;
+			int joulesUsed = tem.getJoulesUsed();
 			drawTextBox(new String[] { joulesString(tem.getJoules()), joulesString(joulesGained) + "/t IN", joulesString(joulesUsed) + "/t OUT" }, new int[] { 0xffffff, 0x00ff00, 0xff0000 }, mouseX, mouseY);
 		}
+		if(tem.ticksToProcess > 0 && mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height))
+			drawTextBox(tem.getProcessProgressScaled(100) + "%", 0xffffff, mouseX, mouseY);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
@@ -100,8 +103,14 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		bindTexture("extras");
-		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
-		drawTexturedModalRect(energyMeter.x, energyMeter.y, ENERGY_METER.x, ENERGY_METER.y + ENERGY_METER.height - joulesScaled, ENERGY_METER.width, joulesScaled);
+		if(tem.maxJoules > 0) {
+			int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
+			drawTexturedModalRect(energyMeter.x, energyMeter.y, ENERGY_METER.x, ENERGY_METER.y + ENERGY_METER.height - joulesScaled, ENERGY_METER.width, joulesScaled);
+		}
+		if(tem.ticksToProcess > 0) {
+			int progressScaled = tem.getJoulesScaled(PROGRESS_BAR.height);
+			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, tem.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
+		}
 		machineTabs.clear();
 		Point cont = TEHelper.controllers.get(mc.thePlayer.username);
 		if(cont != null) {

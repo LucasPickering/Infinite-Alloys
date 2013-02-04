@@ -78,7 +78,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	/** Return the resulting ingot for the smelted ingots
-	 * 
 	 * @return The resulting ingot. */
 	private ItemStack getIngotResult() {
 		int alloy = 0;
@@ -145,11 +144,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			ingotsToRemove[ingotNum] -= Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize);
 			decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
 		}
-		ItemStack ingotResult = getIngotResult();
-		if(inventoryStacks[2] == null)
-			inventoryStacks[2] = ingotResult;
-		else if(inventoryStacks[2].getTagCompound().getInteger("alloy") == ingotResult.getTagCompound().getInteger("alloy"))
-			inventoryStacks[2].stackSize += ingotResult.stackSize;
 		ItemStack result = getIngotResult();
 		if(inventoryStacks[2] == null)
 			inventoryStacks[2] = result;

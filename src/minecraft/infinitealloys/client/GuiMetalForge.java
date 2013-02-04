@@ -18,6 +18,7 @@ public class GuiMetalForge extends GuiMachine {
 	public GuiMetalForge(InventoryPlayer inventoryPlayer, TileEntityMetalForge tileEntity) {
 		super(176, 216, tileEntity, new ContainerMetalForge(inventoryPlayer, tileEntity), "metalforge");
 		temf = tileEntity;
+		progressBar.setLocation(31, 14);
 	}
 
 	@Override
@@ -44,8 +45,6 @@ public class GuiMetalForge extends GuiMachine {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
-		bindTexture("extras");
-		drawTexturedModalRect(31, 14, PROGRESS_BAR.x, PROGRESS_BAR.y, temf.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
 		for(int i = 0; i < References.metalCount; i++)
 			fontRenderer.drawStringWithShadow(new Byte(temf.recipeAmts[i]).toString(), i % 4 * 18 + 77, i / 4 * 18 + 52, 0xffffff);
 		GL11.glEnable(GL11.GL_LIGHTING);

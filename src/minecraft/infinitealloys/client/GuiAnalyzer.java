@@ -19,6 +19,7 @@ public class GuiAnalyzer extends GuiMachine {
 	public GuiAnalyzer(InventoryPlayer inventoryPlayer, TileEntityAnalyzer tileEntity) {
 		super(216, 166, tileEntity, new ContainerAnalyzer(inventoryPlayer, tileEntity), "analyzer");
 		tea = tileEntity;
+		progressBar.setLocation(54, 57);
 	}
 
 	@Override
@@ -30,7 +31,6 @@ public class GuiAnalyzer extends GuiMachine {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		bindTexture("extras");
-		drawTexturedModalRect(54, 57, PROGRESS_BAR.x, PROGRESS_BAR.y, tea.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
 		if(tea.inventoryStacks[1] != null) {
 			int currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");
 			WorldData worldData = InfiniteAlloys.instance.worldData;
