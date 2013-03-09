@@ -62,7 +62,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/** Amount of ticks it takes for this machine to finish one of its processes */
 	public int ticksToProcess = 200;
 
-	/** Amount of ticks this machine has been running its process for, when this reaches ticksToFinish it is done */
+	/**
+	 * Amount of ticks this machine has been running its process for, when this
+	 * reaches ticksToFinish it is done
+	 */
 	public int processProgress;
 
 	/** The size limit for one stack in this machine */
@@ -159,9 +162,12 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		upgrades = 0;
 	}
 
-	/** Determines if the given itemstack is a valid upgrade for the machine
+	/**
+	 * Determines if the given itemstack is a valid upgrade for the machine
+	 * 
 	 * @param upgrade
-	 * @return true if valid */
+	 * @return true if valid
+	 */
 	public boolean isUpgradeValid(ItemStack upgrade) {
 		int damage = upgrade.getItemDamage();
 		return upgrade.itemID == Items.upgrade.itemID && (!TEHelper.hasPrereqUpgrade(upgrade) || hasUpgrade(damage >> 1)) && !hasUpgrade(damage) && validUpgrades.contains(damage);
@@ -173,7 +179,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/** Called when processProgress reeaches ticksToProgress */
 	protected abstract void finishProcessing();
 
-	/** Actual amount of joules used per tick, after certain calculations and conditions */
+	/**
+	 * Actual amount of joules used per tick, after certain calculations and
+	 * conditions
+	 */
 	public abstract int getJoulesUsed();
 
 	/** Updates all values that are dependent on upgrades */
@@ -182,9 +191,12 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/** Add the valid upgrades for each machine */
 	protected abstract void populateValidUpgrades();
 
-	/** Does the machine have the upgrade
+	/**
+	 * Does the machine have the upgrade
+	 * 
 	 * @param upgrade
-	 * @return true if the machine has the upgrade */
+	 * @return true if the machine has the upgrade
+	 */
 	public boolean hasUpgrade(int upgrade) {
 		return (upgrades & upgrade) == upgrade;
 	}
@@ -321,13 +333,16 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@Override
-	public void openChest() {}
+	public void openChest() {
+	}
 
 	@Override
-	public void closeChest() {}
+	public void closeChest() {
+	}
 
 	@Override
-	public void onDisable(int duration) {}
+	public void onDisable(int duration) {
+	}
 
 	@Override
 	public boolean isDisabled() {
@@ -335,22 +350,22 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@Override
-	public double getVoltage() {
+	public double getVoltage(Object... data) {
 		return 120;
 	}
 
 	@Override
-	public double getJoules() {
+	public double getJoules(Object... data) {
 		return joules;
 	}
 
 	@Override
-	public void setJoules(double joules) {
+	public void setJoules(double joules, Object... data) {
 		this.joules = (int)joules;
 	}
 
 	@Override
-	public double getMaxJoules() {
+	public double getMaxJoules(Object... data) {
 		return maxJoules;
 	}
 }
