@@ -50,6 +50,10 @@ public class GuiBlockButton extends GuiScreen {
 		}
 	}
 
+	public int getYValue() {
+		return yValue;
+	}
+
 	public boolean mousePressed(int mouseX, int mouseY) {
 		return mouseX >= xPos && mouseY >= yPos && mouseX < xPos + width && mouseY < yPos + height;
 	}

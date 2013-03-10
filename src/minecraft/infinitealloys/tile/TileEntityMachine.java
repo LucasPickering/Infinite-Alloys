@@ -166,7 +166,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	 * @return true if valid */
 	public boolean isUpgradeValid(ItemStack upgrade) {
 		int upg = (int)Math.pow(2, upgrade.getItemDamage());
-		System.out.println(TEHelper.hasPrereqUpgrade(upg));
 		return upgrade.itemID == Items.upgrade.itemID && (!TEHelper.hasPrereqUpgrade(upg) || hasUpgrade(upg >> 1)) && !hasUpgrade(upg)
 				&& validUpgrades.contains(upg);
 	}

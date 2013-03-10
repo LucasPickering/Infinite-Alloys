@@ -24,7 +24,7 @@ public class TEHelper {
 	public static final int ELECCAPACITY2 = 1024;
 
 	public static final int AMPS_PER_TICK = 5;
-	public static final int SEARCH_PER_TICK = 200;
+	public static final int SEARCH_PER_TICK = 2000;
 
 	/** The controlling computer for each player */
 	public static HashMap<String, Point> controllers = new HashMap<String, Point>();

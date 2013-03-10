@@ -13,6 +13,7 @@ import infinitealloys.tile.TileEntityXray;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -26,18 +27,18 @@ import cpw.mods.fml.common.network.Player;
 
 public class PacketHandler implements IPacketHandler {
 
-	private static final int WORLD_DATA = 0;
-	private static final int TE_SERVER_TO_CLIENT = 1;
-	private static final int TE_CLIENT_TO_SERVER = 2;
-	private static final int TE_JOULES = 3;
-	private static final int COMPUTER_ADD_MACHINE = 4;
-	private static final int OPEN_GUI = 5;
-	private static final int SEARCH = 6;
+	private static final byte WORLD_DATA = 0;
+	private static final byte TE_SERVER_TO_CLIENT = 1;
+	private static final byte TE_CLIENT_TO_SERVER = 2;
+	private static final byte TE_JOULES = 3;
+	private static final byte COMPUTER_ADD_MACHINE = 4;
+	private static final byte OPEN_GUI = 5;
+	private static final byte SEARCH = 6;
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
-		int packetIndex = data.readInt();
+		int packetIndex = data.readByte();
 		World world = ((EntityPlayer)player).worldObj;
 		switch(packetIndex) {
 			case WORLD_DATA:
@@ -74,6 +75,13 @@ public class PacketHandler implements IPacketHandler {
 							recipeAmts[i] = data.readByte();
 						((TileEntityMetalForge)te).handlePacketData(recipeAmts);
 					}
+					else if(te instanceof TileEntityXray) {
+						TileEntityXray tex = (TileEntityXray)te;
+						tex.clearDetectedBlocks();
+						short size = data.readShort();
+						for(int i = 0; i < size; i++)
+							tex.addDetectedBlock(new Point(data.readInt(), data.readShort(), data.readInt()));
+					}
 				}
 				break;
 			case TE_CLIENT_TO_SERVER:
@@ -89,7 +97,9 @@ public class PacketHandler implements IPacketHandler {
 				}
 				else if(te instanceof TileEntityXray) {
 					boolean searching = data.readBoolean();
-					((TileEntityXray)te).handlePacketDataFromClient(searching);
+					String playerName = ((EntityPlayer)player).username;
+					short selectedButton = data.readShort();
+					((TileEntityXray)te).handlePacketDataFromClient(searching, playerName, selectedButton);
 				}
 				break;
 			case TE_JOULES:
@@ -141,7 +151,7 @@ public class PacketHandler implements IPacketHandler {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);
 		try {
-			dos.writeInt(TE_SERVER_TO_CLIENT);
+			dos.writeByte(TE_SERVER_TO_CLIENT);
 			dos.writeInt(tem.xCoord);
 			dos.writeInt(tem.yCoord);
 			dos.writeInt(tem.zCoord);
@@ -161,6 +171,16 @@ public class PacketHandler implements IPacketHandler {
 			else if(tem instanceof TileEntityMetalForge)
 				for(byte amt : ((TileEntityMetalForge)tem).recipeAmts)
 					dos.writeByte(amt);
+			else if(tem instanceof TileEntityXray) {
+				ArrayList<Point> points = ((TileEntityXray)tem).getDetectedBlocks();
+				short size = (short)points.size();
+				dos.writeShort(size);
+				for(int i = 0; i < size; i++) {
+					dos.writeInt(points.get(i).x);
+					dos.writeShort((short)points.get(i).y);
+					dos.writeInt(points.get(i).z);
+				}
+			}
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -174,7 +194,7 @@ public class PacketHandler implements IPacketHandler {
 		if(tem instanceof TileEntityMetalForge)
 			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityMetalForge)tem).recipeAmts);
 		if(tem instanceof TileEntityXray)
-			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityXray)tem).searching);
+			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityXray)tem).searching, ((TileEntityXray)tem).selectedButton);
 		return null;
 	}
 
@@ -198,24 +218,34 @@ public class PacketHandler implements IPacketHandler {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);
 		try {
-			dos.writeInt(id);
+			dos.writeByte(id);
 			for(Object datum : data) {
 				if(datum instanceof Byte)
-					dos.writeByte((Byte)datum);
+					dos.writeByte((byte)datum);
+
 				else if(datum instanceof byte[])
 					for(byte datum2 : (byte[])datum)
 						dos.writeByte(datum2);
+
 				else if(datum instanceof Short)
-					dos.writeShort((Short)datum);
+					dos.writeShort((short)datum);
+
+				else if(datum instanceof short[])
+					for(short datum2 : (short[])datum)
+						dos.writeShort(datum2);
+
 				else if(datum instanceof Integer)
-					dos.writeInt((Integer)datum);
+					dos.writeInt((int)datum);
+
 				else if(datum instanceof int[])
 					for(int datum2 : (int[])datum)
 						dos.writeInt(datum2);
+
 				else if(datum instanceof Double)
-					dos.writeDouble((Double)datum);
+					dos.writeDouble((double)datum);
+
 				else if(datum instanceof Boolean)
-					dos.writeBoolean((Boolean)datum);
+					dos.writeBoolean((boolean)datum);
 			}
 		}
 		catch(IOException e) {

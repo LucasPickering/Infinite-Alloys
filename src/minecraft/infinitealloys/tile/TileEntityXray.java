@@ -1,16 +1,28 @@
 package infinitealloys.tile;
 
 import infinitealloys.core.Point;
+import infinitealloys.handlers.PacketHandler;
 import java.util.ArrayList;
+import java.util.HashMap;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityXray extends TileEntityMachine {
 
-	/** A list of the detected blocks, points are relative to the machine */
+	/** A list of the detected blocks, x and z are relative to the machine, y is absolute */
 	private ArrayList<Point> detectedBlocks = new ArrayList<Point>();
 	public int range;
 	private Point lastSearch;
+
+	/** The selected button for the user, client-side only */
+	@SideOnly(Side.CLIENT)
+	public int selectedButton = -1;
+
+	/** The selected button on the gui for each player */
+	public HashMap<String, Short> selectedButtons = new HashMap<String, Short>();
 
 	/** Is it searching client-side. Does not necessarily mean the x-ray is running a search, only that the user sees a loading progress bar */
 	public boolean searching;
@@ -42,13 +54,14 @@ public class TileEntityXray extends TileEntityMachine {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if(!lastSearch.equals(0, 0, 0))
+		if(inventoryStacks[0] == null)
+			selectedButtons.clear();
+		else if(!lastSearch.equals(0, 0, 0))
 			search();
-		if(searching) {
-			if(++processProgress >= ticksToProcess) {
-				processProgress = 0;
-				searching = false;
-			}
+		if(searching && ++processProgress >= ticksToProcess) {
+			processProgress = 0;
+			searching = false;
+			PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(this));
 		}
 	}
 
@@ -58,17 +71,18 @@ public class TileEntityXray extends TileEntityMachine {
 		int targetID = inventoryStacks[0].itemID;
 		int targetMetadata = inventoryStacks[0].getItemDamage();
 		int blocksSearched = 0;
+		if(lastSearch.equals(0, 0, 0))
+			detectedBlocks.clear();
 		for(int y = lastSearch.y; y >= -yCoord; y--) {
 			for(int x = Math.abs(lastSearch.x); x <= range; x++) {
 				for(int z = Math.abs(lastSearch.z); z <= range; z++) {
-					for(int i = lastSearch.x >= 0 ? 0 : 1; i < 2; i++) {
-						for(int j = lastSearch.z >= 0 ? 0 : 1; j < 2; j++) {
+					for(int i = x == 0 ? 1 : 0; i < 2; i++) {
+						for(int j = z == 0 ? 1 : 0; j < 2; j++) {
 							int xRel = i == 0 ? x : -x;
 							int zRel = j == 0 ? z : -z;
-							if(worldObj.getBlockId(xCoord + xRel, yCoord + y, zCoord + zRel) == targetID
-									&& worldObj.getBlockMetadata(xCoord + xRel, yCoord + y, zCoord + zRel) == targetMetadata)
-								detectedBlocks.add(new Point(xRel, y, zRel));
-							if(++blocksSearched == TEHelper.SEARCH_PER_TICK) {
+							if(worldObj.getBlockId(xCoord + xRel, yCoord + y, zCoord + zRel) == targetID && worldObj.getBlockMetadata(xCoord + xRel, yCoord + y, zCoord + zRel) == targetMetadata)
+								detectedBlocks.add(new Point(xRel, yCoord + y, zRel));
+							if(++blocksSearched >= TEHelper.SEARCH_PER_TICK) {
 								lastSearch.set(xRel, y, zRel);
 								return;
 							}
@@ -86,8 +100,20 @@ public class TileEntityXray extends TileEntityMachine {
 		return detectedBlocks;
 	}
 
-	public void handlePacketDataFromClient(boolean searching) {
+	public void clearDetectedBlocks() {
+		detectedBlocks.clear();
+	}
+
+	public void addDetectedBlock(Point p) {
+		detectedBlocks.add(p);
+	}
+
+	public void handlePacketDataFromClient(boolean searching, String playerName, short selectedButton) {
 		this.searching = searching;
+		if(selectedButton != -1)
+			selectedButtons.put(playerName, selectedButton);
+		else
+			selectedButtons.remove(playerName);
 	}
 
 	@Override
@@ -113,14 +139,14 @@ public class TileEntityXray extends TileEntityMachine {
 		else if(hasUpgrade(TEHelper.SPEED1))
 			ticksToProcess = 18000;
 		else
-			ticksToProcess = 24000;
+			ticksToProcess = 24; // TODO: Change this back to 24000
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
 			joulesUsedPerTick = 1800;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
 			joulesUsedPerTick = 2700;
 		else
-			joulesUsedPerTick = 3600;
+			joulesUsedPerTick = 0; // TODO: Change this back to 3600
 
 		if(hasUpgrade(TEHelper.RANGE2))
 			range = 10;

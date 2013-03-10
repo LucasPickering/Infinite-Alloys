@@ -7,6 +7,7 @@ import infinitealloys.handlers.GfxHandler;
 import infinitealloys.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
@@ -15,7 +16,8 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void initLocalization() {
 		for(String langFile : References.langFiles)
-			LanguageRegistry.instance().loadLocalization(getClass().getResource(langFile), langFile.substring(langFile.lastIndexOf('/') + 1, langFile.lastIndexOf('.')), true);
+			LanguageRegistry.instance().loadLocalization(getClass().getResource(langFile),
+					langFile.substring(langFile.lastIndexOf('/') + 1, langFile.lastIndexOf('.')), true);
 	}
 
 	@Override
@@ -41,6 +43,12 @@ public class ClientProxy extends CommonProxy {
 		addName(new ItemStack(Items.upgrade), "item.upgrade.name");
 		addName(new ItemStack(Items.gps), "item.gps.name");
 		addName(new ItemStack(Items.alloyBook), "item.alloyBook.name");
+	}
+
+	@Override
+	public void initHandlers() {
+		super.initHandlers();
+		MinecraftForge.EVENT_BUS.register(gfxHandler);
 	}
 
 	@Override
