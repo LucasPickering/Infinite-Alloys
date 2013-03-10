@@ -9,6 +9,6 @@ Minecraft Forge
 Universal Electricity Basic Components
 
 ### Versions
-MC: 1.4.6  
-Forge: #472  
-UEBC: #309
+MC: 1.5 prerelease  
+Forge: #566  
+UEBC: #346
