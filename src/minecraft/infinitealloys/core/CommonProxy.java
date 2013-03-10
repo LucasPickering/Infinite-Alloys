@@ -42,8 +42,8 @@ public class CommonProxy {
 	public void initLocalization() {}
 
 	public void initBlocks() {
-		Blocks.ore = new BlockOre(Blocks.oreID).setCreativeTab(InfiniteAlloys.tabIA).setHardness(3F).setBlockName("IAore");
-		Blocks.machine = new BlockMachine(Blocks.machineID).setCreativeTab(InfiniteAlloys.tabIA).setHardness(3F).setBlockName("IAmachine");
+		Blocks.ore = new BlockOre(Blocks.oreID).setCreativeTab(InfiniteAlloys.tabIA).setHardness(3F).setUnlocalizedName("IAore");
+		Blocks.machine = new BlockMachine(Blocks.machineID).setCreativeTab(InfiniteAlloys.tabIA).setHardness(3F).setUnlocalizedName("IAmachine");
 		GameRegistry.registerBlock(Blocks.ore, ItemBlockIA.class, "IAore");
 		GameRegistry.registerBlock(Blocks.machine, ItemBlockIA.class, "IAmachine");
 		OreDictionary.registerOre("oreZinc", new ItemStack(Blocks.ore, 1, 0));
@@ -65,12 +65,12 @@ public class CommonProxy {
 	}
 
 	public void initItems() {
-		Items.multi = new ItemMulti(Items.multiID, 128).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAmulti");
-		Items.ingot = new ItemIngot(Items.ingotID, 130).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAingot");
-		Items.alloyIngot = new ItemAlloyIngot(Items.alloyIngotID, 130).setItemName("IAalloyIngot");
-		Items.upgrade = new ItemUpgrade(Items.upgradeID, 131).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAupgrade");
-		Items.gps = new ItemGPS(Items.gpsID, 142).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAgps");
-		Items.alloyBook = new ItemAlloyBook(Items.alloyBookID, 143).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA).setItemName("IAalloyBook");
+		Items.multi = new ItemMulti(Items.multiID, 128).setCreativeTab(InfiniteAlloys.tabIA);
+		Items.ingot = new ItemIngot(Items.ingotID, 130).setCreativeTab(InfiniteAlloys.tabIA);
+		Items.alloyIngot = new ItemAlloyIngot(Items.alloyIngotID, 130);
+		Items.upgrade = new ItemUpgrade(Items.upgradeID, 131).setCreativeTab(InfiniteAlloys.tabIA);
+		Items.gps = new ItemGPS(Items.gpsID, 142).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA);
+		Items.alloyBook = new ItemAlloyBook(Items.alloyBookID, 143).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA);
 		OreDictionary.registerOre("ingotZinc", new ItemStack(Items.ingot));
 		OreDictionary.registerOre("ingotMagnesium", new ItemStack(Items.ingot, 1, 1));
 		OreDictionary.registerOre("ingotScandium", new ItemStack(Items.ingot, 1, 2));

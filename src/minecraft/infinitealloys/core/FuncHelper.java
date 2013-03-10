@@ -1,10 +1,8 @@
 package infinitealloys.core;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class FuncHelper {
 

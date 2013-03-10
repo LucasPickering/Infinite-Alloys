@@ -244,13 +244,15 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		tagCompound.setTag("Items", nbttaglist);
 	}
 
+	/** One of the ISidedInventory functions */
 	@Override
-	public int func_94127_c(int i) {
+	public int func_94127_c(int side) {
 		return 0;
 	}
 
+	/** One of the ISidedInventory functions */
 	@Override
-	public int func_94128_d(int i) {
+	public int func_94128_d(int side) {
 		return 0;
 	}
 
