@@ -12,7 +12,6 @@ import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
-import java.util.EnumSet;
 import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -26,18 +25,15 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.electricity.ElectricityConnections;
-import universalelectricity.core.vector.Vector3;
+import universalelectricity.core.vector.VectorHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockMachine extends BlockContainer {
 
-	public BlockMachine(int id, int texture) {
-		super(id, texture, Material.iron);
+	public BlockMachine(int id) {
+		super(id, Material.iron);
 	}
 
 	@Override
@@ -113,7 +109,7 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int metadata) {
+	public TileEntity createTileEntity(World world, int metadata) {
 		switch(metadata) {
 			case 0:
 				return new TileEntityComputer();
@@ -149,15 +145,18 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityliving) {
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityliving, ItemStack itemstack) {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
-			int dir = MathHelper.floor_double(entityliving.rotationYaw * 4.0F / 360.0F + 0.5D) % 4;
-			tem.front = ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4);
-			if(tem.maxJoules > 0) {
-				EnumSet<ForgeDirection> set = EnumSet.allOf(ForgeDirection.class);
-				set.remove(tem.front);
-				ElectricityConnections.registerConnector(tem, set);
+			switch(MathHelper.floor_double(entityliving.rotationYaw * 4.0F / 360.0F + 0.5D) % 4) {
+				case 0:
+					tem.front = ForgeDirection.getOrientation(2);
+				case 1:
+					tem.front = ForgeDirection.getOrientation(5);
+				case 2:
+					tem.front = ForgeDirection.getOrientation(3);
+				default:
+					tem.front = ForgeDirection.getOrientation(4);
 			}
 			world.markBlockForUpdate(x, y, z);
 		}
@@ -170,7 +169,7 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public int getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
-		side = Vector3.getOrientationFromSide(((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z)).front, ForgeDirection.getOrientation(side)).ordinal();
+		side = VectorHelper.getOrientationFromSide(((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z)).front, ForgeDirection.getOrientation(side)).ordinal();
 		return blockIndexInTexture + blockAccess.getBlockMetadata(x, y, z) * 3 + (side < 2 ? 0 : side == 3 ? 1 : 2);
 	}
 
@@ -180,7 +179,6 @@ public class BlockMachine extends BlockContainer {
 		if(tem != null) {
 			tem.dropItems();
 			tem.dropUpgrades();
-			ElectricityConnections.unregisterConnector(tem);
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}

@@ -18,7 +18,7 @@ public class ItemAlloyIngot extends ItemIA {
 	}
 
 	@Override
-	public String getItemNameIS(ItemStack stack) {
+	public String getUnlocalizedName(ItemStack stack) {
 		return "IAalloyIngot";
 	}
 

@@ -2,17 +2,18 @@ package infinitealloys.block;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.References;
-
 import java.util.List;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockOre extends BlockIA {
 
-	public BlockOre(int id, int texture) {
-		super(id, texture, Material.rock);
+	public BlockOre(int id) {
+		super(id, Material.rock);
 	}
 
 	@Override
@@ -27,9 +28,10 @@ public class BlockOre extends BlockIA {
 	}
 
 	@Override
-	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
+	@SideOnly(Side.CLIENT)
+	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata) {
 		if(metadata < References.metalCount)
-			return blockIndexInTexture;
-		return blockIndexInTexture + 1;
+			return field_94336_cN;
+		return field_94336_cN + 1;
 	}
 }

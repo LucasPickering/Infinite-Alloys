@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 
 public class GuiXray extends GuiMachine {
 
@@ -28,7 +27,7 @@ public class GuiXray extends GuiMachine {
 	public void initGui() {
 		super.initGui();
 		setButtons();
-		controlList.add(searchButton = new GuiButton(0, width / 2 - 30, height / 2 - 92, 80, 20, "Search"));
+		buttonList.add(searchButton = new GuiButton(0, width / 2 - 30, height / 2 - 92, 80, 20, "Search"));
 	}
 
 	@Override

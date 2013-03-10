@@ -6,8 +6,8 @@ import net.minecraft.block.material.Material;
 
 public class BlockIA extends Block {
 
-	public BlockIA(int id, int texture, Material material) {
-		super(id, texture, material);
+	public BlockIA(int id, Material material) {
+		super(id, material);
 	}
 
 	@Override

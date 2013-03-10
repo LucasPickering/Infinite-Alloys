@@ -16,7 +16,7 @@ public class ItemBlockIA extends ItemBlock {
 	}
 
 	@Override
-	public String getItemNameIS(ItemStack itemstack) {
+	public String getUnlocalizedName(ItemStack itemstack) {
 		return "IAblock" + itemstack.itemID + "@" + itemstack.getItemDamage();
 	}
 }

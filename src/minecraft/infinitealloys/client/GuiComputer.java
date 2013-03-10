@@ -25,7 +25,7 @@ public class GuiComputer extends GuiMachine {
 	@Override
 	public void initGui() {
 		super.initGui();
-		controlList.add(addMachine = new GuiButton(0, width / 2 + 44, height / 2 - 83, 32, 20, "Add"));
+		buttonList.add(addMachine = new GuiButton(0, width / 2 + 44, height / 2 - 83, 32, 20, "Add"));
 		xInput = new GuiTextField(mc.fontRenderer, width / 2 - 80, height / 2 - 81, 30, 16);
 		yInput = new GuiTextField(mc.fontRenderer, width / 2 - 38, height / 2 - 81, 30, 16);
 		zInput = new GuiTextField(mc.fontRenderer, width / 2 + 4, height / 2 - 81, 30, 16);

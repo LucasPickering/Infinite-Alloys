@@ -9,26 +9,27 @@ import java.util.EnumSet;
 import java.util.Random;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import net.minecraftforge.common.ISidedInventory;
-import universalelectricity.core.electricity.ElectricityConnections;
-import universalelectricity.core.electricity.ElectricityNetwork;
-import universalelectricity.core.implement.IDisableable;
-import universalelectricity.core.implement.IJouleStorage;
-import universalelectricity.core.implement.IVoltage;
+import universalelectricity.core.block.IConnector;
+import universalelectricity.core.block.IElectricityStorage;
+import universalelectricity.core.block.IVoltage;
+import universalelectricity.core.electricity.ElectricityNetworkHelper;
+import universalelectricity.core.electricity.IElectricityNetwork;
 import universalelectricity.core.vector.Vector3;
+import universalelectricity.core.vector.VectorHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class TileEntityMachine extends TileEntity implements ISidedInventory, IJouleStorage, IVoltage {
+public abstract class TileEntityMachine extends TileEntity implements ISidedInventory, IElectricityStorage, IVoltage, IConnector {
 
 	public Random random = new Random();
 	public ArrayList<String> playersUsing = new ArrayList<String>();
@@ -89,8 +90,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 			EnumSet<ForgeDirection> inputDirections = EnumSet.allOf(ForgeDirection.class);
 			inputDirections.remove(front);
 			for(ForgeDirection inputDirection : inputDirections) {
-				TileEntity inputTile = Vector3.getTileEntityFromSide(worldObj, new Vector3(this), inputDirection);
-				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
+				TileEntity inputTile = VectorHelper.getConnectorFromSide(worldObj, new Vector3(this), inputDirection);
+				IElectricityNetwork network = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection);
 				if(network != null) {
 					if(joules < maxJoules) {
 						network.startRequesting(this, TEHelper.AMPS_PER_TICK, getVoltage());
@@ -222,11 +223,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 			if(var5 >= 0 && var5 < inventoryStacks.length)
 				inventoryStacks[var5] = ItemStack.loadItemStackFromNBT(nbttag);
 		}
-		if(maxJoules > 0) {
-			EnumSet<ForgeDirection> set = EnumSet.allOf(ForgeDirection.class);
-			set.remove(front);
-			ElectricityConnections.registerConnector(this, set);
-		}
 	}
 
 	@Override
@@ -249,12 +245,12 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@Override
-	public int getStartInventorySide(ForgeDirection side) {
+	public int func_94127_c(int i) {
 		return 0;
 	}
 
 	@Override
-	public int getSizeInventorySide(ForgeDirection side) {
+	public int func_94128_d(int i) {
 		return 0;
 	}
 
@@ -333,22 +329,37 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	@Override
-	public double getVoltage(Object... data) {
+	public double getVoltage() {
 		return 120;
 	}
 
 	@Override
-	public double getJoules(Object... data) {
+	public double getJoules() {
 		return joules;
 	}
 
 	@Override
-	public void setJoules(double joules, Object... data) {
+	public void setJoules(double joules) {
 		this.joules = (int)joules;
 	}
 
 	@Override
-	public double getMaxJoules(Object... data) {
+	public double getMaxJoules() {
 		return maxJoules;
+	}
+
+	@Override
+	public boolean canConnect(ForgeDirection side) {
+		return maxJoules > 0 && side != front;
+	}
+
+	@Override
+	public boolean func_94042_c() {
+		return false;
+	}
+
+	@Override
+	public boolean func_94041_b(int i, ItemStack itemstack) {
+		return false;
 	}
 }

@@ -5,7 +5,6 @@ import infinitealloys.core.FuncHelper;
 import infinitealloys.core.Point;
 import infinitealloys.core.References;
 import infinitealloys.handlers.PacketHandler;
-import infinitealloys.item.Items;
 import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
@@ -16,10 +15,10 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
-import universalelectricity.core.electricity.ElectricInfo;
+import universalelectricity.core.electricity.ElectricityDisplay;
+import universalelectricity.core.electricity.ElectricityPack;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public abstract class GuiMachine extends GuiContainer {
@@ -83,9 +82,9 @@ public abstract class GuiMachine extends GuiContainer {
 		if(tem.maxJoules > 0
 				&& mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width,
 						ENERGY_METER.height))
-			drawTextBox(new String[] { ElectricInfo.getDisplayShort(tem.getJoules(), ElectricInfo.ElectricUnit.JOULES),
-					ElectricInfo.getDisplayShort(ElectricInfo.getWattsFromJoules(tem.joulesGained, 0.05F), ElectricInfo.ElectricUnit.WATT) + " IN",
-					ElectricInfo.getDisplayShort(ElectricInfo.getWattsFromJoules(tem.getJoulesUsed(), 0.05F), ElectricInfo.ElectricUnit.WATT) + " OUT" },
+			drawTextBox(new String[] { ElectricityDisplay.getDisplayShort(tem.getJoules(), ElectricityDisplay.ElectricUnit.JOULES),
+					ElectricityDisplay.getDisplayShort(ElectricityPack.getWattsFromJoules(tem.joulesGained, 0.05F), ElectricityDisplay.ElectricUnit.WATT) + " IN",
+					ElectricityDisplay.getDisplayShort(ElectricityPack.getWattsFromJoules(tem.getJoulesUsed(), 0.05F), ElectricityDisplay.ElectricUnit.WATT) + " OUT" },
 					new int[] { 0xffffff, 0x00ff00, 0xff0000 }, mouseX, mouseY);
 		if(tem.ticksToProcess > 0 && mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height))
 			drawTextBox(tem.getProcessProgressScaled(100) + "%", 0xffffff, mouseX, mouseY);
@@ -170,8 +169,7 @@ public abstract class GuiMachine extends GuiContainer {
 	}
 
 	public static void bindTexture(String texture) {
-		Minecraft.getMinecraft().renderEngine
-				.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(References.TEXTURE_PATH + "gui/" + texture + ".png"));
+		Minecraft.getMinecraft().renderEngine.func_98187_b(References.TEXTURE_PATH + "gui/" + texture + ".png");
 	}
 
 	@Override

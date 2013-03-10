@@ -17,7 +17,7 @@ public class ItemIA extends Item {
 	}
 
 	@Override
-	public String getItemNameIS(ItemStack itemstack) {
+	public String getUnlocalizedName(ItemStack itemstack) {
 		return "IAitem" + itemstack.itemID + "@" + itemstack.getItemDamage();
 	}
 }

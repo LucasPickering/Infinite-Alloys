@@ -1,8 +1,5 @@
 package infinitealloys.inventory;
 
-import infinitealloys.core.Point;
-import infinitealloys.tile.TEHelper;
-import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

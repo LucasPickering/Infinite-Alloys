@@ -19,7 +19,7 @@ public class ItemUpgrade extends ItemIA {
 	}
 
 	@Override
-	public String getItemNameIS(ItemStack itemstack) {
+	public String getUnlocalizedName(ItemStack itemstack) {
 		return "IAupgrade";
 	}
 
