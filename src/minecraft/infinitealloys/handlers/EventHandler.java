@@ -1,10 +1,10 @@
 package infinitealloys.handlers;
 
-import infinitealloys.FuncHelper;
-import infinitealloys.InfiniteAlloys;
-import infinitealloys.References;
-import infinitealloys.WorldData;
 import infinitealloys.block.Blocks;
+import infinitealloys.core.FuncHelper;
+import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.core.References;
+import infinitealloys.core.WorldData;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,11 +32,9 @@ public class EventHandler implements ICraftingHandler {
 		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
 			return;
 		world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(0).getChunkSaveLocation().getPath();
-		FileInputStream fis = null;
 		ObjectInputStream ois = null;
 		try {
-			fis = new FileInputStream(world + "/WorldData.dat");
-			ois = new ObjectInputStream(fis);
+			ois = new ObjectInputStream(new FileInputStream(world + "/WorldData.dat"));
 			InfiniteAlloys.instance.worldData = (WorldData)ois.readObject();
 			System.out.println("Successfully loaded IA alloys");
 		}
@@ -68,10 +66,12 @@ public class EventHandler implements ICraftingHandler {
 		}
 		finally {
 			try {
-				ois.close();
-				fis.close();
+				if(ois != null)
+					ois.close();
 			}
-			catch(Exception e) {}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -79,11 +79,9 @@ public class EventHandler implements ICraftingHandler {
 	public void onWorldUnload(Unload event) {
 		if(InfiniteAlloys.instance.worldData == null || FMLCommonHandler.instance().getEffectiveSide().isClient())
 			return;
-		FileOutputStream fos = null;
 		ObjectOutputStream oos = null;
 		try {
-			fos = new FileOutputStream(world + "/WorldData.dat");
-			oos = new ObjectOutputStream(fos);
+			oos = new ObjectOutputStream(new FileOutputStream(world + "/WorldData.dat"));
 			oos.writeObject(InfiniteAlloys.instance.worldData);
 		}
 		catch(Exception e) {
@@ -92,10 +90,12 @@ public class EventHandler implements ICraftingHandler {
 		}
 		finally {
 			try {
-				oos.close();
-				fos.close();
+				if(oos != null)
+					oos.close();
 			}
-			catch(Exception e) {}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
 		}
 		InfiniteAlloys.instance.worldData = null;
 	}
@@ -110,11 +110,12 @@ public class EventHandler implements ICraftingHandler {
 	@Override
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
 		if(item.itemID == Blocks.machine.blockID && item.getItemDamage() == 1) {
-			System.out.println("hi");
+			System.out.println("Adding stat");
 			player.addStat(InfiniteAlloys.instance.achievements[0], 1);
 		}
 	}
 
 	@Override
-	public void onSmelting(EntityPlayer player, ItemStack item) {}
+	public void onSmelting(EntityPlayer player, ItemStack item) {
+	}
 }

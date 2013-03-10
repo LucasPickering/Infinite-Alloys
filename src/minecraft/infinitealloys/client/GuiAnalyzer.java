@@ -1,9 +1,9 @@
 package infinitealloys.client;
 
-import infinitealloys.FuncHelper;
-import infinitealloys.InfiniteAlloys;
-import infinitealloys.References;
-import infinitealloys.WorldData;
+import infinitealloys.core.FuncHelper;
+import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.core.References;
+import infinitealloys.core.WorldData;
 import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TileEntityAnalyzer;

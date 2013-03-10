@@ -1,7 +1,7 @@
 package infinitealloys.tile;
 
-import infinitealloys.References;
 import infinitealloys.block.BlockMachine;
+import infinitealloys.core.References;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class TileEntityMachine extends TileEntity implements ISidedInventory, IJouleStorage, IVoltage, IDisableable {
+public abstract class TileEntityMachine extends TileEntity implements ISidedInventory, IJouleStorage, IVoltage {
 
 	public Random random = new Random();
 	public ArrayList<String> playersUsing = new ArrayList<String>();
@@ -62,10 +62,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/** Amount of ticks it takes for this machine to finish one of its processes */
 	public int ticksToProcess = 200;
 
-	/**
-	 * Amount of ticks this machine has been running its process for, when this
-	 * reaches ticksToFinish it is done
-	 */
+	/** Amount of ticks this machine has been running its process for, when this reaches ticksToFinish it is done */
 	public int processProgress;
 
 	/** The size limit for one stack in this machine */
@@ -84,7 +81,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	@Override
 	public void updateEntity() {
 		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
-			upgrades |= inventoryStacks[upgradeSlotIndex].getItemDamage();
+			upgrades |= (int)Math.pow(2, inventoryStacks[upgradeSlotIndex].getItemDamage());
 			inventoryStacks[upgradeSlotIndex] = null;
 			updateUpgrades();
 		}
@@ -96,8 +93,9 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 				ElectricityNetwork network = ElectricityNetwork.getNetworkFromTileEntity(inputTile, inputDirection);
 				if(network != null) {
 					if(joules < maxJoules) {
-						network.startRequesting(this, TEHelper.WATTS_PER_TICK / getVoltage(), getVoltage());
-						joules += (joulesGained = (int)Math.max(Math.min(network.consumeElectricity(this).getWatts(), TEHelper.WATTS_PER_TICK), 0));
+						network.startRequesting(this, TEHelper.AMPS_PER_TICK, getVoltage());
+						joules += (joulesGained = (int)Math
+								.max(Math.min(network.consumeElectricity(this).getWatts(), TEHelper.AMPS_PER_TICK * getVoltage()), 0));
 					}
 					else
 						network.stopRequesting(this);
@@ -111,7 +109,8 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		}
 		joules -= getJoulesUsed();
 		for(String playerName : playersUsing)
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEJoulesPacket(this), (Player)FMLCommonHandler.instance().getSidedDelegate().getServer().getConfigurationManager().getPlayerForUsername(playerName));
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEJoulesPacket(this), (Player)FMLCommonHandler.instance().getSidedDelegate().getServer()
+					.getConfigurationManager().getPlayerForUsername(playerName));
 		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -147,12 +146,11 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/** Drops the upgrades that were used on the block as items */
 	public void dropUpgrades() {
 		for(int i = 0; i <= References.upgradeCount; i++) {
-			int upg = (int)Math.pow(2D, i);
-			if(hasUpgrade(upg)) {
+			if(hasUpgrade((int)Math.pow(2D, i))) {
 				float f = random.nextFloat() * 0.8F + 0.1F;
 				float f1 = random.nextFloat() * 0.8F + 0.1F;
 				float f2 = random.nextFloat() * 0.8F + 0.1F;
-				EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(Items.upgrade, 1, upg));
+				EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(Items.upgrade, 1, i));
 				item.motionX = random.nextGaussian() * 0.05F;
 				item.motionY = random.nextGaussian() * 0.25F;
 				item.motionZ = random.nextGaussian() * 0.05F;
@@ -162,15 +160,15 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		upgrades = 0;
 	}
 
-	/**
-	 * Determines if the given itemstack is a valid upgrade for the machine
+	/** Determines if the given itemstack is a valid upgrade for the machine
 	 * 
 	 * @param upgrade
-	 * @return true if valid
-	 */
+	 * @return true if valid */
 	public boolean isUpgradeValid(ItemStack upgrade) {
-		int damage = upgrade.getItemDamage();
-		return upgrade.itemID == Items.upgrade.itemID && (!TEHelper.hasPrereqUpgrade(upgrade) || hasUpgrade(damage >> 1)) && !hasUpgrade(damage) && validUpgrades.contains(damage);
+		int upg = (int)Math.pow(2, upgrade.getItemDamage());
+		System.out.println(TEHelper.hasPrereqUpgrade(upg));
+		return upgrade.itemID == Items.upgrade.itemID && (!TEHelper.hasPrereqUpgrade(upg) || hasUpgrade(upg >> 1)) && !hasUpgrade(upg)
+				&& validUpgrades.contains(upg);
 	}
 
 	/** Should the process tick be increased? */
@@ -179,10 +177,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/** Called when processProgress reeaches ticksToProgress */
 	protected abstract void finishProcessing();
 
-	/**
-	 * Actual amount of joules used per tick, after certain calculations and
-	 * conditions
-	 */
+	/** Actual amount of joules used per tick, after certain calculations and conditions */
 	public abstract int getJoulesUsed();
 
 	/** Updates all values that are dependent on upgrades */
@@ -191,12 +186,10 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	/** Add the valid upgrades for each machine */
 	protected abstract void populateValidUpgrades();
 
-	/**
-	 * Does the machine have the upgrade
+	/** Does the machine have the upgrade
 	 * 
 	 * @param upgrade
-	 * @return true if the machine has the upgrade
-	 */
+	 * @return true if the machine has the upgrade */
 	public boolean hasUpgrade(int upgrade) {
 		return (upgrades & upgrade) == upgrade;
 	}
@@ -338,15 +331,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public void closeChest() {
-	}
-
-	@Override
-	public void onDisable(int duration) {
-	}
-
-	@Override
-	public boolean isDisabled() {
-		return false;
 	}
 
 	@Override

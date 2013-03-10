@@ -1,7 +1,7 @@
 package infinitealloys.inventory;
 
-import infinitealloys.InfiniteAlloys;
-import infinitealloys.References;
+import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.core.References;
 import infinitealloys.item.Items;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

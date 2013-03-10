@@ -1,11 +1,11 @@
 package infinitealloys.handlers;
 
-import infinitealloys.FuncHelper;
-import infinitealloys.InfiniteAlloys;
-import infinitealloys.Point;
-import infinitealloys.References;
-import infinitealloys.WorldData;
 import infinitealloys.block.BlockMachine;
+import infinitealloys.core.FuncHelper;
+import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.core.Point;
+import infinitealloys.core.References;
+import infinitealloys.core.WorldData;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
@@ -32,6 +32,7 @@ public class PacketHandler implements IPacketHandler {
 	private static final int TE_JOULES = 3;
 	private static final int COMPUTER_ADD_MACHINE = 4;
 	private static final int OPEN_GUI = 5;
+	private static final int SEARCH = 6;
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
@@ -120,7 +121,14 @@ public class PacketHandler implements IPacketHandler {
 				y = data.readInt();
 				z = data.readInt();
 				boolean fromComputer = data.readBoolean();
-				((BlockMachine)FuncHelper.getBlock(world, x, y, z)).openGui(world, (EntityPlayer)player, (TileEntityMachine)world.getBlockTileEntity(x, y, z), fromComputer);
+				((BlockMachine)FuncHelper.getBlock(world, x, y, z)).openGui(world, (EntityPlayer)player, (TileEntityMachine)world.getBlockTileEntity(x, y, z),
+						fromComputer);
+				break;
+			case SEARCH:
+				x = data.readInt();
+				y = data.readInt();
+				z = data.readInt();
+				((TileEntityXray)world.getBlockTileEntity(x, y, z)).search();
 				break;
 		}
 	}
@@ -150,11 +158,9 @@ public class PacketHandler implements IPacketHandler {
 					dos.writeInt(coords.z);
 				}
 			}
-			else if(tem instanceof TileEntityMetalForge) {
-				TileEntityMetalForge temf = (TileEntityMetalForge)tem;
-				for(byte amt : temf.recipeAmts)
+			else if(tem instanceof TileEntityMetalForge)
+				for(byte amt : ((TileEntityMetalForge)tem).recipeAmts)
 					dos.writeByte(amt);
-			}
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -182,6 +188,10 @@ public class PacketHandler implements IPacketHandler {
 
 	public static Packet getPacketOpenGui(int x, int y, int z, boolean fromComputer) {
 		return getPacket(OPEN_GUI, x, y, z, fromComputer);
+	}
+
+	public static Packet getPacketSearch(int x, int y, int z) {
+		return getPacket(SEARCH, x, y, z);
 	}
 
 	private static Packet getPacket(int id, Object... data) {

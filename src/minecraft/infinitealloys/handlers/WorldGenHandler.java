@@ -1,8 +1,8 @@
 package infinitealloys.handlers;
 
-import infinitealloys.InfiniteAlloys;
-import infinitealloys.References;
 import infinitealloys.block.Blocks;
+import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.core.References;
 import java.util.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;

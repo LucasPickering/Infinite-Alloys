@@ -1,8 +1,8 @@
 package infinitealloys.client;
 
-import infinitealloys.CommonProxy;
-import infinitealloys.References;
 import infinitealloys.block.Blocks;
+import infinitealloys.core.CommonProxy;
+import infinitealloys.core.References;
 import infinitealloys.handlers.GfxHandler;
 import infinitealloys.item.Items;
 import net.minecraft.item.ItemStack;

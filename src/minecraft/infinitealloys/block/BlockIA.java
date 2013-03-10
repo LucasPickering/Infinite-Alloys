@@ -1,6 +1,6 @@
 package infinitealloys.block;
 
-import infinitealloys.References;
+import infinitealloys.core.References;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 

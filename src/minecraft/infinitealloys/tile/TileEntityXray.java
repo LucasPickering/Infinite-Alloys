@@ -1,12 +1,13 @@
 package infinitealloys.tile;
 
-import infinitealloys.Point;
+import infinitealloys.core.Point;
 import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityXray extends TileEntityMachine {
 
+	/** A list of the detected blocks, points are relative to the machine */
 	private ArrayList<Point> detectedBlocks = new ArrayList<Point>();
 	public int range;
 	private Point lastSearch;
@@ -23,7 +24,6 @@ public class TileEntityXray extends TileEntityMachine {
 		super(1);
 		inventoryStacks = new ItemStack[2];
 		stackLimit = 1;
-		range = 10;
 		lastSearch = new Point(0, 0, 0);
 	}
 
@@ -65,7 +65,8 @@ public class TileEntityXray extends TileEntityMachine {
 						for(int j = lastSearch.z >= 0 ? 0 : 1; j < 2; j++) {
 							int xRel = i == 0 ? x : -x;
 							int zRel = j == 0 ? z : -z;
-							if(worldObj.getBlockId(xCoord + xRel, yCoord + y, zCoord + zRel) == targetID && worldObj.getBlockMetadata(xCoord + xRel, yCoord + y, zCoord + zRel) == targetMetadata)
+							if(worldObj.getBlockId(xCoord + xRel, yCoord + y, zCoord + zRel) == targetID
+									&& worldObj.getBlockMetadata(xCoord + xRel, yCoord + y, zCoord + zRel) == targetMetadata)
 								detectedBlocks.add(new Point(xRel, y, zRel));
 							if(++blocksSearched == TEHelper.SEARCH_PER_TICK) {
 								lastSearch.set(xRel, y, zRel);
@@ -95,7 +96,8 @@ public class TileEntityXray extends TileEntityMachine {
 	}
 
 	@Override
-	public void finishProcessing() {}
+	public void finishProcessing() {
+	}
 
 	@Override
 	public int getJoulesUsed() {
@@ -121,11 +123,11 @@ public class TileEntityXray extends TileEntityMachine {
 			joulesUsedPerTick = 3600;
 
 		if(hasUpgrade(TEHelper.RANGE2))
-			range = 20;
-		else if(hasUpgrade(TEHelper.RANGE1))
-			range = 15;
-		else
 			range = 10;
+		else if(hasUpgrade(TEHelper.RANGE1))
+			range = 8;
+		else
+			range = 5;
 
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 

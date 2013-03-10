@@ -1,9 +1,9 @@
 package infinitealloys.client;
 
-import infinitealloys.FuncHelper;
-import infinitealloys.Point;
-import infinitealloys.References;
 import infinitealloys.block.BlockMachine;
+import infinitealloys.core.FuncHelper;
+import infinitealloys.core.Point;
+import infinitealloys.core.References;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEHelper;
@@ -42,7 +42,7 @@ public abstract class GuiMachine extends GuiContainer {
 	protected java.awt.Point energyMeter = new java.awt.Point();
 	protected java.awt.Point progressBar = new java.awt.Point();
 	protected TileEntityMachine tem;
-	protected infinitealloys.Point controllingComputer = new infinitealloys.Point();
+	protected infinitealloys.core.Point controllingComputer = new infinitealloys.core.Point();
 	protected GuiMachineTab controllerTab;
 	protected ArrayList<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
 
@@ -62,14 +62,14 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
-		if(mouseInZone(mouseX, mouseY, slot.xDisplayPosition, slot.yDisplayPosition, 16, 16)) {
+		if(mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x, slot.yDisplayPosition + topLeft.y, 16, 16)) {
 			ArrayList<String> texts = new ArrayList<String>();
 			ArrayList<Integer> colors = new ArrayList<Integer>();
 			texts.add(FuncHelper.getLoc("upgrade.name"));
 			colors.add(0xffffff);
 			for(int i = 0; i < References.upgradeCount; i++) {
-				int damage = (int)Math.pow(2, i);
-				if(TEHelper.isPrereqUpgrade(new ItemStack(Items.upgrade, 1, damage)) && tem.hasUpgrade(damage << 1) || !tem.hasUpgrade(damage))
+				int upg = (int)Math.pow(2, i);
+				if(TEHelper.isPrereqUpgrade(upg) && tem.hasUpgrade(upg << 1) || !tem.hasUpgrade(upg))
 					continue;
 				texts.add(FuncHelper.getLoc("upgrade." + References.upgradeNames[i] + ".name"));
 				colors.add(0xaaaaaa);
@@ -80,11 +80,13 @@ public abstract class GuiMachine extends GuiContainer {
 			drawTextBox(texts.toArray(new String[texts.size()]), colorsA, mouseX, mouseY);
 		}
 		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
-		if(tem.maxJoules > 0 && mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height)) {
-			int joulesGained = tem.joulesGained;
-			int joulesUsed = tem.getJoulesUsed();
-			drawTextBox(new String[] { joulesString(tem.getJoules()), joulesString(joulesGained) + "/t IN", joulesString(joulesUsed) + "/t OUT" }, new int[] { 0xffffff, 0x00ff00, 0xff0000 }, mouseX, mouseY);
-		}
+		if(tem.maxJoules > 0
+				&& mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width,
+						ENERGY_METER.height))
+			drawTextBox(new String[] { ElectricInfo.getDisplayShort(tem.getJoules(), ElectricInfo.ElectricUnit.JOULES),
+					ElectricInfo.getDisplayShort(ElectricInfo.getWattsFromJoules(tem.joulesGained, 0.05F), ElectricInfo.ElectricUnit.WATT) + " IN",
+					ElectricInfo.getDisplayShort(ElectricInfo.getWattsFromJoules(tem.getJoulesUsed(), 0.05F), ElectricInfo.ElectricUnit.WATT) + " OUT" },
+					new int[] { 0xffffff, 0x00ff00, 0xff0000 }, mouseX, mouseY);
 		if(tem.ticksToProcess > 0 && mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height))
 			drawTextBox(tem.getProcessProgressScaled(100) + "%", 0xffffff, mouseX, mouseY);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -105,21 +107,26 @@ public abstract class GuiMachine extends GuiContainer {
 		bindTexture("extras");
 		if(tem.maxJoules > 0) {
 			int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
-			drawTexturedModalRect(energyMeter.x, energyMeter.y, ENERGY_METER.x, ENERGY_METER.y + ENERGY_METER.height - joulesScaled, ENERGY_METER.width, joulesScaled);
+			drawTexturedModalRect(energyMeter.x, energyMeter.y, ENERGY_METER.x, ENERGY_METER.y + ENERGY_METER.height - joulesScaled, ENERGY_METER.width,
+					joulesScaled);
 		}
 		if(tem.ticksToProcess > 0) {
 			int progressScaled = tem.getJoulesScaled(PROGRESS_BAR.height);
-			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, tem.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
+			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, tem.getProcessProgressScaled(PROGRESS_BAR.width),
+					PROGRESS_BAR.height);
 		}
 		machineTabs.clear();
 		Point cont = TEHelper.controllers.get(mc.thePlayer.username);
 		if(cont != null) {
 			TileEntityComputer tec = ((TileEntityComputer)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z));
-			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true, tem.coordsEquals(cont.x, cont.y, cont.z));
+			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true,
+					tem.coordsEquals(cont.x, cont.y, cont.z));
 			controllerTab.drawButton();
 			for(int i = 0; i < tec.networkCoords.size(); i++) {
 				Point coords = tec.networkCoords.get(i);
-				machineTabs.add(new GuiMachineTab(mc, itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityMachine)mc.theWorld.getBlockTileEntity(coords.x, coords.y, coords.z), i / 5 == 0, tem.coordsEquals(coords.x, coords.y, coords.z)));
+				machineTabs.add(new GuiMachineTab(mc, itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityMachine)mc.theWorld.getBlockTileEntity(
+						coords.x, coords.y, coords.z), i / 5 == 0, tem
+						.coordsEquals(coords.x, coords.y, coords.z)));
 				machineTabs.get(i).drawButton();
 			}
 		}
@@ -163,7 +170,8 @@ public abstract class GuiMachine extends GuiContainer {
 	}
 
 	public static void bindTexture(String texture) {
-		Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(References.TEXTURE_PATH + "gui/" + texture + ".png"));
+		Minecraft.getMinecraft().renderEngine
+				.bindTexture(Minecraft.getMinecraft().renderEngine.getTexture(References.TEXTURE_PATH + "gui/" + texture + ".png"));
 	}
 
 	@Override
@@ -197,9 +205,5 @@ public abstract class GuiMachine extends GuiContainer {
 
 	protected boolean mouseInZone(int mouseX, int mouseY, int xStart, int yStart, int width, int height) {
 		return mouseX >= xStart && mouseY >= yStart && mouseX < xStart + width && mouseY < yStart + height;
-	}
-
-	protected String joulesString(double joules) {
-		return ElectricInfo.getDisplayShort(joules, ElectricInfo.ElectricUnit.JOULES);
 	}
 }

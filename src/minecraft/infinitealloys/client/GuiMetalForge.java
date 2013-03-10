@@ -1,7 +1,7 @@
 package infinitealloys.client;
 
-import infinitealloys.FuncHelper;
-import infinitealloys.References;
+import infinitealloys.core.FuncHelper;
+import infinitealloys.core.References;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.item.Items;

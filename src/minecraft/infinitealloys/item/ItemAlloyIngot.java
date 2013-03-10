@@ -1,8 +1,8 @@
 package infinitealloys.item;
 
-import infinitealloys.FuncHelper;
-import infinitealloys.InfiniteAlloys;
-import infinitealloys.References;
+import infinitealloys.core.FuncHelper;
+import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.core.References;
 import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;

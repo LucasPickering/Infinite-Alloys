@@ -1,6 +1,6 @@
 package infinitealloys.tile;
 
-import infinitealloys.Point;
+import infinitealloys.core.Point;
 import infinitealloys.item.Items;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class TEHelper {
 	public static final int ELECCAPACITY1 = 512;
 	public static final int ELECCAPACITY2 = 1024;
 
-	public static final int WATTS_PER_TICK = 500;
+	public static final int AMPS_PER_TICK = 5;
 	public static final int SEARCH_PER_TICK = 200;
 
 	/** The controlling computer for each player */
@@ -88,15 +88,15 @@ public class TEHelper {
 	 * 
 	 * @param upgrade
 	 * @return true if it is a prereq */
-	public static boolean isPrereqUpgrade(ItemStack upgrade) {
-		return TEHelper.prereqUpgrades.contains(upgrade.getItemDamage());
+	public static boolean isPrereqUpgrade(int upg) {
+		return TEHelper.prereqUpgrades.contains(upg);
 	}
 
 	/** Does the upgrade require another to work?
 	 * 
 	 * @param upgrade
 	 * @return true if it has a prereq */
-	public static boolean hasPrereqUpgrade(ItemStack upgrade) {
-		return TEHelper.prereqNeedingUpgrades.contains(upgrade.getItemDamage());
+	public static boolean hasPrereqUpgrade(int upg) {
+		return TEHelper.prereqNeedingUpgrades.contains(upg);
 	}
 }

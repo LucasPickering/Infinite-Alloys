@@ -1,8 +1,8 @@
 package infinitealloys.block;
 
-import infinitealloys.InfiniteAlloys;
-import infinitealloys.Point;
-import infinitealloys.References;
+import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.core.Point;
+import infinitealloys.core.References;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEHelper;

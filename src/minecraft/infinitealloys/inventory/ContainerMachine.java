@@ -1,6 +1,6 @@
 package infinitealloys.inventory;
 
-import infinitealloys.Point;
+import infinitealloys.core.Point;
 import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;

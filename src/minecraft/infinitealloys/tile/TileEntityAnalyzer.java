@@ -1,7 +1,7 @@
 package infinitealloys.tile;
 
-import infinitealloys.InfiniteAlloys;
-import infinitealloys.References;
+import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.core.References;
 import java.util.Arrays;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

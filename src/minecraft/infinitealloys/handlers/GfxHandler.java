@@ -1,11 +1,11 @@
 package infinitealloys.handlers;
 
-import infinitealloys.References;
 import infinitealloys.client.GuiAnalyzer;
 import infinitealloys.client.GuiComputer;
 import infinitealloys.client.GuiMetalForge;
 import infinitealloys.client.GuiPrinter;
 import infinitealloys.client.GuiXray;
+import infinitealloys.core.References;
 import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.inventory.ContainerMachine;
 import infinitealloys.inventory.ContainerMetalForge;

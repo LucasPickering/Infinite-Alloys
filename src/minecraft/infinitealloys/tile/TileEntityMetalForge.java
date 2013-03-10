@@ -1,7 +1,7 @@
 package infinitealloys.tile;
 
-import infinitealloys.InfiniteAlloys;
-import infinitealloys.References;
+import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.core.References;
 import infinitealloys.item.Items;
 import java.util.ArrayList;
 import java.util.Arrays;

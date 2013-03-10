@@ -1,7 +1,7 @@
 package infinitealloys.block;
 
-import infinitealloys.InfiniteAlloys;
-import infinitealloys.References;
+import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.core.References;
 
 import java.util.List;
 

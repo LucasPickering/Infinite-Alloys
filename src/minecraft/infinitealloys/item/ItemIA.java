@@ -1,6 +1,6 @@
 package infinitealloys.item;
 
-import infinitealloys.References;
+import infinitealloys.core.References;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 

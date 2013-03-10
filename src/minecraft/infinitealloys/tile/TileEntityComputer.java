@@ -1,9 +1,9 @@
 package infinitealloys.tile;
 
-import infinitealloys.FuncHelper;
-import infinitealloys.Point;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.block.Blocks;
+import infinitealloys.core.FuncHelper;
+import infinitealloys.core.Point;
 import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
