@@ -1,24 +1,27 @@
 package infinitealloys.item;
 
+import infinitealloys.util.References;
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.Icon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemAlloyBook extends ItemIA {
 
-	public ItemAlloyBook(int id, int texture) {
-		super(id, texture);
+	public ItemAlloyBook(int id) {
+		super(id);
 	}
 
 	@Override
 	public boolean getShareTag() {
 		return true;
 	}
-
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {

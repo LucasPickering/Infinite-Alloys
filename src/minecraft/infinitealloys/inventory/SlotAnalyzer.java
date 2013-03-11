@@ -1,8 +1,8 @@
 package infinitealloys.inventory;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.core.References;
 import infinitealloys.item.Items;
+import infinitealloys.util.References;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

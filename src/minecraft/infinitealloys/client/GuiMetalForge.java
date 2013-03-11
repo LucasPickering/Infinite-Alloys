@@ -1,11 +1,11 @@
 package infinitealloys.client;
 
-import infinitealloys.core.FuncHelper;
-import infinitealloys.core.References;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TileEntityMetalForge;
+import infinitealloys.util.FuncHelper;
+import infinitealloys.util.References;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;

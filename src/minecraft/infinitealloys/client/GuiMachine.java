@@ -1,13 +1,13 @@
 package infinitealloys.client;
 
 import infinitealloys.block.BlockMachine;
-import infinitealloys.core.FuncHelper;
-import infinitealloys.core.Point;
-import infinitealloys.core.References;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
+import infinitealloys.util.FuncHelper;
+import infinitealloys.util.Point;
+import infinitealloys.util.References;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
@@ -41,7 +41,7 @@ public abstract class GuiMachine extends GuiContainer {
 	protected java.awt.Point energyMeter = new java.awt.Point();
 	protected java.awt.Point progressBar = new java.awt.Point();
 	protected TileEntityMachine tem;
-	protected infinitealloys.core.Point controllingComputer = new infinitealloys.core.Point();
+	protected infinitealloys.util.Point controllingComputer = new infinitealloys.util.Point();
 	protected GuiMachineTab controllerTab;
 	protected ArrayList<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
 

@@ -1,15 +1,15 @@
 package infinitealloys.handlers;
 
 import infinitealloys.block.BlockMachine;
-import infinitealloys.core.FuncHelper;
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.core.Point;
-import infinitealloys.core.References;
 import infinitealloys.core.WorldData;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityXray;
+import infinitealloys.util.FuncHelper;
+import infinitealloys.util.Point;
+import infinitealloys.util.References;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -156,7 +156,7 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(tem.yCoord);
 			dos.writeInt(tem.zCoord);
 			dos.writeInt(tem.processProgress);
-			dos.writeByte(tem.front.ordinal());
+			dos.writeByte(tem.front);
 			dos.writeInt(tem.getUpgrades());
 			dos.writeInt(tem.joules);
 			if(tem instanceof TileEntityComputer) {
@@ -221,31 +221,31 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeByte(id);
 			for(Object datum : data) {
 				if(datum instanceof Byte)
-					dos.writeByte((byte)datum);
+					dos.writeByte((Byte)datum);
 
 				else if(datum instanceof byte[])
 					for(byte datum2 : (byte[])datum)
 						dos.writeByte(datum2);
 
 				else if(datum instanceof Short)
-					dos.writeShort((short)datum);
+					dos.writeShort((Short)datum);
 
 				else if(datum instanceof short[])
 					for(short datum2 : (short[])datum)
 						dos.writeShort(datum2);
 
 				else if(datum instanceof Integer)
-					dos.writeInt((int)datum);
+					dos.writeInt((Integer)datum);
 
 				else if(datum instanceof int[])
 					for(int datum2 : (int[])datum)
 						dos.writeInt(datum2);
 
 				else if(datum instanceof Double)
-					dos.writeDouble((double)datum);
+					dos.writeDouble((Double)datum);
 
 				else if(datum instanceof Boolean)
-					dos.writeBoolean((boolean)datum);
+					dos.writeBoolean((Boolean)datum);
 			}
 		}
 		catch(IOException e) {

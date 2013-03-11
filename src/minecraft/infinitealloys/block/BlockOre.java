@@ -1,7 +1,7 @@
 package infinitealloys.block;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.core.References;
+import infinitealloys.util.References;
 import java.util.List;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -26,16 +26,5 @@ public class BlockOre extends BlockIA {
 	@Override
 	public int getRenderType() {
 		return InfiniteAlloys.instance.proxy.gfxHandler.renderID;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata) {
-		return Blocks.oreIcon;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void func_94332_a(IconRegister iconRegister) {
-		Blocks.oreIcon = iconRegister.func_94245_a("IAore");
 	}
 }

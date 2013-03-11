@@ -1,6 +1,6 @@
 package infinitealloys.item;
 
-import infinitealloys.core.References;
+import infinitealloys.util.References;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemGPS extends ItemIA {
 
-	public ItemGPS(int id, int texture) {
-		super(id, texture);
+	public ItemGPS(int id) {
+		super(id);
 	}
 
 	@Override

@@ -1,8 +1,6 @@
 package infinitealloys.block;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.core.Point;
-import infinitealloys.core.References;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEHelper;
@@ -12,6 +10,8 @@ import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
+import infinitealloys.util.Point;
+import infinitealloys.util.References;
 import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -40,8 +40,16 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	public String getTextureFile() {
-		return References.TEXTURE_PATH + "sprites.png";
+	@SideOnly(Side.CLIENT)
+	public void func_94332_a(IconRegister iconRegister) {
+		for(int i = 0; i < References.METAL_COUNT; ++i)
+			for(int j = 0; j < 3; j++)
+				Blocks.machineIcons[i][j] = iconRegister.func_94245_a("IAmachine@" + i + "x" + j);
+	}
+
+	@Override
+	public Icon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
+		return Blocks.machineIcons[blockAccess.getBlockMetadata(x, y, z)][side < 2 ? side : 2];
 	}
 
 	@Override
@@ -151,30 +159,10 @@ public class BlockMachine extends BlockContainer {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityliving, ItemStack itemstack) {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
-			switch(MathHelper.floor_double(entityliving.rotationYaw * 4.0F / 360.0F + 0.5D) % 4) {
-				case 0:
-					tem.front = ForgeDirection.getOrientation(2);
-				case 1:
-					tem.front = ForgeDirection.getOrientation(5);
-				case 2:
-					tem.front = ForgeDirection.getOrientation(3);
-				default:
-					tem.front = ForgeDirection.getOrientation(4);
-			}
+			// TODO: Check this, and fix it if the directions are derped
+			tem.front = MathHelper.floor_double(entityliving.rotationYaw * 4.0F / 360.0F + 0.5D) % 4;
 			world.markBlockForUpdate(x, y, z);
 		}
-	}
-
-	@Override
-	public Icon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
-		return Blocks.machineIcons[blockAccess.getBlockMetadata(x, y, z)][side < 2 ? side : 2];
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void func_94332_a(IconRegister iconRegister) {
-		for(int i = 0; i < References.METAL_COUNT; ++i)
-			for(int j = 0; j < 3; j++)
-				Blocks.machineIcons[i][j] = iconRegister.func_94245_a("IAmachine@" + i + "x" + j);
 	}
 
 	@Override

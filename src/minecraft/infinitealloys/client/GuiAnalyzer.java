@@ -1,12 +1,12 @@
 package infinitealloys.client;
 
-import infinitealloys.core.FuncHelper;
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.core.References;
 import infinitealloys.core.WorldData;
 import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TileEntityAnalyzer;
+import infinitealloys.util.FuncHelper;
+import infinitealloys.util.References;
 import java.awt.Rectangle;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;

@@ -20,6 +20,7 @@ import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
+import infinitealloys.util.References;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -65,12 +66,12 @@ public class CommonProxy {
 	}
 
 	public void initItems() {
-		Items.multi = new ItemMulti(Items.multiID, 128).setCreativeTab(InfiniteAlloys.tabIA);
-		Items.ingot = new ItemIngot(Items.ingotID, 130).setCreativeTab(InfiniteAlloys.tabIA);
-		Items.alloyIngot = new ItemAlloyIngot(Items.alloyIngotID, 130);
-		Items.upgrade = new ItemUpgrade(Items.upgradeID, 131).setCreativeTab(InfiniteAlloys.tabIA);
-		Items.gps = new ItemGPS(Items.gpsID, 142).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA);
-		Items.alloyBook = new ItemAlloyBook(Items.alloyBookID, 143).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA);
+		Items.multi = new ItemMulti(Items.multiID).setCreativeTab(InfiniteAlloys.tabIA);
+		Items.ingot = new ItemIngot(Items.ingotID).setCreativeTab(InfiniteAlloys.tabIA);
+		Items.alloyIngot = new ItemAlloyIngot(Items.alloyIngotID);
+		Items.upgrade = new ItemUpgrade(Items.upgradeID).setCreativeTab(InfiniteAlloys.tabIA);
+		Items.gps = new ItemGPS(Items.gpsID).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA);
+		Items.alloyBook = new ItemAlloyBook(Items.alloyBookID).setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA);
 		OreDictionary.registerOre("ingotZinc", new ItemStack(Items.ingot));
 		OreDictionary.registerOre("ingotMagnesium", new ItemStack(Items.ingot, 1, 1));
 		OreDictionary.registerOre("ingotScandium", new ItemStack(Items.ingot, 1, 2));

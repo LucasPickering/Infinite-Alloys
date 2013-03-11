@@ -1,9 +1,8 @@
 package infinitealloys.item;
 
-import infinitealloys.core.References;
-
+import infinitealloys.util.References;
 import java.util.List;
-
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
@@ -11,9 +10,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemIngot extends ItemIA {
 
-	public ItemIngot(int id, int texture) {
-		super(id, texture);
+	public ItemIngot(int id) {
+		super(id);
 		setHasSubtypes(true);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void func_94581_a(IconRegister iconRegister) {
+		iconIndex = iconRegister.func_94245_a("IAingot");
 	}
 
 	@Override

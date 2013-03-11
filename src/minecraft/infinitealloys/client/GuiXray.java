@@ -1,10 +1,10 @@
 package infinitealloys.client;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.core.Point;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.inventory.ContainerXray;
 import infinitealloys.tile.TileEntityXray;
+import infinitealloys.util.Point;
 import java.util.ArrayList;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.client.gui.GuiButton;

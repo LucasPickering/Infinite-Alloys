@@ -1,20 +1,21 @@
 package infinitealloys.item;
 
-import infinitealloys.core.FuncHelper;
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.core.References;
+import infinitealloys.util.FuncHelper;
+import infinitealloys.util.References;
 import java.util.List;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemAlloyIngot extends ItemIA {
 
-	public ItemAlloyIngot(int id, int texture) {
-		super(id, texture);
-		setHasSubtypes(true);
+	public ItemAlloyIngot(int id) {
+		super(id);
 	}
 
 	@Override
@@ -25,6 +26,12 @@ public class ItemAlloyIngot extends ItemIA {
 	@Override
 	public boolean getShareTag() {
 		return true;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void func_94581_a(IconRegister iconRegister) {
+		iconIndex = iconRegister.func_94245_a("IAingot");
 	}
 
 	@Override
@@ -81,5 +88,6 @@ public class ItemAlloyIngot extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int id, CreativeTabs creativetabs, List list) {}
+	public void getSubItems(int id, CreativeTabs creativetabs, List list) {
+	}
 }

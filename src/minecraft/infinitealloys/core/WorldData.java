@@ -1,5 +1,6 @@
 package infinitealloys.core;
 
+import infinitealloys.util.References;
 import java.io.Serializable;
 
 public class WorldData implements Serializable {

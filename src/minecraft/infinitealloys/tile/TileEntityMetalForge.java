@@ -1,8 +1,8 @@
 package infinitealloys.tile;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.core.References;
 import infinitealloys.item.Items;
+import infinitealloys.util.References;
 import java.util.ArrayList;
 import java.util.Arrays;
 import net.minecraft.item.ItemStack;
@@ -17,7 +17,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	private byte[] lastRecipeAmts = new byte[References.METAL_COUNT];
 	public byte presetSelection = -1;
 
-	public TileEntityMetalForge(ForgeDirection facing) {
+	public TileEntityMetalForge(int facing) {
 		this();
 		front = facing;
 	}
@@ -34,15 +34,15 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	@Override
-	public int getStartInventorySide(ForgeDirection side) {
-		if(side == ForgeDirection.UP || side == ForgeDirection.DOWN)
+	public int func_94127_c(int side) {
+		if(side == References.TOP || side == References.BOTTOM)
 			return 2;
 		return 3;
 	}
 
 	@Override
-	public int getSizeInventorySide(ForgeDirection side) {
-		if(side == ForgeDirection.UP || side == ForgeDirection.DOWN)
+	public int func_94128_d(int side) {
+		if(side == References.TOP || side == References.BOTTOM)
 			return 1;
 		return 18;
 	}

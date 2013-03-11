@@ -2,6 +2,7 @@ package infinitealloys.core;
 
 import infinitealloys.block.Blocks;
 import infinitealloys.item.Items;
+import infinitealloys.util.References;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.AchievementPage;

@@ -1,9 +1,10 @@
 package infinitealloys.tile;
 
 import infinitealloys.block.BlockMachine;
-import infinitealloys.core.References;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
+import infinitealloys.util.FuncHelper;
+import infinitealloys.util.References;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Random;
@@ -40,7 +41,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	/** A list of the upgrades that can be used on this machine */
 	protected ArrayList<Integer> validUpgrades = new ArrayList<Integer>();
-	public ForgeDirection front;
+	public int front;
 
 	/** The index of the slot that upgrades are placed in */
 	public int upgradeSlotIndex = 0;
@@ -213,7 +214,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		super.readFromNBT(tagCompound);
 		processProgress = tagCompound.getInteger("ProcessProgress");
 		upgrades = tagCompound.getShort("Upgrades");
-		front = ForgeDirection.getOrientation(tagCompound.getByte("Orientation"));
+		front = tagCompound.getByte("Orientation");
 		joules = tagCompound.getInteger("Joules");
 		NBTTagList nbttaglist = tagCompound.getTagList("Items");
 		inventoryStacks = new ItemStack[getSizeInventory()];
@@ -230,7 +231,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("ProcessProgress", processProgress);
 		tagCompound.setShort("Upgrades", (short)upgrades);
-		tagCompound.setByte("Orientation", (byte)front.ordinal());
+		tagCompound.setByte("Orientation", (byte)front);
 		tagCompound.setInteger("Joules", joules);
 		NBTTagList nbttaglist = new NBTTagList();
 		for(int i = 0; i < inventoryStacks.length; i++) {
@@ -244,13 +245,13 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		tagCompound.setTag("Items", nbttaglist);
 	}
 
-	/** One of the ISidedInventory functions */
+	/** One of the ISidedInventory functions, possibly getStartInventorySide */
 	@Override
 	public int func_94127_c(int side) {
 		return 0;
 	}
 
-	/** One of the ISidedInventory functions */
+	/** One of the ISidedInventory functions, possibly getSizeInventorySide */
 	@Override
 	public int func_94128_d(int side) {
 		return 0;
@@ -263,7 +264,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	public void handlePacketDataFromServer(int processProgress, byte orientation, int upgrades, int joules) {
 		this.processProgress = processProgress;
-		front = ForgeDirection.getOrientation(orientation);
+		front = orientation;
 		this.upgrades = upgrades;
 		this.joules = joules;
 	}
@@ -352,7 +353,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public boolean canConnect(ForgeDirection side) {
-		return maxJoules > 0 && side != front;
+		return maxJoules > 0 && FuncHelper.fdToSide(side) != front;
 	}
 
 	@Override

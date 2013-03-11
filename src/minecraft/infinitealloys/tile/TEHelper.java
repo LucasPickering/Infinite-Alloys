@@ -1,7 +1,7 @@
 package infinitealloys.tile;
 
-import infinitealloys.core.Point;
 import infinitealloys.item.Items;
+import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import net.minecraft.block.Block;

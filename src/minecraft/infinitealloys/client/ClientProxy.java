@@ -2,8 +2,8 @@ package infinitealloys.client;
 
 import infinitealloys.block.Blocks;
 import infinitealloys.core.CommonProxy;
-import infinitealloys.core.References;
 import infinitealloys.item.Items;
+import infinitealloys.util.References;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;

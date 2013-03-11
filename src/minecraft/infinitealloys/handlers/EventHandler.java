@@ -1,10 +1,10 @@
 package infinitealloys.handlers;
 
 import infinitealloys.block.Blocks;
-import infinitealloys.core.FuncHelper;
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.core.References;
 import infinitealloys.core.WorldData;
+import infinitealloys.util.FuncHelper;
+import infinitealloys.util.References;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;

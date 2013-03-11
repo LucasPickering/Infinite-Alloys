@@ -1,14 +1,15 @@
 package infinitealloys.tile;
 
-import infinitealloys.core.Point;
 import infinitealloys.handlers.PacketHandler;
+import infinitealloys.util.Point;
+import infinitealloys.util.References;
 import java.util.ArrayList;
 import java.util.HashMap;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityXray extends TileEntityMachine {
 
@@ -27,7 +28,7 @@ public class TileEntityXray extends TileEntityMachine {
 	/** Is it searching client-side. Does not necessarily mean the x-ray is running a search, only that the user sees a loading progress bar */
 	public boolean searching;
 
-	public TileEntityXray(ForgeDirection facing) {
+	public TileEntityXray(int facing) {
 		this();
 		front = facing;
 	}
@@ -45,8 +46,8 @@ public class TileEntityXray extends TileEntityMachine {
 	}
 
 	@Override
-	public int getSizeInventorySide(ForgeDirection side) {
-		if(side != front && (side == ForgeDirection.NORTH || side == ForgeDirection.SOUTH || side == ForgeDirection.EAST || side == ForgeDirection.WEST))
+	public int func_94128_d(int side) {
+		if(side != front && (side == References.NORTH || side == References.SOUTH || side == References.EAST || side == References.WEST))
 			return 1;
 		return 0;
 	}

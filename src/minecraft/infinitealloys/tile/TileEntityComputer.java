@@ -2,8 +2,8 @@ package infinitealloys.tile;
 
 import infinitealloys.block.BlockMachine;
 import infinitealloys.block.Blocks;
-import infinitealloys.core.FuncHelper;
-import infinitealloys.core.Point;
+import infinitealloys.util.FuncHelper;
+import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,7 +22,7 @@ public class TileEntityComputer extends TileEntityMachine {
 	/** 3D coords for each machine */
 	public ArrayList<Point> networkCoords;
 
-	public TileEntityComputer(ForgeDirection facing) {
+	public TileEntityComputer(int facing) {
 		this();
 		front = facing;
 	}

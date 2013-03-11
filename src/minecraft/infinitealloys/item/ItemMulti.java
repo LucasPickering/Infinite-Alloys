@@ -1,24 +1,31 @@
 package infinitealloys.item;
 
-import infinitealloys.core.References;
-
+import infinitealloys.util.References;
 import java.util.List;
-
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMulti extends ItemIA {
 
-	public ItemMulti(int id, int texture) {
-		super(id, texture);
+	public ItemMulti(int id) {
+		super(id);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void func_94581_a(IconRegister iconRegister) {
+		for(int i = 0; i < References.MULTI_ITEM_COUNT; i++)
+			Items.multiIcons[i] = iconRegister.func_94245_a("IAmulti@" + i);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getIconFromDamage(int damage) {
-		return iconIndex + damage;
+	public Icon getIconFromDamage(int damage) {
+		return Items.multiIcons[damage];
 	}
 
 	@Override

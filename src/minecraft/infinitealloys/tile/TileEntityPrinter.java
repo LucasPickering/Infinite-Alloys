@@ -1,11 +1,12 @@
 package infinitealloys.tile;
 
+import infinitealloys.util.References;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityPrinter extends TileEntityMachine {
 
-	public TileEntityPrinter(ForgeDirection facing) {
+	public TileEntityPrinter(int facing) {
 		this();
 		front = facing;
 	}
@@ -21,16 +22,16 @@ public class TileEntityPrinter extends TileEntityMachine {
 	}
 
 	@Override
-	public int getStartInventorySide(ForgeDirection side) {
-		if(side == ForgeDirection.UP)
+	public int func_94127_c(int side) {
+		if(side == References.TOP)
 			return 0;
-		if(side == ForgeDirection.DOWN)
+		if(side == References.BOTTOM)
 			return 2;
 		return 1;
 	}
 
 	@Override
-	public int getSizeInventorySide(ForgeDirection side) {
+	public int func_94128_d(int side) {
 		return 1;
 	}
 
