@@ -12,9 +12,9 @@ import net.minecraftforge.common.ForgeDirection;
 public class TileEntityMetalForge extends TileEntityMachine {
 
 	/** An array for the "stack sizes" of each ingot in the recipe setting */
-	public byte[] recipeAmts = new byte[References.metalCount];
+	public byte[] recipeAmts = new byte[References.METAL_COUNT];
 	/** recipeAmts from last tick, used to tell if the recipe has changed to reset progress */
-	private byte[] lastRecipeAmts = new byte[References.metalCount];
+	private byte[] lastRecipeAmts = new byte[References.METAL_COUNT];
 	public byte presetSelection = -1;
 
 	public TileEntityMetalForge(ForgeDirection facing) {
@@ -72,7 +72,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	public int getIngotNum(ItemStack ingot) {
-		if(ingot.itemID == Items.ingot.itemID && ingot.getItemDamage() < References.metalCount)
+		if(ingot.itemID == Items.ingot.itemID && ingot.getItemDamage() < References.METAL_COUNT)
 			return ingot.getItemDamage();
 		return -1;
 	}
@@ -108,7 +108,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	private int[] getIngotAmts() {
-		int[] amts = new int[References.metalCount];
+		int[] amts = new int[References.METAL_COUNT];
 		for(int slot : getSlotsWithIngot())
 			amts[getIngotNum(inventoryStacks[slot])] += inventoryStacks[slot].stackSize;
 		return amts;

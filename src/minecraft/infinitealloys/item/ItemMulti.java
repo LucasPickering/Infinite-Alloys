@@ -24,7 +24,7 @@ public class ItemMulti extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < References.multiItemCount; i++)
+		for(int i = 0; i < References.MULTI_ITEM_COUNT; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 }

@@ -41,9 +41,9 @@ public class EventHandler implements ICraftingHandler {
 		catch(IOException e) {
 			if(InfiniteAlloys.instance.worldData == null) {
 				Random random = new Random();
-				int[] validAlloys = new int[References.validAlloyCount];
-				for(int i = 0; i < References.validAlloyCount; i++) {
-					int metalCount = References.metalCount;
+				int[] validAlloys = new int[References.VALID_ALLOY_COUNT];
+				for(int i = 0; i < References.VALID_ALLOY_COUNT; i++) {
+					int metalCount = References.METAL_COUNT;
 					byte[] alloyDigits = new byte[metalCount];
 					for(int j = 0; j < metalCount; j++) {
 						int min = FuncHelper.intAtPos(References.alloyRadix, metalCount, References.validAlloyMins[i], j);

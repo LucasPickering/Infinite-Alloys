@@ -3,7 +3,6 @@ package infinitealloys.client;
 import infinitealloys.block.Blocks;
 import infinitealloys.core.CommonProxy;
 import infinitealloys.core.References;
-import infinitealloys.handlers.GfxHandler;
 import infinitealloys.item.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -23,7 +22,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void initBlocks() {
 		super.initBlocks();
-		for(int i = 0; i < References.metalCount; i++)
+		for(int i = 0; i < References.METAL_COUNT; i++)
 			addName(new ItemStack(Blocks.ore, 0, i), "metal." + References.metalNames[i] + ".name", "tile.ore.name");
 		addName(new ItemStack(Blocks.machine, 1, 0), "machine.computer.name");
 		addName(new ItemStack(Blocks.machine, 1, 1), "machine.metalforge.name");
@@ -37,7 +36,7 @@ public class ClientProxy extends CommonProxy {
 		super.initItems();
 		addName(new ItemStack(Items.multi), "multi.machineComp.name");
 		addName(new ItemStack(Items.multi, 1, 1), "multi.upgComp.name");
-		for(int i = 0; i < References.metalCount; i++)
+		for(int i = 0; i < References.METAL_COUNT; i++)
 			addName(new ItemStack(Items.ingot, 1, i), "metal." + References.metalNames[i] + ".name", "item.ingot.name");
 		addName(new ItemStack(Items.alloyIngot), "item.alloyIngot.name");
 		addName(new ItemStack(Items.upgrade), "item.upgrade.name");

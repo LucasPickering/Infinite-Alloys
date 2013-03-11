@@ -42,7 +42,7 @@ public class PacketHandler implements IPacketHandler {
 		World world = ((EntityPlayer)player).worldObj;
 		switch(packetIndex) {
 			case WORLD_DATA:
-				int[] validAlloys = new int[References.validAlloyCount];
+				int[] validAlloys = new int[References.VALID_ALLOY_COUNT];
 				for(int i = 0; i < validAlloys.length; i++)
 					validAlloys[i] = data.readInt();
 				InfiniteAlloys.instance.worldData = new WorldData(validAlloys);
@@ -70,7 +70,7 @@ public class PacketHandler implements IPacketHandler {
 						}
 					}
 					else if(te instanceof TileEntityMetalForge) {
-						byte[] recipeAmts = new byte[References.metalCount];
+						byte[] recipeAmts = new byte[References.METAL_COUNT];
 						for(int i = 0; i < recipeAmts.length; i++)
 							recipeAmts[i] = data.readByte();
 						((TileEntityMetalForge)te).handlePacketData(recipeAmts);
@@ -90,7 +90,7 @@ public class PacketHandler implements IPacketHandler {
 				z = data.readInt();
 				te = world.getBlockTileEntity(x, y, z);
 				if(te instanceof TileEntityMetalForge) {
-					byte[] recipeAmts = new byte[References.metalCount];
+					byte[] recipeAmts = new byte[References.METAL_COUNT];
 					for(int i = 0; i < recipeAmts.length; i++)
 						recipeAmts[i] = data.readByte();
 					((TileEntityMetalForge)te).handlePacketData(recipeAmts);

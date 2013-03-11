@@ -4,6 +4,7 @@ import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.References;
 import java.util.List;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
@@ -18,7 +19,7 @@ public class BlockOre extends BlockIA {
 
 	@Override
 	public void getSubBlocks(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < References.metalCount; i++)
+		for(int i = 0; i < References.METAL_COUNT; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 
@@ -30,8 +31,11 @@ public class BlockOre extends BlockIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata) {
-		if(metadata < References.metalCount)
-			return field_94336_cN;
-		return field_94336_cN + 1;
+		return Blocks.oreIcon;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void func_94332_a(IconRegister iconRegister) {
+		Blocks.oreIcon = iconRegister.func_94245_a("IAore");
 	}
 }

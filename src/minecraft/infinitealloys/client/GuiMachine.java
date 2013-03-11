@@ -66,7 +66,7 @@ public abstract class GuiMachine extends GuiContainer {
 			ArrayList<Integer> colors = new ArrayList<Integer>();
 			texts.add(FuncHelper.getLoc("upgrade.name"));
 			colors.add(0xffffff);
-			for(int i = 0; i < References.upgradeCount; i++) {
+			for(int i = 0; i < References.UPGRADE_COUNT; i++) {
 				int upg = (int)Math.pow(2, i);
 				if(TEHelper.isPrereqUpgrade(upg) && tem.hasUpgrade(upg << 1) || !tem.hasUpgrade(upg))
 					continue;

@@ -15,20 +15,23 @@ import infinitealloys.tile.TileEntityXray;
 import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.vector.VectorHelper;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockMachine extends BlockContainer {
 
@@ -140,7 +143,7 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public void getSubBlocks(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < References.machineCount; i++)
+		for(int i = 0; i < References.MACHINE_COUNT; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 
@@ -163,14 +166,15 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	public int getBlockTextureFromSideAndMetadata(int side, int metadata) {
-		return blockIndexInTexture + metadata * 3 + (side < 2 ? 0 : side == 3 ? 1 : 2);
+	public Icon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
+		return Blocks.machineIcons[blockAccess.getBlockMetadata(x, y, z)][side < 2 ? side : 2];
 	}
 
-	@Override
-	public int getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
-		side = VectorHelper.getOrientationFromSide(((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z)).front, ForgeDirection.getOrientation(side)).ordinal();
-		return blockIndexInTexture + blockAccess.getBlockMetadata(x, y, z) * 3 + (side < 2 ? 0 : side == 3 ? 1 : 2);
+	@SideOnly(Side.CLIENT)
+	public void func_94332_a(IconRegister iconRegister) {
+		for(int i = 0; i < References.METAL_COUNT; ++i)
+			for(int j = 0; j < 3; j++)
+				Blocks.machineIcons[i][j] = iconRegister.func_94245_a("IAmachine@" + i + "x" + j);
 	}
 
 	@Override

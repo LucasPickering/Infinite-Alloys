@@ -19,14 +19,14 @@ public class ItemIngot extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < References.metalCount; i++)
+		for(int i = 0; i < References.METAL_COUNT; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
-		if(itemstack.getItemDamage() < References.metalCount)
+		if(itemstack.getItemDamage() < References.METAL_COUNT)
 			return References.metalColors[itemstack.getItemDamage()];
 		return 0xffffff;
 	}

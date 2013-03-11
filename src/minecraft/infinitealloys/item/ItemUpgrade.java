@@ -38,7 +38,7 @@ public class ItemUpgrade extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < References.upgradeCount; i++)
+		for(int i = 0; i < References.UPGRADE_COUNT; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 }

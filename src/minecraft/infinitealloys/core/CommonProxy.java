@@ -35,8 +35,8 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class CommonProxy {
 
-	private ItemStack[] alloys = new ItemStack[References.validAlloyCount];
-	private ItemStack[] upgrades = new ItemStack[References.upgradeCount];
+	private ItemStack[] alloys = new ItemStack[References.VALID_ALLOY_COUNT];
+	private ItemStack[] upgrades = new ItemStack[References.UPGRADE_COUNT];
 	public GfxHandler gfxHandler;
 
 	public void initLocalization() {}
@@ -145,7 +145,7 @@ public class CommonProxy {
 
 	public void initAchievements() {
 		InfiniteAlloys.achievements[0] = new Achievement(2000, "craftMetalForge", 0, 0, new ItemStack(Blocks.machine, 1, 1), null).registerAchievement();
-		for(int i = 1; i <= References.validAlloyCount; i++)
+		for(int i = 1; i <= References.VALID_ALLOY_COUNT; i++)
 			InfiniteAlloys.achievements[i] = new Achievement(2000 + i, "smeltAlloy" + i, 2 * i, 0, new ItemStack(Items.alloyIngot, 1, i), InfiniteAlloys.achievements[i - 1]).registerAchievement();
 		InfiniteAlloys.achPage = new AchievementPage("Infinite Alloys", InfiniteAlloys.achievements);
 		AchievementPage.registerAchievementPage(InfiniteAlloys.achPage);

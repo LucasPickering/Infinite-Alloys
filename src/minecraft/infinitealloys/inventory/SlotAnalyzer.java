@@ -25,7 +25,7 @@ public class SlotAnalyzer extends Slot {
 	@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack stack) {
 		int damage = stack.getItemDamage();
-		if(slotIndex == 1 && damage > 0 && damage <= References.validAlloyCount)
+		if(slotIndex == 1 && damage > 0 && damage <= References.VALID_ALLOY_COUNT)
 			player.addStat(InfiniteAlloys.instance.achievements[damage], 1);
 	}
 }

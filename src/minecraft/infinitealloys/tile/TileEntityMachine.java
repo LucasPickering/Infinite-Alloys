@@ -146,7 +146,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	/** Drops the upgrades that were used on the block as items */
 	public void dropUpgrades() {
-		for(int i = 0; i <= References.upgradeCount; i++) {
+		for(int i = 0; i <= References.UPGRADE_COUNT; i++) {
 			if(hasUpgrade((int)Math.pow(2D, i))) {
 				float f = random.nextFloat() * 0.8F + 0.1F;
 				float f1 = random.nextFloat() * 0.8F + 0.1F;

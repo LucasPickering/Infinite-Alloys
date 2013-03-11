@@ -3,7 +3,6 @@ package infinitealloys.block;
 import infinitealloys.core.References;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.ItemStack;
 
 public class BlockIA extends Block {
 

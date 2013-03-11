@@ -30,24 +30,24 @@ public class ItemAlloyIngot extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		float[] metalMasses = new float[References.metalCount];
+		float[] metalMasses = new float[References.METAL_COUNT];
 		float totalMass = 0;
 		int alloy;
 		int damage = itemstack.getItemDamage() - 1;
 		if(itemstack.hasTagCompound())
 			alloy = itemstack.getTagCompound().getInteger("alloy");
-		else if(damage >= 0 && damage < References.validAlloyCount)
+		else if(damage >= 0 && damage < References.VALID_ALLOY_COUNT)
 			alloy = InfiniteAlloys.instance.worldData.getValidAlloys()[damage];
 		else
 			return;
-		for(int i = 0; i < References.metalCount; i++) {
-			metalMasses[i] = FuncHelper.intAtPos(References.alloyRadix, References.metalCount, alloy, i);
+		for(int i = 0; i < References.METAL_COUNT; i++) {
+			metalMasses[i] = FuncHelper.intAtPos(References.alloyRadix, References.METAL_COUNT, alloy, i);
 			totalMass += metalMasses[i];
 		}
-		for(int i = 0; i < References.metalCount; i++) {
+		for(int i = 0; i < References.METAL_COUNT; i++) {
 			float percentage = Math.round(metalMasses[i] / totalMass * 10000F) / 100F;
 			if(percentage != 0)
-				list.add(percentage + "% " + FuncHelper.getLoc("metal." + References.metalNames[References.metalCount - 1 - i] + ".name"));
+				list.add(percentage + "% " + FuncHelper.getLoc("metal." + References.metalNames[References.METAL_COUNT - 1 - i] + ".name"));
 		}
 	}
 
@@ -61,9 +61,9 @@ public class ItemAlloyIngot extends ItemIA {
 			alloy = itemstack.getTagCompound().getInteger("alloy");
 		else if(itemstack.getItemDamage() > 0)
 			alloy = InfiniteAlloys.instance.worldData.getValidAlloys()[itemstack.getItemDamage() - 1];
-		for(int i = 0; i < References.metalCount; i++) {
-			for(int j = 0; j < FuncHelper.intAtPos(References.alloyRadix, References.metalCount, alloy, i); j++) {
-				int ingotColor = References.metalColors[References.metalCount - 1 - i];
+		for(int i = 0; i < References.METAL_COUNT; i++) {
+			for(int j = 0; j < FuncHelper.intAtPos(References.alloyRadix, References.METAL_COUNT, alloy, i); j++) {
+				int ingotColor = References.metalColors[References.METAL_COUNT - 1 - i];
 				colorCount++;
 				redTot += ingotColor >> 16 & 255;
 				greenTot += ingotColor >> 8 & 255;

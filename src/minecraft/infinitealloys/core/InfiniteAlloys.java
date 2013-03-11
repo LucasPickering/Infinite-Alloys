@@ -25,7 +25,7 @@ public class InfiniteAlloys {
 	public static InfiniteAlloys instance;
 	@SidedProxy(clientSide = "infinitealloys.client.ClientProxy", serverSide = "infinitealloys.CommonProxy")
 	public static CommonProxy proxy;
-	public static boolean[] spawnOres = new boolean[References.metalCount];
+	public static boolean[] spawnOres = new boolean[References.METAL_COUNT];
 	public static CreativeTabs tabIA;
 	public static Achievement[] achievements = new Achievement[7];
 	public static AchievementPage achPage;
@@ -44,9 +44,9 @@ public class InfiniteAlloys {
 		Items.gpsID = config.getItem(Configuration.CATEGORY_ITEM, "GPS", 15004).getInt();
 		Items.alloyBookID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyBook", 15005).getInt();
 		int[] metalColors = { 0x2a2a2a, 0xd2cda3, 0xccc34f, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
-		for(int i = 0; i < References.metalCount; i++)
+		for(int i = 0; i < References.METAL_COUNT; i++)
 			References.metalColors[i] = config.get("Metal Colors", References.metalNames[i], metalColors[i]).getInt();
-		for(int i = 0; i < References.metalCount; i++)
+		for(int i = 0; i < References.METAL_COUNT; i++)
 			spawnOres[i] = config.get("World Gen", References.metalNames[i], true).getBoolean(true);
 		config.save();
 	}
