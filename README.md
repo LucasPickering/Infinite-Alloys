@@ -10,5 +10,5 @@ Universal Electricity Basic Components
 
 ### Versions
 MC: 1.5 prerelease  
-Forge: #566  
+Forge: #567  
 UEBC: #346
