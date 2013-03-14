@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties version="1.0">
-	<comment>Amurican English Localization File</comment>
+	<comment>'Murican English Localization File</comment>
 	<entry key="itemGroup.main">Infinite Alloys</entry>
 	<entry key="multi.machineComp.name">Machine Component</entry>
 	<entry key="multi.upgComp.name">Upgrade Component</entry>

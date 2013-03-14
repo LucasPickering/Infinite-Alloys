@@ -13,7 +13,7 @@ public class Consts {
 	public static final int VALID_ALLOY_COUNT = 6;
 
 	// These are the int values for block faces, NOT correct right now
-	// TODO: Make this correct
+	// TODO: Make these correct
 	public static final int TOP = 0;
 	public static final int BOTTOM = 1;
 	public static final int EAST = 2;
@@ -35,6 +35,9 @@ public class Consts {
 
 	/** The names of each metal that can be used to make alloys */
 	public static final String[] metalNames = { "zinc", "magnesium", "scandium", "tantalum", "flamium", "vegetanium", "aquatilum", "swagtanium" };
+
+	/** The names of each machine */
+	public static final String[] machineNames = { "computer", "metalforge", "analyzer", "printer", "xray" };
 
 	/** The names of each upgrade that can be used on machines */
 	public static final String[] upgradeNames = { "speed1", "speed2", "efficiency1", "efficiency2", "capacity1", "capacity2", "range1", "range2", "wireless", "eleccapacity1", "eleccapacity2" };

@@ -24,6 +24,21 @@ public class BlockOre extends BlockIA {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public void func_94332_a(IconRegister iconRegister) {
+		Blocks.oreForegroundIcon = iconRegister.func_94245_a("ore_foreground");
+		Blocks.oreBackgroundIcon = iconRegister.func_94245_a("ore_background");
+	}
+
+	@Override
+	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata) {
+		// Not actually used as metadata, see GfxHandler for ISBRH code
+		if(metadata == 0)
+			return Blocks.oreBackgroundIcon;
+		return Blocks.oreForegroundIcon;
+	}
+
+	@Override
 	public int getRenderType() {
 		return InfiniteAlloys.instance.proxy.gfxHandler.renderID;
 	}

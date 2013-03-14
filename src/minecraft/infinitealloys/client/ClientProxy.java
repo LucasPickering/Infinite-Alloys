@@ -24,11 +24,8 @@ public class ClientProxy extends CommonProxy {
 		super.initBlocks();
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			addName(new ItemStack(Blocks.ore, 0, i), "metal." + Consts.metalNames[i] + ".name", "tile.ore.name");
-		addName(new ItemStack(Blocks.machine, 1, 0), "machine.computer.name");
-		addName(new ItemStack(Blocks.machine, 1, 1), "machine.metalforge.name");
-		addName(new ItemStack(Blocks.machine, 1, 2), "machine.analyzer.name");
-		addName(new ItemStack(Blocks.machine, 1, 3), "machine.printer.name");
-		addName(new ItemStack(Blocks.machine, 1, 4), "machine.xray.name");
+		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
+			addName(new ItemStack(Blocks.machine, 1, i), "machine." + Consts.machineNames[i] + ".name");
 	}
 
 	@Override
@@ -57,7 +54,8 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/metalforge.png");
 		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/analyzer.png");
 		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/printer.png");
-		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/alloybook.png");
+		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/xray.png");
+		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/extras.png");
 		gfxHandler.renderID = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(gfxHandler);
 	}
