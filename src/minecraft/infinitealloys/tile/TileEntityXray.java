@@ -2,7 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.util.Point;
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import java.util.ArrayList;
 import java.util.HashMap;
 import net.minecraft.item.ItemStack;
@@ -47,7 +47,7 @@ public class TileEntityXray extends TileEntityMachine {
 
 	@Override
 	public int func_94128_d(int side) {
-		if(side != front && (side == References.NORTH || side == References.SOUTH || side == References.EAST || side == References.WEST))
+		if(side != front && (side == Consts.NORTH || side == Consts.SOUTH || side == Consts.EAST || side == Consts.WEST))
 			return 1;
 		return 0;
 	}

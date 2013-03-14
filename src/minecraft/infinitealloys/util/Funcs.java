@@ -36,29 +36,43 @@ public class Funcs {
 		return LanguageRegistry.instance().getStringLocalization(key);
 	}
 
-	// TODO: Fix this
 	/** Convert a Vanilla MC block face int to a ForgeDirection, NOT WORKING YET */
-	public static ForgeDirection sideToFD(int side) {
-		switch(side) {
-			case 0:
-				return ForgeDirection.getOrientation(0);
-			case 1:
-				return ForgeDirection.getOrientation(1);
-			case 2:
-				return ForgeDirection.getOrientation(2);
-			case 3:
-				return ForgeDirection.getOrientation(3);
-			case 4:
-				return ForgeDirection.getOrientation(4);
-			case 5:
-				return ForgeDirection.getOrientation(5);
+	public static ForgeDirection numToFDSide(int num) {
+		switch(num) {
+			case Consts.TOP:
+				return ForgeDirection.UP;
+			case Consts.BOTTOM:
+				return ForgeDirection.DOWN;
+			case Consts.EAST:
+				return ForgeDirection.EAST;
+			case Consts.WEST:
+				return ForgeDirection.WEST;
+			case Consts.NORTH:
+				return ForgeDirection.NORTH;
+			case Consts.SOUTH:
+				return ForgeDirection.SOUTH;
+			default:
+				return ForgeDirection.UNKNOWN;
 		}
-		return null;
 	}
 
-	// TODO: Fix this
 	/** Convert a Vanilla MC block face int to a ForgeDirection, NOT WORKING YET */
-	public static int fdToSide(ForgeDirection fd) {
-		return fd.ordinal();
+	public static int fdToNumSide(ForgeDirection fd) {
+		switch(fd) {
+			case UP:
+				return Consts.TOP;
+			case DOWN:
+				return Consts.BOTTOM;
+			case EAST:
+				return Consts.EAST;
+			case WEST:
+				return Consts.WEST;
+			case NORTH:
+				return Consts.NORTH;
+			case SOUTH:
+				return Consts.SOUTH;
+			default:
+				return -1;
+		}
 	}
 }

@@ -2,7 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.block.BlockMachine;
 import infinitealloys.block.Blocks;
-import infinitealloys.util.FuncHelper;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.block.Block;
@@ -70,7 +70,7 @@ public class TileEntityComputer extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 		for(Point coords : networkCoords)
-			if(!(FuncHelper.getBlock(worldObj, coords.x, coords.y, coords.z) instanceof BlockMachine))
+			if(!(Funcs.getBlock(worldObj, coords.x, coords.y, coords.z) instanceof BlockMachine))
 				networkCoords.remove(coords);
 	}
 

@@ -4,8 +4,8 @@ import infinitealloys.handlers.PacketHandler;
 import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TileEntityMetalForge;
-import infinitealloys.util.FuncHelper;
-import infinitealloys.util.References;
+import infinitealloys.util.Funcs;
+import infinitealloys.util.Consts;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
@@ -26,9 +26,9 @@ public class GuiMetalForge extends GuiMachine {
 		super.drawScreen(mouseX, mouseY, f);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		for(int i = 0; i < References.METAL_COUNT; i++)
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			if(mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18))
-				drawTextBox(FuncHelper.getLoc("metal." + References.metalNames[i] + ".name"), 0xffffff, mouseX, mouseY);
+				drawTextBox(Funcs.getLoc("metal." + Consts.metalNames[i] + ".name"), 0xffffff, mouseX, mouseY);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
@@ -40,12 +40,12 @@ public class GuiMetalForge extends GuiMachine {
 			int[] alloys = temf.inventoryStacks[0].getTagCompound().getIntArray("alloys");
 			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.alloyIngot, 1, temf.getDamageForAlloy(alloys[temf.presetSelection])), 40, 52);
 		}
-		for(int i = 0; i < References.METAL_COUNT; i++)
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.ingot, 1, i), i % 4 * 18 + 66, i / 4 * 18 + 43);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
-		for(int i = 0; i < References.METAL_COUNT; i++)
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			fontRenderer.drawStringWithShadow(new Byte(temf.recipeAmts[i]).toString(), i % 4 * 18 + 77, i / 4 * 18 + 52, 0xffffff);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -64,14 +64,14 @@ public class GuiMetalForge extends GuiMachine {
 				temf.presetSelection = (byte)Math.max(temf.presetSelection - 1, -1);
 			if(temf.presetSelection > -1)
 				for(int i = 0; i < temf.recipeAmts.length; i++)
-					temf.recipeAmts[i] = (byte)FuncHelper.intAtPos(References.alloyRadix, References.METAL_COUNT, alloys[temf.presetSelection], References.METAL_COUNT - i - 1);
+					temf.recipeAmts[i] = (byte)Funcs.intAtPos(Consts.alloyRadix, Consts.METAL_COUNT, alloys[temf.presetSelection], Consts.METAL_COUNT - i - 1);
 			PacketDispatcher.sendPacketToServer(PacketHandler.getTEPacketToServer(temf));
 		}
 		if(temf.presetSelection == -1) {
-			for(int i = 0; i < References.METAL_COUNT; i++) {
+			for(int i = 0; i < Consts.METAL_COUNT; i++) {
 				if(mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18)) {
 					if(mouseButton == 0)
-						temf.recipeAmts[i] = (byte)Math.min(temf.recipeAmts[i] + 1, References.alloyRadix - 1);
+						temf.recipeAmts[i] = (byte)Math.min(temf.recipeAmts[i] + 1, Consts.alloyRadix - 1);
 					else if(mouseButton == 1)
 						temf.recipeAmts[i] = (byte)Math.max(temf.recipeAmts[i] - 1, 0);
 					PacketDispatcher.sendPacketToServer(PacketHandler.getTEPacketToServer(temf));

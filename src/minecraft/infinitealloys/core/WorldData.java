@@ -1,11 +1,11 @@
 package infinitealloys.core;
 
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import java.io.Serializable;
 
 public class WorldData implements Serializable {
 
-	private int[] validAlloys = new int[References.VALID_ALLOY_COUNT];
+	private int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT];
 	public int alloysUnlocked;
 
 	public WorldData(int[] va) {

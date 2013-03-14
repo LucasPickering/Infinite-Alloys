@@ -1,6 +1,6 @@
 package infinitealloys.item;
 
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IconRegister;

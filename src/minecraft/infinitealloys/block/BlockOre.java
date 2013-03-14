@@ -1,7 +1,7 @@
 package infinitealloys.block;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import java.util.List;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -19,7 +19,7 @@ public class BlockOre extends BlockIA {
 
 	@Override
 	public void getSubBlocks(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < References.METAL_COUNT; i++)
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 

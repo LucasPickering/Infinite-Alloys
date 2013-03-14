@@ -2,7 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.Items;
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import java.util.ArrayList;
 import java.util.Arrays;
 import net.minecraft.item.ItemStack;
@@ -12,9 +12,9 @@ import net.minecraftforge.common.ForgeDirection;
 public class TileEntityMetalForge extends TileEntityMachine {
 
 	/** An array for the "stack sizes" of each ingot in the recipe setting */
-	public byte[] recipeAmts = new byte[References.METAL_COUNT];
+	public byte[] recipeAmts = new byte[Consts.METAL_COUNT];
 	/** recipeAmts from last tick, used to tell if the recipe has changed to reset progress */
-	private byte[] lastRecipeAmts = new byte[References.METAL_COUNT];
+	private byte[] lastRecipeAmts = new byte[Consts.METAL_COUNT];
 	public byte presetSelection = -1;
 
 	public TileEntityMetalForge(int facing) {
@@ -35,14 +35,14 @@ public class TileEntityMetalForge extends TileEntityMachine {
 
 	@Override
 	public int func_94127_c(int side) {
-		if(side == References.TOP || side == References.BOTTOM)
+		if(side == Consts.TOP || side == Consts.BOTTOM)
 			return 2;
 		return 3;
 	}
 
 	@Override
 	public int func_94128_d(int side) {
-		if(side == References.TOP || side == References.BOTTOM)
+		if(side == Consts.TOP || side == Consts.BOTTOM)
 			return 1;
 		return 18;
 	}
@@ -72,7 +72,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	public int getIngotNum(ItemStack ingot) {
-		if(ingot.itemID == Items.ingot.itemID && ingot.getItemDamage() < References.METAL_COUNT)
+		if(ingot.itemID == Items.ingot.itemID && ingot.getItemDamage() < Consts.METAL_COUNT)
 			return ingot.getItemDamage();
 		return -1;
 	}
@@ -82,7 +82,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	private ItemStack getIngotResult() {
 		int alloy = 0;
 		for(int i = 0; i < recipeAmts.length; i++)
-			alloy += Math.pow(References.alloyRadix, i) * recipeAmts[i];
+			alloy += Math.pow(Consts.alloyRadix, i) * recipeAmts[i];
 		ItemStack result = new ItemStack(Items.alloyIngot);
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		tagCompound.setInteger("alloy", alloy);
@@ -108,7 +108,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	private int[] getIngotAmts() {
-		int[] amts = new int[References.METAL_COUNT];
+		int[] amts = new int[Consts.METAL_COUNT];
 		for(int slot : getSlotsWithIngot())
 			amts[getIngotNum(inventoryStacks[slot])] += inventoryStacks[slot].stackSize;
 		return amts;

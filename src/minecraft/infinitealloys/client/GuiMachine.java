@@ -5,9 +5,9 @@ import infinitealloys.handlers.PacketHandler;
 import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.util.FuncHelper;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
@@ -64,13 +64,13 @@ public abstract class GuiMachine extends GuiContainer {
 		if(mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x, slot.yDisplayPosition + topLeft.y, 16, 16)) {
 			ArrayList<String> texts = new ArrayList<String>();
 			ArrayList<Integer> colors = new ArrayList<Integer>();
-			texts.add(FuncHelper.getLoc("upgrade.name"));
+			texts.add(Funcs.getLoc("upgrade.name"));
 			colors.add(0xffffff);
-			for(int i = 0; i < References.UPGRADE_COUNT; i++) {
+			for(int i = 0; i < Consts.UPGRADE_COUNT; i++) {
 				int upg = (int)Math.pow(2, i);
 				if(TEHelper.isPrereqUpgrade(upg) && tem.hasUpgrade(upg << 1) || !tem.hasUpgrade(upg))
 					continue;
-				texts.add(FuncHelper.getLoc("upgrade." + References.upgradeNames[i] + ".name"));
+				texts.add(Funcs.getLoc("upgrade." + Consts.upgradeNames[i] + ".name"));
 				colors.add(0xaaaaaa);
 			}
 			int[] colorsA = new int[colors.size()];
@@ -169,7 +169,7 @@ public abstract class GuiMachine extends GuiContainer {
 	}
 
 	public static void bindTexture(String texture) {
-		Minecraft.getMinecraft().renderEngine.func_98187_b(References.TEXTURE_PATH + "gui/" + texture + ".png");
+		Minecraft.getMinecraft().renderEngine.func_98187_b(Consts.TEXTURE_PATH + "gui/" + texture + ".png");
 	}
 
 	@Override
@@ -182,7 +182,7 @@ public abstract class GuiMachine extends GuiContainer {
 			int y = controllerTab.tem.yCoord;
 			int z = controllerTab.tem.zCoord;
 			if(!tem.coordsEquals(x, y, z)) {
-				((BlockMachine)FuncHelper.getBlock(world, x, y, z)).openGui(world, player, controllerTab.tem, false);
+				((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, player, controllerTab.tem, false);
 				PacketDispatcher.sendPacketToServer(PacketHandler.getPacketOpenGui(x, y, z, false));
 			}
 			return;
@@ -193,7 +193,7 @@ public abstract class GuiMachine extends GuiContainer {
 				int y = tab.tem.yCoord;
 				int z = tab.tem.zCoord;
 				if(!tem.coordsEquals(x, y, z)) {
-					((BlockMachine)FuncHelper.getBlock(world, x, y, z)).openGui(world, player, tab.tem, true);
+					((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, player, tab.tem, true);
 					PacketDispatcher.sendPacketToServer(PacketHandler.getPacketOpenGui(x, y, z, true));
 				}
 				return;

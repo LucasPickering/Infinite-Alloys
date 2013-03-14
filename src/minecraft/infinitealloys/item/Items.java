@@ -1,6 +1,6 @@
 package infinitealloys.item;
 
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import net.minecraft.item.Item;
 import net.minecraft.util.Icon;
 
@@ -20,6 +20,6 @@ public class Items {
 	public static Item gps;
 	public static Item alloyBook;
 
-	public static Icon[] multiIcons = new Icon[References.MULTI_ITEM_COUNT];
-	public static Icon[] upgradeIcons = new Icon[References.UPGRADE_COUNT];
+	public static Icon[] multiIcons = new Icon[Consts.MULTI_ITEM_COUNT];
+	public static Icon[] upgradeIcons = new Icon[Consts.UPGRADE_COUNT];
 }

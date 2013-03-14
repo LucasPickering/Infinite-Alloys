@@ -11,7 +11,7 @@ import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
 import infinitealloys.util.Point;
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -42,7 +42,7 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void func_94332_a(IconRegister iconRegister) {
-		for(int i = 0; i < References.METAL_COUNT; ++i)
+		for(int i = 0; i < Consts.MACHINE_COUNT; ++i)
 			for(int j = 0; j < 3; j++)
 				Blocks.machineIcons[i][j] = iconRegister.func_94245_a("IAmachine@" + i + "x" + j);
 	}
@@ -59,7 +59,7 @@ public class BlockMachine extends BlockContainer {
 			if(player.isSneaking() && world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer && currentItem.hasTagCompound()) {
 				if(currentItem.hasTagCompound()) {
 					NBTTagCompound tagCompound = currentItem.getTagCompound();
-					for(int i = 0; i < References.gpsMaxCoords; i++) {
+					for(int i = 0; i < Consts.gpsMaxCoords; i++) {
 						if(!tagCompound.hasKey("coords" + i))
 							continue;
 						int[] coords = tagCompound.getIntArray("coords" + i);
@@ -74,7 +74,7 @@ public class BlockMachine extends BlockContainer {
 			else {
 				NBTTagCompound tagCompound = currentItem.hasTagCompound() ? currentItem.getTagCompound() : new NBTTagCompound();
 				int size = 0;
-				for(int i = 0; i < References.gpsMaxCoords; i++) {
+				for(int i = 0; i < Consts.gpsMaxCoords; i++) {
 					if(!tagCompound.hasKey("coords" + i)) {
 						size = i;
 						break;
@@ -83,7 +83,7 @@ public class BlockMachine extends BlockContainer {
 					if(nbtCoords[0] == x && nbtCoords[1] == y && nbtCoords[2] == z)
 						return true;
 				}
-				if(size < References.gpsMaxCoords) {
+				if(size < Consts.gpsMaxCoords) {
 					tagCompound.setIntArray("coords" + size, new int[] { x, y, z });
 					currentItem.setTagCompound(tagCompound);
 					if(world.isRemote)
@@ -151,7 +151,7 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public void getSubBlocks(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < References.MACHINE_COUNT; i++)
+		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 

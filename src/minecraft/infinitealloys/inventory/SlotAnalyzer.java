@@ -2,7 +2,7 @@ package infinitealloys.inventory;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.Items;
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -25,7 +25,7 @@ public class SlotAnalyzer extends Slot {
 	@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack stack) {
 		int damage = stack.getItemDamage();
-		if(slotIndex == 1 && damage > 0 && damage <= References.VALID_ALLOY_COUNT)
+		if(slotIndex == 1 && damage > 0 && damage <= Consts.VALID_ALLOY_COUNT)
 			player.addStat(InfiniteAlloys.instance.achievements[damage], 1);
 	}
 }

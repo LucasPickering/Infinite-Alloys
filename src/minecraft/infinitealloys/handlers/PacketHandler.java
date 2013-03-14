@@ -7,9 +7,9 @@ import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityXray;
-import infinitealloys.util.FuncHelper;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class PacketHandler implements IPacketHandler {
 		World world = ((EntityPlayer)player).worldObj;
 		switch(packetIndex) {
 			case WORLD_DATA:
-				int[] validAlloys = new int[References.VALID_ALLOY_COUNT];
+				int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT];
 				for(int i = 0; i < validAlloys.length; i++)
 					validAlloys[i] = data.readInt();
 				InfiniteAlloys.instance.worldData = new WorldData(validAlloys);
@@ -70,7 +70,7 @@ public class PacketHandler implements IPacketHandler {
 						}
 					}
 					else if(te instanceof TileEntityMetalForge) {
-						byte[] recipeAmts = new byte[References.METAL_COUNT];
+						byte[] recipeAmts = new byte[Consts.METAL_COUNT];
 						for(int i = 0; i < recipeAmts.length; i++)
 							recipeAmts[i] = data.readByte();
 						((TileEntityMetalForge)te).handlePacketData(recipeAmts);
@@ -90,7 +90,7 @@ public class PacketHandler implements IPacketHandler {
 				z = data.readInt();
 				te = world.getBlockTileEntity(x, y, z);
 				if(te instanceof TileEntityMetalForge) {
-					byte[] recipeAmts = new byte[References.METAL_COUNT];
+					byte[] recipeAmts = new byte[Consts.METAL_COUNT];
 					for(int i = 0; i < recipeAmts.length; i++)
 						recipeAmts[i] = data.readByte();
 					((TileEntityMetalForge)te).handlePacketData(recipeAmts);
@@ -131,7 +131,7 @@ public class PacketHandler implements IPacketHandler {
 				y = data.readInt();
 				z = data.readInt();
 				boolean fromComputer = data.readBoolean();
-				((BlockMachine)FuncHelper.getBlock(world, x, y, z)).openGui(world, (EntityPlayer)player, (TileEntityMachine)world.getBlockTileEntity(x, y, z),
+				((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, (EntityPlayer)player, (TileEntityMachine)world.getBlockTileEntity(x, y, z),
 						fromComputer);
 				break;
 			case SEARCH:

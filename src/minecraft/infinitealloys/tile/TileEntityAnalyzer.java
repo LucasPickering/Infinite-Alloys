@@ -1,7 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import java.util.Arrays;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,9 +27,9 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 
 	@Override
 	public int func_94127_c(int side) {
-		if(side == References.TOP)
+		if(side == Consts.TOP)
 			return 0;
-		if(side == References.BOTTOM)
+		if(side == Consts.BOTTOM)
 			return 2;
 		return 1;
 	}
@@ -53,7 +53,7 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 
 	@Override
 	public void finishProcessing() {
-		if(InfiniteAlloys.instance.worldData.alloysUnlocked == Math.min(inventoryStacks[0].getItemDamage() - 1, References.VALID_ALLOY_COUNT))
+		if(InfiniteAlloys.instance.worldData.alloysUnlocked == Math.min(inventoryStacks[0].getItemDamage() - 1, Consts.VALID_ALLOY_COUNT))
 			InfiniteAlloys.instance.worldData.alloysUnlocked = inventoryStacks[0].getItemDamage();
 		if(inventoryStacks[2] != null) {
 			int alloy = inventoryStacks[0].getTagCompound().getInteger("alloy");
@@ -80,7 +80,7 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 			Arrays.sort(newSave);
 
 			// Add the new alloy to newSave if there is room and it is not a repeat then set the compound to newSave
-			if(newSave.length < References.VALID_ALLOY_COUNT && Arrays.binarySearch(newSave, alloy) < 0) {
+			if(newSave.length < Consts.VALID_ALLOY_COUNT && Arrays.binarySearch(newSave, alloy) < 0) {
 				newSave[newSave.length - 1] = alloy;
 				tagCompound.setIntArray("alloys", newSave);
 				inventoryStacks[2].setTagCompound(tagCompound);

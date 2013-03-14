@@ -3,8 +3,8 @@ package infinitealloys.tile;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
-import infinitealloys.util.FuncHelper;
-import infinitealloys.util.References;
+import infinitealloys.util.Funcs;
+import infinitealloys.util.Consts;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Random;
@@ -147,7 +147,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	/** Drops the upgrades that were used on the block as items */
 	public void dropUpgrades() {
-		for(int i = 0; i <= References.UPGRADE_COUNT; i++) {
+		for(int i = 0; i <= Consts.UPGRADE_COUNT; i++) {
 			if(hasUpgrade((int)Math.pow(2D, i))) {
 				float f = random.nextFloat() * 0.8F + 0.1F;
 				float f1 = random.nextFloat() * 0.8F + 0.1F;
@@ -353,7 +353,7 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 
 	@Override
 	public boolean canConnect(ForgeDirection side) {
-		return maxJoules > 0 && FuncHelper.fdToSide(side) != front;
+		return maxJoules > 0 && Funcs.fdToNumSide(side) != front;
 	}
 
 	@Override

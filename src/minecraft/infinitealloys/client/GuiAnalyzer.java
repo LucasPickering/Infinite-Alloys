@@ -5,8 +5,8 @@ import infinitealloys.core.WorldData;
 import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TileEntityAnalyzer;
-import infinitealloys.util.FuncHelper;
-import infinitealloys.util.References;
+import infinitealloys.util.Funcs;
+import infinitealloys.util.Consts;
 import java.awt.Rectangle;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -25,7 +25,7 @@ public class GuiAnalyzer extends GuiMachine {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		for(int i = 0; i < References.METAL_COUNT; i++)
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.ingot, 1, i), i * 18 + 27, 8);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -34,11 +34,11 @@ public class GuiAnalyzer extends GuiMachine {
 		if(tea.inventoryStacks[1] != null) {
 			int currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");
 			WorldData worldData = InfiniteAlloys.instance.worldData;
-			for(int i = 0; i < References.METAL_COUNT; i++) {
-				int currentValue = FuncHelper.intAtPos(10, References.METAL_COUNT, currentAlloy, i);
-				int nextValue = FuncHelper.intAtPos(10, References.METAL_COUNT, worldData.getValidAlloys()[worldData.alloysUnlocked], i);
+			for(int i = 0; i < Consts.METAL_COUNT; i++) {
+				int currentValue = Funcs.intAtPos(10, Consts.METAL_COUNT, currentAlloy, i);
+				int nextValue = Funcs.intAtPos(10, Consts.METAL_COUNT, worldData.getValidAlloys()[worldData.alloysUnlocked], i);
 				Rectangle symbol = nextValue > currentValue ? DOWN_ARROW : nextValue < currentValue ? UP_ARROW : CHECK;
-				drawTexturedModalRect((References.VALID_ALLOY_COUNT - i) * 18 + 45, 26, symbol.x, symbol.y, symbol.width, symbol.height);
+				drawTexturedModalRect((Consts.VALID_ALLOY_COUNT - i) * 18 + 45, 26, symbol.x, symbol.y, symbol.width, symbol.height);
 			}
 		}
 		GL11.glEnable(GL11.GL_LIGHTING);

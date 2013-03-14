@@ -1,6 +1,6 @@
 package infinitealloys.tile;
 
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeDirection;
 
@@ -23,9 +23,9 @@ public class TileEntityPrinter extends TileEntityMachine {
 
 	@Override
 	public int func_94127_c(int side) {
-		if(side == References.TOP)
+		if(side == Consts.TOP)
 			return 0;
-		if(side == References.BOTTOM)
+		if(side == Consts.BOTTOM)
 			return 2;
 		return 1;
 	}

@@ -1,7 +1,7 @@
 package infinitealloys.core;
 
 import infinitealloys.block.Blocks;
-import infinitealloys.util.FuncHelper;
+import infinitealloys.util.Funcs;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
@@ -22,6 +22,6 @@ public class CreativeTabIA extends CreativeTabs {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getTranslatedTabLabel() {
-		return FuncHelper.getLoc("itemGroup." + getTabLabel());
+		return Funcs.getLoc("itemGroup." + getTabLabel());
 	}
 }

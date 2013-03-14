@@ -18,7 +18,7 @@ import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
 import infinitealloys.util.Point;
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -115,38 +115,38 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		renderer.renderSouthFace(block, 0D, 0D, 0D, block.getBlockTextureFromSideAndMetadata(5, metadata));
 		tessellator.draw();
 
-		if(metadata < References.METAL_COUNT) {
-			int mult = References.metalColors[metadata];
+		if(metadata < Consts.METAL_COUNT) {
+			int mult = Consts.metalColors[metadata];
 			GL11.glColor4f((float)(mult >> 16 & 255) / 255F, (float)(mult >> 8 & 255) / 255F, (float)(mult & 255) / 255F, 1F);
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, -1F, 0F);
-			renderer.renderBottomFace(block, 0D, 0D, 0D, block.getBlockTextureFromSideAndMetadata(0, References.METAL_COUNT));
+			renderer.renderBottomFace(block, 0D, 0D, 0D, block.getBlockTextureFromSideAndMetadata(0, Consts.METAL_COUNT));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, 1F, 0F);
-			renderer.renderTopFace(block, 0D, 0D, 0D, block.getBlockTextureFromSideAndMetadata(1, References.METAL_COUNT));
+			renderer.renderTopFace(block, 0D, 0D, 0D, block.getBlockTextureFromSideAndMetadata(1, Consts.METAL_COUNT));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, 0F, -1F);
-			renderer.renderEastFace(block, 0D, 0D, 0D, block.getBlockTextureFromSideAndMetadata(2, References.METAL_COUNT));
+			renderer.renderEastFace(block, 0D, 0D, 0D, block.getBlockTextureFromSideAndMetadata(2, Consts.METAL_COUNT));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, 0F, 1F);
-			renderer.renderWestFace(block, 0D, 0D, 0D, block.getBlockTextureFromSideAndMetadata(3, References.METAL_COUNT));
+			renderer.renderWestFace(block, 0D, 0D, 0D, block.getBlockTextureFromSideAndMetadata(3, Consts.METAL_COUNT));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(-1F, 0F, 0F);
-			renderer.renderNorthFace(block, 0D, 0D, 0D, block.getBlockTextureFromSideAndMetadata(4, References.METAL_COUNT));
+			renderer.renderNorthFace(block, 0D, 0D, 0D, block.getBlockTextureFromSideAndMetadata(4, Consts.METAL_COUNT));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(1F, 0F, 0F);
-			renderer.renderSouthFace(block, 0D, 0D, 0D, block.getBlockTextureFromSideAndMetadata(5, References.METAL_COUNT));
+			renderer.renderSouthFace(block, 0D, 0D, 0D, block.getBlockTextureFromSideAndMetadata(5, Consts.METAL_COUNT));
 			tessellator.draw();
 		}
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
@@ -155,7 +155,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		Tessellator tess = Tessellator.instance;
-		int mult = References.metalColors[world.getBlockMetadata(x, y, z)];
+		int mult = Consts.metalColors[world.getBlockMetadata(x, y, z)];
 		boolean rendered = renderer.renderStandardBlock(block, x, y, z);
 		int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
 		float var10 = 0.5F;
@@ -187,37 +187,37 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y - 1, z, 0)) {
 			tess.setBrightness(renderer.renderMinY > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y - 1, z));
 			tess.setColorOpaque_F(var17, var20, var23);
-			renderer.renderBottomFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(0, References.METAL_COUNT));
+			renderer.renderBottomFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(0, Consts.METAL_COUNT));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y + 1, z, 1)) {
 			tess.setBrightness(renderer.renderMaxY < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y + 1, z));
 			tess.setColorOpaque_F(var14, var15, var16);
-			renderer.renderTopFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(1, References.METAL_COUNT));
+			renderer.renderTopFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(1, Consts.METAL_COUNT));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z - 1, 2)) {
 			tess.setBrightness(renderer.renderMinZ > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z - 1));
 			tess.setColorOpaque_F(var18, var21, var24);
-			renderer.renderEastFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(2, References.METAL_COUNT));
+			renderer.renderEastFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(2, Consts.METAL_COUNT));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z + 1, 3)) {
 			tess.setBrightness(renderer.renderMaxZ < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z + 1));
 			tess.setColorOpaque_F(var18, var21, var24);
-			renderer.renderWestFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(3, References.METAL_COUNT));
+			renderer.renderWestFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(3, Consts.METAL_COUNT));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x - 1, y, z, 4)) {
 			tess.setBrightness(renderer.renderMinX > 0D ? brightness : block.getMixedBrightnessForBlock(world, x - 1, y, z));
 			tess.setColorOpaque_F(var19, var22, var25);
-			renderer.renderNorthFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(4, References.METAL_COUNT));
+			renderer.renderNorthFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(4, Consts.METAL_COUNT));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x + 1, y, z, 5)) {
 			tess.setBrightness(renderer.renderMaxX < 1D ? brightness : block.getMixedBrightnessForBlock(world, x + 1, y, z));
 			tess.setColorOpaque_F(var19, var22, var25);
-			renderer.renderSouthFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(5, References.METAL_COUNT));
+			renderer.renderSouthFace(block, (double)x, (double)y, (double)z, block.getBlockTextureFromSideAndMetadata(5, Consts.METAL_COUNT));
 			rendered = true;
 		}
 		return rendered;

@@ -3,8 +3,8 @@ package infinitealloys.handlers;
 import infinitealloys.block.Blocks;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.WorldData;
-import infinitealloys.util.FuncHelper;
-import infinitealloys.util.References;
+import infinitealloys.util.Funcs;
+import infinitealloys.util.Consts;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,13 +41,13 @@ public class EventHandler implements ICraftingHandler {
 		catch(IOException e) {
 			if(InfiniteAlloys.instance.worldData == null) {
 				Random random = new Random();
-				int[] validAlloys = new int[References.VALID_ALLOY_COUNT];
-				for(int i = 0; i < References.VALID_ALLOY_COUNT; i++) {
-					int metalCount = References.METAL_COUNT;
+				int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT];
+				for(int i = 0; i < Consts.VALID_ALLOY_COUNT; i++) {
+					int metalCount = Consts.METAL_COUNT;
 					byte[] alloyDigits = new byte[metalCount];
 					for(int j = 0; j < metalCount; j++) {
-						int min = FuncHelper.intAtPos(References.alloyRadix, metalCount, References.validAlloyMins[i], j);
-						int max = FuncHelper.intAtPos(References.alloyRadix, metalCount, References.validAlloyMaxes[i], j);
+						int min = Funcs.intAtPos(Consts.alloyRadix, metalCount, Consts.validAlloyMins[i], j);
+						int max = Funcs.intAtPos(Consts.alloyRadix, metalCount, Consts.validAlloyMaxes[i], j);
 						alloyDigits[j] = (byte)(min + (max == min ? 0 : random.nextInt(max - min)));
 					}
 					String alloy = "";

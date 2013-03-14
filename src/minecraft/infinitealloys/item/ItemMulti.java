@@ -1,6 +1,6 @@
 package infinitealloys.item;
 
-import infinitealloys.util.References;
+import infinitealloys.util.Consts;
 import java.util.List;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -18,7 +18,7 @@ public class ItemMulti extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void func_94581_a(IconRegister iconRegister) {
-		for(int i = 0; i < References.MULTI_ITEM_COUNT; i++)
+		for(int i = 0; i < Consts.MULTI_ITEM_COUNT; i++)
 			Items.multiIcons[i] = iconRegister.func_94245_a("IAmulti@" + i);
 	}
 
@@ -31,7 +31,7 @@ public class ItemMulti extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < References.MULTI_ITEM_COUNT; i++)
+		for(int i = 0; i < Consts.MULTI_ITEM_COUNT; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 }
