@@ -26,8 +26,8 @@ public class BlockOre extends BlockIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void func_94332_a(IconRegister iconRegister) {
-		Blocks.oreForegroundIcon = iconRegister.func_94245_a("ore_foreground");
-		Blocks.oreBackgroundIcon = iconRegister.func_94245_a("ore_background");
+		Blocks.oreForegroundIcon = iconRegister.func_94245_a(Consts.TEXTURE_PREFIX + "ore_foreground");
+		Blocks.oreBackgroundIcon = iconRegister.func_94245_a(Consts.TEXTURE_PREFIX + "ore_background");
 	}
 
 	@Override

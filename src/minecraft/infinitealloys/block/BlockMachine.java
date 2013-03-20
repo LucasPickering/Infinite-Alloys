@@ -43,9 +43,9 @@ public class BlockMachine extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	public void func_94332_a(IconRegister iconRegister) {
 		for(int i = 0; i < Consts.MACHINE_COUNT; ++i) {
-			Blocks.machineIcons[i][0] = iconRegister.func_94245_a(Consts.machineNames[i] + "_top");
-			Blocks.machineIcons[i][1] = iconRegister.func_94245_a(Consts.machineNames[i] + "_bottom");
-			Blocks.machineIcons[i][2] = iconRegister.func_94245_a(Consts.machineNames[i] + "_side");
+			Blocks.machineIcons[i][0] = iconRegister.func_94245_a(Consts.TEXTURE_PREFIX + Consts.machineNames[i] + "_top");
+			Blocks.machineIcons[i][1] = iconRegister.func_94245_a(Consts.TEXTURE_PREFIX + Consts.machineNames[i] + "_bottom");
+			Blocks.machineIcons[i][2] = iconRegister.func_94245_a(Consts.TEXTURE_PREFIX + Consts.machineNames[i] + "_side");
 		}
 	}
 

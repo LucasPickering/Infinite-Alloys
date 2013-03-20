@@ -3,6 +3,7 @@ package infinitealloys.util;
 public class Consts {
 
 	public static final String TEXTURE_PATH = "/infinitealloys/gfx/";
+	public static final String TEXTURE_PREFIX = "infinitealloys:";
 	public static final String LANG_PATH = "lang/";
 	public static final String[] langFiles = { LANG_PATH + "en_US.xml" };
 
