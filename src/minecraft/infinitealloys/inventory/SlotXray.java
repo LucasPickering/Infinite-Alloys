@@ -13,6 +13,6 @@ public class SlotXray extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return TEHelper.isDetectable(itemstack);
+		return TEHelper.stackValidForSlot(TEHelper.XRAY, 0, itemstack);
 	}
 }

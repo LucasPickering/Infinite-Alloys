@@ -53,6 +53,11 @@ public class TileEntityXray extends TileEntityMachine {
 	}
 
 	@Override
+	public boolean isStackValidForSlot(int slot, ItemStack itemstack) {
+		return super.isStackValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.XRAY, slot, itemstack);
+	}
+
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		if(inventoryStacks[0] == null)

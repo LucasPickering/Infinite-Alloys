@@ -36,6 +36,11 @@ public class TileEntityPrinter extends TileEntityMachine {
 	}
 
 	@Override
+	public boolean isStackValidForSlot(int slot, ItemStack itemstack) {
+		return super.isStackValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.PRINTER, slot, itemstack);
+	}
+
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		if(inventoryStacks[0] != null && inventoryStacks[1] != null && inventoryStacks[2] == null)

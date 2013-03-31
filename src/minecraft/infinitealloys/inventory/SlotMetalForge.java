@@ -17,7 +17,7 @@ public class SlotMetalForge extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return slotIndex == 0 && TEHelper.isAlloyBook(itemstack) || (slotIndex > 2 && ((TileEntityMetalForge)inventory).getIngotNum(itemstack) != -1);
+		return TEHelper.stackValidForSlot(TEHelper.METAL_FORGE, slotIndex, itemstack);
 	}
 
 	@Override

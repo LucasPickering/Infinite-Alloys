@@ -48,7 +48,7 @@ public class ContainerMetalForge extends ContainerMachine {
 					if(!mergeItemStack(stackInSlotCopy, 1, 2, false))
 						return null;
 				}
-				else if(inventory.getIngotNum(stackInSlotCopy) != -1) {
+				else if(TEHelper.getIngotNum(stackInSlotCopy) != -1) {
 					if(!mergeItemStack(stackInSlotCopy, 3, 20, false))
 						return null;
 				}

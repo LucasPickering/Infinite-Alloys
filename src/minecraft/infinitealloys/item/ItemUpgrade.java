@@ -22,9 +22,9 @@ public class ItemUpgrade extends ItemIA {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_94581_a(IconRegister iconRegister) {
+	public void updateIcons(IconRegister iconRegister) {
 		for(int i = 0; i < Consts.UPGRADE_COUNT; i++)
-			Items.upgradeIcons[i] = iconRegister.func_94245_a("IAupgrade@" + i);
+			Items.upgradeIcons[i] = iconRegister.registerIcon("IAupgrade@" + i);
 	}
 
 	@Override

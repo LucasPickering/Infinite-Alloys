@@ -17,8 +17,8 @@ public class ItemIngot extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_94581_a(IconRegister iconRegister) {
-		iconIndex = iconRegister.func_94245_a("IAingot");
+	public void updateIcons(IconRegister iconRegister) {
+		iconIndex = iconRegister.registerIcon("IAingot");
 	}
 
 	@Override

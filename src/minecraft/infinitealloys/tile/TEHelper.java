@@ -1,6 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.item.Items;
+import infinitealloys.util.Consts;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +11,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class TEHelper {
+
+	public static final int COMPUTER = 0;
+	public static final int METAL_FORGE = 1;
+	public static final int ANALYZER = 2;
+	public static final int PRINTER = 3;
+	public static final int XRAY = 4;
 
 	public static final int SPEED1 = 1;
 	public static final int SPEED2 = 2;
@@ -98,5 +105,48 @@ public class TEHelper {
 	 * @return true if it has a prereq */
 	public static boolean hasPrereqUpgrade(int upg) {
 		return TEHelper.prereqNeedingUpgrades.contains(upg);
+	}
+
+	public static int getIngotNum(ItemStack ingot) {
+		if(ingot.itemID == Items.ingot.itemID && ingot.getItemDamage() < Consts.METAL_COUNT)
+			return ingot.getItemDamage();
+		return -1;
+	}
+
+	public static boolean stackValidForSlot(int type, int index, ItemStack itemstack) {
+		switch(type) {
+			case METAL_FORGE:
+				switch(index) {
+					case 0:
+						return TEHelper.isAlloyBook(itemstack);
+					case 1:
+					case 2:
+						return false;
+					default:
+						return getIngotNum(itemstack) != -1;
+				}
+			case ANALYZER:
+				switch(index) {
+					case 0:
+						return itemstack.itemID == Items.alloyIngot.itemID;
+					case 2:
+						return itemstack.itemID == Items.alloyBook.itemID;
+					default:
+						return false;
+				}
+			case PRINTER:
+				switch(index) {
+					case 0:
+						return itemstack.hasTagCompound()
+								&& (itemstack.itemID == Items.alloyBook.itemID || itemstack.itemID == Item.writableBook.itemID || itemstack.itemID == Item.writtenBook.itemID);
+					case 1:
+						return itemstack.itemID == Item.book.itemID;
+					default:
+						return false;
+				}
+			case XRAY:
+				return TEHelper.isDetectable(itemstack);
+		}
+		return false;
 	}
 }

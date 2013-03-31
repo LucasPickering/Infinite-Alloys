@@ -1,6 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
 import java.util.Arrays;
 import net.minecraft.item.ItemStack;
@@ -37,6 +38,11 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	@Override
 	public int func_94128_d(int side) {
 		return 1;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int slot, ItemStack itemstack) {
+		return super.isStackValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.ANALYZER, slot, itemstack);
 	}
 
 	@Override

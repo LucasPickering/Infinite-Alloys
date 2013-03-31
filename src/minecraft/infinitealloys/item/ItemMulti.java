@@ -17,9 +17,9 @@ public class ItemMulti extends ItemIA {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_94581_a(IconRegister iconRegister) {
+	public void updateIcons(IconRegister iconRegister) {
 		for(int i = 0; i < Consts.MULTI_ITEM_COUNT; i++)
-			Items.multiIcons[i] = iconRegister.func_94245_a("IAmulti@" + i);
+			Items.multiIcons[i] = iconRegister.registerIcon("IAmulti@" + i);
 	}
 
 	@Override

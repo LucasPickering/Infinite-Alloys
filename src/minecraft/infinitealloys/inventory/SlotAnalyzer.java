@@ -2,6 +2,7 @@ package infinitealloys.inventory;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.Items;
+import infinitealloys.tile.TEHelper;
 import infinitealloys.util.Consts;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -19,7 +20,7 @@ public class SlotAnalyzer extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return (slotIndex == 0 && itemstack.itemID == Items.alloyIngot.itemID) || (slotIndex == 2 && itemstack.itemID == Items.alloyBook.itemID);
+		return TEHelper.stackValidForSlot(TEHelper.ANALYZER, slotIndex, itemstack);
 	}
 
 	@Override

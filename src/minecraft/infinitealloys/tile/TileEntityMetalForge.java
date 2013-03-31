@@ -48,6 +48,11 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	@Override
+	public boolean isStackValidForSlot(int slot, ItemStack itemstack) {
+		return super.isStackValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.METAL_FORGE, slot, itemstack);
+	}
+
+	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		recipeAmts = tagCompound.getByteArray("RecipeAmts");
@@ -69,12 +74,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		if(!Arrays.equals(lastRecipeAmts, recipeAmts))
 			processProgress = 0;
 		lastRecipeAmts = Arrays.copyOf(recipeAmts, recipeAmts.length);
-	}
-
-	public int getIngotNum(ItemStack ingot) {
-		if(ingot.itemID == Items.ingot.itemID && ingot.getItemDamage() < Consts.METAL_COUNT)
-			return ingot.getItemDamage();
-		return -1;
 	}
 
 	/** Return the resulting ingot for the smelted ingots
@@ -110,7 +109,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	private int[] getIngotAmts() {
 		int[] amts = new int[Consts.METAL_COUNT];
 		for(int slot : getSlotsWithIngot())
-			amts[getIngotNum(inventoryStacks[slot])] += inventoryStacks[slot].stackSize;
+			amts[TEHelper.getIngotNum(inventoryStacks[slot])] += inventoryStacks[slot].stackSize;
 		return amts;
 	}
 
@@ -139,7 +138,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	protected void finishProcessing() {
 		byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
 		for(int slot : getSlotsWithIngot()) {
-			int ingotNum = getIngotNum(inventoryStacks[slot]);
+			int ingotNum = TEHelper.getIngotNum(inventoryStacks[slot]);
 			int ingots = ingotsToRemove[ingotNum];
 			ingotsToRemove[ingotNum] -= Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize);
 			decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));

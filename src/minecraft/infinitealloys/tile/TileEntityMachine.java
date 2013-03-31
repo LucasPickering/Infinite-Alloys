@@ -252,9 +252,19 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	}
 
 	/** One of the ISidedInventory functions, possibly getSizeInventorySide */
+	// TODO: Figure out how the hell this works
 	@Override
-	public int func_94128_d(int side) {
+	public int[] getSizeInventorySide(int side) {
 		return 0;
+	}
+
+	@Override
+	public boolean isStackValidForSlot(int slot, ItemStack itemstack) {
+		return slot == upgradeSlotIndex && isUpgradeValid(itemstack);
+	}
+
+	public boolean isInvNameLocalized() {
+		return false;
 	}
 
 	@Override

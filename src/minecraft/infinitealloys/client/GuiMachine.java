@@ -169,7 +169,7 @@ public abstract class GuiMachine extends GuiContainer {
 	}
 
 	public static void bindTexture(String texture) {
-		Minecraft.getMinecraft().renderEngine.func_98187_b(Consts.TEXTURE_PATH + "gui/" + texture + ".png");
+		Minecraft.getMinecraft().renderEngine.bindTexture(Consts.TEXTURE_PATH + "gui/" + texture + ".png");
 	}
 
 	@Override
