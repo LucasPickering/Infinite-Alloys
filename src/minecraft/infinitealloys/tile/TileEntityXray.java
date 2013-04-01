@@ -46,13 +46,6 @@ public class TileEntityXray extends TileEntityMachine {
 	}
 
 	@Override
-	public int func_94128_d(int side) {
-		if(side != front && (side == Consts.NORTH || side == Consts.SOUTH || side == Consts.EAST || side == Consts.WEST))
-			return 1;
-		return 0;
-	}
-
-	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack itemstack) {
 		return super.isStackValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.XRAY, slot, itemstack);
 	}

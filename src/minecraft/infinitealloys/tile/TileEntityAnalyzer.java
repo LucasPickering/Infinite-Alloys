@@ -27,20 +27,6 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	}
 
 	@Override
-	public int func_94127_c(int side) {
-		if(side == Consts.TOP)
-			return 0;
-		if(side == Consts.BOTTOM)
-			return 2;
-		return 1;
-	}
-
-	@Override
-	public int func_94128_d(int side) {
-		return 1;
-	}
-
-	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack itemstack) {
 		return super.isStackValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.ANALYZER, slot, itemstack);
 	}

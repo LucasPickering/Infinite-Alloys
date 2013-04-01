@@ -3,14 +3,14 @@ package infinitealloys.tile;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
-import infinitealloys.util.Funcs;
 import infinitealloys.util.Consts;
+import infinitealloys.util.Funcs;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Random;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -30,7 +30,7 @@ import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class TileEntityMachine extends TileEntity implements ISidedInventory, IElectricityStorage, IVoltage, IConnector {
+public abstract class TileEntityMachine extends TileEntity implements IInventory, IElectricityStorage, IVoltage, IConnector {
 
 	public Random random = new Random();
 	public ArrayList<String> playersUsing = new ArrayList<String>();
@@ -245,19 +245,6 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 		tagCompound.setTag("Items", nbttaglist);
 	}
 
-	/** One of the ISidedInventory functions, possibly getStartInventorySide */
-	@Override
-	public int func_94127_c(int side) {
-		return 0;
-	}
-
-	/** One of the ISidedInventory functions, possibly getSizeInventorySide */
-	// TODO: Figure out how the hell this works
-	@Override
-	public int[] getSizeInventorySide(int side) {
-		return 0;
-	}
-
 	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack itemstack) {
 		return slot == upgradeSlotIndex && isUpgradeValid(itemstack);
@@ -364,15 +351,5 @@ public abstract class TileEntityMachine extends TileEntity implements ISidedInve
 	@Override
 	public boolean canConnect(ForgeDirection side) {
 		return maxJoules > 0 && Funcs.fdToNumSide(side) != front;
-	}
-
-	@Override
-	public boolean func_94042_c() {
-		return false;
-	}
-
-	@Override
-	public boolean func_94041_b(int i, ItemStack itemstack) {
-		return false;
 	}
 }

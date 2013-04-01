@@ -34,20 +34,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	@Override
-	public int func_94127_c(int side) {
-		if(side == Consts.TOP || side == Consts.BOTTOM)
-			return 2;
-		return 3;
-	}
-
-	@Override
-	public int func_94128_d(int side) {
-		if(side == Consts.TOP || side == Consts.BOTTOM)
-			return 1;
-		return 18;
-	}
-
-	@Override
 	public boolean isStackValidForSlot(int slot, ItemStack itemstack) {
 		return super.isStackValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.METAL_FORGE, slot, itemstack);
 	}
