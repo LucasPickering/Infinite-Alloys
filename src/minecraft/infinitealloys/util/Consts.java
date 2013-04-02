@@ -17,10 +17,10 @@ public class Consts {
 	// TODO: Make these correct
 	public static final int TOP = 0;
 	public static final int BOTTOM = 1;
-	public static final int EAST = 2;
-	public static final int WEST = 3;
-	public static final int NORTH = 4;
-	public static final int SOUTH = 5;
+	public static final int NORTH = 2;
+	public static final int SOUTH = 3;
+	public static final int WEST = 4;
+	public static final int EAST = 5;
 
 	/** The min for each metal in each valid alloy, the valid alloys will be between these and the maxes */
 	public static final int[] validAlloyMins = { 11, 1111, 11111, 111111, 11111111, 44444444 };

@@ -10,6 +10,7 @@ import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import infinitealloys.util.Consts;
 import java.util.List;
@@ -44,15 +45,23 @@ public class BlockMachine extends BlockContainer {
 	public void registerIcons(IconRegister iconRegister) {
 		for(int i = 0; i < Consts.MACHINE_COUNT; ++i) {
 			Blocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.machineNames[i] + "_top");
-			Blocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.machineNames[i] + "_bottom");
+			Blocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.machineNames[i] + "_front");
 			Blocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.machineNames[i] + "_side");
 		}
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public Icon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
-		return Blocks.machineIcons[blockAccess.getBlockMetadata(x, y, z)][side < 2 ? side : 2];
+		int type = side <= Consts.BOTTOM ? 0 : side == ((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z)).front ? 1 : 2;
+		return Blocks.machineIcons[blockAccess.getBlockMetadata(x, y, z)][type];
 	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+    public Icon getBlockTextureFromSideAndMetadata(int side, int metadata) {
+        return Blocks.machineIcons[metadata][side <= Consts.BOTTOM ? 0 : side == Consts.SOUTH ? 1 : 2];
+    }
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
@@ -162,7 +171,7 @@ public class BlockMachine extends BlockContainer {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
 			// TODO: Check this, and fix it if the directions are derped
-			tem.front = MathHelper.floor_double(entityliving.rotationYaw * 4.0F / 360.0F + 0.5D) % 4;
+			tem.front = Funcs.rotationToNumSide(MathHelper.floor_float(entityliving.rotationYaw / 90F - 1.5F) & 3);
 			world.markBlockForUpdate(x, y, z);
 		}
 	}
