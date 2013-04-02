@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties version="1.0">
+	<comment>'Murican English Localization File</comment>
+	<entry key="itemGroup.main">Infinite Alloys</entry>
+	<entry key="multi.machineComp.name">Machine Component</entry>
+	<entry key="multi.upgComp.name">Upgrade Component</entry>
+	<entry key="item.ingot.name"> Ingot</entry>
+	<entry key="item.alloyIngot.name">Alloy Ingot</entry>
+	<entry key="item.upgrade.name">Upgrade</entry>
+	<entry key="item.gps.name">GPS</entry>
+	<entry key="item.alloyBook.name">Alloy Journal</entry>
+	<entry key="metal.zinc.name">Zinc</entry>
+	<entry key="metal.magnesium.name">Magnesium</entry>
+	<entry key="metal.scandium.name">Scandium</entry>
+	<entry key="metal.tantalum.name">Tantalum</entry>
+	<entry key="metal.flamium.name">Flamium</entry>
+	<entry key="metal.vegetanium.name">Vegetanium</entry>
+	<entry key="metal.aquatilum.name">Aquatilum</entry>
+	<entry key="metal.swagtanium.name">Swagtanium</entry>
+	<entry key="upgrade.name">Upgrades</entry>
+	<entry key="upgrade.speed1.name">Speed I</entry>
+	<entry key="upgrade.speed2.name">Speed II</entry>
+	<entry key="upgrade.efficiency1.name">Efficiency I</entry>
+	<entry key="upgrade.efficiency2.name">Efficiency II</entry>
+	<entry key="upgrade.capacity1.name">Capacity I</entry>
+	<entry key="upgrade.capacity2.name">Capacity II</entry>
+	<entry key="upgrade.range1.name">Range I</entry>
+	<entry key="upgrade.range2.name">Range II</entry>
+	<entry key="upgrade.wireless.name">Wireless Networking</entry>
+	<entry key="upgrade.eleccapacity1.name">Energy Capacity I</entry>
+	<entry key="upgrade.eleccapacity2.name">Energy Capacity II</entry>
+	<entry key="tile.ore.name"> Ore</entry>
+	<entry key="machine.computer.name">Computer</entry>
+	<entry key="machine.metalforge.name">Metal Forge</entry>
+	<entry key="machine.analyzer.name">Analyzer</entry>
+	<entry key="machine.printer.name">Printer</entry>
+	<entry key="machine.xray.name">X-Ray</entry>
+	<entry key="achievement.craftMetalForge">Your First Machine</entry>
+	<entry key="achievement.craftMetalForge.desc">Craft A Metal Forge</entry>
+	<entry key="achievement.smeltAlloy1">Mixing Metals 1</entry>
+	<entry key="achievement.smeltAlloy1.desc">Create A Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy2">Mixing Metals 2</entry>
+	<entry key="achievement.smeltAlloy2.desc">Create A Second Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy3">Mixing Metals 3</entry>
+	<entry key="achievement.smeltAlloy3.desc">Create A Third Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy4">Mixing Metals 4</entry>
+	<entry key="achievement.smeltAlloy4.desc">Create A Fourth Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy5">Mixing Metals 5</entry>
+	<entry key="achievement.smeltAlloy5.desc">Create A Fifth Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy6">Mixing Metals 6</entry>
+	<entry key="achievement.smeltAlloy6.desc">Create A Sixth Useable Alloy</entry>
+</properties>
