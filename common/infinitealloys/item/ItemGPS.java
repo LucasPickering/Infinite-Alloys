@@ -4,6 +4,7 @@ import infinitealloys.util.Consts;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
@@ -22,8 +23,14 @@ public class ItemGPS extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
+	public void updateIcons(IconRegister iconRegister) {
+		iconIndex = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "gps");
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		for(int i = 0; i < Consts.gpsMaxCoords; i++) {
+		for(int i = 0; i < Consts.GPS_MAX_COORDS; i++) {
 			if(itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey("coords" + i)) {
 				int[] coords = itemstack.getTagCompound().getIntArray("coords" + i);
 				list.add(coords[0] + ", " + coords[1] + ", " + coords[2]);

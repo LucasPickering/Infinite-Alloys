@@ -21,6 +21,12 @@ public class ItemAlloyBook extends ItemIA {
 	public boolean getShareTag() {
 		return true;
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void updateIcons(IconRegister iconRegister) {
+		iconIndex = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "alloybook");
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)

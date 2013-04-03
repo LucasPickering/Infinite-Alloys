@@ -6,9 +6,7 @@ import infinitealloys.tile.TileEntityComputer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.InventoryPlayer;
-
 import org.lwjgl.input.Keyboard;
-
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiComputer extends GuiMachine {
@@ -101,7 +99,8 @@ public class GuiComputer extends GuiMachine {
 				tec.addMachine(mc.thePlayer, new Integer(xInput.getText()), new Integer(yInput.getText()), new Integer(zInput.getText()));
 				PacketDispatcher.sendPacketToServer(PacketHandler.getComputerPacketAddMachine(tec.xCoord, tec.yCoord, tec.zCoord, x, y, z));
 			}
-			catch(NumberFormatException e) {}
+			catch(NumberFormatException e) {
+			}
 		}
 	}
 }

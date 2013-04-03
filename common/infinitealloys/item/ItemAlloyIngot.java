@@ -31,7 +31,7 @@ public class ItemAlloyIngot extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void updateIcons(IconRegister iconRegister) {
-		iconIndex = iconRegister.registerIcon("IAingot");
+		iconIndex = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "ingot");
 	}
 
 	@Override
@@ -48,13 +48,13 @@ public class ItemAlloyIngot extends ItemIA {
 		else
 			return;
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
-			metalMasses[i] = Funcs.intAtPos(Consts.alloyRadix, Consts.METAL_COUNT, alloy, i);
+			metalMasses[i] = Funcs.intAtPos(Consts.ALLOY_RADIX, Consts.METAL_COUNT, alloy, i);
 			totalMass += metalMasses[i];
 		}
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
 			float percentage = Math.round(metalMasses[i] / totalMass * 10000F) / 100F;
 			if(percentage != 0)
-				list.add(percentage + "% " + Funcs.getLoc("metal." + Consts.metalNames[Consts.METAL_COUNT - 1 - i] + ".name"));
+				list.add(percentage + "% " + Funcs.getLoc("metal." + Consts.METAL_NAMES[Consts.METAL_COUNT - 1 - i] + ".name"));
 		}
 	}
 
@@ -69,7 +69,7 @@ public class ItemAlloyIngot extends ItemIA {
 		else if(itemstack.getItemDamage() > 0)
 			alloy = InfiniteAlloys.instance.worldData.getValidAlloys()[itemstack.getItemDamage() - 1];
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
-			for(int j = 0; j < Funcs.intAtPos(Consts.alloyRadix, Consts.METAL_COUNT, alloy, i); j++) {
+			for(int j = 0; j < Funcs.intAtPos(Consts.ALLOY_RADIX, Consts.METAL_COUNT, alloy, i); j++) {
 				int ingotColor = Consts.metalColors[Consts.METAL_COUNT - 1 - i];
 				colorCount++;
 				redTot += ingotColor >> 16 & 255;

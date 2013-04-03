@@ -23,18 +23,18 @@ public class ClientProxy extends CommonProxy {
 	public void initBlocks() {
 		super.initBlocks();
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			addName(new ItemStack(Blocks.ore, 0, i), "metal." + Consts.metalNames[i] + ".name", "tile.ore.name");
+			addName(new ItemStack(Blocks.ore, 0, i), "metal." + Consts.METAL_NAMES[i] + ".name", "tile.ore.name");
 		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
-			addName(new ItemStack(Blocks.machine, 1, i), "machine." + Consts.machineNames[i] + ".name");
+			addName(new ItemStack(Blocks.machine, 1, i), "machine." + Consts.MACHINE_NAMES[i] + ".name");
 	}
 
 	@Override
 	public void initItems() {
 		super.initItems();
-		addName(new ItemStack(Items.multi), "multi.machineComp.name");
-		addName(new ItemStack(Items.multi, 1, 1), "multi.upgComp.name");
+		for(int i = 0; i < Consts.MULTI_ITEM_COUNT; i++)
+			addName(new ItemStack(Items.multi, 1, i), "multi." + Consts.MULTI_ITEM_NAMES[i] + ".name");
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			addName(new ItemStack(Items.ingot, 1, i), "metal." + Consts.metalNames[i] + ".name", "item.ingot.name");
+			addName(new ItemStack(Items.ingot, 1, i), "metal." + Consts.METAL_NAMES[i] + ".name", "item.ingot.name");
 		addName(new ItemStack(Items.alloyIngot), "item.alloyIngot.name");
 		addName(new ItemStack(Items.upgrade), "item.upgrade.name");
 		addName(new ItemStack(Items.gps), "item.gps.name");
@@ -49,7 +49,6 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void initRendering() {
-		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "sprites.png");
 		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/computer.png");
 		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/metalforge.png");
 		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/analyzer.png");

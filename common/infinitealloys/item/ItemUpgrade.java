@@ -1,7 +1,7 @@
 package infinitealloys.item;
 
-import infinitealloys.util.Funcs;
 import infinitealloys.util.Consts;
+import infinitealloys.util.Funcs;
 import java.util.List;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,12 +19,12 @@ public class ItemUpgrade extends ItemIA {
 		super(id);
 		setHasSubtypes(true);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void updateIcons(IconRegister iconRegister) {
 		for(int i = 0; i < Consts.UPGRADE_COUNT; i++)
-			Items.upgradeIcons[i] = iconRegister.registerIcon("IAupgrade@" + i);
+			Items.upgradeIcons[i] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.UPGRADE_NAMES[i]);
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class ItemUpgrade extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		list.add(Funcs.getLoc("upgrade." + Consts.upgradeNames[itemstack.getItemDamage()] + ".name"));
+		list.add(Funcs.getLoc("upgrade." + Consts.UPGRADE_NAMES[itemstack.getItemDamage()] + ".name"));
 	}
 
 	@Override

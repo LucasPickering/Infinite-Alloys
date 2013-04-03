@@ -28,7 +28,7 @@ public class GuiMetalForge extends GuiMachine {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			if(mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18))
-				drawTextBox(Funcs.getLoc("metal." + Consts.metalNames[i] + ".name"), 0xffffff, mouseX, mouseY);
+				drawTextBox(Funcs.getLoc("metal." + Consts.METAL_NAMES[i] + ".name"), 0xffffff, mouseX, mouseY);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
@@ -64,14 +64,14 @@ public class GuiMetalForge extends GuiMachine {
 				temf.presetSelection = (byte)Math.max(temf.presetSelection - 1, -1);
 			if(temf.presetSelection > -1)
 				for(int i = 0; i < temf.recipeAmts.length; i++)
-					temf.recipeAmts[i] = (byte)Funcs.intAtPos(Consts.alloyRadix, Consts.METAL_COUNT, alloys[temf.presetSelection], Consts.METAL_COUNT - i - 1);
+					temf.recipeAmts[i] = (byte)Funcs.intAtPos(Consts.ALLOY_RADIX, Consts.METAL_COUNT, alloys[temf.presetSelection], Consts.METAL_COUNT - i - 1);
 			PacketDispatcher.sendPacketToServer(PacketHandler.getTEPacketToServer(temf));
 		}
 		if(temf.presetSelection == -1) {
 			for(int i = 0; i < Consts.METAL_COUNT; i++) {
 				if(mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18)) {
 					if(mouseButton == 0)
-						temf.recipeAmts[i] = (byte)Math.min(temf.recipeAmts[i] + 1, Consts.alloyRadix - 1);
+						temf.recipeAmts[i] = (byte)Math.min(temf.recipeAmts[i] + 1, Consts.ALLOY_RADIX - 1);
 					else if(mouseButton == 1)
 						temf.recipeAmts[i] = (byte)Math.max(temf.recipeAmts[i] - 1, 0);
 					PacketDispatcher.sendPacketToServer(PacketHandler.getTEPacketToServer(temf));

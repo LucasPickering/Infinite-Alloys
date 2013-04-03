@@ -44,9 +44,9 @@ public class BlockMachine extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
 		for(int i = 0; i < Consts.MACHINE_COUNT; ++i) {
-			Blocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.machineNames[i] + "_top");
-			Blocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.machineNames[i] + "_front");
-			Blocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.machineNames[i] + "_side");
+			Blocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.MACHINE_NAMES[i] + "_top");
+			Blocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.MACHINE_NAMES[i] + "_front");
+			Blocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.MACHINE_NAMES[i] + "_side");
 		}
 	}
 
@@ -70,7 +70,7 @@ public class BlockMachine extends BlockContainer {
 			if(player.isSneaking() && world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer && currentItem.hasTagCompound()) {
 				if(currentItem.hasTagCompound()) {
 					NBTTagCompound tagCompound = currentItem.getTagCompound();
-					for(int i = 0; i < Consts.gpsMaxCoords; i++) {
+					for(int i = 0; i < Consts.GPS_MAX_COORDS; i++) {
 						if(!tagCompound.hasKey("coords" + i))
 							continue;
 						int[] coords = tagCompound.getIntArray("coords" + i);
@@ -85,7 +85,7 @@ public class BlockMachine extends BlockContainer {
 			else {
 				NBTTagCompound tagCompound = currentItem.hasTagCompound() ? currentItem.getTagCompound() : new NBTTagCompound();
 				int size = 0;
-				for(int i = 0; i < Consts.gpsMaxCoords; i++) {
+				for(int i = 0; i < Consts.GPS_MAX_COORDS; i++) {
 					if(!tagCompound.hasKey("coords" + i)) {
 						size = i;
 						break;
@@ -94,7 +94,7 @@ public class BlockMachine extends BlockContainer {
 					if(nbtCoords[0] == x && nbtCoords[1] == y && nbtCoords[2] == z)
 						return true;
 				}
-				if(size < Consts.gpsMaxCoords) {
+				if(size < Consts.GPS_MAX_COORDS) {
 					tagCompound.setIntArray("coords" + size, new int[] { x, y, z });
 					currentItem.setTagCompound(tagCompound);
 					if(world.isRemote)

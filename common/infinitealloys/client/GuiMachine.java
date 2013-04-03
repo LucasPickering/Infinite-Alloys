@@ -56,7 +56,9 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTick) {
 		topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
-		energyMeter.setLocation(13, 7 + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height));
+		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
+		if(joulesScaled > 0)
+			energyMeter.setLocation(13, 7 + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height));
 		super.drawScreen(mouseX, mouseY, partialTick);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -70,7 +72,7 @@ public abstract class GuiMachine extends GuiContainer {
 				int upg = (int)Math.pow(2, i);
 				if(TEHelper.isPrereqUpgrade(upg) && tem.hasUpgrade(upg << 1) || !tem.hasUpgrade(upg))
 					continue;
-				texts.add(Funcs.getLoc("upgrade." + Consts.upgradeNames[i] + ".name"));
+				texts.add(Funcs.getLoc("upgrade." + Consts.UPGRADE_NAMES[i] + ".name"));
 				colors.add(0xaaaaaa);
 			}
 			int[] colorsA = new int[colors.size()];
@@ -78,10 +80,7 @@ public abstract class GuiMachine extends GuiContainer {
 				colorsA[i] = colors.get(i);
 			drawTextBox(texts.toArray(new String[texts.size()]), colorsA, mouseX, mouseY);
 		}
-		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
-		if(tem.maxJoules > 0
-				&& mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width,
-						ENERGY_METER.height))
+		if(joulesScaled > 0 && mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x, topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height))
 			drawTextBox(new String[] { ElectricityDisplay.getDisplayShort(tem.getJoules(), ElectricityDisplay.ElectricUnit.JOULES),
 					ElectricityDisplay.getDisplayShort(ElectricityPack.getWattsFromJoules(tem.joulesGained, 0.05F), ElectricityDisplay.ElectricUnit.WATT) + " IN",
 					ElectricityDisplay.getDisplayShort(ElectricityPack.getWattsFromJoules(tem.getJoulesUsed(), 0.05F), ElectricityDisplay.ElectricUnit.WATT) + " OUT" },

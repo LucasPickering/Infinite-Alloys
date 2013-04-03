@@ -202,7 +202,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	@SideOnly(Side.CLIENT)
 	public int getJoulesScaled(int scale) {
-		return (int)(joules * scale / maxJoules);
+		if(maxJoules > 0)
+			return (int)(joules * scale / maxJoules);
+		return -1;
 	}
 
 	public boolean coordsEquals(int x2, int y2, int z2) {

@@ -67,7 +67,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	private ItemStack getIngotResult() {
 		int alloy = 0;
 		for(int i = 0; i < recipeAmts.length; i++)
-			alloy += Math.pow(Consts.alloyRadix, i) * recipeAmts[i];
+			alloy += Math.pow(Consts.ALLOY_RADIX, i) * recipeAmts[i];
 		ItemStack result = new ItemStack(Items.alloyIngot);
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		tagCompound.setInteger("alloy", alloy);

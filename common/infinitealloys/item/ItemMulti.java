@@ -14,12 +14,12 @@ public class ItemMulti extends ItemIA {
 	public ItemMulti(int id) {
 		super(id);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void updateIcons(IconRegister iconRegister) {
 		for(int i = 0; i < Consts.MULTI_ITEM_COUNT; i++)
-			Items.multiIcons[i] = iconRegister.registerIcon("IAmulti@" + i);
+			Items.multiIcons[i] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.MULTI_ITEM_NAMES[i]);
 	}
 
 	@Override

@@ -46,9 +46,9 @@ public class InfiniteAlloys {
 		Items.alloyBookID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyBook", 15005).getInt();
 		int[] metalColors = { 0x2a2a2a, 0xd2cda3, 0xccc34f, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			Consts.metalColors[i] = config.get("Metal Colors", Consts.metalNames[i], metalColors[i]).getInt();
+			Consts.metalColors[i] = config.get("Metal Colors", Consts.METAL_NAMES[i], metalColors[i]).getInt();
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			spawnOres[i] = config.get("World Gen", Consts.metalNames[i], true).getBoolean(true);
+			spawnOres[i] = config.get("World Gen", Consts.METAL_NAMES[i], true).getBoolean(true);
 		config.save();
 	}
 
