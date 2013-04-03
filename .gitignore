@@ -69,6 +69,7 @@ pip-log.txt
 /src/minecraft/*
 /src/minecraft_server/*
 /src/common/*
+/alex/*
 !/resources
 !/common
 
