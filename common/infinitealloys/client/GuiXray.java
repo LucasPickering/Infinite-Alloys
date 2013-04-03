@@ -88,6 +88,7 @@ public class GuiXray extends GuiMachine {
 	public void actionPerformed(GuiButton button) {
 		if(button.id == 0) {
 			tex.selectedButton = -1;
+			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 			PacketDispatcher.sendPacketToServer(PacketHandler.getPacketSearch(tex.xCoord, tex.yCoord, tex.zCoord));
 			tex.searching = true;
 		}

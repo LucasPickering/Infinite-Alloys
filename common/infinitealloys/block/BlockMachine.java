@@ -10,9 +10,9 @@ import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
+import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
-import infinitealloys.util.Consts;
 import java.util.List;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -27,8 +27,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
@@ -56,12 +54,12 @@ public class BlockMachine extends BlockContainer {
 		int type = side <= Consts.BOTTOM ? 0 : side == ((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z)).front ? 1 : 2;
 		return Blocks.machineIcons[blockAccess.getBlockMetadata(x, y, z)][type];
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
-    public Icon getBlockTextureFromSideAndMetadata(int side, int metadata) {
-        return Blocks.machineIcons[metadata][side <= Consts.BOTTOM ? 0 : side == Consts.SOUTH ? 1 : 2];
-    }
+	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata) {
+		return Blocks.machineIcons[metadata][side <= Consts.BOTTOM ? 0 : side == Consts.SOUTH ? 1 : 2];
+	}
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
@@ -110,7 +108,7 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	public void openGui(World world, EntityPlayer player, TileEntityMachine tem, boolean fromComputer) {
-		if(!fromComputer && FMLCommonHandler.instance().getEffectiveSide().isClient())
+		if(!fromComputer && Funcs.isClient())
 			TEHelper.controllers.remove(player.username);
 		if(tem instanceof TileEntityComputer) {
 			TEHelper.controllers.put(player.username, new Point(tem.xCoord, tem.yCoord, tem.zCoord));
@@ -124,7 +122,7 @@ public class BlockMachine extends BlockContainer {
 			player.openGui(InfiniteAlloys.instance, 3, world, tem.xCoord, tem.yCoord, tem.zCoord);
 		else if(tem instanceof TileEntityXray)
 			player.openGui(InfiniteAlloys.instance, 4, world, tem.xCoord, tem.yCoord, tem.zCoord);
-		if(FMLCommonHandler.instance().getEffectiveSide().isServer()) {
+		if(Funcs.isServer()) {
 			tem.playersUsing.add(player.username);
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEPacketToClient(tem), (Player)player);
 		}
@@ -170,7 +168,6 @@ public class BlockMachine extends BlockContainer {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityliving, ItemStack itemstack) {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
-			// TODO: Check this, and fix it if the directions are derped
 			tem.front = Funcs.yawToNumSide(MathHelper.floor_float(entityliving.rotationYaw / 90F - 1.5F) & 3);
 			world.markBlockForUpdate(x, y, z);
 		}

@@ -1,12 +1,12 @@
 package infinitealloys.inventory;
 
 import infinitealloys.tile.TileEntityMachine;
+import infinitealloys.util.Funcs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.common.FMLCommonHandler;
 
 public class ContainerMachine extends Container {
 
@@ -64,7 +64,7 @@ public class ContainerMachine extends Container {
 	@Override
 	public void onCraftGuiClosed(EntityPlayer player) {
 		super.onCraftGuiClosed(player);
-		if(FMLCommonHandler.instance().getEffectiveSide().isServer())
+		if(Funcs.isServer())
 			inventory.playersUsing.remove(player.username);
 	}
 

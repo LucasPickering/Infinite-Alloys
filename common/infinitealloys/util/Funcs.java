@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class Funcs {
@@ -75,10 +76,10 @@ public class Funcs {
 				return -1;
 		}
 	}
-	
+
 	/** Convert an entity's yaw to a Vanilla MC block face int */
 	public static int yawToNumSide(int rotation) {
-		switch(rotation){
+		switch(rotation) {
 			case 0:
 				return Consts.SOUTH;
 			case 1:
@@ -90,5 +91,19 @@ public class Funcs {
 			default:
 				return -1;
 		}
+	}
+
+	/** See if the running side is client
+	 * 
+	 * @return true if the running side is client */
+	public static boolean isClient() {
+		return FMLCommonHandler.instance().getEffectiveSide().isClient();
+	}
+
+	/** See if the running side is server
+	 * 
+	 * @return true if the running side is server */
+	public static boolean isServer() {
+		return FMLCommonHandler.instance().getEffectiveSide().isClient();
 	}
 }

@@ -3,8 +3,8 @@ package infinitealloys.handlers;
 import infinitealloys.block.Blocks;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.WorldData;
-import infinitealloys.util.Funcs;
 import infinitealloys.util.Consts;
+import infinitealloys.util.Funcs;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onWorldLoad(Load event) {
-		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
+		if(Funcs.isClient())
 			return;
 		world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(0).getChunkSaveLocation().getPath();
 		ObjectInputStream ois = null;
@@ -77,7 +77,7 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onWorldUnload(Unload event) {
-		if(InfiniteAlloys.instance.worldData == null || FMLCommonHandler.instance().getEffectiveSide().isClient())
+		if(InfiniteAlloys.instance.worldData == null || Funcs.isClient())
 			return;
 		ObjectOutputStream oos = null;
 		try {
@@ -102,7 +102,7 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onEntityJoinWorld(EntityJoinWorldEvent e) {
-		if(FMLCommonHandler.instance().getEffectiveSide().isClient() || !(e.entity instanceof EntityPlayer))
+		if(Funcs.isClient() || !(e.entity instanceof EntityPlayer))
 			return;
 		PacketDispatcher.sendPacketToPlayer(PacketHandler.getWorldDataPacket(), (Player)e.entity);
 	}

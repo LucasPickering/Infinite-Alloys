@@ -242,14 +242,13 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glTranslated(-RenderManager.renderPosX, 1 - RenderManager.renderPosY, -RenderManager.renderPosZ);
+		GL11.glTranslated(-RenderManager.renderPosX, -RenderManager.renderPosY, 1 - RenderManager.renderPosZ);
 		GL11.glColor3f(255, 0, 0);
 		Tessellator tess = Tessellator.instance;
 		Tessellator.renderingWorldRenderer = false;
 
 		Point last = new Point(0, 0, 0);
 		for(Point block : xrayBlocks) {
-			GL11.glScalef(1.0F, -1.0F, -1.0F);
 			GL11.glTranslatef(block.x - last.x, block.y - last.y, block.z - last.z);
 			renderOutlineBox(tess);
 			last.set(block);
