@@ -249,11 +249,8 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 		Point last = new Point(0, 0, 0);
 		for(Point block : xrayBlocks) {
-			if(last.equals(0, 0, 0))
-				GL11.glTranslated(block.x - last.x, block.y - last.y, block.z - last.z);
-			else
-				GL11.glTranslated(block.x - last.x, -(block.y - last.y), block.z - last.z);
 			GL11.glScalef(1.0F, -1.0F, -1.0F);
+			GL11.glTranslatef(block.x - last.x, block.y - last.y, block.z - last.z);
 			renderOutlineBox(tess);
 			last.set(block);
 		}
@@ -268,7 +265,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 	private void renderOutlineBox(Tessellator tess) {
 		tess.startDrawing(GL11.GL_LINES);
 
-		// FRONT
+		// Front
 		tess.addVertex(0, 0, 0);
 		tess.addVertex(0, 1, 0);
 
@@ -281,17 +278,20 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		tess.addVertex(1, 0, 0);
 		tess.addVertex(0, 0, 0);
 
-		// BACK
+		// Back
 		tess.addVertex(0, 0, -1);
 		tess.addVertex(0, 1, -1);
+
 		tess.addVertex(0, 0, -1);
 		tess.addVertex(1, 0, -1);
+
 		tess.addVertex(1, 0, -1);
 		tess.addVertex(1, 1, -1);
+
 		tess.addVertex(0, 1, -1);
 		tess.addVertex(1, 1, -1);
 
-		// betweens.
+		// Betweens
 		tess.addVertex(0, 0, 0);
 		tess.addVertex(0, 0, -1);
 
