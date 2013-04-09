@@ -1,12 +1,11 @@
 package infinitealloys.tile;
 
 import infinitealloys.handlers.PacketHandler;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
-import infinitealloys.util.Consts;
 import java.util.ArrayList;
 import java.util.HashMap;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -79,7 +78,7 @@ public class TileEntityXray extends TileEntityMachine {
 						for(int j = z == 0 ? 1 : 0; j < 2; j++) {
 							int xRel = i == 0 ? x : -x;
 							int zRel = j == 0 ? z : -z;
-							if(worldObj.getBlockId(xCoord + xRel, yCoord + y, zCoord + zRel) == targetID && worldObj.getBlockMetadata(xCoord + xRel, yCoord + y, zCoord + zRel) == targetMetadata)
+							if(Funcs.blocksEqual(worldObj, targetID, targetMetadata, xCoord + xRel, yCoord + y, zCoord + zRel))
 								detectedBlocks.add(new Point(xRel, yCoord + y, zRel));
 							if(++blocksSearched >= TEHelper.SEARCH_PER_TICK) {
 								lastSearch.set(xRel, y, zRel);

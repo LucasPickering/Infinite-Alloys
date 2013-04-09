@@ -79,8 +79,10 @@ public class PacketHandler implements IPacketHandler {
 						TileEntityXray tex = (TileEntityXray)te;
 						tex.clearDetectedBlocks();
 						short size = data.readShort();
-						for(int i = 0; i < size; i++)
+						for(int i = 0; i < size; i++) {
+							System.out.println("Reading " + new Point(data.readInt(), data.readShort(), data.readInt()));
 							tex.addDetectedBlock(new Point(data.readInt(), data.readShort(), data.readInt()));
+						}
 					}
 				}
 				break;
@@ -173,12 +175,12 @@ public class PacketHandler implements IPacketHandler {
 					dos.writeByte(amt);
 			else if(tem instanceof TileEntityXray) {
 				ArrayList<Point> points = ((TileEntityXray)tem).getDetectedBlocks();
-				short size = (short)points.size();
-				dos.writeShort(size);
-				for(int i = 0; i < size; i++) {
-					dos.writeInt(points.get(i).x);
-					dos.writeShort((short)points.get(i).y);
-					dos.writeInt(points.get(i).z);
+				dos.writeShort(points.size());
+				for(Point p : points) {
+					System.out.println("Writing " + p);
+					dos.writeInt(p.x);
+					dos.writeShort((short)p.y);
+					dos.writeInt(p.z);
 				}
 			}
 		}

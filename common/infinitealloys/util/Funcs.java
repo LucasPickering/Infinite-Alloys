@@ -106,4 +106,11 @@ public class Funcs {
 	public static boolean isServer() {
 		return FMLCommonHandler.instance().getEffectiveSide().isClient();
 	}
+
+	/** Check if the block at x, y, z is of a certain type
+	 * 
+	 * @return true if block at x, y, z is equals id and metadata */
+	public static boolean blocksEqual(World world, int id, int metadata, int x, int y, int z) {
+		return world.getBlockId(x, y, z) == id && world.getBlockMetadata(x, y, z) == metadata;
+	}
 }
