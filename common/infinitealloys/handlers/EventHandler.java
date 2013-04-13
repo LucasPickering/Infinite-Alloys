@@ -20,6 +20,7 @@ import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ICraftingHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
@@ -54,7 +55,8 @@ public class EventHandler implements ICraftingHandler {
 					for(int digit : alloyDigits)
 						alloy = alloy + digit;
 					validAlloys[i] = new Integer(alloy);
-					System.out.println("SPOILER ALERT! Alloy " + i + ": " + validAlloys[i]);
+					if(Loader.isModLoaded("mcp"))
+						System.out.println("SPOILER ALERT! Alloy " + i + ": " + validAlloys[i]);
 				}
 				InfiniteAlloys.instance.worldData = new WorldData(validAlloys);
 				System.out.println("Successfully generated IA alloys");

@@ -77,8 +77,8 @@ public class GuiXray extends GuiMachine {
 					levels.add(block.y);
 			blockButtons = new GuiBlockButton[levels.size()];
 			for(int i = 0; i < blockButtons.length; i++)
-				blockButtons[i] = new GuiBlockButton(mc, itemRenderer, i / 5 * 40 + 7, i % 5 * 20 + 50, tex.inventoryStacks[0].itemID,
-						blockCounts[levels.get(i)], tex.inventoryStacks[0].getItemDamage(), levels.get(i));
+				blockButtons[i] = new GuiBlockButton(mc, itemRenderer, i / 5 * 40 + 7, i % 5 * 20 + 50, tex.inventoryStacks[0].itemID, blockCounts[levels.get(i)],
+						tex.inventoryStacks[0].getItemDamage(), levels.get(i));
 			if(tex.selectedButton != -1)
 				blockButtons[tex.selectedButton].activated = true;
 		}

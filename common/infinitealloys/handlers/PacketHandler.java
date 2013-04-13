@@ -174,9 +174,8 @@ public class PacketHandler implements IPacketHandler {
 				for(byte amt : ((TileEntityMetalForge)tem).recipeAmts)
 					dos.writeByte(amt);
 			else if(tem instanceof TileEntityXray) {
-				ArrayList<Point> points = ((TileEntityXray)tem).getDetectedBlocks();
-				dos.writeShort(points.size());
-				for(Point p : points) {
+				dos.writeShort(((TileEntityXray)tem).getDetectedBlocks().size());
+				for(Point p : ((TileEntityXray)tem).getDetectedBlocks()) {
 					System.out.println("Writing " + p);
 					dos.writeInt(p.x);
 					dos.writeShort((short)p.y);
