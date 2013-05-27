@@ -4,8 +4,8 @@ public class Consts {
 
 	public static final String TEXTURE_PATH = "/mods/infinitealloys/textures/";
 	public static final String TEXTURE_PREFIX = "infinitealloys:";
-	public static final String LANG_PATH = "lang/";
-	public static final String[] langFiles = { LANG_PATH + "en_US.xml" };
+	public static final String LANG_PATH = "/mods/infinitealloys/lang/";
+	public static final String[] langFiles = { "en_US.xml" };
 
 	public static final int MULTI_ITEM_COUNT = 2;
 	public static final int METAL_COUNT = 8;

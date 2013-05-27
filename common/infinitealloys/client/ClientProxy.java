@@ -14,8 +14,8 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void initLocalization() {
-		for(String langFile : Consts.langFiles)
-			LanguageRegistry.instance().loadLocalization(getClass().getResource(langFile), langFile.substring(langFile.lastIndexOf('/') + 1, langFile.lastIndexOf('.')), true);
+		for(String file : Consts.langFiles)
+			LanguageRegistry.instance().loadLocalization(Consts.LANG_PATH + file, file.substring(file.lastIndexOf('/') + 1, file.lastIndexOf('.')), true);
 	}
 
 	@Override
