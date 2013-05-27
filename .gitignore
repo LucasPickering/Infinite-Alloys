@@ -72,6 +72,8 @@ pip-log.txt
 /alex/*
 !/resources
 !/common
+CHANGELOG
+LICENSE.txt
 
 *.bat
 *.sh
