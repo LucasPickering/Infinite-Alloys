@@ -57,7 +57,6 @@ public class TileEntityXray extends TileEntityMachine {
 		else if(!lastSearch.equals(0, 0, 0))
 			search();
 		if(searching && ++processProgress >= ticksToProcess) {
-			System.out.println("Finished");
 			processProgress = 0;
 			searching = false;
 			PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(this));
@@ -70,10 +69,8 @@ public class TileEntityXray extends TileEntityMachine {
 		int targetID = inventoryStacks[0].itemID;
 		int targetMetadata = inventoryStacks[0].getItemDamage();
 		int blocksSearched = 0;
-		if(lastSearch.equals(0, 0, 0)) {
-			System.out.println("Clearing");
+		if(lastSearch.equals(0, 0, 0))
 			detectedBlocks.clear();
-		}
 		for(int y = lastSearch.y; y >= -yCoord; y--) {
 			for(int x = Math.abs(lastSearch.x); x <= range; x++) {
 				for(int z = Math.abs(lastSearch.z); z <= range; z++) {
@@ -81,10 +78,8 @@ public class TileEntityXray extends TileEntityMachine {
 						for(int j = z == 0 ? 1 : 0; j < 2; j++) {
 							int xRel = i == 0 ? x : -x;
 							int zRel = j == 0 ? z : -z;
-							if(Funcs.blocksEqual(worldObj, targetID, targetMetadata, xCoord + xRel, yCoord + y, zCoord + zRel)) {
-								System.out.println("Adding");
+							if(Funcs.blocksEqual(worldObj, targetID, targetMetadata, xCoord + xRel, yCoord + y, zCoord + zRel))
 								detectedBlocks.add(new Point(xRel, yCoord + y, zRel));
-							}
 							if(++blocksSearched >= TEHelper.SEARCH_PER_TICK) {
 								lastSearch.set(xRel, y, zRel);
 								return;

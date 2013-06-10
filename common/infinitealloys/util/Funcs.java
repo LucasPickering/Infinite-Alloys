@@ -103,7 +103,7 @@ public class Funcs {
 	 * 
 	 * @return true if the running side is server */
 	public static boolean isServer() {
-		return FMLCommonHandler.instance().getEffectiveSide().isClient();
+		return FMLCommonHandler.instance().getEffectiveSide().isServer();
 	}
 
 	/** Check if the block at x, y, z is of a certain type

@@ -79,7 +79,6 @@ public class PacketHandler implements IPacketHandler {
 						tex.clearDetectedBlocks();
 						short size = data.readShort();
 						for(int i = 0; i < size; i++) {
-							System.out.println("Reading " + new Point(data.readInt(), data.readShort(), data.readInt()));
 							tex.addDetectedBlock(new Point(data.readInt(), data.readShort(), data.readInt()));
 						}
 					}
@@ -175,7 +174,6 @@ public class PacketHandler implements IPacketHandler {
 			else if(tem instanceof TileEntityXray) {
 				dos.writeShort(((TileEntityXray)tem).getDetectedBlocks().size());
 				for(Point p : ((TileEntityXray)tem).getDetectedBlocks()) {
-					System.out.println("Writing " + p);
 					dos.writeInt(p.x);
 					dos.writeShort((short)p.y);
 					dos.writeInt(p.z);
