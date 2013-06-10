@@ -33,7 +33,7 @@ public class Consts {
 	public static int[] metalColors = new int[METAL_COUNT];
 
 	/** The names of each metal that can be used to make alloys */
-	public static final String[] METAL_NAMES = { "zinc", "magnesium", "scandium", "tantalum", "roguite", "verdite", "aquatilum", "swagtanium" };
+	public static final String[] METAL_NAMES = { "zinc", "magnesium", "scandium", "tantalum", "roguite", "verdite", "hydronium", "swagtanium" };
 
 	/** The names of each machine */
 	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray" };
