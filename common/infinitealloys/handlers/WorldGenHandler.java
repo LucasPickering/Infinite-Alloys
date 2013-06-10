@@ -16,6 +16,7 @@ public class WorldGenHandler implements IWorldGenerator {
 	private final int[] rarities = { 8, 7, 6, 5, 4, 3, 2, 1 };
 	private final int[] groupSizes = { 10, 9, 8, 7, 6, 5, 4, 3 };
 
+	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
 			if(!InfiniteAlloys.spawnOres[i] || random.nextInt(spawnChance[i]) == 0)

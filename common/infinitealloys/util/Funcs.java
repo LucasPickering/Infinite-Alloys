@@ -1,7 +1,6 @@
 package infinitealloys.util;
 
 import net.minecraft.block.Block;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.common.FMLCommonHandler;

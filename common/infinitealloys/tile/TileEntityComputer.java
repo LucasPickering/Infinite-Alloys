@@ -5,11 +5,9 @@ import infinitealloys.block.Blocks;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityComputer extends TileEntityMachine {
 

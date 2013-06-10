@@ -1,12 +1,10 @@
 package infinitealloys.tile;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
 import java.util.Arrays;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityAnalyzer extends TileEntityMachine {
 
@@ -89,6 +87,7 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 		return 0;
 	}
 
+	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.SPEED2))
 			ticksToProcess = 1800;

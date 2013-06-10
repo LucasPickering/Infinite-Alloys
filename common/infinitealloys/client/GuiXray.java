@@ -6,9 +6,9 @@ import infinitealloys.inventory.ContainerXray;
 import infinitealloys.tile.TileEntityXray;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiXray extends GuiMachine {
 
@@ -72,7 +72,7 @@ public class GuiXray extends GuiMachine {
 		if(tex.inventoryStacks[0] != null) {
 			int[] blockCounts = new int[tem.yCoord];
 			ArrayList<Integer> levels = new ArrayList<Integer>();
-			for(Point block : (ArrayList<Point>)tex.getDetectedBlocks())
+			for(Point block : tex.getDetectedBlocks())
 				if(blockCounts[block.y]++ == 0)
 					levels.add(block.y);
 			blockButtons = new GuiBlockButton[levels.size()];

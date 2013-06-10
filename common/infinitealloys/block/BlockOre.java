@@ -40,6 +40,6 @@ public class BlockOre extends BlockIA {
 
 	@Override
 	public int getRenderType() {
-		return InfiniteAlloys.instance.proxy.gfxHandler.renderID;
+		return InfiniteAlloys.proxy.gfxHandler.renderID;
 	}
 }

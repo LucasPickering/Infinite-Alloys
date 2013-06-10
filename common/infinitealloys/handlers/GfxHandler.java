@@ -1,6 +1,5 @@
 package infinitealloys.handlers;
 
-import java.util.ArrayList;
 import infinitealloys.client.GuiAnalyzer;
 import infinitealloys.client.GuiComputer;
 import infinitealloys.client.GuiMetalForge;
@@ -17,8 +16,9 @@ import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
-import infinitealloys.util.Point;
 import infinitealloys.util.Consts;
+import infinitealloys.util.Point;
+import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
@@ -118,7 +118,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		// Draw ore pieces on top of stone background
 		if(metadata < Consts.METAL_COUNT) {
 			int mult = Consts.metalColors[metadata];
-			GL11.glColor4f((float)(mult >> 16 & 255) / 255F, (float)(mult >> 8 & 255) / 255F, (float)(mult & 255) / 255F, 1F);
+			GL11.glColor4f((mult >> 16 & 255) / 255F, (mult >> 8 & 255) / 255F, (mult & 255) / 255F, 1F);
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, -1F, 0F);
@@ -157,45 +157,45 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		Tessellator tessellator = Tessellator.instance;
 		int color = Consts.metalColors[world.getBlockMetadata(x, y, z)];
-		float red = (float)(color >> 16 & 255) / 255F;
-		float green = (float)(color >> 8 & 255) / 255F;
-		float blue = (float)(color & 255) / 255F;
+		float red = (color >> 16 & 255) / 255F;
+		float green = (color >> 8 & 255) / 255F;
+		float blue = (color & 255) / 255F;
 		boolean rendered = renderer.renderStandardBlock(block, x, y, z);
 		int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y - 1, z, 0)) {
 			tessellator.setBrightness(renderer.renderMinY > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y - 1, z));
 			tessellator.setColorOpaque_F(red * 0.5F, green * 0.5F, blue * 0.5F);
-			renderer.renderFaceYNeg(block, (double)x, (double)y, (double)z, block.getIcon(0, 0));
+			renderer.renderFaceYNeg(block, x, y, z, block.getIcon(0, 0));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y + 1, z, 1)) {
 			tessellator.setBrightness(renderer.renderMaxY < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y + 1, z));
 			tessellator.setColorOpaque_F(red, green, blue);
-			renderer.renderFaceYPos(block, (double)x, (double)y, (double)z, block.getIcon(1, 0));
+			renderer.renderFaceYPos(block, x, y, z, block.getIcon(1, 0));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x + 1, y, z, 2)) {
 			tessellator.setBrightness(renderer.renderMinZ > 0D ? brightness : block.getMixedBrightnessForBlock(world, x + 1, y, z));
 			tessellator.setColorOpaque_F(red * 0.6F, green * 0.6F, blue * 0.6F);
-			renderer.renderFaceXPos(block, (double)x, (double)y, (double)z, block.getIcon(2, 0));
+			renderer.renderFaceXPos(block, x, y, z, block.getIcon(2, 0));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x - 1, y, z, 3)) {
 			tessellator.setBrightness(renderer.renderMaxZ < 1D ? brightness : block.getMixedBrightnessForBlock(world, x - 1, y, z));
 			tessellator.setColorOpaque_F(red * 0.6F, green * 0.6F, blue * 0.6F);
-			renderer.renderFaceXNeg(block, (double)x, (double)y, (double)z, block.getIcon(3, 0));
+			renderer.renderFaceXNeg(block, x, y, z, block.getIcon(3, 0));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z - 1, 4)) {
 			tessellator.setBrightness(renderer.renderMinX > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z - 1));
 			tessellator.setColorOpaque_F(red * 0.8F, green * 0.8F, blue * 0.8F);
-			renderer.renderFaceZNeg(block, (double)x, (double)y, (double)z, block.getIcon(4, 0));
+			renderer.renderFaceZNeg(block, x, y, z, block.getIcon(4, 0));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z + 1, 5)) {
 			tessellator.setBrightness(renderer.renderMaxX < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z + 1));
 			tessellator.setColorOpaque_F(red * 0.8F, green * 0.8F, blue * 0.8F);
-			renderer.renderFaceZPos(block, (double)x, (double)y, (double)z, block.getIcon(5, 0));
+			renderer.renderFaceZPos(block, x, y, z, block.getIcon(5, 0));
 			rendered = true;
 		}
 		return rendered;

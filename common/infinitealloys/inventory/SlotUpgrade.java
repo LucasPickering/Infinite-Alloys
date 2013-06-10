@@ -10,6 +10,7 @@ public class SlotUpgrade extends Slot {
 		super(tem, index, x, y);
 	}
 
+	@Override
 	public int getSlotStackLimit() {
 		return 1;
 	}

@@ -113,7 +113,7 @@ public class EventHandler implements ICraftingHandler {
 	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
 		if(item.itemID == Blocks.machine.blockID && item.getItemDamage() == 1) {
 			System.out.println("Adding stat");
-			player.addStat(InfiniteAlloys.instance.achievements[0], 1);
+			player.addStat(InfiniteAlloys.achievements[0], 1);
 		}
 	}
 

@@ -1,7 +1,6 @@
 package infinitealloys.inventory;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.item.Items;
 import infinitealloys.tile.TEHelper;
 import infinitealloys.util.Consts;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +26,6 @@ public class SlotAnalyzer extends Slot {
 	public void onPickupFromSlot(EntityPlayer player, ItemStack stack) {
 		int damage = stack.getItemDamage();
 		if(slotIndex == 1 && damage > 0 && damage <= Consts.VALID_ALLOY_COUNT)
-			player.addStat(InfiniteAlloys.instance.achievements[damage], 1);
+			player.addStat(InfiniteAlloys.achievements[damage], 1);
 	}
 }

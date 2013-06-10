@@ -1,8 +1,6 @@
 package infinitealloys.tile;
 
-import infinitealloys.util.Consts;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ForgeDirection;
 
 public class TileEntityPrinter extends TileEntityMachine {
 

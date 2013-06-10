@@ -1,14 +1,13 @@
 package infinitealloys.item;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.util.Funcs;
 import infinitealloys.util.Consts;
+import infinitealloys.util.Funcs;
 import java.util.List;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

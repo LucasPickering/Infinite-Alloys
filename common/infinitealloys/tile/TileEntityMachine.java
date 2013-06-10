@@ -203,7 +203,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	@SideOnly(Side.CLIENT)
 	public int getJoulesScaled(int scale) {
 		if(maxJoules > 0)
-			return (int)(joules * scale / maxJoules);
+			return joules * scale / maxJoules;
 		return -1;
 	}
 
@@ -252,6 +252,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		return slot == upgradeSlotIndex && isUpgradeValid(itemstack);
 	}
 
+	@Override
 	public boolean isInvNameLocalized() {
 		return false;
 	}
