@@ -17,8 +17,8 @@ public class ItemIngot extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void updateIcons(IconRegister iconRegister) {
-		iconIndex = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "ingot");
+	public void registerIcons(IconRegister iconRegister) {
+		itemIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "ingot");
 	}
 
 	@Override

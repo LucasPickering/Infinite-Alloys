@@ -24,8 +24,8 @@ public class ItemAlloyBook extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void updateIcons(IconRegister iconRegister) {
-		iconIndex = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "alloybook");
+	public void registerIcons(IconRegister iconRegister) {
+		itemIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "alloybook");
 	}
 	
 	@Override

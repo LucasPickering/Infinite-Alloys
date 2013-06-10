@@ -57,7 +57,7 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata) {
+	public Icon getIcon(int side, int metadata) {
 		return Blocks.machineIcons[metadata][side <= Consts.BOTTOM ? 0 : side == Consts.SOUTH ? 1 : 2];
 	}
 

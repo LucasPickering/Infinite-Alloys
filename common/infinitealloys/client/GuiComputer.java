@@ -40,9 +40,9 @@ public class GuiComputer extends GuiMachine {
 		zInput.drawTextBox();
 		boolean full = machineTabs.size() < tec.networkCapacity;
 		addMachine.enabled = full;
-		xInput.func_82265_c(full);
-		yInput.func_82265_c(full);
-		zInput.func_82265_c(full);
+		xInput.setEnabled(full);
+		yInput.setEnabled(full);
+		zInput.setEnabled(full);
 	}
 
 	@Override

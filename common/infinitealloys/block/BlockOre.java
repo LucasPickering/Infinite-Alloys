@@ -31,11 +31,11 @@ public class BlockOre extends BlockIA {
 	}
 
 	@Override
-	public Icon getBlockTextureFromSideAndMetadata(int side, int metadata) {
-		// Not actually used as metadata, see GfxHandler for ISBRH code
+	public Icon getIcon(int side, int metadata) {
+		// Not actually used as metadata, called from GfxHandler with a 0 or 1
 		if(metadata == 0)
-			return Blocks.oreBackgroundIcon;
-		return Blocks.oreForegroundIcon;
+			return Blocks.oreForegroundIcon;
+		return Blocks.oreBackgroundIcon;
 	}
 
 	@Override
