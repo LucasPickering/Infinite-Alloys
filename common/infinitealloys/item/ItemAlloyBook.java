@@ -25,12 +25,12 @@ public class ItemAlloyBook extends ItemIA {
 	public void registerIcons(IconRegister iconRegister) {
 		itemIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "alloybook");
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
 		NBTTagCompound tagCompound = itemstack.getTagCompound();
-		if(tagCompound != null)// && tagCompound.hasKey("title"))
+		if(tagCompound != null) // && tagCompound.hasKey("title"))
 			for(int alloy : tagCompound.getIntArray("alloys"))
 				list.add(Integer.toString(alloy));
 	}

@@ -72,6 +72,7 @@ public class TileEntityXray extends TileEntityMachine {
 			clearDetectedBlocks();
 			selectedButtons.clear();
 			shouldSearch = false;
+			searchingClient = false;
 		}
 		else if(shouldSearch)
 			search();
@@ -92,15 +93,15 @@ public class TileEntityXray extends TileEntityMachine {
 		int blocksSearched = 0;
 		if(lastSearch.equals(0, 0, 0))
 			clearDetectedBlocks();
-		for(int y = lastSearch.y; y >= -yCoord; y--) {
+		for(int y = lastSearch.y; y <= yCoord; y++) {
 			for(int x = Math.abs(lastSearch.x); x <= range; x++) {
 				for(int z = Math.abs(lastSearch.z); z <= range; z++) {
 					for(int i = x == 0 ? 1 : 0; i < 2; i++) {
 						for(int j = z == 0 ? 1 : 0; j < 2; j++) {
 							int xRel = i == 0 ? x : -x;
 							int zRel = j == 0 ? z : -z;
-							if(Funcs.blocksEqual(worldObj, targetID, targetMetadata, xCoord + xRel, yCoord + y, zCoord + zRel))
-								addDetectedBlock(new Point(xRel, yCoord + y, zRel));
+							if(Funcs.blocksEqual(worldObj, targetID, targetMetadata, xCoord + xRel, y, zCoord + zRel))
+								addDetectedBlock(new Point(xRel, y, zRel));
 							if(++blocksSearched >= TEHelper.SEARCH_PER_TICK) {
 								lastSearch.set(xRel, y, zRel);
 								return;

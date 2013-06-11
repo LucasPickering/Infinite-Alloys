@@ -5,15 +5,22 @@ import infinitealloys.handlers.PacketHandler;
 import infinitealloys.inventory.ContainerXray;
 import infinitealloys.tile.TileEntityXray;
 import infinitealloys.util.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
+import org.lwjgl.input.Mouse;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiXray extends GuiMachine {
 
 	private TileEntityXray tex;
 
+	/** The scroll bar (width is for the scrolling block) */
+	private final Rectangle SCROLL_BAR = new Rectangle(172, 49, 12, 96);
+
+	/** The number of the first displayed line of blocks. Min is 0, max is num of rows - number on screen (5) */
+	private int scrollPos = 0;
 	private GuiBlockButton[] blockButtons = new GuiBlockButton[0];
 	private GuiButton searchButton;
 
@@ -33,9 +40,14 @@ public class GuiXray extends GuiMachine {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		searchButton.enabled = tex.inventoryStacks[0] != null;
+		if(blockButtons.length <= 20)
+			drawTexturedModalRect(SCROLL_BAR.x, SCROLL_BAR.y, SCROLL_OFF.x, SCROLL_OFF.y, SCROLL_OFF.width, SCROLL_OFF.height);
+		else
+			drawTexturedModalRect(SCROLL_BAR.x, SCROLL_BAR.y + (int)((float)(SCROLL_BAR.height - 15) / (float)(blockButtons.length / 4 - 4) * scrollPos),
+					SCROLL_ON.x, SCROLL_ON.y, SCROLL_ON.width, SCROLL_ON.height);
 		setButtons();
-		for(GuiBlockButton button : blockButtons)
-			button.drawButton();
+		for(int i = scrollPos * 4; i < blockButtons.length && i < scrollPos * 4 + 20; i++)
+			blockButtons[i].drawButton();
 	}
 
 	@Override
@@ -64,7 +76,20 @@ public class GuiXray extends GuiMachine {
 					}
 				}
 			}
+			if(mouseInZone(mouseX, mouseY, topLeft.x + 172, topLeft.y + 40, 14, 8))
+				scroll(-1);
+			else if(mouseInZone(mouseX, mouseY, topLeft.x + 172, topLeft.y + 147, 14, 8))
+				scroll(1);
 		}
+	}
+
+	@Override
+	public void handleMouseInput() {
+		super.handleMouseInput();
+		int scrollAmt = Mouse.getEventDWheel();
+		// Scroll one line up or down based on the movement, if the list is long enough to need scrolling
+		if(blockButtons.length > 20)
+			scroll(scrollAmt > 0 ? -1 : scrollAmt < 0 ? 1 : 0);
 	}
 
 	public void setButtons() {
@@ -80,11 +105,17 @@ public class GuiXray extends GuiMachine {
 					levels.add(block.y);
 			blockButtons = new GuiBlockButton[levels.size()];
 			for(int i = 0; i < blockButtons.length; i++)
-				blockButtons[i] = new GuiBlockButton(mc, itemRenderer, i / 5 * 40 + 7, i % 5 * 20 + 50, tex.inventoryStacks[0].itemID, blockCounts[levels.get(i)],
+				blockButtons[i] = new GuiBlockButton(mc, itemRenderer, i % 4 * 40 + 9, (i / 4 - scrollPos) * 20 + 50, tex.inventoryStacks[0].itemID, blockCounts[levels.get(i)],
 						tex.inventoryStacks[0].getItemDamage(), levels.get(i));
 			if(tex.selectedButton != -1)
 				blockButtons[tex.selectedButton].activated = true;
 		}
+	}
+
+	/** Scroll the block list the specified amount of lines. Positive is down, negative is up. */
+	private void scroll(int lines) {
+		if(lines > 0 && scrollPos < blockButtons.length / 4 - 4 || lines < 0 && scrollPos > 0)
+			scrollPos += lines;
 	}
 
 	@Override

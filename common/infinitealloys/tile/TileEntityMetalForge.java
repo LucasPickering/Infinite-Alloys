@@ -62,6 +62,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	/** Return the resulting ingot for the smelted ingots
+	 * 
 	 * @return The resulting ingot. */
 	private ItemStack getIngotResult() {
 		int alloy = 0;
@@ -116,7 +117,8 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
 		if(sufficientIngots.contains(false))
 			processProgress = 0;
-		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick && (inventoryStacks[2] == null || inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1);
+		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick
+				&& (inventoryStacks[2] == null || inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1);
 	}
 
 	@Override

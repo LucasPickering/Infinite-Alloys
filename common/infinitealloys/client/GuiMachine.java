@@ -23,13 +23,15 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 
 public abstract class GuiMachine extends GuiContainer {
 
+	// The position for each item in the texture sheet extras.png
 	public static final Rectangle ENERGY_METER = new Rectangle(0, 0, 10, 32);
 	public static final Rectangle TAB_LEFT_OFF = new Rectangle(10, 0, 24, 24);
 	public static final Rectangle TAB_LEFT_ON = new Rectangle(34, 0, 28, 24);
 	public static final Rectangle TAB_RIGHT_OFF = new Rectangle(62, 0, 29, 24);
 	public static final Rectangle TAB_RIGHT_ON = new Rectangle(91, 0, 28, 24);
 	public static final Rectangle PROGRESS_BAR = new Rectangle(119, 0, 108, 18);
-	public static final Rectangle XRAY_GRID = new Rectangle(227, 0, 16, 16);
+	public static final Rectangle SCROLL_ON = new Rectangle(227, 0, 12, 15);
+	public static final Rectangle SCROLL_OFF = new Rectangle(239, 0, 12, 15);
 	public static final Rectangle UP_ARROW = new Rectangle(10, 24, 16, 16);
 	public static final Rectangle DOWN_ARROW = new Rectangle(26, 24, 16, 16);
 	public static final Rectangle CHECK = new Rectangle(42, 24, 16, 16);
@@ -37,9 +39,11 @@ public abstract class GuiMachine extends GuiContainer {
 	public static final Rectangle BLOCK_BG_ON = new Rectangle(94, 24, 36, 18);
 
 	private String texture;
+
 	protected java.awt.Point topLeft = new java.awt.Point();
 	protected java.awt.Point energyMeter = new java.awt.Point();
 	protected java.awt.Point progressBar = new java.awt.Point();
+
 	protected TileEntityMachine tem;
 	protected infinitealloys.util.Point controllingComputer = new infinitealloys.util.Point();
 	protected GuiMachineTab controllerTab;

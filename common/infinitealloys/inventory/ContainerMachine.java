@@ -82,7 +82,8 @@ public class ContainerMachine extends Container {
 				slot = (Slot)inventorySlots.get(currentSlot);
 				maxStackSize = Math.min(itemstack.getMaxStackSize(), slot.getSlotStackLimit());
 				stackInSlot = slot.getStack();
-				if(stackInSlot != null && stackInSlot.itemID == itemstack.itemID && (!itemstack.getHasSubtypes() || itemstack.getItemDamage() == stackInSlot.getItemDamage()) && ItemStack.areItemStackTagsEqual(itemstack, stackInSlot)) {
+				if(stackInSlot != null && stackInSlot.itemID == itemstack.itemID && (!itemstack.getHasSubtypes() || itemstack.getItemDamage() == stackInSlot.getItemDamage())
+						&& ItemStack.areItemStackTagsEqual(itemstack, stackInSlot)) {
 					int var9 = stackInSlot.stackSize + itemstack.stackSize;
 					if(var9 <= maxStackSize) {
 						itemstack.stackSize = 0;
