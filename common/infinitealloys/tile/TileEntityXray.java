@@ -1,12 +1,11 @@
 package infinitealloys.tile;
 
-import infinitealloys.handlers.PacketHandler;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.common.network.PacketDispatcher;
+import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -24,8 +23,11 @@ public class TileEntityXray extends TileEntityMachine {
 	/** The selected button on the gui for each player */
 	public HashMap<String, Short> selectedButtons = new HashMap<String, Short>();
 
+	/** Should searching continue, or is it complete. Set this to true to begin a search. */
+	public boolean shouldSearch;
+
 	/** Is it searching client-side. Does not necessarily mean the x-ray is running a search, only that the user sees a loading progress bar */
-	public boolean searching;
+	public boolean searchingClient;
 
 	public TileEntityXray(int facing) {
 		this();
@@ -50,27 +52,46 @@ public class TileEntityXray extends TileEntityMachine {
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		if(inventoryStacks[0] == null)
-			selectedButtons.clear();
-		else if(!lastSearch.equals(0, 0, 0))
-			search();
-		if(searching && ++processProgress >= ticksToProcess) {
-			processProgress = 0;
-			searching = false;
-			PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(this));
-		}
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		// True if there were blocks before to be restored, false if it was empty
+		shouldSearch = tagCompound.getBoolean("ShouldSearch");
 	}
 
-	public void search() {
+	@Override
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		// True if there are blocks on the GUI, false if there are no blocks
+		tagCompound.setBoolean("ShouldSearch", getDetectedBlocks().size() > 0);
+	}
+
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		if(inventoryStacks[0] == null) {
+			clearDetectedBlocks();
+			selectedButtons.clear();
+			shouldSearch = false;
+		}
+		else if(shouldSearch)
+			search();
+
+		// Finished searching client-side
+		if(searchingClient && ++processProgress >= ticksToProcess)
+			searchingClient = false;
+		if(!searchingClient)
+			processProgress = 0;
+	}
+
+	private void search() {
 		if(inventoryStacks[0] == null)
 			return;
+		searchingClient = true;
 		int targetID = inventoryStacks[0].itemID;
 		int targetMetadata = inventoryStacks[0].getItemDamage();
 		int blocksSearched = 0;
 		if(lastSearch.equals(0, 0, 0))
-			detectedBlocks.clear();
+			clearDetectedBlocks();
 		for(int y = lastSearch.y; y >= -yCoord; y--) {
 			for(int x = Math.abs(lastSearch.x); x <= range; x++) {
 				for(int z = Math.abs(lastSearch.z); z <= range; z++) {
@@ -79,7 +100,7 @@ public class TileEntityXray extends TileEntityMachine {
 							int xRel = i == 0 ? x : -x;
 							int zRel = j == 0 ? z : -z;
 							if(Funcs.blocksEqual(worldObj, targetID, targetMetadata, xCoord + xRel, yCoord + y, zCoord + zRel))
-								detectedBlocks.add(new Point(xRel, yCoord + y, zRel));
+								addDetectedBlock(new Point(xRel, yCoord + y, zRel));
 							if(++blocksSearched >= TEHelper.SEARCH_PER_TICK) {
 								lastSearch.set(xRel, y, zRel);
 								return;
@@ -92,6 +113,7 @@ public class TileEntityXray extends TileEntityMachine {
 			lastSearch.x = 0;
 		}
 		lastSearch.y = 0;
+		shouldSearch = false;
 	}
 
 	public ArrayList<Point> getDetectedBlocks() {
@@ -107,7 +129,7 @@ public class TileEntityXray extends TileEntityMachine {
 	}
 
 	public void handlePacketDataFromClient(boolean searching, String playerName, short selectedButton) {
-		this.searching = searching;
+		this.searchingClient = searching;
 		if(selectedButton != -1)
 			selectedButtons.put(playerName, selectedButton);
 		else
@@ -125,7 +147,7 @@ public class TileEntityXray extends TileEntityMachine {
 
 	@Override
 	public int getJoulesUsed() {
-		if(searching && inventoryStacks[0] != null)
+		if(searchingClient && inventoryStacks[0] != null)
 			return joulesUsedPerTick * TEHelper.getDetectableWorth(inventoryStacks[0]);
 		return 0;
 	}

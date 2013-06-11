@@ -78,9 +78,8 @@ public class PacketHandler implements IPacketHandler {
 						TileEntityXray tex = (TileEntityXray)te;
 						tex.clearDetectedBlocks();
 						short size = data.readShort();
-						for(int i = 0; i < size; i++) {
+						for(int i = 0; i < size; i++)
 							tex.addDetectedBlock(new Point(data.readInt(), data.readShort(), data.readInt()));
-						}
 					}
 				}
 				break;
@@ -138,7 +137,7 @@ public class PacketHandler implements IPacketHandler {
 				x = data.readInt();
 				y = data.readInt();
 				z = data.readInt();
-				((TileEntityXray)world.getBlockTileEntity(x, y, z)).search();
+				((TileEntityXray)world.getBlockTileEntity(x, y, z)).shouldSearch = true;
 				break;
 		}
 	}
@@ -192,7 +191,7 @@ public class PacketHandler implements IPacketHandler {
 		if(tem instanceof TileEntityMetalForge)
 			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityMetalForge)tem).recipeAmts);
 		if(tem instanceof TileEntityXray)
-			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityXray)tem).searching, ((TileEntityXray)tem).selectedButton);
+			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityXray)tem).searchingClient, ((TileEntityXray)tem).selectedButton);
 		return null;
 	}
 

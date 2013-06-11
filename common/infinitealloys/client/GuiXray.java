@@ -26,7 +26,6 @@ public class GuiXray extends GuiMachine {
 	@Override
 	public void initGui() {
 		super.initGui();
-		setButtons();
 		buttonList.add(searchButton = new GuiButton(0, width / 2 - 30, height / 2 - 92, 80, 20, "Search"));
 	}
 
@@ -69,10 +68,14 @@ public class GuiXray extends GuiMachine {
 	}
 
 	public void setButtons() {
-		if(tex.inventoryStacks[0] != null) {
+		if(tex.inventoryStacks[0] == null || tex.searchingClient)
+			blockButtons = new GuiBlockButton[0];
+		else {
 			int[] blockCounts = new int[tem.yCoord];
 			ArrayList<Integer> levels = new ArrayList<Integer>();
+			// Go through each detected block
 			for(Point block : tex.getDetectedBlocks())
+				// For each block if there hasn't been a block for that y-level yet, at that y to the list
 				if(blockCounts[block.y]++ == 0)
 					levels.add(block.y);
 			blockButtons = new GuiBlockButton[levels.size()];
@@ -89,8 +92,8 @@ public class GuiXray extends GuiMachine {
 		if(button.id == 0) {
 			tex.selectedButton = -1;
 			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
+			tex.shouldSearch = true;
 			PacketDispatcher.sendPacketToServer(PacketHandler.getPacketSearch(tex.xCoord, tex.yCoord, tex.zCoord));
-			tex.searching = true;
 		}
 	}
 }
