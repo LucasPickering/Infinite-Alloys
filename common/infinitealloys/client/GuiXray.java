@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiXray extends GuiMachine {
@@ -39,6 +40,8 @@ public class GuiXray extends GuiMachine {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		searchButton.enabled = tex.inventoryStacks[0] != null;
 		if(blockButtons.length <= 20)
 			drawTexturedModalRect(SCROLL_BAR.x, SCROLL_BAR.y, SCROLL_OFF.x, SCROLL_OFF.y, SCROLL_OFF.width, SCROLL_OFF.height);
@@ -48,6 +51,8 @@ public class GuiXray extends GuiMachine {
 		setButtons();
 		for(int i = scrollPos * 4; i < blockButtons.length && i < scrollPos * 4 + 20; i++)
 			blockButtons[i].drawButton();
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override

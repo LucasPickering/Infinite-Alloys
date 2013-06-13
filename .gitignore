@@ -66,12 +66,11 @@ pip-log.txt
 /reobf/*
 /runtime/*
 /temp/*
-/src/minecraft/*
-/src/minecraft_server/*
+/src/*
+/src/*
 /src/common/*
 /alex/*
-!/resources
-!/common
+/resources/mods/basiccomponents
 CHANGELOG
 LICENSE.txt
 

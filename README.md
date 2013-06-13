@@ -7,10 +7,10 @@ use github, visit https://help.github.com/ for help. Join the #InfiniteAlloys IR
 ### Source Setup
 1. Download the correct version of the forge source
 2. Install forge using the instructions there
-3. Download the UE source from https://github.com/calclavia/Universal-Electricity
-4. Copy ONLY the universalelectricity/core/ folder to mcp/src/minecraft
-5. Download the correct version of BCDev from http://universalelectricity.com/universalelectricity/downloads
-6. Copy the UEBC jar file to mcp/jars/mods
+3. Download the correct version of the UE source (listed below)
+4. Copy the universalelectricity folder to mcp/src/minecraft/
+5. Download the correct version of the BC source (listed below)
+6. Copy the src/basiccomponents folder to mcp/src/minecraft/ and the resources folder to mcp/
 7. Clone this repo to your mcp folder
 8. Open the mcp/eclipse folder as your workspace in eclipse
 9. Right click project folder, and click New -> Folder
@@ -21,9 +21,9 @@ use github, visit https://help.github.com/ for help. Join the #InfiniteAlloys IR
 
 ### Dependencies
 Minecraft Forge  
-Universal Electricity Basic Components  
 
 ### Versions
 MC: 1.5.2  
 Forge: #722  
-UEBC: #88  
+UE: [Commit 12271b55a6f4bb67b1a512b5a40fe5f9b2ae987e](https://github.com/calclavia/Universal-Electricity/tree/12271b55a6f4bb67b1a512b5a40fe5f9b2ae987e)  
+BC: [Commit 2a52d4415f4d45b1307900e9427bd817f48f8f4e](https://github.com/calclavia/Basic-Components/tree/2a52d4415f4d45b1307900e9427bd817f48f8f4e)
