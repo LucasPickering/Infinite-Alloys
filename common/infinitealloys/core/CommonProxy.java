@@ -30,6 +30,7 @@ import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import universalelectricity.prefab.ore.OreGenerator;
 import basiccomponents.common.BasicComponents;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -71,6 +72,8 @@ public class CommonProxy {
 		BasicComponents.requestBlock("oreTin", -1);
 		BasicComponents.requestBlock("copperWire", -1);
 		BasicComponents.requireMachines(-1);
+		OreGenerator.addOre(BasicComponents.generationOreCopper);
+		OreGenerator.addOre(BasicComponents.generationOreTin);
 	}
 
 	public void initItems() {
