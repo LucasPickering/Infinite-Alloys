@@ -48,12 +48,6 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void initRendering() {
-		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/computer.png");
-		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/metalforge.png");
-		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/analyzer.png");
-		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/printer.png");
-		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/xray.png");
-		MinecraftForgeClient.preloadTexture(Consts.TEXTURE_PATH + "gui/extras.png");
 		gfxHandler.renderID = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(gfxHandler);
 	}

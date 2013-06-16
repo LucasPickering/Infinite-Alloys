@@ -160,14 +160,14 @@ public class TileEntityXray extends TileEntityMachine {
 		else if(hasUpgrade(TEHelper.SPEED1))
 			ticksToProcess = 18000;
 		else
-			ticksToProcess = 24; // TODO: Change this back to 24000
+			ticksToProcess = 24000;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
 			joulesUsedPerTick = 1800;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
 			joulesUsedPerTick = 2700;
 		else
-			joulesUsedPerTick = 0; // TODO: Change this back to 3600
+			joulesUsedPerTick = 3600;
 
 		if(hasUpgrade(TEHelper.RANGE2))
 			range = 10;

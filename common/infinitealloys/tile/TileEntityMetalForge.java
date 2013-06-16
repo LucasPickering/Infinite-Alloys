@@ -161,9 +161,9 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			joulesUsedPerTick = 180;
 
 		if(hasUpgrade(TEHelper.CAPACITY2))
-			stackLimit = 48;
-		else if(hasUpgrade(TEHelper.CAPACITY1))
 			stackLimit = 64;
+		else if(hasUpgrade(TEHelper.CAPACITY1))
+			stackLimit = 48;
 		else
 			stackLimit = 32;
 
