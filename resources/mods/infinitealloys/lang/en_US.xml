@@ -3,13 +3,16 @@
 <properties version="1.0">
 	<comment>'Murican English Localization File</comment>
 	<entry key="itemGroup.main">Infinite Alloys</entry>
+
 	<entry key="multi.machinecomponent.name">Machine Component</entry>
 	<entry key="multi.upgradecomponent.name">Upgrade Component</entry>
+
 	<entry key="item.ingot.name"> Ingot</entry>
 	<entry key="item.alloyIngot.name">Alloy Ingot</entry>
 	<entry key="item.upgrade.name">Upgrade</entry>
 	<entry key="item.gps.name">GPS</entry>
 	<entry key="item.alloyBook.name">Alloy Journal</entry>
+
 	<entry key="metal.zinc.name">Zinc</entry>
 	<entry key="metal.magnesium.name">Magnesium</entry>
 	<entry key="metal.scandium.name">Scandium</entry>
@@ -18,6 +21,7 @@
 	<entry key="metal.verdite.name">Verdite</entry>
 	<entry key="metal.hydronium.name">Hydronium</entry>
 	<entry key="metal.swagtanium.name">Swagtanium</entry>
+
 	<entry key="upgrade.name">Upgrades</entry>
 	<entry key="upgrade.speed1.name">Speed I</entry>
 	<entry key="upgrade.speed2.name">Speed II</entry>
@@ -30,24 +34,50 @@
 	<entry key="upgrade.wireless.name">Wireless Networking</entry>
 	<entry key="upgrade.eleccapacity1.name">Energy Capacity I</entry>
 	<entry key="upgrade.eleccapacity2.name">Energy Capacity II</entry>
+
 	<entry key="tile.ore.name"> Ore</entry>
+
 	<entry key="machine.computer.name">Computer</entry>
 	<entry key="machine.metalforge.name">Metal Forge</entry>
 	<entry key="machine.analyzer.name">Analyzer</entry>
 	<entry key="machine.printer.name">Printer</entry>
 	<entry key="machine.xray.name">X-Ray</entry>
+
 	<entry key="achievement.craftMetalForge">Your First Machine</entry>
 	<entry key="achievement.craftMetalForge.desc">Craft A Metal Forge</entry>
 	<entry key="achievement.smeltAlloy1">Mixing Metals 1</entry>
-	<entry key="achievement.smeltAlloy1.desc">Create A Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy1.desc">Create A Usable Alloy</entry>
 	<entry key="achievement.smeltAlloy2">Mixing Metals 2</entry>
-	<entry key="achievement.smeltAlloy2.desc">Create A Second Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy2.desc">Create A Second Usable Alloy</entry>
 	<entry key="achievement.smeltAlloy3">Mixing Metals 3</entry>
-	<entry key="achievement.smeltAlloy3.desc">Create A Third Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy3.desc">Create A Third Usable Alloy</entry>
 	<entry key="achievement.smeltAlloy4">Mixing Metals 4</entry>
-	<entry key="achievement.smeltAlloy4.desc">Create A Fourth Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy4.desc">Create A Fourth Usable Alloy</entry>
 	<entry key="achievement.smeltAlloy5">Mixing Metals 5</entry>
-	<entry key="achievement.smeltAlloy5.desc">Create A Fifth Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy5.desc">Create A Fifth Usable Alloy</entry>
 	<entry key="achievement.smeltAlloy6">Mixing Metals 6</entry>
-	<entry key="achievement.smeltAlloy6.desc">Create A Sixth Useable Alloy</entry>
+	<entry key="achievement.smeltAlloy6.desc">Create A Sixth Usable Alloy</entry>
+
+	<entry key="machineHelp.upgrade.title">Upgrades</entry>
+	<entry key="machineHelp.upgrade.info">Place an upgrade item here/nto add it to the machine</entry>
+	<entry key="machineHelp.energy.title">Energy Meter</entry>
+	<entry key="machineHelp.energy.info">Shows the amount of energy/nstored in the machine</entry>
+	<entry key="machineHelp.progress.title">Progress</entry>
+	<entry key="machineHelp.progress.info">Shows the progress of the/nmachine's current process</entry>
+
+	<entry key="machineHelp.cpTab.title">Machine Tabs</entry>
+	<entry key="machineHelp.cpTab.info">Use these to switch between/nmachines connected to/nthe network</entry>
+	<entry key="machineHelp.cpAdd.title">Machine Network Entry</entry>
+	<entry key="machineHelp.cpAdd.info">Add a machine by entering/nits coordinates, which can/nalso be done with a GPS</entry>
+
+	<entry key="machineHelp.mfBook.title">Alloy Book</entry>
+	<entry key="machineHelp.mfBook.info">Place an alloy book here to use/nits preset alloys recipes</entry>
+	<entry key="machineHelp.mfOutput.title">Alloy Output</entry>
+	<entry key="machineHelp.mfOutput.info">Completed alloys will show here</entry>
+	<entry key="machineHelp.mfSupply.title">Metal Supply</entry>
+	<entry key="machineHelp.mfSupply.info">All base metal ingots that are/nused to make the alloy/nare stored here</entry>
+	<entry key="machineHelp.mfPresets.title">Alloy Presets</entry>
+	<entry key="machineHelp.mfPresets.info">Available with an alloy book/nUseful alloys are found with the/nanalyzer and can be stored/nand reused/nRight and left click to scroll</entry>
+	<entry key="machineHelp.mfIngots.title">Alloy Selection</entry>
+	<entry key="machineHelp.mfIngots.info">The amount of each metal/nto use in the alloy/nRight and left click to/nchange amounts</entry>
 </properties>

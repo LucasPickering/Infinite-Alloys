@@ -21,6 +21,7 @@ import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
 import infinitealloys.util.Consts;
+import infinitealloys.util.Funcs;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -179,7 +180,7 @@ public class CommonProxy {
 	protected void addName(Object obj, String... keys) {
 		String name = "";
 		for(String key : keys)
-			name = name + LanguageRegistry.instance().getStringLocalization(key);
+			name = name + Funcs.getLoc(key);
 		LanguageRegistry.addName(obj, name);
 	}
 

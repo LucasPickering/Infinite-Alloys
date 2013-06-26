@@ -24,17 +24,17 @@ public class GuiComputer extends GuiMachine {
 	public void initGui() {
 		super.initGui();
 		buttonList.add(addMachine = new GuiButton(0, width / 2 + 44, height / 2 - 83, 32, 20, "Add"));
-		xInput = new GuiTextField(mc.fontRenderer, width / 2 - 80, height / 2 - 81, 30, 16);
-		yInput = new GuiTextField(mc.fontRenderer, width / 2 - 38, height / 2 - 81, 30, 16);
-		zInput = new GuiTextField(mc.fontRenderer, width / 2 + 4, height / 2 - 81, 30, 16);
+		xInput = new GuiTextField(mc.fontRenderer, 8, 7, 30, 16);
+		yInput = new GuiTextField(mc.fontRenderer, 50, 7, 30, 16);
+		zInput = new GuiTextField(mc.fontRenderer, 92, 7, 30, 16);
 		xInput.setText("X");
 		yInput.setText("Y");
 		zInput.setText("Z");
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTick) {
-		super.drawScreen(mouseX, mouseY, partialTick);
+	public void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		xInput.drawTextBox();
 		yInput.drawTextBox();
 		zInput.drawTextBox();
