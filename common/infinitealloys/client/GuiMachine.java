@@ -11,6 +11,7 @@ import infinitealloys.util.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -40,16 +41,21 @@ public abstract class GuiMachine extends GuiContainer {
 
 	private String texture;
 
+	/** Coordinates of the top-left corner of the GUI */
 	protected java.awt.Point topLeft = new java.awt.Point();
+	/** Coordinates of the meter texture, shifts up and down with energy level, same for all machines */
 	protected java.awt.Point energyMeter = new java.awt.Point();
+	/** Coordinates of the progress bar texture, changes by machine but still otherwise */
 	protected java.awt.Point progressBar = new java.awt.Point();
+	/** The button to enable and disable the help overlay */
+	private GuiButton helpButton;
 
 	protected TileEntityMachine tem;
 	protected infinitealloys.util.Point controllingComputer = new infinitealloys.util.Point();
 	protected GuiMachineTab controllerTab;
 	protected ArrayList<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
 	/** When help is enabled, slots get a colored outline and a mouse-over description */
-	protected boolean helpEnabled = true;
+	private boolean helpEnabled;
 
 	public GuiMachine(int xSize, int ySize, TileEntityMachine tileEntity, Container container, String texture) {
 		super(container);
@@ -57,6 +63,12 @@ public abstract class GuiMachine extends GuiContainer {
 		this.ySize = ySize;
 		tem = tileEntity;
 		this.texture = texture;
+	}
+
+	@Override
+	public void initGui() {
+		super.initGui();
+		buttonList.add(helpButton = new GuiButton(0, width - 20, 0, 20, 20, "?"));
 	}
 
 	@Override
@@ -68,33 +80,6 @@ public abstract class GuiMachine extends GuiContainer {
 		super.drawScreen(mouseX, mouseY, partialTick);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-
-		// Draw the upgrade list if the mouse is over the upgrade slot and help mode is not enabled
-		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
-		if(!helpEnabled && mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x, slot.yDisplayPosition + topLeft.y, 16, 16)) {
-			ArrayList<ColoredLine> lines = new ArrayList<ColoredLine>();
-			lines.add(new ColoredLine(Funcs.getLoc("upgrade.name"), 0xffffff));
-			for(int i = 0; i < Consts.UPGRADE_COUNT; i++) {
-				int upg = (int)Math.pow(2, i);
-				if(TEHelper.isPrereqUpgrade(upg) && tem.hasUpgrade(upg << 1) || !tem.hasUpgrade(upg))
-					continue;
-				lines.add(new ColoredLine(Funcs.getLoc("upgrade." + Consts.UPGRADE_NAMES[i] + ".name"), 0xaaaaaa));
-			}
-			drawTextBox(mouseX, mouseY, lines.toArray(new ColoredLine[lines.size()]));
-		}
-
-		// Draw the energy numbers if the mouse is over the energy meter and help is not enabled
-		if(!helpEnabled && joulesScaled > 0 && mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x,
-				topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height))
-			drawTextBox(mouseX, mouseY,
-					new ColoredLine(ElectricityDisplay.getDisplayShort(tem.getJoules(), ElectricityDisplay.ElectricUnit.JOULES), 0xffffff),
-					new ColoredLine(ElectricityDisplay.getDisplayShort(ElectricityPack.getWattsFromJoules(tem.joulesGained, 0.05F), ElectricityDisplay.ElectricUnit.WATT) + " IN", 0x00ff00),
-					new ColoredLine(ElectricityDisplay.getDisplayShort(ElectricityPack.getWattsFromJoules(tem.getJoulesUsed(), 0.05F), ElectricityDisplay.ElectricUnit.WATT) + " OUT", 0xff0000));
-
-		// Draw the progress info if the mouse is over the progress bar and help is not enabled
-		if(!helpEnabled && tem.ticksToProcess > 0 &&
-				mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height))
-			drawTextBox(mouseX, mouseY, new ColoredLine(tem.getProcessProgressScaled(100) + "%", 0xffffff));
 
 		// Draw the help dialogue and shade the help zone if help is enabled and the mouse is over a help zone
 		if(helpEnabled) {
@@ -128,6 +113,33 @@ public abstract class GuiMachine extends GuiContainer {
 			else
 				GL11.glPopMatrix();
 		}
+
+		// Draw the upgrade list if the mouse is over the upgrade slot
+		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
+		if(mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x, slot.yDisplayPosition + topLeft.y, 16, 16)) {
+			ArrayList<ColoredLine> lines = new ArrayList<ColoredLine>();
+			lines.add(new ColoredLine(Funcs.getLoc("upgrade.name"), 0xffffff));
+			for(int i = 0; i < Consts.UPGRADE_COUNT; i++) {
+				int upg = (int)Math.pow(2, i);
+				if(TEHelper.isPrereqUpgrade(upg) && tem.hasUpgrade(upg << 1) || !tem.hasUpgrade(upg))
+					continue;
+				lines.add(new ColoredLine(Funcs.getLoc("upgrade." + Consts.UPGRADE_NAMES[i] + ".name"), 0xaaaaaa));
+			}
+			drawTextBox(mouseX, mouseY, lines.toArray(new ColoredLine[lines.size()]));
+		}
+
+		// Draw the energy numbers if the mouse is over the energy meter
+		if(joulesScaled > 0 && mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x,
+				topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height))
+			drawTextBox(mouseX, mouseY,
+					new ColoredLine(ElectricityDisplay.getDisplayShort(tem.getJoules(), ElectricityDisplay.ElectricUnit.JOULES), 0xffffff),
+					new ColoredLine(ElectricityDisplay.getDisplayShort(ElectricityPack.getWattsFromJoules(tem.joulesGained, 0.05F), ElectricityDisplay.ElectricUnit.WATT) + " IN", 0x00ff00),
+					new ColoredLine(ElectricityDisplay.getDisplayShort(ElectricityPack.getWattsFromJoules(tem.getJoulesUsed(), 0.05F), ElectricityDisplay.ElectricUnit.WATT) + " OUT", 0xff0000));
+
+		// Draw the progress info if the mouse is over the progress bar
+		if(tem.ticksToProcess > 0 &&
+				mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height))
+			drawTextBox(mouseX, mouseY, new ColoredLine(tem.getProcessProgressScaled(100) + "%", 0xffffff));
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -209,6 +221,12 @@ public abstract class GuiMachine extends GuiContainer {
 
 	public static void bindTexture(String texture) {
 		Minecraft.getMinecraft().renderEngine.bindTexture(Consts.TEXTURE_PATH + "gui/" + texture + ".png");
+	}
+
+	@Override
+	public void actionPerformed(GuiButton button) {
+		if(button.id == 0)
+			helpEnabled = !helpEnabled;
 	}
 
 	@Override

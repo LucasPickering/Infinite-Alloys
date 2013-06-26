@@ -27,7 +27,7 @@ public class GuiMetalForge extends GuiMachine {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			if(!helpEnabled && mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18))
+			if(mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18))
 				drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("metal." + Consts.METAL_NAMES[i] + ".name"), 0xffffff));
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);

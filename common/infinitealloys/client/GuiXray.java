@@ -34,7 +34,7 @@ public class GuiXray extends GuiMachine {
 	@Override
 	public void initGui() {
 		super.initGui();
-		buttonList.add(searchButton = new GuiButton(0, width / 2 - 30, height / 2 - 92, 80, 20, "Search"));
+		buttonList.add(searchButton = new GuiButton(1, width / 2 - 30, height / 2 - 92, 80, 20, "Search"));
 	}
 
 	@Override
@@ -125,7 +125,8 @@ public class GuiXray extends GuiMachine {
 
 	@Override
 	public void actionPerformed(GuiButton button) {
-		if(button.id == 0) {
+		super.actionPerformed(button);
+		if(button.id == 1) {
 			tex.selectedButton = -1;
 			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 			tex.shouldSearch = true;

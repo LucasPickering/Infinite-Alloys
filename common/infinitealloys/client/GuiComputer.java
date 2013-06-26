@@ -23,7 +23,7 @@ public class GuiComputer extends GuiMachine {
 	@Override
 	public void initGui() {
 		super.initGui();
-		buttonList.add(addMachine = new GuiButton(0, width / 2 + 44, height / 2 - 83, 32, 20, "Add"));
+		buttonList.add(addMachine = new GuiButton(1, width / 2 + 44, height / 2 - 83, 32, 20, "Add"));
 		xInput = new GuiTextField(mc.fontRenderer, 8, 7, 30, 16);
 		yInput = new GuiTextField(mc.fontRenderer, 50, 7, 30, 16);
 		zInput = new GuiTextField(mc.fontRenderer, 92, 7, 30, 16);
@@ -48,9 +48,9 @@ public class GuiComputer extends GuiMachine {
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
-		xInput.mouseClicked(mouseX, mouseY, mouseButton);
-		yInput.mouseClicked(mouseX, mouseY, mouseButton);
-		zInput.mouseClicked(mouseX, mouseY, mouseButton);
+		xInput.mouseClicked(mouseX - topLeft.x, mouseY - topLeft.y, mouseButton);
+		yInput.mouseClicked(mouseX - topLeft.x, mouseY - topLeft.y, mouseButton);
+		zInput.mouseClicked(mouseX - topLeft.x, mouseY - topLeft.y, mouseButton);
 
 		if(xInput.isFocused() && xInput.getText().equals("X"))
 			xInput.setText("");
@@ -91,7 +91,8 @@ public class GuiComputer extends GuiMachine {
 
 	@Override
 	public void actionPerformed(GuiButton button) {
-		if(button.id == 0) {
+		super.actionPerformed(button);
+		if(button.id == 1) {
 			try {
 				int x = new Integer(xInput.getText());
 				int y = new Integer(yInput.getText());
