@@ -24,6 +24,8 @@ public class GuiXray extends GuiMachine {
 	private int scrollPos = 0;
 	private GuiBlockButton[] blockButtons = new GuiBlockButton[0];
 	private GuiButton searchButton;
+	/** TileEntityXray.searchingClient, used to checking if searching just finished */
+	private boolean wasSearching;
 
 	public GuiXray(InventoryPlayer inventoryPlayer, TileEntityXray tileEntity) {
 		super(196, 238, tileEntity, new ContainerXray(inventoryPlayer, tileEntity), "xray");
@@ -35,6 +37,7 @@ public class GuiXray extends GuiMachine {
 	public void initGui() {
 		super.initGui();
 		buttonList.add(searchButton = new GuiButton(1, width / 2 - 30, height / 2 - 92, 80, 20, "Search"));
+		setButtons();
 	}
 
 	@Override
@@ -48,7 +51,9 @@ public class GuiXray extends GuiMachine {
 		else
 			drawTexturedModalRect(SCROLL_BAR.x, SCROLL_BAR.y + (int)((float)(SCROLL_BAR.height - 15) / (float)(blockButtons.length / 4 - 4) * scrollPos),
 					SCROLL_ON.x, SCROLL_ON.y, SCROLL_ON.width, SCROLL_ON.height);
-		setButtons();
+		if(wasSearching && !tex.searchingClient)
+			setButtons();
+		wasSearching = tex.searchingClient;
 		for(int i = scrollPos * 4; i < blockButtons.length && i < scrollPos * 4 + 20; i++)
 			blockButtons[i].drawButton();
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -81,6 +86,7 @@ public class GuiXray extends GuiMachine {
 					}
 				}
 			}
+			setButtons();
 			if(mouseInZone(mouseX, mouseY, topLeft.x + 172, topLeft.y + 40, 14, 8))
 				scroll(-1);
 			else if(mouseInZone(mouseX, mouseY, topLeft.x + 172, topLeft.y + 147, 14, 8))
@@ -97,7 +103,7 @@ public class GuiXray extends GuiMachine {
 			scroll(scrollAmt > 0 ? -1 : scrollAmt < 0 ? 1 : 0);
 	}
 
-	public void setButtons() {
+	private void setButtons() {
 		if(tex.inventoryStacks[0] == null || tex.searchingClient)
 			blockButtons = new GuiBlockButton[0];
 		else {
@@ -121,6 +127,7 @@ public class GuiXray extends GuiMachine {
 	private void scroll(int lines) {
 		if(lines > 0 && scrollPos < blockButtons.length / 4 - 4 || lines < 0 && scrollPos > 0)
 			scrollPos += lines;
+		setButtons();
 	}
 
 	@Override

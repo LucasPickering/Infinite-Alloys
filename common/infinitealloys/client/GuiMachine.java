@@ -81,39 +81,6 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-		// Draw the help dialogue and shade the help zone if help is enabled and the mouse is over a help zone
-		if(helpEnabled) {
-			MachineHelp hoveredZone = null; // The help zone that the mouse is over to render to dialogue later, null if mouse is not over a zone\
-			GL11.glPushMatrix();
-			GL11.glTranslatef(topLeft.x, topLeft.y, 0F);
-			for(MachineHelp help : MachineHelp.getBoxesForTEM(tem)) {
-				// Draw zone outline, add alpha to make the rectangles opaque
-				drawRect(help.x, help.y, help.x + help.w, help.y + 1, 0xff000000 + help.color); // Top of outline box
-				drawRect(help.x, help.y + help.h, help.x + help.w, help.y + help.h - 1, 0xff000000 + help.color); // Bottom of outline box
-				drawRect(help.x, help.y, help.x + 1, help.y + help.h - 1, 0xff000000 + help.color); // Left side of outline box
-				drawRect(help.x + help.w - 1, help.y, help.x + help.w, help.y + help.h, 0xff000000 + help.color); // Right side of outline box
-
-				// Set hoveredZone to this zone if it hasn't been set already and the mouse is over this zone
-				if(hoveredZone == null && mouseInZone(mouseX, mouseY, topLeft.x + help.x, topLeft.y + help.y, help.w, help.h))
-					hoveredZone = help;
-			}
-
-			if(hoveredZone != null) {
-				// Fill in the zone with an smaller 4th hex pair for less alpha
-				drawRect(hoveredZone.x, hoveredZone.y, hoveredZone.x + hoveredZone.w, hoveredZone.y + hoveredZone.h, 0x60000000 + hoveredZone.color);
-				GL11.glPopMatrix();
-
-				// Draw text box with help info
-				ArrayList<ColoredLine> lines = new ArrayList<ColoredLine>();
-				lines.add(new ColoredLine(Funcs.getLoc("machineHelp." + hoveredZone.name + ".title"), 0xffffff));
-				for(String s : Funcs.getLoc("machineHelp." + hoveredZone.name + ".info").split("/n"))
-					lines.add(new ColoredLine(s, 0xaaaaaa));
-				drawTextBox(-5, topLeft.y + 16, lines.toArray(new ColoredLine[lines.size()]));
-			}
-			else
-				GL11.glPopMatrix();
-		}
-
 		// Draw the upgrade list if the mouse is over the upgrade slot
 		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
 		if(mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x, slot.yDisplayPosition + topLeft.y, 16, 16)) {
@@ -149,6 +116,44 @@ public abstract class GuiMachine extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float partialTick, int mouseX, int mouseY) {
 		bindTexture(texture);
 		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+		// Draw the help dialogue and shade the help zone if help is enabled and the mouse is over a help zone
+		if(helpEnabled) {
+			MachineHelp hoveredZone = null; // The help zone that the mouse is over to render to dialogue later, null if mouse is not over a zone\
+			GL11.glPushMatrix();
+			GL11.glTranslatef(topLeft.x, topLeft.y, 0F);
+			for(MachineHelp help : MachineHelp.getBoxesForTEM(tem)) {
+				// Draw zone outline, add alpha to make the rectangles opaque
+				drawRect(help.x, help.y, help.x + help.w, help.y + 1, 0xff000000 + help.color); // Top of outline box
+				drawRect(help.x, help.y + help.h, help.x + help.w, help.y + help.h - 1, 0xff000000 + help.color); // Bottom of outline box
+				drawRect(help.x, help.y, help.x + 1, help.y + help.h - 1, 0xff000000 + help.color); // Left side of outline box
+				drawRect(help.x + help.w - 1, help.y, help.x + help.w, help.y + help.h, 0xff000000 + help.color); // Right side of outline box
+
+				// Set hoveredZone to this zone if it hasn't been set already and the mouse is over this zone
+				if(hoveredZone == null && mouseInZone(mouseX, mouseY, topLeft.x + help.x, topLeft.y + help.y, help.w, help.h))
+					hoveredZone = help;
+			}
+
+			if(hoveredZone != null) {
+				// Fill in the zone with an smaller 4th hex pair for less alpha
+				drawRect(hoveredZone.x, hoveredZone.y, hoveredZone.x + hoveredZone.w, hoveredZone.y + hoveredZone.h, 0x60000000 + hoveredZone.color);
+				GL11.glPopMatrix();
+
+				// Draw text box with help info
+				ArrayList<ColoredLine> lines = new ArrayList<ColoredLine>();
+				lines.add(new ColoredLine(Funcs.getLoc("machineHelp." + hoveredZone.name + ".title"), 0xffffff));
+				for(String s : Funcs.getLoc("machineHelp." + hoveredZone.name + ".info").split("/n"))
+					lines.add(new ColoredLine(s, 0xaaaaaa));
+				drawTextBox(-5, topLeft.y + 16, lines.toArray(new ColoredLine[lines.size()]));
+			}
+			else
+				GL11.glPopMatrix();
+		}
+
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	@Override

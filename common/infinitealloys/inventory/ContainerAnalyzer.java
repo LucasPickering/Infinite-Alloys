@@ -50,7 +50,7 @@ public class ContainerAnalyzer extends ContainerMachine {
 						return null;
 				}
 				else if(slot >= 30)
-					if(!mergeItemStack(stackInSlotCopy, 3, 30, false))
+					if(!mergeItemStack(stackInSlotCopy, 4, 30, false))
 						return null;
 			}
 			if(stackInSlotCopy.stackSize == 0)

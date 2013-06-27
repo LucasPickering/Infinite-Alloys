@@ -42,9 +42,6 @@ public class GuiAnalyzer extends GuiMachine {
 				drawTexturedModalRect((Consts.VALID_ALLOY_COUNT - i) * 18 + 45, 26, symbol.x, symbol.y, symbol.width, symbol.height);
 			}
 		}
-		Rectangle symbol = DOWN_ARROW;
-		drawTexturedModalRect(Consts.VALID_ALLOY_COUNT * 18 + 45, 26, symbol.x, symbol.y, symbol.width, symbol.height);
-		drawTexturedModalRect(45-18, 26, symbol.x, symbol.y, symbol.width, symbol.height);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}

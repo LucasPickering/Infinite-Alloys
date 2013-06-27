@@ -59,7 +59,7 @@ public enum MachineHelp {
 		if(tem instanceof TileEntityPrinter)
 			return new MachineHelp[] { ENERGY, PR_UPGRADE, PR_PROGRESS, PR_INPUT, PR_SUPPLY, PR_OUTPUT };
 		if(tem instanceof TileEntityXray)
-			return new MachineHelp[] { ENERGY, XR_UPGRADE, XR_PROGRESS, XR_ORE,XR_SEARCH, XR_RESULTS };
+			return new MachineHelp[] { ENERGY, XR_UPGRADE, XR_PROGRESS, XR_ORE, XR_SEARCH, XR_RESULTS };
 		return null;
 	}
 }
