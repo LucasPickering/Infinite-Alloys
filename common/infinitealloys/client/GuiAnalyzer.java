@@ -32,7 +32,8 @@ public class GuiAnalyzer extends GuiMachine {
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		bindTexture("extras");
 		if(tea.inventoryStacks[1] != null) {
-			int currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");
+			int currentAlloy;
+			currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");
 			WorldData worldData = InfiniteAlloys.instance.worldData;
 			for(int i = 0; i < Consts.METAL_COUNT; i++) {
 				int currentValue = Funcs.intAtPos(10, Consts.METAL_COUNT, currentAlloy, i);
@@ -41,6 +42,9 @@ public class GuiAnalyzer extends GuiMachine {
 				drawTexturedModalRect((Consts.VALID_ALLOY_COUNT - i) * 18 + 45, 26, symbol.x, symbol.y, symbol.width, symbol.height);
 			}
 		}
+		Rectangle symbol = DOWN_ARROW;
+		drawTexturedModalRect(Consts.VALID_ALLOY_COUNT * 18 + 45, 26, symbol.x, symbol.y, symbol.width, symbol.height);
+		drawTexturedModalRect(45-18, 26, symbol.x, symbol.y, symbol.width, symbol.height);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}

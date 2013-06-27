@@ -73,11 +73,34 @@
 	<entry key="machineHelp.mfBook.title">Alloy Book</entry>
 	<entry key="machineHelp.mfBook.info">Place an alloy book here to use/nits preset alloys recipes</entry>
 	<entry key="machineHelp.mfOutput.title">Alloy Output</entry>
-	<entry key="machineHelp.mfOutput.info">Completed alloys will show here</entry>
+	<entry key="machineHelp.mfOutput.info">Completed alloys appear here</entry>
 	<entry key="machineHelp.mfSupply.title">Metal Supply</entry>
 	<entry key="machineHelp.mfSupply.info">All base metal ingots that are/nused to make the alloy/nare stored here</entry>
 	<entry key="machineHelp.mfPresets.title">Alloy Presets</entry>
-	<entry key="machineHelp.mfPresets.info">Available with an alloy book/nUseful alloys are found with the/nanalyzer and can be stored/nand reused/nRight and left click to scroll</entry>
+	<entry key="machineHelp.mfPresets.info">Available with an alloy book/n /nUseful alloys are found with the/nanalyzer and can be stored/nand reused/n /nRight and left click to scroll</entry>
 	<entry key="machineHelp.mfIngots.title">Alloy Selection</entry>
-	<entry key="machineHelp.mfIngots.info">The amount of each metal/nto use in the alloy/nRight and left click to/nchange amounts</entry>
+	<entry key="machineHelp.mfIngots.info">The amount of each metal/nto use in the alloy/n /nRight and left click to/nchange amounts</entry>
+
+	<entry key="machineHelp.azBook.title">Alloy Book</entry>
+    <entry key="machineHelp.azBook.info">Place an alloy book here to/nsave the composition of the/ningot if it is useful/n /nIt can then be used in the/nmetal forge</entry>
+    <entry key="machineHelp.azInput.title">Alloy Input</entry>
+    <entry key="machineHelp.azInput.info">Place an alloy here to/nanalyze its composition and/nsee if it is useful</entry>
+    <entry key="machineHelp.azOutput.title">Alloy Output</entry>
+    <entry key="machineHelp.azOutput.info">Reclaim your alloy after it/nhas been analyzed</entry>
+    <entry key="machineHelp.azIngots.title">Alloy Composition</entry>
+    <entry key="machineHelp.azIngots.info">This shows the adjustments/nyou must make to/nachieve the next useful alloy/n /nUseful alloys are discovered/nin order</entry>
+   
+    <entry key="machineHelp.prInput.title">Book Input</entry>
+    <entry key="machineHelp.prInput.info">Place a book here to make a/ncopy of it</entry>
+    <entry key="machineHelp.prSupply.title">Blank Book</entry>
+    <entry key="machineHelp.prSupply.info">Place a regular blank book here/nto print on</entry>
+    <entry key="machineHelp.prOutput.title">Book Output</entry>
+    <entry key="machineHelp.prOutput.info">The copy of the book/nwill appear here</entry>
+
+    <entry key="machineHelp.xrOre.title">Ore Input</entry>
+    <entry key="machineHelp.xrOre.info">Place an ore here to conduct/na search for it</entry>
+    <entry key="machineHelp.xrSearch.title">Search Button</entry>
+    <entry key="machineHelp.xrSearch.info">Start the search for ores/n /nThis is be long and will use a/nlot of energy</entry>
+    <entry key="machineHelp.xrResults.title">Search Results</entry>
+    <entry key="machineHelp.xrResults.info">Ores found in the search will/nappear here</entry>
 </properties>

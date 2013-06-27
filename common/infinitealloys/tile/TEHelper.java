@@ -128,7 +128,7 @@ public class TEHelper {
 			case ANALYZER:
 				switch(index) {
 					case 0:
-						return itemstack.itemID == Items.alloyIngot.itemID;
+						return itemstack.itemID == Items.alloyIngot.itemID && itemstack.hasTagCompound();
 					case 2:
 						return itemstack.itemID == Items.alloyBook.itemID;
 					default:
