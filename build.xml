@@ -6,7 +6,7 @@
 
 	<target name="clean">
 		<delete file="${build.dir.development}\mcp\src\minecraft\mcmod.info" />
-		<delete dir="${build.dir.development}\mcp\src\minecraft\com\pahimar" />
+		<delete dir="${build.dir.development}\mcp\src\minecraft\infinitealloys" />
 		<delete dir="${build.dir.development}\mcp\reobf\minecraft" />
 	</target>
 
@@ -18,14 +18,12 @@
 
 	<target name="prep">
 		<copy todir="${build.dir.development}\mcp\src\minecraft">
-			<fileset dir="${build.dir.development}\mcp\common\infinitealloys\" />
+			<fileset dir="${build.dir.development}\mcp\common\" />
 		</copy>
 	</target>
 
 	<target name="replace_tokens">
-		<replace dir="${build.dir.development}\mcp\src\minecraft" token="@VERSION@" value="${build.release.mod.version}" />
-		<replace dir="${build.dir.development}\mcp\src\minecraft" token="@FINGERPRINT@" value="${build.release.mod.fingerprint}" />
-		<replace dir="${build.dir.development}\mcp\src\minecraft" token="@BUILD_NUMBER@" value="${build_number.build_number}" />
+		<replace dir="${build.dir.development}\mcp\src\minecraft" token="@VERSION@" value="${build.release.mod.version}.${build_number.build_number}" />
 	</target>
 
 	<target name="recompile">
@@ -56,7 +54,7 @@
 
 		<!-- Build the jar -->
 		<mkdir dir="${build.dir.release}\${build.release.minecraft.version}\${build.release.mod.version}" />
-		<jar destfile="${build.dir.release}\${build.release.minecraft.version}\${build.release.mod.version}\infinite-alloys-${build.release.mod.version}-${build_number.build_number}.jar">
+		<jar destfile="${build.dir.release}\${build.release.minecraft.version}\${build.release.mod.version}\Infinite-Alloys-${build.release.mod.version}.${build_number.build_number}.jar">
 			<fileset dir="${build.dir.development}\mcp\src\minecraft\" includes="mcmod.info" />
 			<fileset dir="${build.dir.development}\mcp\reobf\minecraft" />
 			<fileset dir="${build.dir.development}\mcp\resources" />
@@ -77,7 +75,7 @@
 
 		<!-- Build the jar -->
 		<mkdir dir="${build.dir.release}\${build.release.minecraft.version}\${build.release.mod.version}" />
-		<jar destfile="${build.dir.release}\${build.release.minecraft.version}\${build.release.mod.version}\infinite-alloys-${build.release.mod.version}-${build_number.build_number}.jar">
+		<jar destfile="${build.dir.release}\${build.release.minecraft.version}\${build.release.mod.version}\Infinite-Alloys-${build.release.mod.version}.${build_number.build_number}.jar">
 			<fileset dir="${build.dir.development}\mcp\src\minecraft\" includes="mcmod.info" />
 			<fileset dir="${build.dir.development}\mcp\reobf\minecraft" />
 			<fileset dir="${build.dir.development}\mcp\resources" />
