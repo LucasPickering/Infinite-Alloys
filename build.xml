@@ -46,10 +46,6 @@
 		</exec>
 	</target>
 
-	<target name="sign_jar">
-		<signjar jar="${build.dir.release}\${build.release.minecraft.version}\${build.release.mod.version}\infinite-alloys-${build.release.mod.version}-${build_number.build_number}.jar" keystore="${build.keystore.location}" alias="${build.keystore.alias}" storepass="${build.keystore.password}" />
-	</target>
-
 	<target name="build">
 		<!-- Prep for the build -->
 		<antcall target="clean" />
@@ -86,9 +82,6 @@
 			<fileset dir="${build.dir.development}\mcp\reobf\minecraft" />
 			<fileset dir="${build.dir.development}\mcp\resources" />
 		</jar>
-
-		<!-- Sign the finished jar -->
-		<antcall target="sign_jar" />
 
 		<!-- Clean up the MCP source now that we are done -->
 		<antcall target="clean" />
