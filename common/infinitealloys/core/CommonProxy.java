@@ -73,8 +73,6 @@ public class CommonProxy {
 		BasicComponents.requestBlock("oreTin", -1);
 		BasicComponents.requestBlock("copperWire", -1);
 		BasicComponents.requireMachines(-1);
-		OreGenerator.addOre(BasicComponents.generationOreCopper);
-		OreGenerator.addOre(BasicComponents.generationOreTin);
 	}
 
 	public void initItems() {
