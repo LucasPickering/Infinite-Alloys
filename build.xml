@@ -74,8 +74,8 @@
 		<antcall target="reobfuscate" />
 
 		<!-- Build the jar -->
-		<mkdir dir="${build.dir.release}\${build.release.minecraft.version}\${build.release.mod.version}" />
-		<jar destfile="${build.dir.release}\${build.release.minecraft.version}\${build.release.mod.version}\Infinite-Alloys-${build.release.mod.version}.${build_number.build_number}.jar">
+		<mkdir dir="${build.dir.release}\${build.release.mod.version}" />
+		<jar destfile="${build.dir.release}\${build.release.minecraft.version}\Infinite-Alloys-${build.release.mod.version}.${build_number.build_number}.jar">
 			<fileset dir="${build.dir.development}\mcp\src\minecraft\" includes="mcmod.info" />
 			<fileset dir="${build.dir.development}\mcp\reobf\minecraft" />
 			<fileset dir="${build.dir.development}\mcp\resources" />
