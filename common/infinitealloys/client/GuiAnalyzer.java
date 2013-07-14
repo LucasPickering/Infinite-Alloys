@@ -30,7 +30,7 @@ public class GuiAnalyzer extends GuiMachine {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
-		bindTexture("extras");
+		bindTexture(extras);
 		if(tea.inventoryStacks[1] != null) {
 			int currentAlloy;
 			currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");

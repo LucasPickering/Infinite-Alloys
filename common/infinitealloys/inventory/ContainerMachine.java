@@ -62,8 +62,8 @@ public class ContainerMachine extends Container {
 	}
 
 	@Override
-	public void onCraftGuiClosed(EntityPlayer player) {
-		super.onCraftGuiClosed(player);
+	public void onContainerClosed(EntityPlayer player) {
+		super.onContainerClosed(player);
 		if(Funcs.isServer())
 			inventory.playersUsing.remove(player.username);
 	}

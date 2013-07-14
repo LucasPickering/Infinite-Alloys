@@ -47,8 +47,8 @@ public class TileEntityXray extends TileEntityMachine {
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack itemstack) {
-		return super.isStackValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.XRAY, slot, itemstack);
+	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
+		return super.isItemValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.XRAY, slot, itemstack);
 	}
 
 	@Override
@@ -179,11 +179,11 @@ public class TileEntityXray extends TileEntityMachine {
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 
 		if(hasUpgrade(TEHelper.ELECCAPACITY2))
-			maxJoules = 1000000;
+			setMaxEnergyStored(1000000);
 		else if(hasUpgrade(TEHelper.ELECCAPACITY1))
-			maxJoules = 750000;
+			setMaxEnergyStored(750000);
 		else
-			maxJoules = 500000;
+			setMaxEnergyStored(500000);
 	}
 
 	@Override

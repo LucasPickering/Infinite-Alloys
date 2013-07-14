@@ -29,7 +29,7 @@ public class TileEntityComputer extends TileEntityMachine {
 		super();
 		inventoryStacks = new ItemStack[1];
 		ticksToProcess = 0;
-		maxJoules = 0;
+		setMaxEnergyStored(0);
 		canNetwork = true;
 		networkCapacity = 3;
 		networkRange = 10;

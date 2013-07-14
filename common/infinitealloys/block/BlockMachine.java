@@ -18,7 +18,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,6 +36,7 @@ public class BlockMachine extends BlockContainer {
 
 	public BlockMachine(int id) {
 		super(id, Material.iron);
+		setCreativeTab(InfiniteAlloys.tabIA);
 	}
 
 	@Override
@@ -165,10 +166,10 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLiving entityliving, ItemStack itemstack) {
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemstack) {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
-			tem.front = Funcs.yawToNumSide(MathHelper.floor_float(entityliving.rotationYaw / 90F - 1.5F) & 3);
+			tem.front = Funcs.yawToNumSide(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
 			world.markBlockForUpdate(x, y, z);
 		}
 	}

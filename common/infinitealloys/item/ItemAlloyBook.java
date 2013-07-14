@@ -1,8 +1,6 @@
 package infinitealloys.item;
 
-import infinitealloys.util.Consts;
 import java.util.List;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,18 +10,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemAlloyBook extends ItemIA {
 
 	public ItemAlloyBook(int id) {
-		super(id);
+		super(id, "alloybook");
 	}
 
 	@Override
 	public boolean getShareTag() {
 		return true;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegister) {
-		itemIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "alloybook");
 	}
 
 	@Override

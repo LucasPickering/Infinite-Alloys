@@ -16,6 +16,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import universalelectricity.core.electricity.ElectricityDisplay;
@@ -39,7 +40,10 @@ public abstract class GuiMachine extends GuiContainer {
 	public static final Rectangle BLOCK_BG_OFF = new Rectangle(58, 24, 36, 18);
 	public static final Rectangle BLOCK_BG_ON = new Rectangle(94, 24, 36, 18);
 
-	private String texture;
+	/** The background texture */
+	protected ResourceLocation background;
+	/** The texture resource for the texture item */
+	public static ResourceLocation extras;
 
 	/** Coordinates of the top-left corner of the GUI */
 	protected java.awt.Point topLeft = new java.awt.Point();
@@ -62,7 +66,8 @@ public abstract class GuiMachine extends GuiContainer {
 		this.xSize = xSize;
 		this.ySize = ySize;
 		tem = tileEntity;
-		this.texture = texture;
+		background = createTexture(texture);
+		extras = createTexture(texture);
 	}
 
 	@Override
@@ -99,7 +104,7 @@ public abstract class GuiMachine extends GuiContainer {
 		if(joulesScaled > 0 && mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x,
 				topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height))
 			drawTextBox(mouseX, mouseY,
-					new ColoredLine(ElectricityDisplay.getDisplayShort(tem.getJoules(), ElectricityDisplay.ElectricUnit.JOULES), 0xffffff),
+					new ColoredLine(ElectricityDisplay.getDisplayShort(tem.getEnergyStored(), ElectricityDisplay.ElectricUnit.JOULES), 0xffffff),
 					new ColoredLine(ElectricityDisplay.getDisplayShort(ElectricityPack.getWattsFromJoules(tem.joulesGained, 0.05F), ElectricityDisplay.ElectricUnit.WATT) + " IN", 0x00ff00),
 					new ColoredLine(ElectricityDisplay.getDisplayShort(ElectricityPack.getWattsFromJoules(tem.getJoulesUsed(), 0.05F), ElectricityDisplay.ElectricUnit.WATT) + " OUT", 0xff0000));
 
@@ -114,7 +119,7 @@ public abstract class GuiMachine extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTick, int mouseX, int mouseY) {
-		bindTexture(texture);
+		bindTexture(background);
 		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -161,8 +166,8 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		bindTexture("extras");
-		if(tem.maxJoules > 0) {
+		bindTexture(extras);
+		if(tem.getMaxEnergyStored() > 0) {
 			int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
 			drawTexturedModalRect(energyMeter.x, energyMeter.y, ENERGY_METER.x, ENERGY_METER.y + ENERGY_METER.height - joulesScaled, ENERGY_METER.width,
 					joulesScaled);
@@ -224,8 +229,12 @@ public abstract class GuiMachine extends GuiContainer {
 		itemRenderer.zLevel = 0F;
 	}
 
-	public static void bindTexture(String texture) {
-		Minecraft.getMinecraft().renderEngine.bindTexture(Consts.TEXTURE_PATH + "gui/" + texture + ".png");
+	public static ResourceLocation createTexture(String texture) {
+		return new ResourceLocation(Consts.TEXTURE_PATH + "gui/" + texture + ".png");
+	}
+
+	public static void bindTexture(ResourceLocation texture) {
+		Minecraft.getMinecraft().renderEngine.func_110577_a(texture);
 	}
 
 	@Override

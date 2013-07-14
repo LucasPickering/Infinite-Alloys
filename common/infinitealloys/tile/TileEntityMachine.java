@@ -6,7 +6,6 @@ import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.Random;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,20 +16,17 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.block.IConnector;
-import universalelectricity.core.block.IElectricityStorage;
-import universalelectricity.core.block.IVoltage;
-import universalelectricity.core.electricity.ElectricityNetworkHelper;
-import universalelectricity.core.electricity.IElectricityNetwork;
-import universalelectricity.core.vector.Vector3;
-import universalelectricity.core.vector.VectorHelper;
+import universalelectricity.core.block.IElectrical;
+import universalelectricity.core.block.IElectricalStorage;
+import universalelectricity.core.electricity.ElectricityPack;
+import universalelectricity.prefab.tile.ElectricityHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class TileEntityMachine extends TileEntity implements IInventory, IElectricityStorage, IVoltage, IConnector {
+public abstract class TileEntityMachine extends TileEntity implements IInventory, IElectrical, IElectricalStorage {
 
 	public Random random = new Random();
 	public ArrayList<String> playersUsing = new ArrayList<String>();
@@ -49,8 +45,11 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	/** True if this machine can be accessed wirelessly */
 	public boolean canNetwork;
 
+	/** UE class to handle all electricity */
+	protected ElectricityHandler electricityHandler;
+
 	/** Maximum amount of joules this machine can store */
-	public int maxJoules = 500000;
+	private int maxJoules = 500000;
 
 	/** Amount of joules stored in the machine currently */
 	public int joules = 0;
@@ -78,6 +77,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public TileEntityMachine() {
 		populateValidUpgrades();
 		updateUpgrades();
+		electricityHandler = new ElectricityHandler(this, maxJoules);
 	}
 
 	@Override
@@ -87,23 +87,11 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 			inventoryStacks[upgradeSlotIndex] = null;
 			updateUpgrades();
 		}
-		if(!worldObj.isRemote) {
-			EnumSet<ForgeDirection> inputDirections = EnumSet.allOf(ForgeDirection.class);
-			inputDirections.remove(front);
-			for(ForgeDirection inputDirection : inputDirections) {
-				TileEntity inputTile = VectorHelper.getConnectorFromSide(worldObj, new Vector3(this), inputDirection);
-				IElectricityNetwork network = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection);
-				if(network != null) {
-					if(joules < maxJoules) {
-						network.startRequesting(this, TEHelper.AMPS_PER_TICK, getVoltage());
-						joules += (joulesGained = (int)Math
-								.max(Math.min(network.consumeElectricity(this).getWatts(), TEHelper.AMPS_PER_TICK * getVoltage()), 0));
-					}
-					else
-						network.stopRequesting(this);
-				}
-			}
-		}
+		/* if(!worldObj.isRemote) { EnumSet<ForgeDirection> inputDirections = EnumSet.allOf(ForgeDirection.class); inputDirections.remove(front);
+		 * for(ForgeDirection inputDirection : inputDirections) { TileEntity inputTile = VectorHelper.getConnectorFromSide(worldObj, new Vector3(this),
+		 * inputDirection); IElectricityNetwork network = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection); if(network != null) {
+		 * if(joules < maxJoules) { network.startRequesting(this, TEHelper.AMPS_PER_TICK, getVoltage()); joules += (joulesGained = (int)Math
+		 * .max(Math.min(network.consumeElectricity(this).getWatts(), TEHelper.AMPS_PER_TICK * getVoltage()), 0)); } else network.stopRequesting(this); } } } */
 		if(shouldProcess() && ++processProgress >= ticksToProcess) {
 			processProgress = 0;
 			finishProcessing();
@@ -248,7 +236,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	}
 
 	@Override
-	public boolean isStackValidForSlot(int slot, ItemStack itemstack) {
+	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
 		return slot == upgradeSlotIndex && isUpgradeValid(itemstack);
 	}
 
@@ -332,27 +320,52 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	}
 
 	@Override
-	public double getVoltage() {
+	public float getVoltage() {
 		return 120;
 	}
 
 	@Override
-	public double getJoules() {
+	public float getEnergyStored() {
 		return joules;
 	}
 
 	@Override
-	public void setJoules(double joules) {
+	public void setEnergyStored(float joules) {
 		this.joules = (int)joules;
 	}
 
 	@Override
-	public double getMaxJoules() {
+	public float getMaxEnergyStored() {
 		return maxJoules;
+	}
+
+	public void setMaxEnergyStored(float joules) {
+		this.maxJoules = (int)joules;
+		electricityHandler.setMaxEnergyStored(joules);
 	}
 
 	@Override
 	public boolean canConnect(ForgeDirection side) {
 		return maxJoules > 0 && Funcs.fdToNumSide(side) != front;
+	}
+
+	@Override
+	public float getRequest(ForgeDirection direction) {
+		return TEHelper.AMPS_PER_TICK * getVoltage();
+	}
+
+	@Override
+	public float getProvide(ForgeDirection direction) {
+		return 0;
+	}
+
+	@Override
+	public float receiveElectricity(ForgeDirection from, ElectricityPack receive, boolean doReceive) {
+		return electricityHandler.receiveElectricity(receive, doReceive);
+	}
+
+	@Override
+	public ElectricityPack provideElectricity(ForgeDirection from, ElectricityPack request, boolean doProvide) {
+		return electricityHandler.provideElectricity(request, doProvide);
 	}
 }

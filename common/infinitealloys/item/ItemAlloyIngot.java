@@ -4,7 +4,6 @@ import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import java.util.List;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -14,7 +13,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemAlloyIngot extends ItemIA {
 
 	public ItemAlloyIngot(int id) {
-		super(id);
+		super(id, "ingot");
+		setCreativeTab(null);
 	}
 
 	@Override
@@ -25,12 +25,6 @@ public class ItemAlloyIngot extends ItemIA {
 	@Override
 	public boolean getShareTag() {
 		return true;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegister) {
-		itemIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "ingot");
 	}
 
 	@Override

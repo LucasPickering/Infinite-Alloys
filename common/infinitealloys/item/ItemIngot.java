@@ -11,14 +11,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ItemIngot extends ItemIA {
 
 	public ItemIngot(int id) {
-		super(id);
+		super(id, "ingot");
 		setHasSubtypes(true);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegister) {
-		itemIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "ingot");
 	}
 
 	@Override

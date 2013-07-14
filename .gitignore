@@ -70,7 +70,7 @@ pip-log.txt
 /src/*
 /src/common/*
 /Releases/*
-/resources/mods/basiccomponents
+/resources/assets/basiccomponents
 CHANGELOG
 LICENSE.txt
 
