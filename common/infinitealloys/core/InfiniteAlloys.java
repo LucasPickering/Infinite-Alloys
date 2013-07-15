@@ -8,10 +8,8 @@ import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -32,7 +30,7 @@ public class InfiniteAlloys {
 	public static AchievementPage achPage;
 	public WorldData worldData;
 
-	@PreInit
+	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
@@ -53,7 +51,7 @@ public class InfiniteAlloys {
 		config.save();
 	}
 
-	@Init
+	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		tabIA = new CreativeTabIA(CreativeTabs.getNextID(), "main");
 		proxy.initLocalization();
@@ -66,7 +64,7 @@ public class InfiniteAlloys {
 		proxy.initRendering();
 	}
 
-	@PostInit
+	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 	}
 }
