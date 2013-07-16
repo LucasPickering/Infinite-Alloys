@@ -26,24 +26,24 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 public abstract class GuiMachine extends GuiContainer {
 
 	// The position for each item in the texture sheet extras.png
-	public static final Rectangle ENERGY_METER = new Rectangle(0, 0, 10, 32);
-	public static final Rectangle TAB_LEFT_OFF = new Rectangle(10, 0, 24, 24);
-	public static final Rectangle TAB_LEFT_ON = new Rectangle(34, 0, 28, 24);
-	public static final Rectangle TAB_RIGHT_OFF = new Rectangle(62, 0, 29, 24);
-	public static final Rectangle TAB_RIGHT_ON = new Rectangle(91, 0, 28, 24);
-	public static final Rectangle PROGRESS_BAR = new Rectangle(119, 0, 108, 18);
-	public static final Rectangle SCROLL_ON = new Rectangle(227, 0, 12, 15);
-	public static final Rectangle SCROLL_OFF = new Rectangle(239, 0, 12, 15);
-	public static final Rectangle UP_ARROW = new Rectangle(10, 24, 16, 16);
-	public static final Rectangle DOWN_ARROW = new Rectangle(26, 24, 16, 16);
-	public static final Rectangle CHECK = new Rectangle(42, 24, 16, 16);
-	public static final Rectangle BLOCK_BG_OFF = new Rectangle(58, 24, 36, 18);
-	public static final Rectangle BLOCK_BG_ON = new Rectangle(94, 24, 36, 18);
+	static final Rectangle ENERGY_METER = new Rectangle(0, 0, 10, 32);
+	static final Rectangle TAB_LEFT_OFF = new Rectangle(10, 0, 24, 24);
+	static final Rectangle TAB_LEFT_ON = new Rectangle(34, 0, 28, 24);
+	static final Rectangle TAB_RIGHT_OFF = new Rectangle(62, 0, 29, 24);
+	static final Rectangle TAB_RIGHT_ON = new Rectangle(91, 0, 28, 24);
+	static final Rectangle PROGRESS_BAR = new Rectangle(119, 0, 108, 18);
+	static final Rectangle SCROLL_ON = new Rectangle(227, 0, 12, 15);
+	static final Rectangle SCROLL_OFF = new Rectangle(239, 0, 12, 15);
+	static final Rectangle UP_ARROW = new Rectangle(10, 24, 16, 16);
+	static final Rectangle DOWN_ARROW = new Rectangle(26, 24, 16, 16);
+	static final Rectangle CHECK = new Rectangle(42, 24, 16, 16);
+	static final Rectangle BLOCK_BG_OFF = new Rectangle(58, 24, 36, 18);
+	static final Rectangle BLOCK_BG_ON = new Rectangle(94, 24, 36, 18);
 
 	/** The background texture */
 	protected ResourceLocation background;
 	/** The texture resource for the texture item */
-	public static ResourceLocation extras;
+	static ResourceLocation extras;
 
 	/** Coordinates of the top-left corner of the GUI */
 	protected java.awt.Point topLeft = new java.awt.Point();
@@ -229,11 +229,11 @@ public abstract class GuiMachine extends GuiContainer {
 		itemRenderer.zLevel = 0F;
 	}
 
-	public static ResourceLocation createTexture(String texture) {
-		return new ResourceLocation(Consts.TEXTURE_PATH + "gui/" + texture + ".png");
+	static ResourceLocation createTexture(String texture) {
+		return new ResourceLocation(Consts.TEXTURE_DOMAIN, "textures/gui/" + texture + ".png");
 	}
 
-	public static void bindTexture(ResourceLocation texture) {
+	static void bindTexture(ResourceLocation texture) {
 		Minecraft.getMinecraft().renderEngine.func_110577_a(texture);
 	}
 

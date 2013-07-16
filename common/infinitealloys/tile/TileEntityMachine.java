@@ -46,10 +46,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public boolean canNetwork;
 
 	/** UE class to handle all electricity */
-	protected ElectricityHandler electricityHandler;
-
-	/** Maximum amount of joules this machine can store */
-	private int maxJoules = 500000;
+	protected ElectricityHandler electricityHandler = new ElectricityHandler(this, 0);
 
 	/** Amount of joules stored in the machine currently */
 	public int joules = 0;
@@ -77,7 +74,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public TileEntityMachine() {
 		populateValidUpgrades();
 		updateUpgrades();
-		electricityHandler = new ElectricityHandler(this, maxJoules);
 	}
 
 	@Override
@@ -190,8 +186,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	@SideOnly(Side.CLIENT)
 	public int getJoulesScaled(int scale) {
-		if(maxJoules > 0)
-			return joules * scale / maxJoules;
+		if(electricityHandler.getMaxEnergyStored() > 0)
+			return (int)(joules * scale / electricityHandler.getMaxEnergyStored());
 		return -1;
 	}
 
@@ -336,17 +332,16 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	@Override
 	public float getMaxEnergyStored() {
-		return maxJoules;
+		return electricityHandler.getMaxEnergyStored();
 	}
 
 	public void setMaxEnergyStored(float joules) {
-		this.maxJoules = (int)joules;
 		electricityHandler.setMaxEnergyStored(joules);
 	}
 
 	@Override
 	public boolean canConnect(ForgeDirection side) {
-		return maxJoules > 0 && Funcs.fdToNumSide(side) != front;
+		return electricityHandler.getMaxEnergyStored() > 0 && Funcs.fdToNumSide(side) != front;
 	}
 
 	@Override
