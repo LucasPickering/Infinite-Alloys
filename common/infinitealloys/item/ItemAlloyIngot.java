@@ -15,6 +15,7 @@ public class ItemAlloyIngot extends ItemIA {
 	public ItemAlloyIngot(int id) {
 		super(id, "ingot");
 		setCreativeTab(null);
+		setHasSubtypes(true);
 	}
 
 	@Override

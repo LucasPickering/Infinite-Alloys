@@ -13,6 +13,7 @@ public class ItemMulti extends ItemIA {
 
 	public ItemMulti(int id) {
 		super(id);
+		setHasSubtypes(true);
 	}
 
 	@Override
