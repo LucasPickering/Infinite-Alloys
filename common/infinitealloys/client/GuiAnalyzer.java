@@ -36,8 +36,8 @@ public class GuiAnalyzer extends GuiMachine {
 			currentAlloy = tea.inventoryStacks[1].getTagCompound().getInteger("alloy");
 			WorldData worldData = InfiniteAlloys.instance.worldData;
 			for(int i = 0; i < Consts.METAL_COUNT; i++) {
-				int currentValue = Funcs.intAtPos(10, Consts.METAL_COUNT, currentAlloy, i);
-				int nextValue = Funcs.intAtPos(10, Consts.METAL_COUNT, worldData.getValidAlloys()[worldData.alloysUnlocked], i);
+				int currentValue = Funcs.intAtPos(currentAlloy, 10, Consts.METAL_COUNT, i);
+				int nextValue = Funcs.intAtPos(worldData.getValidAlloys()[worldData.alloysUnlocked], 10, Consts.METAL_COUNT, i);
 				Rectangle symbol = nextValue > currentValue ? DOWN_ARROW : nextValue < currentValue ? UP_ARROW : CHECK;
 				drawTexturedModalRect((Consts.VALID_ALLOY_COUNT - i) * 18 + 45, 26, symbol.x, symbol.y, symbol.width, symbol.height);
 			}

@@ -83,11 +83,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 			inventoryStacks[upgradeSlotIndex] = null;
 			updateUpgrades();
 		}
-		/* if(!worldObj.isRemote) { EnumSet<ForgeDirection> inputDirections = EnumSet.allOf(ForgeDirection.class); inputDirections.remove(front);
-		 * for(ForgeDirection inputDirection : inputDirections) { TileEntity inputTile = VectorHelper.getConnectorFromSide(worldObj, new Vector3(this),
-		 * inputDirection); IElectricityNetwork network = ElectricityNetworkHelper.getNetworkFromTileEntity(inputTile, inputDirection); if(network != null) {
-		 * if(joules < maxJoules) { network.startRequesting(this, TEHelper.AMPS_PER_TICK, getVoltage()); joules += (joulesGained = (int)Math
-		 * .max(Math.min(network.consumeElectricity(this).getWatts(), TEHelper.AMPS_PER_TICK * getVoltage()), 0)); } else network.stopRequesting(this); } } } */
 		if(shouldProcess() && ++processProgress >= ticksToProcess) {
 			processProgress = 0;
 			finishProcessing();
@@ -308,12 +303,10 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	}
 
 	@Override
-	public void openChest() {
-	}
+	public void openChest() {}
 
 	@Override
-	public void closeChest() {
-	}
+	public void closeChest() {}
 
 	@Override
 	public float getVoltage() {

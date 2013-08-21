@@ -3,6 +3,7 @@ package infinitealloys.handlers;
 import infinitealloys.client.GuiAnalyzer;
 import infinitealloys.client.GuiComputer;
 import infinitealloys.client.GuiMetalForge;
+import infinitealloys.client.GuiPasture;
 import infinitealloys.client.GuiPrinter;
 import infinitealloys.client.GuiXray;
 import infinitealloys.inventory.ContainerAnalyzer;
@@ -14,6 +15,7 @@ import infinitealloys.tile.TileEntityAnalyzer;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
+import infinitealloys.tile.TileEntityPasture;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
 import infinitealloys.util.Consts;
@@ -48,6 +50,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 		switch(id) {
 			case 0:
+			case 5:
 				return new ContainerMachine(player.inventory, (TileEntityMachine)tileEntity);
 			case 1:
 				return new ContainerMetalForge(player.inventory, (TileEntityMetalForge)tileEntity);
@@ -75,6 +78,8 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 				return new GuiPrinter(player.inventory, (TileEntityPrinter)tileEntity);
 			case 4:
 				return new GuiXray(player.inventory, (TileEntityXray)tileEntity);
+			case 5:
+				return new GuiPasture(player.inventory, (TileEntityPasture)tileEntity);
 		}
 		return null;
 	}

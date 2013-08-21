@@ -8,6 +8,7 @@ import infinitealloys.tile.TileEntityAnalyzer;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
+import infinitealloys.tile.TileEntityPasture;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
 import infinitealloys.util.Consts;
@@ -52,7 +53,8 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
-		int type = side <= Consts.BOTTOM ? 0 : side == ((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z)).front ? 1 : 2;
+		int type = side <= Consts.BOTTOM ? 0 : side == ((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z))
+				.front ? 1 : 2;
 		return Blocks.machineIcons[blockAccess.getBlockMetadata(x, y, z)][type];
 	}
 
@@ -123,6 +125,8 @@ public class BlockMachine extends BlockContainer {
 			player.openGui(InfiniteAlloys.instance, 3, world, tem.xCoord, tem.yCoord, tem.zCoord);
 		else if(tem instanceof TileEntityXray)
 			player.openGui(InfiniteAlloys.instance, 4, world, tem.xCoord, tem.yCoord, tem.zCoord);
+		else if(tem instanceof TileEntityPasture)
+			player.openGui(InfiniteAlloys.instance, 5, world, tem.xCoord, tem.yCoord, tem.zCoord);
 		if(Funcs.isServer()) {
 			tem.playersUsing.add(player.username);
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEPacketToClient(tem), (Player)player);

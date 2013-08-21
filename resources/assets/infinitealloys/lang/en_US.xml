@@ -4,6 +4,10 @@
 	<comment>'Murican English Localization File</comment>
 	<entry key="itemGroup.main">Infinite Alloys</entry>
 
+    <entry key="general.off">Off</entry>
+    <entry key="general.on">On</entry>
+    <entry key="general.mode">Mode</entry>
+
 	<entry key="multi.machinecomponent.name">Machine Component</entry>
 	<entry key="multi.upgradecomponent.name">Upgrade Component</entry>
 
@@ -42,6 +46,7 @@
 	<entry key="machine.analyzer.name">Analyzer</entry>
 	<entry key="machine.printer.name">Printer</entry>
 	<entry key="machine.xray.name">X-Ray</entry>
+    <entry key="machine.pasture.name">Pasture</entry>
 
 	<entry key="achievement.craftMetalForge">Your First Machine</entry>
 	<entry key="achievement.craftMetalForge.desc">Craft A Metal Forge</entry>
@@ -57,6 +62,19 @@
 	<entry key="achievement.smeltAlloy5.desc">Create A Fifth Usable Alloy</entry>
 	<entry key="achievement.smeltAlloy6">Mixing Metals 6</entry>
 	<entry key="achievement.smeltAlloy6.desc">Create A Sixth Usable Alloy</entry>
+
+    <entry key="pasture.mode.0">Off</entry>
+    <entry key="pasture.mode.1">Animals</entry>
+    <entry key="pasture.mode.2">Monsters</entry>
+    <entry key="pasture.mode.3">Both</entry>
+    <entry key="pasture.animal.0">Chicken</entry>
+    <entry key="pasture.animal.1">Cow</entry>
+    <entry key="pasture.animal.2">Pig</entry>
+    <entry key="pasture.animal.3">Sheep</entry>
+    <entry key="pasture.monster.0">Creeper</entry>
+    <entry key="pasture.monster.1">Skeleton</entry>
+    <entry key="pasture.monster.2">Spider</entry>
+    <entry key="pasture.monster.3">Zombie</entry>
 
 	<entry key="machineHelp.upgrade.title">Upgrades</entry>
 	<entry key="machineHelp.upgrade.info">Place an upgrade item here/nto add it to the machine</entry>

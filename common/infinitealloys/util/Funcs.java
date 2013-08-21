@@ -16,14 +16,29 @@ public class Funcs {
 		return getBlock(world.getBlockId(x, y, z));
 	}
 
-	public static int intAtPos(int radix, int strlen, int n, int pos) {
+	/** Translate a number n into a radix, add leading zeros to make it length strlen, then get the digit at pos
+	 * 
+	 * @param radix the radix of the number being given, e.g. 10 (decimal) or 2 (binary)\
+	 * @param strlen the length to make the number (wqill be filled in with leading zeros) before finding the digit
+	 * @param n the number that is being used
+	 * @param pos the position of the digit to be found
+	 * @return the digit at pos, after adding leading zeros to make it length strlen */
+	public static int intAtPos(int n, int radix, int strlen, int pos) {
 		return Character.digit(addLeadingZeros(Integer.toString(n, radix), strlen).charAt(pos), radix);
 	}
 
+	/** Take the log base n of num
+	 * 
+	 * @param base the base of the logarithm
+	 * @param n the number to be used */
 	public static double logn(int base, double num) {
 		return Math.log(num) / Math.log(base);
 	}
 
+	/** Add leading zeros to a number to make it a certain length
+	 * 
+	 * @param s the string to be extended
+	 * @param finalSize the length to be acheived */
 	public static String addLeadingZeros(String s, int finalSize) {
 		s.trim();
 		int length = s.length();
@@ -32,8 +47,21 @@ public class Funcs {
 		return s;
 	}
 
-	public static String getLoc(String key) {
-		return LanguageRegistry.instance().getStringLocalization(key);
+	/** Get a localization or series of localization with keys. Add '/' to the start of a key to have it added to the final string without being localized. e.g.
+	 * getLoc("general.off", "/is not", "general.on") would return "Off is not On"
+	 * 
+	 * @param keys the list of keys to be localized and spliced together into a final string */
+	public static String getLoc(String... keys) {
+		String finalKey = "";
+		for(String key : keys) {
+			if(key.length() == 0)
+				continue;
+			if(key.charAt(0) == '/')
+				finalKey += key.substring(1);
+			else
+				finalKey += LanguageRegistry.instance().getStringLocalization(key);
+		}
+		return finalKey;
 	}
 
 	/** Convert a Vanilla MC block face int to a ForgeDirection */

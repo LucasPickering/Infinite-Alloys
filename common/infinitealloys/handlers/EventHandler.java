@@ -47,8 +47,8 @@ public class EventHandler implements ICraftingHandler {
 					int metalCount = Consts.METAL_COUNT;
 					byte[] alloyDigits = new byte[metalCount];
 					for(int j = 0; j < metalCount; j++) {
-						int min = Funcs.intAtPos(Consts.ALLOY_RADIX, metalCount, Consts.VALID_ALLOY_MINS[i], j);
-						int max = Funcs.intAtPos(Consts.ALLOY_RADIX, metalCount, Consts.VALID_ALLOY_MAXES[i], j);
+						int min = Funcs.intAtPos(Consts.VALID_ALLOY_MINS[i], Consts.ALLOY_RADIX, metalCount, j);
+						int max = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[i], Consts.ALLOY_RADIX, metalCount, j);
 						alloyDigits[j] = (byte)(min + (max == min ? 0 : random.nextInt(max - min)));
 					}
 					String alloy = "";
@@ -118,6 +118,5 @@ public class EventHandler implements ICraftingHandler {
 	}
 
 	@Override
-	public void onSmelting(EntityPlayer player, ItemStack item) {
-	}
+	public void onSmelting(EntityPlayer player, ItemStack item) {}
 }

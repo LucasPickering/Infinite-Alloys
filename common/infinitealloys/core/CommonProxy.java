@@ -42,8 +42,7 @@ public class CommonProxy {
 	private ItemStack[] upgrades = new ItemStack[Consts.UPGRADE_COUNT];
 	public GfxHandler gfxHandler;
 
-	public void initLocalization() {
-	}
+	public void initLocalization() {}
 
 	public void initBlocks() {
 		Blocks.ore = new BlockOre(Blocks.oreID).setHardness(3F).setUnlocalizedName("IAore");
@@ -178,8 +177,7 @@ public class CommonProxy {
 		AchievementPage.registerAchievementPage(InfiniteAlloys.achPage);
 	}
 
-	public void initRendering() {
-	}
+	public void initRendering() {}
 
 	protected void addName(Object obj, String... keys) {
 		String name = "";

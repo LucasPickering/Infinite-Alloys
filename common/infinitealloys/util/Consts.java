@@ -36,7 +36,7 @@ public class Consts {
 	public static final String[] METAL_NAMES = { "zinc", "magnesium", "scandium", "tantalum", "roguite", "verdite", "hydronium", "swagtanium" };
 
 	/** The names of each machine */
-	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray" };
+	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray"};//, "pasture" };
 
 	/** The names of each multi item */
 	public static final String[] MULTI_ITEM_NAMES = { "machinecomponent", "upgradecomponent" };
@@ -46,4 +46,8 @@ public class Consts {
 
 	/** The amount of coords that the gps can hold */
 	public static final int GPS_MAX_COORDS = 10;
+
+	public static final int PASTURE_MODES = 4;
+	public static final int PASTURE_ANIMALS = 4;
+	public static final int PASTURE_MONSTERS = 4;
 }

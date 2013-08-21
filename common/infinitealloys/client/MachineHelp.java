@@ -9,8 +9,7 @@ import infinitealloys.tile.TileEntityXray;
 
 public enum MachineHelp {
 
-	/*
-	 * CP - Computer MF - Metal Forge AZ - Analyzer PR - Printer XR - X-ray */
+	/* CP - Computer MF - Metal Forge AZ - Analyzer PR - Printer XR - X-ray */
 
 	ENERGY("energy", 0xff8900, 12, 6, 12, 34),
 	CP_UPGRADE("upgrade", 0x9c00ff, 139, 42, 18, 18), CP_TAB("cpTab", 0xff8900, -24, 6, 27, 24), CP_ADD("cpAdd", 0x00ff16, 6, 5, 158, 20),

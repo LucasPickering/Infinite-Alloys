@@ -65,6 +65,5 @@ public class InfiniteAlloys {
 	}
 
 	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
-	}
+	public void postInit(FMLPostInitializationEvent event) {}
 }

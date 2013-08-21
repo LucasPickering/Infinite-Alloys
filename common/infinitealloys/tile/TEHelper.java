@@ -17,6 +17,7 @@ public class TEHelper {
 	public static final int ANALYZER = 2;
 	public static final int PRINTER = 3;
 	public static final int XRAY = 4;
+	public static final int PASTURE = 5;
 
 	public static final int SPEED1 = 1;
 	public static final int SPEED2 = 2;
@@ -58,14 +59,26 @@ public class TEHelper {
 		prereqNeedingUpgrades.add(ELECCAPACITY2);
 	}
 
+	/** Add a block to the list of blocks that can be detected by the x-ray
+	 * 
+	 * @param block the block to be added to the list with a metadata of 0
+	 * @param worth the amount the block is worth, higher worth requires more energy to detect */
 	public static void addDetectable(Block block, int worth) {
 		addDetectable(block, 0, worth);
 	}
 
+	/** Add a block with metadata to the list of blocks that can be detected by the x-ray
+	 * 
+	 * @param block the block to be added to the list
+	 * @param metadata the metadata of the block to be added to the list
+	 * @param worth the amount the block is worth, higher worth requires more energy to detect */
 	public static void addDetectable(Block block, int metadata, int worth) {
 		detectables.put(block.blockID + "@" + metadata, worth);
 	}
 
+	/** Add a block or blocks to the list of blocks that can be detected by the x-ray with an ore dictionary string 
+	 * @param dictName the ore dictionary string from which the block(s) is/are retrieved
+	 * @param worth the amount the block(s) is/are worth, higher worth requires more energy to detect*/
 	public static void addDictDetectables(String dictName, int worth) {
 		for(ItemStack block : OreDictionary.getOres(dictName))
 			detectables.put(block.itemID + "@" + block.getItemDamage(), worth);
@@ -146,6 +159,8 @@ public class TEHelper {
 				}
 			case XRAY:
 				return TEHelper.isDetectable(itemstack);
+			case PASTURE:
+				return false;
 		}
 		return false;
 	}

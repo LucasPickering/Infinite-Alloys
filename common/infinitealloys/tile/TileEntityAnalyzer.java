@@ -94,14 +94,14 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 		else if(hasUpgrade(TEHelper.SPEED1))
 			ticksToProcess = 2700;
 		else
-			ticksToProcess = 10; // TODO: Change this back to 3600
+			ticksToProcess = 3600;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
 			joulesUsedPerTick = 180;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
 			joulesUsedPerTick = 270;
 		else
-			joulesUsedPerTick = 0; // TODO: Change this back to 360
+			joulesUsedPerTick = 360;
 
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 

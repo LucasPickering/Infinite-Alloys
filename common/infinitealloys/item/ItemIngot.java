@@ -2,7 +2,6 @@ package infinitealloys.item;
 
 import infinitealloys.util.Consts;
 import java.util.List;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;

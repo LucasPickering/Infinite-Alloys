@@ -42,7 +42,7 @@ public class ItemAlloyIngot extends ItemIA {
 		else
 			return;
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
-			metalMasses[i] = Funcs.intAtPos(Consts.ALLOY_RADIX, Consts.METAL_COUNT, alloy, i);
+			metalMasses[i] = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i);
 			totalMass += metalMasses[i];
 		}
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
@@ -64,7 +64,7 @@ public class ItemAlloyIngot extends ItemIA {
 			alloy = InfiniteAlloys.instance.worldData.getValidAlloys()[itemstack.getItemDamage() - 1];
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
 			int ingotColor = Consts.metalColors[Consts.METAL_COUNT - 1 - i];
-			int alloyAmt = Funcs.intAtPos(Consts.ALLOY_RADIX, Consts.METAL_COUNT, alloy, i);
+			int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i);
 			colorCount += alloyAmt;
 			redTot += (ingotColor >> 16 & 255) * alloyAmt;
 			greenTot += (ingotColor >> 8 & 255) * alloyAmt;
@@ -81,6 +81,5 @@ public class ItemAlloyIngot extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int id, CreativeTabs creativetabs, List list) {
-	}
+	public void getSubItems(int id, CreativeTabs creativetabs, List list) {}
 }
