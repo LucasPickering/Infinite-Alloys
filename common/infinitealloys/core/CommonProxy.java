@@ -18,6 +18,7 @@ import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TileEntityAnalyzer;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMetalForge;
+import infinitealloys.tile.TileEntityPasture;
 import infinitealloys.tile.TileEntityPrinter;
 import infinitealloys.tile.TileEntityXray;
 import infinitealloys.util.Consts;
@@ -144,6 +145,7 @@ public class CommonProxy {
 		GameRegistry.registerTileEntity(TileEntityAnalyzer.class, "Analyzer");
 		GameRegistry.registerTileEntity(TileEntityPrinter.class, "Printer");
 		GameRegistry.registerTileEntity(TileEntityXray.class, "Xray");
+		GameRegistry.registerTileEntity(TileEntityPasture.class, "Pasture");
 		TEHelper.addDetectable(Block.oreCoal, 1);
 		TEHelper.addDetectable(Block.oreIron, 2);
 		TEHelper.addDetectable(Block.oreGold, 6);

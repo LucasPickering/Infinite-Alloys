@@ -66,11 +66,11 @@ public class TileEntityPasture extends TileEntityMachine {
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			joulesUsedPerTick = 180;
+			joulesUsedPerTick = 1;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			joulesUsedPerTick = 270;
+			joulesUsedPerTick = 2;
 		else
-			joulesUsedPerTick = 360;
+			joulesUsedPerTick = 4;
 
 		if(hasUpgrade(TEHelper.CAPACITY2))
 			maxSpots = 8;

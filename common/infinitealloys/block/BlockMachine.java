@@ -53,8 +53,10 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
-		int type = side <= Consts.BOTTOM ? 0 : side == ((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z))
-				.front ? 1 : 2;
+		int type = side <= Consts.BOTTOM ? 0 : side == 
+				((TileEntityMachine)blockAccess.
+						getBlockTileEntity(x, y, z)).
+						front ? 1 : 2;
 		return Blocks.machineIcons[blockAccess.getBlockMetadata(x, y, z)][type];
 	}
 
@@ -146,6 +148,8 @@ public class BlockMachine extends BlockContainer {
 				return new TileEntityPrinter();
 			case 4:
 				return new TileEntityXray();
+			case 5:
+				return new TileEntityPasture();
 		}
 		return null;
 	}

@@ -9,7 +9,7 @@ public class Consts {
 
 	public static final int MULTI_ITEM_COUNT = 2;
 	public static final int METAL_COUNT = 8;
-	public static final int MACHINE_COUNT = 5;
+	public static final int MACHINE_COUNT = 6;
 	public static final int UPGRADE_COUNT = 11;
 	public static final int VALID_ALLOY_COUNT = 6;
 
@@ -36,7 +36,7 @@ public class Consts {
 	public static final String[] METAL_NAMES = { "zinc", "magnesium", "scandium", "tantalum", "roguite", "verdite", "hydronium", "swagtanium" };
 
 	/** The names of each machine */
-	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray"};//, "pasture" };
+	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray", "pasture" };
 
 	/** The names of each multi item */
 	public static final String[] MULTI_ITEM_NAMES = { "machinecomponent", "upgradecomponent" };

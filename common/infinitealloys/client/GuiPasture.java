@@ -29,19 +29,18 @@ public class GuiPasture extends GuiMachine {
 		super.initGui();
 
 		// Initialize the mode button with the text "Mode: <mode>", where <mode> is Off, Animals, Monsters, Both
-		buttonList.add(modeButton = new GuiButton(0, width / 2 + 44, height / 2 - 83, 32, 20, Funcs.getLoc("general.mode", "/: ", "pasture.mode" + tep.mode)));
+		buttonList.add(modeButton = new GuiButton(0, width / 2, height / 2, 32, 20, Funcs.getLoc("general.mode", "/: ", "pasture.mode" + tep.mode)));
 
 		// Initialize each animal button with the text "<animal>: <off/on>"
 		for(int i = 0; i < Consts.PASTURE_ANIMALS; i++) {
-			buttonList.add(animalButtons[i] = new GuiButton(i + 1, width / 2 + 20, height / 2 - 83 + i * 28, 32, 20, Funcs.getLoc("pasture.animal." + i, "/: ", tep.animals[i] ? "general.on"
-					: "general.off")));
+			buttonList.add(animalButtons[i] = new GuiButton(i + 1, width / 2 - 40, height / 2 - 83 + i * 22, 24, 20, Funcs.getLoc(tep.animals[i] ? "general.on" : "general.off")));
 			animalButtons[i].enabled = tep.animals[i] || tep.hasFreeSpots();
 		}
 
 		// Initialize each monster button with the text "<monster>: <off/on>"
 		for(int i = 0; i < Consts.PASTURE_MONSTERS; i++) {
-			buttonList.add(monsterButtons[i] = new GuiButton(i + Consts.PASTURE_ANIMALS + 1, width / 2 + 80, height / 2 - 83 + i * 28, 32, 20, Funcs.getLoc("pasture.monster." + i, "/: ",
-					tep.monsters[i] ? "general.on" : "general.off")));
+			buttonList.add(monsterButtons[i] = new GuiButton(i + Consts.PASTURE_ANIMALS + 1, width / 2 - 10, height / 2 - 83 + i * 22, 24, 20, Funcs.getLoc(tep.monsters[i] ? "general.on"
+					: "general.off")));
 			monsterButtons[i].enabled = tep.monsters[i] || tep.hasFreeSpots();
 		}
 	}
