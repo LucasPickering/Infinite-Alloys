@@ -3,6 +3,8 @@ package infinitealloys.tile;
 import java.util.Arrays;
 import infinitealloys.util.Consts;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public class TileEntityPasture extends TileEntityMachine {
 
@@ -15,7 +17,7 @@ public class TileEntityPasture extends TileEntityMachine {
 	/** The mode value for both trapping animals and repelling monsters */
 	public static final int MODE_BOTH = 3;
 	/** The machines mode: 0 is off, 1 is animal-trapping only, 2 is monster-repulsion only, 3 is both (requires upgrade) */
-	public int mode;
+	public byte mode;
 	/** Whether or not to trap each animal in the order of chicken, cow, pig, sheep */
 	public boolean[] animals = new boolean[Consts.PASTURE_ANIMALS];
 	/** Whether or not to repel each monster in the order of creeper, skeleton, spider, zombie */
@@ -31,6 +33,7 @@ public class TileEntityPasture extends TileEntityMachine {
 	public TileEntityPasture() {
 		super(0);
 		inventoryStacks = new ItemStack[1];
+		ticksToProcess = 0;
 	}
 
 	@Override
@@ -55,6 +58,26 @@ public class TileEntityPasture extends TileEntityMachine {
 
 	@Override
 	public void finishProcessing() {}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		mode = tagCompound.getByte("Mode");
+		for(int i = 0; i < Consts.PASTURE_ANIMALS; i++)
+			animals[i] = tagCompound.getBoolean("Animal" + i);
+		for(int i = 0; i < Consts.PASTURE_MONSTERS; i++)
+			monsters[i] = tagCompound.getBoolean("Monster" + i);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		tagCompound.setByte("Mode", mode);
+		for(int i = 0; i < Consts.PASTURE_ANIMALS; i++)
+			tagCompound.setBoolean("Animal" + i, animals[i]);
+		for(int i = 0; i < Consts.PASTURE_MONSTERS; i++)
+			tagCompound.setBoolean("Monster" + i, monsters[i]);
+	}
 
 	@Override
 	public int getJoulesUsed() {

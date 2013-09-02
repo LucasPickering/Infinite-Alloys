@@ -50,8 +50,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 		switch(id) {
 			case 0:
-			case 5:
-				return new ContainerMachine(player.inventory, (TileEntityMachine)tileEntity);
+				return new ContainerMachine(player.inventory, (TileEntityMachine)tileEntity, 8, 84, 140, 43);
 			case 1:
 				return new ContainerMetalForge(player.inventory, (TileEntityMetalForge)tileEntity);
 			case 2:
@@ -60,6 +59,8 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 				return new ContainerPrinter(player.inventory, (TileEntityPrinter)tileEntity);
 			case 4:
 				return new ContainerXray(player.inventory, (TileEntityXray)tileEntity);
+			case 5:
+				return new ContainerMachine(player.inventory, (TileEntityMachine)tileEntity, 13, 94, 141, 44);
 		}
 		return null;
 	}

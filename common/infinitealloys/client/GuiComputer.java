@@ -16,7 +16,7 @@ public class GuiComputer extends GuiMachine {
 	private GuiButton addMachine;
 
 	public GuiComputer(InventoryPlayer inventoryPlayer, TileEntityComputer tileEntity) {
-		super(176, 176, tileEntity, new ContainerMachine(inventoryPlayer, tileEntity), "computer");
+		super(176, 176, tileEntity, new ContainerMachine(inventoryPlayer, tileEntity, 8, 84, 140, 43), "computer");
 		tec = tileEntity;
 	}
 

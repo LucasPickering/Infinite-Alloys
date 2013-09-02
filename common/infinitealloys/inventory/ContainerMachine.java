@@ -16,14 +16,14 @@ public class ContainerMachine extends Container {
 		inventory = tileEntity;
 	}
 
-	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine tileEntity) {
+	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine tileEntity, int invX, int invY, int upgX, int upgY) {
 		inventory = tileEntity;
-		addSlotToContainer(new SlotUpgrade(inventory, 0, 140, 43));
+		addSlotToContainer(new SlotUpgrade(inventory, inventory.upgradeSlotIndex, upgX, upgY));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, invX + x * 18, invY + y * 18));
 		for(int x = 0; x < 9; x++)
-			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 142));
+			addSlotToContainer(new Slot(inventoryPlayer, x, invX + x * 18, invY + 58));
 	}
 
 	@Override
