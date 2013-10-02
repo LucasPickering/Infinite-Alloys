@@ -53,10 +53,10 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
-		int type = side <= Consts.BOTTOM ? 0 : side == 
+		int type = side <= Consts.BOTTOM ? 0 : side ==
 				((TileEntityMachine)blockAccess.
 						getBlockTileEntity(x, y, z)).
-						front ? 1 : 2;
+				front ? 1 : 2;
 		return Blocks.machineIcons[blockAccess.getBlockMetadata(x, y, z)][type];
 	}
 
@@ -71,17 +71,15 @@ public class BlockMachine extends BlockContainer {
 		ItemStack currentItem = player.inventory.getCurrentItem();
 		if(currentItem != null && currentItem.itemID == Items.gps.itemID && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).canNetwork) {
 			if(player.isSneaking() && world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer && currentItem.hasTagCompound()) {
-				if(currentItem.hasTagCompound()) {
-					NBTTagCompound tagCompound = currentItem.getTagCompound();
-					for(int i = 0; i < Consts.GPS_MAX_COORDS; i++) {
-						if(!tagCompound.hasKey("coords" + i))
-							continue;
-						int[] coords = tagCompound.getIntArray("coords" + i);
-						if(((TileEntityComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
-							if(world.isRemote)
-								player.addChatMessage("Adding machine at " + coords[0] + ", " + coords[1] + ", " + coords[2]);
-							tagCompound.removeTag("coords" + i);
-						}
+				NBTTagCompound tagCompound = currentItem.getTagCompound();
+				for(int i = 0; i < Consts.GPS_MAX_COORDS; i++) {
+					if(!tagCompound.hasKey("coords" + i))
+						continue;
+					int[] coords = tagCompound.getIntArray("coords" + i);
+					if(((TileEntityComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
+						if(world.isRemote)
+							player.addChatMessage("Adding machine at " + coords[0] + ", " + coords[1] + ", " + coords[2]);
+						tagCompound.removeTag("coords" + i);
 					}
 				}
 			}

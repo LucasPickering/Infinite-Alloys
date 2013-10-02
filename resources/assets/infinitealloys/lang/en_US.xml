@@ -4,9 +4,7 @@
 	<comment>'Murican English Localization File</comment>
 	<entry key="itemGroup.main">Infinite Alloys</entry>
 
-    <entry key="general.off">Off</entry>
     <entry key="general.on">On</entry>
-    <entry key="general.mode">Mode</entry>
 
 	<entry key="multi.machinecomponent.name">Machine Component</entry>
 	<entry key="multi.upgradecomponent.name">Upgrade Component</entry>
@@ -64,9 +62,8 @@
 	<entry key="achievement.smeltAlloy6.desc">Create A Sixth Usable Alloy</entry>
 
     <entry key="pasture.mode.0">Off</entry>
-    <entry key="pasture.mode.1">Animals</entry>
-    <entry key="pasture.mode.2">Monsters</entry>
-    <entry key="pasture.mode.3">Both</entry>
+    <entry key="pasture.mode.1">Att.</entry>
+    <entry key="pasture.mode.2">Rep.</entry>
     <entry key="pasture.animal.0">Chicken</entry>
     <entry key="pasture.animal.1">Cow</entry>
     <entry key="pasture.animal.2">Pig</entry>
