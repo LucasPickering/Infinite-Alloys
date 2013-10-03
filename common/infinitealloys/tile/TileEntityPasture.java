@@ -23,14 +23,13 @@ public class TileEntityPasture extends TileEntityMachine {
 	public static final int MODE_ATTRACT = 1;
 	/** The mode value for only repelling monsters */
 	public static final int MODE_REPEL = 2;
-	/** 0 is do nothing to the animal, 1 is attract the animal, 2 is repel the animal. Animals are in the order of chicken, cow, pig, sheep. */
-	public byte[] animals = new byte[Consts.PASTURE_ANIMALS];
-	/** 0 is do nothing to the monster, 1 is attract the monster, 2 is repel the monster. Monsters are in the order of creeper, skeleton, spider, zombie */
-	public byte[] monsters = new byte[Consts.PASTURE_MONSTERS];
-	/** The list of entities that are currently trapped */
-	private ArrayList<EntityCreature> trapList = new ArrayList<EntityCreature>();
+	/** 0 is do nothing to the mob, 1 is attract the mob, 2 is repel the mob. The order can be seen in {@link #mobClasses mobClasses} */
+	public byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
+	/** The entity classes for each mob to be used in the {@link #updateEntity() updateEntity} function */
+	private final Class[] mobClasses = { EntityChicken.class, EntityCow.class, EntityCow.class, EntitySheep.class, EntityCreeper.class, EntitySkeleton.class, EntitySpider.class, EntityZombie.class };
 	private int maxSpots;
-	private int range;
+	private int trapRange;
+	private int repelRange;
 
 	public TileEntityPasture(int facing) {
 		this();
@@ -56,49 +55,39 @@ public class TileEntityPasture extends TileEntityMachine {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		AxisAlignedBB aabb = AxisAlignedBB.getAABBPool().getAABB(xCoord - range, yCoord - range, zCoord - range, xCoord + range + 1, yCoord + range + 1, zCoord + range + 1);
+		ArrayList<EntityCreature> trapList = new ArrayList<EntityCreature>();
+		ArrayList<EntityCreature> repelList = new ArrayList<EntityCreature>();
 
-		if(animals[0] == 1)
-			for(EntityChicken chicken : (ArrayList<EntityChicken>)worldObj.getEntitiesWithinAABB(EntityChicken.class, aabb))
-				if(!trapList.contains(chicken))
-					trapList.add(chicken);
-		if(animals[1] == 1)
-			for(EntityCow cow : (ArrayList<EntityCow>)worldObj.getEntitiesWithinAABB(EntityCow.class, aabb))
-				if(!trapList.contains(cow))
-					trapList.add(cow);
-		if(animals[2] == 1)
-			for(EntityPig pig : (ArrayList<EntityPig>)worldObj.getEntitiesWithinAABB(EntityPig.class, aabb))
-				if(!trapList.contains(pig))
-					trapList.add(pig);
-		if(animals[3] == 1)
-			for(EntitySheep sheep : (ArrayList<EntitySheep>)worldObj.getEntitiesWithinAABB(EntitySheep.class, aabb))
-				if(!trapList.contains(sheep))
-					trapList.add(sheep);
-
-		if(monsters[0] == 1)
-			for(EntityCreeper creeper : (ArrayList<EntityCreeper>)worldObj.getEntitiesWithinAABB(EntityCreeper.class, aabb))
-				if(!trapList.contains(creeper))
-					trapList.add(creeper);
-		if(monsters[1] == 1)
-			for(EntitySkeleton skeleton : (ArrayList<EntitySkeleton>)worldObj.getEntitiesWithinAABB(EntitySkeleton.class, aabb))
-				if(!trapList.contains(skeleton))
-					trapList.add(skeleton);
-		if(monsters[2] == 1)
-			for(EntitySpider spider : (ArrayList<EntitySpider>)worldObj.getEntitiesWithinAABB(EntitySpider.class, aabb))
-				if(!trapList.contains(spider))
-					trapList.add(spider);
-		if(monsters[3] == 1)
-			for(EntityZombie zombie : (ArrayList<EntityZombie>)worldObj.getEntitiesWithinAABB(EntityZombie.class, aabb))
-				if(!trapList.contains(zombie))
-					trapList.add(zombie);
+		for(int i = 0; i < mobActions.length; i++) {
+			if(mobActions[i] == 1)
+				for(EntityCreature creature : (ArrayList<EntityChicken>)worldObj.getEntitiesWithinAABB(mobClasses[i],
+						AxisAlignedBB.getAABBPool().getAABB(xCoord - trapRange, yCoord - trapRange, zCoord - trapRange, xCoord + trapRange + 1, yCoord + trapRange + 1, zCoord + trapRange + 1)))
+					trapList.add(creature);
+			else if(mobActions[i] == 2) {
+				for(EntityCreature creature : (ArrayList<EntityChicken>)worldObj.getEntitiesWithinAABB(mobClasses[i],
+						AxisAlignedBB.getAABBPool().getAABB(xCoord - repelRange, yCoord - repelRange, zCoord - repelRange, xCoord + repelRange + 1, yCoord + repelRange + 1, zCoord + repelRange + 1))) {
+					repelList.add(creature);
+				}
+			}
+		}
 
 		for(EntityCreature creature : trapList) {
-			if(creature.posX * creature.posX + creature.posZ * creature.posZ >= range * range) { // Is the creature outside the edge of the pasture's range
-				float yawRads = creature.rotationYaw * (float)Math.PI / 180F;
-				if(Math.signum(xCoord - creature.posX) != Math.signum(Math.cos(yawRads))) // Is the creature moving away from the pasture in the x
-					creature.rotationYaw = Math.signum(creature.rotationYaw) * (float)Math.PI - creature.rotationYaw; // Turn the creature around in the x
-				if(Math.signum(zCoord - creature.posZ) != Math.signum(Math.sin(yawRads))) // Is the creature moving away from the pasture in the z
-					creature.rotationYaw = -creature.rotationYaw; // Turn the creature around in the z direction
+			if(creature.posX * creature.posX + creature.posZ * creature.posZ >= (trapRange - 1) * (trapRange - 1)) { // Is the creature outside the edge of the pasture's range, bring the range in one unit to capture mobs as they approach the edge
+				float yawRads = creature.rotationYaw * (float)Math.PI / 180F; // The direction the creature is facing in radians
+				if(Math.signum(xCoord - creature.posX) != Math.signum(Math.sin(yawRads))) // Is the creature moving away from the pasture in the x
+					creature.rotationYaw = -creature.rotationYaw; // Turn the creature around in the x direction
+				if(Math.signum(zCoord - creature.posZ) != Math.signum(Math.cos(yawRads))) // Is the creature moving away from the pasture in the z
+					creature.rotationYaw = Math.signum(creature.rotationYaw) * (float)Math.PI - creature.rotationYaw; // Turn the creature around in the z
+			}
+		}
+
+		for(EntityCreature creature : repelList) {
+			if(creature.posX * creature.posX + creature.posZ * creature.posZ <= (repelRange + 1) * (repelRange + 1)) { // Is the creature inside the edge of the pasture's range, push the range out one unit to capture mobs as they approach the edge
+				float yawRads = creature.rotationYaw * (float)Math.PI / 180F; // The direction the creature is facing in radians
+				if(Math.signum(creature.posX - xCoord) != Math.signum(Math.sin(yawRads))) // Is the creature moving away from the pasture in the x
+					creature.rotationYaw = -creature.rotationYaw; // Turn the creature around in the x direction
+				if(Math.signum(creature.posZ - zCoord) != Math.signum(Math.cos(yawRads))) // Is the creature moving away from the pasture in the z
+					creature.rotationYaw = Math.signum(creature.rotationYaw) * (float)Math.PI - creature.rotationYaw; // Turn the creature around in the z
 			}
 		}
 	}
@@ -116,19 +105,15 @@ public class TileEntityPasture extends TileEntityMachine {
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		for(int i = 0; i < Consts.PASTURE_ANIMALS; i++)
-			animals[i] = tagCompound.getByte("Animal" + i);
-		for(int i = 0; i < Consts.PASTURE_MONSTERS; i++)
-			monsters[i] = tagCompound.getByte("Monster" + i);
+		for(int i = 0; i < Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS; i++)
+			mobActions[i] = tagCompound.getByte("Mob" + i);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		for(int i = 0; i < Consts.PASTURE_ANIMALS; i++)
-			tagCompound.setByte("Animal" + i, animals[i]);
-		for(int i = 0; i < Consts.PASTURE_MONSTERS; i++)
-			tagCompound.setByte("Monster" + i, monsters[i]);
+		for(int i = 0; i < Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS; i++)
+			tagCompound.setByte("Mob" + i, mobActions[i]);
 	}
 
 	@Override
@@ -154,12 +139,18 @@ public class TileEntityPasture extends TileEntityMachine {
 		else
 			maxSpots = 2;
 
-		if(hasUpgrade(TEHelper.RANGE2))
-			range = 15;
-		else if(hasUpgrade(TEHelper.RANGE1))
-			range = 10;
-		else
-			range = 5;
+		if(hasUpgrade(TEHelper.RANGE2)) {
+			trapRange = 15;
+			repelRange = 24;
+		}
+		else if(hasUpgrade(TEHelper.RANGE1)) {
+			trapRange = 10;
+			repelRange = 16;
+		}
+		else {
+			trapRange = 5;
+			repelRange = 8;
+		}
 
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 
@@ -189,11 +180,8 @@ public class TileEntityPasture extends TileEntityMachine {
 	 * @return true if there is enough space to enable another animal or monster */
 	public boolean hasFreeSpots() {
 		int usedSpots = 0;
-		for(byte animal : animals)
-			if(animal > 0)
-				usedSpots++;
-		for(byte monster : monsters)
-			if(monster > 0)
+		for(byte mob : mobActions)
+			if(mob > 0)
 				usedSpots++;
 		return usedSpots < maxSpots;
 	}
