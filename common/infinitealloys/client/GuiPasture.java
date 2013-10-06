@@ -1,6 +1,8 @@
 package infinitealloys.client;
 
 import java.util.Arrays;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import infinitealloys.handlers.PacketHandler;
 import infinitealloys.inventory.ContainerMachine;
 import infinitealloys.tile.TileEntityPasture;
 import infinitealloys.util.Consts;
@@ -23,8 +25,7 @@ public class GuiPasture extends GuiMachine {
 	@Override
 	public void initGui() {
 		super.initGui();
-
-		// Initialize each mob button with the text "<off/on>"
+		// Initialize each mob button with the text "<off/trap/repel>"
 		for(int i = 0; i < Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS; i++) {
 			buttonList.add(mobButtons[i] = new GuiButton(i + 1, width / 2 - (i < Consts.PASTURE_ANIMALS ? 53 : 23),
 					height / 2 - 88 + i % Consts.PASTURE_ANIMALS * 22, 24, 20, Funcs.getLoc("pasture.mode." + tep.mobActions[i])));
@@ -35,9 +36,8 @@ public class GuiPasture extends GuiMachine {
 	@Override
 	public void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
-
 		// If a mob button is clicked
-		if(1 < button.id)
+		if(0 < button.id)
 			// Cycle the value of the field associated with the button
 			tep.mobActions[button.id - 1] = (byte)(++tep.mobActions[button.id - 1] % Consts.PASTURE_MODES);
 
@@ -52,5 +52,8 @@ public class GuiPasture extends GuiMachine {
 			mobButtons[i].enabled = tep.mobActions[i] > 0 || tep.hasFreeSpots();
 			mobButtons[i].displayString = Funcs.getLoc("pasture.mode." + tep.mobActions[i]);
 		}
+
+		// Send a packet to the server to sync the settings
+		PacketDispatcher.sendPacketToServer(PacketHandler.getTEPacketToServer(tep));
 	}
 }

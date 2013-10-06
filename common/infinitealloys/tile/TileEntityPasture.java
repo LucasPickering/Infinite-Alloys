@@ -27,9 +27,9 @@ public class TileEntityPasture extends TileEntityMachine {
 	public byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 	/** The entity classes for each mob to be used in the {@link #updateEntity() updateEntity} function */
 	private final Class[] mobClasses = { EntityChicken.class, EntityCow.class, EntityCow.class, EntitySheep.class, EntityCreeper.class, EntitySkeleton.class, EntitySpider.class, EntityZombie.class };
-	private int maxSpots;
-	private int trapRange;
-	private int repelRange;
+	private byte maxSpots;
+	private byte trapRange;
+	private byte repelRange;
 
 	public TileEntityPasture(int facing) {
 		this();
@@ -100,7 +100,9 @@ public class TileEntityPasture extends TileEntityMachine {
 	@Override
 	public void finishProcessing() {}
 
-	public void handlePacketData(byte[] recipeAmts) {}
+	public void handlePacketData(byte[] mobActions) {
+		this.mobActions = mobActions;
+	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {

@@ -6,6 +6,7 @@ import infinitealloys.core.WorldData;
 import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
+import infinitealloys.tile.TileEntityPasture;
 import infinitealloys.tile.TileEntityXray;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -81,6 +82,12 @@ public class PacketHandler implements IPacketHandler {
 						for(int i = 0; i < size; i++)
 							tex.addDetectedBlock(new Point(data.readInt(), data.readShort(), data.readInt()));
 					}
+					else if(te instanceof TileEntityPasture) {
+						byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
+						for(int i = 0; i < mobActions.length; i++)
+							mobActions[i] = data.readByte();
+						((TileEntityPasture)te).handlePacketData(mobActions);
+					}
 				}
 				break;
 			case TE_CLIENT_TO_SERVER:
@@ -99,6 +106,12 @@ public class PacketHandler implements IPacketHandler {
 					String playerName = ((EntityPlayer)player).username;
 					short selectedButton = data.readShort();
 					((TileEntityXray)te).handlePacketDataFromClient(searching, playerName, selectedButton);
+				}
+				else if(te instanceof TileEntityPasture) {
+					byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
+					for(int i = 0; i < mobActions.length; i++)
+						mobActions[i] = data.readByte();
+					((TileEntityPasture)te).handlePacketData(mobActions);
 				}
 				break;
 			case TE_JOULES:
@@ -178,6 +191,9 @@ public class PacketHandler implements IPacketHandler {
 					dos.writeInt(p.z);
 				}
 			}
+			else if(tem instanceof TileEntityPasture)
+				for(byte mob : ((TileEntityPasture)tem).mobActions)
+					dos.writeByte(mob);
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -192,6 +208,8 @@ public class PacketHandler implements IPacketHandler {
 			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityMetalForge)tem).recipeAmts);
 		if(tem instanceof TileEntityXray)
 			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityXray)tem).searchingClient, ((TileEntityXray)tem).selectedButton);
+		if(tem instanceof TileEntityPasture)
+			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityPasture)tem).mobActions);
 		return null;
 	}
 
