@@ -61,34 +61,28 @@ public class TileEntityPasture extends TileEntityMachine {
 		for(int i = 0; i < mobActions.length; i++) {
 			if(mobActions[i] == 1)
 				for(EntityCreature creature : (ArrayList<EntityChicken>)worldObj.getEntitiesWithinAABB(mobClasses[i],
-						AxisAlignedBB.getAABBPool().getAABB(xCoord - trapRange, yCoord - trapRange, zCoord - trapRange, xCoord + trapRange + 1, yCoord + trapRange + 1, zCoord + trapRange + 1)))
+						AxisAlignedBB.getAABBPool().getAABB(xCoord - trapRange - 1, 0, zCoord - trapRange - 1, xCoord + trapRange + 2, worldObj.getHeight(), zCoord + trapRange + 2)))
 					trapList.add(creature);
 			else if(mobActions[i] == 2) {
 				for(EntityCreature creature : (ArrayList<EntityChicken>)worldObj.getEntitiesWithinAABB(mobClasses[i],
-						AxisAlignedBB.getAABBPool().getAABB(xCoord - repelRange, yCoord - repelRange, zCoord - repelRange, xCoord + repelRange + 1, yCoord + repelRange + 1, zCoord + repelRange + 1))) {
+						AxisAlignedBB.getAABBPool().getAABB(xCoord - repelRange, 0, zCoord - repelRange, xCoord + repelRange + 1, worldObj.getHeight(), zCoord + repelRange + 1))) {
 					repelList.add(creature);
 				}
 			}
 		}
 
 		for(EntityCreature creature : trapList) {
-			if(creature.posX * creature.posX + creature.posZ * creature.posZ >= (trapRange - 1) * (trapRange - 1)) { // Is the creature outside the edge of the pasture's range, bring the range in one unit to capture mobs as they approach the edge
-				float yawRads = creature.rotationYaw * (float)Math.PI / 180F; // The direction the creature is facing in radians
-				if(Math.signum(xCoord - creature.posX) != Math.signum(Math.sin(yawRads))) // Is the creature moving away from the pasture in the x
-					creature.rotationYaw = -creature.rotationYaw; // Turn the creature around in the x direction
-				if(Math.signum(zCoord - creature.posZ) != Math.signum(Math.cos(yawRads))) // Is the creature moving away from the pasture in the z
-					creature.rotationYaw = Math.signum(creature.rotationYaw) * (float)Math.PI - creature.rotationYaw; // Turn the creature around in the z
-			}
+			if(Math.abs(xCoord - creature.posX) > trapRange + 1) // Is the creature too far away in the x direction
+				creature.moveEntity(xCoord + Math.signum(creature.posX - xCoord) * trapRange - creature.posX, 0, 0); // Move it back to the edge of the radius in the x direction
+			if(Math.abs(zCoord - creature.posZ) > trapRange + 1) // Is the creature too far away in the z direction
+				creature.moveEntity(0, 0, zCoord + Math.signum(creature.posZ - zCoord) * trapRange - creature.posZ); // Move is back to the edge of the radius in the z direction
 		}
 
 		for(EntityCreature creature : repelList) {
-			if(creature.posX * creature.posX + creature.posZ * creature.posZ <= (repelRange + 1) * (repelRange + 1)) { // Is the creature inside the edge of the pasture's range, push the range out one unit to capture mobs as they approach the edge
-				float yawRads = creature.rotationYaw * (float)Math.PI / 180F; // The direction the creature is facing in radians
-				if(Math.signum(creature.posX - xCoord) != Math.signum(Math.sin(yawRads))) // Is the creature moving away from the pasture in the x
-					creature.rotationYaw = -creature.rotationYaw; // Turn the creature around in the x direction
-				if(Math.signum(creature.posZ - zCoord) != Math.signum(Math.cos(yawRads))) // Is the creature moving away from the pasture in the z
-					creature.rotationYaw = Math.signum(creature.rotationYaw) * (float)Math.PI - creature.rotationYaw; // Turn the creature around in the z
-			}
+			if(Math.abs(xCoord - creature.posX) > repelRange) // Is the creature too close in the x direction
+				creature.moveEntity(creature.posX - xCoord - Math.signum(creature.posX - xCoord) * repelRange, 0, 0); // Move it back to the edge of the radius in the x direction
+			if(Math.abs(zCoord - creature.posZ) > repelRange) // Is the creature too close in the z direction
+				creature.moveEntity(0, 0, creature.posZ - zCoord - Math.signum(creature.posZ - zCoord) * repelRange); // Move is back to the edge of the radius in the z direction
 		}
 	}
 
