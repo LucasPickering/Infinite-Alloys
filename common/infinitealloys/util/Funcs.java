@@ -19,7 +19,7 @@ public class Funcs {
 	/** Translate a number n into a radix, add leading zeros to make it length strlen, then get the digit at pos
 	 * 
 	 * @param radix the radix of the number being given, e.g. 10 (decimal) or 2 (binary)\
-	 * @param strlen the length to make the number (wqill be filled in with leading zeros) before finding the digit
+	 * @param strlen the length to make the number (will be filled in with leading zeros) before finding the digit
 	 * @param n the number that is being used
 	 * @param pos the position of the digit to be found
 	 * @return the digit at pos, after adding leading zeros to make it length strlen */
@@ -84,7 +84,7 @@ public class Funcs {
 		}
 	}
 
-	/** Convert a Vanilla MC block face int to a ForgeDirection */
+	/** Convert a ForgeDirection to a Vanilla MC block face int */
 	public static int fdToNumSide(ForgeDirection fd) {
 		switch(fd) {
 			case UP:
