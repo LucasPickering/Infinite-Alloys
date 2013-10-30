@@ -18,8 +18,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import universalelectricity.core.block.IElectrical;
 import universalelectricity.core.block.IElectricalStorage;
+import universalelectricity.core.electricity.ElectricityHelper;
 import universalelectricity.core.electricity.ElectricityPack;
-import universalelectricity.prefab.tile.ElectricityHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -46,7 +46,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public boolean canNetwork;
 
 	/** UE class to handle all electricity */
-	protected ElectricityHandler electricityHandler = new ElectricityHandler(this, 0);
+	protected ElectricityHelper electricityHandler = new ElectricityHelper(this, 0);
 
 	/** Amount of joules stored in the machine currently */
 	public int joules = 0;

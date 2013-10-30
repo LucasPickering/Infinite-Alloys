@@ -32,7 +32,7 @@ import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import basiccomponents.common.BasicComponents;
+import basiccomponents.BasicComponents;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -71,7 +71,6 @@ public class CommonProxy {
 		BasicComponents.requestBlock("oreCopper", -1);
 		BasicComponents.requestBlock("oreTin", -1);
 		BasicComponents.requestBlock("copperWire", -1);
-		BasicComponents.requireMachines(InfiniteAlloys.instance, -1);
 	}
 
 	public void initItems() {

@@ -234,7 +234,7 @@ public abstract class GuiMachine extends GuiContainer {
 	}
 
 	static void bindTexture(ResourceLocation texture) {
-		Minecraft.getMinecraft().renderEngine.func_110577_a(texture);
+		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 	}
 
 	@Override
