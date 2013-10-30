@@ -1,6 +1,7 @@
 package infinitealloys.inventory;
 
 import infinitealloys.tile.TileEntityMachine;
+import infinitealloys.tile.TileEntityUpgradable;
 import infinitealloys.util.Funcs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -8,15 +9,15 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerMachine extends Container {
+public class ContainerUpgradable extends Container {
 
-	public TileEntityMachine inventory;
+	public TileEntityUpgradable inventory;
 
-	public ContainerMachine(TileEntityMachine tileEntity) {
+	public ContainerUpgradable(TileEntityMachine tileEntity) {
 		inventory = tileEntity;
 	}
 
-	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine tileEntity, int invX, int invY, int upgX, int upgY) {
+	public ContainerUpgradable(InventoryPlayer inventoryPlayer, TileEntityUpgradable tileEntity, int invX, int invY, int upgX, int upgY) {
 		inventory = tileEntity;
 		addSlotToContainer(new SlotUpgrade(inventory, inventory.upgradeSlotIndex, upgX, upgY));
 		for(int y = 0; y < 3; y++)

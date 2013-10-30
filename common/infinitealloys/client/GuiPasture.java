@@ -3,7 +3,7 @@ package infinitealloys.client;
 import java.util.Arrays;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import infinitealloys.handlers.PacketHandler;
-import infinitealloys.inventory.ContainerMachine;
+import infinitealloys.inventory.ContainerUpgradable;
 import infinitealloys.tile.TileEntityPasture;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -18,7 +18,7 @@ public class GuiPasture extends GuiMachine {
 	private GuiButton[] mobButtons = new GuiButton[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 
 	public GuiPasture(InventoryPlayer inventoryPlayer, TileEntityPasture tileEntity) {
-		super(210, 186, tileEntity, new ContainerMachine(inventoryPlayer, tileEntity, 13, 94, 141, 44), "pasture");
+		super(210, 186, tileEntity, new ContainerUpgradable(inventoryPlayer, tileEntity, 13, 94, 141, 44), "pasture");
 		tep = tileEntity;
 	}
 

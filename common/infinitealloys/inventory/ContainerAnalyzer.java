@@ -7,7 +7,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerAnalyzer extends ContainerMachine {
+public class ContainerAnalyzer extends ContainerUpgradable {
 
 	public TileEntityAnalyzer inventory;
 

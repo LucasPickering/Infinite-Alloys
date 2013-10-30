@@ -7,6 +7,7 @@ import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPasture;
+import infinitealloys.tile.TileEntityUpgradable;
 import infinitealloys.tile.TileEntityXray;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -51,11 +52,10 @@ public class PacketHandler implements IPacketHandler {
 				int y = data.readInt();
 				int z = data.readInt();
 				TileEntity te = world.getBlockTileEntity(x, y, z);
-				if(te instanceof TileEntityMachine) {
-					int processProgress = data.readInt();
+				if(te instanceof TileEntityUpgradable) {
 					byte orientation = data.readByte();
 					int upgrades = data.readInt();
-					((TileEntityMachine)te).handlePacketDataFromServer(processProgress, orientation, upgrades);
+					((TileEntityUpgradable)te).handlePacketDataFromServer(orientation, upgrades);
 					if(te instanceof TileEntityComputer) {
 						TileEntityComputer tec = (TileEntityComputer)te;
 						tec.networkCoords.clear();
@@ -67,24 +67,28 @@ public class PacketHandler implements IPacketHandler {
 							tec.networkCoords.add(new Point(machX, machY, machZ));
 						}
 					}
-					else if(te instanceof TileEntityMetalForge) {
-						byte[] recipeAmts = new byte[Consts.METAL_COUNT];
-						for(int i = 0; i < recipeAmts.length; i++)
-							recipeAmts[i] = data.readByte();
-						((TileEntityMetalForge)te).handlePacketData(recipeAmts);
-					}
-					else if(te instanceof TileEntityXray) {
-						TileEntityXray tex = (TileEntityXray)te;
-						tex.clearDetectedBlocks();
-						short size = data.readShort();
-						for(int i = 0; i < size; i++)
-							tex.addDetectedBlock(new Point(data.readInt(), data.readShort(), data.readInt()));
-					}
-					else if(te instanceof TileEntityPasture) {
-						byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
-						for(int i = 0; i < mobActions.length; i++)
-							mobActions[i] = data.readByte();
-						((TileEntityPasture)te).handlePacketData(mobActions);
+					else if(te instanceof TileEntityMachine) {
+						int processProgress = data.readInt();
+						((TileEntityMachine)te).handlePacketDataFromServer(processProgress);
+						if(te instanceof TileEntityMetalForge) {
+							byte[] recipeAmts = new byte[Consts.METAL_COUNT];
+							for(int i = 0; i < recipeAmts.length; i++)
+								recipeAmts[i] = data.readByte();
+							((TileEntityMetalForge)te).handlePacketData(recipeAmts);
+						}
+						else if(te instanceof TileEntityXray) {
+							TileEntityXray tex = (TileEntityXray)te;
+							tex.clearDetectedBlocks();
+							short size = data.readShort();
+							for(int i = 0; i < size; i++)
+								tex.addDetectedBlock(new Point(data.readInt(), data.readShort(), data.readInt()));
+						}
+						else if(te instanceof TileEntityPasture) {
+							byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
+							for(int i = 0; i < mobActions.length; i++)
+								mobActions[i] = data.readByte();
+							((TileEntityPasture)te).handlePacketData(mobActions);
+						}
 					}
 				}
 				break;
@@ -145,19 +149,18 @@ public class PacketHandler implements IPacketHandler {
 		return getPacket(WORLD_DATA, InfiniteAlloys.instance.worldData.getValidAlloys());
 	}
 
-	public static Packet getTEPacketToClient(TileEntityMachine tem) {
+	public static Packet getTEPacketToClient(TileEntityUpgradable teu) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);
 		try {
 			dos.writeByte(TE_SERVER_TO_CLIENT);
-			dos.writeInt(tem.xCoord);
-			dos.writeInt(tem.yCoord);
-			dos.writeInt(tem.zCoord);
-			dos.writeInt(tem.processProgress);
-			dos.writeByte(tem.front);
-			dos.writeInt(tem.getUpgrades());
-			if(tem instanceof TileEntityComputer) {
-				TileEntityComputer tec = (TileEntityComputer)tem;
+			dos.writeInt(teu.xCoord);
+			dos.writeInt(teu.yCoord);
+			dos.writeInt(teu.zCoord);
+			dos.writeByte(teu.front);
+			dos.writeInt(teu.getUpgrades());
+			if(teu instanceof TileEntityComputer) {
+				TileEntityComputer tec = (TileEntityComputer)teu;
 				dos.writeInt(tec.networkCoords.size());
 				for(Point coords : tec.networkCoords) {
 					dos.writeInt(coords.x);
@@ -165,20 +168,24 @@ public class PacketHandler implements IPacketHandler {
 					dos.writeInt(coords.z);
 				}
 			}
-			else if(tem instanceof TileEntityMetalForge)
-				for(byte amt : ((TileEntityMetalForge)tem).recipeAmts)
-					dos.writeByte(amt);
-			else if(tem instanceof TileEntityXray) {
-				dos.writeShort(((TileEntityXray)tem).getDetectedBlocks().size());
-				for(Point p : ((TileEntityXray)tem).getDetectedBlocks()) {
-					dos.writeInt(p.x);
-					dos.writeShort((short)p.y);
-					dos.writeInt(p.z);
+			else if(teu instanceof TileEntityMachine) {
+				TileEntityMachine tem = (TileEntityMachine)teu;
+				dos.writeInt(tem.processProgress);
+				if(tem instanceof TileEntityMetalForge)
+					for(byte amt : ((TileEntityMetalForge)tem).recipeAmts)
+						dos.writeByte(amt);
+				else if(tem instanceof TileEntityXray) {
+					dos.writeShort(((TileEntityXray)tem).getDetectedBlocks().size());
+					for(Point p : ((TileEntityXray)tem).getDetectedBlocks()) {
+						dos.writeInt(p.x);
+						dos.writeShort((short)p.y);
+						dos.writeInt(p.z);
+					}
 				}
+				else if(tem instanceof TileEntityPasture)
+					for(byte mob : ((TileEntityPasture)tem).mobActions)
+						dos.writeByte(mob);
 			}
-			else if(tem instanceof TileEntityPasture)
-				for(byte mob : ((TileEntityPasture)tem).mobActions)
-					dos.writeByte(mob);
 		}
 		catch(IOException e) {
 			e.printStackTrace();

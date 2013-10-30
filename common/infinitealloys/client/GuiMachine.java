@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
-public abstract class GuiMachine extends GuiContainer {
+public abstract class GuiMachine extends GuiUpgradable {
 
 	// The position for each item in the texture sheet extras.png
 	static final Rectangle TAB_LEFT_OFF = new Rectangle(10, 0, 24, 24);
@@ -36,11 +36,6 @@ public abstract class GuiMachine extends GuiContainer {
 	static final Rectangle CHECK = new Rectangle(42, 24, 16, 16);
 	static final Rectangle BLOCK_BG_OFF = new Rectangle(58, 24, 36, 18);
 	static final Rectangle BLOCK_BG_ON = new Rectangle(94, 24, 36, 18);
-
-	/** The background texture */
-	protected ResourceLocation background;
-	/** The texture resource for the texture item */
-	static ResourceLocation extras;
 
 	/** Coordinates of the top-left corner of the GUI */
 	protected java.awt.Point topLeft = new java.awt.Point();
@@ -57,12 +52,8 @@ public abstract class GuiMachine extends GuiContainer {
 	private boolean helpEnabled;
 
 	public GuiMachine(int xSize, int ySize, TileEntityMachine tileEntity, Container container, String texture) {
-		super(container);
-		this.xSize = xSize;
-		this.ySize = ySize;
+		super(xSize, ySize, tileEntity, container, texture);
 		tem = tileEntity;
-		background = createTexture(texture);
-		extras = createTexture(texture);
 	}
 
 	@Override
@@ -78,23 +69,8 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-		// Draw the upgrade list if the mouse is over the upgrade slot
-		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
-		if(mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x, slot.yDisplayPosition + topLeft.y, 16, 16)) {
-			ArrayList<ColoredLine> lines = new ArrayList<ColoredLine>();
-			lines.add(new ColoredLine(Funcs.getLoc("upgrade.name"), 0xffffff));
-			for(int i = 0; i < Consts.UPGRADE_COUNT; i++) {
-				int upg = (int)Math.pow(2, i);
-				if(TEHelper.isPrereqUpgrade(upg) && tem.hasUpgrade(upg << 1) || !tem.hasUpgrade(upg))
-					continue;
-				lines.add(new ColoredLine(Funcs.getLoc("upgrade." + Consts.UPGRADE_NAMES[i] + ".name"), 0xaaaaaa));
-			}
-			drawTextBox(mouseX, mouseY, lines.toArray(new ColoredLine[lines.size()]));
-		}
-
 		// Draw the progress info if the mouse is over the progress bar
-		if(tem.ticksToProcess > 0 &&
-				mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height))
+		if(mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height))
 			drawTextBox(mouseX, mouseY, new ColoredLine(tem.getProcessProgressScaled(100) + "%", 0xffffff));
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);

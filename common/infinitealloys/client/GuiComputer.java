@@ -1,7 +1,7 @@
 package infinitealloys.client;
 
 import infinitealloys.handlers.PacketHandler;
-import infinitealloys.inventory.ContainerMachine;
+import infinitealloys.inventory.ContainerUpgradable;
 import infinitealloys.tile.TileEntityComputer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
@@ -9,14 +9,14 @@ import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.input.Keyboard;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
-public class GuiComputer extends GuiMachine {
+public class GuiComputer extends GuiUpgradable {
 
 	public TileEntityComputer tec;
 	private GuiTextField xInput, yInput, zInput;
 	private GuiButton addMachine;
 
 	public GuiComputer(InventoryPlayer inventoryPlayer, TileEntityComputer tileEntity) {
-		super(176, 176, tileEntity, new ContainerMachine(inventoryPlayer, tileEntity, 8, 84, 140, 43), "computer");
+		super(176, 176, tileEntity, new ContainerUpgradable(inventoryPlayer, tileEntity, 8, 84, 140, 43), "computer");
 		tec = tileEntity;
 	}
 

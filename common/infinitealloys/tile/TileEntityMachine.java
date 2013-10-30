@@ -22,36 +22,16 @@ import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class TileEntityMachine extends TileEntity implements IInventory {
+public abstract class TileEntityMachine extends TileEntityUpgradable {
 
-	public Random random = new Random();
-	public ArrayList<String> playersUsing = new ArrayList<String>();
-	public ItemStack[] inventoryStacks;
-	
-	/** A binary integer used to determine what upgrades have been installed */
-	private int upgrades;
-
-	/** A list of the upgrades that can be used on this machine */
-	protected ArrayList<Integer> validUpgrades = new ArrayList<Integer>();
-	public int front;
-
-	/** The index of the slot that upgrades are placed in */
-	public int upgradeSlotIndex = 0;
-
-	/** True if this machine can be accessed wirelessly */
-	public boolean canNetwork;
-
-	/** Amount of RK this machine consumes per tick while working */
-	protected int rkUsedPerTick = 360;
+	/** Amount of RK this machine produces/consumes per tick while working. Positive is producing RK and negative is consuming RK */
+	protected int rkPerTick;
 
 	/** Amount of ticks it takes for this machine to finish one of its processes */
 	public int ticksToProcess = 200;
 
 	/** Amount of ticks this machine has been running its process for, when this reaches ticksToFinish it is done */
 	public int processProgress;
-
-	/** The size limit for one stack in this machine */
-	protected int stackLimit = 64;
 
 	public TileEntityMachine(int upgradeSlotIndex) {
 		this();
@@ -65,12 +45,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	@Override
 	public void updateEntity() {
-		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
-			upgrades |= (int)Math.pow(2, inventoryStacks[upgradeSlotIndex].getItemDamage());
-			inventoryStacks[upgradeSlotIndex] = null;
-			updateUpgrades();
-		}
-
+		super.updateEntity();
 		// If the conditions are correct so that the process can continue, increment the progress by one. If it has reached or exceeded the limit for
 		// completion, then finish the process and reset the counter.
 		if(shouldProcess() && ++processProgress >= ticksToProcess) {
@@ -78,64 +53,10 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 			finishProcessing();
 			onInventoryChanged();
 		}
-
-		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 	}
 
-	public int getUpgrades() {
-		return upgrades;
-	}
-
-	/** Drops the items in the block's inventory */
-	public void dropItems() {
-		for(int i = 0; i < getSizeInventory(); i++) {
-			ItemStack stack = getStackInSlot(i);
-			if(stack != null) {
-				float f1 = random.nextFloat() * 0.8F + 0.1F;
-				float f2 = random.nextFloat() * 0.8F + 0.1F;
-				float f3 = random.nextFloat() * 0.8F + 0.1F;
-				while(stack.stackSize > 0) {
-					int j = random.nextInt(21) + 10;
-					if(j > stack.stackSize)
-						j = stack.stackSize;
-					stack.stackSize -= j;
-					EntityItem item = new EntityItem(worldObj, xCoord + f1, yCoord + f2, zCoord + f3, new ItemStack(stack.itemID, j, stack.getItemDamage()));
-					if(stack.hasTagCompound())
-						item.getEntityItem().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
-					item.motionX = random.nextGaussian() * 0.05F;
-					item.motionY = random.nextGaussian() * 0.25F;
-					item.motionZ = random.nextGaussian() * 0.05F;
-					worldObj.spawnEntityInWorld(item);
-				}
-			}
-		}
-	}
-
-	/** Drops the upgrades that were used on the block as items */
-	public void dropUpgrades() {
-		for(int i = 0; i <= Consts.UPGRADE_COUNT; i++) {
-			if(hasUpgrade((int)Math.pow(2D, i))) {
-				float f = random.nextFloat() * 0.8F + 0.1F;
-				float f1 = random.nextFloat() * 0.8F + 0.1F;
-				float f2 = random.nextFloat() * 0.8F + 0.1F;
-				EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(Items.upgrade, 1, i));
-				item.motionX = random.nextGaussian() * 0.05F;
-				item.motionY = random.nextGaussian() * 0.25F;
-				item.motionZ = random.nextGaussian() * 0.05F;
-				worldObj.spawnEntityInWorld(item);
-			}
-		}
-		upgrades = 0;
-	}
-
-	/** Determines if the given itemstack is a valid upgrade for the machine
-	 * 
-	 * @param upgrade
-	 * @return true if valid */
-	public boolean isUpgradeValid(ItemStack upgrade) {
-		int upg = (int)Math.pow(2, upgrade.getItemDamage());
-		return upgrade.itemID == Items.upgrade.itemID && (!TEHelper.hasPrereqUpgrade(upg) || hasUpgrade(upg >> 1)) && !hasUpgrade(upg)
-				&& validUpgrades.contains(upg);
+	public void handlePacketDataFromServer(int processProgress) {
+		this.processProgress = processProgress;
 	}
 
 	/** Should the process tick be increased? Called every tick to determine if power should be used and if progress should continue. */
@@ -144,27 +65,18 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	/** Called when processProgress reaches ticksToProgress */
 	protected abstract void finishProcessing();
 
-	/** Actual amount of RK used per tick, after certain calculations and conditions */
-	public abstract int getRKUsed();
-
-	/** Updates all values that are dependent on upgrades */
-	protected abstract void updateUpgrades();
-
-	/** Add the valid upgrades for each machine */
-	protected abstract void populateValidUpgrades();
-
-	/** Does the machine have the upgrade
-	 * 
-	 * @param upgrade
-	 * @return true if the machine has the upgrade */
-	public boolean hasUpgrade(int upgrade) {
-		return (upgrades & upgrade) == upgrade;
+	/** Actual amount of RK change per tick, after certain calculations and conditions. Positive is produced RK and negative is consumed RK. */
+	public int getRKChange() {
+		if(shouldProcess())
+			return rkPerTick;
+		return 0;
 	}
 
-	/** Is the machine connected to a power storage unit and does the unit have enough power to run this machine? Checked every tick
+	/** Is there a power storage unit to support this machine? There must be a PSU in range with space if this generates power and one with sufficient energy if
+	 * this consumes power.
 	 * 
-	 * @return True if the PSU can power this machine and False if it cannot */
-	public boolean hasSufficientPower() {
+	 * @return True if the PSU can support this machine and False if it cannot */
+	public boolean hasGoodCircuit() {
 		return false; // TODO: Integrate this with the power storage to look at available power
 	}
 
@@ -173,122 +85,15 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		return processProgress * scale / ticksToProcess;
 	}
 
-	public boolean coordsEquals(int x2, int y2, int z2) {
-		return xCoord == x2 && yCoord == y2 && zCoord == z2;
-	}
-
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		processProgress = tagCompound.getInteger("ProcessProgress");
-		upgrades = tagCompound.getShort("Upgrades");
-		front = tagCompound.getByte("Orientation");
-		NBTTagList nbttaglist = tagCompound.getTagList("Items");
-		inventoryStacks = new ItemStack[getSizeInventory()];
-		for(int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttag = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte var5 = nbttag.getByte("Slot");
-			if(var5 >= 0 && var5 < inventoryStacks.length)
-				inventoryStacks[var5] = ItemStack.loadItemStackFromNBT(nbttag);
-		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("ProcessProgress", processProgress);
-		tagCompound.setShort("Upgrades", (short)upgrades);
-		tagCompound.setByte("Orientation", (byte)front);
-		NBTTagList nbttaglist = new NBTTagList();
-		for(int i = 0; i < inventoryStacks.length; i++) {
-			if(inventoryStacks[i] != null) {
-				NBTTagCompound nbt = new NBTTagCompound();
-				nbt.setByte("Slot", (byte)i);
-				inventoryStacks[i].writeToNBT(nbt);
-				nbttaglist.appendTag(nbt);
-			}
-		}
-		tagCompound.setTag("Items", nbttaglist);
 	}
-
-	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return slot == upgradeSlotIndex && isUpgradeValid(itemstack);
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		return PacketHandler.getTEPacketToClient(this);
-	}
-
-	public void handlePacketDataFromServer(int processProgress, byte orientation, int upgrades) {
-		this.processProgress = processProgress;
-		front = orientation;
-		this.upgrades = upgrades;
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return stackLimit;
-	}
-
-	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return true;
-	}
-
-	@Override
-	public ItemStack decrStackSize(int slot, int amt) {
-		if(inventoryStacks[slot] != null) {
-			ItemStack stack;
-			if(inventoryStacks[slot].stackSize <= amt) {
-				stack = inventoryStacks[slot];
-				inventoryStacks[slot] = null;
-				return stack;
-			}
-			stack = inventoryStacks[slot].splitStack(amt);
-			if(inventoryStacks[slot].stackSize == 0)
-				inventoryStacks[slot] = null;
-			return stack;
-		}
-		return null;
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return inventoryStacks.length;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int slot) {
-		return inventoryStacks[slot];
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		if(inventoryStacks[slot] != null) {
-			ItemStack stack = inventoryStacks[slot];
-			inventoryStacks[slot] = null;
-			return stack;
-		}
-		return null;
-	}
-
-	@Override
-	public void setInventorySlotContents(int slot, ItemStack stack) {
-		inventoryStacks[slot] = stack;
-		if(stack != null && stack.stackSize > getInventoryStackLimit())
-			stack.stackSize = getInventoryStackLimit();
-	}
-
-	@Override
-	public void openChest() {}
-
-	@Override
-	public void closeChest() {}
 }

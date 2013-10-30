@@ -10,6 +10,7 @@ import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPasture;
 import infinitealloys.tile.TileEntityPrinter;
+import infinitealloys.tile.TileEntityUpgradable;
 import infinitealloys.tile.TileEntityXray;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -106,30 +107,30 @@ public class BlockMachine extends BlockContainer {
 		}
 		if(player.isSneaking())
 			return false;
-		openGui(world, player, (TileEntityMachine)world.getBlockTileEntity(x, y, z), false);
+		openGui(world, player, (TileEntityUpgradable)world.getBlockTileEntity(x, y, z), false);
 		return true;
 	}
 
-	public void openGui(World world, EntityPlayer player, TileEntityMachine tem, boolean fromComputer) {
+	public void openGui(World world, EntityPlayer player, TileEntityUpgradable teu, boolean fromComputer) {
 		if(!fromComputer && Funcs.isClient())
 			TEHelper.controllers.remove(player.username);
-		if(tem instanceof TileEntityComputer) {
-			TEHelper.controllers.put(player.username, new Point(tem.xCoord, tem.yCoord, tem.zCoord));
-			player.openGui(InfiniteAlloys.instance, 0, world, tem.xCoord, tem.yCoord, tem.zCoord);
+		if(teu instanceof TileEntityComputer) {
+			TEHelper.controllers.put(player.username, new Point(teu.xCoord, teu.yCoord, teu.zCoord));
+			player.openGui(InfiniteAlloys.instance, 0, world, teu.xCoord, teu.yCoord, teu.zCoord);
 		}
-		else if(tem instanceof TileEntityMetalForge)
-			player.openGui(InfiniteAlloys.instance, 1, world, tem.xCoord, tem.yCoord, tem.zCoord);
-		else if(tem instanceof TileEntityAnalyzer)
-			player.openGui(InfiniteAlloys.instance, 2, world, tem.xCoord, tem.yCoord, tem.zCoord);
-		else if(tem instanceof TileEntityPrinter)
-			player.openGui(InfiniteAlloys.instance, 3, world, tem.xCoord, tem.yCoord, tem.zCoord);
-		else if(tem instanceof TileEntityXray)
-			player.openGui(InfiniteAlloys.instance, 4, world, tem.xCoord, tem.yCoord, tem.zCoord);
-		else if(tem instanceof TileEntityPasture)
-			player.openGui(InfiniteAlloys.instance, 5, world, tem.xCoord, tem.yCoord, tem.zCoord);
+		else if(teu instanceof TileEntityMetalForge)
+			player.openGui(InfiniteAlloys.instance, 1, world, teu.xCoord, teu.yCoord, teu.zCoord);
+		else if(teu instanceof TileEntityAnalyzer)
+			player.openGui(InfiniteAlloys.instance, 2, world, teu.xCoord, teu.yCoord, teu.zCoord);
+		else if(teu instanceof TileEntityPrinter)
+			player.openGui(InfiniteAlloys.instance, 3, world, teu.xCoord, teu.yCoord, teu.zCoord);
+		else if(teu instanceof TileEntityXray)
+			player.openGui(InfiniteAlloys.instance, 4, world, teu.xCoord, teu.yCoord, teu.zCoord);
+		else if(teu instanceof TileEntityPasture)
+			player.openGui(InfiniteAlloys.instance, 5, world, teu.xCoord, teu.yCoord, teu.zCoord);
 		if(Funcs.isServer()) {
-			tem.playersUsing.add(player.username);
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEPacketToClient(tem), (Player)player);
+			teu.playersUsing.add(player.username);
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEPacketToClient(teu), (Player)player);
 		}
 	}
 

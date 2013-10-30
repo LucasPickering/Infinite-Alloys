@@ -7,7 +7,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerPrinter extends ContainerMachine {
+public class ContainerPrinter extends ContainerUpgradable {
 
 	public TileEntityPrinter inventory;
 

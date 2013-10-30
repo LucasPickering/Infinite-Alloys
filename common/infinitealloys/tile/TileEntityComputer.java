@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class TileEntityComputer extends TileEntityMachine {
+public class TileEntityComputer extends TileEntityUpgradable {
 
 	/** That amount of machines that the computer can control */
 	public int networkCapacity;
@@ -28,7 +28,6 @@ public class TileEntityComputer extends TileEntityMachine {
 	public TileEntityComputer() {
 		super();
 		inventoryStacks = new ItemStack[1];
-		ticksToProcess = 0;
 		canNetwork = true;
 		networkCapacity = 3;
 		networkRange = 10;
@@ -104,19 +103,6 @@ public class TileEntityComputer extends TileEntityMachine {
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public boolean shouldProcess() {
-		return false;
-	}
-
-	@Override
-	public void finishProcessing() {}
-
-	@Override
-	public int getRKUsed() {
-		return 0;
 	}
 
 	@Override

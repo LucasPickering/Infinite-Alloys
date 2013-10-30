@@ -5,6 +5,7 @@ import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityMetalForge;
 import infinitealloys.tile.TileEntityPrinter;
+import infinitealloys.tile.TileEntityUpgradable;
 import infinitealloys.tile.TileEntityXray;
 
 public enum MachineHelp {
@@ -45,16 +46,16 @@ public enum MachineHelp {
 		this.h = h;
 	}
 
-	public static MachineHelp[] getBoxesForTEM(TileEntityMachine tem) {
-		if(tem instanceof TileEntityComputer)
+	public static MachineHelp[] getBoxesForTEM(TileEntityUpgradable teu) {
+		if(teu instanceof TileEntityComputer)
 			return new MachineHelp[] { CP_UPGRADE, CP_TAB, CP_ADD };
-		if(tem instanceof TileEntityMetalForge)
+		if(teu instanceof TileEntityMetalForge)
 			return new MachineHelp[] { ENERGY, MF_UPGRADE, MF_PROGRESS, MF_BOOK, MF_OUTPUT, MF_SUPPLY, MF_PRESETS, MF_INGOTS };
-		if(tem instanceof TileEntityAnalyzer)
+		if(teu instanceof TileEntityAnalyzer)
 			return new MachineHelp[] { ENERGY, AZ_UPGRADE, AZ_PROGRESS, AZ_BOOK, AZ_INPUT, AZ_OUTPUT, AZ_INGOTS };
-		if(tem instanceof TileEntityPrinter)
+		if(teu instanceof TileEntityPrinter)
 			return new MachineHelp[] { ENERGY, PR_UPGRADE, PR_PROGRESS, PR_INPUT, PR_SUPPLY, PR_OUTPUT };
-		if(tem instanceof TileEntityXray)
+		if(teu instanceof TileEntityXray)
 			return new MachineHelp[] { ENERGY, XR_UPGRADE, XR_PROGRESS, XR_ORE, XR_SEARCH, XR_RESULTS };
 		return null;
 	}

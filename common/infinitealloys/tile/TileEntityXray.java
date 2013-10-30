@@ -146,13 +146,6 @@ public class TileEntityXray extends TileEntityMachine {
 	public void finishProcessing() {}
 
 	@Override
-	public int getRKUsed() {
-		if(searchingClient && inventoryStacks[0] != null)
-			return rkUsedPerTick * TEHelper.getDetectableWorth(inventoryStacks[0]);
-		return 0;
-	}
-
-	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.SPEED2))
 			ticksToProcess = 12000;
@@ -162,11 +155,11 @@ public class TileEntityXray extends TileEntityMachine {
 			ticksToProcess = 24000;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			rkUsedPerTick = 1800;
+			rkPerTick = -1800;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			rkUsedPerTick = 2700;
+			rkPerTick = -2700;
 		else
-			rkUsedPerTick = 3600;
+			rkPerTick = -3600;
 
 		if(hasUpgrade(TEHelper.RANGE2))
 			range = 10;

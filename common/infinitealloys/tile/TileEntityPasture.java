@@ -56,7 +56,7 @@ public class TileEntityPasture extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 
-		if(!hasSufficientPower()) // If the machine does not have enough power to run, do not perform any of its actions
+		if(!hasGoodCircuit()) // If the machine does not have enough power to run, do not perform any of its actions
 			return;
 
 		ArrayList<EntityCreature> trapList = new ArrayList<EntityCreature>();
@@ -121,20 +121,13 @@ public class TileEntityPasture extends TileEntityMachine {
 	}
 
 	@Override
-	public int getRKUsed() {
-		if(shouldProcess())
-			return rkUsedPerTick;
-		return 0;
-	}
-
-	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			rkUsedPerTick = 40;
+			rkPerTick = -40;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			rkUsedPerTick = 30;
+			rkPerTick = -30;
 		else
-			rkUsedPerTick = 20;
+			rkPerTick = -20;
 
 		if(hasUpgrade(TEHelper.CAPACITY2))
 			maxSpots = 8;

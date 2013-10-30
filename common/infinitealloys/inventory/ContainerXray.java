@@ -7,7 +7,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerXray extends ContainerMachine {
+public class ContainerXray extends ContainerUpgradable {
 
 	public TileEntityXray inventory;
 

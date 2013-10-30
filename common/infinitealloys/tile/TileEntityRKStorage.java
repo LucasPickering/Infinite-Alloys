@@ -2,7 +2,7 @@ package infinitealloys.tile;
 
 import net.minecraft.item.ItemStack;
 
-public class TileEntityRKStorage extends TileEntityMachine {
+public class TileEntityRKStorage extends TileEntityUpgradable {
 
 	/** The maximum amount of RK that this machine can store */
 	private int maxRK = 10000000;
@@ -18,25 +18,11 @@ public class TileEntityRKStorage extends TileEntityMachine {
 	public TileEntityRKStorage() {
 		super();
 		inventoryStacks = new ItemStack[1];
-		ticksToProcess = 0;
 	}
 
 	@Override
 	public String getInvName() {
 		return "RK Storage"; // TODO: Change this one I figure out a better name for this TE
-	}
-
-	@Override
-	protected boolean shouldProcess() {
-		return false;
-	}
-
-	@Override
-	protected void finishProcessing() {}
-
-	@Override
-	public int getRKUsed() {
-		return 0;
 	}
 
 	@Override
