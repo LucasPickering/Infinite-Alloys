@@ -18,6 +18,7 @@ public class TEHelper {
 	public static final int PRINTER = 3;
 	public static final int XRAY = 4;
 	public static final int PASTURE = 5;
+	public static final int RK_STORAGE = 6; // TODO: Change this when I figure out a better name for this TE
 
 	public static final int SPEED1 = 1;
 	public static final int SPEED2 = 2;
@@ -28,10 +29,7 @@ public class TEHelper {
 	public static final int RANGE1 = 64;
 	public static final int RANGE2 = 128;
 	public static final int WIRELESS = 256;
-	public static final int ELECCAPACITY1 = 512;
-	public static final int ELECCAPACITY2 = 1024;
 
-	public static final int AMPS_PER_TICK = 5;
 	public static final int SEARCH_PER_TICK = 2000;
 
 	/** The controlling computer for each player */
@@ -51,12 +49,10 @@ public class TEHelper {
 		prereqUpgrades.add(EFFICIENCY1);
 		prereqUpgrades.add(CAPACITY1);
 		prereqUpgrades.add(RANGE1);
-		prereqUpgrades.add(ELECCAPACITY1);
 		prereqNeedingUpgrades.add(SPEED2);
 		prereqNeedingUpgrades.add(EFFICIENCY2);
 		prereqNeedingUpgrades.add(CAPACITY2);
 		prereqNeedingUpgrades.add(RANGE2);
-		prereqNeedingUpgrades.add(ELECCAPACITY2);
 	}
 
 	/** Add a block to the list of blocks that can be detected by the x-ray
@@ -76,9 +72,10 @@ public class TEHelper {
 		detectables.put(block.blockID + "@" + metadata, worth);
 	}
 
-	/** Add a block or blocks to the list of blocks that can be detected by the x-ray with an ore dictionary string 
+	/** Add a block or blocks to the list of blocks that can be detected by the x-ray with an ore dictionary string
+	 * 
 	 * @param dictName the ore dictionary string from which the block(s) is/are retrieved
-	 * @param worth the amount the block(s) is/are worth, higher worth requires more energy to detect*/
+	 * @param worth the amount the block(s) is/are worth, higher worth requires more energy to detect */
 	public static void addDictDetectables(String dictName, int worth) {
 		for(ItemStack block : OreDictionary.getOres(dictName))
 			detectables.put(block.itemID + "@" + block.getItemDamage(), worth);

@@ -38,7 +38,7 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 
 	@Override
 	public boolean shouldProcess() {
-		return inventoryStacks[0] != null && inventoryStacks[1] == null && joules >= joulesUsedPerTick;
+		return inventoryStacks[0] != null && inventoryStacks[1] == null && hasSufficientPower();
 	}
 
 	@Override
@@ -81,9 +81,9 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 	}
 
 	@Override
-	public int getJoulesUsed() {
+	public int getRKUsed() {
 		if(shouldProcess())
-			return joulesUsedPerTick;
+			return rkUsedPerTick;
 		return 0;
 	}
 
@@ -97,20 +97,13 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 			ticksToProcess = 3600;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			joulesUsedPerTick = 180;
+			rkUsedPerTick = 180;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			joulesUsedPerTick = 270;
+			rkUsedPerTick = 270;
 		else
-			joulesUsedPerTick = 360;
+			rkUsedPerTick = 360;
 
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
-
-		if(hasUpgrade(TEHelper.ELECCAPACITY2))
-			setMaxEnergyStored(1000000);
-		else if(hasUpgrade(TEHelper.ELECCAPACITY1))
-			setMaxEnergyStored(750000);
-		else
-			setMaxEnergyStored(500000);
 	}
 
 	@Override
@@ -120,7 +113,5 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 		validUpgrades.add(TEHelper.EFFICIENCY1);
 		validUpgrades.add(TEHelper.EFFICIENCY2);
 		validUpgrades.add(TEHelper.WIRELESS);
-		validUpgrades.add(TEHelper.ELECCAPACITY1);
-		validUpgrades.add(TEHelper.ELECCAPACITY2);
 	}
 }

@@ -33,7 +33,7 @@ public class TileEntityPrinter extends TileEntityMachine {
 
 	@Override
 	public boolean shouldProcess() {
-		return inventoryStacks[0] != null && inventoryStacks[1] != null && inventoryStacks[2] == null && joules >= joulesUsedPerTick;
+		return inventoryStacks[0] != null && inventoryStacks[1] != null && inventoryStacks[2] == null && hasSufficientPower();
 	}
 
 	@Override
@@ -46,9 +46,9 @@ public class TileEntityPrinter extends TileEntityMachine {
 	}
 
 	@Override
-	public int getJoulesUsed() {
+	public int getRKUsed() {
 		if(shouldProcess())
-			return joulesUsedPerTick;
+			return rkUsedPerTick;
 		return 0;
 	}
 
@@ -62,20 +62,13 @@ public class TileEntityPrinter extends TileEntityMachine {
 			ticksToProcess = 200;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			joulesUsedPerTick = 180;
+			rkUsedPerTick = 180;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			joulesUsedPerTick = 270;
+			rkUsedPerTick = 270;
 		else
-			joulesUsedPerTick = 360;
+			rkUsedPerTick = 360;
 
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
-
-		if(hasUpgrade(TEHelper.ELECCAPACITY2))
-			setMaxEnergyStored(1000000);
-		else if(hasUpgrade(TEHelper.ELECCAPACITY1))
-			setMaxEnergyStored(750000);
-		else
-			setMaxEnergyStored(500000);
 	}
 
 	@Override

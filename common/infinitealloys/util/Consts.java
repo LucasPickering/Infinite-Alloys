@@ -34,7 +34,7 @@ public class Consts {
 	public static final String[] METAL_NAMES = { "zinc", "magnesium", "scandium", "tantalum", "roguite", "verdite", "hydronium", "swagtanium" };
 	/** The names of each machine */
 	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray", "pasture" };
-	/** The names of each multi item */
+	/** The names of each item that has damage values */
 	public static final String[] MULTI_ITEM_NAMES = { "machinecomponent", "upgradecomponent" };
 	/** The names of each upgrade that can be used on machines */
 	public static final String[] UPGRADE_NAMES = { "speed1", "speed2", "efficiency1", "efficiency2", "capacity1", "capacity2", "range1", "range2", "wireless", "eleccapacity1", "eleccapacity2" };

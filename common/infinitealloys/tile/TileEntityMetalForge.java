@@ -117,7 +117,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
 		if(sufficientIngots.contains(false))
 			processProgress = 0;
-		return typesInRecipe > 1 && !sufficientIngots.contains(false) && joules >= joulesUsedPerTick
+		return typesInRecipe > 1 && !sufficientIngots.contains(false) && hasSufficientPower()
 				&& (inventoryStacks[2] == null || inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1);
 	}
 
@@ -138,9 +138,9 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	}
 
 	@Override
-	public int getJoulesUsed() {
+	public int getRKUsed() {
 		if(shouldProcess())
-			return joulesUsedPerTick * getIngotsInRecipe();
+			return rkUsedPerTick * getIngotsInRecipe();
 		return 0;
 	}
 
@@ -154,11 +154,11 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			ticksToProcess = 12800;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			joulesUsedPerTick = 90;
+			rkUsedPerTick = 90;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			joulesUsedPerTick = 120;
+			rkUsedPerTick = 120;
 		else
-			joulesUsedPerTick = 180;
+			rkUsedPerTick = 180;
 
 		if(hasUpgrade(TEHelper.CAPACITY2))
 			stackLimit = 64;
@@ -168,14 +168,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			stackLimit = 32;
 
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
-
-		if(hasUpgrade(TEHelper.ELECCAPACITY2))
-			setMaxEnergyStored(1000000);
-		else if(hasUpgrade(TEHelper.ELECCAPACITY1))
-			setMaxEnergyStored(750000);
-		else
-			setMaxEnergyStored(500000);
-
 	}
 
 	@Override
@@ -187,7 +179,5 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		validUpgrades.add(TEHelper.CAPACITY1);
 		validUpgrades.add(TEHelper.CAPACITY2);
 		validUpgrades.add(TEHelper.WIRELESS);
-		validUpgrades.add(TEHelper.ELECCAPACITY1);
-		validUpgrades.add(TEHelper.ELECCAPACITY2);
 	}
 }

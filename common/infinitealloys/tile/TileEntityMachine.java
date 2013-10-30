@@ -16,22 +16,18 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
-import universalelectricity.core.block.IElectrical;
-import universalelectricity.core.block.IElectricalStorage;
-import universalelectricity.core.electricity.ElectricityHelper;
-import universalelectricity.core.electricity.ElectricityPack;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public abstract class TileEntityMachine extends TileEntity implements IInventory, IElectrical, IElectricalStorage {
+public abstract class TileEntityMachine extends TileEntity implements IInventory {
 
 	public Random random = new Random();
 	public ArrayList<String> playersUsing = new ArrayList<String>();
 	public ItemStack[] inventoryStacks;
-
+	
 	/** A binary integer used to determine what upgrades have been installed */
 	private int upgrades;
 
@@ -45,17 +41,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	/** True if this machine can be accessed wirelessly */
 	public boolean canNetwork;
 
-	/** UE class to handle all electricity */
-	protected ElectricityHelper electricityHandler = new ElectricityHelper(this, 0);
-
-	/** Amount of joules stored in the machine currently */
-	public int joules = 0;
-
-	/** Joules gained this tick, for the GUI */
-	public int joulesGained = 0;
-
-	/** Amount of joules this machine consumes per tick while working */
-	protected int joulesUsedPerTick = 360;
+	/** Amount of RK this machine consumes per tick while working */
+	protected int rkUsedPerTick = 360;
 
 	/** Amount of ticks it takes for this machine to finish one of its processes */
 	public int ticksToProcess = 200;
@@ -66,9 +53,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	/** The size limit for one stack in this machine */
 	protected int stackLimit = 64;
 
-	public TileEntityMachine(int index) {
+	public TileEntityMachine(int upgradeSlotIndex) {
 		this();
-		upgradeSlotIndex = index;
+		this.upgradeSlotIndex = upgradeSlotIndex;
 	}
 
 	public TileEntityMachine() {
@@ -83,15 +70,15 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 			inventoryStacks[upgradeSlotIndex] = null;
 			updateUpgrades();
 		}
+
+		// If the conditions are correct so that the process can continue, increment the progress by one. If it has reached or exceeded the limit for
+		// completion, then finish the process and reset the counter.
 		if(shouldProcess() && ++processProgress >= ticksToProcess) {
 			processProgress = 0;
 			finishProcessing();
 			onInventoryChanged();
 		}
-		joules -= getJoulesUsed();
-		for(String playerName : playersUsing)
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEJoulesPacket(this), (Player)FMLCommonHandler.instance().getSidedDelegate().getServer()
-					.getConfigurationManager().getPlayerForUsername(playerName));
+
 		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 	}
 
@@ -151,14 +138,14 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 				&& validUpgrades.contains(upg);
 	}
 
-	/** Should the process tick be increased? */
+	/** Should the process tick be increased? Called every tick to determine if power should be used and if progress should continue. */
 	protected abstract boolean shouldProcess();
 
-	/** Called when processProgress reeaches ticksToProgress */
+	/** Called when processProgress reaches ticksToProgress */
 	protected abstract void finishProcessing();
 
-	/** Actual amount of joules used per tick, after certain calculations and conditions */
-	public abstract int getJoulesUsed();
+	/** Actual amount of RK used per tick, after certain calculations and conditions */
+	public abstract int getRKUsed();
 
 	/** Updates all values that are dependent on upgrades */
 	protected abstract void updateUpgrades();
@@ -174,16 +161,16 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		return (upgrades & upgrade) == upgrade;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public int getProcessProgressScaled(int scale) {
-		return processProgress * scale / ticksToProcess;
+	/** Is the machine connected to a power storage unit and does the unit have enough power to run this machine? Checked every tick
+	 * 
+	 * @return True if the PSU can power this machine and False if it cannot */
+	public boolean hasSufficientPower() {
+		return false; // TODO: Integrate this with the power storage to look at available power
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getJoulesScaled(int scale) {
-		if(electricityHandler.getMaxEnergyStored() > 0)
-			return (int)(joules * scale / electricityHandler.getMaxEnergyStored());
-		return -1;
+	public int getProcessProgressScaled(int scale) {
+		return processProgress * scale / ticksToProcess;
 	}
 
 	public boolean coordsEquals(int x2, int y2, int z2) {
@@ -196,7 +183,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		processProgress = tagCompound.getInteger("ProcessProgress");
 		upgrades = tagCompound.getShort("Upgrades");
 		front = tagCompound.getByte("Orientation");
-		joules = tagCompound.getInteger("Joules");
 		NBTTagList nbttaglist = tagCompound.getTagList("Items");
 		inventoryStacks = new ItemStack[getSizeInventory()];
 		for(int i = 0; i < nbttaglist.tagCount(); i++) {
@@ -213,7 +199,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		tagCompound.setInteger("ProcessProgress", processProgress);
 		tagCompound.setShort("Upgrades", (short)upgrades);
 		tagCompound.setByte("Orientation", (byte)front);
-		tagCompound.setInteger("Joules", joules);
 		NBTTagList nbttaglist = new NBTTagList();
 		for(int i = 0; i < inventoryStacks.length; i++) {
 			if(inventoryStacks[i] != null) {
@@ -241,11 +226,10 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		return PacketHandler.getTEPacketToClient(this);
 	}
 
-	public void handlePacketDataFromServer(int processProgress, byte orientation, int upgrades, int joules) {
+	public void handlePacketDataFromServer(int processProgress, byte orientation, int upgrades) {
 		this.processProgress = processProgress;
 		front = orientation;
 		this.upgrades = upgrades;
-		this.joules = joules;
 	}
 
 	@Override
@@ -307,53 +291,4 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	@Override
 	public void closeChest() {}
-
-	@Override
-	public float getVoltage() {
-		return 120;
-	}
-
-	@Override
-	public float getEnergyStored() {
-		return joules;
-	}
-
-	@Override
-	public void setEnergyStored(float joules) {
-		this.joules = (int)joules;
-	}
-
-	@Override
-	public float getMaxEnergyStored() {
-		return electricityHandler.getMaxEnergyStored();
-	}
-
-	public void setMaxEnergyStored(float joules) {
-		electricityHandler.setMaxEnergyStored(joules);
-	}
-
-	@Override
-	public boolean canConnect(ForgeDirection side) {
-		return electricityHandler.getMaxEnergyStored() > 0 && Funcs.fdToNumSide(side) != front;
-	}
-
-	@Override
-	public float getRequest(ForgeDirection direction) {
-		return TEHelper.AMPS_PER_TICK * getVoltage();
-	}
-
-	@Override
-	public float getProvide(ForgeDirection direction) {
-		return 0;
-	}
-
-	@Override
-	public float receiveElectricity(ForgeDirection from, ElectricityPack receive, boolean doReceive) {
-		return electricityHandler.receiveElectricity(receive, doReceive);
-	}
-
-	@Override
-	public ElectricityPack provideElectricity(ForgeDirection from, ElectricityPack request, boolean doProvide) {
-		return electricityHandler.provideElectricity(request, doProvide);
-	}
 }

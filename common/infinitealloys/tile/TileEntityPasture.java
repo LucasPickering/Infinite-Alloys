@@ -55,6 +55,10 @@ public class TileEntityPasture extends TileEntityMachine {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
+
+		if(!hasSufficientPower()) // If the machine does not have enough power to run, do not perform any of its actions
+			return;
+
 		ArrayList<EntityCreature> trapList = new ArrayList<EntityCreature>();
 		ArrayList<EntityCreature> repelList = new ArrayList<EntityCreature>();
 
@@ -73,16 +77,20 @@ public class TileEntityPasture extends TileEntityMachine {
 
 		for(EntityCreature creature : trapList) {
 			if(Math.abs(xCoord - creature.posX) > trapRange + 1) // Is the creature too far away in the x direction
-				creature.moveEntity(xCoord + Math.signum(creature.posX - xCoord) * trapRange - creature.posX, 0, 0); // Move it back to the edge of the radius in the x direction
+				creature.moveEntity(xCoord + Math.signum(creature.posX - xCoord) * trapRange - creature.posX, 0, 0); // Move it back to the edge of the radius
+																														// in the x direction
 			if(Math.abs(zCoord - creature.posZ) > trapRange + 1) // Is the creature too far away in the z direction
-				creature.moveEntity(0, 0, zCoord + Math.signum(creature.posZ - zCoord) * trapRange - creature.posZ); // Move is back to the edge of the radius in the z direction
+				creature.moveEntity(0, 0, zCoord + Math.signum(creature.posZ - zCoord) * trapRange - creature.posZ); // Move is back to the edge of the radius
+																														// in the z direction
 		}
 
 		for(EntityCreature creature : repelList) {
 			if(Math.abs(xCoord - creature.posX) > repelRange) // Is the creature too close in the x direction
-				creature.moveEntity(creature.posX - xCoord - Math.signum(creature.posX - xCoord) * repelRange, 0, 0); // Move it back to the edge of the radius in the x direction
+				creature.moveEntity(creature.posX - xCoord - Math.signum(creature.posX - xCoord) * repelRange, 0, 0); // Move it back to the edge of the radius
+																														// in the x direction
 			if(Math.abs(zCoord - creature.posZ) > repelRange) // Is the creature too close in the z direction
-				creature.moveEntity(0, 0, creature.posZ - zCoord - Math.signum(creature.posZ - zCoord) * repelRange); // Move is back to the edge of the radius in the z direction
+				creature.moveEntity(0, 0, creature.posZ - zCoord - Math.signum(creature.posZ - zCoord) * repelRange); // Move is back to the edge of the radius
+																														// in the z direction
 		}
 	}
 
@@ -113,20 +121,20 @@ public class TileEntityPasture extends TileEntityMachine {
 	}
 
 	@Override
-	public int getJoulesUsed() {
+	public int getRKUsed() {
 		if(shouldProcess())
-			return joulesUsedPerTick;
+			return rkUsedPerTick;
 		return 0;
 	}
 
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			joulesUsedPerTick = 1;
+			rkUsedPerTick = 40;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			joulesUsedPerTick = 2;
+			rkUsedPerTick = 30;
 		else
-			joulesUsedPerTick = 4;
+			rkUsedPerTick = 20;
 
 		if(hasUpgrade(TEHelper.CAPACITY2))
 			maxSpots = 8;
@@ -149,13 +157,6 @@ public class TileEntityPasture extends TileEntityMachine {
 		}
 
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
-
-		if(hasUpgrade(TEHelper.ELECCAPACITY2))
-			setMaxEnergyStored(1000000);
-		else if(hasUpgrade(TEHelper.ELECCAPACITY1))
-			setMaxEnergyStored(750000);
-		else
-			setMaxEnergyStored(500000);
 	}
 
 	@Override
@@ -167,8 +168,6 @@ public class TileEntityPasture extends TileEntityMachine {
 		validUpgrades.add(TEHelper.RANGE1);
 		validUpgrades.add(TEHelper.RANGE2);
 		validUpgrades.add(TEHelper.WIRELESS);
-		validUpgrades.add(TEHelper.ELECCAPACITY1);
-		validUpgrades.add(TEHelper.ELECCAPACITY2);
 	}
 
 	/** Does the pasture have enough space to enable another animal or monster

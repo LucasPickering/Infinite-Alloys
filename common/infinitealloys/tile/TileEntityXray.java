@@ -146,9 +146,9 @@ public class TileEntityXray extends TileEntityMachine {
 	public void finishProcessing() {}
 
 	@Override
-	public int getJoulesUsed() {
+	public int getRKUsed() {
 		if(searchingClient && inventoryStacks[0] != null)
-			return joulesUsedPerTick * TEHelper.getDetectableWorth(inventoryStacks[0]);
+			return rkUsedPerTick * TEHelper.getDetectableWorth(inventoryStacks[0]);
 		return 0;
 	}
 
@@ -162,11 +162,11 @@ public class TileEntityXray extends TileEntityMachine {
 			ticksToProcess = 24000;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			joulesUsedPerTick = 1800;
+			rkUsedPerTick = 1800;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			joulesUsedPerTick = 2700;
+			rkUsedPerTick = 2700;
 		else
-			joulesUsedPerTick = 3600;
+			rkUsedPerTick = 3600;
 
 		if(hasUpgrade(TEHelper.RANGE2))
 			range = 10;
@@ -176,13 +176,6 @@ public class TileEntityXray extends TileEntityMachine {
 			range = 5;
 
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
-
-		if(hasUpgrade(TEHelper.ELECCAPACITY2))
-			setMaxEnergyStored(1000000);
-		else if(hasUpgrade(TEHelper.ELECCAPACITY1))
-			setMaxEnergyStored(750000);
-		else
-			setMaxEnergyStored(500000);
 	}
 
 	@Override

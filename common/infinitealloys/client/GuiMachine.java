@@ -19,14 +19,11 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
-import universalelectricity.core.electricity.ElectricityDisplay;
-import universalelectricity.core.electricity.ElectricityPack;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public abstract class GuiMachine extends GuiContainer {
 
 	// The position for each item in the texture sheet extras.png
-	static final Rectangle ENERGY_METER = new Rectangle(0, 0, 10, 32);
 	static final Rectangle TAB_LEFT_OFF = new Rectangle(10, 0, 24, 24);
 	static final Rectangle TAB_LEFT_ON = new Rectangle(34, 0, 28, 24);
 	static final Rectangle TAB_RIGHT_OFF = new Rectangle(62, 0, 29, 24);
@@ -47,8 +44,6 @@ public abstract class GuiMachine extends GuiContainer {
 
 	/** Coordinates of the top-left corner of the GUI */
 	protected java.awt.Point topLeft = new java.awt.Point();
-	/** Coordinates of the meter texture, shifts up and down with energy level, same for all machines */
-	protected java.awt.Point energyMeter = new java.awt.Point();
 	/** Coordinates of the progress bar texture, changes by machine but still otherwise */
 	protected java.awt.Point progressBar = new java.awt.Point();
 	/** The button to enable and disable the help overlay */
@@ -79,9 +74,6 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTick) {
 		topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
-		int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
-		if(joulesScaled > 0)
-			energyMeter.setLocation(13, 7 + ENERGY_METER.height - tem.getJoulesScaled(ENERGY_METER.height));
 		super.drawScreen(mouseX, mouseY, partialTick);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -99,14 +91,6 @@ public abstract class GuiMachine extends GuiContainer {
 			}
 			drawTextBox(mouseX, mouseY, lines.toArray(new ColoredLine[lines.size()]));
 		}
-
-		// Draw the energy numbers if the mouse is over the energy meter
-		if(joulesScaled > 0 && mouseInZone(mouseX, mouseY, topLeft.x + energyMeter.x,
-				topLeft.y + energyMeter.y + joulesScaled - ENERGY_METER.height, ENERGY_METER.width, ENERGY_METER.height))
-			drawTextBox(mouseX, mouseY,
-					new ColoredLine(ElectricityDisplay.getDisplayShort(tem.getEnergyStored(), ElectricityDisplay.ElectricUnit.JOULES), 0xffffff),
-					new ColoredLine(ElectricityDisplay.getDisplayShort(ElectricityPack.getWattsFromJoules(tem.joulesGained, 0.05F), ElectricityDisplay.ElectricUnit.WATT) + " IN", 0x00ff00),
-					new ColoredLine(ElectricityDisplay.getDisplayShort(ElectricityPack.getWattsFromJoules(tem.getJoulesUsed(), 0.05F), ElectricityDisplay.ElectricUnit.WATT) + " OUT", 0xff0000));
 
 		// Draw the progress info if the mouse is over the progress bar
 		if(tem.ticksToProcess > 0 &&
@@ -167,14 +151,9 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		bindTexture(extras);
-		if(tem.getMaxEnergyStored() > 0) {
-			int joulesScaled = tem.getJoulesScaled(ENERGY_METER.height);
-			drawTexturedModalRect(energyMeter.x, energyMeter.y, ENERGY_METER.x, ENERGY_METER.y + ENERGY_METER.height - joulesScaled, ENERGY_METER.width,
-					joulesScaled);
-		}
 
 		if(tem.ticksToProcess > 0) {
-			int progressScaled = tem.getJoulesScaled(PROGRESS_BAR.height);
+			int progressScaled = tem.getProcessProgressScaled(PROGRESS_BAR.width);
 			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, tem.getProcessProgressScaled(PROGRESS_BAR.width),
 					PROGRESS_BAR.height);
 		}

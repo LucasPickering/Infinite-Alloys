@@ -30,10 +30,9 @@ public class PacketHandler implements IPacketHandler {
 	private static final byte WORLD_DATA = 0;
 	private static final byte TE_SERVER_TO_CLIENT = 1;
 	private static final byte TE_CLIENT_TO_SERVER = 2;
-	private static final byte TE_JOULES = 3;
-	private static final byte COMPUTER_ADD_MACHINE = 4;
-	private static final byte OPEN_GUI = 5;
-	private static final byte SEARCH = 6;
+	private static final byte COMPUTER_ADD_MACHINE = 3;
+	private static final byte OPEN_GUI = 4;
+	private static final byte SEARCH = 5;
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
@@ -56,8 +55,7 @@ public class PacketHandler implements IPacketHandler {
 					int processProgress = data.readInt();
 					byte orientation = data.readByte();
 					int upgrades = data.readInt();
-					int joules = data.readInt();
-					((TileEntityMachine)te).handlePacketDataFromServer(processProgress, orientation, upgrades, joules);
+					((TileEntityMachine)te).handlePacketDataFromServer(processProgress, orientation, upgrades);
 					if(te instanceof TileEntityComputer) {
 						TileEntityComputer tec = (TileEntityComputer)te;
 						tec.networkCoords.clear();
@@ -114,18 +112,6 @@ public class PacketHandler implements IPacketHandler {
 					((TileEntityPasture)te).handlePacketData(mobActions);
 				}
 				break;
-			case TE_JOULES:
-				x = data.readInt();
-				y = data.readInt();
-				z = data.readInt();
-				te = world.getBlockTileEntity(x, y, z);
-				if(te instanceof TileEntityMachine) {
-					int joules = data.readInt();
-					int joulesGained = data.readInt();
-					((TileEntityMachine)te).joules = joules;
-					((TileEntityMachine)te).joulesGained = joulesGained;
-				}
-				break;
 			case COMPUTER_ADD_MACHINE:
 				x = data.readInt();
 				y = data.readInt();
@@ -170,7 +156,6 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(tem.processProgress);
 			dos.writeByte(tem.front);
 			dos.writeInt(tem.getUpgrades());
-			dos.writeInt(tem.joules);
 			if(tem instanceof TileEntityComputer) {
 				TileEntityComputer tec = (TileEntityComputer)tem;
 				dos.writeInt(tec.networkCoords.size());
@@ -211,10 +196,6 @@ public class PacketHandler implements IPacketHandler {
 		if(tem instanceof TileEntityPasture)
 			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityPasture)tem).mobActions);
 		return null;
-	}
-
-	public static Packet getTEJoulesPacket(TileEntityMachine tem) {
-		return getPacket(TE_JOULES, tem.xCoord, tem.yCoord, tem.zCoord, tem.joules, tem.joulesGained);
 	}
 
 	public static Packet getComputerPacketAddMachine(int compX, int compY, int compZ, int machX, int machY, int machZ) {

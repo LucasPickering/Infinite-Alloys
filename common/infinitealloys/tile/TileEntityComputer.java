@@ -29,7 +29,6 @@ public class TileEntityComputer extends TileEntityMachine {
 		super();
 		inventoryStacks = new ItemStack[1];
 		ticksToProcess = 0;
-		setMaxEnergyStored(0);
 		canNetwork = true;
 		networkCapacity = 3;
 		networkRange = 10;
@@ -116,7 +115,7 @@ public class TileEntityComputer extends TileEntityMachine {
 	public void finishProcessing() {}
 
 	@Override
-	public int getJoulesUsed() {
+	public int getRKUsed() {
 		return 0;
 	}
 

@@ -32,7 +32,6 @@ import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import basiccomponents.BasicComponents;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -66,11 +65,6 @@ public class CommonProxy {
 		MinecraftForge.setBlockHarvestLevel(Blocks.machine, 1, "pickaxe", 0);
 		MinecraftForge.setBlockHarvestLevel(Blocks.machine, 2, "pickaxe", 0);
 		MinecraftForge.setBlockHarvestLevel(Blocks.machine, 3, "pickaxe", 0);
-
-		// Basic Components blocks, not part of IA. Passing -1 as the id makes it use the default id.
-		BasicComponents.requestBlock("oreCopper", -1);
-		BasicComponents.requestBlock("oreTin", -1);
-		BasicComponents.requestBlock("copperWire", -1);
 	}
 
 	public void initItems() {
@@ -88,15 +82,6 @@ public class CommonProxy {
 			alloys[i] = new ItemStack(Items.alloyIngot, 1, i + 1);
 		for(int i = 0; i < upgrades.length; i++)
 			upgrades[i] = new ItemStack(Items.upgrade, 1, (int)Math.pow(2D, i));
-
-		// Basic Components items, not part of IA. Passing -1 as the id makes it use the default id.
-		BasicComponents.requestItem("ingotCopper", -1);
-		BasicComponents.requestItem("ingotTin", -1);
-		BasicComponents.requestItem("dustBronze", -1);
-		BasicComponents.requestItem("battery", -1);
-		BasicComponents.requestItem("circuitBasic", -1);
-		BasicComponents.requestItem("circuitAdvanced", -1);
-		BasicComponents.requestItem("circuitElite", -1);
 	}
 
 	public void initRecipes() {
