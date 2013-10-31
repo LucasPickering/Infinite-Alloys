@@ -30,6 +30,7 @@ public class TEHelper {
 	public static final int RANGE2 = 128;
 	public static final int WIRELESS = 256;
 
+	/** How many blocks are searched per tick. Used to limit lag. Currently only used by the x-ray. */
 	public static final int SEARCH_PER_TICK = 2000;
 
 	/** The controlling computer for each player */

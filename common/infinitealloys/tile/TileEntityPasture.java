@@ -9,7 +9,6 @@ import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -53,11 +52,14 @@ public class TileEntityPasture extends TileEntityMachine {
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public boolean shouldProcess() {
+		return true;
+	}
 
-		if(!hasGoodCircuit()) // If the machine does not have enough power to run, do not perform any of its actions
-			return;
+	@Override
+	public void finishProcessing() {
+		/* NOTE: For this specific machine, ticksToProcess = 0, meaning this function is called every tick. It is essentially an updateEntity() function with
+		 * conditions applied in TileEntityMachine.updateEntity() */
 
 		ArrayList<EntityCreature> trapList = new ArrayList<EntityCreature>();
 		ArrayList<EntityCreature> repelList = new ArrayList<EntityCreature>();
@@ -94,14 +96,6 @@ public class TileEntityPasture extends TileEntityMachine {
 		}
 	}
 
-	@Override
-	public boolean shouldProcess() {
-		return false;
-	}
-
-	@Override
-	public void finishProcessing() {}
-
 	public void handlePacketData(byte[] mobActions) {
 		this.mobActions = mobActions;
 	}
@@ -123,11 +117,11 @@ public class TileEntityPasture extends TileEntityMachine {
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			rkPerTick = -40;
+			baseRKPerTick = -40;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			rkPerTick = -30;
+			baseRKPerTick = -30;
 		else
-			rkPerTick = -20;
+			baseRKPerTick = -20;
 
 		if(hasUpgrade(TEHelper.CAPACITY2))
 			maxSpots = 8;

@@ -105,7 +105,7 @@ public abstract class TileEntityUpgradable extends TileEntity implements IInvent
 		front = orientation;
 		this.upgrades = upgrades;
 	}
-	
+
 	public boolean coordsEquals(int x2, int y2, int z2) {
 		return xCoord == x2 && yCoord == y2 && zCoord == z2;
 	}
@@ -240,7 +240,7 @@ public abstract class TileEntityUpgradable extends TileEntity implements IInvent
 
 	/** Determines if the given itemstack is a valid upgrade for the machine
 	 * 
-	 * @param binary upgrade damage value (see {@infinitealloys.tile.TEHelper} for upgrade numbers)
+	 * @param ItemStack for upgrade item with a binary upgrade damage value (see {@link infinitealloys.tile.TEHelper TEHelper} for upgrade numbers)
 	 * @return true if valid */
 	public final boolean isUpgradeValid(ItemStack upgrade) {
 		int upg = (int)Math.pow(2, upgrade.getItemDamage());
@@ -249,7 +249,7 @@ public abstract class TileEntityUpgradable extends TileEntity implements IInvent
 
 	/** Does the machine have the upgrade
 	 * 
-	 * @param binary upgrade damage value
+	 * @param binary upgrade damage value (see {@link infinitealloys.tile.TEHelper TEHelper} for upgrade numbers)
 	 * @return true if the machine has the upgrade */
 	public boolean hasUpgrade(int upgrade) {
 		return (upgrades & upgrade) == upgrade;

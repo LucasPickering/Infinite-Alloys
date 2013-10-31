@@ -1,7 +1,5 @@
 package infinitealloys.client;
 
-import java.util.Arrays;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.inventory.ContainerUpgradable;
 import infinitealloys.tile.TileEntityPasture;
@@ -9,6 +7,7 @@ import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiPasture extends GuiMachine {
 

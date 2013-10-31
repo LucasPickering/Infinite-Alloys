@@ -43,7 +43,7 @@ public class GuiBlockButton extends GuiScreen {
 
 	public void drawButton() {
 		if(blockAmount > 0) {
-			GuiMachine.bindTexture(GuiMachine.extras);
+			GuiMachine.bindTexture(GuiUpgradable.extras);
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 

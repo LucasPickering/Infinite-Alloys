@@ -12,10 +12,8 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
@@ -227,6 +225,7 @@ public abstract class GuiMachine extends GuiUpgradable {
 		}
 	}
 
+	@Override
 	protected boolean mouseInZone(int mouseX, int mouseY, int xStart, int yStart, int width, int height) {
 		return mouseX >= xStart && mouseY >= yStart && mouseX < xStart + width && mouseY < yStart + height;
 	}

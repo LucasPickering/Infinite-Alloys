@@ -38,7 +38,7 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 
 	@Override
 	public boolean shouldProcess() {
-		return inventoryStacks[0] != null && inventoryStacks[1] == null && hasGoodCircuit();
+		return inventoryStacks[0] != null && inventoryStacks[1] == null;
 	}
 
 	@Override
@@ -90,11 +90,11 @@ public class TileEntityAnalyzer extends TileEntityMachine {
 			ticksToProcess = 3600;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			rkPerTick = -180;
+			baseRKPerTick = -180;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			rkPerTick = -270;
+			baseRKPerTick = -270;
 		else
-			rkPerTick = -360;
+			baseRKPerTick = -360;
 
 		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 	}

@@ -14,7 +14,6 @@ public class TileEntityXray extends TileEntityMachine {
 	/** A list of the detected blocks, x and z are relative to the machine, y is absolute */
 	private ArrayList<Point> detectedBlocks = new ArrayList<Point>();
 	public int range;
-	private Point lastSearch;
 
 	/** The selected button for the user, client-side only */
 	@SideOnly(Side.CLIENT)
@@ -22,6 +21,10 @@ public class TileEntityXray extends TileEntityMachine {
 
 	/** The selected button on the gui for each player */
 	public HashMap<String, Short> selectedButtons = new HashMap<String, Short>();
+
+	/** The last point that was checked for the target block in the previous iteration of {@link #search}. The x and z coords are relative to the x-ray block;
+	 * the y coord is aboslute */
+	private Point lastSearch;
 
 	/** Should searching continue, or is it complete. Set this to true to begin a search. */
 	public boolean shouldSearch;
@@ -84,24 +87,46 @@ public class TileEntityXray extends TileEntityMachine {
 			processProgress = 0;
 	}
 
+	/** Perform a search for the target block. This checks {@link infinitealloys.tile.TEHelper#SEARCH_PER_TICK a set amount of} blocks in a tick, then saves its
+	 * place and picks up where it left off next tick. This eliminates stutter during searches. */
 	private void search() {
+		// If there is no target block to search for, return
 		if(inventoryStacks[0] == null)
 			return;
+
+		// Begin the process of searching that appears on the client. Note that this is a just a progress bar and does not actually look for blocks.
 		searchingClient = true;
+
+		// Convenience variables for the data pertaining to the target block that is being searched for
 		int targetID = inventoryStacks[0].itemID;
 		int targetMetadata = inventoryStacks[0].getItemDamage();
+
+		// The amount of blocks that have been iterated over this tick. When this reaches TEHelper.SEARCH_PER_TICK, the loops break
 		int blocksSearched = 0;
-		if(lastSearch.equals(0, 0, 0))
+
+		// (0, 0, 0) is the start point for the search. When lastSearch == (0, 0, 0), this is the first tick of the search. The block list is cleared to be
+		// repopulated in this search.
+		if(lastSearch.equals(0, yCoord, 0))
 			clearDetectedBlocks();
+
+		// Iterate over each block that is within the given range horizontally. Note that it searches all blocks below x-ray within that horizontal range, which
+		// is why the y loop comes first and why it looks a bit different from the x and z loops.
 		for(int y = lastSearch.y; y <= yCoord; y++) {
 			for(int x = Math.abs(lastSearch.x); x <= range; x++) {
 				for(int z = Math.abs(lastSearch.z); z <= range; z++) {
+					// These i and j loops iterate twice each to cover both positive and negative values of x and z.
 					for(int i = x == 0 ? 1 : 0; i < 2; i++) {
 						for(int j = z == 0 ? 1 : 0; j < 2; j++) {
-							int xRel = i == 0 ? x : -x;
-							int zRel = j == 0 ? z : -z;
+							int xRel = i == 0 ? x : -x; // When i == 0, xRel is positive x. When i == 1, xRel is negative x.
+							int zRel = j == 0 ? z : -z; // When j == 0, zRel is positive z. When j == 1, zRel is negative z.
+
+							// If the block at the given coords (which have been converted to absolute coordinates) is of the target block's type, add it to the
+							// list of blocks that have been found.
 							if(Funcs.blocksEqual(worldObj, targetID, targetMetadata, xCoord + xRel, y, zCoord + zRel))
 								addDetectedBlock(new Point(xRel, y, zRel));
+
+							// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
+							// continued next tick.
 							if(++blocksSearched >= TEHelper.SEARCH_PER_TICK) {
 								lastSearch.set(xRel, y, zRel);
 								return;
@@ -109,11 +134,16 @@ public class TileEntityXray extends TileEntityMachine {
 						}
 					}
 				}
+				// If we've search all the z values, reset the z position.
 				lastSearch.z = 0;
 			}
+			// If we've search all the x values, reset the x position.
 			lastSearch.x = 0;
 		}
+		// If we've search all the y values, reset the y position.
 		lastSearch.y = 0;
+
+		// The search is done. Stop running the function until another search is initiated.
 		shouldSearch = false;
 	}
 
@@ -155,11 +185,11 @@ public class TileEntityXray extends TileEntityMachine {
 			ticksToProcess = 24000;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			rkPerTick = -1800;
+			baseRKPerTick = -1800;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			rkPerTick = -2700;
+			baseRKPerTick = -2700;
 		else
-			rkPerTick = -3600;
+			baseRKPerTick = -3600;
 
 		if(hasUpgrade(TEHelper.RANGE2))
 			range = 10;

@@ -5,6 +5,7 @@ import infinitealloys.block.Blocks;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +19,7 @@ public class TileEntityComputer extends TileEntityUpgradable {
 	public int networkRange;
 
 	/** 3D coords for each machine */
-	public ArrayList<Point> networkCoords;
+	public List<Point> networkCoords;
 
 	public TileEntityComputer(int facing) {
 		this();
@@ -65,16 +66,18 @@ public class TileEntityComputer extends TileEntityUpgradable {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		for(Point coords : networkCoords)
-			if(!(Funcs.getBlock(worldObj, coords.x, coords.y, coords.z) instanceof BlockMachine))
-				networkCoords.remove(coords);
+
+		// If a connected machine no longer exists or its networking upgrade was removed, remove it from the network list
+		for(Point p : networkCoords)
+			if(!(worldObj.getBlockTileEntity(p.x, p.y, p.z) instanceof TileEntityUpgradable && ((TileEntityUpgradable)worldObj.getBlockTileEntity(p.x, p.y, p.z)).canNetwork))
+				networkCoords.remove(p);
 	}
 
 	public boolean addMachine(EntityPlayer player, int machX, int machY, int machZ) {
 		for(Point coords : networkCoords) {
 			if(coords.x == machX && coords.y == machY && coords.z == machZ) {
 				if(worldObj.isRemote)
-					player.addChatMessage("Error: Machine already in network");
+					player.addChatMessage("Error: Machine is already in network");
 				return false;
 			}
 		}

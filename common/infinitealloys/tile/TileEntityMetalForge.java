@@ -117,8 +117,8 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
 		if(sufficientIngots.contains(false))
 			processProgress = 0;
-		return typesInRecipe > 1 && !sufficientIngots.contains(false) && hasGoodCircuit()
-				&& (inventoryStacks[2] == null || inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1);
+		return (inventoryStacks[2] == null || inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1)
+				&& typesInRecipe > 1 && !sufficientIngots.contains(false);
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	@Override
 	public int getRKChange() {
 		if(shouldProcess())
-			return rkPerTick * getIngotsInRecipe();
+			return baseRKPerTick * getIngotsInRecipe();
 		return 0;
 	}
 
@@ -154,11 +154,11 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			ticksToProcess = 12800;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			rkPerTick = -90;
+			baseRKPerTick = -90;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			rkPerTick = -120;
+			baseRKPerTick = -120;
 		else
-			rkPerTick = -180;
+			baseRKPerTick = -180;
 
 		if(hasUpgrade(TEHelper.CAPACITY2))
 			stackLimit = 64;

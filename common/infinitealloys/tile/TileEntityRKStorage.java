@@ -1,14 +1,40 @@
 package infinitealloys.tile;
 
+import infinitealloys.block.BlockMachine;
+import infinitealloys.util.Funcs;
+import infinitealloys.util.Point;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityRKStorage extends TileEntityUpgradable {
+
+	/** The amount of time, in ticks (20 ticks = 1 second), between each regular search for new machines to connect to. */
+	private final int SEARCH_INTERVAL = 200;
 
 	/** The maximum amount of RK that this machine can store */
 	private int maxRK = 10000000;
 
+	private int currentRK;
+
 	/** The distance over which energy can be added to and taken from this machine */
 	private int range;
+
+	/** How many ticks have passed since the last search for machines. When this reaches {@link #SEARCH_INTERVAL the search interval time}, it resets to 0 and a
+	 * search begins. */
+	private int currentSearchTicks;
+
+	/** A list of the locations of TileEntityUpgradables that provide power to or consume power from this storage unit */
+	private List<Point> connectedMachines = new ArrayList<Point>();
+
+	/** The last point that was checked for a machine in the previous iteration of {@link #search}. The coords are relative to this TE block. */
+	private Point lastSearch;
+
+	/** Should searching continue, or is it complete. Set this to true to begin a search. */
+	public boolean shouldSearch;
+
+	// ---BEGIN GENERAL FUNCTIONS---
 
 	public TileEntityRKStorage(int facing) {
 		this();
@@ -21,9 +47,83 @@ public class TileEntityRKStorage extends TileEntityUpgradable {
 	}
 
 	@Override
+	public void updateEntity() {
+		super.updateEntity();
+
+		if(++currentSearchTicks >= SEARCH_INTERVAL) {
+			currentSearchTicks = 0;
+			shouldSearch = true;
+		}
+		if(shouldSearch)
+			search();
+
+		// If a connected machine no longer exists, remove it from the network
+		for(Point p : connectedMachines)
+			if(!(worldObj.getBlockTileEntity(p.x, p.y, p.z) instanceof TileEntityMachine))
+				connectedMachines.remove(p);
+	}
+
+	/** Perform a search for machines that produce/consume power. This checks {@link infinitealloys.tile.TEHelper#SEARCH_PER_TICK a set amount of} blocks in a
+	 * tick, then saves its place and picks up where it left off next tick, which eliminates stutter during searches. */
+	private void search() {
+		// The amount of blocks that have been iterated over this tick. When this reaches TEHelper.SEARCH_PER_TICK, the loops break
+		int blocksSearched = 0;
+
+		// Iterate over each block that is within the given range in all three dimensions. The searched area will be a cube with each side being (2 * range + 1)
+		// blocks long.
+		for(int x = lastSearch.x; x <= range; x++) {
+			for(int y = lastSearch.y; y <= range; y++) {
+				for(int z = lastSearch.z; z <= range; z++) {
+
+					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to a
+					// power storage unit, add it to the power network.
+					TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
+					if(te instanceof TileEntityMachine && ((TileEntityMachine)te).powerStorageUnit == null)
+						connectedMachines.add(new Point(xCoord + x, yCoord + y, zCoord + z));
+
+					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
+					// continued next tick.
+					if(++blocksSearched >= TEHelper.SEARCH_PER_TICK) {
+						lastSearch.set(x, y, z);
+						return;
+					}
+				}
+				// If we've search all the z values, reset the z position.
+				lastSearch.z = -range;
+			}
+			// If we've search all the y values, reset the y position.
+			lastSearch.y = -range;
+		}
+		// If we've search all the x values, reset the x position.
+		lastSearch.x = -range;
+
+		// The search is done. Stop running the function until another search is initiated.
+		shouldSearch = false;
+	}
+
+	/** Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK, will the result be less than zero or overflow the machine? If
+	 * this condition is true, make said change, i.e. actually add changeInRK to currentRK
+	 * 
+	 * @param changeInRK the specified change in RK
+	 * @return True if changeInRK plus currentRK is between 0 and maxRK, False otherwise */
+	public boolean consumeRK(int changeInRK) {
+		if(0 <= currentRK + changeInRK && currentRK + changeInRK <= maxRK) {
+			currentRK += changeInRK;
+			return true;
+		}
+		return false;
+	}
+
+	// ---END GENERAL FUNCTIONS---
+	// ---BEGIN INVENTORY FUNCTIONS---
+
+	@Override
 	public String getInvName() {
 		return "RK Storage"; // TODO: Change this one I figure out a better name for this TE
 	}
+
+	// ---END INVENTORY FUNCTIONS---
+	// ---BEGIN UPGRADE FUNCTIONS---
 
 	@Override
 	protected void updateUpgrades() {
@@ -49,4 +149,6 @@ public class TileEntityRKStorage extends TileEntityUpgradable {
 		validUpgrades.add(TEHelper.RANGE1);
 		validUpgrades.add(TEHelper.RANGE2);
 	}
+
+	// ---END UPGRADE FUNCTIONS---
 }
