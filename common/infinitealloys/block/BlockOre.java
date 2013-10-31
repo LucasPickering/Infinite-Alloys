@@ -32,8 +32,8 @@ public class BlockOre extends BlockIA {
 
 	@Override
 	public Icon getIcon(int side, int metadata) {
-		// Not actually used as metadata, called from GfxHandler with a 0 or 1
-		if(metadata == 0)
+		// Not actually used as metadata, called from GfxHandler with a -1 for foreground or anything else for background
+		if(metadata == -1)
 			return Blocks.oreForegroundIcon;
 		return Blocks.oreBackgroundIcon;
 	}

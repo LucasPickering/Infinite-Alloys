@@ -62,7 +62,7 @@ public abstract class GuiUpgradable extends GuiContainer {
 		this.ySize = ySize;
 		teu = tileEntity;
 		background = createTexture(texture);
-		extras = createTexture(texture);
+		extras = createTexture("extras");
 	}
 
 	@Override
@@ -147,6 +147,7 @@ public abstract class GuiUpgradable extends GuiContainer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		bindTexture(extras);
 
+		// Draw the tabs of other machines on the network if this machine is connected to a computer
 		machineTabs.clear();
 		Point cont = TEHelper.controllers.get(mc.thePlayer.username);
 		if(cont != null) {
@@ -216,6 +217,8 @@ public abstract class GuiUpgradable extends GuiContainer {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		World world = Minecraft.getMinecraft().theWorld;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		
+		// Was the network tab of the controlling computer clicked? Go to that computer
 		if(controllerTab != null && controllerTab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
 			int x = controllerTab.tem.xCoord;
 			int y = controllerTab.tem.yCoord;
@@ -226,6 +229,8 @@ public abstract class GuiUpgradable extends GuiContainer {
 			}
 			return;
 		}
+		
+		// Was the network tab of another machine clicked? Go to that machine
 		for(GuiMachineTab tab : machineTabs) {
 			if(tab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
 				int x = tab.tem.xCoord;

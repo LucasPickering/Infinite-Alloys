@@ -94,7 +94,7 @@ public class TileEntityXray extends TileEntityMachine {
 		if(inventoryStacks[0] == null)
 			return;
 
-		// Begin the process of searching that appears on the client. Note that this is a just a progress bar and does not actually look for blocks.
+		// Enable the process of searching that appears on the client. Note that this is a just a progress bar and does not actually look for blocks.
 		searchingClient = true;
 
 		// Convenience variables for the data pertaining to the target block that is being searched for
@@ -104,41 +104,34 @@ public class TileEntityXray extends TileEntityMachine {
 		// The amount of blocks that have been iterated over this tick. When this reaches TEHelper.SEARCH_PER_TICK, the loops break
 		int blocksSearched = 0;
 
-		// (0, 0, 0) is the start point for the search. When lastSearch == (0, 0, 0), this is the first tick of the search. The block list is cleared to be
-		// repopulated in this search.
-		if(lastSearch.equals(0, yCoord, 0))
+		// (-range, 0, -range) is the start point for the search. When lastSearch == (-range, 0, -range), this is the first tick of the search. The block list
+		// is cleared to be repopulated in this search.
+		if(lastSearch.equals(-range, 0, -range))
 			clearDetectedBlocks();
 
 		// Iterate over each block that is within the given range horizontally. Note that it searches all blocks below x-ray within that horizontal range, which
 		// is why the y loop comes first and why it looks a bit different from the x and z loops.
 		for(int y = lastSearch.y; y <= yCoord; y++) {
-			for(int x = Math.abs(lastSearch.x); x <= range; x++) {
-				for(int z = Math.abs(lastSearch.z); z <= range; z++) {
-					// These i and j loops iterate twice each to cover both positive and negative values of x and z.
-					for(int i = x == 0 ? 1 : 0; i < 2; i++) {
-						for(int j = z == 0 ? 1 : 0; j < 2; j++) {
-							int xRel = i == 0 ? x : -x; // When i == 0, xRel is positive x. When i == 1, xRel is negative x.
-							int zRel = j == 0 ? z : -z; // When j == 0, zRel is positive z. When j == 1, zRel is negative z.
+			for(int x = lastSearch.x; x <= range; x++) {
+				for(int z = lastSearch.z; z <= range; z++) {
 
-							// If the block at the given coords (which have been converted to absolute coordinates) is of the target block's type, add it to the
-							// list of blocks that have been found.
-							if(Funcs.blocksEqual(worldObj, targetID, targetMetadata, xCoord + xRel, y, zCoord + zRel))
-								addDetectedBlock(new Point(xRel, y, zRel));
+					// If the block at the given coords (which have been converted to absolute coordinates) is of the target block's type, add it to the
+					// list of blocks that have been found.
+					if(Funcs.blocksEqual(worldObj, targetID, targetMetadata, xCoord + x, y, zCoord + z))
+						addDetectedBlock(new Point(x, y, z));
 
-							// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
-							// continued next tick.
-							if(++blocksSearched >= TEHelper.SEARCH_PER_TICK) {
-								lastSearch.set(xRel, y, zRel);
-								return;
-							}
-						}
+					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
+					// continued next tick.
+					if(++blocksSearched >= TEHelper.SEARCH_PER_TICK) {
+						lastSearch.set(x, y, z);
+						return;
 					}
 				}
 				// If we've search all the z values, reset the z position.
-				lastSearch.z = 0;
+				lastSearch.z = -range;
 			}
 			// If we've search all the x values, reset the x position.
-			lastSearch.x = 0;
+			lastSearch.x = -range;
 		}
 		// If we've search all the y values, reset the y position.
 		lastSearch.y = 0;
@@ -182,7 +175,7 @@ public class TileEntityXray extends TileEntityMachine {
 		else if(hasUpgrade(TEHelper.SPEED1))
 			ticksToProcess = 18000;
 		else
-			ticksToProcess = 24000;
+			ticksToProcess = 24; // TODO: Change this back to 12000
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
 			baseRKPerTick = -1800;

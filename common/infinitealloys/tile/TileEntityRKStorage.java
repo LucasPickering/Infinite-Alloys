@@ -86,17 +86,13 @@ public class TileEntityRKStorage extends TileEntityUpgradable {
 						return;
 					}
 				}
-				// If we've search all the z values, reset the z position.
-				lastSearch.z = -range;
+				lastSearch.z = -range; // If we've search all the z values, reset the z position.
 			}
-			// If we've search all the y values, reset the y position.
-			lastSearch.y = -range;
+			lastSearch.y = -range; // If we've search all the y values, reset the y position.
 		}
-		// If we've search all the x values, reset the x position.
-		lastSearch.x = -range;
+		lastSearch.x = -range; // If we've search all the x values, reset the x position.
 
-		// The search is done. Stop running the function until another search is initiated.
-		shouldSearch = false;
+		shouldSearch = false; // The search is done. Stop running the function until another search is initiated.
 	}
 
 	/** Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK, will the result be less than zero or overflow the machine? If

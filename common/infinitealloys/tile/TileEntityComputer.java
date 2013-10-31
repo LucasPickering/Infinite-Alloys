@@ -95,7 +95,7 @@ public class TileEntityComputer extends TileEntityUpgradable {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Can only add machines");
 		}
-		else if(!((TileEntityMachine)worldObj.getBlockTileEntity(machX, machY, machZ)).canNetwork) {
+		else if(!((TileEntityUpgradable)worldObj.getBlockTileEntity(machX, machY, machZ)).canNetwork) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Machine not capable of networking");
 		}

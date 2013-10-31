@@ -93,32 +93,32 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0F, -1F, 0F);
-		renderer.renderFaceYNeg(block, 0D, 0D, 0D, block.getIcon(0, 1));
+		renderer.renderFaceYNeg(block, 0D, 0D, 0D, block.getIcon(0, 0));
 		tessellator.draw();
 
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0F, 1F, 0F);
-		renderer.renderFaceYPos(block, 0D, 0D, 0D, block.getIcon(1, 1));
+		renderer.renderFaceYPos(block, 0D, 0D, 0D, block.getIcon(1, 0));
 		tessellator.draw();
 
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(1F, 0F, 0F);
-		renderer.renderFaceXPos(block, 0D, 0D, 0D, block.getIcon(2, 1));
+		renderer.renderFaceXPos(block, 0D, 0D, 0D, block.getIcon(2, 0));
 		tessellator.draw();
 
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(-1F, 0F, 0F);
-		renderer.renderFaceXNeg(block, 0D, 0D, 0D, block.getIcon(3, 1));
+		renderer.renderFaceXNeg(block, 0D, 0D, 0D, block.getIcon(3, 0));
 		tessellator.draw();
 
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0F, 0F, -1F);
-		renderer.renderFaceZNeg(block, 0D, 0D, 0D, block.getIcon(4, 1));
+		renderer.renderFaceZNeg(block, 0D, 0D, 0D, block.getIcon(4, 0));
 		tessellator.draw();
 
 		tessellator.startDrawingQuads();
 		tessellator.setNormal(0F, 0F, 1F);
-		renderer.renderFaceZPos(block, 0D, 0D, 0D, block.getIcon(5, 1));
+		renderer.renderFaceZPos(block, 0D, 0D, 0D, block.getIcon(5, 0));
 		tessellator.draw();
 
 		// Draw ore pieces on top of stone background
@@ -128,32 +128,32 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, -1F, 0F);
-			renderer.renderFaceYNeg(block, 0D, 0D, 0D, block.getIcon(0, 0));
+			renderer.renderFaceYNeg(block, 0D, 0D, 0D, block.getIcon(0, -1));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, 1F, 0F);
-			renderer.renderFaceYPos(block, 0D, 0D, 0D, block.getIcon(1, 0));
+			renderer.renderFaceYPos(block, 0D, 0D, 0D, block.getIcon(1, -1));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(1F, 0F, 0F);
-			renderer.renderFaceXPos(block, 0D, 0D, 0D, block.getIcon(2, 0));
+			renderer.renderFaceXPos(block, 0D, 0D, 0D, block.getIcon(2, -1));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(-1F, 0F, 0F);
-			renderer.renderFaceXNeg(block, 0D, 0D, 0D, block.getIcon(3, 0));
+			renderer.renderFaceXNeg(block, 0D, 0D, 0D, block.getIcon(3, -1));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, 0F, -1F);
-			renderer.renderFaceZNeg(block, 0D, 0D, 0D, block.getIcon(4, 0));
+			renderer.renderFaceZNeg(block, 0D, 0D, 0D, block.getIcon(4, -1));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, 0F, 1F);
-			renderer.renderFaceZPos(block, 0D, 0D, 0D, block.getIcon(5, 0));
+			renderer.renderFaceZPos(block, 0D, 0D, 0D, block.getIcon(5, -1));
 			tessellator.draw();
 		}
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
@@ -171,37 +171,37 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y - 1, z, 0)) {
 			tessellator.setBrightness(renderer.renderMinY > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y - 1, z));
 			tessellator.setColorOpaque_F(red * 0.5F, green * 0.5F, blue * 0.5F);
-			renderer.renderFaceYNeg(block, x, y, z, block.getIcon(0, 0));
+			renderer.renderFaceYNeg(block, x, y, z, block.getIcon(0, -1));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y + 1, z, 1)) {
 			tessellator.setBrightness(renderer.renderMaxY < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y + 1, z));
 			tessellator.setColorOpaque_F(red, green, blue);
-			renderer.renderFaceYPos(block, x, y, z, block.getIcon(1, 0));
+			renderer.renderFaceYPos(block, x, y, z, block.getIcon(1, -1));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x + 1, y, z, 2)) {
 			tessellator.setBrightness(renderer.renderMinZ > 0D ? brightness : block.getMixedBrightnessForBlock(world, x + 1, y, z));
 			tessellator.setColorOpaque_F(red * 0.6F, green * 0.6F, blue * 0.6F);
-			renderer.renderFaceXPos(block, x, y, z, block.getIcon(2, 0));
+			renderer.renderFaceXPos(block, x, y, z, block.getIcon(2, -1));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x - 1, y, z, 3)) {
 			tessellator.setBrightness(renderer.renderMaxZ < 1D ? brightness : block.getMixedBrightnessForBlock(world, x - 1, y, z));
 			tessellator.setColorOpaque_F(red * 0.6F, green * 0.6F, blue * 0.6F);
-			renderer.renderFaceXNeg(block, x, y, z, block.getIcon(3, 0));
+			renderer.renderFaceXNeg(block, x, y, z, block.getIcon(3, -1));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z - 1, 4)) {
 			tessellator.setBrightness(renderer.renderMinX > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z - 1));
 			tessellator.setColorOpaque_F(red * 0.8F, green * 0.8F, blue * 0.8F);
-			renderer.renderFaceZNeg(block, x, y, z, block.getIcon(4, 0));
+			renderer.renderFaceZNeg(block, x, y, z, block.getIcon(4, -1));
 			rendered = true;
 		}
 		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z + 1, 5)) {
 			tessellator.setBrightness(renderer.renderMaxX < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z + 1));
 			tessellator.setColorOpaque_F(red * 0.8F, green * 0.8F, blue * 0.8F);
-			renderer.renderFaceZPos(block, x, y, z, block.getIcon(5, 0));
+			renderer.renderFaceZPos(block, x, y, z, block.getIcon(5, -1));
 			rendered = true;
 		}
 		return rendered;

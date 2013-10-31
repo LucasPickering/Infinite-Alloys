@@ -135,8 +135,10 @@ public class GuiXray extends GuiMachine {
 		super.actionPerformed(button);
 		if(button.id == 1) {
 			tex.selectedButton = -1;
+			setButtons();
 			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 			tex.shouldSearch = true;
+			tex.searchingClient = true;
 			PacketDispatcher.sendPacketToServer(PacketHandler.getPacketSearch(tex.xCoord, tex.yCoord, tex.zCoord));
 		}
 	}
