@@ -7,6 +7,7 @@ import infinitealloys.tile.TileEntityXray;
 import infinitealloys.util.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.input.Mouse;
@@ -20,12 +21,15 @@ public class GuiXray extends GuiMachine {
 	/** The scroll bar (width is for the scrolling block) */
 	private final Rectangle SCROLL_BAR = new Rectangle(172, 49, 12, 96);
 
-	/** The number of the first displayed line of blocks. Min is 0, max is num of rows - number on screen (5) */
-	private int scrollPos = 0;
-	private GuiBlockButton[] blockButtons = new GuiBlockButton[0];
-	private GuiButton searchButton;
 	/** TileEntityXray.searchingClient, used to checking if searching just finished */
 	private boolean wasSearching;
+
+	/** The number of the first displayed line of blocks. Min is 0, max is num of rows - number on screen (5) */
+	private int scrollPos = 0;
+
+	private GuiBlockButton[] blockButtons = new GuiBlockButton[0];
+	private GuiButton searchButton;
+	private boolean initialized;
 
 	public GuiXray(InventoryPlayer inventoryPlayer, TileEntityXray tileEntity) {
 		super(196, 238, tileEntity, new ContainerXray(inventoryPlayer, tileEntity), "xray");
@@ -37,12 +41,15 @@ public class GuiXray extends GuiMachine {
 	public void initGui() {
 		super.initGui();
 		buttonList.add(searchButton = new GuiButton(1, width / 2 - 30, height / 2 - 92, 80, 20, "Search"));
-		setButtons();
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+		if(!initialized) {
+			initialized = true;
+			setButtons();
+		}
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		searchButton.enabled = tex.inventoryStacks[0] != null;
@@ -63,26 +70,35 @@ public class GuiXray extends GuiMachine {
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
+		// Was the left mouse button clicked?
 		if(mouseButton == 0) {
+			// Iterate though each block button
 			for(int i = 0; i < blockButtons.length; i++) {
+				// Was this button clicked?
 				if(blockButtons[i].mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
+					// Was there already a selected button? If so, deselect it.
 					if(tex.selectedButton >= 0)
 						blockButtons[tex.selectedButton].activated = false;
-					if(tex.selectedButton != i) {
+
+					// Clear the highlighted blocks from the last selected button
+					InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
+
+					// Was this button already selected? If so, none of the buttons are selected now
+					if(tex.selectedButton == i)
+						tex.selectedButton = -1;
+
+					// This button wasn't already selected
+					else {
+						// This button is now selected
 						tex.selectedButton = i;
 						blockButtons[i].activated = true;
-						InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
-						for(Point block : tex.getDetectedBlocks()) {
-							if(block.y == blockButtons[i].getYValue()) {
-								block.x += tex.xCoord;
-								block.z += tex.zCoord;
-								InfiniteAlloys.proxy.gfxHandler.xrayBlocks.add(block);
-							}
-						}
-					}
-					else {
-						tex.selectedButton = -1;
-						InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
+
+						// The blocks that are represented by the newly selected button get highlighted
+						for(Point block : tex.getDetectedBlocks())
+							// Is this block represented by the newly selected button?
+							if(block.y == blockButtons[i].getYValue())
+								// If so, add this block to the list of blocks to be highlighted. Convert the x and z coords from relative to absolute
+								InfiniteAlloys.proxy.gfxHandler.xrayBlocks.add(new Point(tex.xCoord + block.x, block.y, tex.zCoord + block.z));
 					}
 				}
 			}
@@ -108,12 +124,13 @@ public class GuiXray extends GuiMachine {
 			blockButtons = new GuiBlockButton[0];
 		else {
 			int[] blockCounts = new int[tem.yCoord];
-			ArrayList<Integer> levels = new ArrayList<Integer>();
+			List<Integer> levels = new ArrayList<Integer>();
 			// Go through each detected block
-			for(Point block : tex.getDetectedBlocks())
+			for(Point block : tex.getDetectedBlocks()) {
 				// For each block if there hasn't been a block for that y-level yet, at that y to the list
 				if(blockCounts[block.y]++ == 0)
 					levels.add(block.y);
+			}
 			blockButtons = new GuiBlockButton[levels.size()];
 			for(int i = 0; i < blockButtons.length; i++)
 				blockButtons[i] = new GuiBlockButton(mc, itemRenderer, i % 4 * 40 + 9, (i / 4 - scrollPos) * 20 + 50, tex.inventoryStacks[0].itemID, blockCounts[levels.get(i)],

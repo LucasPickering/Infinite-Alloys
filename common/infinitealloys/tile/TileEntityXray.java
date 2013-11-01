@@ -23,7 +23,7 @@ public class TileEntityXray extends TileEntityMachine {
 	public HashMap<String, Short> selectedButtons = new HashMap<String, Short>();
 
 	/** The last point that was checked for the target block in the previous iteration of {@link #search}. The x and z coords are relative to the x-ray block;
-	 * the y coord is aboslute */
+	 * the y coord is absolute */
 	private Point lastSearch;
 
 	/** Should searching continue, or is it complete. Set this to true to begin a search. */
@@ -41,7 +41,7 @@ public class TileEntityXray extends TileEntityMachine {
 		super(1);
 		inventoryStacks = new ItemStack[2];
 		stackLimit = 1;
-		lastSearch = new Point(0, 0, 0);
+		lastSearch = new Point(-range, 0, -range);
 	}
 
 	@Override
@@ -175,7 +175,7 @@ public class TileEntityXray extends TileEntityMachine {
 		else if(hasUpgrade(TEHelper.SPEED1))
 			ticksToProcess = 18000;
 		else
-			ticksToProcess = 24; // TODO: Change this back to 12000
+			ticksToProcess = 24; // TODO: Change this back to 24000
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
 			baseRKPerTick = -1800;

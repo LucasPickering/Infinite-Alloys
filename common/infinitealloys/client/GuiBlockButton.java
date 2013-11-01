@@ -9,13 +9,19 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiBlockButton extends GuiScreen {
 
-	private RenderItem itemRenderer;
-	/***/
-	private Background[] BACKGROUNDS = { new Background(0, 5, 94, 24), new Background(6, 50, 128, 24), new Background(51, 60, 162, 24),
+	private final Rectangle OVERLAY = new Rectangle(58, 24, 36, 18);
+
+	/** The background pattern of the button, dependent on the elevation. Can be bedrock, stone, dirt, grass, or sky */
+	private final Background[] BACKGROUNDS = { new Background(0, 5, 94, 24), new Background(6, 50, 128, 24), new Background(51, 60, 162, 24),
 			new Background(61, 85, 196, 24), new Background(86, Short.MAX_VALUE, 0, 42) };
-	public static final Rectangle OVERLAY = new Rectangle(58, 24, 36, 18);
+
+	private RenderItem itemRenderer;
+
+	/** The position of the button within the GUI */
 	private int xPos, yPos;
+
 	private int blockID, blockAmount, blockMeta;
+	/** The yValue of blocks that this button represents */
 	private int yValue;
 	private Background background;
 	public boolean activated;
