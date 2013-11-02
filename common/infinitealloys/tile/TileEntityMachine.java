@@ -33,7 +33,7 @@ public abstract class TileEntityMachine extends TileEntityUpgradable {
 	public void updateEntity() {
 		super.updateEntity();
 
-		// If the conditions are correct so that the process can continue, increment the progress by one. If it has reached or exceeded the limit for
+		// If the machine should be processing and enough power is available, increment the progress by one. If it has reached or exceeded the limit for
 		// completion, then finish the process and reset the counter.
 		if(shouldProcess() && powerStorageUnit.consumeRK(getRKChange())) {
 			if(++processProgress >= ticksToProcess) {

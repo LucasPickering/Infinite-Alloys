@@ -33,7 +33,7 @@ public class PacketHandler implements IPacketHandler {
 	private static final byte TE_CLIENT_TO_SERVER = 2;
 	private static final byte COMPUTER_ADD_MACHINE = 3;
 	private static final byte OPEN_GUI = 4;
-	private static final byte SEARCH = 5;
+	private static final byte XRAY_SEARCH = 5;
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
@@ -134,7 +134,7 @@ public class PacketHandler implements IPacketHandler {
 				((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, (EntityPlayer)player, (TileEntityMachine)world.getBlockTileEntity(x, y, z),
 						fromComputer);
 				break;
-			case SEARCH:
+			case XRAY_SEARCH:
 				x = data.readInt();
 				y = data.readInt();
 				z = data.readInt();
@@ -212,7 +212,7 @@ public class PacketHandler implements IPacketHandler {
 	}
 
 	public static Packet getPacketSearch(int x, int y, int z) {
-		return getPacket(SEARCH, x, y, z);
+		return getPacket(XRAY_SEARCH, x, y, z);
 	}
 
 	private static Packet getPacket(int id, Object... data) {

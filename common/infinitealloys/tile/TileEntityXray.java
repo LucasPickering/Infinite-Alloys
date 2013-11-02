@@ -17,7 +17,7 @@ public class TileEntityXray extends TileEntityMachine {
 	/** The selected button for the user, client-side only */
 	@SideOnly(Side.CLIENT)
 	public int selectedButton = -1;
-	
+
 	/** The last point that was checked for the target block in the previous iteration of {@link #search}. The x and z coords are relative to the x-ray block;
 	 * the y coord is absolute */
 	private Point lastSearch;
@@ -75,10 +75,7 @@ public class TileEntityXray extends TileEntityMachine {
 		else if(shouldSearch)
 			search();
 
-		// Finished searching client-side
-		if(searchingClient && ++processProgress >= ticksToProcess)
-			searchingClient = false;
-		if(!searchingClient)
+		if(!shouldSearch)
 			processProgress = 0;
 	}
 
@@ -153,11 +150,13 @@ public class TileEntityXray extends TileEntityMachine {
 
 	@Override
 	public boolean shouldProcess() {
-		return false;
+		return searchingClient;
 	}
 
 	@Override
-	public void finishProcessing() {}
+	public void finishProcessing() {
+		searchingClient = false;
+	}
 
 	@Override
 	protected void updateUpgrades() {
