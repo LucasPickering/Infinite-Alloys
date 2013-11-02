@@ -153,8 +153,8 @@ public abstract class GuiUpgradable extends GuiContainer {
 			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true,
 					teu.coordsEquals(cont.x, cont.y, cont.z));
 			controllerTab.drawButton();
-			for(int i = 0; i < tec.networkCoords.size(); i++) {
-				Point coords = tec.networkCoords.get(i);
+			for(int i = 0; i < tec.connectedTEUs.size(); i++) {
+				Point coords = tec.connectedTEUs.get(i);
 				machineTabs.add(new GuiMachineTab(mc, itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityMachine)mc.theWorld.getBlockTileEntity(
 						coords.x, coords.y, coords.z), i / 5 == 0, teu.coordsEquals(coords.x, coords.y, coords.z)));
 				machineTabs.get(i).drawButton();

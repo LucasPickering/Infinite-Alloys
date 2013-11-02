@@ -180,8 +180,6 @@ public class TileEntityXray extends TileEntityMachine {
 			range = 8;
 		else
 			range = 5;
-
-		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 	}
 
 	@Override

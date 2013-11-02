@@ -32,11 +32,11 @@ public abstract class TileEntityUpgradable extends TileEntity implements IInvent
 	/** A binary integer used to determine what upgrades have been installed */
 	private int upgrades;
 
+	/** A binary integer containing upgrades that the machine starts with, e.g. the computer starts with the Wireless upgrade */
+	protected int startingUpgrades;
+
 	/** The index of the slot that upgrades are placed in */
 	public int upgradeSlotIndex = 0;
-
-	/** True if this TE can be accessed wirelessly by a computer */
-	public boolean canNetwork;
 
 	/** The size limit for one stack in this machine */
 	protected int stackLimit = 64;
@@ -55,6 +55,8 @@ public abstract class TileEntityUpgradable extends TileEntity implements IInvent
 
 	@Override
 	public void updateEntity() {
+
+		// Check for upgrades in the upgrade inventory slot. If there is one, remove it from the slot and add it to the machine.
 		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
 			upgrades |= (int)Math.pow(2, inventoryStacks[upgradeSlotIndex].getItemDamage());
 			inventoryStacks[upgradeSlotIndex] = null;

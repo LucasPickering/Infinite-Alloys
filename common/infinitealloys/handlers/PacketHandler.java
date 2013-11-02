@@ -31,9 +31,8 @@ public class PacketHandler implements IPacketHandler {
 	private static final byte WORLD_DATA = 0;
 	private static final byte TE_SERVER_TO_CLIENT = 1;
 	private static final byte TE_CLIENT_TO_SERVER = 2;
-	private static final byte COMPUTER_ADD_MACHINE = 3;
-	private static final byte OPEN_GUI = 4;
-	private static final byte XRAY_SEARCH = 5;
+	private static final byte OPEN_GUI = 3;
+	private static final byte XRAY_SEARCH = 4;
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
@@ -58,13 +57,13 @@ public class PacketHandler implements IPacketHandler {
 					((TileEntityUpgradable)te).handlePacketDataFromServer(orientation, upgrades);
 					if(te instanceof TileEntityComputer) {
 						TileEntityComputer tec = (TileEntityComputer)te;
-						tec.networkCoords.clear();
+						tec.connectedTEUs.clear();
 						int networkSize = data.readInt();
 						for(int i = 0; i < networkSize; i++) {
 							int machX = data.readInt();
 							int machY = data.readInt();
 							int machZ = data.readInt();
-							tec.networkCoords.add(new Point(machX, machY, machZ));
+							tec.connectedTEUs.add(new Point(machX, machY, machZ));
 						}
 					}
 					else if(te instanceof TileEntityMachine) {
@@ -74,7 +73,7 @@ public class PacketHandler implements IPacketHandler {
 							byte[] recipeAmts = new byte[Consts.METAL_COUNT];
 							for(int i = 0; i < recipeAmts.length; i++)
 								recipeAmts[i] = data.readByte();
-							((TileEntityMetalForge)te).handlePacketData(recipeAmts);
+							((TileEntityMetalForge)te).handlePacketDataFromClient(recipeAmts);
 						}
 						else if(te instanceof TileEntityXray) {
 							TileEntityXray tex = (TileEntityXray)te;
@@ -97,11 +96,15 @@ public class PacketHandler implements IPacketHandler {
 				y = data.readInt();
 				z = data.readInt();
 				te = world.getBlockTileEntity(x, y, z);
+				if(te instanceof TileEntityComputer) {
+					boolean autoSearch = data.readBoolean();
+					((TileEntityComputer)te).handlePacketDataFromClient(autoSearch);
+				}
 				if(te instanceof TileEntityMetalForge) {
 					byte[] recipeAmts = new byte[Consts.METAL_COUNT];
 					for(int i = 0; i < recipeAmts.length; i++)
 						recipeAmts[i] = data.readByte();
-					((TileEntityMetalForge)te).handlePacketData(recipeAmts);
+					((TileEntityMetalForge)te).handlePacketDataFromClient(recipeAmts);
 				}
 				else if(te instanceof TileEntityXray) {
 					boolean searching = data.readBoolean();
@@ -112,18 +115,6 @@ public class PacketHandler implements IPacketHandler {
 					for(int i = 0; i < mobActions.length; i++)
 						mobActions[i] = data.readByte();
 					((TileEntityPasture)te).handlePacketData(mobActions);
-				}
-				break;
-			case COMPUTER_ADD_MACHINE:
-				x = data.readInt();
-				y = data.readInt();
-				z = data.readInt();
-				te = world.getBlockTileEntity(x, y, z);
-				if(te instanceof TileEntityComputer) {
-					int machX = data.readInt();
-					int machY = data.readInt();
-					int machZ = data.readInt();
-					((TileEntityComputer)te).addMachine((EntityPlayer)player, machX, machY, machZ);
 				}
 				break;
 			case OPEN_GUI:
@@ -159,8 +150,8 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(teu.getUpgrades());
 			if(teu instanceof TileEntityComputer) {
 				TileEntityComputer tec = (TileEntityComputer)teu;
-				dos.writeInt(tec.networkCoords.size());
-				for(Point coords : tec.networkCoords) {
+				dos.writeInt(tec.connectedTEUs.size());
+				for(Point coords : tec.connectedTEUs) {
 					dos.writeInt(coords.x);
 					dos.writeInt(coords.y);
 					dos.writeInt(coords.z);
@@ -193,18 +184,16 @@ public class PacketHandler implements IPacketHandler {
 		return packet;
 	}
 
-	public static Packet getTEPacketToServer(TileEntityMachine tem) {
-		if(tem instanceof TileEntityMetalForge)
-			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityMetalForge)tem).recipeAmts);
-		if(tem instanceof TileEntityXray)
-			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord);
-		if(tem instanceof TileEntityPasture)
-			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityPasture)tem).mobActions);
+	public static Packet getTEPacketToServer(TileEntityUpgradable teu) {
+		if(teu instanceof TileEntityComputer)
+			return getPacket(TE_CLIENT_TO_SERVER, teu.xCoord, teu.yCoord, teu.zCoord, ((TileEntityComputer)teu).autoSearch);
+		if(teu instanceof TileEntityMetalForge)
+			return getPacket(TE_CLIENT_TO_SERVER, teu.xCoord, teu.yCoord, teu.zCoord, ((TileEntityMetalForge)teu).recipeAmts);
+		if(teu instanceof TileEntityXray)
+			return getPacket(TE_CLIENT_TO_SERVER, teu.xCoord, teu.yCoord, teu.zCoord);
+		if(teu instanceof TileEntityPasture)
+			return getPacket(TE_CLIENT_TO_SERVER, teu.xCoord, teu.yCoord, teu.zCoord, ((TileEntityPasture)teu).mobActions);
 		return null;
-	}
-
-	public static Packet getComputerPacketAddMachine(int compX, int compY, int compZ, int machX, int machY, int machZ) {
-		return getPacket(COMPUTER_ADD_MACHINE, compX, compY, compZ, machX, machY, machZ);
 	}
 
 	public static Packet getPacketOpenGui(int x, int y, int z, boolean fromComputer) {

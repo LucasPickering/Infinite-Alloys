@@ -35,7 +35,7 @@ public class ClientProxy extends CommonProxy {
 			addName(new ItemStack(Items.ingot, 1, i), "metal." + Consts.METAL_NAMES[i] + ".name", "item.ingot.name");
 		addName(new ItemStack(Items.alloyIngot), "item.alloyIngot.name");
 		addName(new ItemStack(Items.upgrade), "item.upgrade.name");
-		addName(new ItemStack(Items.gps), "item.gps.name");
+		addName(new ItemStack(Items.internetWand), "item.gps.name");
 		addName(new ItemStack(Items.alloyBook), "item.alloyBook.name");
 	}
 

@@ -69,23 +69,31 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
-		ItemStack currentItem = player.inventory.getCurrentItem();
-		if(currentItem != null && currentItem.itemID == Items.gps.itemID && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).canNetwork) {
-			if(player.isSneaking() && world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer && currentItem.hasTagCompound()) {
-				NBTTagCompound tagCompound = currentItem.getTagCompound();
-				for(int i = 0; i < Consts.GPS_MAX_COORDS; i++) {
-					if(!tagCompound.hasKey("coords" + i))
-						continue;
-					int[] coords = tagCompound.getIntArray("coords" + i);
-					if(((TileEntityComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
-						if(world.isRemote)
-							player.addChatMessage("Adding machine at " + coords[0] + ", " + coords[1] + ", " + coords[2]);
-						tagCompound.removeTag("coords" + i);
+		ItemStack heldItem = player.inventory.getCurrentItem();
+		// Is the player holding an internet wand?
+		if(heldItem != null && heldItem.itemID == Items.internetWand.itemID) {
+			// Is this block a computer?
+			if(world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer) {
+				// Does the internet wand have stored data?
+				if(heldItem.hasTagCompound()) {
+					// If so, add all coordinates saved by the wand into the computer
+					NBTTagCompound tagCompound = heldItem.getTagCompound();
+					for(int i = 0; i < Consts.GPS_MAX_COORDS; i++) {
+						if(!tagCompound.hasKey("coords" + i))
+							continue;
+						int[] coords = tagCompound.getIntArray("coords" + i);
+						if(((TileEntityComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
+							if(world.isRemote)
+								player.addChatMessage("Adding machine at " + coords[0] + ", " + coords[1] + ", " + coords[2]);
+							tagCompound.removeTag("coords" + i);
+						}
 					}
 				}
 			}
-			else {
-				NBTTagCompound tagCompound = currentItem.hasTagCompound() ? currentItem.getTagCompound() : new NBTTagCompound();
+
+			// If it's not a computer, but it is capable of networking, add its data to the wand
+			else if(((TileEntityUpgradable)world.getBlockTileEntity(x, y, z)).hasUpgrade(TEHelper.WIRELESS)) {
+				NBTTagCompound tagCompound = heldItem.hasTagCompound() ? heldItem.getTagCompound() : new NBTTagCompound();
 				int size = 0;
 				for(int i = 0; i < Consts.GPS_MAX_COORDS; i++) {
 					if(!tagCompound.hasKey("coords" + i)) {
@@ -98,7 +106,7 @@ public class BlockMachine extends BlockContainer {
 				}
 				if(size < Consts.GPS_MAX_COORDS) {
 					tagCompound.setIntArray("coords" + size, new int[] { x, y, z });
-					currentItem.setTagCompound(tagCompound);
+					heldItem.setTagCompound(tagCompound);
 					if(world.isRemote)
 						player.addChatMessage("Tracking machine at " + x + ", " + y + ", " + z);
 				}

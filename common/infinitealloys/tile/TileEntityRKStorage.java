@@ -16,15 +16,18 @@ public class TileEntityRKStorage extends TileEntityUpgradable {
 
 	private int currentRK;
 
-	/** The distance over which energy can be added to and taken from this machine */
-	private int range;
+	/** The range that is searched for new machines */
+	private int autoSearchRange;
+
+	/** The max range that machines can be added at with the Internet Wand */
+	private int maxRange;
+
+	/** A list of the locations of TileEntityUpgradables that provide power to or consume power from this storage unit */
+	private List<Point> connectedMachines = new ArrayList<Point>();
 
 	/** How many ticks have passed since the last search for machines. When this reaches {@link #SEARCH_INTERVAL the search interval time}, it resets to 0 and a
 	 * search begins. */
 	private int currentSearchTicks;
-
-	/** A list of the locations of TileEntityUpgradables that provide power to or consume power from this storage unit */
-	private List<Point> connectedMachines = new ArrayList<Point>();
 
 	/** The last point that was checked for a machine in the previous iteration of {@link #search}. The coords are relative to this TE block. */
 	private Point lastSearch;
@@ -48,10 +51,13 @@ public class TileEntityRKStorage extends TileEntityUpgradable {
 	public void updateEntity() {
 		super.updateEntity();
 
+		// Increment the ticks since last search and if it reaches the interval, reset it and run a search
 		if(++currentSearchTicks >= SEARCH_INTERVAL) {
 			currentSearchTicks = 0;
 			shouldSearch = true;
 		}
+
+		// Run a search
 		if(shouldSearch)
 			search();
 
@@ -69,9 +75,9 @@ public class TileEntityRKStorage extends TileEntityUpgradable {
 
 		// Iterate over each block that is within the given range in all three dimensions. The searched area will be a cube with each side being (2 * range + 1)
 		// blocks long.
-		for(int x = lastSearch.x; x <= range; x++) {
-			for(int y = lastSearch.y; y <= range; y++) {
-				for(int z = lastSearch.z; z <= range; z++) {
+		for(int x = lastSearch.x; x <= autoSearchRange; x++) {
+			for(int y = lastSearch.y; y <= autoSearchRange; y++) {
+				for(int z = lastSearch.z; z <= autoSearchRange; z++) {
 
 					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to a
 					// power storage unit, add it to the power network.
@@ -86,11 +92,11 @@ public class TileEntityRKStorage extends TileEntityUpgradable {
 						return;
 					}
 				}
-				lastSearch.z = -range; // If we've search all the z values, reset the z position.
+				lastSearch.z = -autoSearchRange; // If we've search all the z values, reset the z position.
 			}
-			lastSearch.y = -range; // If we've search all the y values, reset the y position.
+			lastSearch.y = -autoSearchRange; // If we've search all the y values, reset the y position.
 		}
-		lastSearch.x = -range; // If we've search all the x values, reset the x position.
+		lastSearch.x = -autoSearchRange; // If we've search all the x values, reset the x position.
 
 		shouldSearch = false; // The search is done. Stop running the function until another search is initiated.
 	}
@@ -128,12 +134,18 @@ public class TileEntityRKStorage extends TileEntityUpgradable {
 		else
 			maxRK = 10000000;
 
-		if(hasUpgrade(TEHelper.RANGE2))
-			range = 20;
-		else if(hasUpgrade(TEHelper.RANGE1))
-			range = 15;
-		else
-			range = 10;
+		if(hasUpgrade(TEHelper.RANGE2)) {
+			autoSearchRange = 20;
+			maxRange = 60;
+		}
+		else if(hasUpgrade(TEHelper.RANGE1)) {
+			autoSearchRange = 15;
+			maxRange = 45;
+		}
+		else {
+			autoSearchRange = 10;
+			maxRange = 30;
+		}
 	}
 
 	@Override

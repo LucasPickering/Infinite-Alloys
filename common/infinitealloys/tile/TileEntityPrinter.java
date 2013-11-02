@@ -60,8 +60,6 @@ public class TileEntityPrinter extends TileEntityMachine {
 			baseRKPerTick = -270;
 		else
 			baseRKPerTick = -360;
-
-		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 	}
 
 	@Override

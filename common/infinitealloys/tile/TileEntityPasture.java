@@ -142,8 +142,6 @@ public class TileEntityPasture extends TileEntityMachine {
 			trapRange = 5;
 			repelRange = 8;
 		}
-
-		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 	}
 
 	@Override

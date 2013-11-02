@@ -40,7 +40,7 @@ public class InfiniteAlloys {
 		Items.ingotID = config.getItem(Configuration.CATEGORY_ITEM, "Ingot", 15001).getInt();
 		Items.alloyIngotID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyIngot", 15002).getInt();
 		Items.upgradeID = config.getItem(Configuration.CATEGORY_ITEM, "Upgrade", 15003).getInt();
-		Items.gpsID = config.getItem(Configuration.CATEGORY_ITEM, "GPS", 15004).getInt();
+		Items.internetWandID = config.getItem(Configuration.CATEGORY_ITEM, "Internet Wand", 15004).getInt();
 		Items.alloyBookID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyBook", 15005).getInt();
 
 		int[] metalColors = { 0x2a2a2a, 0xd2cda3, 0xccc34f, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };

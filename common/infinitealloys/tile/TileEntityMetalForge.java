@@ -49,7 +49,7 @@ public class TileEntityMetalForge extends TileEntityMachine {
 		tagCompound.setByteArray("RecipeAmts", recipeAmts);
 	}
 
-	public void handlePacketData(byte[] recipeAmts) {
+	public void handlePacketDataFromClient(byte[] recipeAmts) {
 		this.recipeAmts = recipeAmts;
 	}
 
@@ -166,8 +166,6 @@ public class TileEntityMetalForge extends TileEntityMachine {
 			stackLimit = 48;
 		else
 			stackLimit = 32;
-
-		canNetwork = hasUpgrade(TEHelper.WIRELESS);
 	}
 
 	@Override
