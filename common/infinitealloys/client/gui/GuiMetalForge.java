@@ -1,9 +1,9 @@
-package infinitealloys.client;
+package infinitealloys.client.gui;
 
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.item.Items;
-import infinitealloys.tile.TileEntityMetalForge;
+import infinitealloys.tile.TEMMetalForge;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -13,9 +13,9 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiMetalForge extends GuiMachine {
 
-	private TileEntityMetalForge temf;
+	private TEMMetalForge temf;
 
-	public GuiMetalForge(InventoryPlayer inventoryPlayer, TileEntityMetalForge tileEntity) {
+	public GuiMetalForge(InventoryPlayer inventoryPlayer, TEMMetalForge tileEntity) {
 		super(176, 216, tileEntity, new ContainerMetalForge(inventoryPlayer, tileEntity), "metalforge");
 		temf = tileEntity;
 		progressBar.setLocation(31, 14);

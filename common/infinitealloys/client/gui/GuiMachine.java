@@ -1,4 +1,4 @@
-package infinitealloys.client;
+package infinitealloys.client.gui;
 
 import infinitealloys.tile.TileEntityMachine;
 import java.awt.Rectangle;

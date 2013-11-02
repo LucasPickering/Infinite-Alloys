@@ -1,4 +1,4 @@
-package infinitealloys.client;
+package infinitealloys.client.gui;
 
 import java.awt.Rectangle;
 import net.minecraft.client.Minecraft;

@@ -8,7 +8,7 @@ import java.util.Arrays;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class TileEntityMetalForge extends TileEntityMachine {
+public class TEMMetalForge extends TileEntityMachine {
 
 	/** An array for the "stack sizes" of each ingot in the recipe setting */
 	public byte[] recipeAmts = new byte[Consts.METAL_COUNT];
@@ -16,12 +16,12 @@ public class TileEntityMetalForge extends TileEntityMachine {
 	private byte[] lastRecipeAmts = new byte[Consts.METAL_COUNT];
 	public byte presetSelection = -1;
 
-	public TileEntityMetalForge(int facing) {
+	public TEMMetalForge(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TileEntityMetalForge() {
+	public TEMMetalForge() {
 		super(1);
 		inventoryStacks = new ItemStack[21];
 		ticksToProcess = 12800;

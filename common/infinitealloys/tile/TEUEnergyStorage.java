@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityRKStorage extends TileEntityUpgradable {
+public class TEUEnergyStorage extends TileEntityUpgradable {
 
 	/** The amount of time, in ticks (20 ticks = 1 second), between each regular search for new machines to connect to. */
 	private final int SEARCH_INTERVAL = 200;
@@ -37,12 +37,12 @@ public class TileEntityRKStorage extends TileEntityUpgradable {
 
 	// ---BEGIN GENERAL FUNCTIONS---
 
-	public TileEntityRKStorage(int facing) {
+	public TEUEnergyStorage(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TileEntityRKStorage() {
+	public TEUEnergyStorage() {
 		super();
 		inventoryStacks = new ItemStack[1];
 	}

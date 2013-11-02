@@ -1,9 +1,9 @@
-package infinitealloys.client;
+package infinitealloys.client.gui;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.inventory.ContainerXray;
-import infinitealloys.tile.TileEntityXray;
+import infinitealloys.tile.TEMXray;
 import infinitealloys.util.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiXray extends GuiMachine {
 
-	private TileEntityXray tex;
+	private TEMXray tex;
 
 	/** The scroll bar (width is for the scrolling block) */
 	private final Rectangle SCROLL_BAR = new Rectangle(172, 49, 12, 96);
@@ -31,7 +31,7 @@ public class GuiXray extends GuiMachine {
 	private GuiButton searchButton;
 	private boolean initialized;
 
-	public GuiXray(InventoryPlayer inventoryPlayer, TileEntityXray tileEntity) {
+	public GuiXray(InventoryPlayer inventoryPlayer, TEMXray tileEntity) {
 		super(196, 238, tileEntity, new ContainerXray(inventoryPlayer, tileEntity), "xray");
 		tex = tileEntity;
 		progressBar.setLocation(54, 5);

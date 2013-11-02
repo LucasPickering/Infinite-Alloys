@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 
-public class TileEntityPasture extends TileEntityMachine {
+public class TEMPasture extends TileEntityMachine {
 
 	/** The the mode value for turning the machine off */
 	public static final int MODE_OFF = 0;
@@ -30,12 +30,12 @@ public class TileEntityPasture extends TileEntityMachine {
 	private byte trapRange;
 	private byte repelRange;
 
-	public TileEntityPasture(int facing) {
+	public TEMPasture(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TileEntityPasture() {
+	public TEMPasture() {
 		super(0);
 		inventoryStacks = new ItemStack[1];
 		ticksToProcess = 0;

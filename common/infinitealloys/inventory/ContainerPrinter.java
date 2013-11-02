@@ -1,7 +1,7 @@
 package infinitealloys.inventory;
 
 import infinitealloys.item.Items;
-import infinitealloys.tile.TileEntityPrinter;
+import infinitealloys.tile.TEMPrinter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -9,9 +9,9 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerPrinter extends ContainerUpgradable {
 
-	public TileEntityPrinter inventory;
+	public TEMPrinter inventory;
 
-	public ContainerPrinter(InventoryPlayer inventoryPlayer, TileEntityPrinter tileEntity) {
+	public ContainerPrinter(InventoryPlayer inventoryPlayer, TEMPrinter tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
 		addSlotToContainer(new SlotPrinter(inventory, 0, 12, 44));

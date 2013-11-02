@@ -1,10 +1,10 @@
-package infinitealloys.client;
+package infinitealloys.client.gui;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.WorldData;
 import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.item.Items;
-import infinitealloys.tile.TileEntityAnalyzer;
+import infinitealloys.tile.TEMAnalyzer;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import java.awt.Rectangle;
@@ -14,9 +14,9 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiAnalyzer extends GuiMachine {
 
-	private TileEntityAnalyzer tea;
+	private TEMAnalyzer tea;
 
-	public GuiAnalyzer(InventoryPlayer inventoryPlayer, TileEntityAnalyzer tileEntity) {
+	public GuiAnalyzer(InventoryPlayer inventoryPlayer, TEMAnalyzer tileEntity) {
 		super(216, 166, tileEntity, new ContainerAnalyzer(inventoryPlayer, tileEntity), "analyzer");
 		tea = tileEntity;
 		progressBar.setLocation(54, 57);

@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileEntityComputer extends TileEntityUpgradable {
+public class TEUComputer extends TileEntityUpgradable {
 
 	/** The amount of time, in ticks (20 ticks = 1 second), between each regular search for new machines to connect to. */
 	private final int SEARCH_INTERVAL = 200;
@@ -41,12 +41,12 @@ public class TileEntityComputer extends TileEntityUpgradable {
 
 	// ---BEGIN GENERAL FUNCTIONS---
 
-	public TileEntityComputer(int facing) {
+	public TEUComputer(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TileEntityComputer() {
+	public TEUComputer() {
 		super();
 		inventoryStacks = new ItemStack[1];
 		networkCapacity = 3;
@@ -96,7 +96,7 @@ public class TileEntityComputer extends TileEntityUpgradable {
 					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to a
 					// power storage unit, add it to the power network.
 					TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
-					if(te instanceof TileEntityUpgradable && !(te instanceof TileEntityComputer) && hasUpgrade(TEHelper.WIRELESS))
+					if(te instanceof TileEntityUpgradable && !(te instanceof TEUComputer) && hasUpgrade(TEHelper.WIRELESS))
 						connectedTEUs.add(new Point(xCoord + x, yCoord + y, zCoord + z));
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be

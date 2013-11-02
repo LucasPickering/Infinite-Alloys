@@ -1,7 +1,7 @@
 package infinitealloys.inventory;
 
 import infinitealloys.tile.TEHelper;
-import infinitealloys.tile.TileEntityXray;
+import infinitealloys.tile.TEMXray;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -9,9 +9,9 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerXray extends ContainerUpgradable {
 
-	public TileEntityXray inventory;
+	public TEMXray inventory;
 
-	public ContainerXray(InventoryPlayer inventoryPlayer, TileEntityXray tileEntity) {
+	public ContainerXray(InventoryPlayer inventoryPlayer, TEMXray tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
 		addSlotToContainer(new SlotXray(inventory, 0, 32, 6));

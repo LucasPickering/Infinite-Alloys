@@ -1,23 +1,23 @@
 package infinitealloys.handlers;
 
-import infinitealloys.client.GuiAnalyzer;
-import infinitealloys.client.GuiComputer;
-import infinitealloys.client.GuiMetalForge;
-import infinitealloys.client.GuiPasture;
-import infinitealloys.client.GuiPrinter;
-import infinitealloys.client.GuiXray;
+import infinitealloys.client.gui.GuiAnalyzer;
+import infinitealloys.client.gui.GuiComputer;
+import infinitealloys.client.gui.GuiMetalForge;
+import infinitealloys.client.gui.GuiPasture;
+import infinitealloys.client.gui.GuiPrinter;
+import infinitealloys.client.gui.GuiXray;
 import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.inventory.ContainerPrinter;
 import infinitealloys.inventory.ContainerUpgradable;
 import infinitealloys.inventory.ContainerXray;
-import infinitealloys.tile.TileEntityAnalyzer;
-import infinitealloys.tile.TileEntityComputer;
+import infinitealloys.tile.TEMAnalyzer;
+import infinitealloys.tile.TEUComputer;
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.tile.TileEntityMetalForge;
-import infinitealloys.tile.TileEntityPasture;
-import infinitealloys.tile.TileEntityPrinter;
-import infinitealloys.tile.TileEntityXray;
+import infinitealloys.tile.TEMMetalForge;
+import infinitealloys.tile.TEMPasture;
+import infinitealloys.tile.TEMPrinter;
+import infinitealloys.tile.TEMXray;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -53,13 +53,13 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 			case 0:
 				return new ContainerUpgradable(player.inventory, (TileEntityMachine)tileEntity, 8, 84, 140, 43);
 			case 1:
-				return new ContainerMetalForge(player.inventory, (TileEntityMetalForge)tileEntity);
+				return new ContainerMetalForge(player.inventory, (TEMMetalForge)tileEntity);
 			case 2:
-				return new ContainerAnalyzer(player.inventory, (TileEntityAnalyzer)tileEntity);
+				return new ContainerAnalyzer(player.inventory, (TEMAnalyzer)tileEntity);
 			case 3:
-				return new ContainerPrinter(player.inventory, (TileEntityPrinter)tileEntity);
+				return new ContainerPrinter(player.inventory, (TEMPrinter)tileEntity);
 			case 4:
-				return new ContainerXray(player.inventory, (TileEntityXray)tileEntity);
+				return new ContainerXray(player.inventory, (TEMXray)tileEntity);
 			case 5:
 				return new ContainerUpgradable(player.inventory, (TileEntityMachine)tileEntity, 13, 94, 141, 44);
 		}
@@ -71,17 +71,17 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
 		switch(id) {
 			case 0:
-				return new GuiComputer(player.inventory, (TileEntityComputer)tileEntity);
+				return new GuiComputer(player.inventory, (TEUComputer)tileEntity);
 			case 1:
-				return new GuiMetalForge(player.inventory, (TileEntityMetalForge)tileEntity);
+				return new GuiMetalForge(player.inventory, (TEMMetalForge)tileEntity);
 			case 2:
-				return new GuiAnalyzer(player.inventory, (TileEntityAnalyzer)tileEntity);
+				return new GuiAnalyzer(player.inventory, (TEMAnalyzer)tileEntity);
 			case 3:
-				return new GuiPrinter(player.inventory, (TileEntityPrinter)tileEntity);
+				return new GuiPrinter(player.inventory, (TEMPrinter)tileEntity);
 			case 4:
-				return new GuiXray(player.inventory, (TileEntityXray)tileEntity);
+				return new GuiXray(player.inventory, (TEMXray)tileEntity);
 			case 5:
-				return new GuiPasture(player.inventory, (TileEntityPasture)tileEntity);
+				return new GuiPasture(player.inventory, (TEMPasture)tileEntity);
 		}
 		return null;
 	}

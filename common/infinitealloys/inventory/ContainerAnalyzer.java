@@ -1,7 +1,7 @@
 package infinitealloys.inventory;
 
 import infinitealloys.item.Items;
-import infinitealloys.tile.TileEntityAnalyzer;
+import infinitealloys.tile.TEMAnalyzer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -9,9 +9,9 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerAnalyzer extends ContainerUpgradable {
 
-	public TileEntityAnalyzer inventory;
+	public TEMAnalyzer inventory;
 
-	public ContainerAnalyzer(InventoryPlayer inventoryPlayer, TileEntityAnalyzer tileEntity) {
+	public ContainerAnalyzer(InventoryPlayer inventoryPlayer, TEMAnalyzer tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
 		addSlotToContainer(new SlotAnalyzer(inventory, 0, 28, 58));

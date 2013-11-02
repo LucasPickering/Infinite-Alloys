@@ -1,9 +1,10 @@
-package infinitealloys.client;
+package infinitealloys.client.gui;
 
 import infinitealloys.block.BlockMachine;
+import infinitealloys.client.MachineHelp;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.tile.TEHelper;
-import infinitealloys.tile.TileEntityComputer;
+import infinitealloys.tile.TEUComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityUpgradable;
 import infinitealloys.util.Consts;
@@ -149,7 +150,7 @@ public abstract class GuiUpgradable extends GuiContainer {
 		machineTabs.clear();
 		Point cont = TEHelper.controllers.get(mc.thePlayer.username);
 		if(cont != null) {
-			TileEntityComputer tec = ((TileEntityComputer)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z));
+			TEUComputer tec = ((TEUComputer)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z));
 			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true,
 					teu.coordsEquals(cont.x, cont.y, cont.z));
 			controllerTab.drawButton();

@@ -1,11 +1,11 @@
 package infinitealloys.client;
 
-import infinitealloys.tile.TileEntityAnalyzer;
-import infinitealloys.tile.TileEntityComputer;
-import infinitealloys.tile.TileEntityMetalForge;
-import infinitealloys.tile.TileEntityPrinter;
+import infinitealloys.tile.TEMAnalyzer;
+import infinitealloys.tile.TEUComputer;
+import infinitealloys.tile.TEMMetalForge;
+import infinitealloys.tile.TEMPrinter;
 import infinitealloys.tile.TileEntityUpgradable;
-import infinitealloys.tile.TileEntityXray;
+import infinitealloys.tile.TEMXray;
 
 public enum MachineHelp {
 
@@ -46,15 +46,15 @@ public enum MachineHelp {
 	}
 
 	public static MachineHelp[] getBoxesForTEM(TileEntityUpgradable teu) {
-		if(teu instanceof TileEntityComputer)
+		if(teu instanceof TEUComputer)
 			return new MachineHelp[] { CP_UPGRADE, CP_TAB, CP_ADD };
-		if(teu instanceof TileEntityMetalForge)
+		if(teu instanceof TEMMetalForge)
 			return new MachineHelp[] { ENERGY, MF_UPGRADE, MF_PROGRESS, MF_BOOK, MF_OUTPUT, MF_SUPPLY, MF_PRESETS, MF_INGOTS };
-		if(teu instanceof TileEntityAnalyzer)
+		if(teu instanceof TEMAnalyzer)
 			return new MachineHelp[] { ENERGY, AZ_UPGRADE, AZ_PROGRESS, AZ_BOOK, AZ_INPUT, AZ_OUTPUT, AZ_INGOTS };
-		if(teu instanceof TileEntityPrinter)
+		if(teu instanceof TEMPrinter)
 			return new MachineHelp[] { ENERGY, PR_UPGRADE, PR_PROGRESS, PR_INPUT, PR_SUPPLY, PR_OUTPUT };
-		if(teu instanceof TileEntityXray)
+		if(teu instanceof TEMXray)
 			return new MachineHelp[] { ENERGY, XR_UPGRADE, XR_PROGRESS, XR_ORE, XR_SEARCH, XR_RESULTS };
 		return null;
 	}

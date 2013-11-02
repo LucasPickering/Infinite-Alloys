@@ -3,12 +3,12 @@ package infinitealloys.handlers;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.WorldData;
-import infinitealloys.tile.TileEntityComputer;
+import infinitealloys.tile.TEUComputer;
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.tile.TileEntityMetalForge;
-import infinitealloys.tile.TileEntityPasture;
+import infinitealloys.tile.TEMMetalForge;
+import infinitealloys.tile.TEMPasture;
 import infinitealloys.tile.TileEntityUpgradable;
-import infinitealloys.tile.TileEntityXray;
+import infinitealloys.tile.TEMXray;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
@@ -55,8 +55,8 @@ public class PacketHandler implements IPacketHandler {
 					byte orientation = data.readByte();
 					int upgrades = data.readInt();
 					((TileEntityUpgradable)te).handlePacketDataFromServer(orientation, upgrades);
-					if(te instanceof TileEntityComputer) {
-						TileEntityComputer tec = (TileEntityComputer)te;
+					if(te instanceof TEUComputer) {
+						TEUComputer tec = (TEUComputer)te;
 						tec.connectedTEUs.clear();
 						int networkSize = data.readInt();
 						for(int i = 0; i < networkSize; i++) {
@@ -69,24 +69,24 @@ public class PacketHandler implements IPacketHandler {
 					else if(te instanceof TileEntityMachine) {
 						int processProgress = data.readInt();
 						((TileEntityMachine)te).handlePacketDataFromServer(processProgress);
-						if(te instanceof TileEntityMetalForge) {
+						if(te instanceof TEMMetalForge) {
 							byte[] recipeAmts = new byte[Consts.METAL_COUNT];
 							for(int i = 0; i < recipeAmts.length; i++)
 								recipeAmts[i] = data.readByte();
-							((TileEntityMetalForge)te).handlePacketDataFromClient(recipeAmts);
+							((TEMMetalForge)te).handlePacketDataFromClient(recipeAmts);
 						}
-						else if(te instanceof TileEntityXray) {
-							TileEntityXray tex = (TileEntityXray)te;
+						else if(te instanceof TEMXray) {
+							TEMXray tex = (TEMXray)te;
 							tex.clearDetectedBlocks();
 							short size = data.readShort();
 							for(int i = 0; i < size; i++)
 								tex.addDetectedBlock(new Point(data.readInt(), data.readShort(), data.readInt()));
 						}
-						else if(te instanceof TileEntityPasture) {
+						else if(te instanceof TEMPasture) {
 							byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 							for(int i = 0; i < mobActions.length; i++)
 								mobActions[i] = data.readByte();
-							((TileEntityPasture)te).handlePacketData(mobActions);
+							((TEMPasture)te).handlePacketData(mobActions);
 						}
 					}
 				}
@@ -96,25 +96,25 @@ public class PacketHandler implements IPacketHandler {
 				y = data.readInt();
 				z = data.readInt();
 				te = world.getBlockTileEntity(x, y, z);
-				if(te instanceof TileEntityComputer) {
+				if(te instanceof TEUComputer) {
 					boolean autoSearch = data.readBoolean();
-					((TileEntityComputer)te).handlePacketDataFromClient(autoSearch);
+					((TEUComputer)te).handlePacketDataFromClient(autoSearch);
 				}
-				if(te instanceof TileEntityMetalForge) {
+				if(te instanceof TEMMetalForge) {
 					byte[] recipeAmts = new byte[Consts.METAL_COUNT];
 					for(int i = 0; i < recipeAmts.length; i++)
 						recipeAmts[i] = data.readByte();
-					((TileEntityMetalForge)te).handlePacketDataFromClient(recipeAmts);
+					((TEMMetalForge)te).handlePacketDataFromClient(recipeAmts);
 				}
-				else if(te instanceof TileEntityXray) {
+				else if(te instanceof TEMXray) {
 					boolean searching = data.readBoolean();
-					((TileEntityXray)te).handlePacketDataFromClient(searching);
+					((TEMXray)te).handlePacketDataFromClient(searching);
 				}
-				else if(te instanceof TileEntityPasture) {
+				else if(te instanceof TEMPasture) {
 					byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 					for(int i = 0; i < mobActions.length; i++)
 						mobActions[i] = data.readByte();
-					((TileEntityPasture)te).handlePacketData(mobActions);
+					((TEMPasture)te).handlePacketData(mobActions);
 				}
 				break;
 			case OPEN_GUI:
@@ -129,7 +129,7 @@ public class PacketHandler implements IPacketHandler {
 				x = data.readInt();
 				y = data.readInt();
 				z = data.readInt();
-				((TileEntityXray)world.getBlockTileEntity(x, y, z)).shouldSearch = true;
+				((TEMXray)world.getBlockTileEntity(x, y, z)).shouldSearch = true;
 				break;
 		}
 	}
@@ -148,8 +148,8 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(teu.zCoord);
 			dos.writeByte(teu.front);
 			dos.writeInt(teu.getUpgrades());
-			if(teu instanceof TileEntityComputer) {
-				TileEntityComputer tec = (TileEntityComputer)teu;
+			if(teu instanceof TEUComputer) {
+				TEUComputer tec = (TEUComputer)teu;
 				dos.writeInt(tec.connectedTEUs.size());
 				for(Point coords : tec.connectedTEUs) {
 					dos.writeInt(coords.x);
@@ -160,19 +160,19 @@ public class PacketHandler implements IPacketHandler {
 			else if(teu instanceof TileEntityMachine) {
 				TileEntityMachine tem = (TileEntityMachine)teu;
 				dos.writeInt(tem.processProgress);
-				if(tem instanceof TileEntityMetalForge)
-					for(byte amt : ((TileEntityMetalForge)tem).recipeAmts)
+				if(tem instanceof TEMMetalForge)
+					for(byte amt : ((TEMMetalForge)tem).recipeAmts)
 						dos.writeByte(amt);
-				else if(tem instanceof TileEntityXray) {
-					dos.writeShort(((TileEntityXray)tem).getDetectedBlocks().size());
-					for(Point p : ((TileEntityXray)tem).getDetectedBlocks()) {
+				else if(tem instanceof TEMXray) {
+					dos.writeShort(((TEMXray)tem).getDetectedBlocks().size());
+					for(Point p : ((TEMXray)tem).getDetectedBlocks()) {
 						dos.writeInt(p.x);
 						dos.writeShort((short)p.y);
 						dos.writeInt(p.z);
 					}
 				}
-				else if(tem instanceof TileEntityPasture)
-					for(byte mob : ((TileEntityPasture)tem).mobActions)
+				else if(tem instanceof TEMPasture)
+					for(byte mob : ((TEMPasture)tem).mobActions)
 						dos.writeByte(mob);
 			}
 		}
@@ -185,14 +185,14 @@ public class PacketHandler implements IPacketHandler {
 	}
 
 	public static Packet getTEPacketToServer(TileEntityUpgradable teu) {
-		if(teu instanceof TileEntityComputer)
-			return getPacket(TE_CLIENT_TO_SERVER, teu.xCoord, teu.yCoord, teu.zCoord, ((TileEntityComputer)teu).autoSearch);
-		if(teu instanceof TileEntityMetalForge)
-			return getPacket(TE_CLIENT_TO_SERVER, teu.xCoord, teu.yCoord, teu.zCoord, ((TileEntityMetalForge)teu).recipeAmts);
-		if(teu instanceof TileEntityXray)
+		if(teu instanceof TEUComputer)
+			return getPacket(TE_CLIENT_TO_SERVER, teu.xCoord, teu.yCoord, teu.zCoord, ((TEUComputer)teu).autoSearch);
+		if(teu instanceof TEMMetalForge)
+			return getPacket(TE_CLIENT_TO_SERVER, teu.xCoord, teu.yCoord, teu.zCoord, ((TEMMetalForge)teu).recipeAmts);
+		if(teu instanceof TEMXray)
 			return getPacket(TE_CLIENT_TO_SERVER, teu.xCoord, teu.yCoord, teu.zCoord);
-		if(teu instanceof TileEntityPasture)
-			return getPacket(TE_CLIENT_TO_SERVER, teu.xCoord, teu.yCoord, teu.zCoord, ((TileEntityPasture)teu).mobActions);
+		if(teu instanceof TEMPasture)
+			return getPacket(TE_CLIENT_TO_SERVER, teu.xCoord, teu.yCoord, teu.zCoord, ((TEMPasture)teu).mobActions);
 		return null;
 	}
 

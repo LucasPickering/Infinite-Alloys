@@ -17,7 +17,7 @@ public abstract class TileEntityMachine extends TileEntityUpgradable {
 	public int processProgress;
 
 	/** The RK storage unit that this machine supplies power to or receives power from */
-	public TileEntityRKStorage powerStorageUnit;
+	public TEUEnergyStorage powerStorageUnit;
 
 	public TileEntityMachine(int upgradeSlotIndex) {
 		this();

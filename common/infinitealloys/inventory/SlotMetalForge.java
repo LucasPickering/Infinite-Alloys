@@ -1,7 +1,7 @@
 package infinitealloys.inventory;
 
 import infinitealloys.tile.TEHelper;
-import infinitealloys.tile.TileEntityMetalForge;
+import infinitealloys.tile.TEMMetalForge;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -24,6 +24,6 @@ public class SlotMetalForge extends Slot {
 	public void onSlotChanged() {
 		super.onSlotChanged();
 		if(slotIndex == 0)
-			((TileEntityMetalForge)inventory).presetSelection = -1;
+			((TEMMetalForge)inventory).presetSelection = -1;
 	}
 }

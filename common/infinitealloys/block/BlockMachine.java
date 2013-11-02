@@ -4,14 +4,14 @@ import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEHelper;
-import infinitealloys.tile.TileEntityAnalyzer;
-import infinitealloys.tile.TileEntityComputer;
+import infinitealloys.tile.TEMAnalyzer;
+import infinitealloys.tile.TEUComputer;
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.tile.TileEntityMetalForge;
-import infinitealloys.tile.TileEntityPasture;
-import infinitealloys.tile.TileEntityPrinter;
+import infinitealloys.tile.TEMMetalForge;
+import infinitealloys.tile.TEMPasture;
+import infinitealloys.tile.TEMPrinter;
 import infinitealloys.tile.TileEntityUpgradable;
-import infinitealloys.tile.TileEntityXray;
+import infinitealloys.tile.TEMXray;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
@@ -73,7 +73,7 @@ public class BlockMachine extends BlockContainer {
 		// Is the player holding an internet wand?
 		if(heldItem != null && heldItem.itemID == Items.internetWand.itemID) {
 			// Is this block a computer?
-			if(world.getBlockTileEntity(x, y, z) instanceof TileEntityComputer) {
+			if(world.getBlockTileEntity(x, y, z) instanceof TEUComputer) {
 				// Does the internet wand have stored data?
 				if(heldItem.hasTagCompound()) {
 					// If so, add all coordinates saved by the wand into the computer
@@ -82,7 +82,7 @@ public class BlockMachine extends BlockContainer {
 						if(!tagCompound.hasKey("coords" + i))
 							continue;
 						int[] coords = tagCompound.getIntArray("coords" + i);
-						if(((TileEntityComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
+						if(((TEUComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
 							if(world.isRemote)
 								player.addChatMessage("Adding machine at " + coords[0] + ", " + coords[1] + ", " + coords[2]);
 							tagCompound.removeTag("coords" + i);
@@ -122,19 +122,19 @@ public class BlockMachine extends BlockContainer {
 	public void openGui(World world, EntityPlayer player, TileEntityUpgradable teu, boolean fromComputer) {
 		if(!fromComputer && Funcs.isClient())
 			TEHelper.controllers.remove(player.username);
-		if(teu instanceof TileEntityComputer) {
+		if(teu instanceof TEUComputer) {
 			TEHelper.controllers.put(player.username, new Point(teu.xCoord, teu.yCoord, teu.zCoord));
 			player.openGui(InfiniteAlloys.instance, 0, world, teu.xCoord, teu.yCoord, teu.zCoord);
 		}
-		else if(teu instanceof TileEntityMetalForge)
+		else if(teu instanceof TEMMetalForge)
 			player.openGui(InfiniteAlloys.instance, 1, world, teu.xCoord, teu.yCoord, teu.zCoord);
-		else if(teu instanceof TileEntityAnalyzer)
+		else if(teu instanceof TEMAnalyzer)
 			player.openGui(InfiniteAlloys.instance, 2, world, teu.xCoord, teu.yCoord, teu.zCoord);
-		else if(teu instanceof TileEntityPrinter)
+		else if(teu instanceof TEMPrinter)
 			player.openGui(InfiniteAlloys.instance, 3, world, teu.xCoord, teu.yCoord, teu.zCoord);
-		else if(teu instanceof TileEntityXray)
+		else if(teu instanceof TEMXray)
 			player.openGui(InfiniteAlloys.instance, 4, world, teu.xCoord, teu.yCoord, teu.zCoord);
-		else if(teu instanceof TileEntityPasture)
+		else if(teu instanceof TEMPasture)
 			player.openGui(InfiniteAlloys.instance, 5, world, teu.xCoord, teu.yCoord, teu.zCoord);
 		if(Funcs.isServer()) {
 			teu.playersUsing.add(player.username);
@@ -146,17 +146,17 @@ public class BlockMachine extends BlockContainer {
 	public TileEntity createTileEntity(World world, int metadata) {
 		switch(metadata) {
 			case 0:
-				return new TileEntityComputer();
+				return new TEUComputer();
 			case 1:
-				return new TileEntityMetalForge();
+				return new TEMMetalForge();
 			case 2:
-				return new TileEntityAnalyzer();
+				return new TEMAnalyzer();
 			case 3:
-				return new TileEntityPrinter();
+				return new TEMPrinter();
 			case 4:
-				return new TileEntityXray();
+				return new TEMXray();
 			case 5:
-				return new TileEntityPasture();
+				return new TEMPasture();
 		}
 		return null;
 	}

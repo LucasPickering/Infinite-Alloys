@@ -6,14 +6,14 @@ import java.util.Arrays;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class TileEntityAnalyzer extends TileEntityMachine {
+public class TEMAnalyzer extends TileEntityMachine {
 
-	public TileEntityAnalyzer(int facing) {
+	public TEMAnalyzer(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TileEntityAnalyzer() {
+	public TEMAnalyzer() {
 		super(3);
 		inventoryStacks = new ItemStack[4];
 		stackLimit = 1;

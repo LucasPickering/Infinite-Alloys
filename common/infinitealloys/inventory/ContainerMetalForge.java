@@ -1,7 +1,7 @@
 package infinitealloys.inventory;
 
 import infinitealloys.tile.TEHelper;
-import infinitealloys.tile.TileEntityMetalForge;
+import infinitealloys.tile.TEMMetalForge;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
@@ -9,9 +9,9 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerMetalForge extends ContainerUpgradable {
 
-	public TileEntityMetalForge inventory;
+	public TEMMetalForge inventory;
 
-	public ContainerMetalForge(InventoryPlayer inventoryPlayer, TileEntityMetalForge tileEntity) {
+	public ContainerMetalForge(InventoryPlayer inventoryPlayer, TEMMetalForge tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
 		addSlotToContainer(new SlotMetalForge(inventory, 0, 8, 52));

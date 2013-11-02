@@ -2,14 +2,14 @@ package infinitealloys.tile;
 
 import net.minecraft.item.ItemStack;
 
-public class TileEntityPrinter extends TileEntityMachine {
+public class TEMPrinter extends TileEntityMachine {
 
-	public TileEntityPrinter(int facing) {
+	public TEMPrinter(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TileEntityPrinter() {
+	public TEMPrinter() {
 		super(3);
 		inventoryStacks = new ItemStack[4];
 	}

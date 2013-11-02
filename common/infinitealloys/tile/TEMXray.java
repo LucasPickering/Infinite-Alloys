@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityXray extends TileEntityMachine {
+public class TEMXray extends TileEntityMachine {
 
 	/** A list of the detected blocks, x and z are relative to the machine, y is absolute */
 	private ArrayList<Point> detectedBlocks = new ArrayList<Point>();
@@ -28,12 +28,12 @@ public class TileEntityXray extends TileEntityMachine {
 	/** Is it searching client-side. Does not necessarily mean the x-ray is running a search, only that the user sees a loading progress bar */
 	public boolean searchingClient;
 
-	public TileEntityXray(int facing) {
+	public TEMXray(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TileEntityXray() {
+	public TEMXray() {
 		super(1);
 		inventoryStacks = new ItemStack[2];
 		stackLimit = 1;

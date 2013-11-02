@@ -15,12 +15,12 @@ import infinitealloys.item.ItemMulti;
 import infinitealloys.item.ItemUpgrade;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEHelper;
-import infinitealloys.tile.TileEntityAnalyzer;
-import infinitealloys.tile.TileEntityComputer;
-import infinitealloys.tile.TileEntityMetalForge;
-import infinitealloys.tile.TileEntityPasture;
-import infinitealloys.tile.TileEntityPrinter;
-import infinitealloys.tile.TileEntityXray;
+import infinitealloys.tile.TEMAnalyzer;
+import infinitealloys.tile.TEUComputer;
+import infinitealloys.tile.TEMMetalForge;
+import infinitealloys.tile.TEMPasture;
+import infinitealloys.tile.TEMPrinter;
+import infinitealloys.tile.TEMXray;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import net.minecraft.block.Block;
@@ -124,12 +124,12 @@ public class CommonProxy {
 	}
 
 	public void initTileEntities() {
-		GameRegistry.registerTileEntity(TileEntityComputer.class, "Computer");
-		GameRegistry.registerTileEntity(TileEntityMetalForge.class, "MetalForge");
-		GameRegistry.registerTileEntity(TileEntityAnalyzer.class, "Analyzer");
-		GameRegistry.registerTileEntity(TileEntityPrinter.class, "Printer");
-		GameRegistry.registerTileEntity(TileEntityXray.class, "Xray");
-		GameRegistry.registerTileEntity(TileEntityPasture.class, "Pasture");
+		GameRegistry.registerTileEntity(TEUComputer.class, "Computer");
+		GameRegistry.registerTileEntity(TEMMetalForge.class, "MetalForge");
+		GameRegistry.registerTileEntity(TEMAnalyzer.class, "Analyzer");
+		GameRegistry.registerTileEntity(TEMPrinter.class, "Printer");
+		GameRegistry.registerTileEntity(TEMXray.class, "Xray");
+		GameRegistry.registerTileEntity(TEMPasture.class, "Pasture");
 		TEHelper.addDetectable(Block.oreCoal, 1);
 		TEHelper.addDetectable(Block.oreIron, 2);
 		TEHelper.addDetectable(Block.oreGold, 6);
