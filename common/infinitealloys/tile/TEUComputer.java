@@ -115,9 +115,9 @@ public class TEUComputer extends TileEntityUpgradable {
 		shouldSearch = false; // The search is done. Stop running the function until another search is initiated.
 	}
 
-	public boolean addMachine(EntityPlayer player, int machX, int machY, int machZ) {
+	public boolean addTEU(EntityPlayer player, int teuX, int teuY, int teuZ) {
 		for(Point coords : connectedTEUs) {
-			if(coords.x == machX && coords.y == machY && coords.z == machZ) {
+			if(coords.x == teuX && coords.y == teuY && coords.z == teuZ) {
 				if(worldObj.isRemote)
 					player.addChatMessage("Error: Machine is already in network");
 				return false;
@@ -127,24 +127,24 @@ public class TEUComputer extends TileEntityUpgradable {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Network full");
 		}
-		else if(worldObj.getBlockId(machX, machY, machZ) != Blocks.machine.blockID) {
+		else if(worldObj.getBlockId(teuX, teuY, teuZ) != Blocks.machine.blockID) {
 			if(worldObj.isRemote)
-				player.addChatMessage("Error: Can only add machines");
+				player.addChatMessage("Error: Block is not capable of networking");
 		}
-		else if(machX == xCoord && machY == yCoord && machZ == zCoord) {
+		else if(teuX == xCoord && teuY == yCoord && teuZ == zCoord) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Cannot add self to network");
 		}
-		else if(new Point(machX, machY, machZ).distanceTo(xCoord, yCoord, zCoord) > maxRange) {
+		else if(new Point(teuX, teuY, teuZ).distanceTo(xCoord, yCoord, zCoord) > maxRange) {
 			if(worldObj.isRemote)
-				player.addChatMessage("Error: Machine out of range");
+				player.addChatMessage("Error: Block out of range");
 		}
-		else if(!((TileEntityUpgradable)worldObj.getBlockTileEntity(machX, machY, machZ)).hasUpgrade(TEHelper.WIRELESS)) {
+		else if(!((TileEntityUpgradable)worldObj.getBlockTileEntity(teuX, teuY, teuZ)).hasUpgrade(TEHelper.WIRELESS)) {
 			if(worldObj.isRemote)
-				player.addChatMessage("Error: Machine not capable of networking");
+				player.addChatMessage("Error: Block does not have a networking upgrade");
 		}
 		else {
-			connectedTEUs.add(new Point(machX, machY, machZ));
+			connectedTEUs.add(new Point(teuX, teuY, teuZ));
 			return true;
 		}
 		return false;

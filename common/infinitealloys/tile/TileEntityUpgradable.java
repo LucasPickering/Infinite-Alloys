@@ -15,6 +15,9 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
 
+/** A base, abstract class for Tile Entities that can receive upgrades. Machines are a sub-type of this. Often referred to as TEUs.
+ * 
+ * @see TileEntityMachine */
 public abstract class TileEntityUpgradable extends TileEntity implements IInventory {
 
 	/** The stacks that make up the inventory of this TE */

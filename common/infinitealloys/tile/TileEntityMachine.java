@@ -4,6 +4,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/** A base, abstract class for TileEntities that can receive upgrades, use power, and have processes to run. A sub-type of TileEntityUpgradable. Often referred
+ * to as TEMs or machines.
+ * 
+ * @see TileEntityUpgradable */
 public abstract class TileEntityMachine extends TileEntityUpgradable {
 
 	/** Base amount of RK this machine produces/consumes per tick while working. Actual RK change is often also dependent on other conditions. For the actual

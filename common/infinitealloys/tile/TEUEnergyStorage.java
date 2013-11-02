@@ -3,6 +3,7 @@ package infinitealloys.tile;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
@@ -99,6 +100,37 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 		lastSearch.x = -autoSearchRange; // If we've search all the x values, reset the x position.
 
 		shouldSearch = false; // The search is done. Stop running the function until another search is initiated.
+	}
+
+	public boolean addMachine(EntityPlayer player, int teuX, int teuY, int teuZ) {
+		for(Point coords : connectedMachines) {
+			if(coords.x == teuX && coords.y == teuY && coords.z == teuZ) {
+				if(worldObj.isRemote)
+					player.addChatMessage("Error: Machine is already in network");
+				return false;
+			}
+		}
+		if(worldObj.getBlockTileEntity(teuX, teuY, teuZ) == null || !(worldObj.getBlockTileEntity(teuX, teuY, teuZ) instanceof TileEntityMachine)) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Only machines can be powered");
+		}
+		else if(teuX == xCoord && teuY == yCoord && teuZ == zCoord) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Cannot add self to network");
+		}
+		else if(new Point(teuX, teuY, teuZ).distanceTo(xCoord, yCoord, zCoord) > maxRange) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Machine out of range");
+		}
+		else if(!((TileEntityUpgradable)worldObj.getBlockTileEntity(teuX, teuY, teuZ)).hasUpgrade(TEHelper.WIRELESS)) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Block does not have a networking upgrade");
+		}
+		else {
+			connectedMachines.add(new Point(teuX, teuY, teuZ));
+			return true;
+		}
+		return false;
 	}
 
 	/** Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK, will the result be less than zero or overflow the machine? If

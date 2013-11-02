@@ -9,7 +9,7 @@ import infinitealloys.handlers.WorldGenHandler;
 import infinitealloys.item.ItemAlloyBook;
 import infinitealloys.item.ItemAlloyIngot;
 import infinitealloys.item.ItemBlockIA;
-import infinitealloys.item.ItemGPS;
+import infinitealloys.item.ItemInternetWand;
 import infinitealloys.item.ItemIngot;
 import infinitealloys.item.ItemMulti;
 import infinitealloys.item.ItemUpgrade;
@@ -72,7 +72,7 @@ public class CommonProxy {
 		Items.ingot = new ItemIngot(Items.ingotID);
 		Items.alloyIngot = new ItemAlloyIngot(Items.alloyIngotID);
 		Items.upgrade = new ItemUpgrade(Items.upgradeID);
-		Items.internetWand = new ItemGPS(Items.internetWandID).setMaxStackSize(1);
+		Items.internetWand = new ItemInternetWand(Items.internetWandID).setMaxStackSize(1);
 		Items.alloyBook = new ItemAlloyBook(Items.alloyBookID).setMaxStackSize(1);
 		OreDictionary.registerOre("ingotZinc", new ItemStack(Items.ingot));
 		OreDictionary.registerOre("ingotMagnesium", new ItemStack(Items.ingot, 1, 1));
@@ -107,10 +107,6 @@ public class CommonProxy {
 																																							// I
 		addRecipeDict(upgrades[7], "AGA", " U ", "ACA", 'A', alloys[5], 'C', "eliteCircuit", 'G', Item.swordGold, 'U', upgrades[6]); // Range II
 		addRecipeDict(upgrades[8], "AEA", " U ", "ACA", 'A', alloys[1], 'C', "basicCircuit", 'E', Item.enderPearl, 'U', new ItemStack(Items.multi, 1, 1)); // Wireless
-		addRecipeDict(upgrades[9], "ABA", " U ", "ACA", 'A', alloys[2], 'B', "battery", 'C', "basicCircuit", 'U', new ItemStack(Items.multi, 1, 1)); // Electricity
-																																						// Capacity
-																																						// I
-		addRecipeDict(upgrades[10], "ABA", " U ", "ACA", 'B', alloys[4], 'B', "battery", 'C', "advancedCircuit", 'U', upgrades[9]); // Electricity Capacity II
 		addRecipeDict(new ItemStack(Items.internetWand), " W ", "RSR", 'R', Item.redstone, 'S', "basicCircuit", 'W', upgrades[8]);
 		addRecipe(new ItemStack(Items.alloyBook), "R", "B", 'B', Item.writableBook, 'R', Item.redstone);
 		addSmelting(Blocks.ore.blockID, 0, new ItemStack(Items.ingot), 0.6F);

@@ -5,13 +5,14 @@ import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TEMAnalyzer;
-import infinitealloys.tile.TEUComputer;
-import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TEMMetalForge;
 import infinitealloys.tile.TEMPasture;
 import infinitealloys.tile.TEMPrinter;
-import infinitealloys.tile.TileEntityUpgradable;
 import infinitealloys.tile.TEMXray;
+import infinitealloys.tile.TEUComputer;
+import infinitealloys.tile.TEUEnergyStorage;
+import infinitealloys.tile.TileEntityMachine;
+import infinitealloys.tile.TileEntityUpgradable;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
@@ -78,11 +79,30 @@ public class BlockMachine extends BlockContainer {
 				if(heldItem.hasTagCompound()) {
 					// If so, add all coordinates saved by the wand into the computer
 					NBTTagCompound tagCompound = heldItem.getTagCompound();
-					for(int i = 0; i < Consts.GPS_MAX_COORDS; i++) {
+					for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) {
 						if(!tagCompound.hasKey("coords" + i))
 							continue;
 						int[] coords = tagCompound.getIntArray("coords" + i);
-						if(((TEUComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
+						if(((TEUComputer)world.getBlockTileEntity(x, y, z)).addTEU(player, coords[0], coords[1], coords[2])) {
+							if(world.isRemote)
+								player.addChatMessage("Adding machine at " + coords[0] + ", " + coords[1] + ", " + coords[2]);
+							tagCompound.removeTag("coords" + i);
+						}
+					}
+				}
+			}
+
+			// Is this block an RK storage unit?
+			else if(world.getBlockTileEntity(x, y, z) instanceof TEUEnergyStorage) {
+				// Does the internet wand have stored data?
+				if(heldItem.hasTagCompound()) {
+					// If so, add all coordinates saved by the wand into the unit
+					NBTTagCompound tagCompound = heldItem.getTagCompound();
+					for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) {
+						if(!tagCompound.hasKey("coords" + i))
+							continue;
+						int[] coords = tagCompound.getIntArray("coords" + i);
+						if(((TEUEnergyStorage)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
 							if(world.isRemote)
 								player.addChatMessage("Adding machine at " + coords[0] + ", " + coords[1] + ", " + coords[2]);
 							tagCompound.removeTag("coords" + i);
@@ -95,7 +115,7 @@ public class BlockMachine extends BlockContainer {
 			else if(((TileEntityUpgradable)world.getBlockTileEntity(x, y, z)).hasUpgrade(TEHelper.WIRELESS)) {
 				NBTTagCompound tagCompound = heldItem.hasTagCompound() ? heldItem.getTagCompound() : new NBTTagCompound();
 				int size = 0;
-				for(int i = 0; i < Consts.GPS_MAX_COORDS; i++) {
+				for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) {
 					if(!tagCompound.hasKey("coords" + i)) {
 						size = i;
 						break;
@@ -104,7 +124,7 @@ public class BlockMachine extends BlockContainer {
 					if(nbtCoords[0] == x && nbtCoords[1] == y && nbtCoords[2] == z)
 						return true;
 				}
-				if(size < Consts.GPS_MAX_COORDS) {
+				if(size < Consts.WAND_MAX_COORDS) {
 					tagCompound.setIntArray("coords" + size, new int[] { x, y, z });
 					heldItem.setTagCompound(tagCompound);
 					if(world.isRemote)

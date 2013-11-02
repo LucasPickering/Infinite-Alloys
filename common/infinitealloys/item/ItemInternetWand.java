@@ -7,10 +7,10 @@ import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemGPS extends ItemIA {
+public class ItemInternetWand extends ItemIA {
 
-	public ItemGPS(int id) {
-		super(id, "gps");
+	public ItemInternetWand(int id) {
+		super(id, "internetwand");
 	}
 
 	@Override
@@ -21,7 +21,7 @@ public class ItemGPS extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		for(int i = 0; i < Consts.GPS_MAX_COORDS; i++) {
+		for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) {
 			if(itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey("coords" + i)) {
 				int[] coords = itemstack.getTagCompound().getIntArray("coords" + i);
 				list.add(coords[0] + ", " + coords[1] + ", " + coords[2]);
