@@ -46,8 +46,6 @@ public abstract class GuiUpgradable extends GuiContainer {
 	protected java.awt.Point topLeft = new java.awt.Point();
 	/** Coordinates of the progress bar texture, changes by machine but still otherwise */
 	protected java.awt.Point progressBar = new java.awt.Point();
-	/** The button to enable and disable the help overlay */
-	private GuiButton helpButton;
 
 	protected TileEntityUpgradable teu;
 	protected infinitealloys.util.Point controllingComputer = new infinitealloys.util.Point();
@@ -68,7 +66,7 @@ public abstract class GuiUpgradable extends GuiContainer {
 	@Override
 	public void initGui() {
 		super.initGui();
-		buttonList.add(helpButton = new GuiButton(0, width - 20, 0, 20, 20, "?"));
+		buttonList.add(new GuiButton(0, width - 20, 0, 20, 20, "?")); // The button to enable/disable help
 	}
 
 	@Override
@@ -217,7 +215,7 @@ public abstract class GuiUpgradable extends GuiContainer {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		World world = Minecraft.getMinecraft().theWorld;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		
+
 		// Was the network tab of the controlling computer clicked? Go to that computer
 		if(controllerTab != null && controllerTab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
 			int x = controllerTab.tem.xCoord;
@@ -229,7 +227,7 @@ public abstract class GuiUpgradable extends GuiContainer {
 			}
 			return;
 		}
-		
+
 		// Was the network tab of another machine clicked? Go to that machine
 		for(GuiMachineTab tab : machineTabs) {
 			if(tab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {

@@ -42,6 +42,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 	public int renderID;
 
+	/** The list of blocks identified by an x-ray machine to be highlighted */
 	@SideOnly(Side.CLIENT)
 	public ArrayList<Point> xrayBlocks = new ArrayList<Point>();
 
@@ -245,7 +246,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private void renderOutlineBox(Tessellator tess) {
+	private static void renderOutlineBox(Tessellator tess) {
 		tess.startDrawing(GL11.GL_LINES);
 
 		// Front

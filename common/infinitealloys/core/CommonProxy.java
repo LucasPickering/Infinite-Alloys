@@ -172,15 +172,15 @@ public class CommonProxy {
 		LanguageRegistry.addName(obj, name);
 	}
 
-	private void addRecipe(ItemStack result, Object... params) {
+	private static void addRecipe(ItemStack result, Object... params) {
 		GameRegistry.addRecipe(result, params);
 	}
 
-	private void addRecipeDict(ItemStack result, Object... params) {
+	private static void addRecipeDict(ItemStack result, Object... params) {
 		GameRegistry.addRecipe(new ShapedOreRecipe(result, params));
 	}
 
-	private void addSmelting(int inputID, int inputDamage, ItemStack output, float experience) {
+	private static void addSmelting(int inputID, int inputDamage, ItemStack output, float experience) {
 		FurnaceRecipes.smelting().addSmelting(inputID, inputDamage, output, experience);
 	}
 }

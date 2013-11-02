@@ -3,7 +3,6 @@ package infinitealloys.tile;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.relauncher.Side;
@@ -18,10 +17,7 @@ public class TileEntityXray extends TileEntityMachine {
 	/** The selected button for the user, client-side only */
 	@SideOnly(Side.CLIENT)
 	public int selectedButton = -1;
-
-	/** The selected button on the gui for each player */
-	public HashMap<String, Short> selectedButtons = new HashMap<String, Short>();
-
+	
 	/** The last point that was checked for the target block in the previous iteration of {@link #search}. The x and z coords are relative to the x-ray block;
 	 * the y coord is absolute */
 	private Point lastSearch;
@@ -73,7 +69,6 @@ public class TileEntityXray extends TileEntityMachine {
 		super.updateEntity();
 		if(inventoryStacks[0] == null) {
 			clearDetectedBlocks();
-			selectedButtons.clear();
 			shouldSearch = false;
 			searchingClient = false;
 		}
@@ -152,12 +147,8 @@ public class TileEntityXray extends TileEntityMachine {
 		detectedBlocks.add(p);
 	}
 
-	public void handlePacketDataFromClient(boolean searching, String playerName, short selectedButton) {
+	public void handlePacketDataFromClient(boolean searching) {
 		this.searchingClient = searching;
-		if(selectedButton != -1)
-			selectedButtons.put(playerName, selectedButton);
-		else
-			selectedButtons.remove(playerName);
 	}
 
 	@Override
@@ -175,7 +166,7 @@ public class TileEntityXray extends TileEntityMachine {
 		else if(hasUpgrade(TEHelper.SPEED1))
 			ticksToProcess = 18000;
 		else
-			ticksToProcess = 24; // TODO: Change this back to 24000
+			ticksToProcess = 24000;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
 			baseRKPerTick = -1800;

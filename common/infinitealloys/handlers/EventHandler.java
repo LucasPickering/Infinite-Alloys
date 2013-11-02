@@ -30,76 +30,85 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onWorldLoad(Load event) {
-		if(Funcs.isClient())
-			return;
-		world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(0).getChunkSaveLocation().getPath();
-		ObjectInputStream ois = null;
-		try {
-			ois = new ObjectInputStream(new FileInputStream(world + "/WorldData.dat"));
-			InfiniteAlloys.instance.worldData = (WorldData)ois.readObject();
-			System.out.println("Successfully loaded IA alloys");
-		}
-		catch(IOException e) {
-			if(InfiniteAlloys.instance.worldData == null) {
-				Random random = new Random();
-				int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT];
-				for(int i = 0; i < Consts.VALID_ALLOY_COUNT; i++) {
-					int metalCount = Consts.METAL_COUNT;
-					byte[] alloyDigits = new byte[metalCount];
-					for(int j = 0; j < metalCount; j++) {
-						int min = Funcs.intAtPos(Consts.VALID_ALLOY_MINS[i], Consts.ALLOY_RADIX, metalCount, j);
-						int max = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[i], Consts.ALLOY_RADIX, metalCount, j);
-						alloyDigits[j] = (byte)(min + (max == min ? 0 : random.nextInt(max - min)));
-					}
-					String alloy = "";
-					for(int digit : alloyDigits)
-						alloy = alloy + digit;
-					validAlloys[i] = new Integer(alloy);
-					if(Loader.isModLoaded("mcp"))
-						System.out.println("SPOILER ALERT! Alloy " + i + ": " + validAlloys[i]);
-				}
-				InfiniteAlloys.instance.worldData = new WorldData(validAlloys);
-				System.out.println("Successfully generated IA alloys");
-			}
-		}
-		catch(Exception e) {
-			System.out.println("Error while deserializing Infinite Alloys world data");
-			e.printStackTrace();
-		}
-		finally {
+
+		// If it's the server, look for stored alloy data and if they exist, load them. If not, generate new data.
+		if(Funcs.isServer()) {
+			world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(0).getChunkSaveLocation().getPath();
+			ObjectInputStream ois = null;
 			try {
-				if(ois != null)
-					ois.close();
+				ois = new ObjectInputStream(new FileInputStream(world + "/WorldData.dat"));
+				InfiniteAlloys.instance.worldData = (WorldData)ois.readObject();
+				System.out.println("Successfully loaded IA alloys");
+			}
+			catch(IOException e) {
+				if(InfiniteAlloys.instance.worldData == null) {
+					Random random = new Random();
+					int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT];
+					for(int i = 0; i < Consts.VALID_ALLOY_COUNT; i++) {
+						int metalCount = Consts.METAL_COUNT;
+						byte[] alloyDigits = new byte[metalCount];
+						for(int j = 0; j < metalCount; j++) {
+							int min = Funcs.intAtPos(Consts.VALID_ALLOY_MINS[i], Consts.ALLOY_RADIX, metalCount, j);
+							int max = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[i], Consts.ALLOY_RADIX, metalCount, j);
+							alloyDigits[j] = (byte)(min + (max == min ? 0 : random.nextInt(max - min)));
+						}
+						String alloy = "";
+						for(int digit : alloyDigits)
+							alloy = alloy + digit;
+						validAlloys[i] = new Integer(alloy);
+						if(Loader.isModLoaded("mcp"))
+							System.out.println("SPOILER ALERT! Alloy " + i + ": " + validAlloys[i]);
+					}
+					InfiniteAlloys.instance.worldData = new WorldData(validAlloys);
+					System.out.println("Successfully generated IA alloys");
+				}
 			}
 			catch(Exception e) {
+				System.out.println("Error while deserializing Infinite Alloys world data");
 				e.printStackTrace();
+			}
+			finally {
+				try {
+					if(ois != null)
+						ois.close();
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 
 	@ForgeSubscribe
 	public void onWorldUnload(Unload event) {
-		if(InfiniteAlloys.instance.worldData == null || Funcs.isClient())
+		// Clear the list of blocks to be outlines by the x-ray on unload. Alloys are not stored client-side, so return.
+		if(Funcs.isClient()) {
+			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 			return;
-		ObjectOutputStream oos = null;
-		try {
-			oos = new ObjectOutputStream(new FileOutputStream(world + "/WorldData.dat"));
-			oos.writeObject(InfiniteAlloys.instance.worldData);
 		}
-		catch(Exception e) {
-			System.out.println("Error while serializing Infinite Alloys world data");
-			e.printStackTrace();
-		}
-		finally {
+
+		// If there is stored alloy data for this world, serialize them to be saved and reloaded next session
+		if(InfiniteAlloys.instance.worldData != null) {
+			ObjectOutputStream oos = null;
 			try {
-				if(oos != null)
-					oos.close();
+				oos = new ObjectOutputStream(new FileOutputStream(world + "/WorldData.dat"));
+				oos.writeObject(InfiniteAlloys.instance.worldData);
 			}
 			catch(Exception e) {
+				System.out.println("Error while serializing Infinite Alloys world data");
 				e.printStackTrace();
 			}
+			finally {
+				try {
+					if(oos != null)
+						oos.close();
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+			InfiniteAlloys.instance.worldData = null;
 		}
-		InfiniteAlloys.instance.worldData = null;
 	}
 
 	@ForgeSubscribe

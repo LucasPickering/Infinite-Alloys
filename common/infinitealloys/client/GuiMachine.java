@@ -1,23 +1,9 @@
 package infinitealloys.client;
 
-import infinitealloys.block.BlockMachine;
-import infinitealloys.handlers.PacketHandler;
-import infinitealloys.tile.TEHelper;
-import infinitealloys.tile.TileEntityComputer;
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.util.Consts;
-import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
-import cpw.mods.fml.common.network.PacketDispatcher;
 
 public abstract class GuiMachine extends GuiUpgradable {
 
@@ -67,11 +53,9 @@ public abstract class GuiMachine extends GuiUpgradable {
 		bindTexture(extras);
 
 		// Draw the progress bar overlay
-		if(tem.ticksToProcess > 0) {
-			int progressScaled = tem.getProcessProgressScaled(PROGRESS_BAR.width);
+		if(tem.ticksToProcess > 0)
 			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, tem.getProcessProgressScaled(PROGRESS_BAR.width),
 					PROGRESS_BAR.height);
-		}
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);

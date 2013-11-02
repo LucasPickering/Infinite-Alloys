@@ -220,7 +220,7 @@ public abstract class TileEntityUpgradable extends TileEntity implements IInvent
 
 	protected abstract void populateValidUpgrades();
 
-	/** Drops the upgrades that were used on the block as items */
+	/** Drops the applied upgrades as items */
 	public final void dropUpgrades() {
 		Random random = new Random();
 		for(int i = 0; i <= Consts.UPGRADE_COUNT; i++) {

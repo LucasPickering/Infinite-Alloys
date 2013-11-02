@@ -105,9 +105,7 @@ public class PacketHandler implements IPacketHandler {
 				}
 				else if(te instanceof TileEntityXray) {
 					boolean searching = data.readBoolean();
-					String playerName = ((EntityPlayer)player).username;
-					short selectedButton = data.readShort();
-					((TileEntityXray)te).handlePacketDataFromClient(searching, playerName, selectedButton);
+					((TileEntityXray)te).handlePacketDataFromClient(searching);
 				}
 				else if(te instanceof TileEntityPasture) {
 					byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
@@ -199,7 +197,7 @@ public class PacketHandler implements IPacketHandler {
 		if(tem instanceof TileEntityMetalForge)
 			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityMetalForge)tem).recipeAmts);
 		if(tem instanceof TileEntityXray)
-			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityXray)tem).searchingClient, ((TileEntityXray)tem).selectedButton);
+			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord);
 		if(tem instanceof TileEntityPasture)
 			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TileEntityPasture)tem).mobActions);
 		return null;
