@@ -85,31 +85,30 @@ public class CommonProxy {
 	}
 
 	public void initRecipes() {
-		addRecipeDict(new ItemStack(Items.multi), " W ", "CBC", " W ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire");
-		addRecipeDict(new ItemStack(Items.multi, 1, 1), "CTC", "IWI", 'C', "ingotCopper", 'I', Item.ingotIron, 'T', "ingotTin", 'W', "copperWire");
-		addRecipe(new ItemStack(Blocks.machine), "ASA", "WCG", "ABA", 'A', alloys[2], 'B', alloys[3], 'C', Items.multi, 'G', Block.thinGlass, 'S', Block.stoneButton, 'W', upgrades[8]); // Computer
-		addRecipe(new ItemStack(Blocks.machine, 1, 1), "BDB", "BCB", "NNN", 'B', Block.brick, 'C', Items.multi, 'D', Item.doorIron, 'N', Block.netherrack); // Metal
-																																							// Forge
-		addRecipe(new ItemStack(Blocks.machine, 1, 2), " G ", "RCR", "III", 'C', Items.multi, 'G', Block.glowStone, 'I', Item.ingotIron, 'R', Item.redstone); // Analyzer
-		addRecipe(new ItemStack(Blocks.machine, 1, 3), "APA", "BCB", "OIO", 'A', alloys[0], 'B', alloys[1], 'C', Items.multi, 'I', new ItemStack(Item.dyePowder, 1, 15), 'O', Block.obsidian, 'P',
-				Block.pistonBase); // Printer
-		addRecipe(new ItemStack(Blocks.machine, 1, 4), "ADA", "BCB", "EGE", 'A', alloys[4], 'B', alloys[5], 'C', Items.multi, 'D', Item.diamond, 'E', Item.enderPearl, 'G', Block.thinGlass); // X-ray
-		addRecipeDict(upgrades[0], "AGA", " U ", "ACA", 'A', alloys[2], 'C', "basicCircuit", 'G', Item.ingotGold, 'U', new ItemStack(Items.multi, 1, 1)); // Speed
-																																							// I
-		addRecipeDict(upgrades[1], "ADA", " U ", "ACA", 'A', alloys[5], 'C', "eliteCircuit", 'D', Item.diamond, 'U', upgrades[0]); // Speed II
-		addRecipeDict(upgrades[2], "AIA", " U ", "ACA", 'A', alloys[1], 'C', "basicCircuit", 'I', Item.shovelIron, 'U', new ItemStack(Items.multi, 1, 1)); // Efficiency
-																																							// I
-		addRecipeDict(upgrades[3], "AGA", " U ", "ACA", 'A', alloys[4], 'C', "advancedCircuit", 'G', Item.shovelGold, 'U', upgrades[2]); // Efficiency II
-		addRecipeDict(upgrades[4], "ASA", " U ", "ACA", 'A', alloys[0], 'C', "basicCircuit", 'S', Block.chest, 'U', new ItemStack(Items.multi, 1, 1)); // Capacity
-																																						// I
-		addRecipeDict(upgrades[5], "ASA", " U ", "ACA", 'A', alloys[3], 'C', "advancedCircuit", 'S', Block.chest, 'U', upgrades[4]); // Capacity II
-		addRecipeDict(upgrades[6], "AIA", " U ", "ACA", 'A', alloys[3], 'C', "basicCircuit", 'I', Item.swordIron, 'U', new ItemStack(Items.multi, 1, 1)); // Range
-																																							// I
-		addRecipeDict(upgrades[7], "AGA", " U ", "ACA", 'A', alloys[5], 'C', "eliteCircuit", 'G', Item.swordGold, 'U', upgrades[6]); // Range II
-		addRecipeDict(upgrades[8], "AEA", " U ", "ACA", 'A', alloys[1], 'C', "basicCircuit", 'E', Item.enderPearl, 'U', new ItemStack(Items.multi, 1, 1)); // Wireless
-		addRecipeDict(new ItemStack(Items.internetWand), " W ", "RSR", 'R', Item.redstone, 'S', "basicCircuit", 'W', upgrades[8]);
-		addRecipe(new ItemStack(Items.alloyBook), "R", "B", 'B', Item.writableBook, 'R', Item.redstone);
-		addSmelting(Blocks.ore.blockID, 0, new ItemStack(Items.ingot), 0.6F);
+		/* Machine Component */addRecipeDict(new ItemStack(Items.multi, 1, 0), " W ", "CBC", " W ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire");
+		/* Upgrade Component */addRecipeDict(new ItemStack(Items.multi, 1, 1), "CTC", "IWI", 'C', "ingotCopper", 'I', Item.ingotIron, 'T', "ingotTin", 'W', "copperWire");
+
+		/* Computer */addRecipe(new ItemStack(Blocks.machine), "ASA", "WCG", "ABA", 'A', alloys[2], 'B', alloys[3], 'C', Items.multi, 'G', Block.thinGlass, 'S', Block.stoneButton, 'W', upgrades[8]);
+		/* Metal Forge */addRecipe(new ItemStack(Blocks.machine, 1, 1), "BDB", "BCB", "NNN", 'B', Block.brick, 'C', Items.multi, 'D', Item.doorIron, 'N', Block.netherrack); // Metal
+		/* Analyzer */addRecipe(new ItemStack(Blocks.machine, 1, 2), " G ", "RCR", "III", 'C', Items.multi, 'G', Block.glowStone, 'I', Item.ingotIron, 'R', Item.redstone); // Analyzer
+		/* Printer */addRecipe(new ItemStack(Blocks.machine, 1, 3), "APA", "BCB", "OIO", 'A', alloys[0], 'B', alloys[1], 'C', Items.multi, 'I', new ItemStack(Item.dyePowder, 1, 15), 'O',
+				Block.obsidian, 'P', Block.pistonBase);
+		/* X-ray */addRecipe(new ItemStack(Blocks.machine, 1, 4), "ADA", "BCB", "EGE", 'A', alloys[4], 'B', alloys[5], 'C', Items.multi, 'D', Item.diamond, 'E', Item.enderPearl, 'G', Block.thinGlass);
+
+		/* Speed I */addRecipeDict(upgrades[0], "AGA", "AUA", 'A', alloys[2], 'G', Item.ingotGold, 'U', new ItemStack(Items.multi, 1, 1));
+		/* Speed II */addRecipeDict(upgrades[1], "ADA", "AUA", 'A', alloys[5], 'D', Item.diamond, 'U', upgrades[0]);
+		/* Efficiency I */addRecipeDict(upgrades[2], "AIA", "AUA", 'A', alloys[1], 'I', Item.shovelIron, 'U', new ItemStack(Items.multi, 1, 1));
+		/* Efficiency II */addRecipeDict(upgrades[3], "AGA", "AUA", 'A', alloys[4], 'G', Item.shovelGold, 'U', upgrades[2]);
+		/* Capacity I */addRecipeDict(upgrades[4], "ASA", "AUA", 'A', alloys[0], 'S', Block.chest, 'U', new ItemStack(Items.multi, 1, 1));
+		/* Capacity II */addRecipeDict(upgrades[5], "ASA", "AUA", 'A', alloys[3], 'S', Block.chest, 'U', upgrades[4]);
+		/* Range I */addRecipeDict(upgrades[6], "AIA", "AUA", 'A', alloys[3], 'I', Item.swordIron, 'U', new ItemStack(Items.multi, 1, 1));
+		/* Range II */addRecipeDict(upgrades[7], "AGA", "AUA", 'A', alloys[5], 'G', Item.swordGold, 'U', upgrades[6]);
+		/* Wireless */addRecipeDict(upgrades[8], "AEA", "AUA", 'A', alloys[1], 'E', Item.enderPearl, 'U', new ItemStack(Items.multi, 1, 1));
+
+		/* Internet Wand */addRecipeDict(new ItemStack(Items.internetWand), " W ", "RSR", 'R', Item.redstone, 'S', "basicCircuit", 'W', upgrades[8]);
+		/* Alloy Book */addRecipe(new ItemStack(Items.alloyBook), "R", "B", 'B', Item.writableBook, 'R', Item.redstone);
+
+		addSmelting(Blocks.ore.blockID, 0, new ItemStack(Items.ingot, 1, 0), 0.6F);
 		addSmelting(Blocks.ore.blockID, 1, new ItemStack(Items.ingot, 1, 1), 0.6F);
 		addSmelting(Blocks.ore.blockID, 2, new ItemStack(Items.ingot, 1, 2), 0.7F);
 		addSmelting(Blocks.ore.blockID, 3, new ItemStack(Items.ingot, 1, 3), 0.7F);

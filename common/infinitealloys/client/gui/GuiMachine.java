@@ -8,10 +8,6 @@ import org.lwjgl.opengl.GL11;
 public abstract class GuiMachine extends GuiUpgradable {
 
 	// The position for each item in the texture sheet extras.png
-	static final Rectangle TAB_LEFT_OFF = new Rectangle(10, 0, 24, 24);
-	static final Rectangle TAB_LEFT_ON = new Rectangle(34, 0, 28, 24);
-	static final Rectangle TAB_RIGHT_OFF = new Rectangle(62, 0, 29, 24);
-	static final Rectangle TAB_RIGHT_ON = new Rectangle(91, 0, 28, 24);
 	static final Rectangle PROGRESS_BAR = new Rectangle(119, 0, 108, 18);
 	static final Rectangle SCROLL_ON = new Rectangle(227, 0, 12, 15);
 	static final Rectangle SCROLL_OFF = new Rectangle(239, 0, 12, 15);
