@@ -5,6 +5,7 @@
 	<entry key="itemGroup.main">Infinite Alloys</entry>
 
     <entry key="general.on">On</entry>
+    <entry key="general.off">Off</entry>
 
 	<entry key="multi.machinecomponent.name">Machine Component</entry>
 	<entry key="multi.upgradecomponent.name">Upgrade Component</entry>
@@ -12,7 +13,7 @@
 	<entry key="item.ingot.name"> Ingot</entry>
 	<entry key="item.alloyIngot.name">Alloy Ingot</entry>
 	<entry key="item.upgrade.name">Upgrade</entry>
-	<entry key="item.gps.name">GPS</entry>
+	<entry key="item.internetWand.name">Internet Wand</entry>
 	<entry key="item.alloyBook.name">Alloy Journal</entry>
 
 	<entry key="metal.zinc.name">Zinc</entry>

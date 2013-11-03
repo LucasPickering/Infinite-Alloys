@@ -12,7 +12,7 @@ public class TEMXray extends TileEntityMachine {
 
 	/** A list of the detected blocks, x and z are relative to the machine, y is absolute */
 	private ArrayList<Point> detectedBlocks = new ArrayList<Point>();
-	public int range;
+	public int range = 5;
 
 	/** The selected button for the user, client-side only */
 	@SideOnly(Side.CLIENT)
@@ -20,7 +20,7 @@ public class TEMXray extends TileEntityMachine {
 
 	/** The last point that was checked for the target block in the previous iteration of {@link #search}. The x and z coords are relative to the x-ray block;
 	 * the y coord is absolute */
-	private Point lastSearch;
+	private Point lastSearch = new Point(-range, 0, -range);
 
 	/** Should searching continue, or is it complete. Set this to true to begin a search. */
 	public boolean shouldSearch;
@@ -37,7 +37,8 @@ public class TEMXray extends TileEntityMachine {
 		super(1);
 		inventoryStacks = new ItemStack[2];
 		stackLimit = 1;
-		lastSearch = new Point(-range, 0, -range);
+		ticksToProcess = 24000;
+		baseRKPerTick = -360;
 	}
 
 	@Override
@@ -74,9 +75,6 @@ public class TEMXray extends TileEntityMachine {
 		}
 		else if(shouldSearch)
 			search();
-
-		if(!shouldSearch)
-			processProgress = 0;
 	}
 
 	/** Perform a search for the target block. This checks {@link infinitealloys.tile.TEHelper#SEARCH_PER_TICK a set amount of} blocks in a tick, then saves its
@@ -154,25 +152,25 @@ public class TEMXray extends TileEntityMachine {
 	}
 
 	@Override
-	public void finishProcessing() {
+	public void finishProcess() {
 		searchingClient = false;
 	}
 
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.SPEED2))
-			ticksToProcess = 12000;
+			processTimeMult = 0.5F;
 		else if(hasUpgrade(TEHelper.SPEED1))
-			ticksToProcess = 18000;
+			processTimeMult = 0.75F;
 		else
-			ticksToProcess = 24000;
+			processTimeMult = 1.0F;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			baseRKPerTick = -1800;
+			rkPerTickMult = 0.5F;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			baseRKPerTick = -2700;
+			rkPerTickMult = 0.75F;
 		else
-			baseRKPerTick = -3600;
+			rkPerTickMult = 1.0F;
 
 		if(hasUpgrade(TEHelper.RANGE2))
 			range = 10;

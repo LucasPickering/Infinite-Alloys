@@ -20,8 +20,16 @@ public abstract class TileEntityMachine extends TileEntityUpgradable {
 	/** Amount of ticks this machine has been running its process for, when this reaches ticksToFinish it is done */
 	public int processProgress;
 
+	/** A multiplier for the time it takes to process, changed with upgrades. NOTE: Less is faster */
+	protected float processTimeMult = 1.0F;
+
+	/** A multiplier for the power used, changed with upgrades. NOTE: Less will consume less power, but also generate less for generators */
+	protected float rkPerTickMult = 1.0F;
+
 	/** The RK storage unit that this machine supplies power to or receives power from */
 	public TEUEnergyStorage powerStorageUnit;
+
+	// ---BEGIN GENERAL FUNCTIONS---
 
 	public TileEntityMachine(int upgradeSlotIndex) {
 		this();
@@ -37,33 +45,38 @@ public abstract class TileEntityMachine extends TileEntityUpgradable {
 	public void updateEntity() {
 		super.updateEntity();
 
-		// If the machine should be processing and enough power is available, increment the progress by one. If it has reached or exceeded the limit for
-		// completion, then finish the process and reset the counter.
-		if(shouldProcess() && powerStorageUnit.consumeRK(getRKChange())) {
+		// If the machine should be processing and enough power is available, increment the progress by one. If this is the first tick of the process, call
+		// startProcess(). If it has reached or exceeded the limit for completion, then finish the process and reset the counter.
+		if(shouldProcess() && powerStorageUnit != null && powerStorageUnit.changeRK(getRKChange())) {
+			if(processProgress == 0)
+				startProcess();
 			if(++processProgress >= ticksToProcess) {
 				processProgress = 0;
-				finishProcessing();
+				finishProcess();
 				onInventoryChanged();
 			}
 		}
-	}
-
-	public void handlePacketDataFromServer(int processProgress) {
-		this.processProgress = processProgress;
 	}
 
 	/** Should the process tick be increased? Called every tick to determine if power should be used and if progress should continue. NOTE: This will return true
 	 * even if there is not a nearby power storage unit to support the process */
 	protected abstract boolean shouldProcess();
 
+	/** Called on the first tick of a process */
+	protected void startProcess() {}
+
 	/** Called when processProgress reaches ticksToProgress */
-	protected abstract void finishProcessing();
+	protected void finishProcess() {}
 
 	/** Actual amount of RK change per tick, after certain calculations and conditions. Positive is produced RK and negative is consumed RK. */
 	public int getRKChange() {
 		if(shouldProcess())
-			return baseRKPerTick;
+			return (int)(baseRKPerTick * rkPerTickMult / processTimeMult);
 		return 0;
+	}
+
+	public void handlePacketDataFromServer(int processProgress) {
+		this.processProgress = processProgress;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -82,4 +95,6 @@ public abstract class TileEntityMachine extends TileEntityUpgradable {
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("ProcessProgress", processProgress);
 	}
+
+	// ---END GENERAL FUNCTIONS---
 }

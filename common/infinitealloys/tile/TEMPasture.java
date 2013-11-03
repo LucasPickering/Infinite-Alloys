@@ -38,6 +38,7 @@ public class TEMPasture extends TileEntityMachine {
 	public TEMPasture() {
 		super(0);
 		inventoryStacks = new ItemStack[1];
+		baseRKPerTick = -4;
 		ticksToProcess = 0;
 	}
 
@@ -57,7 +58,7 @@ public class TEMPasture extends TileEntityMachine {
 	}
 
 	@Override
-	public void finishProcessing() {
+	public void finishProcess() {
 		/* NOTE: For this specific machine, ticksToProcess = 0, meaning this function is called every tick. It is essentially an updateEntity() function with
 		 * conditions applied in TileEntityMachine.updateEntity() */
 
@@ -117,11 +118,11 @@ public class TEMPasture extends TileEntityMachine {
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			baseRKPerTick = -40;
+			rkPerTickMult = 0.5F;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			baseRKPerTick = -30;
+			rkPerTickMult = 0.75F;
 		else
-			baseRKPerTick = -20;
+			rkPerTickMult = 1.0F;
 
 		if(hasUpgrade(TEHelper.CAPACITY2))
 			maxSpots = 8;

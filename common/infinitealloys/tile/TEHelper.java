@@ -8,6 +8,7 @@ import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class TEHelper {
@@ -19,6 +20,7 @@ public class TEHelper {
 	public static final int XRAY = 4;
 	public static final int PASTURE = 5;
 	public static final int RK_STORAGE = 6; // TODO: Change this when I figure out a better name for this TE
+	public static final int GENERATOR = 7;
 
 	public static final int SPEED1 = 1;
 	public static final int SPEED2 = 2;
@@ -148,8 +150,8 @@ public class TEHelper {
 			case PRINTER:
 				switch(index) {
 					case 0:
-						return itemstack.hasTagCompound()
-								&& (itemstack.itemID == Items.alloyBook.itemID || itemstack.itemID == Item.writableBook.itemID || itemstack.itemID == Item.writtenBook.itemID);
+						return (itemstack.itemID == Items.alloyBook.itemID || itemstack.itemID == Item.writableBook.itemID || itemstack.itemID == Item.writtenBook.itemID)
+								&& itemstack.hasTagCompound();
 					case 1:
 						return itemstack.itemID == Item.book.itemID;
 					default:
@@ -159,6 +161,10 @@ public class TEHelper {
 				return TEHelper.isDetectable(itemstack);
 			case PASTURE:
 				return false;
+			case RK_STORAGE:
+				return false;
+			case GENERATOR:
+				return TileEntityFurnace.isItemFuel(itemstack);
 		}
 		return false;
 	}

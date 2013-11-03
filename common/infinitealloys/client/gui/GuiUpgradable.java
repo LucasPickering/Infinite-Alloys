@@ -12,6 +12,7 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -51,7 +52,7 @@ public abstract class GuiUpgradable extends GuiContainer {
 	protected TileEntityUpgradable teu;
 	protected infinitealloys.util.Point controllingComputer = new infinitealloys.util.Point();
 	protected GuiMachineTab controllerTab;
-	protected ArrayList<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
+	protected List<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
 	/** When help is enabled, slots get a colored outline and a mouse-over description */
 	private boolean helpEnabled;
 
@@ -80,7 +81,7 @@ public abstract class GuiUpgradable extends GuiContainer {
 		// Draw the upgrade list if the mouse is over the upgrade slot
 		Slot slot = inventorySlots.getSlot(teu.upgradeSlotIndex);
 		if(mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x, slot.yDisplayPosition + topLeft.y, 16, 16)) {
-			ArrayList<ColoredLine> lines = new ArrayList<ColoredLine>();
+			List<ColoredLine> lines = new ArrayList<ColoredLine>();
 			lines.add(new ColoredLine(Funcs.getLoc("upgrade.name"), 0xffffff));
 			for(int i = 0; i < Consts.UPGRADE_COUNT; i++) {
 				int upg = (int)Math.pow(2, i);
@@ -125,7 +126,7 @@ public abstract class GuiUpgradable extends GuiContainer {
 				GL11.glPopMatrix();
 
 				// Draw text box with help info
-				ArrayList<ColoredLine> lines = new ArrayList<ColoredLine>();
+				List<ColoredLine> lines = new ArrayList<ColoredLine>();
 				lines.add(new ColoredLine(Funcs.getLoc("machineHelp." + hoveredZone.name + ".title"), 0xffffff));
 				for(String s : Funcs.getLoc("machineHelp." + hoveredZone.name + ".info").split("/n"))
 					lines.add(new ColoredLine(s, 0xaaaaaa));

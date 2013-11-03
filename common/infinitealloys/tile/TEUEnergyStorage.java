@@ -13,7 +13,7 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 	private final int SEARCH_INTERVAL = 200;
 
 	/** The maximum amount of RK that this machine can store */
-	private int maxRK = 10000000;
+	private int maxRK;
 
 	private int currentRK;
 
@@ -138,7 +138,7 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 	 * 
 	 * @param changeInRK the specified change in RK
 	 * @return True if changeInRK plus currentRK is between 0 and maxRK, False otherwise */
-	public boolean consumeRK(int changeInRK) {
+	public boolean changeRK(int changeInRK) {
 		if(0 <= currentRK + changeInRK && currentRK + changeInRK <= maxRK) {
 			currentRK += changeInRK;
 			return true;
@@ -160,11 +160,11 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.CAPACITY2))
-			maxRK = 40000000;
+			maxRK = 400000000; // 400,000,000 (400 million)
 		else if(hasUpgrade(TEHelper.CAPACITY1))
-			maxRK = 20000000;
+			maxRK = 200000000; // 200,000,000 (200 million)
 		else
-			maxRK = 10000000;
+			maxRK = 100000000; // 100,000,000 (100 million)
 
 		if(hasUpgrade(TEHelper.RANGE2)) {
 			autoSearchRange = 20;

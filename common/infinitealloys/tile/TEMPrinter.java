@@ -12,6 +12,8 @@ public class TEMPrinter extends TileEntityMachine {
 	public TEMPrinter() {
 		super(3);
 		inventoryStacks = new ItemStack[4];
+		ticksToProcess = 200;
+		baseRKPerTick = -36;
 	}
 
 	@Override
@@ -37,7 +39,7 @@ public class TEMPrinter extends TileEntityMachine {
 	}
 
 	@Override
-	public void finishProcessing() {
+	public void finishProcess() {
 		inventoryStacks[2] = inventoryStacks[0].copy();
 		inventoryStacks[1].stackSize--;
 		if(inventoryStacks[1].stackSize == 0)
@@ -48,18 +50,18 @@ public class TEMPrinter extends TileEntityMachine {
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.SPEED2))
-			ticksToProcess = 100;
+			processTimeMult = 0.5F;
 		else if(hasUpgrade(TEHelper.SPEED1))
-			ticksToProcess = 150;
+			processTimeMult = 0.75F;
 		else
-			ticksToProcess = 200;
+			processTimeMult = 1.0F;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			baseRKPerTick = -180;
+			rkPerTickMult = 0.5F;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			baseRKPerTick = -270;
+			rkPerTickMult = 0.75F;
 		else
-			baseRKPerTick = -360;
+			rkPerTickMult = 1.0F;
 	}
 
 	@Override

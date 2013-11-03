@@ -17,6 +17,8 @@ public class TEMAnalyzer extends TileEntityMachine {
 		super(3);
 		inventoryStacks = new ItemStack[4];
 		stackLimit = 1;
+		baseRKPerTick = -36;
+		ticksToProcess = 3600;
 	}
 
 	@Override
@@ -42,7 +44,7 @@ public class TEMAnalyzer extends TileEntityMachine {
 	}
 
 	@Override
-	public void finishProcessing() {
+	public void finishProcess() {
 		if(InfiniteAlloys.instance.worldData.alloysUnlocked == Math.min(inventoryStacks[0].getItemDamage() - 1, Consts.VALID_ALLOY_COUNT))
 			InfiniteAlloys.instance.worldData.alloysUnlocked = inventoryStacks[0].getItemDamage();
 		if(inventoryStacks[2] != null) {
@@ -83,18 +85,18 @@ public class TEMAnalyzer extends TileEntityMachine {
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.SPEED2))
-			ticksToProcess = 1800;
+			processTimeMult = 1800;
 		else if(hasUpgrade(TEHelper.SPEED1))
-			ticksToProcess = 2700;
+			processTimeMult = 2700;
 		else
-			ticksToProcess = 3600;
+			processTimeMult = 3600;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			baseRKPerTick = -180;
+			rkPerTickMult = 0.5F;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			baseRKPerTick = -270;
+			rkPerTickMult = 0.75F;
 		else
-			baseRKPerTick = -360;
+			rkPerTickMult = 1.0F;
 	}
 
 	@Override

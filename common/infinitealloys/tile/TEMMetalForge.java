@@ -24,6 +24,7 @@ public class TEMMetalForge extends TileEntityMachine {
 	public TEMMetalForge() {
 		super(1);
 		inventoryStacks = new ItemStack[21];
+		baseRKPerTick = -18;
 		ticksToProcess = 12800;
 	}
 
@@ -122,7 +123,7 @@ public class TEMMetalForge extends TileEntityMachine {
 	}
 
 	@Override
-	protected void finishProcessing() {
+	protected void finishProcess() {
 		byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
 		for(int slot : getSlotsWithIngot()) {
 			int ingotNum = TEHelper.getIngotNum(inventoryStacks[slot]);
@@ -140,25 +141,25 @@ public class TEMMetalForge extends TileEntityMachine {
 	@Override
 	public int getRKChange() {
 		if(shouldProcess())
-			return baseRKPerTick * getIngotsInRecipe();
+			return (int)(baseRKPerTick * rkPerTickMult / processTimeMult * getIngotsInRecipe());
 		return 0;
 	}
 
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(TEHelper.SPEED2))
-			ticksToProcess = 6400;
+			processTimeMult = 0.5F;
 		else if(hasUpgrade(TEHelper.SPEED1))
-			ticksToProcess = 9600;
+			processTimeMult = 0.75F;
 		else
-			ticksToProcess = 12800;
+			processTimeMult = 1.0F;
 
 		if(hasUpgrade(TEHelper.EFFICIENCY2))
-			baseRKPerTick = -90;
+			rkPerTickMult = 0.5F;
 		else if(hasUpgrade(TEHelper.EFFICIENCY1))
-			baseRKPerTick = -120;
+			rkPerTickMult = 0.75F;
 		else
-			baseRKPerTick = -180;
+			rkPerTickMult = 1.0F;
 
 		if(hasUpgrade(TEHelper.CAPACITY2))
 			stackLimit = 64;
