@@ -5,13 +5,13 @@ import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TEMAnalyzer;
+import infinitealloys.tile.TEMGenerator;
 import infinitealloys.tile.TEMMetalForge;
 import infinitealloys.tile.TEMPasture;
 import infinitealloys.tile.TEMPrinter;
 import infinitealloys.tile.TEMXray;
 import infinitealloys.tile.TEUComputer;
 import infinitealloys.tile.TEUEnergyStorage;
-import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityUpgradable;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -55,10 +55,7 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
-		int type = side <= Consts.BOTTOM ? 0 : side ==
-				((TileEntityMachine)blockAccess.
-						getBlockTileEntity(x, y, z)).
-				front ? 1 : 2;
+		int type = side <= Consts.BOTTOM ? 0 : side == ((TileEntityUpgradable)blockAccess.getBlockTileEntity(x, y, z)).front ? 1 : 2;
 		return Blocks.machineIcons[blockAccess.getBlockMetadata(x, y, z)][type];
 	}
 
@@ -165,18 +162,22 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
 		switch(metadata) {
-			case 0:
+			case TEHelper.COMPUTER:
 				return new TEUComputer();
-			case 1:
+			case TEHelper.METAL_FORGE:
 				return new TEMMetalForge();
-			case 2:
+			case TEHelper.ANALYZER:
 				return new TEMAnalyzer();
-			case 3:
+			case TEHelper.PRINTER:
 				return new TEMPrinter();
-			case 4:
+			case TEHelper.XRAY:
 				return new TEMXray();
-			case 5:
+			case TEHelper.PASTURE:
 				return new TEMPasture();
+			case TEHelper.GENERATOR:
+				return new TEMGenerator();
+			case TEHelper.RK_STORAGE:
+				return new TEUEnergyStorage();
 		}
 		return null;
 	}
@@ -202,19 +203,19 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemstack) {
-		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
-		if(tem != null) {
-			tem.front = Funcs.yawToNumSide(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
+		TileEntityUpgradable teu = (TileEntityUpgradable)world.getBlockTileEntity(x, y, z);
+		if(teu != null) {
+			teu.front = Funcs.yawToNumSide(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
 			world.markBlockForUpdate(x, y, z);
 		}
 	}
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
-		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
-		if(tem != null) {
-			tem.dropItems();
-			tem.dropUpgrades();
+		TileEntityUpgradable teu = (TileEntityUpgradable)world.getBlockTileEntity(x, y, z);
+		if(teu != null) {
+			teu.dropItems();
+			teu.dropUpgrades();
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}

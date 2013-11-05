@@ -11,7 +11,6 @@ public enum MachineHelp {
 
 	/* CP - Computer, MF - Metal Forge, AZ - Analyzer, PR - Printer, XR - X-ray, PS - Pasture, GE - Generator, RS - RK Storage */
 
-	ENERGY("energy", 0xff8900, 12, 6, 12, 34),
 	CP_UPGRADE("upgrade", 0x9c00ff, 139, 42, 18, 18), CP_TAB("cpTab", 0xff8900, -24, 6, 27, 24), CP_ADD("cpAdd", 0x00ff16, 6, 5, 158, 20),
 	MF_UPGRADE("upgrade", 0x9c00ff, 147, 7, 18, 18), MF_PROGRESS("progress", 0x00ff16, 30, 13, 110, 20),
 	MF_BOOK("mfBook", 0xffff00, 7, 51, 18, 18), MF_OUTPUT("mfOutput", 0x0000ff, 143, 47, 26, 26), MF_SUPPLY("mfSupply", 0xff0000, 7, 81, 162, 36),
@@ -49,13 +48,13 @@ public enum MachineHelp {
 		if(teu instanceof TEUComputer)
 			return new MachineHelp[] { CP_UPGRADE, CP_TAB, CP_ADD };
 		if(teu instanceof TEMMetalForge)
-			return new MachineHelp[] { ENERGY, MF_UPGRADE, MF_PROGRESS, MF_BOOK, MF_OUTPUT, MF_SUPPLY, MF_PRESETS, MF_INGOTS };
+			return new MachineHelp[] { MF_UPGRADE, MF_PROGRESS, MF_BOOK, MF_OUTPUT, MF_SUPPLY, MF_PRESETS, MF_INGOTS };
 		if(teu instanceof TEMAnalyzer)
-			return new MachineHelp[] { ENERGY, AZ_UPGRADE, AZ_PROGRESS, AZ_BOOK, AZ_INPUT, AZ_OUTPUT, AZ_INGOTS };
+			return new MachineHelp[] { AZ_UPGRADE, AZ_PROGRESS, AZ_BOOK, AZ_INPUT, AZ_OUTPUT, AZ_INGOTS };
 		if(teu instanceof TEMPrinter)
-			return new MachineHelp[] { ENERGY, PR_UPGRADE, PR_PROGRESS, PR_INPUT, PR_SUPPLY, PR_OUTPUT };
+			return new MachineHelp[] { PR_UPGRADE, PR_PROGRESS, PR_INPUT, PR_SUPPLY, PR_OUTPUT };
 		if(teu instanceof TEMXray)
-			return new MachineHelp[] { ENERGY, XR_UPGRADE, XR_PROGRESS, XR_ORE, XR_SEARCH, XR_RESULTS };
+			return new MachineHelp[] { XR_UPGRADE, XR_PROGRESS, XR_ORE, XR_SEARCH, XR_RESULTS };
 		return null;
 	}
 }

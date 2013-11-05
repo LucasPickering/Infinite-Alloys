@@ -1,6 +1,5 @@
 package infinitealloys.inventory;
 
-import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TileEntityUpgradable;
 import infinitealloys.util.Funcs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,7 +12,7 @@ public class ContainerUpgradable extends Container {
 
 	public TileEntityUpgradable inventory;
 
-	public ContainerUpgradable(TileEntityMachine tileEntity) {
+	public ContainerUpgradable(TileEntityUpgradable tileEntity) {
 		inventory = tileEntity;
 	}
 

@@ -5,17 +5,17 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class SlotPrinter extends Slot {
+public class SlotGenerator extends Slot {
 
 	private int slotIndex;
 
-	public SlotPrinter(IInventory inventory, int index, int x, int y) {
+	public SlotGenerator(IInventory inventory, int index, int x, int y) {
 		super(inventory, index, x, y);
 		slotIndex = index;
 	}
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return TEHelper.stackValidForSlot(TEHelper.GENERATOR, slotIndex, itemstack);
+		return TEHelper.stackValidForSlot(TEHelper.PRINTER, slotIndex, itemstack);
 	}
 }
