@@ -1,5 +1,7 @@
 package infinitealloys.util;
 
+import infinitealloys.tile.EnumTEUpgradable;
+
 public class Consts {
 
 	public static final String TEXTURE_DOMAIN = "infinitealloys";
@@ -9,7 +11,7 @@ public class Consts {
 
 	public static final int MULTI_ITEM_COUNT = 2;
 	public static final int METAL_COUNT = 8;
-	public static final int MACHINE_COUNT = 8;
+	public static final int MACHINE_COUNT = EnumTEUpgradable.values().length;
 	public static final int UPGRADE_COUNT = 9;
 	public static final int VALID_ALLOY_COUNT = 6;
 
@@ -32,8 +34,6 @@ public class Consts {
 
 	/** The names of each metal that can be used to make alloys */
 	public static final String[] METAL_NAMES = { "zinc", "magnesium", "scandium", "tantalum", "roguite", "verdite", "hydronium", "swagtanium" };
-	/** The names of each machine */
-	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray", "pasture", "generator", "rkstorage" };
 	/** The names of each item that has damage values */
 	public static final String[] MULTI_ITEM_NAMES = { "machinecomponent", "upgradecomponent" };
 	/** The names of each upgrade that can be used on machines */

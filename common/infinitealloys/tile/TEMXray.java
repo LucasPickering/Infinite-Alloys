@@ -12,7 +12,7 @@ public class TEMXray extends TileEntityMachine {
 
 	/** A list of the detected blocks, x and z are relative to the machine, y is absolute */
 	private ArrayList<Point> detectedBlocks = new ArrayList<Point>();
-	public int range = 5;
+	public int range;
 
 	/** The selected button for the user, client-side only */
 	@SideOnly(Side.CLIENT)
@@ -20,7 +20,7 @@ public class TEMXray extends TileEntityMachine {
 
 	/** The last point that was checked for the target block in the previous iteration of {@link #search}. The x and z coords are relative to the x-ray block;
 	 * the y coord is absolute */
-	private Point lastSearch = new Point(-range, 0, -range);
+	private Point lastSearch = new Point();
 
 	/** Should searching continue, or is it complete. Set this to true to begin a search. */
 	public boolean shouldSearch;
@@ -178,6 +178,7 @@ public class TEMXray extends TileEntityMachine {
 			range = 8;
 		else
 			range = 5;
+		lastSearch.set(-range, 0, -range);
 	}
 
 	@Override

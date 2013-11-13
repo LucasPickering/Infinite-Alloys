@@ -178,6 +178,10 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 			autoSearchRange = 10;
 			maxRange = 30;
 		}
+		if(lastSearch == null)
+			lastSearch = new Point(-autoSearchRange, 0, -autoSearchRange);
+		else
+			lastSearch.set(-autoSearchRange, 0, -autoSearchRange);
 	}
 
 	@Override

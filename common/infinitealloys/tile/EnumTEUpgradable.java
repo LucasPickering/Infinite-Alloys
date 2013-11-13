@@ -2,14 +2,14 @@ package infinitealloys.tile;
 
 public enum EnumTEUpgradable {
 
-	COMPUTER("Computer", TEUComputer.class),
-	METAL_FORGE("Metal Forge", TEMMetalForge.class),
-	ANALYZER("Analyzer", TEMAnalyzer.class),
-	PRINTER("Printer", TEMPrinter.class),
-	XRAY("X-ray", TEMXray.class),
-	PASTURE("Pasture", TEMPasture.class),
-	RK_STORAGE("RK Storage Unit", TEUEnergyStorage.class),
-	GENERATOR("Generator", TEMGenerator.class);
+	COMPUTER("computer", TEUComputer.class),
+	METAL_FORGE("metalforge", TEMMetalForge.class),
+	ANALYZER("analyzer", TEMAnalyzer.class),
+	PRINTER("printer", TEMPrinter.class),
+	XRAY("xray", TEMXray.class),
+	PASTURE("pasture", TEMPasture.class),
+	RK_STORAGE("rkstorage", TEUEnergyStorage.class),
+	GENERATOR("generator", TEMGenerator.class);
 
 	private final String name;
 	private final Class<? extends TileEntityUpgradable> teuClass;

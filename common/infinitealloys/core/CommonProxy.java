@@ -14,15 +14,8 @@ import infinitealloys.item.ItemInternetWand;
 import infinitealloys.item.ItemMulti;
 import infinitealloys.item.ItemUpgrade;
 import infinitealloys.item.Items;
+import infinitealloys.tile.EnumTEUpgradable;
 import infinitealloys.tile.TEHelper;
-import infinitealloys.tile.TEMAnalyzer;
-import infinitealloys.tile.TEMGenerator;
-import infinitealloys.tile.TEMMetalForge;
-import infinitealloys.tile.TEMPasture;
-import infinitealloys.tile.TEMPrinter;
-import infinitealloys.tile.TEMXray;
-import infinitealloys.tile.TEUComputer;
-import infinitealloys.tile.TEUEnergyStorage;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import net.minecraft.block.Block;
@@ -121,14 +114,8 @@ public class CommonProxy {
 	}
 
 	public void initTileEntities() {
-		GameRegistry.registerTileEntity(TEUComputer.class, "Computer");
-		GameRegistry.registerTileEntity(TEMMetalForge.class, "MetalForge");
-		GameRegistry.registerTileEntity(TEMAnalyzer.class, "Analyzer");
-		GameRegistry.registerTileEntity(TEMPrinter.class, "Printer");
-		GameRegistry.registerTileEntity(TEMXray.class, "Xray");
-		GameRegistry.registerTileEntity(TEMPasture.class, "Pasture");
-		GameRegistry.registerTileEntity(TEUEnergyStorage.class, "RKStorage");
-		GameRegistry.registerTileEntity(TEMGenerator.class, "Generator");
+		for(EnumTEUpgradable enumTEU : EnumTEUpgradable.values())
+			GameRegistry.registerTileEntity(enumTEU.getTeuClass(), enumTEU.getName());
 		TEHelper.addDetectable(Block.oreCoal, 1);
 		TEHelper.addDetectable(Block.oreIron, 2);
 		TEHelper.addDetectable(Block.oreGold, 6);

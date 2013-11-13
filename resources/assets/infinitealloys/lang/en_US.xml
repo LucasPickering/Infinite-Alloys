@@ -48,6 +48,7 @@
     <entry key="machine.pasture.name">Pasture</entry>
     <entry key="machine.generator.name">Generator</entry>
     <entry key="machine.rkstorage.name">Energy Storage Unit</entry>
+    <entry key="machine.generator.name">Generator</entry>
 
 	<entry key="achievement.craftMetalForge">Your First Machine</entry>
 	<entry key="achievement.craftMetalForge.desc">Craft A Metal Forge</entry>

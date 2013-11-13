@@ -3,6 +3,7 @@ package infinitealloys.block;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
+import infinitealloys.tile.EnumTEUpgradable;
 import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TEMAnalyzer;
 import infinitealloys.tile.TEMGenerator;
@@ -45,10 +46,11 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
-		for(int i = 0; i < Consts.MACHINE_COUNT; ++i) {
-			Blocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.MACHINE_NAMES[i] + "_top");
-			Blocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.MACHINE_NAMES[i] + "_front");
-			Blocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.MACHINE_NAMES[i] + "_side");
+		for(int i = 0; i < Consts.MACHINE_COUNT; i++) {
+			EnumTEUpgradable enumTEU = EnumTEUpgradable.values()[i];
+			Blocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + enumTEU.getName() + "_top");
+			Blocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + enumTEU.getName() + "_front");
+			Blocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + enumTEU.getName() + "_side");
 		}
 	}
 
@@ -130,8 +132,6 @@ public class BlockMachine extends BlockContainer {
 			}
 			return true;
 		}
-		if(player.isSneaking())
-			return false;
 		openGui(world, player, (TileEntityUpgradable)world.getBlockTileEntity(x, y, z), false);
 		return true;
 	}
@@ -139,20 +139,12 @@ public class BlockMachine extends BlockContainer {
 	public void openGui(World world, EntityPlayer player, TileEntityUpgradable teu, boolean fromComputer) {
 		if(!fromComputer && Funcs.isClient())
 			TEHelper.controllers.remove(player.username);
-		if(teu instanceof TEUComputer) {
+		if(teu instanceof TEUComputer)
 			TEHelper.controllers.put(player.username, new Point(teu.xCoord, teu.yCoord, teu.zCoord));
-			player.openGui(InfiniteAlloys.instance, 0, world, teu.xCoord, teu.yCoord, teu.zCoord);
+		for(EnumTEUpgradable enumTEU : EnumTEUpgradable.values()) {
+			player.openGui(InfiniteAlloys.instance, enumTEU.ordinal(), world, teu.xCoord, teu.yCoord, teu.zCoord);
+			break;
 		}
-		else if(teu instanceof TEMMetalForge)
-			player.openGui(InfiniteAlloys.instance, 1, world, teu.xCoord, teu.yCoord, teu.zCoord);
-		else if(teu instanceof TEMAnalyzer)
-			player.openGui(InfiniteAlloys.instance, 2, world, teu.xCoord, teu.yCoord, teu.zCoord);
-		else if(teu instanceof TEMPrinter)
-			player.openGui(InfiniteAlloys.instance, 3, world, teu.xCoord, teu.yCoord, teu.zCoord);
-		else if(teu instanceof TEMXray)
-			player.openGui(InfiniteAlloys.instance, 4, world, teu.xCoord, teu.yCoord, teu.zCoord);
-		else if(teu instanceof TEMPasture)
-			player.openGui(InfiniteAlloys.instance, 5, world, teu.xCoord, teu.yCoord, teu.zCoord);
 		if(Funcs.isServer()) {
 			teu.playersUsing.add(player.username);
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEPacketToClient(teu), (Player)player);
