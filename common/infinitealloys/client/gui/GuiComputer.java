@@ -1,7 +1,6 @@
 package infinitealloys.client.gui;
 
 import infinitealloys.handlers.PacketHandler;
-import infinitealloys.inventory.ContainerUpgradable;
 import infinitealloys.tile.TEUComputer;
 import infinitealloys.util.Funcs;
 import net.minecraft.client.gui.GuiButton;
@@ -13,7 +12,7 @@ public class GuiComputer extends GuiUpgradable {
 	public TEUComputer tec;
 
 	public GuiComputer(InventoryPlayer inventoryPlayer, TEUComputer tileEntity) {
-		super(176, 176, tileEntity, new ContainerUpgradable(inventoryPlayer, tileEntity, 8, 84, 140, 43), "computer");
+		super(176, 176, inventoryPlayer, tileEntity);
 		tec = tileEntity;
 	}
 

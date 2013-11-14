@@ -1,7 +1,6 @@
 package infinitealloys.client.gui;
 
 import infinitealloys.handlers.PacketHandler;
-import infinitealloys.inventory.ContainerUpgradable;
 import infinitealloys.tile.TEMPasture;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -17,7 +16,7 @@ public class GuiPasture extends GuiMachine {
 	private GuiButton[] mobButtons = new GuiButton[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 
 	public GuiPasture(InventoryPlayer inventoryPlayer, TEMPasture tileEntity) {
-		super(210, 186, tileEntity, new ContainerUpgradable(inventoryPlayer, tileEntity, 13, 94, 141, 44), "pasture");
+		super(210, 186, inventoryPlayer, tileEntity);
 		tep = tileEntity;
 	}
 

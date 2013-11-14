@@ -2,7 +2,6 @@ package infinitealloys.client.gui;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.handlers.PacketHandler;
-import infinitealloys.inventory.ContainerXray;
 import infinitealloys.tile.TEMXray;
 import infinitealloys.util.Point;
 import java.awt.Rectangle;
@@ -32,7 +31,7 @@ public class GuiXray extends GuiMachine {
 	private boolean initialized;
 
 	public GuiXray(InventoryPlayer inventoryPlayer, TEMXray tileEntity) {
-		super(196, 238, tileEntity, new ContainerXray(inventoryPlayer, tileEntity), "xray");
+		super(196, 238, inventoryPlayer, tileEntity);
 		tex = tileEntity;
 		progressBar.setLocation(54, 5);
 	}

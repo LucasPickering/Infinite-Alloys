@@ -1,7 +1,6 @@
 package infinitealloys.client.gui;
 
 import infinitealloys.handlers.PacketHandler;
-import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEMMetalForge;
 import infinitealloys.util.Consts;
@@ -16,7 +15,7 @@ public class GuiMetalForge extends GuiMachine {
 	private TEMMetalForge temf;
 
 	public GuiMetalForge(InventoryPlayer inventoryPlayer, TEMMetalForge tileEntity) {
-		super(176, 216, tileEntity, new ContainerMetalForge(inventoryPlayer, tileEntity), "metalforge");
+		super(176, 216, inventoryPlayer, tileEntity);
 		temf = tileEntity;
 		progressBar.setLocation(31, 14);
 	}

@@ -2,7 +2,6 @@ package infinitealloys.client.gui;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.WorldData;
-import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEMAnalyzer;
 import infinitealloys.util.Consts;
@@ -17,7 +16,7 @@ public class GuiAnalyzer extends GuiMachine {
 	private TEMAnalyzer tea;
 
 	public GuiAnalyzer(InventoryPlayer inventoryPlayer, TEMAnalyzer tileEntity) {
-		super(216, 166, tileEntity, new ContainerAnalyzer(inventoryPlayer, tileEntity), "analyzer");
+		super(216, 166, inventoryPlayer,tileEntity );
 		tea = tileEntity;
 		progressBar.setLocation(54, 57);
 	}

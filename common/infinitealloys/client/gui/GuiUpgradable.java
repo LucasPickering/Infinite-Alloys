@@ -17,7 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -56,12 +56,12 @@ public abstract class GuiUpgradable extends GuiContainer {
 	/** When help is enabled, slots get a colored outline and a mouse-over description */
 	private boolean helpEnabled;
 
-	public GuiUpgradable(int xSize, int ySize, TileEntityUpgradable tileEntity, Container container, String texture) {
-		super(container);
+	public GuiUpgradable(int xSize, int ySize, InventoryPlayer inventoryPlayer, TileEntityUpgradable tileEntity) {
+		super(TEHelper.getContainerForTEU(tileEntity.getID(), inventoryPlayer, tileEntity));
 		this.xSize = xSize;
 		this.ySize = ySize;
 		teu = tileEntity;
-		background = createTexture(texture);
+		background = createTexture(TEHelper.TEU_NAMES[tileEntity.getID()]);
 		extras = createTexture("extras");
 	}
 

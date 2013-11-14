@@ -9,13 +9,19 @@ import infinitealloys.client.gui.GuiPasture;
 import infinitealloys.client.gui.GuiPrinter;
 import infinitealloys.client.gui.GuiUpgradable;
 import infinitealloys.client.gui.GuiXray;
+import infinitealloys.inventory.ContainerAnalyzer;
+import infinitealloys.inventory.ContainerGenerator;
+import infinitealloys.inventory.ContainerMetalForge;
+import infinitealloys.inventory.ContainerPrinter;
+import infinitealloys.inventory.ContainerUpgradable;
+import infinitealloys.inventory.ContainerXray;
 import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -142,24 +148,46 @@ public class TEHelper {
 		return -1;
 	}
 
-	public static GuiUpgradable getGuiForTEU(int teuID, EntityPlayer player, TileEntityUpgradable teu) {
+	public static ContainerUpgradable getContainerForTEU(int teuID, InventoryPlayer inventoryPlayer, TileEntityUpgradable teu) {
 		switch(teuID) {
 			case COMPUTER:
-				return new GuiComputer(player.inventory, (TEUComputer)teu);
+				return new ContainerUpgradable(inventoryPlayer, teu, 8, 84, 140, 43);
 			case METAL_FORGE:
-				return new GuiMetalForge(player.inventory, (TEMMetalForge)teu);
+				return new ContainerMetalForge(inventoryPlayer, (TEMMetalForge)teu);
 			case ANALYZER:
-				return new GuiAnalyzer(player.inventory, (TEMAnalyzer)teu);
+				return new ContainerAnalyzer(inventoryPlayer, (TEMAnalyzer)teu);
 			case PRINTER:
-				return new GuiPrinter(player.inventory, (TEMPrinter)teu);
+				return new ContainerPrinter(inventoryPlayer, (TEMPrinter)teu);
 			case XRAY:
-				return new GuiXray(player.inventory, (TEMXray)teu);
+				return new ContainerXray(inventoryPlayer, (TEMXray)teu);
 			case PASTURE:
-				return new GuiPasture(player.inventory, (TEMPasture)teu);
+				return new ContainerUpgradable(inventoryPlayer, teu, 13, 94, 141, 44);
 			case ENERGY_STORAGE:
-				return new GuiEnergyStorage(player.inventory, (TEUEnergyStorage)teu);
+				return new ContainerUpgradable(inventoryPlayer, teu, 8, 84, 140, 43);
 			case GENERATOR:
-				return new GuiGenerator(player.inventory, (TEMGenerator)teu);
+				return new ContainerGenerator(inventoryPlayer, (TEMGenerator)teu);
+		}
+		return null;
+	}
+
+	public static GuiUpgradable getGuiForTEU(int teuID, InventoryPlayer inventoryPlayer, TileEntityUpgradable teu) {
+		switch(teuID) {
+			case COMPUTER:
+				return new GuiComputer(inventoryPlayer, (TEUComputer)teu);
+			case METAL_FORGE:
+				return new GuiMetalForge(inventoryPlayer, (TEMMetalForge)teu);
+			case ANALYZER:
+				return new GuiAnalyzer(inventoryPlayer, (TEMAnalyzer)teu);
+			case PRINTER:
+				return new GuiPrinter(inventoryPlayer, (TEMPrinter)teu);
+			case XRAY:
+				return new GuiXray(inventoryPlayer, (TEMXray)teu);
+			case PASTURE:
+				return new GuiPasture(inventoryPlayer, (TEMPasture)teu);
+			case ENERGY_STORAGE:
+				return new GuiEnergyStorage(inventoryPlayer, (TEUEnergyStorage)teu);
+			case GENERATOR:
+				return new GuiGenerator(inventoryPlayer, (TEMGenerator)teu);
 		}
 		return null;
 	}

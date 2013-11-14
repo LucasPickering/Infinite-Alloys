@@ -2,7 +2,7 @@ package infinitealloys.client.gui;
 
 import infinitealloys.tile.TileEntityMachine;
 import java.awt.Rectangle;
-import net.minecraft.inventory.Container;
+import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.opengl.GL11;
 
 public abstract class GuiMachine extends GuiUpgradable {
@@ -22,8 +22,8 @@ public abstract class GuiMachine extends GuiUpgradable {
 
 	protected TileEntityMachine tem;
 
-	public GuiMachine(int xSize, int ySize, TileEntityMachine tileEntity, Container container, String texture) {
-		super(xSize, ySize, tileEntity, container, texture);
+	public GuiMachine(int xSize, int ySize, InventoryPlayer inventoryPlayer, TileEntityMachine tileEntity) {
+		super(xSize, ySize, inventoryPlayer,tileEntity);
 		tem = tileEntity;
 	}
 
