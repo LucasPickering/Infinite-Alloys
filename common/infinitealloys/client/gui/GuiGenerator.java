@@ -1,7 +1,8 @@
 package infinitealloys.client.gui;
 
-import net.minecraft.inventory.Container;
+import infinitealloys.inventory.ContainerGenerator;
 import infinitealloys.tile.TEMGenerator;
+import net.minecraft.entity.player.InventoryPlayer;
 
 public class GuiGenerator extends GuiMachine {
 
@@ -9,8 +10,8 @@ public class GuiGenerator extends GuiMachine {
 
 	public java.awt.Point fire = new java.awt.Point(30, 75);
 
-	public GuiGenerator(int xSize, int ySize, TEMGenerator tileEntity, Container container, String texture) {
-		super(xSize, ySize, tileEntity, container, texture);
+	public GuiGenerator(InventoryPlayer inventoryPlayer, TEMGenerator tileEntity) {
+		super(176, 176, tileEntity, new ContainerGenerator(inventoryPlayer, tileEntity), "computer");
 		teg = tileEntity;
 	}
 }

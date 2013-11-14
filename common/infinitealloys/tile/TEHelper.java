@@ -1,11 +1,21 @@
 package infinitealloys.tile;
 
+import infinitealloys.client.gui.GuiAnalyzer;
+import infinitealloys.client.gui.GuiComputer;
+import infinitealloys.client.gui.GuiEnergyStorage;
+import infinitealloys.client.gui.GuiGenerator;
+import infinitealloys.client.gui.GuiMetalForge;
+import infinitealloys.client.gui.GuiPasture;
+import infinitealloys.client.gui.GuiPrinter;
+import infinitealloys.client.gui.GuiUpgradable;
+import infinitealloys.client.gui.GuiXray;
 import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -19,7 +29,7 @@ public class TEHelper {
 	public static final int PRINTER = 3;
 	public static final int XRAY = 4;
 	public static final int PASTURE = 5;
-	public static final int RK_STORAGE = 6; // TODO: Change this when I figure out a better name for this TE
+	public static final int ENERGY_STORAGE = 6;
 	public static final int GENERATOR = 7;
 
 	public static final int SPEED1 = 1;
@@ -31,6 +41,12 @@ public class TEHelper {
 	public static final int RANGE1 = 64;
 	public static final int RANGE2 = 128;
 	public static final int WIRELESS = 256;
+
+	/** The TileEntityUpgradable class for each TEU block */
+	public static final Class[] TEU_CLASSES = { TEUComputer.class, TEMMetalForge.class, TEMAnalyzer.class, TEMPrinter.class, TEMXray.class, TEMPasture.class,
+			TEUEnergyStorage.class, TEMGenerator.class };
+
+	public static final String[] TEU_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray", "pasture", "energystorage", "generator" };
 
 	/** How many blocks are searched per tick. Used to limit lag. Currently only used by the x-ray. */
 	public static final int SEARCH_PER_TICK = 2000;
@@ -126,6 +142,28 @@ public class TEHelper {
 		return -1;
 	}
 
+	public static GuiUpgradable getGuiForTEU(int teuID, EntityPlayer player, TileEntityUpgradable teu) {
+		switch(teuID) {
+			case COMPUTER:
+				return new GuiComputer(player.inventory, (TEUComputer)teu);
+			case METAL_FORGE:
+				return new GuiMetalForge(player.inventory, (TEMMetalForge)teu);
+			case ANALYZER:
+				return new GuiAnalyzer(player.inventory, (TEMAnalyzer)teu);
+			case PRINTER:
+				return new GuiPrinter(player.inventory, (TEMPrinter)teu);
+			case XRAY:
+				return new GuiXray(player.inventory, (TEMXray)teu);
+			case PASTURE:
+				return new GuiPasture(player.inventory, (TEMPasture)teu);
+			case ENERGY_STORAGE:
+				return new GuiEnergyStorage(player.inventory, (TEUEnergyStorage)teu);
+			case GENERATOR:
+				return new GuiGenerator(player.inventory, (TEMGenerator)teu);
+		}
+		return null;
+	}
+
 	public static boolean stackValidForSlot(int type, int index, ItemStack itemstack) {
 		switch(type) {
 			case METAL_FORGE:
@@ -161,7 +199,7 @@ public class TEHelper {
 				return TEHelper.isDetectable(itemstack);
 			case PASTURE:
 				return false;
-			case RK_STORAGE:
+			case ENERGY_STORAGE:
 				return false;
 			case GENERATOR:
 				return TileEntityFurnace.isItemFuel(itemstack);

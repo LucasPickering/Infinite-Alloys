@@ -29,8 +29,8 @@ public class TEMMetalForge extends TileEntityMachine {
 	}
 
 	@Override
-	public String getInvName() {
-		return "Metal Forge";
+	public int getID() {
+		return TEHelper.METAL_FORGE;
 	}
 
 	@Override

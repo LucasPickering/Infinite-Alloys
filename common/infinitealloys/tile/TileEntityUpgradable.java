@@ -56,6 +56,9 @@ public abstract class TileEntityUpgradable extends TileEntity implements IInvent
 		updateUpgrades();
 	}
 
+	/** Get the integer from {@link TEHelper} that corresponds to this TEU */
+	public abstract int getID();
+
 	@Override
 	public void updateEntity() {
 
@@ -117,6 +120,11 @@ public abstract class TileEntityUpgradable extends TileEntity implements IInvent
 
 	// ---END GENERAL FUNCTIONS---
 	// ---BEGIN INVENTORY FUNCTIONS---
+
+	@Override
+	public String getInvName() {
+		return TEHelper.TEU_NAMES[getID()];
+	}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {

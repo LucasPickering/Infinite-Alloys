@@ -54,6 +54,11 @@ public class TEUComputer extends TileEntityUpgradable {
 	}
 
 	@Override
+	public int getID() {
+		return TEHelper.COMPUTER;
+	}
+
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 
@@ -170,14 +175,6 @@ public class TEUComputer extends TileEntityUpgradable {
 	}
 
 	// ---END GENERAL FUNCTIONS---
-	// ---BEGIN GENERAL FUNCTIONS---
-
-	@Override
-	public String getInvName() {
-		return "Computer";
-	}
-
-	// ---END INVENTORY FUNCTIONS---
 	// ---BEGIN UPGRADE FUNCTIONS---
 
 	@Override

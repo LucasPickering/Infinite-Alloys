@@ -3,12 +3,12 @@ package infinitealloys.handlers;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.WorldData;
-import infinitealloys.tile.TEUComputer;
-import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.tile.TEMMetalForge;
 import infinitealloys.tile.TEMPasture;
-import infinitealloys.tile.TileEntityUpgradable;
 import infinitealloys.tile.TEMXray;
+import infinitealloys.tile.TEUComputer;
+import infinitealloys.tile.TileEntityMachine;
+import infinitealloys.tile.TileEntityUpgradable;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
@@ -175,8 +175,7 @@ public class PacketHandler implements IPacketHandler {
 					for(byte mob : ((TEMPasture)tem).mobActions)
 						dos.writeByte(mob);
 			}
-		}
-		catch(IOException e) {
+		}catch(IOException e) {
 			e.printStackTrace();
 		}
 		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
@@ -237,8 +236,7 @@ public class PacketHandler implements IPacketHandler {
 				else if(datum instanceof Boolean)
 					dos.writeBoolean((Boolean)datum);
 			}
-		}
-		catch(IOException e) {
+		}catch(IOException e) {
 			e.printStackTrace();
 		}
 		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());

@@ -22,8 +22,8 @@ public class TEMAnalyzer extends TileEntityMachine {
 	}
 
 	@Override
-	public String getInvName() {
-		return "Analyzer";
+	public int getID() {
+		return TEHelper.ANALYZER;
 	}
 
 	@Override

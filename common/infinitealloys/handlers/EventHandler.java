@@ -39,8 +39,7 @@ public class EventHandler implements ICraftingHandler {
 				ois = new ObjectInputStream(new FileInputStream(world + "/WorldData.dat"));
 				InfiniteAlloys.instance.worldData = (WorldData)ois.readObject();
 				System.out.println("Successfully loaded IA alloys");
-			}
-			catch(IOException e) {
+			}catch(IOException e) {
 				if(InfiniteAlloys.instance.worldData == null) {
 					Random random = new Random();
 					int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT];
@@ -62,8 +61,7 @@ public class EventHandler implements ICraftingHandler {
 					InfiniteAlloys.instance.worldData = new WorldData(validAlloys);
 					System.out.println("Successfully generated IA alloys");
 				}
-			}
-			catch(Exception e) {
+			}catch(Exception e) {
 				System.out.println("Error while deserializing Infinite Alloys world data");
 				e.printStackTrace();
 			}
@@ -71,8 +69,7 @@ public class EventHandler implements ICraftingHandler {
 				try {
 					if(ois != null)
 						ois.close();
-				}
-				catch(Exception e) {
+				}catch(Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -93,8 +90,7 @@ public class EventHandler implements ICraftingHandler {
 			try {
 				oos = new ObjectOutputStream(new FileOutputStream(world + "/WorldData.dat"));
 				oos.writeObject(InfiniteAlloys.instance.worldData);
-			}
-			catch(Exception e) {
+			}catch(Exception e) {
 				System.out.println("Error while serializing Infinite Alloys world data");
 				e.printStackTrace();
 			}
@@ -102,8 +98,7 @@ public class EventHandler implements ICraftingHandler {
 				try {
 					if(oos != null)
 						oos.close();
-				}
-				catch(Exception e) {
+				}catch(Exception e) {
 					e.printStackTrace();
 				}
 			}

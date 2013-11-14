@@ -49,6 +49,11 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 	}
 
 	@Override
+	public int getID() {
+		return TEHelper.ENERGY_STORAGE;
+	}
+
+	@Override
 	public void updateEntity() {
 		super.updateEntity();
 
@@ -147,14 +152,6 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 	}
 
 	// ---END GENERAL FUNCTIONS---
-	// ---BEGIN INVENTORY FUNCTIONS---
-
-	@Override
-	public String getInvName() {
-		return "RK Storage"; // TODO: Change this one I figure out a better name for this TE
-	}
-
-	// ---END INVENTORY FUNCTIONS---
 	// ---BEGIN UPGRADE FUNCTIONS---
 
 	@Override

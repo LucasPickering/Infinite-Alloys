@@ -14,7 +14,6 @@ import infinitealloys.item.ItemInternetWand;
 import infinitealloys.item.ItemMulti;
 import infinitealloys.item.ItemUpgrade;
 import infinitealloys.item.Items;
-import infinitealloys.tile.EnumTEUpgradable;
 import infinitealloys.tile.TEHelper;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -114,8 +113,8 @@ public class CommonProxy {
 	}
 
 	public void initTileEntities() {
-		for(EnumTEUpgradable enumTEU : EnumTEUpgradable.values())
-			GameRegistry.registerTileEntity(enumTEU.getTeuClass(), enumTEU.getName());
+		for(int i = 0; i < Consts.TEU_COUNT; i++)
+			GameRegistry.registerTileEntity(TEHelper.TEU_CLASSES[i], TEHelper.TEU_NAMES[i]);
 		TEHelper.addDetectable(Block.oreCoal, 1);
 		TEHelper.addDetectable(Block.oreIron, 2);
 		TEHelper.addDetectable(Block.oreGold, 6);

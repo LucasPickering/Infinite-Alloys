@@ -1,11 +1,11 @@
 package infinitealloys.client;
 
 import infinitealloys.tile.TEMAnalyzer;
-import infinitealloys.tile.TEUComputer;
 import infinitealloys.tile.TEMMetalForge;
 import infinitealloys.tile.TEMPrinter;
-import infinitealloys.tile.TileEntityUpgradable;
 import infinitealloys.tile.TEMXray;
+import infinitealloys.tile.TEUComputer;
+import infinitealloys.tile.TileEntityUpgradable;
 
 public enum MachineHelp {
 

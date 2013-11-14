@@ -3,7 +3,7 @@ package infinitealloys.client;
 import infinitealloys.block.Blocks;
 import infinitealloys.core.CommonProxy;
 import infinitealloys.item.Items;
-import infinitealloys.tile.EnumTEUpgradable;
+import infinitealloys.tile.TEHelper;
 import infinitealloys.util.Consts;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -23,8 +23,8 @@ public class ClientProxy extends CommonProxy {
 		super.initBlocks();
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			addName(new ItemStack(Blocks.ore, 0, i), "metal." + Consts.METAL_NAMES[i] + ".name", "tile.ore.name");
-		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
-			addName(new ItemStack(Blocks.machine, 1, i), "machine." + EnumTEUpgradable.values()[i].getName() + ".name");
+		for(int i = 0; i < Consts.TEU_COUNT; i++)
+			addName(new ItemStack(Blocks.machine, 1, i), "machine." + TEHelper.TEU_NAMES[i] + ".name");
 	}
 
 	@Override

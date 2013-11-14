@@ -17,8 +17,8 @@ public class TEMPrinter extends TileEntityMachine {
 	}
 
 	@Override
-	public String getInvName() {
-		return "Printer";
+	public int getID() {
+		return TEHelper.PRINTER;
 	}
 
 	@Override

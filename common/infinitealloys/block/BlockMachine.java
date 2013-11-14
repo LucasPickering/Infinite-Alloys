@@ -3,14 +3,7 @@ package infinitealloys.block;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
-import infinitealloys.tile.EnumTEUpgradable;
 import infinitealloys.tile.TEHelper;
-import infinitealloys.tile.TEMAnalyzer;
-import infinitealloys.tile.TEMGenerator;
-import infinitealloys.tile.TEMMetalForge;
-import infinitealloys.tile.TEMPasture;
-import infinitealloys.tile.TEMPrinter;
-import infinitealloys.tile.TEMXray;
 import infinitealloys.tile.TEUComputer;
 import infinitealloys.tile.TEUEnergyStorage;
 import infinitealloys.tile.TileEntityUpgradable;
@@ -46,11 +39,10 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
-		for(int i = 0; i < Consts.MACHINE_COUNT; i++) {
-			EnumTEUpgradable enumTEU = EnumTEUpgradable.values()[i];
-			Blocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + enumTEU.getName() + "_top");
-			Blocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + enumTEU.getName() + "_front");
-			Blocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + enumTEU.getName() + "_side");
+		for(int i = 0; i < Consts.TEU_COUNT; i++) {
+			Blocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + TEHelper.TEU_NAMES[i] + "_top");
+			Blocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + TEHelper.TEU_NAMES[i] + "_front");
+			Blocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + TEHelper.TEU_NAMES[i] + "_side");
 		}
 	}
 
@@ -141,10 +133,7 @@ public class BlockMachine extends BlockContainer {
 			TEHelper.controllers.remove(player.username);
 		if(teu instanceof TEUComputer)
 			TEHelper.controllers.put(player.username, new Point(teu.xCoord, teu.yCoord, teu.zCoord));
-		for(EnumTEUpgradable enumTEU : EnumTEUpgradable.values()) {
-			player.openGui(InfiniteAlloys.instance, enumTEU.ordinal(), world, teu.xCoord, teu.yCoord, teu.zCoord);
-			break;
-		}
+		player.openGui(InfiniteAlloys.instance, teu.getID(), world, teu.xCoord, teu.yCoord, teu.zCoord);
 		if(Funcs.isServer()) {
 			teu.playersUsing.add(player.username);
 			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEPacketToClient(teu), (Player)player);
@@ -153,25 +142,12 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
-		switch(metadata) {
-			case TEHelper.COMPUTER:
-				return new TEUComputer();
-			case TEHelper.METAL_FORGE:
-				return new TEMMetalForge();
-			case TEHelper.ANALYZER:
-				return new TEMAnalyzer();
-			case TEHelper.PRINTER:
-				return new TEMPrinter();
-			case TEHelper.XRAY:
-				return new TEMXray();
-			case TEHelper.PASTURE:
-				return new TEMPasture();
-			case TEHelper.GENERATOR:
-				return new TEMGenerator();
-			case TEHelper.RK_STORAGE:
-				return new TEUEnergyStorage();
+		try {
+			return (TileEntity)TEHelper.TEU_CLASSES[metadata].newInstance();
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 
 	@Override
@@ -189,7 +165,7 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public void getSubBlocks(int id, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
+		for(int i = 0; i < Consts.TEU_COUNT; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
 

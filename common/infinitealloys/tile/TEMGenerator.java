@@ -21,6 +21,11 @@ public class TEMGenerator extends TileEntityMachine {
 	}
 
 	@Override
+	public int getID() {
+		return TEHelper.GENERATOR;
+	}
+
+	@Override
 	protected boolean shouldProcess() {
 		for(int i = 1; i < inventoryStacks.length; i++)
 			if(inventoryStacks[i] != null)
@@ -35,6 +40,7 @@ public class TEMGenerator extends TileEntityMachine {
 				decrStackSize(i, 1);
 	}
 
+	@Override
 	public int getRKChange() {
 		if(shouldProcess())
 			return (int)(baseRKPerTick * rkPerTickMult / processTimeMult * FURNACE_FUEL_TO_RK_RATIO);
@@ -42,14 +48,6 @@ public class TEMGenerator extends TileEntityMachine {
 	}
 
 	// ---END GENERAL FUNCTIONS
-	// ---BEGIN INVENTORY FUNCTIONS
-
-	@Override
-	public String getInvName() {
-		return "Generator";
-	}
-
-	// ---END INVENTORY FUNCTIONS
 	// ---BEGIN UPGRADE FUNCTIONS---
 
 	@Override

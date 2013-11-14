@@ -43,8 +43,8 @@ public class TEMPasture extends TileEntityMachine {
 	}
 
 	@Override
-	public String getInvName() {
-		return "Pasture";
+	public int getID() {
+		return TEHelper.PASTURE;
 	}
 
 	@Override

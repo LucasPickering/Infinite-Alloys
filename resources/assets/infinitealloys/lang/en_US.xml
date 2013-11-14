@@ -47,7 +47,7 @@
 	<entry key="machine.xray.name">X-Ray</entry>
     <entry key="machine.pasture.name">Pasture</entry>
     <entry key="machine.generator.name">Generator</entry>
-    <entry key="machine.rkstorage.name">Energy Storage Unit</entry>
+    <entry key="machine.energystorage.name">Energy Storage Unit</entry>
     <entry key="machine.generator.name">Generator</entry>
 
 	<entry key="achievement.craftMetalForge">Your First Machine</entry>

@@ -42,8 +42,8 @@ public class TEMXray extends TileEntityMachine {
 	}
 
 	@Override
-	public String getInvName() {
-		return "X-ray";
+	public int getID() {
+		return TEHelper.XRAY;
 	}
 
 	@Override
