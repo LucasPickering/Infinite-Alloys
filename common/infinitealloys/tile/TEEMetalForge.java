@@ -34,8 +34,49 @@ public class TEEMetalForge extends TileEntityElectric {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return super.isItemValidForSlot(slot, itemstack) || MachineHelper.stackValidForSlot(MachineHelper.METAL_FORGE, slot, itemstack);
+	public void updateEntity() {
+		super.updateEntity();
+		if(!Arrays.equals(lastRecipeAmts, recipeAmts))
+			processProgress = 0;
+		lastRecipeAmts = Arrays.copyOf(recipeAmts, recipeAmts.length);
+	}
+
+	@Override
+	protected boolean shouldProcess() {
+		int typesInRecipe = 0;
+		ArrayList<Boolean> sufficientIngots = new ArrayList<Boolean>();
+		for(int amt : recipeAmts)
+			if(amt > 0)
+				typesInRecipe++;
+		for(int i = 0; i < getIngotAmts().length; i++)
+			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
+		if(sufficientIngots.contains(false))
+			processProgress = 0;
+		return (inventoryStacks[2] == null || inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1)
+				&& typesInRecipe > 1 && !sufficientIngots.contains(false);
+	}
+
+	@Override
+	protected void finishProcess() {
+		byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
+		for(int slot : getSlotsWithIngot()) {
+			int ingotNum = MachineHelper.getIngotNum(inventoryStacks[slot]);
+			int ingots = ingotsToRemove[ingotNum];
+			ingotsToRemove[ingotNum] -= Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize);
+			decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
+		}
+		ItemStack result = getIngotResult();
+		if(inventoryStacks[2] == null)
+			inventoryStacks[2] = result;
+		else if(inventoryStacks[2].getTagCompound().getInteger("alloy") == result.getTagCompound().getInteger("alloy"))
+			inventoryStacks[2].stackSize += result.stackSize;
+	}
+
+	@Override
+	public int getRKChange() {
+		if(shouldProcess())
+			return (int)(baseRKPerTick * rkPerTickMult / processTimeMult * getIngotsInRecipe());
+		return 0;
 	}
 
 	@Override
@@ -52,14 +93,6 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	public void handlePacketDataFromClient(byte[] recipeAmts) {
 		this.recipeAmts = recipeAmts;
-	}
-
-	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		if(!Arrays.equals(lastRecipeAmts, recipeAmts))
-			processProgress = 0;
-		lastRecipeAmts = Arrays.copyOf(recipeAmts, recipeAmts.length);
 	}
 
 	/** Return the resulting ingot for the smelted ingots
@@ -105,44 +138,6 @@ public class TEEMetalForge extends TileEntityElectric {
 		for(int amt : recipeAmts)
 			ingots += amt;
 		return ingots;
-	}
-
-	@Override
-	protected boolean shouldProcess() {
-		int typesInRecipe = 0;
-		ArrayList<Boolean> sufficientIngots = new ArrayList<Boolean>();
-		for(int amt : recipeAmts)
-			if(amt > 0)
-				typesInRecipe++;
-		for(int i = 0; i < getIngotAmts().length; i++)
-			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
-		if(sufficientIngots.contains(false))
-			processProgress = 0;
-		return (inventoryStacks[2] == null || inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1)
-				&& typesInRecipe > 1 && !sufficientIngots.contains(false);
-	}
-
-	@Override
-	protected void finishProcess() {
-		byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
-		for(int slot : getSlotsWithIngot()) {
-			int ingotNum = MachineHelper.getIngotNum(inventoryStacks[slot]);
-			int ingots = ingotsToRemove[ingotNum];
-			ingotsToRemove[ingotNum] -= Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize);
-			decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
-		}
-		ItemStack result = getIngotResult();
-		if(inventoryStacks[2] == null)
-			inventoryStacks[2] = result;
-		else if(inventoryStacks[2].getTagCompound().getInteger("alloy") == result.getTagCompound().getInteger("alloy"))
-			inventoryStacks[2].stackSize += result.stackSize;
-	}
-
-	@Override
-	public int getRKChange() {
-		if(shouldProcess())
-			return (int)(baseRKPerTick * rkPerTickMult / processTimeMult * getIngotsInRecipe());
-		return 0;
 	}
 
 	@Override

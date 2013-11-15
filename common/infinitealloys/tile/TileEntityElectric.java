@@ -29,8 +29,6 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	/** The RK storage unit that this machine supplies power to or receives power from */
 	public TEMEnergyStorage powerStorageUnit;
 
-	// ---BEGIN GENERAL FUNCTIONS---
-
 	public TileEntityElectric(int upgradeSlotIndex) {
 		this();
 		this.upgradeSlotIndex = upgradeSlotIndex;
@@ -75,10 +73,6 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 		return 0;
 	}
 
-	public void handlePacketDataFromServer(int processProgress) {
-		this.processProgress = processProgress;
-	}
-
 	@SideOnly(Side.CLIENT)
 	public int getProcessProgressScaled(int scale) {
 		return processProgress * scale / ticksToProcess;
@@ -96,5 +90,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 		tagCompound.setInteger("ProcessProgress", processProgress);
 	}
 
-	// ---END GENERAL FUNCTIONS---
+	public void handlePacketDataFromServer(int processProgress) {
+		this.processProgress = processProgress;
+	}
 }

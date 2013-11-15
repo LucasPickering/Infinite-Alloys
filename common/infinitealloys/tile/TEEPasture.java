@@ -49,11 +49,6 @@ public class TEEPasture extends TileEntityElectric {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return super.isItemValidForSlot(slot, itemstack) || MachineHelper.stackValidForSlot(MachineHelper.PASTURE, slot, itemstack);
-	}
-
-	@Override
 	public boolean shouldProcess() {
 		return true;
 	}

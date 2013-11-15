@@ -28,11 +28,6 @@ public class TEEAnalyzer extends TileEntityElectric {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return super.isItemValidForSlot(slot, itemstack) || MachineHelper.stackValidForSlot(MachineHelper.ANALYZER, slot, itemstack);
-	}
-
-	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		if(inventoryStacks[0] == null && inventoryStacks[1] != null)

@@ -48,25 +48,6 @@ public class TEEXray extends TileEntityElectric {
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return super.isItemValidForSlot(slot, itemstack) || MachineHelper.stackValidForSlot(MachineHelper.XRAY, slot, itemstack);
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tagCompound) {
-		super.readFromNBT(tagCompound);
-		// True if there were blocks before to be restored, false if it was empty
-		shouldSearch = tagCompound.getBoolean("ShouldSearch");
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound tagCompound) {
-		super.writeToNBT(tagCompound);
-		// True if there are blocks on the GUI, false if there are no blocks
-		tagCompound.setBoolean("ShouldSearch", getDetectedBlocks().size() > 0);
-	}
-
-	@Override
 	public void updateEntity() {
 		super.updateEntity();
 		if(inventoryStacks[0] == null) {
@@ -78,8 +59,18 @@ public class TEEXray extends TileEntityElectric {
 			search();
 	}
 
-	/** Perform a search for the target block. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a tick, then saves its
-	 * place and picks up where it left off next tick. This eliminates stutter during searches. */
+	@Override
+	public boolean shouldProcess() {
+		return searchingClient;
+	}
+
+	@Override
+	public void finishProcess() {
+		searchingClient = false;
+	}
+
+	/** Perform a search for the target block. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a tick, then saves
+	 * its place and picks up where it left off next tick. This eliminates stutter during searches. */
 	private void search() {
 		// If there is no target block to search for, return
 		if(inventoryStacks[0] == null)
@@ -143,18 +134,22 @@ public class TEEXray extends TileEntityElectric {
 		detectedBlocks.add(p);
 	}
 
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		// True if there were blocks before to be restored, false if it was empty
+		shouldSearch = tagCompound.getBoolean("ShouldSearch");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		// True if there are blocks on the GUI, false if there are no blocks
+		tagCompound.setBoolean("ShouldSearch", getDetectedBlocks().size() > 0);
+	}
+
 	public void handlePacketDataFromClient(boolean searching) {
 		this.searchingClient = searching;
-	}
-
-	@Override
-	public boolean shouldProcess() {
-		return searchingClient;
-	}
-
-	@Override
-	public void finishProcess() {
-		searchingClient = false;
 	}
 
 	@Override

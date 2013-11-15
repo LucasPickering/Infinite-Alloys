@@ -9,8 +9,6 @@ public class TEEGenerator extends TileEntityElectric {
 	/** The ratio between how long an item will burn in a furnace and how long it will burn in the generator. Furnace is numerator, generator is demoninator. */
 	private final float FURNACE_TO_GENERATOR_TICK_RATIO = 2.0F;
 
-	// ---BEGIN GENERAL FUNCTIONS---
-
 	public TEEGenerator(int facing) {
 		this();
 		front = facing;
@@ -46,9 +44,6 @@ public class TEEGenerator extends TileEntityElectric {
 		}
 	}
 
-	// ---END GENERAL FUNCTIONS
-	// ---BEGIN UPGRADE FUNCTIONS---
-
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(MachineHelper.SPEED2))
@@ -83,6 +78,4 @@ public class TEEGenerator extends TileEntityElectric {
 		validUpgrades.add(MachineHelper.CAPACITY2);
 		validUpgrades.add(MachineHelper.WIRELESS);
 	}
-
-	// ---END UPGRADE FUNCTIONS---
 }

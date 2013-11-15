@@ -45,8 +45,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	/** The size limit for one stack in this machine */
 	protected int stackLimit = 64;
 
-	// ---BEGIN GENERAL FUNCTIONS---
-
 	public TileEntityMachine(int upgradeSlotIndex) {
 		this();
 		this.upgradeSlotIndex = upgradeSlotIndex;
@@ -119,9 +117,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		return xCoord == x2 && yCoord == y2 && zCoord == z2;
 	}
 
-	// ---END GENERAL FUNCTIONS---
-	// ---BEGIN INVENTORY FUNCTIONS---
-
 	@Override
 	public String getInvName() {
 		return MachineHelper.MACHINE_NAMES[getID()];
@@ -129,7 +124,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return slot == upgradeSlotIndex && isUpgradeValid(itemstack);
+		return slot == upgradeSlotIndex && isUpgradeValid(itemstack) || MachineHelper.stackValidForSlot(getID(), slot, itemstack);
 	}
 
 	@Override
@@ -223,9 +218,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		}
 	}
 
-	// ---END INVENTORY FUNCTIONS---
-	// ---BEGIN UPGRADE FUNCTIONS---
-
 	public final int getUpgrades() {
 		return upgrades;
 	}
@@ -268,6 +260,4 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public boolean hasUpgrade(int upgrade) {
 		return (upgrades & upgrade) == upgrade;
 	}
-
-	// ---END UPGRADE FUNCTIONS---
 }

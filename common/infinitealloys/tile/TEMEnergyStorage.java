@@ -37,8 +37,6 @@ public class TEMEnergyStorage extends TileEntityMachine {
 	/** Should searching continue, or is it complete. Set this to true to begin a search. */
 	public boolean shouldSearch;
 
-	// ---BEGIN GENERAL FUNCTIONS---
-
 	public TEMEnergyStorage(int facing) {
 		this();
 		front = facing;
@@ -152,9 +150,6 @@ public class TEMEnergyStorage extends TileEntityMachine {
 		return false;
 	}
 
-	// ---END GENERAL FUNCTIONS---
-	// ---BEGIN UPGRADE FUNCTIONS---
-
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(MachineHelper.CAPACITY2))
@@ -189,6 +184,4 @@ public class TEMEnergyStorage extends TileEntityMachine {
 		validUpgrades.add(MachineHelper.RANGE1);
 		validUpgrades.add(MachineHelper.RANGE2);
 	}
-
-	// ---END UPGRADE FUNCTIONS---
 }
