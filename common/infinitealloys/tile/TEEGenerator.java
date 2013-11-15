@@ -16,8 +16,8 @@ public class TEEGenerator extends TileEntityElectric {
 	}
 
 	public TEEGenerator() {
-		super(0);
-		inventoryStacks = new ItemStack[10];
+		super(9);
+		inventoryStacks = new ItemStack[11];
 		baseRKPerTick = 72;
 	}
 

@@ -107,7 +107,7 @@
     <entry key="machineHelp.azOutput.title">Alloy Output</entry>
     <entry key="machineHelp.azOutput.info">Reclaim your alloy after it/nhas been analyzed</entry>
     <entry key="machineHelp.azIngots.title">Alloy Composition</entry>
-    <entry key="machineHelp.azIngots.info">This shows the adjustments/nyou must make to/nachieve the next useful alloy/n /nUseful alloys are discovered/nin order</entry>
+    <entry key="machineHelp.azIngots.info">This shows the adjustments/nyou must make to/nachieve the next useful alloy/n /nUseful alloys are discovered/nin order, i.e. you must find/nthe first, then the second,/nand so on</entry>
    
     <entry key="machineHelp.prInput.title">Book Input</entry>
     <entry key="machineHelp.prInput.info">Place a book here to make a/ncopy of it</entry>

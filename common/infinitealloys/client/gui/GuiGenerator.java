@@ -8,7 +8,8 @@ public class GuiGenerator extends GuiElectric {
 	public TEEGenerator teg;
 
 	public GuiGenerator(InventoryPlayer inventoryPlayer, TEEGenerator tileEntity) {
-		super(176, 176, inventoryPlayer, tileEntity);
+		super(214, 176, inventoryPlayer, tileEntity);
 		teg = tileEntity;
+		progressBar.setLocation(71, 39);
 	}
 }
