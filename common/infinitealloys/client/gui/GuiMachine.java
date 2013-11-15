@@ -16,6 +16,7 @@ public abstract class GuiMachine extends GuiUpgradable {
 	static final Rectangle CHECK = new Rectangle(42, 24, 16, 16);
 	static final Rectangle BLOCK_BG_OFF = new Rectangle(58, 24, 36, 18);
 	static final Rectangle BLOCK_BG_ON = new Rectangle(94, 24, 36, 18);
+	static final Rectangle FLAME = new Rectangle(34, 42, 14, 14);
 
 	/** Coordinates of the progress bar texture, changes by machine but still otherwise */
 	protected java.awt.Point progressBar = new java.awt.Point();
@@ -23,7 +24,7 @@ public abstract class GuiMachine extends GuiUpgradable {
 	protected TileEntityMachine tem;
 
 	public GuiMachine(int xSize, int ySize, InventoryPlayer inventoryPlayer, TileEntityMachine tileEntity) {
-		super(xSize, ySize, inventoryPlayer,tileEntity);
+		super(xSize, ySize, inventoryPlayer, tileEntity);
 		tem = tileEntity;
 	}
 
@@ -50,8 +51,7 @@ public abstract class GuiMachine extends GuiUpgradable {
 
 		// Draw the progress bar overlay
 		if(tem.ticksToProcess > 0)
-			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, tem.getProcessProgressScaled(PROGRESS_BAR.width),
-					PROGRESS_BAR.height);
+			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, tem.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);

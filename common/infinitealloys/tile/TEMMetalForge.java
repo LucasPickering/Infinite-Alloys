@@ -25,7 +25,6 @@ public class TEMMetalForge extends TileEntityMachine {
 		super(1);
 		inventoryStacks = new ItemStack[21];
 		baseRKPerTick = -18;
-		ticksToProcess = 12800;
 	}
 
 	@Override

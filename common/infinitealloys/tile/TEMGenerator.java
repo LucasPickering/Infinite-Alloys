@@ -1,10 +1,12 @@
 package infinitealloys.tile;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
 
 public class TEMGenerator extends TileEntityMachine {
 
-	private final float FURNACE_FUEL_TO_RK_RATIO = 9 / 25;
+	/** The ratio between how long an item will burn in a furnace and how long it will burn in the generator. Furnace is numerator, generator is demoninator. */
+	private final float FURNACE_TO_GENERATOR_TICK_RATIO = 2.0F;
 
 	// ---BEGIN GENERAL FUNCTIONS---
 
@@ -16,8 +18,7 @@ public class TEMGenerator extends TileEntityMachine {
 	public TEMGenerator() {
 		super(0);
 		inventoryStacks = new ItemStack[10];
-		baseRKPerTick = 36;
-		ticksToProcess = 12800;
+		baseRKPerTick = 72;
 	}
 
 	@Override
@@ -36,16 +37,12 @@ public class TEMGenerator extends TileEntityMachine {
 	@Override
 	protected void startProcess() {
 		// Take one piece of fuel out of the first slot that has fuel
-		for(int i = 1; i < inventoryStacks.length; i++)
-			if(inventoryStacks[i] != null)
+		for(int i = 1; i < inventoryStacks.length; i++) {
+			if(inventoryStacks[i] != null) {
+				ticksToProcess = (int)(TileEntityFurnace.getItemBurnTime(inventoryStacks[i]) * FURNACE_TO_GENERATOR_TICK_RATIO);
 				decrStackSize(i, 1);
-	}
-
-	@Override
-	public int getRKChange() {
-		if(shouldProcess())
-			return (int)(baseRKPerTick * rkPerTickMult / processTimeMult * FURNACE_FUEL_TO_RK_RATIO);
-		return 0;
+			}
+		}
 	}
 
 	// ---END GENERAL FUNCTIONS
