@@ -1,7 +1,7 @@
 package infinitealloys.inventory;
 
-import infinitealloys.tile.MachineHelper;
 import infinitealloys.tile.TEEXray;
+import infinitealloys.util.MachineHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;

@@ -3,6 +3,7 @@ package infinitealloys.tile;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
+import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import net.minecraft.item.ItemStack;

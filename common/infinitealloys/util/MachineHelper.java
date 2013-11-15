@@ -1,4 +1,4 @@
-package infinitealloys.tile;
+package infinitealloys.util;
 
 import infinitealloys.client.gui.GuiAnalyzer;
 import infinitealloys.client.gui.GuiComputer;
@@ -16,8 +16,15 @@ import infinitealloys.inventory.ContainerPrinter;
 import infinitealloys.inventory.ContainerMachine;
 import infinitealloys.inventory.ContainerXray;
 import infinitealloys.item.Items;
-import infinitealloys.util.Consts;
-import infinitealloys.util.Point;
+import infinitealloys.tile.TEEAnalyzer;
+import infinitealloys.tile.TEEGenerator;
+import infinitealloys.tile.TEEMetalForge;
+import infinitealloys.tile.TEEPasture;
+import infinitealloys.tile.TEEPrinter;
+import infinitealloys.tile.TEEXray;
+import infinitealloys.tile.TEMComputer;
+import infinitealloys.tile.TEMEnergyStorage;
+import infinitealloys.tile.TileEntityMachine;
 import java.util.ArrayList;
 import java.util.HashMap;
 import net.minecraft.block.Block;

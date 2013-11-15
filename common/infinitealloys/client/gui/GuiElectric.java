@@ -34,8 +34,9 @@ public abstract class GuiElectric extends GuiMachine {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
 		// Draw the progress info if the mouse is over the progress bar
-		if(mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height))
-			drawTextBox(mouseX, mouseY, new ColoredLine(tem.getProcessProgressScaled(100) + "%", 0xffffff));
+		if(tem.ticksToProcess > 0)
+			if(mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height))
+				drawTextBox(mouseX, mouseY, new ColoredLine(tem.getProcessProgressScaled(100) + "%", 0xffffff));
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);

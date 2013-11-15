@@ -97,8 +97,8 @@
 	<entry key="machineHelp.mfSupply.info">All base metal ingots that are/nused to make the alloy/nare stored here</entry>
 	<entry key="machineHelp.mfPresets.title">Alloy Presets</entry>
 	<entry key="machineHelp.mfPresets.info">Available with an alloy book/n /nUseful alloys are found with the/nanalyzer and can be stored/nand reused/n /nRight and left click to scroll</entry>
-	<entry key="machineHelp.mfIngots.title">Alloy Selection</entry>
-	<entry key="machineHelp.mfIngots.info">The amount of each metal/nto use in the alloy/n /nRight and left click to/nchange amounts</entry>
+	<entry key="machineHelp.mfSelection.title">Alloy Selection</entry>
+	<entry key="machineHelp.mfSelection.info">The amount of each metal/nto use in the alloy/n /nRight and left click to/nchange amounts</entry>
 
 	<entry key="machineHelp.azBook.title">Alloy Book</entry>
     <entry key="machineHelp.azBook.info">Place an alloy book here to/nsave the composition of the/ningot if it is useful/n /nIt can then be used in the/nmetal forge</entry>
@@ -122,4 +122,10 @@
     <entry key="machineHelp.xrSearch.info">Start the search for ores/n /nThis is be long and will use a/nlot of energy</entry>
     <entry key="machineHelp.xrResults.title">Search Results</entry>
     <entry key="machineHelp.xrResults.info">Ores found in the search will/nappear here</entry>
+    
+    <entry key="machineHelp.psCreatures.title">Creature Selections</entry>
+    <entry key="machineHelp.psCreatures.info">Each type of creature can/nbe unaffected by this/nmachine, attracted to it, or/nrepelled by it</entry>
+    
+    <entry key="machineHelp.geSupply.title">Fuel Supply</entry>
+    <entry key="machineHelp.geSupply.info">Fuel is placed in here/nThis uses the same fuel items/nas the vanilla furnace</entry>
 </properties>

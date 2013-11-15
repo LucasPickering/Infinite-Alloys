@@ -1,6 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.util.Consts;
+import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.monster.EntityCreeper;

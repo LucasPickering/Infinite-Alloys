@@ -1,6 +1,6 @@
 package infinitealloys.inventory;
 
-import infinitealloys.tile.MachineHelper;
+import infinitealloys.util.MachineHelper;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -12,7 +12,7 @@ public class SlotMachine extends Slot {
 
 	/** @param temID The ID number for the type of machine that this slot is in
 	 * @param index The number that refers to the slot in the array of slots that make up the container
-	 * @see {@link infinitealloys.tile.MachineHelper MachineHelper} for the ID constants */
+	 * @see {@link infinitealloys.util.MachineHelper MachineHelper} for the ID constants */
 	public SlotMachine(IInventory inventory, int temID, int index, int x, int y) {
 		super(inventory, index, x, y);
 		this.temID = temID;

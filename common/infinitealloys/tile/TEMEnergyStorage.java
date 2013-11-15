@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 				connectedMachines.remove(p);
 	}
 
-	/** Perform a search for machines that produce/consume power. This checks {@link infinitealloys.tile.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a
+	/** Perform a search for machines that produce/consume power. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a
 	 * tick, then saves its place and picks up where it left off next tick, which eliminates stutter during searches. */
 	private void search() {
 		// The amount of blocks that have been iterated over this tick. When this reaches TEHelper.SEARCH_PER_TICK, the loops break

@@ -1,6 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.util.Funcs;
+import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
@@ -77,7 +78,7 @@ public class TEEXray extends TileEntityElectric {
 			search();
 	}
 
-	/** Perform a search for the target block. This checks {@link infinitealloys.tile.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a tick, then saves its
+	/** Perform a search for the target block. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a tick, then saves its
 	 * place and picks up where it left off next tick. This eliminates stutter during searches. */
 	private void search() {
 		// If there is no target block to search for, return

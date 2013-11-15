@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.util.MachineHelper;
 import net.minecraft.item.ItemStack;
 
 public class TEEPrinter extends TileEntityElectric {

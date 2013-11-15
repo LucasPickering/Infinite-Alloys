@@ -4,6 +4,7 @@ import infinitealloys.block.BlockMachine;
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
+import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
 import java.util.Random;
 import net.minecraft.entity.item.EntityItem;
@@ -56,7 +57,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		updateUpgrades();
 	}
 
-	/** Get the integer from {@link MachineHelper} that corresponds to this machine */
+	/** Get the integer from {@link infinitealloys.util.MachineHelper MachineHelper} that corresponds to this machine */
 	public abstract int getID();
 
 	@Override
@@ -253,7 +254,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	/** Determines if the given itemstack is a valid upgrade for the machine
 	 * 
-	 * @param ItemStack for upgrade item with a binary upgrade damage value (see {@link infinitealloys.tile.MachineHelper TEHelper} for upgrade numbers)
+	 * @param ItemStack for upgrade item with a binary upgrade damage value (see {@link infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
 	 * @return true if valid */
 	public final boolean isUpgradeValid(ItemStack upgrade) {
 		int upg = (int)Math.pow(2, upgrade.getItemDamage());
@@ -262,7 +263,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	/** Does the machine have the upgrade
 	 * 
-	 * @param binary upgrade damage value (see {@link infinitealloys.tile.MachineHelper TEHelper} for upgrade numbers)
+	 * @param binary upgrade damage value (see {@link infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
 	 * @return true if the machine has the upgrade */
 	public boolean hasUpgrade(int upgrade) {
 		return (upgrades & upgrade) == upgrade;
