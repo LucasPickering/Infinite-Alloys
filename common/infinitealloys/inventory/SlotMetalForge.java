@@ -1,23 +1,15 @@
 package infinitealloys.inventory;
 
-import infinitealloys.tile.TEHelper;
 import infinitealloys.tile.TEMMetalForge;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
-public class SlotMetalForge extends Slot {
+public class SlotMetalForge extends SlotUpgradable {
 
 	private int slotIndex;
 
-	public SlotMetalForge(IInventory inventory, int index, int x, int y) {
-		super(inventory, index, x, y);
+	public SlotMetalForge(IInventory inventory, int index, int x, int y, int teuID) {
+		super(inventory, teuID, index, x, y);
 		slotIndex = index;
-	}
-
-	@Override
-	public boolean isItemValid(ItemStack itemstack) {
-		return TEHelper.stackValidForSlot(TEHelper.METAL_FORGE, slotIndex, itemstack);
 	}
 
 	@Override

@@ -35,6 +35,7 @@ public class TEMGenerator extends TileEntityMachine {
 
 	@Override
 	protected void startProcess() {
+		// Take one piece of fuel out of the first slot that has fuel
 		for(int i = 1; i < inventoryStacks.length; i++)
 			if(inventoryStacks[i] != null)
 				decrStackSize(i, 1);

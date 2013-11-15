@@ -14,9 +14,9 @@ public class ContainerPrinter extends ContainerUpgradable {
 	public ContainerPrinter(InventoryPlayer inventoryPlayer, TEMPrinter tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
-		addSlotToContainer(new SlotPrinter(inventory, 0, 12, 44));
-		addSlotToContainer(new SlotPrinter(inventory, 1, 80, 44));
-		addSlotToContainer(new SlotPrinter(inventory, 2, 148, 44));
+		addSlotToContainer(new SlotUpgradable(inventory, inventory.getID(), 0, 12, 44));
+		addSlotToContainer(new SlotUpgradable(inventory, inventory.getID(), 1, 80, 44));
+		addSlotToContainer(new SlotUpgradable(inventory, inventory.getID(), 2, 148, 44));
 		addSlotToContainer(new SlotUpgrade(inventory, 3, 148, 6));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)

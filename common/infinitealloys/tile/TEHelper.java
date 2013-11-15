@@ -148,6 +148,12 @@ public class TEHelper {
 		return -1;
 	}
 
+	/** Get a Container instance for a specific TileEntityUpgradable
+	 * 
+	 * @param teuID The numerical ID for the TEU, see the TEU ID constants in this class
+	 * @param inventoryPlayer An instance of InventoryPlayer (not used, just passed through)
+	 * @param teu A TileEntityUpgradable instance to be casted and passed to the Container constructor
+	 * @return A new instance of a Container class that extends ContainerUpgradable */
 	public static ContainerUpgradable getContainerForTEU(int teuID, InventoryPlayer inventoryPlayer, TileEntityUpgradable teu) {
 		switch(teuID) {
 			case COMPUTER:
@@ -170,6 +176,12 @@ public class TEHelper {
 		return null;
 	}
 
+	/** Get a GUI instance for a specific TileEntityUpgradable
+	 * 
+	 * @param teuID The numerical ID for the TEU, see the TEU ID constants in this class
+	 * @param inventoryPlayer An instance of InventoryPlayer (not used, just passed through)
+	 * @param teu A TileEntityUpgradable instance to be casted and passed to the GUI constructor
+	 * @return A new instance of a GUI class that extends GuiUpgradable */
 	public static GuiUpgradable getGuiForTEU(int teuID, InventoryPlayer inventoryPlayer, TileEntityUpgradable teu) {
 		switch(teuID) {
 			case COMPUTER:
@@ -192,8 +204,9 @@ public class TEHelper {
 		return null;
 	}
 
-	public static boolean stackValidForSlot(int type, int index, ItemStack itemstack) {
-		switch(type) {
+	public static boolean stackValidForSlot(int teuID, int index, ItemStack itemstack) {
+		// Switch first based on the type of TEU, then based on the index of the slot. If a TEU is not in this switch, it always returns false, e.g. Pasture
+		switch(teuID) {
 			case METAL_FORGE:
 				switch(index) {
 					case 0:
@@ -210,9 +223,8 @@ public class TEHelper {
 						return itemstack.itemID == Items.alloyIngot.itemID && itemstack.hasTagCompound();
 					case 2:
 						return itemstack.itemID == Items.alloyBook.itemID;
-					default:
-						return false;
 				}
+				break;
 			case PRINTER:
 				switch(index) {
 					case 0:
@@ -220,15 +232,10 @@ public class TEHelper {
 								&& itemstack.hasTagCompound();
 					case 1:
 						return itemstack.itemID == Item.book.itemID;
-					default:
-						return false;
 				}
+				break;
 			case XRAY:
 				return TEHelper.isDetectable(itemstack);
-			case PASTURE:
-				return false;
-			case ENERGY_STORAGE:
-				return false;
 			case GENERATOR:
 				return TileEntityFurnace.isItemFuel(itemstack);
 		}

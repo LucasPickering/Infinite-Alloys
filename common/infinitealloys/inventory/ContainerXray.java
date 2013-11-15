@@ -14,7 +14,7 @@ public class ContainerXray extends ContainerUpgradable {
 	public ContainerXray(InventoryPlayer inventoryPlayer, TEMXray tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
-		addSlotToContainer(new SlotXray(inventory, 0, 32, 6));
+		addSlotToContainer(new SlotUpgradable(inventory, inventory.getID(), 0, 32, 6));
 		addSlotToContainer(new SlotUpgrade(inventory, 1, 168, 6));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)

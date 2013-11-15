@@ -1,25 +1,18 @@
 package infinitealloys.inventory;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.tile.TEHelper;
 import infinitealloys.util.Consts;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class SlotAnalyzer extends Slot {
+public class SlotAnalyzer extends SlotUpgradable {
 
 	private int slotIndex;
 
-	public SlotAnalyzer(IInventory inventory, int index, int x, int y) {
-		super(inventory, index, x, y);
+	public SlotAnalyzer(IInventory inventory, int index, int x, int y, int teuID) {
+		super(inventory, teuID, index, x, y);
 		slotIndex = index;
-	}
-
-	@Override
-	public boolean isItemValid(ItemStack itemstack) {
-		return TEHelper.stackValidForSlot(TEHelper.ANALYZER, slotIndex, itemstack);
 	}
 
 	@Override
