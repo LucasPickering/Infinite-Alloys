@@ -3,7 +3,7 @@ package infinitealloys.client.gui;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.WorldData;
 import infinitealloys.item.Items;
-import infinitealloys.tile.TEMAnalyzer;
+import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import java.awt.Rectangle;
@@ -11,11 +11,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
-public class GuiAnalyzer extends GuiMachine {
+public class GuiAnalyzer extends GuiElectric {
 
-	private TEMAnalyzer tea;
+	private TEEAnalyzer tea;
 
-	public GuiAnalyzer(InventoryPlayer inventoryPlayer, TEMAnalyzer tileEntity) {
+	public GuiAnalyzer(InventoryPlayer inventoryPlayer, TEEAnalyzer tileEntity) {
 		super(216, 166, inventoryPlayer,tileEntity );
 		tea = tileEntity;
 		progressBar.setLocation(54, 57);

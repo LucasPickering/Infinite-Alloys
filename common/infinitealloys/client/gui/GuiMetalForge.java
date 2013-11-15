@@ -2,7 +2,7 @@ package infinitealloys.client.gui;
 
 import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
-import infinitealloys.tile.TEMMetalForge;
+import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -10,11 +10,11 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
-public class GuiMetalForge extends GuiMachine {
+public class GuiMetalForge extends GuiElectric {
 
-	private TEMMetalForge temf;
+	private TEEMetalForge temf;
 
-	public GuiMetalForge(InventoryPlayer inventoryPlayer, TEMMetalForge tileEntity) {
+	public GuiMetalForge(InventoryPlayer inventoryPlayer, TEEMetalForge tileEntity) {
 		super(176, 216, inventoryPlayer, tileEntity);
 		temf = tileEntity;
 		progressBar.setLocation(31, 14);

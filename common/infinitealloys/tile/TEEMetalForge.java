@@ -8,7 +8,7 @@ import java.util.Arrays;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class TEMMetalForge extends TileEntityMachine {
+public class TEEMetalForge extends TileEntityElectric {
 
 	/** An array for the "stack sizes" of each ingot in the recipe setting */
 	public byte[] recipeAmts = new byte[Consts.METAL_COUNT];
@@ -16,12 +16,12 @@ public class TEMMetalForge extends TileEntityMachine {
 	private byte[] lastRecipeAmts = new byte[Consts.METAL_COUNT];
 	public byte presetSelection = -1;
 
-	public TEMMetalForge(int facing) {
+	public TEEMetalForge(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TEMMetalForge() {
+	public TEEMetalForge() {
 		super(1);
 		inventoryStacks = new ItemStack[21];
 		baseRKPerTick = -18;
@@ -29,12 +29,12 @@ public class TEMMetalForge extends TileEntityMachine {
 
 	@Override
 	public int getID() {
-		return TEHelper.METAL_FORGE;
+		return MachineHelper.METAL_FORGE;
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return super.isItemValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.METAL_FORGE, slot, itemstack);
+		return super.isItemValidForSlot(slot, itemstack) || MachineHelper.stackValidForSlot(MachineHelper.METAL_FORGE, slot, itemstack);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class TEMMetalForge extends TileEntityMachine {
 	private int[] getIngotAmts() {
 		int[] amts = new int[Consts.METAL_COUNT];
 		for(int slot : getSlotsWithIngot())
-			amts[TEHelper.getIngotNum(inventoryStacks[slot])] += inventoryStacks[slot].stackSize;
+			amts[MachineHelper.getIngotNum(inventoryStacks[slot])] += inventoryStacks[slot].stackSize;
 		return amts;
 	}
 
@@ -125,7 +125,7 @@ public class TEMMetalForge extends TileEntityMachine {
 	protected void finishProcess() {
 		byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
 		for(int slot : getSlotsWithIngot()) {
-			int ingotNum = TEHelper.getIngotNum(inventoryStacks[slot]);
+			int ingotNum = MachineHelper.getIngotNum(inventoryStacks[slot]);
 			int ingots = ingotsToRemove[ingotNum];
 			ingotsToRemove[ingotNum] -= Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize);
 			decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
@@ -146,23 +146,23 @@ public class TEMMetalForge extends TileEntityMachine {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(TEHelper.SPEED2))
+		if(hasUpgrade(MachineHelper.SPEED2))
 			processTimeMult = 0.5F;
-		else if(hasUpgrade(TEHelper.SPEED1))
+		else if(hasUpgrade(MachineHelper.SPEED1))
 			processTimeMult = 0.75F;
 		else
 			processTimeMult = 1.0F;
 
-		if(hasUpgrade(TEHelper.EFFICIENCY2))
+		if(hasUpgrade(MachineHelper.EFFICIENCY2))
 			rkPerTickMult = 0.5F;
-		else if(hasUpgrade(TEHelper.EFFICIENCY1))
+		else if(hasUpgrade(MachineHelper.EFFICIENCY1))
 			rkPerTickMult = 0.75F;
 		else
 			rkPerTickMult = 1.0F;
 
-		if(hasUpgrade(TEHelper.CAPACITY2))
+		if(hasUpgrade(MachineHelper.CAPACITY2))
 			stackLimit = 64;
-		else if(hasUpgrade(TEHelper.CAPACITY1))
+		else if(hasUpgrade(MachineHelper.CAPACITY1))
 			stackLimit = 48;
 		else
 			stackLimit = 32;
@@ -170,12 +170,12 @@ public class TEMMetalForge extends TileEntityMachine {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(TEHelper.SPEED1);
-		validUpgrades.add(TEHelper.SPEED2);
-		validUpgrades.add(TEHelper.EFFICIENCY1);
-		validUpgrades.add(TEHelper.EFFICIENCY2);
-		validUpgrades.add(TEHelper.CAPACITY1);
-		validUpgrades.add(TEHelper.CAPACITY2);
-		validUpgrades.add(TEHelper.WIRELESS);
+		validUpgrades.add(MachineHelper.SPEED1);
+		validUpgrades.add(MachineHelper.SPEED2);
+		validUpgrades.add(MachineHelper.EFFICIENCY1);
+		validUpgrades.add(MachineHelper.EFFICIENCY2);
+		validUpgrades.add(MachineHelper.CAPACITY1);
+		validUpgrades.add(MachineHelper.CAPACITY2);
+		validUpgrades.add(MachineHelper.WIRELESS);
 	}
 }

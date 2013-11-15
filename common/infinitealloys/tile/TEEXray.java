@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TEMXray extends TileEntityMachine {
+public class TEEXray extends TileEntityElectric {
 
 	/** A list of the detected blocks, x and z are relative to the machine, y is absolute */
 	private ArrayList<Point> detectedBlocks = new ArrayList<Point>();
@@ -28,12 +28,12 @@ public class TEMXray extends TileEntityMachine {
 	/** Is it searching client-side. Does not necessarily mean the x-ray is running a search, only that the user sees a loading progress bar */
 	public boolean searchingClient;
 
-	public TEMXray(int facing) {
+	public TEEXray(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TEMXray() {
+	public TEEXray() {
 		super(1);
 		inventoryStacks = new ItemStack[2];
 		stackLimit = 1;
@@ -43,12 +43,12 @@ public class TEMXray extends TileEntityMachine {
 
 	@Override
 	public int getID() {
-		return TEHelper.XRAY;
+		return MachineHelper.XRAY;
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return super.isItemValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.XRAY, slot, itemstack);
+		return super.isItemValidForSlot(slot, itemstack) || MachineHelper.stackValidForSlot(MachineHelper.XRAY, slot, itemstack);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class TEMXray extends TileEntityMachine {
 			search();
 	}
 
-	/** Perform a search for the target block. This checks {@link infinitealloys.tile.TEHelper#SEARCH_PER_TICK a set amount of} blocks in a tick, then saves its
+	/** Perform a search for the target block. This checks {@link infinitealloys.tile.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a tick, then saves its
 	 * place and picks up where it left off next tick. This eliminates stutter during searches. */
 	private void search() {
 		// If there is no target block to search for, return
@@ -112,7 +112,7 @@ public class TEMXray extends TileEntityMachine {
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
 					// continued next tick.
-					if(++blocksSearched >= TEHelper.SEARCH_PER_TICK) {
+					if(++blocksSearched >= MachineHelper.SEARCH_PER_TICK) {
 						lastSearch.set(x, y, z);
 						return;
 					}
@@ -158,23 +158,23 @@ public class TEMXray extends TileEntityMachine {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(TEHelper.SPEED2))
+		if(hasUpgrade(MachineHelper.SPEED2))
 			processTimeMult = 0.5F;
-		else if(hasUpgrade(TEHelper.SPEED1))
+		else if(hasUpgrade(MachineHelper.SPEED1))
 			processTimeMult = 0.75F;
 		else
 			processTimeMult = 1.0F;
 
-		if(hasUpgrade(TEHelper.EFFICIENCY2))
+		if(hasUpgrade(MachineHelper.EFFICIENCY2))
 			rkPerTickMult = 0.5F;
-		else if(hasUpgrade(TEHelper.EFFICIENCY1))
+		else if(hasUpgrade(MachineHelper.EFFICIENCY1))
 			rkPerTickMult = 0.75F;
 		else
 			rkPerTickMult = 1.0F;
 
-		if(hasUpgrade(TEHelper.RANGE2))
+		if(hasUpgrade(MachineHelper.RANGE2))
 			range = 10;
-		else if(hasUpgrade(TEHelper.RANGE1))
+		else if(hasUpgrade(MachineHelper.RANGE1))
 			range = 8;
 		else
 			range = 5;
@@ -183,12 +183,12 @@ public class TEMXray extends TileEntityMachine {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(TEHelper.SPEED1);
-		validUpgrades.add(TEHelper.SPEED2);
-		validUpgrades.add(TEHelper.EFFICIENCY1);
-		validUpgrades.add(TEHelper.EFFICIENCY2);
-		validUpgrades.add(TEHelper.RANGE1);
-		validUpgrades.add(TEHelper.RANGE2);
-		validUpgrades.add(TEHelper.WIRELESS);
+		validUpgrades.add(MachineHelper.SPEED1);
+		validUpgrades.add(MachineHelper.SPEED2);
+		validUpgrades.add(MachineHelper.EFFICIENCY1);
+		validUpgrades.add(MachineHelper.EFFICIENCY2);
+		validUpgrades.add(MachineHelper.RANGE1);
+		validUpgrades.add(MachineHelper.RANGE2);
+		validUpgrades.add(MachineHelper.WIRELESS);
 	}
 }

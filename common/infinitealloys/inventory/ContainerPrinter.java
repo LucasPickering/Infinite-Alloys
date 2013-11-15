@@ -1,22 +1,22 @@
 package infinitealloys.inventory;
 
 import infinitealloys.item.Items;
-import infinitealloys.tile.TEMPrinter;
+import infinitealloys.tile.TEEPrinter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerPrinter extends ContainerUpgradable {
+public class ContainerPrinter extends ContainerMachine {
 
-	public TEMPrinter inventory;
+	public TEEPrinter inventory;
 
-	public ContainerPrinter(InventoryPlayer inventoryPlayer, TEMPrinter tileEntity) {
+	public ContainerPrinter(InventoryPlayer inventoryPlayer, TEEPrinter tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
-		addSlotToContainer(new SlotUpgradable(inventory, inventory.getID(), 0, 12, 44));
-		addSlotToContainer(new SlotUpgradable(inventory, inventory.getID(), 1, 80, 44));
-		addSlotToContainer(new SlotUpgradable(inventory, inventory.getID(), 2, 148, 44));
+		addSlotToContainer(new SlotMachine(inventory, inventory.getID(), 0, 12, 44));
+		addSlotToContainer(new SlotMachine(inventory, inventory.getID(), 1, 80, 44));
+		addSlotToContainer(new SlotMachine(inventory, inventory.getID(), 2, 148, 44));
 		addSlotToContainer(new SlotUpgrade(inventory, 3, 148, 6));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)

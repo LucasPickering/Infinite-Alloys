@@ -2,14 +2,14 @@ package infinitealloys.tile;
 
 import net.minecraft.item.ItemStack;
 
-public class TEMPrinter extends TileEntityMachine {
+public class TEEPrinter extends TileEntityElectric {
 
-	public TEMPrinter(int facing) {
+	public TEEPrinter(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TEMPrinter() {
+	public TEEPrinter() {
 		super(3);
 		inventoryStacks = new ItemStack[4];
 		ticksToProcess = 200;
@@ -18,12 +18,12 @@ public class TEMPrinter extends TileEntityMachine {
 
 	@Override
 	public int getID() {
-		return TEHelper.PRINTER;
+		return MachineHelper.PRINTER;
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return super.isItemValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.PRINTER, slot, itemstack);
+		return super.isItemValidForSlot(slot, itemstack) || MachineHelper.stackValidForSlot(MachineHelper.PRINTER, slot, itemstack);
 	}
 
 	@Override
@@ -49,16 +49,16 @@ public class TEMPrinter extends TileEntityMachine {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(TEHelper.SPEED2))
+		if(hasUpgrade(MachineHelper.SPEED2))
 			processTimeMult = 0.5F;
-		else if(hasUpgrade(TEHelper.SPEED1))
+		else if(hasUpgrade(MachineHelper.SPEED1))
 			processTimeMult = 0.75F;
 		else
 			processTimeMult = 1.0F;
 
-		if(hasUpgrade(TEHelper.EFFICIENCY2))
+		if(hasUpgrade(MachineHelper.EFFICIENCY2))
 			rkPerTickMult = 0.5F;
-		else if(hasUpgrade(TEHelper.EFFICIENCY1))
+		else if(hasUpgrade(MachineHelper.EFFICIENCY1))
 			rkPerTickMult = 0.75F;
 		else
 			rkPerTickMult = 1.0F;
@@ -66,12 +66,12 @@ public class TEMPrinter extends TileEntityMachine {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(TEHelper.SPEED1);
-		validUpgrades.add(TEHelper.SPEED2);
-		validUpgrades.add(TEHelper.EFFICIENCY1);
-		validUpgrades.add(TEHelper.EFFICIENCY2);
-		validUpgrades.add(TEHelper.CAPACITY1);
-		validUpgrades.add(TEHelper.CAPACITY2);
-		validUpgrades.add(TEHelper.WIRELESS);
+		validUpgrades.add(MachineHelper.SPEED1);
+		validUpgrades.add(MachineHelper.SPEED2);
+		validUpgrades.add(MachineHelper.EFFICIENCY1);
+		validUpgrades.add(MachineHelper.EFFICIENCY2);
+		validUpgrades.add(MachineHelper.CAPACITY1);
+		validUpgrades.add(MachineHelper.CAPACITY2);
+		validUpgrades.add(MachineHelper.WIRELESS);
 	}
 }

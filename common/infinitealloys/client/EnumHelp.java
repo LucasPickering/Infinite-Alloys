@@ -1,13 +1,13 @@
 package infinitealloys.client;
 
-import infinitealloys.tile.TEMAnalyzer;
-import infinitealloys.tile.TEMMetalForge;
-import infinitealloys.tile.TEMPrinter;
-import infinitealloys.tile.TEMXray;
-import infinitealloys.tile.TEUComputer;
-import infinitealloys.tile.TileEntityUpgradable;
+import infinitealloys.tile.TEEAnalyzer;
+import infinitealloys.tile.TEEMetalForge;
+import infinitealloys.tile.TEEPrinter;
+import infinitealloys.tile.TEEXray;
+import infinitealloys.tile.TEMComputer;
+import infinitealloys.tile.TileEntityMachine;
 
-public enum MachineHelp {
+public enum EnumHelp {
 
 	/* CP - Computer, MF - Metal Forge, AZ - Analyzer, PR - Printer, XR - X-ray, PS - Pasture, GE - Generator, RS - RK Storage */
 
@@ -35,7 +35,7 @@ public enum MachineHelp {
 	/** Height of outline box */
 	public final int h;
 
-	private MachineHelp(String name, int color, int x, int y, int w, int h) {
+	private EnumHelp(String name, int color, int x, int y, int w, int h) {
 		this.name = name;
 		this.color = color;
 		this.x = x;
@@ -44,17 +44,17 @@ public enum MachineHelp {
 		this.h = h;
 	}
 
-	public static MachineHelp[] getBoxesForTEM(TileEntityUpgradable teu) {
-		if(teu instanceof TEUComputer)
-			return new MachineHelp[] { CP_UPGRADE, CP_TAB, CP_ADD };
-		if(teu instanceof TEMMetalForge)
-			return new MachineHelp[] { MF_UPGRADE, MF_PROGRESS, MF_BOOK, MF_OUTPUT, MF_SUPPLY, MF_PRESETS, MF_INGOTS };
-		if(teu instanceof TEMAnalyzer)
-			return new MachineHelp[] { AZ_UPGRADE, AZ_PROGRESS, AZ_BOOK, AZ_INPUT, AZ_OUTPUT, AZ_INGOTS };
-		if(teu instanceof TEMPrinter)
-			return new MachineHelp[] { PR_UPGRADE, PR_PROGRESS, PR_INPUT, PR_SUPPLY, PR_OUTPUT };
-		if(teu instanceof TEMXray)
-			return new MachineHelp[] { XR_UPGRADE, XR_PROGRESS, XR_ORE, XR_SEARCH, XR_RESULTS };
+	public static EnumHelp[] getBoxesForTEM(TileEntityMachine tem) {
+		if(tem instanceof TEMComputer)
+			return new EnumHelp[] { CP_UPGRADE, CP_TAB, CP_ADD };
+		if(tem instanceof TEEMetalForge)
+			return new EnumHelp[] { MF_UPGRADE, MF_PROGRESS, MF_BOOK, MF_OUTPUT, MF_SUPPLY, MF_PRESETS, MF_INGOTS };
+		if(tem instanceof TEEAnalyzer)
+			return new EnumHelp[] { AZ_UPGRADE, AZ_PROGRESS, AZ_BOOK, AZ_INPUT, AZ_OUTPUT, AZ_INGOTS };
+		if(tem instanceof TEEPrinter)
+			return new EnumHelp[] { PR_UPGRADE, PR_PROGRESS, PR_INPUT, PR_SUPPLY, PR_OUTPUT };
+		if(tem instanceof TEEXray)
+			return new EnumHelp[] { XR_UPGRADE, XR_PROGRESS, XR_ORE, XR_SEARCH, XR_RESULTS };
 		return null;
 	}
 }

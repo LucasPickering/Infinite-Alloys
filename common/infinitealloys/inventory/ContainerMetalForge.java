@@ -1,17 +1,17 @@
 package infinitealloys.inventory;
 
-import infinitealloys.tile.TEHelper;
-import infinitealloys.tile.TEMMetalForge;
+import infinitealloys.tile.MachineHelper;
+import infinitealloys.tile.TEEMetalForge;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerMetalForge extends ContainerUpgradable {
+public class ContainerMetalForge extends ContainerMachine {
 
-	public TEMMetalForge inventory;
+	public TEEMetalForge inventory;
 
-	public ContainerMetalForge(InventoryPlayer inventoryPlayer, TEMMetalForge tileEntity) {
+	public ContainerMetalForge(InventoryPlayer inventoryPlayer, TEEMetalForge tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
 		addSlotToContainer(new SlotMetalForge(inventory, 0, 8, 52, inventory.getID()));
@@ -40,7 +40,7 @@ public class ContainerMetalForge extends ContainerUpgradable {
 				stackInSlot.onSlotChange(stackInSlotCopy, itemstack);
 			}
 			else if(slot > 20) {
-				if(TEHelper.isBook(stackInSlotCopy)) {
+				if(MachineHelper.isBook(stackInSlotCopy)) {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}
@@ -48,7 +48,7 @@ public class ContainerMetalForge extends ContainerUpgradable {
 					if(!mergeItemStack(stackInSlotCopy, 1, 2, false))
 						return null;
 				}
-				else if(TEHelper.getIngotNum(stackInSlotCopy) != -1) {
+				else if(MachineHelper.getIngotNum(stackInSlotCopy) != -1) {
 					if(!mergeItemStack(stackInSlotCopy, 3, 20, false))
 						return null;
 				}

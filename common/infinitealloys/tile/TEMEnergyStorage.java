@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-public class TEUEnergyStorage extends TileEntityUpgradable {
+public class TEMEnergyStorage extends TileEntityMachine {
 
 	/** The amount of time, in ticks (20 ticks = 1 second), between each regular search for new machines to connect to. */
 	private final int SEARCH_INTERVAL = 200;
@@ -23,7 +23,7 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 	/** The max range that machines can be added at with the Internet Wand */
 	private int maxRange;
 
-	/** A list of the locations of TileEntityUpgradables that provide power to or consume power from this storage unit */
+	/** A list of the locations of machines that provide power to or consume power from this storage unit */
 	private List<Point> connectedMachines = new ArrayList<Point>();
 
 	/** How many ticks have passed since the last search for machines. When this reaches {@link #SEARCH_INTERVAL the search interval time}, it resets to 0 and a
@@ -38,19 +38,19 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 
 	// ---BEGIN GENERAL FUNCTIONS---
 
-	public TEUEnergyStorage(int facing) {
+	public TEMEnergyStorage(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TEUEnergyStorage() {
+	public TEMEnergyStorage() {
 		super();
 		inventoryStacks = new ItemStack[1];
 	}
 
 	@Override
 	public int getID() {
-		return TEHelper.ENERGY_STORAGE;
+		return MachineHelper.ENERGY_STORAGE;
 	}
 
 	@Override
@@ -69,11 +69,11 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 
 		// If a connected machine no longer exists, remove it from the network
 		for(Point p : connectedMachines)
-			if(!(worldObj.getBlockTileEntity(p.x, p.y, p.z) instanceof TileEntityMachine))
+			if(!(worldObj.getBlockTileEntity(p.x, p.y, p.z) instanceof TileEntityElectric))
 				connectedMachines.remove(p);
 	}
 
-	/** Perform a search for machines that produce/consume power. This checks {@link infinitealloys.tile.TEHelper#SEARCH_PER_TICK a set amount of} blocks in a
+	/** Perform a search for machines that produce/consume power. This checks {@link infinitealloys.tile.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a
 	 * tick, then saves its place and picks up where it left off next tick, which eliminates stutter during searches. */
 	private void search() {
 		// The amount of blocks that have been iterated over this tick. When this reaches TEHelper.SEARCH_PER_TICK, the loops break
@@ -88,12 +88,12 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to a
 					// power storage unit, add it to the power network.
 					TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
-					if(te instanceof TileEntityMachine && ((TileEntityMachine)te).powerStorageUnit == null)
+					if(te instanceof TileEntityElectric && ((TileEntityElectric)te).powerStorageUnit == null)
 						connectedMachines.add(new Point(xCoord + x, yCoord + y, zCoord + z));
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
 					// continued next tick.
-					if(++blocksSearched >= TEHelper.SEARCH_PER_TICK) {
+					if(++blocksSearched >= MachineHelper.SEARCH_PER_TICK) {
 						lastSearch.set(x, y, z);
 						return;
 					}
@@ -107,32 +107,32 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 		shouldSearch = false; // The search is done. Stop running the function until another search is initiated.
 	}
 
-	public boolean addMachine(EntityPlayer player, int teuX, int teuY, int teuZ) {
+	public boolean addMachine(EntityPlayer player, int temX, int temY, int temZ) {
 		for(Point coords : connectedMachines) {
-			if(coords.x == teuX && coords.y == teuY && coords.z == teuZ) {
+			if(coords.x == temX && coords.y == temY && coords.z == temZ) {
 				if(worldObj.isRemote)
 					player.addChatMessage("Error: Machine is already in network");
 				return false;
 			}
 		}
-		if(worldObj.getBlockTileEntity(teuX, teuY, teuZ) == null || !(worldObj.getBlockTileEntity(teuX, teuY, teuZ) instanceof TileEntityMachine)) {
+		if(worldObj.getBlockTileEntity(temX, temY, temZ) == null || !(worldObj.getBlockTileEntity(temX, temY, temZ) instanceof TileEntityElectric)) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Only machines can be powered");
 		}
-		else if(teuX == xCoord && teuY == yCoord && teuZ == zCoord) {
+		else if(temX == xCoord && temY == yCoord && temZ == zCoord) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Cannot add self to network");
 		}
-		else if(new Point(teuX, teuY, teuZ).distanceTo(xCoord, yCoord, zCoord) > maxRange) {
+		else if(new Point(temX, temY, temZ).distanceTo(xCoord, yCoord, zCoord) > maxRange) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Machine out of range");
 		}
-		else if(!((TileEntityUpgradable)worldObj.getBlockTileEntity(teuX, teuY, teuZ)).hasUpgrade(TEHelper.WIRELESS)) {
+		else if(!((TileEntityMachine)worldObj.getBlockTileEntity(temX, temY, temZ)).hasUpgrade(MachineHelper.WIRELESS)) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Block does not have a networking upgrade");
 		}
 		else {
-			connectedMachines.add(new Point(teuX, teuY, teuZ));
+			connectedMachines.add(new Point(temX, temY, temZ));
 			return true;
 		}
 		return false;
@@ -156,18 +156,18 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(TEHelper.CAPACITY2))
+		if(hasUpgrade(MachineHelper.CAPACITY2))
 			maxRK = 400000000; // 400,000,000 (400 million)
-		else if(hasUpgrade(TEHelper.CAPACITY1))
+		else if(hasUpgrade(MachineHelper.CAPACITY1))
 			maxRK = 200000000; // 200,000,000 (200 million)
 		else
 			maxRK = 100000000; // 100,000,000 (100 million)
 
-		if(hasUpgrade(TEHelper.RANGE2)) {
+		if(hasUpgrade(MachineHelper.RANGE2)) {
 			autoSearchRange = 20;
 			maxRange = 60;
 		}
-		else if(hasUpgrade(TEHelper.RANGE1)) {
+		else if(hasUpgrade(MachineHelper.RANGE1)) {
 			autoSearchRange = 15;
 			maxRange = 45;
 		}
@@ -183,10 +183,10 @@ public class TEUEnergyStorage extends TileEntityUpgradable {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(TEHelper.CAPACITY1);
-		validUpgrades.add(TEHelper.CAPACITY2);
-		validUpgrades.add(TEHelper.RANGE1);
-		validUpgrades.add(TEHelper.RANGE2);
+		validUpgrades.add(MachineHelper.CAPACITY1);
+		validUpgrades.add(MachineHelper.CAPACITY2);
+		validUpgrades.add(MachineHelper.RANGE1);
+		validUpgrades.add(MachineHelper.RANGE2);
 	}
 
 	// ---END UPGRADE FUNCTIONS---

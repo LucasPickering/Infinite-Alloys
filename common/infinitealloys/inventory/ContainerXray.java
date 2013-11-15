@@ -1,20 +1,20 @@
 package infinitealloys.inventory;
 
-import infinitealloys.tile.TEHelper;
-import infinitealloys.tile.TEMXray;
+import infinitealloys.tile.MachineHelper;
+import infinitealloys.tile.TEEXray;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerXray extends ContainerUpgradable {
+public class ContainerXray extends ContainerMachine {
 
-	public TEMXray inventory;
+	public TEEXray inventory;
 
-	public ContainerXray(InventoryPlayer inventoryPlayer, TEMXray tileEntity) {
+	public ContainerXray(InventoryPlayer inventoryPlayer, TEEXray tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
-		addSlotToContainer(new SlotUpgradable(inventory, inventory.getID(), 0, 32, 6));
+		addSlotToContainer(new SlotMachine(inventory, inventory.getID(), 0, 32, 6));
 		addSlotToContainer(new SlotUpgrade(inventory, 1, 168, 6));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
@@ -35,7 +35,7 @@ public class ContainerXray extends ContainerUpgradable {
 					return null;
 			}
 			else {
-				if(TEHelper.isDetectable(stackInSlotCopy)) {
+				if(MachineHelper.isDetectable(stackInSlotCopy)) {
 					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
 						return null;
 				}

@@ -6,12 +6,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
-public class SlotAnalyzer extends SlotUpgradable {
+public class SlotAnalyzer extends SlotMachine {
 
 	private int slotIndex;
 
-	public SlotAnalyzer(IInventory inventory, int index, int x, int y, int teuID) {
-		super(inventory, teuID, index, x, y);
+	public SlotAnalyzer(IInventory inventory, int index, int x, int y, int temID) {
+		super(inventory, temID, index, x, y);
 		slotIndex = index;
 	}
 

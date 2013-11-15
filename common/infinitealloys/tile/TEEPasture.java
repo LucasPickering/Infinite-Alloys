@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 
-public class TEMPasture extends TileEntityMachine {
+public class TEEPasture extends TileEntityElectric {
 
 	/** The the mode value for turning the machine off */
 	public static final int MODE_OFF = 0;
@@ -30,12 +30,12 @@ public class TEMPasture extends TileEntityMachine {
 	private byte trapRange;
 	private byte repelRange;
 
-	public TEMPasture(int facing) {
+	public TEEPasture(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TEMPasture() {
+	public TEEPasture() {
 		super(0);
 		inventoryStacks = new ItemStack[1];
 		baseRKPerTick = -4;
@@ -44,12 +44,12 @@ public class TEMPasture extends TileEntityMachine {
 
 	@Override
 	public int getID() {
-		return TEHelper.PASTURE;
+		return MachineHelper.PASTURE;
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return super.isItemValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.PASTURE, slot, itemstack);
+		return super.isItemValidForSlot(slot, itemstack) || MachineHelper.stackValidForSlot(MachineHelper.PASTURE, slot, itemstack);
 	}
 
 	@Override
@@ -117,25 +117,25 @@ public class TEMPasture extends TileEntityMachine {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(TEHelper.EFFICIENCY2))
+		if(hasUpgrade(MachineHelper.EFFICIENCY2))
 			rkPerTickMult = 0.5F;
-		else if(hasUpgrade(TEHelper.EFFICIENCY1))
+		else if(hasUpgrade(MachineHelper.EFFICIENCY1))
 			rkPerTickMult = 0.75F;
 		else
 			rkPerTickMult = 1.0F;
 
-		if(hasUpgrade(TEHelper.CAPACITY2))
+		if(hasUpgrade(MachineHelper.CAPACITY2))
 			maxSpots = 8;
-		else if(hasUpgrade(TEHelper.CAPACITY1))
+		else if(hasUpgrade(MachineHelper.CAPACITY1))
 			maxSpots = 4;
 		else
 			maxSpots = 2;
 
-		if(hasUpgrade(TEHelper.RANGE2)) {
+		if(hasUpgrade(MachineHelper.RANGE2)) {
 			trapRange = 15;
 			repelRange = 24;
 		}
-		else if(hasUpgrade(TEHelper.RANGE1)) {
+		else if(hasUpgrade(MachineHelper.RANGE1)) {
 			trapRange = 10;
 			repelRange = 16;
 		}
@@ -147,13 +147,13 @@ public class TEMPasture extends TileEntityMachine {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(TEHelper.EFFICIENCY1);
-		validUpgrades.add(TEHelper.EFFICIENCY2);
-		validUpgrades.add(TEHelper.CAPACITY1);
-		validUpgrades.add(TEHelper.CAPACITY2);
-		validUpgrades.add(TEHelper.RANGE1);
-		validUpgrades.add(TEHelper.RANGE2);
-		validUpgrades.add(TEHelper.WIRELESS);
+		validUpgrades.add(MachineHelper.EFFICIENCY1);
+		validUpgrades.add(MachineHelper.EFFICIENCY2);
+		validUpgrades.add(MachineHelper.CAPACITY1);
+		validUpgrades.add(MachineHelper.CAPACITY2);
+		validUpgrades.add(MachineHelper.RANGE1);
+		validUpgrades.add(MachineHelper.RANGE2);
+		validUpgrades.add(MachineHelper.WIRELESS);
 	}
 
 	/** Does the pasture have enough space to enable another animal or monster

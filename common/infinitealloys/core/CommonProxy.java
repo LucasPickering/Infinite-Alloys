@@ -14,7 +14,7 @@ import infinitealloys.item.ItemInternetWand;
 import infinitealloys.item.ItemMulti;
 import infinitealloys.item.ItemUpgrade;
 import infinitealloys.item.Items;
-import infinitealloys.tile.TEHelper;
+import infinitealloys.tile.MachineHelper;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import net.minecraft.block.Block;
@@ -113,22 +113,22 @@ public class CommonProxy {
 	}
 
 	public void initTileEntities() {
-		for(int i = 0; i < Consts.TEU_COUNT; i++)
-			GameRegistry.registerTileEntity(TEHelper.TEU_CLASSES[i], TEHelper.TEU_NAMES[i]);
-		TEHelper.addDetectable(Block.oreCoal, 1);
-		TEHelper.addDetectable(Block.oreIron, 2);
-		TEHelper.addDetectable(Block.oreGold, 6);
-		TEHelper.addDetectable(Block.oreDiamond, 8);
-		TEHelper.addDictDetectables("oreZinc", 3);
-		TEHelper.addDictDetectables("oreMagnesium", 4);
-		TEHelper.addDictDetectables("oreScandium", 5);
-		TEHelper.addDictDetectables("oreTantalum", 6);
-		TEHelper.addDetectable(Blocks.ore, 4, 7);
-		TEHelper.addDetectable(Blocks.ore, 5, 8);
-		TEHelper.addDetectable(Blocks.ore, 6, 9);
-		TEHelper.addDetectable(Blocks.ore, 7, 10);
-		TEHelper.addDictDetectables("oreCopper", 2);
-		TEHelper.addDictDetectables("oreTin", 2);
+		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
+			GameRegistry.registerTileEntity(MachineHelper.MACHINE_CLASSES[i], MachineHelper.MACHINE_NAMES[i]);
+		MachineHelper.addDetectable(Block.oreCoal, 1);
+		MachineHelper.addDetectable(Block.oreIron, 2);
+		MachineHelper.addDetectable(Block.oreGold, 6);
+		MachineHelper.addDetectable(Block.oreDiamond, 8);
+		MachineHelper.addDictDetectables("oreZinc", 3);
+		MachineHelper.addDictDetectables("oreMagnesium", 4);
+		MachineHelper.addDictDetectables("oreScandium", 5);
+		MachineHelper.addDictDetectables("oreTantalum", 6);
+		MachineHelper.addDetectable(Blocks.ore, 4, 7);
+		MachineHelper.addDetectable(Blocks.ore, 5, 8);
+		MachineHelper.addDetectable(Blocks.ore, 6, 9);
+		MachineHelper.addDetectable(Blocks.ore, 7, 10);
+		MachineHelper.addDictDetectables("oreCopper", 2);
+		MachineHelper.addDictDetectables("oreTin", 2);
 	}
 
 	public void initHandlers() {

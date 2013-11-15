@@ -1,15 +1,13 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.tile.TEMGenerator;
+import infinitealloys.tile.TEEGenerator;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiGenerator extends GuiMachine {
+public class GuiGenerator extends GuiElectric {
 
-	public TEMGenerator teg;
+	public TEEGenerator teg;
 
-	public java.awt.Point fire = new java.awt.Point(30, 75);
-
-	public GuiGenerator(InventoryPlayer inventoryPlayer, TEMGenerator tileEntity) {
+	public GuiGenerator(InventoryPlayer inventoryPlayer, TEEGenerator tileEntity) {
 		super(176, 176, inventoryPlayer, tileEntity);
 		teg = tileEntity;
 	}

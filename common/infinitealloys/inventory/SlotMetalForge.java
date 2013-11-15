@@ -1,14 +1,14 @@
 package infinitealloys.inventory;
 
-import infinitealloys.tile.TEMMetalForge;
+import infinitealloys.tile.TEEMetalForge;
 import net.minecraft.inventory.IInventory;
 
-public class SlotMetalForge extends SlotUpgradable {
+public class SlotMetalForge extends SlotMachine {
 
 	private int slotIndex;
 
-	public SlotMetalForge(IInventory inventory, int index, int x, int y, int teuID) {
-		super(inventory, teuID, index, x, y);
+	public SlotMetalForge(IInventory inventory, int index, int x, int y, int temID) {
+		super(inventory, temID, index, x, y);
 		slotIndex = index;
 	}
 
@@ -16,6 +16,6 @@ public class SlotMetalForge extends SlotUpgradable {
 	public void onSlotChanged() {
 		super.onSlotChanged();
 		if(slotIndex == 0)
-			((TEMMetalForge)inventory).presetSelection = -1;
+			((TEEMetalForge)inventory).presetSelection = -1;
 	}
 }

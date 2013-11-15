@@ -1,22 +1,22 @@
 package infinitealloys.inventory;
 
 import infinitealloys.item.Items;
-import infinitealloys.tile.TEMGenerator;
+import infinitealloys.tile.TEEGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerGenerator extends ContainerUpgradable {
+public class ContainerGenerator extends ContainerMachine {
 
-	public TEMGenerator inventory;
+	public TEEGenerator inventory;
 
-	public ContainerGenerator(InventoryPlayer inventoryPlayer, TEMGenerator tileEntity) {
+	public ContainerGenerator(InventoryPlayer inventoryPlayer, TEEGenerator tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 3; x++)
-				addSlotToContainer(new SlotUpgradable(inventory, inventory.getID(), x * y + 1, 8 + x * 18, 66 + y * 18));
+				addSlotToContainer(new SlotMachine(inventory, inventory.getID(), x * y + 1, 8 + x * 18, 66 + y * 18));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)
 				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 66 + y * 18));

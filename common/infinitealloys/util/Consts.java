@@ -9,7 +9,7 @@ public class Consts {
 
 	public static final int MULTI_ITEM_COUNT = 2;
 	public static final int METAL_COUNT = 8;
-	public static final int TEU_COUNT = 8;
+	public static final int MACHINE_COUNT = 8;
 	public static final int UPGRADE_COUNT = 9;
 	public static final int VALID_ALLOY_COUNT = 6;
 

@@ -3,19 +3,19 @@ package infinitealloys.tile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 
-public class TEMGenerator extends TileEntityMachine {
+public class TEEGenerator extends TileEntityElectric {
 
 	/** The ratio between how long an item will burn in a furnace and how long it will burn in the generator. Furnace is numerator, generator is demoninator. */
 	private final float FURNACE_TO_GENERATOR_TICK_RATIO = 2.0F;
 
 	// ---BEGIN GENERAL FUNCTIONS---
 
-	public TEMGenerator(int facing) {
+	public TEEGenerator(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TEMGenerator() {
+	public TEEGenerator() {
 		super(0);
 		inventoryStacks = new ItemStack[10];
 		baseRKPerTick = 72;
@@ -23,7 +23,7 @@ public class TEMGenerator extends TileEntityMachine {
 
 	@Override
 	public int getID() {
-		return TEHelper.GENERATOR;
+		return MachineHelper.GENERATOR;
 	}
 
 	@Override
@@ -50,23 +50,23 @@ public class TEMGenerator extends TileEntityMachine {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(TEHelper.SPEED2))
+		if(hasUpgrade(MachineHelper.SPEED2))
 			processTimeMult = 0.5F;
-		else if(hasUpgrade(TEHelper.SPEED1))
+		else if(hasUpgrade(MachineHelper.SPEED1))
 			processTimeMult = 0.75F;
 		else
 			processTimeMult = 1.0F;
 
-		if(hasUpgrade(TEHelper.EFFICIENCY2))
+		if(hasUpgrade(MachineHelper.EFFICIENCY2))
 			rkPerTickMult = 2.0F;
-		else if(hasUpgrade(TEHelper.EFFICIENCY1))
+		else if(hasUpgrade(MachineHelper.EFFICIENCY1))
 			rkPerTickMult = 1.5F;
 		else
 			rkPerTickMult = 1.0F;
 
-		if(hasUpgrade(TEHelper.CAPACITY2))
+		if(hasUpgrade(MachineHelper.CAPACITY2))
 			stackLimit = 64;
-		else if(hasUpgrade(TEHelper.CAPACITY1))
+		else if(hasUpgrade(MachineHelper.CAPACITY1))
 			stackLimit = 48;
 		else
 			stackLimit = 32;
@@ -74,13 +74,13 @@ public class TEMGenerator extends TileEntityMachine {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(TEHelper.SPEED1);
-		validUpgrades.add(TEHelper.SPEED2);
-		validUpgrades.add(TEHelper.EFFICIENCY1);
-		validUpgrades.add(TEHelper.EFFICIENCY2);
-		validUpgrades.add(TEHelper.CAPACITY1);
-		validUpgrades.add(TEHelper.CAPACITY2);
-		validUpgrades.add(TEHelper.WIRELESS);
+		validUpgrades.add(MachineHelper.SPEED1);
+		validUpgrades.add(MachineHelper.SPEED2);
+		validUpgrades.add(MachineHelper.EFFICIENCY1);
+		validUpgrades.add(MachineHelper.EFFICIENCY2);
+		validUpgrades.add(MachineHelper.CAPACITY1);
+		validUpgrades.add(MachineHelper.CAPACITY2);
+		validUpgrades.add(MachineHelper.WIRELESS);
 	}
 
 	// ---END UPGRADE FUNCTIONS---

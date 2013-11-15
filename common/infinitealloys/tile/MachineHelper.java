@@ -7,13 +7,13 @@ import infinitealloys.client.gui.GuiGenerator;
 import infinitealloys.client.gui.GuiMetalForge;
 import infinitealloys.client.gui.GuiPasture;
 import infinitealloys.client.gui.GuiPrinter;
-import infinitealloys.client.gui.GuiUpgradable;
+import infinitealloys.client.gui.GuiMachine;
 import infinitealloys.client.gui.GuiXray;
 import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.inventory.ContainerGenerator;
 import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.inventory.ContainerPrinter;
-import infinitealloys.inventory.ContainerUpgradable;
+import infinitealloys.inventory.ContainerMachine;
 import infinitealloys.inventory.ContainerXray;
 import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
@@ -27,7 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class TEHelper {
+public class MachineHelper {
 
 	public static final int COMPUTER = 0;
 	public static final int METAL_FORGE = 1;
@@ -48,13 +48,13 @@ public class TEHelper {
 	public static final int RANGE2 = 128;
 	public static final int WIRELESS = 256;
 
-	/** The TileEntityUpgradable class for each TEU block */
-	public static final Class[] TEU_CLASSES = { TEUComputer.class, TEMMetalForge.class, TEMAnalyzer.class, TEMPrinter.class, TEMXray.class, TEMPasture.class,
-			TEUEnergyStorage.class, TEMGenerator.class };
+	/** The TileEntityMachine class for each machine */
+	public static final Class[] MACHINE_CLASSES = { TEMComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEPrinter.class, TEEXray.class, TEEPasture.class,
+			TEMEnergyStorage.class, TEEGenerator.class };
 
-	public static final String[] TEU_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray", "pasture", "energystorage", "generator" };
+	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray", "pasture", "energystorage", "generator" };
 
-	/** How many blocks are searched per tick. Used to limit lag. Currently only used by the x-ray. */
+	/** How many blocks are searched per tick. Used to limit lag. Used by the x-ray, computer, and energy storage unit. */
 	public static final int SEARCH_PER_TICK = 2000;
 
 	/** The controlling computer for each player */
@@ -131,7 +131,7 @@ public class TEHelper {
 	 * @param upgrade
 	 * @return true if it is a prereq */
 	public static boolean isPrereqUpgrade(int upg) {
-		return TEHelper.prereqUpgrades.contains(upg);
+		return MachineHelper.prereqUpgrades.contains(upg);
 	}
 
 	/** Does the upgrade require another to work?
@@ -139,7 +139,7 @@ public class TEHelper {
 	 * @param upgrade
 	 * @return true if it has a prereq */
 	public static boolean hasPrereqUpgrade(int upg) {
-		return TEHelper.prereqNeedingUpgrades.contains(upg);
+		return MachineHelper.prereqNeedingUpgrades.contains(upg);
 	}
 
 	public static int getIngotNum(ItemStack ingot) {
@@ -148,69 +148,69 @@ public class TEHelper {
 		return -1;
 	}
 
-	/** Get a Container instance for a specific TileEntityUpgradable
+	/** Get a Container instance for a specific machine
 	 * 
-	 * @param teuID The numerical ID for the TEU, see the TEU ID constants in this class
+	 * @param temID The numerical ID for the machine, see the machine ID constants in this class
 	 * @param inventoryPlayer An instance of InventoryPlayer (not used, just passed through)
-	 * @param teu A TileEntityUpgradable instance to be casted and passed to the Container constructor
-	 * @return A new instance of a Container class that extends ContainerUpgradable */
-	public static ContainerUpgradable getContainerForTEU(int teuID, InventoryPlayer inventoryPlayer, TileEntityUpgradable teu) {
-		switch(teuID) {
+	 * @param tem A TileEntityMachine instance to be casted and passed to the Container constructor
+	 * @return A new instance of a Container class that extends ContainerMachine */
+	public static ContainerMachine getContainerForMachine(int temID, InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
+		switch(temID) {
 			case COMPUTER:
-				return new ContainerUpgradable(inventoryPlayer, teu, 8, 84, 140, 43);
+				return new ContainerMachine(inventoryPlayer, tem, 8, 84, 140, 43);
 			case METAL_FORGE:
-				return new ContainerMetalForge(inventoryPlayer, (TEMMetalForge)teu);
+				return new ContainerMetalForge(inventoryPlayer, (TEEMetalForge)tem);
 			case ANALYZER:
-				return new ContainerAnalyzer(inventoryPlayer, (TEMAnalyzer)teu);
+				return new ContainerAnalyzer(inventoryPlayer, (TEEAnalyzer)tem);
 			case PRINTER:
-				return new ContainerPrinter(inventoryPlayer, (TEMPrinter)teu);
+				return new ContainerPrinter(inventoryPlayer, (TEEPrinter)tem);
 			case XRAY:
-				return new ContainerXray(inventoryPlayer, (TEMXray)teu);
+				return new ContainerXray(inventoryPlayer, (TEEXray)tem);
 			case PASTURE:
-				return new ContainerUpgradable(inventoryPlayer, teu, 13, 94, 141, 44);
+				return new ContainerMachine(inventoryPlayer, tem, 13, 94, 141, 44);
 			case ENERGY_STORAGE:
-				return new ContainerUpgradable(inventoryPlayer, teu, 8, 84, 140, 43);
+				return new ContainerMachine(inventoryPlayer, tem, 8, 84, 140, 43);
 			case GENERATOR:
-				return new ContainerGenerator(inventoryPlayer, (TEMGenerator)teu);
+				return new ContainerGenerator(inventoryPlayer, (TEEGenerator)tem);
 		}
 		return null;
 	}
 
-	/** Get a GUI instance for a specific TileEntityUpgradable
+	/** Get a GUI instance for a specific machine
 	 * 
-	 * @param teuID The numerical ID for the TEU, see the TEU ID constants in this class
+	 * @param temID The numerical ID for the machine, see the machine ID constants in this class
 	 * @param inventoryPlayer An instance of InventoryPlayer (not used, just passed through)
-	 * @param teu A TileEntityUpgradable instance to be casted and passed to the GUI constructor
-	 * @return A new instance of a GUI class that extends GuiUpgradable */
-	public static GuiUpgradable getGuiForTEU(int teuID, InventoryPlayer inventoryPlayer, TileEntityUpgradable teu) {
-		switch(teuID) {
+	 * @param tem A TileEntityMachine instance to be casted and passed to the GUI constructor
+	 * @return A new instance of a GUI class that extends GuiMachine */
+	public static GuiMachine getGuiForMachine(int temID, InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
+		switch(temID) {
 			case COMPUTER:
-				return new GuiComputer(inventoryPlayer, (TEUComputer)teu);
+				return new GuiComputer(inventoryPlayer, (TEMComputer)tem);
 			case METAL_FORGE:
-				return new GuiMetalForge(inventoryPlayer, (TEMMetalForge)teu);
+				return new GuiMetalForge(inventoryPlayer, (TEEMetalForge)tem);
 			case ANALYZER:
-				return new GuiAnalyzer(inventoryPlayer, (TEMAnalyzer)teu);
+				return new GuiAnalyzer(inventoryPlayer, (TEEAnalyzer)tem);
 			case PRINTER:
-				return new GuiPrinter(inventoryPlayer, (TEMPrinter)teu);
+				return new GuiPrinter(inventoryPlayer, (TEEPrinter)tem);
 			case XRAY:
-				return new GuiXray(inventoryPlayer, (TEMXray)teu);
+				return new GuiXray(inventoryPlayer, (TEEXray)tem);
 			case PASTURE:
-				return new GuiPasture(inventoryPlayer, (TEMPasture)teu);
+				return new GuiPasture(inventoryPlayer, (TEEPasture)tem);
 			case ENERGY_STORAGE:
-				return new GuiEnergyStorage(inventoryPlayer, (TEUEnergyStorage)teu);
+				return new GuiEnergyStorage(inventoryPlayer, (TEMEnergyStorage)tem);
 			case GENERATOR:
-				return new GuiGenerator(inventoryPlayer, (TEMGenerator)teu);
+				return new GuiGenerator(inventoryPlayer, (TEEGenerator)tem);
 		}
 		return null;
 	}
 
-	public static boolean stackValidForSlot(int teuID, int index, ItemStack itemstack) {
-		// Switch first based on the type of TEU, then based on the index of the slot. If a TEU is not in this switch, it always returns false, e.g. Pasture
-		switch(teuID) {
+	public static boolean stackValidForSlot(int temID, int index, ItemStack itemstack) {
+		// Switch first based on the type of machine, then based on the index of the slot. If a machine is not in this switch, it always returns false
+		switch(temID) {
 			case METAL_FORGE:
 				switch(index) {
 					case 0:
-						return TEHelper.isAlloyBook(itemstack);
+						return MachineHelper.isAlloyBook(itemstack);
 					case 1:
 					case 2:
 						return false;
@@ -235,7 +235,7 @@ public class TEHelper {
 				}
 				break;
 			case XRAY:
-				return TEHelper.isDetectable(itemstack);
+				return MachineHelper.isDetectable(itemstack);
 			case GENERATOR:
 				return TileEntityFurnace.isItemFuel(itemstack);
 		}

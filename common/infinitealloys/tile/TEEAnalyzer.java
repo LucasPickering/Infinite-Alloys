@@ -6,14 +6,14 @@ import java.util.Arrays;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class TEMAnalyzer extends TileEntityMachine {
+public class TEEAnalyzer extends TileEntityElectric {
 
-	public TEMAnalyzer(int facing) {
+	public TEEAnalyzer(int facing) {
 		this();
 		front = facing;
 	}
 
-	public TEMAnalyzer() {
+	public TEEAnalyzer() {
 		super(3);
 		inventoryStacks = new ItemStack[4];
 		stackLimit = 1;
@@ -23,12 +23,12 @@ public class TEMAnalyzer extends TileEntityMachine {
 
 	@Override
 	public int getID() {
-		return TEHelper.ANALYZER;
+		return MachineHelper.ANALYZER;
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return super.isItemValidForSlot(slot, itemstack) || TEHelper.stackValidForSlot(TEHelper.ANALYZER, slot, itemstack);
+		return super.isItemValidForSlot(slot, itemstack) || MachineHelper.stackValidForSlot(MachineHelper.ANALYZER, slot, itemstack);
 	}
 
 	@Override
@@ -84,16 +84,16 @@ public class TEMAnalyzer extends TileEntityMachine {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(TEHelper.SPEED2))
+		if(hasUpgrade(MachineHelper.SPEED2))
 			processTimeMult = 1800;
-		else if(hasUpgrade(TEHelper.SPEED1))
+		else if(hasUpgrade(MachineHelper.SPEED1))
 			processTimeMult = 2700;
 		else
 			processTimeMult = 3600;
 
-		if(hasUpgrade(TEHelper.EFFICIENCY2))
+		if(hasUpgrade(MachineHelper.EFFICIENCY2))
 			rkPerTickMult = 0.5F;
-		else if(hasUpgrade(TEHelper.EFFICIENCY1))
+		else if(hasUpgrade(MachineHelper.EFFICIENCY1))
 			rkPerTickMult = 0.75F;
 		else
 			rkPerTickMult = 1.0F;
@@ -101,10 +101,10 @@ public class TEMAnalyzer extends TileEntityMachine {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(TEHelper.SPEED1);
-		validUpgrades.add(TEHelper.SPEED2);
-		validUpgrades.add(TEHelper.EFFICIENCY1);
-		validUpgrades.add(TEHelper.EFFICIENCY2);
-		validUpgrades.add(TEHelper.WIRELESS);
+		validUpgrades.add(MachineHelper.SPEED1);
+		validUpgrades.add(MachineHelper.SPEED2);
+		validUpgrades.add(MachineHelper.EFFICIENCY1);
+		validUpgrades.add(MachineHelper.EFFICIENCY2);
+		validUpgrades.add(MachineHelper.WIRELESS);
 	}
 }

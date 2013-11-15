@@ -1,21 +1,21 @@
 package infinitealloys.client.gui;
 
 import infinitealloys.handlers.PacketHandler;
-import infinitealloys.tile.TEMPasture;
+import infinitealloys.tile.TEEPasture;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
-public class GuiPasture extends GuiMachine {
+public class GuiPasture extends GuiElectric {
 
-	public TEMPasture tep;
+	public TEEPasture tep;
 
 	/** The buttons to enable/disable the mob trapping/repulsion in the order of chicken, cow, pig, sheep, creeper, skeleton, spider, zombie */
 	private GuiButton[] mobButtons = new GuiButton[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 
-	public GuiPasture(InventoryPlayer inventoryPlayer, TEMPasture tileEntity) {
+	public GuiPasture(InventoryPlayer inventoryPlayer, TEEPasture tileEntity) {
 		super(210, 186, inventoryPlayer, tileEntity);
 		tep = tileEntity;
 	}

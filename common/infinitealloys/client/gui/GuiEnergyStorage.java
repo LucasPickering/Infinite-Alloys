@@ -1,14 +1,14 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.tile.TEUEnergyStorage;
+import infinitealloys.tile.TEMEnergyStorage;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 
-public class GuiEnergyStorage extends GuiUpgradable {
+public class GuiEnergyStorage extends GuiMachine {
 
-	public TEUEnergyStorage tees;
+	public TEMEnergyStorage tees;
 
-	public GuiEnergyStorage(InventoryPlayer inventoryPlayer, TEUEnergyStorage tileEntity) {
+	public GuiEnergyStorage(InventoryPlayer inventoryPlayer, TEMEnergyStorage tileEntity) {
 		super(176, 176, inventoryPlayer, tileEntity);
 		tees = tileEntity;
 	}
