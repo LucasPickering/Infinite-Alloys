@@ -26,8 +26,8 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	/** A multiplier for the power used, changed with upgrades. NOTE: Less will consume less power, but also generate less for generators */
 	protected float rkPerTickMult = 1.0F;
 
-	/** The RK storage unit that this machine supplies power to or receives power from */
-	public TEMEnergyStorage powerStorageUnit;
+	/** The energy storage unit that this machine supplies power to or receives power from */
+	public TEMEnergyStorage energyStorageUnit;
 
 	public TileEntityElectric(int upgradeSlotIndex) {
 		this();
@@ -43,9 +43,9 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 
-		// If the machine should be processing and enough power is available, increment the progress by one. If this is the first tick of the process, call
+		// If the machine should be processing and enough energy is available, increment the progress by one. If this is the first tick of the process, call
 		// startProcess(). If it has reached or exceeded the limit for completion, then finish the process and reset the counter.
-		if(shouldProcess() && powerStorageUnit != null && powerStorageUnit.changeRK(getRKChange())) {
+		if(shouldProcess() && energyStorageUnit != null && energyStorageUnit.changeRK(getRKChange())) {
 			if(processProgress == 0)
 				startProcess();
 			if(++processProgress >= ticksToProcess) {
@@ -56,8 +56,8 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 		}
 	}
 
-	/** Should the process tick be increased? Called every tick to determine if power should be used and if progress should continue. NOTE: This will return true
-	 * even if there is not a nearby power storage unit to support the process */
+	/** Should the process tick be increased? Called every tick to determine if energy should be used and if progress should continue. NOTE: This will return true
+	 * even if there is not a nearby energy storage unit to support the process */
 	protected abstract boolean shouldProcess();
 
 	/** Called on the first tick of a process */
@@ -74,7 +74,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public int getProcessProgressScaled(int scale) {
+	public float getProcessProgressScaled(float scale) {
 		return processProgress * scale / ticksToProcess;
 	}
 

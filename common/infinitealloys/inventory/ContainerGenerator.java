@@ -1,11 +1,11 @@
 package infinitealloys.inventory;
 
-import infinitealloys.item.Items;
 import infinitealloys.tile.TEEGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityFurnace;
 
 public class ContainerGenerator extends ContainerMachine {
 
@@ -32,26 +32,24 @@ public class ContainerGenerator extends ContainerMachine {
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
 			ItemStack stackInSlotCopy = stackInSlot.getStack();
 			itemstack = stackInSlotCopy.copy();
-			if(slot < 3) {
-				if(!mergeItemStack(stackInSlotCopy, 4, 39, false))
-					return null;
-			}
-			if(slot > 3) {
-				if(stackInSlotCopy.itemID == Items.alloyIngot.itemID) {
-					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
+			// The stack is coming from the main inventory
+			if(slot > 9) {
+				// If it's a fuel, put it in the fuel supply section
+				if(TileEntityFurnace.getItemBurnTime(stackInSlotCopy) > 0) {
+					if(!mergeItemStack(stackInSlotCopy, 0, 9, false))
 						return null;
 				}
+				// If it's an upgrade, put it in the upgrade slot
 				else if(inventory.isUpgradeValid(stackInSlotCopy)) {
-					if(!mergeItemStack(stackInSlotCopy, 3, 4, false))
+					if(!mergeItemStack(stackInSlotCopy, 9, 10, false))
 						return null;
 				}
-				else if(slot > 3 && slot < 30) {
-					if(!mergeItemStack(stackInSlotCopy, 30, 39, false))
-						return null;
-				}
-				else if(slot >= 30)
-					if(!mergeItemStack(stackInSlotCopy, 3, 30, false))
-						return null;
+			}
+			// If it's coming from the fuel supply section
+			else {
+				// Move it to the main inventory
+				if(!mergeItemStack(stackInSlotCopy, 10, 46, false))
+					return null;
 			}
 			if(stackInSlotCopy.stackSize == 0)
 				stackInSlot.putStack((ItemStack)null);

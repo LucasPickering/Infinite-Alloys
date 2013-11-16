@@ -3,6 +3,7 @@ package infinitealloys.tile;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -25,7 +26,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 	private int maxRange;
 
 	/** A list of the locations of machines that provide power to or consume power from this storage unit */
-	private List<Point> connectedMachines = new ArrayList<Point>();
+	private final List<Point> connectedMachines = new ArrayList<Point>();
 
 	/** How many ticks have passed since the last search for machines. When this reaches {@link #SEARCH_INTERVAL the search interval time}, it resets to 0 and a
 	 * search begins. */
@@ -67,13 +68,15 @@ public class TEMEnergyStorage extends TileEntityMachine {
 			search();
 
 		// If a connected machine no longer exists, remove it from the network
-		for(Point p : connectedMachines)
-			if(!(worldObj.getBlockTileEntity(p.x, p.y, p.z) instanceof TileEntityElectric))
-				connectedMachines.remove(p);
+		for(Iterator iterator = connectedMachines.iterator(); iterator.hasNext();) {
+			Point p = (Point)iterator.next();
+			if(worldObj.getBlockTileEntity(p.x, p.y, p.z) == null || !(worldObj.getBlockTileEntity(p.x, p.y, p.z) instanceof TileEntityElectric))
+				iterator.remove();
+		}
 	}
 
-	/** Perform a search for machines that produce/consume power. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a
-	 * tick, then saves its place and picks up where it left off next tick, which eliminates stutter during searches. */
+	/** Perform a search for machines that produce/consume power. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in
+	 * a tick, then saves its place and picks up where it left off next tick, which eliminates stutter during searches. */
 	private void search() {
 		// The amount of blocks that have been iterated over this tick. When this reaches TEHelper.SEARCH_PER_TICK, the loops break
 		int blocksSearched = 0;
@@ -85,10 +88,12 @@ public class TEMEnergyStorage extends TileEntityMachine {
 				for(int z = lastSearch.z; z <= autoSearchRange; z++) {
 
 					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to a
-					// power storage unit, add it to the power network.
+					// energy storage unit, add it to the power network.
 					TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
-					if(te instanceof TileEntityElectric && ((TileEntityElectric)te).powerStorageUnit == null)
+					if(te instanceof TileEntityElectric && ((TileEntityElectric)te).energyStorageUnit == null) {
 						connectedMachines.add(new Point(xCoord + x, yCoord + y, zCoord + z));
+						((TileEntityElectric)te).energyStorageUnit = this;
+					}
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
 					// continued next tick.
@@ -148,6 +153,10 @@ public class TEMEnergyStorage extends TileEntityMachine {
 			return true;
 		}
 		return false;
+	}
+
+	public int getCurrentRKScaled(int scale) {
+		return currentRK * scale / maxRK;
 	}
 
 	@Override

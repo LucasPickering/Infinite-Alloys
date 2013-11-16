@@ -2,6 +2,7 @@ package infinitealloys.client.gui;
 
 import infinitealloys.tile.TileEntityElectric;
 import java.awt.Rectangle;
+import java.text.DecimalFormat;
 import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.opengl.GL11;
 
@@ -36,7 +37,8 @@ public abstract class GuiElectric extends GuiMachine {
 		// Draw the progress info if the mouse is over the progress bar
 		if(tem.ticksToProcess > 0)
 			if(mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height))
-				drawTextBox(mouseX, mouseY, new ColoredLine(tem.getProcessProgressScaled(100) + "%", 0xffffff));
+				// Draw the progress as a percentage, rounded to the nearest tenth
+				drawTextBox(mouseX, mouseY, new ColoredLine(new DecimalFormat("0.0").format(tem.getProcessProgressScaled(100F)) + "%", 0xffffff));
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -51,7 +53,8 @@ public abstract class GuiElectric extends GuiMachine {
 
 		// Draw the progress bar overlay
 		if(tem.ticksToProcess > 0)
-			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, tem.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
+			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, (int)tem.getProcessProgressScaled(PROGRESS_BAR.width),
+					PROGRESS_BAR.height);
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);

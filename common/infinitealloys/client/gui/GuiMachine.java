@@ -27,6 +27,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 public abstract class GuiMachine extends GuiContainer {
 
 	// The position for each item in the texture sheet extras.png
+	static final Rectangle ENERGY_METER = new Rectangle(0, 0, 10, 32);
 	static final Rectangle TAB_LEFT_OFF = new Rectangle(10, 0, 24, 24);
 	static final Rectangle TAB_LEFT_ON = new Rectangle(34, 0, 28, 24);
 	static final Rectangle TAB_RIGHT_OFF = new Rectangle(62, 0, 29, 24);

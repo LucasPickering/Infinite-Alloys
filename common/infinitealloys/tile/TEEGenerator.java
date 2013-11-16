@@ -2,7 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.util.MachineHelper;
 import net.minecraft.item.ItemStack;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.tileentity.TileEntityFurnace;
 
 public class TEEGenerator extends TileEntityElectric {
 
@@ -38,12 +38,12 @@ public class TEEGenerator extends TileEntityElectric {
 		// Take one piece of fuel out of the first slot that has fuel
 		for(int i = 1; i < inventoryStacks.length; i++) {
 			if(inventoryStacks[i] != null) {
-				ticksToProcess = (int)(GameRegistry.getFuelValue(inventoryStacks[i]) * FURNACE_TO_GENERATOR_TICK_RATIO);
+				ticksToProcess = (int)(TileEntityFurnace.getItemBurnTime(inventoryStacks[i]) * FURNACE_TO_GENERATOR_TICK_RATIO);
 				decrStackSize(i, 1);
 			}
 		}
 	}
-
+	
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(MachineHelper.SPEED2))

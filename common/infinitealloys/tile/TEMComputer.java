@@ -89,8 +89,8 @@ public class TEMComputer extends TileEntityMachine {
 			for(int y = lastSearch.y; y <= autoSearchRange; y++) {
 				for(int z = lastSearch.z; z <= autoSearchRange; z++) {
 	
-					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to a
-					// power storage unit, add it to the power network.
+					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to an
+					// energy storage unit, add it to the power network.
 					TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
 					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(MachineHelper.WIRELESS))
 						connectedMachines.add(new Point(xCoord + x, yCoord + y, zCoord + z));

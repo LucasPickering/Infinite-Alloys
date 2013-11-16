@@ -4,16 +4,16 @@ import infinitealloys.client.gui.GuiAnalyzer;
 import infinitealloys.client.gui.GuiComputer;
 import infinitealloys.client.gui.GuiEnergyStorage;
 import infinitealloys.client.gui.GuiGenerator;
+import infinitealloys.client.gui.GuiMachine;
 import infinitealloys.client.gui.GuiMetalForge;
 import infinitealloys.client.gui.GuiPasture;
 import infinitealloys.client.gui.GuiPrinter;
-import infinitealloys.client.gui.GuiMachine;
 import infinitealloys.client.gui.GuiXray;
 import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.inventory.ContainerGenerator;
+import infinitealloys.inventory.ContainerMachine;
 import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.inventory.ContainerPrinter;
-import infinitealloys.inventory.ContainerMachine;
 import infinitealloys.inventory.ContainerXray;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEEAnalyzer;
@@ -244,7 +244,7 @@ public class MachineHelper {
 			case XRAY:
 				return MachineHelper.isDetectable(itemstack);
 			case GENERATOR:
-				return TileEntityFurnace.isItemFuel(itemstack);
+				return TileEntityFurnace.getItemBurnTime(itemstack) > 0;
 		}
 		return false;
 	}
