@@ -1,25 +1,18 @@
 package infinitealloys.client.gui;
 
 import infinitealloys.tile.TileEntityElectric;
-import java.awt.Rectangle;
+import infinitealloys.util.Funcs;
 import java.text.DecimalFormat;
 import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.opengl.GL11;
 
 public abstract class GuiElectric extends GuiMachine {
 
-	// The position for each item in the texture sheet extras.png
-	static final Rectangle PROGRESS_BAR = new Rectangle(119, 0, 108, 18);
-	static final Rectangle SCROLL_ON = new Rectangle(227, 0, 12, 15);
-	static final Rectangle SCROLL_OFF = new Rectangle(239, 0, 12, 15);
-	static final Rectangle UP_ARROW = new Rectangle(10, 24, 16, 16);
-	static final Rectangle DOWN_ARROW = new Rectangle(26, 24, 16, 16);
-	static final Rectangle CHECK = new Rectangle(42, 24, 16, 16);
-	static final Rectangle BLOCK_BG_OFF = new Rectangle(58, 24, 36, 18);
-	static final Rectangle BLOCK_BG_ON = new Rectangle(94, 24, 36, 18);
-
 	/** Coordinates of the progress bar texture, changes by machine but still otherwise */
 	protected java.awt.Point progressBar = new java.awt.Point();
+
+	/** Coordinates of the energy icon, that indicates power network status */
+	protected java.awt.Point energyIcon = new java.awt.Point();
 
 	protected TileEntityElectric tem;
 
@@ -39,6 +32,15 @@ public abstract class GuiElectric extends GuiMachine {
 			if(mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height))
 				// Draw the progress as a percentage, rounded to the nearest tenth
 				drawTextBox(mouseX, mouseY, new ColoredLine(new DecimalFormat("0.0").format(tem.getProcessProgressScaled(100F)) + "%", 0xffffff));
+
+		// Draw the power network info if the mouse is over the energy icon
+		if(mouseInZone(mouseX, mouseY, topLeft.x + energyIcon.x, topLeft.y + energyIcon.y, ENERGY_ICON.width, ENERGY_ICON.height)) {
+			if(tem.energyStorageUnit != null)
+				drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("electric.connected.true"), 0x00ff00), new ColoredLine((tem.getRKChange() > 0 ? "+" : "")
+						+ tem.getRKChange() + " RK/t", tem.getRKChange() < 0 ? 0xff0000 : tem.getRKChange() > 0 ? 0x00ff00 : 0xffffff));
+			else
+				drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("electric.connected.false"), 0xff0000));
+		}
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);

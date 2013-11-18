@@ -25,7 +25,7 @@ public class TEMComputer extends TileEntityMachine {
 	private int maxRange;
 
 	/** 3D coords for each machine that is connected to the computer */
-	public List<Point> connectedMachines;
+	public final List<Point> connectedMachines;
 
 	/** How many ticks have passed since the last search for machines. When this reaches {@link #SEARCH_INTERVAL the search interval time}, it resets to 0 and a
 	 * search begins. */
@@ -163,10 +163,6 @@ public class TEMComputer extends TileEntityMachine {
 			Point coords = connectedMachines.get(i);
 			tagCompound.setIntArray("Coords" + i, new int[] { coords.x, coords.y, coords.z });
 		}
-	}
-
-	public void handlePacketDataFromServer(ArrayList networkCoords) {
-		this.connectedMachines = networkCoords;
 	}
 
 	public void handlePacketDataFromClient(boolean autoSearch) {

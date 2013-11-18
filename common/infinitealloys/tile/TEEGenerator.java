@@ -6,8 +6,9 @@ import net.minecraft.tileentity.TileEntityFurnace;
 
 public class TEEGenerator extends TileEntityElectric {
 
-	/** The ratio between how long an item will burn in a furnace and how long it will burn in the generator. Furnace is numerator, generator is demoninator. */
-	private final float FURNACE_TO_GENERATOR_TICK_RATIO = 2.0F;
+	/** The ratio between how long an item will burn in a generator and how long it will burn in a furnace. Generator is numerator, furnace is demoninator. */
+	private final float GENERATOR_TO_FURNACE_TICK_RATIO = 0.5F;
+	private boolean burning;
 
 	public TEEGenerator(int facing) {
 		this();
@@ -27,7 +28,9 @@ public class TEEGenerator extends TileEntityElectric {
 
 	@Override
 	protected boolean shouldProcess() {
-		for(int i = 1; i < inventoryStacks.length; i++)
+		if(burning)
+			return true;
+		for(int i = 0; i < inventoryStacks.length - 1; i++)
 			if(inventoryStacks[i] != null)
 				return true;
 		return false;
@@ -36,14 +39,20 @@ public class TEEGenerator extends TileEntityElectric {
 	@Override
 	protected void startProcess() {
 		// Take one piece of fuel out of the first slot that has fuel
-		for(int i = 1; i < inventoryStacks.length; i++) {
+		for(int i = 0; i < inventoryStacks.length - 1; i++) {
 			if(inventoryStacks[i] != null) {
-				ticksToProcess = (int)(TileEntityFurnace.getItemBurnTime(inventoryStacks[i]) * FURNACE_TO_GENERATOR_TICK_RATIO);
+				ticksToProcess = (int)(TileEntityFurnace.getItemBurnTime(inventoryStacks[i]) * GENERATOR_TO_FURNACE_TICK_RATIO);
 				decrStackSize(i, 1);
+				burning = true;
 			}
 		}
 	}
-	
+
+	@Override
+	protected void finishProcess() {
+		burning = false;
+	}
+
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(MachineHelper.SPEED2))

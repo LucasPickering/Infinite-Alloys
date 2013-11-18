@@ -1,6 +1,5 @@
 package infinitealloys.inventory;
 
-import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -18,6 +17,6 @@ public class SlotUpgrade extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemstack) {
-		return ((TileEntityElectric)inventory).isUpgradeValid(itemstack);
+		return ((TileEntityMachine)inventory).isUpgradeValid(itemstack);
 	}
 }

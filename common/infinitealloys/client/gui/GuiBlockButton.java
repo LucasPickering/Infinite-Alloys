@@ -7,13 +7,14 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
+/** The type of button used in the x-ray GUI to represent blocks that have been detected */
 public class GuiBlockButton extends GuiScreen {
 
-	private final Rectangle OVERLAY = new Rectangle(58, 24, 36, 18);
+	private final Rectangle SELECTED_OVERLAY = new Rectangle(68, 24, 36, 18);
 
 	/** The background pattern of the button, dependent on the elevation. Can be bedrock, stone, dirt, grass, or sky */
-	private final Background[] BACKGROUNDS = { new Background(0, 5, 94, 24), new Background(6, 50, 128, 24), new Background(51, 60, 162, 24),
-			new Background(61, 85, 196, 24), new Background(86, Short.MAX_VALUE, 0, 42) };
+	private final Background[] BACKGROUNDS = { new Background(0, 5, 84, 24), new Background(6, 50, 118, 24), new Background(51, 60, 152, 24),
+			new Background(61, 85, 186, 24), new Background(86, Short.MAX_VALUE, 220, 24) };
 
 	private RenderItem itemRenderer;
 
@@ -53,9 +54,11 @@ public class GuiBlockButton extends GuiScreen {
 			GL11.glDisable(GL11.GL_LIGHTING);
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 
+			// Draw the background texture for the button
 			drawTexturedModalRect(xPos, yPos, background.texture.x, background.texture.y, background.texture.width, background.texture.height);
+			// If this button is selected, draw an overlay to indicate that
 			if(activated)
-				drawTexturedModalRect(xPos - 1, yPos - 1, OVERLAY.x, OVERLAY.y, OVERLAY.width, OVERLAY.height);
+				drawTexturedModalRect(xPos - 1, yPos - 1, SELECTED_OVERLAY.x, SELECTED_OVERLAY.y, SELECTED_OVERLAY.width, SELECTED_OVERLAY.height);
 
 			// Draw the yValue string
 			String display = Integer.toString(yValue);
@@ -86,10 +89,10 @@ public class GuiBlockButton extends GuiScreen {
 		/** The texture's location and size in the texture sheet (extras.png) */
 		Rectangle texture;
 
-		private Background(int start, int end, int textureX, int textureY) {
+		private Background(int start, int end, int u, int v) {
 			this.start = start;
 			this.end = end;
-			this.texture = new Rectangle(textureX, textureY, 34, 16);
+			this.texture = new Rectangle(u, v, 34, 16);
 		}
 	}
 }

@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TEEXray extends TileEntityElectric {
 
 	/** A list of the detected blocks, x and z are relative to the machine, y is absolute */
-	private ArrayList<Point> detectedBlocks = new ArrayList<Point>();
+	private final ArrayList<Point> detectedBlocks = new ArrayList<Point>();
 	public int range;
 
 	/** The selected button for the user, client-side only */

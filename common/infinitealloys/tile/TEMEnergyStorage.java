@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
 public class TEMEnergyStorage extends TileEntityMachine {
@@ -17,6 +18,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 	/** The maximum amount of RK that this machine can store */
 	private int maxRK;
 
+	/** The amount of RK currently stored in the unit */
 	private int currentRK;
 
 	/** The range that is searched for new machines */
@@ -33,7 +35,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 	private int currentSearchTicks;
 
 	/** The last point that was checked for a machine in the previous iteration of {@link #search}. The coords are relative to this TE block. */
-	private Point lastSearch;
+	private final Point lastSearch = new Point();
 
 	/** Should searching continue, or is it complete. Set this to true to begin a search. */
 	public boolean shouldSearch;
@@ -73,6 +75,22 @@ public class TEMEnergyStorage extends TileEntityMachine {
 			if(worldObj.getBlockTileEntity(p.x, p.y, p.z) == null || !(worldObj.getBlockTileEntity(p.x, p.y, p.z) instanceof TileEntityElectric))
 				iterator.remove();
 		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		currentRK = tagCompound.getInteger("currentRK");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		tagCompound.setInteger("currentRK", currentRK);
+	}
+
+	public void handlePacketDataFromServer(int currentRK) {
+		this.currentRK = currentRK;
 	}
 
 	/** Perform a search for machines that produce/consume power. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in
@@ -155,8 +173,16 @@ public class TEMEnergyStorage extends TileEntityMachine {
 		return false;
 	}
 
+	public int getCurrentRK() {
+		return currentRK;
+	}
+
 	public int getCurrentRKScaled(int scale) {
 		return currentRK * scale / maxRK;
+	}
+
+	public int getMaxRK() {
+		return maxRK;
 	}
 
 	@Override
@@ -180,10 +206,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 			autoSearchRange = 10;
 			maxRange = 30;
 		}
-		if(lastSearch == null)
-			lastSearch = new Point(-autoSearchRange, 0, -autoSearchRange);
-		else
-			lastSearch.set(-autoSearchRange, 0, -autoSearchRange);
+		lastSearch.set(-autoSearchRange, 0, -autoSearchRange);
 	}
 
 	@Override

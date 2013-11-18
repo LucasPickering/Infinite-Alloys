@@ -27,18 +27,19 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 public abstract class GuiMachine extends GuiContainer {
 
 	// The position for each item in the texture sheet extras.png
-	static final Rectangle ENERGY_METER = new Rectangle(0, 0, 10, 32);
-	static final Rectangle TAB_LEFT_OFF = new Rectangle(10, 0, 24, 24);
-	static final Rectangle TAB_LEFT_ON = new Rectangle(34, 0, 28, 24);
-	static final Rectangle TAB_RIGHT_OFF = new Rectangle(62, 0, 29, 24);
-	static final Rectangle TAB_RIGHT_ON = new Rectangle(91, 0, 28, 24);
-	static final Rectangle SCROLL_ON = new Rectangle(227, 0, 12, 15);
-	static final Rectangle SCROLL_OFF = new Rectangle(239, 0, 12, 15);
-	static final Rectangle UP_ARROW = new Rectangle(10, 24, 16, 16);
-	static final Rectangle DOWN_ARROW = new Rectangle(26, 24, 16, 16);
-	static final Rectangle CHECK = new Rectangle(42, 24, 16, 16);
-	static final Rectangle BLOCK_BG_OFF = new Rectangle(58, 24, 36, 18);
-	static final Rectangle BLOCK_BG_ON = new Rectangle(94, 24, 36, 18);
+	static final Rectangle TAB_LEFT_OFF = new Rectangle(0, 0, 24, 24);
+	static final Rectangle TAB_LEFT_ON = new Rectangle(24, 0, 28, 24);
+	static final Rectangle TAB_RIGHT_OFF = new Rectangle(52, 0, 29, 24);
+	static final Rectangle TAB_RIGHT_ON = new Rectangle(81, 0, 28, 24);
+	static final Rectangle PROGRESS_BAR = new Rectangle(109, 0, 108, 18);
+	static final Rectangle SCROLL_ON = new Rectangle(217, 0, 12, 15);
+	static final Rectangle SCROLL_OFF = new Rectangle(229, 0, 12, 15);
+	static final Rectangle UP_ARROW = new Rectangle(0, 24, 16, 16);
+	static final Rectangle DOWN_ARROW = new Rectangle(16, 24, 16, 16);
+	static final Rectangle CHECK = new Rectangle(32, 24, 16, 16);
+	static final Rectangle BLOCK_BG_OFF = new Rectangle(48, 24, 36, 18);
+	static final Rectangle BLOCK_BG_ON = new Rectangle(84, 24, 36, 18);
+	static final Rectangle ENERGY_ICON = new Rectangle();
 
 	/** The background texture */
 	protected ResourceLocation background;
@@ -53,7 +54,7 @@ public abstract class GuiMachine extends GuiContainer {
 	protected TileEntityMachine tem;
 	protected infinitealloys.util.Point controllingComputer = new infinitealloys.util.Point();
 	protected GuiMachineTab controllerTab;
-	protected List<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
+	protected final List<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
 	/** When help is enabled, slots get a colored outline and a mouse-over description */
 	private boolean helpEnabled;
 

@@ -68,10 +68,10 @@ public class MachineHelper {
 	public static HashMap<String, Point> controllers = new HashMap<String, Point>();
 
 	/** A list of upgrades that are prerequisites for other upgrades */
-	public static ArrayList<Integer> prereqUpgrades = new ArrayList<Integer>();
+	public static final ArrayList<Integer> prereqUpgrades = new ArrayList<Integer>();
 
 	/** A list of upgrades that require other upgrades to work */
-	public static ArrayList<Integer> prereqNeedingUpgrades = new ArrayList<Integer>();
+	public static final ArrayList<Integer> prereqNeedingUpgrades = new ArrayList<Integer>();
 
 	/** The blocks that the x-ray can detect and their worths */
 	private static HashMap<String, Integer> detectables = new HashMap<String, Integer>();

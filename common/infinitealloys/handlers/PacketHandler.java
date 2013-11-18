@@ -7,6 +7,7 @@ import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TEMComputer;
+import infinitealloys.tile.TEMEnergyStorage;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
@@ -65,6 +66,10 @@ public class PacketHandler implements IPacketHandler {
 							int machZ = data.readInt();
 							tec.connectedMachines.add(new Point(machX, machY, machZ));
 						}
+					}
+					else if(te instanceof TEMEnergyStorage) {
+						int currentRK = data.readInt();
+						((TEMEnergyStorage)te).handlePacketDataFromServer(currentRK);
 					}
 					else if(te instanceof TileEntityElectric) {
 						int processProgress = data.readInt();
@@ -157,6 +162,8 @@ public class PacketHandler implements IPacketHandler {
 					dos.writeInt(coords.z);
 				}
 			}
+			if(tem instanceof TEMEnergyStorage)
+				dos.writeInt(((TEMEnergyStorage)tem).getCurrentRK());
 			else if(tem instanceof TileEntityElectric) {
 				TileEntityElectric tee = (TileEntityElectric)tem;
 				dos.writeInt(tee.processProgress);

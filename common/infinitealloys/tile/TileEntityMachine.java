@@ -25,10 +25,10 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public ItemStack[] inventoryStacks;
 
 	/** A list of names of the players who are currently using this machine */
-	public ArrayList<String> playersUsing = new ArrayList<String>();
+	public final ArrayList<String> playersUsing = new ArrayList<String>();
 
 	/** A list of the upgrades that can be used on this machine */
-	protected ArrayList<Integer> validUpgrades = new ArrayList<Integer>();
+	protected final ArrayList<Integer> validUpgrades = new ArrayList<Integer>();
 
 	/** A number from 0-5 to represent which side of this block gets the front texture */
 	public int front;
