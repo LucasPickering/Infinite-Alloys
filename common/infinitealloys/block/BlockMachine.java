@@ -184,6 +184,8 @@ public class BlockMachine extends BlockContainer {
 		if(tem != null) {
 			tem.dropItems();
 			tem.dropUpgrades();
+			if(tem instanceof TEMEnergyStorage)
+				((TEMEnergyStorage)tem).clearConnectedMachines();
 		}
 		super.breakBlock(world, x, y, z, par5, par6);
 	}

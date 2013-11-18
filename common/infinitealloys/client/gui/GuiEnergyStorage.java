@@ -26,7 +26,8 @@ public class GuiEnergyStorage extends GuiMachine {
 		drawTexturedModalRect(energyMeter.x, energyMeter.y, PROGRESS_BAR.x, PROGRESS_BAR.y, tees.getCurrentRKScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
 
 		// Draw the energy amount
-		drawString(fontRenderer, tees.getCurrentRK() + "/" + tees.getMaxRK() + " RK", 12, 12, 0xffffff);
+		String s = tees.getCurrentRK() + "/" + tees.getMaxRK() + " RK";
+		drawString(fontRenderer, s, 10, 30, 0xffffff);
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);

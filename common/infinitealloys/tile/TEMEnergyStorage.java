@@ -35,7 +35,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 	private int currentSearchTicks;
 
 	/** The last point that was checked for a machine in the previous iteration of {@link #search}. The coords are relative to this TE block. */
-	private final Point lastSearch = new Point();
+	private Point lastSearch;
 
 	/** Should searching continue, or is it complete. Set this to true to begin a search. */
 	public boolean shouldSearch;
@@ -160,6 +160,12 @@ public class TEMEnergyStorage extends TileEntityMachine {
 		return false;
 	}
 
+	public void clearConnectedMachines() {
+		for(Point p : connectedMachines)
+			((TileEntityElectric)worldObj.getBlockTileEntity(p.x, p.y, p.z)).energyStorageUnit = null;
+		connectedMachines.clear();
+	}
+
 	/** Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK, will the result be less than zero or overflow the machine? If
 	 * this condition is true, make said change, i.e. actually add changeInRK to currentRK
 	 * 
@@ -206,7 +212,10 @@ public class TEMEnergyStorage extends TileEntityMachine {
 			autoSearchRange = 10;
 			maxRange = 30;
 		}
-		lastSearch.set(-autoSearchRange, 0, -autoSearchRange);
+		if(lastSearch == null)
+			lastSearch = new Point(-autoSearchRange, 0, -autoSearchRange);
+		else
+			lastSearch.set(-autoSearchRange, 0, -autoSearchRange);
 	}
 
 	@Override

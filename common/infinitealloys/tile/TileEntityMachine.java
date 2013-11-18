@@ -244,7 +244,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		upgrades = 0;
 	}
 
-	/** Determines if the given itemstack is a valid upgrade for the machine
+	/** Determines if the given itemstack is a valid upgrade for the machine. Criteria: Does this machine take this type of upgrade? Does this machine already
+	 * have this upgrade? Does this upgrade have a prerequisite upgrade and if so, does this machine already have that upgrade?
 	 * 
 	 * @param ItemStack for upgrade item with a binary upgrade damage value (see {@link infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
 	 * @return true if valid */
