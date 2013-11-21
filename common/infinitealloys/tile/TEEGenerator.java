@@ -2,6 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.util.MachineHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 
 public class TEEGenerator extends TileEntityElectric {
@@ -44,6 +45,7 @@ public class TEEGenerator extends TileEntityElectric {
 				ticksToProcess = (int)(TileEntityFurnace.getItemBurnTime(inventoryStacks[i]) * GENERATOR_TO_FURNACE_TICK_RATIO);
 				decrStackSize(i, 1);
 				burning = true;
+				break;
 			}
 		}
 	}
@@ -51,6 +53,18 @@ public class TEEGenerator extends TileEntityElectric {
 	@Override
 	protected void finishProcess() {
 		burning = false;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		ticksToProcess = tagCompound.getShort("TicksToProcess");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		tagCompound.setInteger("TicksToProcess", ticksToProcess);
 	}
 
 	@Override
