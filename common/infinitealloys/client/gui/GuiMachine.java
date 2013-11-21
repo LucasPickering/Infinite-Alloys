@@ -39,7 +39,7 @@ public abstract class GuiMachine extends GuiContainer {
 	static final Rectangle CHECK = new Rectangle(32, 24, 16, 16);
 	static final Rectangle BLOCK_BG_OFF = new Rectangle(48, 24, 36, 18);
 	static final Rectangle BLOCK_BG_ON = new Rectangle(84, 24, 36, 18);
-	static final Rectangle ENERGY_ICON = new Rectangle();
+	static final Rectangle ENERGY_ICON = new Rectangle(241, 0, 10, 4);
 
 	/** The background texture */
 	protected ResourceLocation background;

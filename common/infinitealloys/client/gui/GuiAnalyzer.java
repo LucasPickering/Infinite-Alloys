@@ -16,9 +16,10 @@ public class GuiAnalyzer extends GuiElectric {
 	private TEEAnalyzer tea;
 
 	public GuiAnalyzer(InventoryPlayer inventoryPlayer, TEEAnalyzer tileEntity) {
-		super(216, 166, inventoryPlayer,tileEntity );
+		super(216, 166, inventoryPlayer, tileEntity);
 		tea = tileEntity;
 		progressBar.setLocation(54, 57);
+		energyIcon.setLocation(95, 77);
 	}
 
 	@Override

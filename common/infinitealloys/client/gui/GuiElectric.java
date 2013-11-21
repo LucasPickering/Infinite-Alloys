@@ -58,6 +58,10 @@ public abstract class GuiElectric extends GuiMachine {
 			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, (int)tem.getProcessProgressScaled(PROGRESS_BAR.width),
 					PROGRESS_BAR.height);
 
+		// Draw the energy icon overlay
+		if(tem.energyStorageUnit != null)
+			drawTexturedModalRect(energyIcon.x, energyIcon.y, ENERGY_ICON.x, ENERGY_ICON.y, ENERGY_ICON.width, ENERGY_ICON.height);
+
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
