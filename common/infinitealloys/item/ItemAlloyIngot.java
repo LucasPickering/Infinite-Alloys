@@ -31,8 +31,10 @@ public class ItemAlloyIngot extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		float[] metalMasses = new float[Consts.METAL_COUNT];
-		float totalMass = 0;
+		// The each metal's content in the alloy. Each metal gets a number from 0 to Consts.ALLOY_RADIX to represent its content.
+		int[] metalContent = new int[Consts.METAL_COUNT];
+		// The total amount of metal "pieces" in this
+		int totalMass = 0;
 		int alloy;
 		int damage = itemstack.getItemDamage() - 1;
 		if(itemstack.hasTagCompound())
@@ -42,11 +44,11 @@ public class ItemAlloyIngot extends ItemIA {
 		else
 			return;
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
-			metalMasses[i] = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i);
-			totalMass += metalMasses[i];
+			metalContent[i] = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i);
+			totalMass += metalContent[i];
 		}
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
-			float percentage = Math.round(metalMasses[i] / totalMass * 10000F) / 100F;
+			float percentage = Math.round((float)metalContent[i] / (float)totalMass * 1000F) / 10F;
 			if(percentage != 0)
 				list.add(percentage + "% " + Funcs.getLoc("metal." + Consts.METAL_NAMES[Consts.METAL_COUNT - 1 - i] + ".name"));
 		}

@@ -35,9 +35,10 @@ public abstract class GuiElectric extends GuiMachine {
 
 		// Draw the power network info if the mouse is over the energy icon
 		if(mouseInZone(mouseX, mouseY, topLeft.x + energyIcon.x, topLeft.y + energyIcon.y, ENERGY_ICON.width, ENERGY_ICON.height)) {
-			if(tem.energyStorageUnit != null)
-				drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("electric.connected.true"), 0x00ff00), new ColoredLine((tem.getRKChange() > 0 ? "+" : "")
-						+ tem.getRKChange() + " RK/t", tem.getRKChange() < 0 ? 0xff0000 : tem.getRKChange() > 0 ? 0x00ff00 : 0xffffff));
+			if(tem.energyStorage != null)
+				drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("electric.connected.true") + "(" + tem.energyStorage.getCoords() + ")", 0x00ff00),
+						new ColoredLine((tem.getRKChange() > 0 ? "+" : "") + tem.getRKChange() + " RK/t",
+								tem.getRKChange() < 0 ? 0xff0000 : tem.getRKChange() > 0 ? 0x00ff00 : 0xffffff));
 			else
 				drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("electric.connected.false"), 0xff0000));
 		}
@@ -59,7 +60,7 @@ public abstract class GuiElectric extends GuiMachine {
 					PROGRESS_BAR.height);
 
 		// Draw the energy icon overlay
-		if(tem.energyStorageUnit != null)
+		if(tem.energyStorage != null)
 			drawTexturedModalRect(energyIcon.x, energyIcon.y, ENERGY_ICON.x, ENERGY_ICON.y, ENERGY_ICON.width, ENERGY_ICON.height);
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);

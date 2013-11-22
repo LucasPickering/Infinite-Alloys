@@ -18,6 +18,7 @@ public class GuiMetalForge extends GuiElectric {
 		super(176, 216, inventoryPlayer, tileEntity);
 		temf = tileEntity;
 		progressBar.setLocation(31, 14);
+		energyIcon.setLocation(83, 123);
 	}
 
 	@Override

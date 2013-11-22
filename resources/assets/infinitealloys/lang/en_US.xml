@@ -66,9 +66,7 @@
 	<entry key="achievement.smeltAlloy6.desc">Create A Sixth Usable Alloy</entry>
 
     <entry key="electric.connected.false">NOT CONNECTED</entry>
-    <entry key="electric.connected.true">CONNECTED</entry>
-    <entry key="electric.powered.false">NOT POWERED</entry>
-    <entry key="electric.powered.true">POWERED</entry>
+    <entry key="electric.connected.true">CONNECTED TO </entry>
 
     <entry key="pasture.mode.0">Off</entry>
     <entry key="pasture.mode.1">Att.</entry>

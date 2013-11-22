@@ -108,9 +108,9 @@ public class TEMEnergyStorage extends TileEntityMachine {
 					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to a
 					// energy storage unit, add it to the power network.
 					TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
-					if(te instanceof TileEntityElectric && ((TileEntityElectric)te).energyStorageUnit == null) {
+					if(te instanceof TileEntityElectric && ((TileEntityElectric)te).energyStorage == null) {
 						connectedMachines.add(new Point(xCoord + x, yCoord + y, zCoord + z));
-						((TileEntityElectric)te).energyStorageUnit = this;
+						((TileEntityElectric)te).energyStorage = this;
 					}
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be

@@ -27,7 +27,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	protected float rkPerTickMult = 1.0F;
 
 	/** The energy storage unit that this machine supplies power to or receives power from */
-	public TEMEnergyStorage energyStorageUnit;
+	public TEMEnergyStorage energyStorage;
 
 	public TileEntityElectric(int upgradeSlotIndex) {
 		this();
@@ -45,7 +45,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 
 		// If the machine should be processing and enough energy is available, increment the progress by one. If this is the first tick of the process, call
 		// startProcess(). If it has reached or exceeded the limit for completion, then finish the process and reset the counter.
-		if(shouldProcess() && energyStorageUnit != null && energyStorageUnit.changeRK(getRKChange())) {
+		if(shouldProcess() && energyStorage != null && energyStorage.changeRK(getRKChange())) {
 			if(processProgress == 0)
 				startProcess();
 			if(++processProgress >= ticksToProcess) {
@@ -56,8 +56,8 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 		}
 
 		// If the energy storage unit that was connected to this no longer exists, make it null
-		if(energyStorageUnit != null && worldObj.getBlockTileEntity(energyStorageUnit.xCoord, energyStorageUnit.yCoord, energyStorageUnit.zCoord) == null)
-			energyStorageUnit = null;
+		if(energyStorage != null && worldObj.getBlockTileEntity(energyStorage.xCoord, energyStorage.yCoord, energyStorage.zCoord) == null)
+			energyStorage = null;
 	}
 
 	/** Should the process tick be increased? Called every tick to determine if energy should be used and if progress should continue. NOTE: This will return

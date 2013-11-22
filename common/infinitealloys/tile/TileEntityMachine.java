@@ -113,6 +113,11 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		this.upgrades = upgrades;
 	}
 
+	/** Get a string containing this machine's coordinates */
+	public String getCoords() {
+		return xCoord + ", " + yCoord + ", " + zCoord;
+	}
+
 	public boolean coordsEquals(int x2, int y2, int z2) {
 		return xCoord == x2 && yCoord == y2 && zCoord == z2;
 	}

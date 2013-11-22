@@ -11,5 +11,6 @@ public class GuiGenerator extends GuiElectric {
 		super(214, 176, inventoryPlayer, tileEntity);
 		teg = tileEntity;
 		progressBar.setLocation(71, 39);
+		energyIcon.setLocation(102, 82);
 	}
 }

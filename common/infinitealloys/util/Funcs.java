@@ -18,21 +18,21 @@ public class Funcs {
 
 	/** Translate a number n into a radix, add leading zeros to make it length strlen, then get the digit at pos
 	 * 
+	 * @param n the number that is being used
 	 * @param radix the radix of the number being given, e.g. 10 (decimal) or 2 (binary)\
 	 * @param strlen the length to make the number (will be filled in with leading zeros) before finding the digit
-	 * @param n the number that is being used
 	 * @param pos the position of the digit to be found
 	 * @return the digit at pos, after adding leading zeros to make it length strlen */
 	public static int intAtPos(int n, int radix, int strlen, int pos) {
 		return Character.digit(addLeadingZeros(Integer.toString(n, radix), strlen).charAt(pos), radix);
 	}
 
-	/** Take the log base n of num
+	/** Take the log-base-b of x, using the change of base formula: log-base-b(x) = ln(x)/ln(b)
 	 * 
-	 * @param base the base of the logarithm
-	 * @param n the number to be used */
-	public static double logn(int base, double num) {
-		return Math.log(num) / Math.log(base);
+	 * @param b the base of the logarithm
+	 * @param x the number to be used */
+	public static double logn(int b, double x) {
+		return Math.log(x) / Math.log(b);
 	}
 
 	/** Add leading zeros to a number to make it a certain length
