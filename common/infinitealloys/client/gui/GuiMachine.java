@@ -175,7 +175,7 @@ public abstract class GuiMachine extends GuiContainer {
 		for(ColoredLine line : lines)
 			boxWidth = Math.max(boxWidth, fontRenderer.getStringWidth(line.text));
 
-		// This is from vanilla, I have *NO* idea what it does, other than make it work
+		// This is from vanilla, I have no idea what it does, other than make it work
 		mouseX += 12;
 		mouseY -= 12;
 		int var9 = 8;
