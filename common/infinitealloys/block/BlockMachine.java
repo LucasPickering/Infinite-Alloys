@@ -179,14 +179,12 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, int par5, int par6) {
+	public void breakBlock(World world, int x, int y, int z, int blockID, int metadata) {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
 			tem.dropItems();
 			tem.dropUpgrades();
-			if(tem instanceof TEMEnergyStorage)
-				((TEMEnergyStorage)tem).clearConnectedMachines();
 		}
-		super.breakBlock(world, x, y, z, par5, par6);
+		super.breakBlock(world, x, y, z, blockID, metadata);
 	}
 }

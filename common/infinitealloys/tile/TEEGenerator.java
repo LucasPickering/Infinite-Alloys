@@ -58,7 +58,7 @@ public class TEEGenerator extends TileEntityElectric {
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		ticksToProcess = tagCompound.getShort("TicksToProcess");
+		ticksToProcess = tagCompound.getInteger("TicksToProcess");
 	}
 
 	@Override

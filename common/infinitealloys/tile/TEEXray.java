@@ -21,7 +21,7 @@ public class TEEXray extends TileEntityElectric {
 
 	/** The last point that was checked for the target block in the previous iteration of {@link #search}. The x and z coords are relative to the x-ray block;
 	 * the y coord is absolute */
-	private Point lastSearch = new Point();
+	private Point lastSearch;
 
 	/** Should searching continue, or is it complete. Set this to true to begin a search. */
 	public boolean shouldSearch;
@@ -174,7 +174,10 @@ public class TEEXray extends TileEntityElectric {
 			range = 8;
 		else
 			range = 5;
-		lastSearch.set(-range, 0, -range);
+		if(lastSearch == null)
+			lastSearch = new Point(-range, 0, -range);
+		else
+			lastSearch.set(-range, 0, -range);
 	}
 
 	@Override

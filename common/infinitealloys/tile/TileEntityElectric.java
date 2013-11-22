@@ -54,10 +54,14 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 				onInventoryChanged();
 			}
 		}
+
+		// If the energy storage unit that was connected to this no longer exists, make it null
+		if(energyStorageUnit != null && worldObj.getBlockTileEntity(energyStorageUnit.xCoord, energyStorageUnit.yCoord, energyStorageUnit.zCoord) == null)
+			energyStorageUnit = null;
 	}
 
-	/** Should the process tick be increased? Called every tick to determine if energy should be used and if progress should continue. NOTE: This will return true
-	 * even if there is not a nearby energy storage unit to support the process */
+	/** Should the process tick be increased? Called every tick to determine if energy should be used and if progress should continue. NOTE: This will return
+	 * true even if there is not a nearby energy storage unit to support the process */
 	protected abstract boolean shouldProcess();
 
 	/** Called on the first tick of a process */

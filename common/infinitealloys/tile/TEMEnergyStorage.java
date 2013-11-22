@@ -160,12 +160,6 @@ public class TEMEnergyStorage extends TileEntityMachine {
 		return false;
 	}
 
-	public void clearConnectedMachines() {
-		for(Point p : connectedMachines)
-			((TileEntityElectric)worldObj.getBlockTileEntity(p.x, p.y, p.z)).energyStorageUnit = null;
-		connectedMachines.clear();
-	}
-
 	/** Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK, will the result be less than zero or overflow the machine? If
 	 * this condition is true, make said change, i.e. actually add changeInRK to currentRK
 	 * 
