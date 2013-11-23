@@ -18,7 +18,7 @@ public class GuiXray extends GuiElectric {
 	private final TEEXray tex;
 
 	/** The scroll bar (width is for the scrolling block) */
-	private final Rectangle SCROLL_BAR = new Rectangle(172, 49, 12, 96);
+	private final Rectangle SCROLL_BAR = new Rectangle(172, 51, 12, 96);
 
 	/** TileEntityXray.searchingClient, used to checking if searching just finished */
 	private boolean wasSearching;
@@ -31,16 +31,16 @@ public class GuiXray extends GuiElectric {
 	private boolean initialized;
 
 	public GuiXray(InventoryPlayer inventoryPlayer, TEEXray tileEntity) {
-		super(196, 238, inventoryPlayer, tileEntity);
+		super(196, 240, inventoryPlayer, tileEntity);
 		tex = tileEntity;
 		progressBar.setLocation(54, 5);
-		energyIcon.setLocation(93, 23);
+		energyIcon.setLocation(93, 25);
 	}
 
 	@Override
 	public void initGui() {
 		super.initGui();
-		buttonList.add(searchButton = new GuiButton(1, width / 2 - 30, height / 2 - 92, 80, 20, "Search"));
+		buttonList.add(searchButton = new GuiButton(1, width / 2 - 30, height / 2 - 90, 80, 20, "Search"));
 	}
 
 	@Override
@@ -138,7 +138,7 @@ public class GuiXray extends GuiElectric {
 			}
 			blockButtons = new GuiBlockButton[levels.size()];
 			for(int i = 0; i < blockButtons.length; i++)
-				blockButtons[i] = new GuiBlockButton(mc, itemRenderer, i % 4 * 40 + 9, (i / 4 - scrollPos) * 20 + 50, tex.inventoryStacks[0].itemID, blockCounts[levels.get(i)],
+				blockButtons[i] = new GuiBlockButton(mc, itemRenderer, i % 4 * 40 + 9, (i / 4 - scrollPos) * 20 + 52, tex.inventoryStacks[0].itemID, blockCounts[levels.get(i)],
 						tex.inventoryStacks[0].getItemDamage(), levels.get(i));
 			if(tex.selectedButton != -1)
 				blockButtons[tex.selectedButton].activated = true;

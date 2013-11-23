@@ -42,16 +42,15 @@ public abstract class GuiElectric extends GuiMachine {
 			else
 				drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("electric.connected.false"), 0xff0000));
 		}
-
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	protected void drawGuiContainerBackgroundLayer(float partialTick, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTick, mouseX, mouseY);
+		GL11.glPushMatrix();
+		GL11.glTranslatef(topLeft.x, topLeft.y, 0);
 		bindTexture(extras);
 
 		// Draw the progress bar overlay
@@ -62,6 +61,15 @@ public abstract class GuiElectric extends GuiMachine {
 		// Draw the energy icon overlay
 		if(tem.energyStorage != null)
 			drawTexturedModalRect(energyIcon.x, energyIcon.y, ENERGY_ICON.x, ENERGY_ICON.y, ENERGY_ICON.width, ENERGY_ICON.height);
+		GL11.glPopMatrix();
+	}
+
+	@Override
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);

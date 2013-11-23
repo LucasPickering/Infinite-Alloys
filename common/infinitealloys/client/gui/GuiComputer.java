@@ -20,7 +20,7 @@ public class GuiComputer extends GuiMachine {
 	public void initGui() {
 		super.initGui();
 		// The button to toggle auto-searching
-		buttonList.add(new GuiButton(1, width / 2 + 44, height / 2 - 83, 32, 20, "Auto-Search: " + (tec.autoSearch ? Funcs.getLoc("general.on") : Funcs.getLoc("general.off"))));
+		buttonList.add(new GuiButton(1, width / 2 - 63, height / 2 - 42, 92, 20, "Auto-Search: " + (tec.autoSearch ? Funcs.getLoc("general.on") : Funcs.getLoc("general.off"))));
 	}
 
 	@Override

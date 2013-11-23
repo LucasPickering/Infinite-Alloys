@@ -82,33 +82,33 @@
 
 	<entry key="machineHelp.upgrade.title">Upgrades</entry>
 	<entry key="machineHelp.upgrade.info">Place an upgrade item here/nto add it to the machine</entry>
-	<entry key="machineHelp.energy.title">Energy Meter</entry>
-	<entry key="machineHelp.energy.info">Shows the amount of energy/nstored in the machine</entry>
 	<entry key="machineHelp.progress.title">Progress</entry>
 	<entry key="machineHelp.progress.info">Shows the progress of the/nmachine's current process</entry>
+	<entry key="machineHelp.energy.title">Energy Connection</entry>
+	<entry key="machineHelp.energy.info">Shows the status of the/npower network</entry>
 
 	<entry key="machineHelp.cpTab.title">Machine Tabs</entry>
 	<entry key="machineHelp.cpTab.info">Use these to switch between/nmachines connected to/nthe network</entry>
-	<entry key="machineHelp.cpAdd.title">Machine Network Entry</entry>
-	<entry key="machineHelp.cpAdd.info">Add a machine by entering/nits coordinates, which can/nalso be done with a GPS</entry>
+	<entry key="machineHelp.cpAuto.title">Auto-Search</entry>
+	<entry key="machineHelp.cpAuto.info">While on, the computer periodically searches/nthe local area for machines and adds them to its network</entry>
 
 	<entry key="machineHelp.mfBook.title">Alloy Book</entry>
 	<entry key="machineHelp.mfBook.info">Place an alloy book here to use/nits preset alloy recipes</entry>
 	<entry key="machineHelp.mfOutput.title">Alloy Output</entry>
 	<entry key="machineHelp.mfOutput.info">Completed alloys appear here</entry>
 	<entry key="machineHelp.mfSupply.title">Metal Supply</entry>
-	<entry key="machineHelp.mfSupply.info">All base metal ingots that are/nused to make the alloy/nare stored here</entry>
+	<entry key="machineHelp.mfSupply.info">All base metal ingots that are used to make the alloy are stored here</entry>
 	<entry key="machineHelp.mfPresets.title">Alloy Presets</entry>
 	<entry key="machineHelp.mfPresets.info">Available with an alloy book/n /nUseful alloys are found with the/nanalyzer and can be stored/nand reused/n /nRight and left click to scroll</entry>
 	<entry key="machineHelp.mfSelection.title">Alloy Selection</entry>
-	<entry key="machineHelp.mfSelection.info">The amount of each metal/nto use in the alloy/n /nRight and left click to/nchange amounts</entry>
+	<entry key="machineHelp.mfSelection.info">The amount of each metal to use in the alloy/nRight and left click to change amounts</entry>
 
 	<entry key="machineHelp.azBook.title">Alloy Book</entry>
-    <entry key="machineHelp.azBook.info">Place an alloy book here to/nsave the composition of each/nalloy that is discovered/n /nThe book can then be used in/nthe metal forge</entry>
+    <entry key="machineHelp.azBook.info">Place an alloy book here to save the composition/nof each alloy that is discovered/n /nThe book can then be used in the metal forge</entry>
     <entry key="machineHelp.azSupply.title">Alloy Supply</entry>
-    <entry key="machineHelp.azSupply.info">Place the required metals here/nto research for a new alloy/n /nPut alloy the setting at 0 to see/nthe required metals</entry>
+    <entry key="machineHelp.azSupply.info">Place the required metals here to research for a new alloy/n /nPut alloy the setting at 0 to see the required metals</entry>
     <entry key="machineHelp.azIngots.title">Alloy Composition</entry>
-    <entry key="machineHelp.azIngots.info">This shows the composition of/neach alloy that you have found/n /nSet it to 0 to see the required/nmetals for the next alloy</entry>
+    <entry key="machineHelp.azIngots.info">This shows the composition of each alloy that you have found/n /nSet it to 0 to see the required metals for the next alloy</entry>
    
     <entry key="machineHelp.prInput.title">Book Input</entry>
     <entry key="machineHelp.prInput.info">Place a book here to make a/ncopy of it</entry>
