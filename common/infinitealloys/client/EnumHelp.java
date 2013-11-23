@@ -20,8 +20,8 @@ public enum EnumHelp {
 	MF_BOOK("mfBook", 0xffff00, 7, 51, 18, 18), MF_OUTPUT("mfOutput", 0x0000ff, 143, 47, 26, 26), MF_SUPPLY("mfSupply", 0xff0000, 7, 81, 162, 36),
 	MF_PRESETS("mfPresets", 0xff00ff, 39, 51, 18, 18), MF_SELECTION("mfSelection", 0x00ffff, 64, 41, 74, 38),
 
-	AZ_UPGRADE("upgrade", 0x9c00ff, 171, 7, 18, 18), AZ_PROGRESS("progress", 0x00ff16, 53, 56, 110, 20), AZ_BOOK("azBook", 0xffff00, 171, 32, 18, 18),
-	AZ_INPUT("azInput", 0xff0000, 27, 57, 18, 18), AZ_OUTPUT("azOutput", 0x0000ff, 171, 57, 18, 18), AZ_INGOTS("azIngots", 0x00ffff, 26, 9, 144, 36),
+	AZ_UPGRADE("upgrade", 0x9c00ff, 150, 7, 18, 18), AZ_PROGRESS("progress", 0x00ff16, 7, 6, 110, 20), AZ_BOOK("azBook", 0xffff00, 124, 7, 18, 18),
+	AZ_SUPPLY("azSupply", 0xff0000, 16, 57, 144, 18), AZ_INGOTS("azIngots", 0x00ffff, 3, 28, 144, 24),
 
 	PR_UPGRADE("upgrade", 0x9c00ff, 147, 5, 18, 18), PR_PROGRESS("progress", 0x00ff16, 30, 13, 110, 20),
 	PR_INPUT("prInput", 0xff0000, 11, 43, 18, 18), PR_SUPPLY("prSupply", 0x0000ff, 79, 43, 18, 18), PR_OUTPUT("prOutput", 0xffff00, 147, 43, 18, 18),
@@ -63,7 +63,7 @@ public enum EnumHelp {
 		if(tem instanceof TEEMetalForge)
 			return new EnumHelp[] { MF_UPGRADE, MF_PROGRESS, MF_BOOK, MF_OUTPUT, MF_SUPPLY, MF_PRESETS, MF_SELECTION };
 		if(tem instanceof TEEAnalyzer)
-			return new EnumHelp[] { AZ_UPGRADE, AZ_PROGRESS, AZ_BOOK, AZ_INPUT, AZ_OUTPUT, AZ_INGOTS };
+			return new EnumHelp[] { AZ_UPGRADE, AZ_PROGRESS, AZ_BOOK, AZ_SUPPLY, AZ_INGOTS };
 		if(tem instanceof TEEPrinter)
 			return new EnumHelp[] { PR_UPGRADE, PR_PROGRESS, PR_INPUT, PR_SUPPLY, PR_OUTPUT };
 		if(tem instanceof TEEXray)

@@ -1,8 +1,8 @@
 package infinitealloys.tile;
 
-import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -116,7 +116,7 @@ public class TEEMetalForge extends TileEntityElectric {
 	}
 
 	public int getDamageForAlloy(int alloy) {
-		int[] validAlloys = InfiniteAlloys.instance.worldData.getValidAlloys();
+		int[] validAlloys = Funcs.getValidAlloys();
 		for(int i = 0; i < validAlloys.length; i++)
 			if(alloy == validAlloys[i])
 				return i + 1;

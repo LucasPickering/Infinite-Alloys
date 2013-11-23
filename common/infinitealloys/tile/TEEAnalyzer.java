@@ -1,9 +1,11 @@
 package infinitealloys.tile;
 
+import infinitealloys.handlers.PacketHandler;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import java.util.Arrays;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TEEAnalyzer extends TileEntityElectric {
@@ -15,10 +17,6 @@ public class TEEAnalyzer extends TileEntityElectric {
 	/** A boolean for each metal telling whether or not an ingot of that metal is required to being searching for the next alloy */
 	private final boolean[] requiredMetals = new boolean[Consts.METAL_COUNT];
 
-	/** As more alloys are discovered, it takes more time to find new ones. The length of this array should ALWAYS be equal to
-	 * {@link infinitealloys.util.Consts#VALID_ALLOY_COUNT Consts.VALID_ALLOY_COUNT} */
-	private final int[] ticksToProcessForAlloys = new int[] { 5000, 20000, 80000, 320000, 1280000, 5120000 };
-
 	public TEEAnalyzer(int facing) {
 		this();
 		front = facing;
@@ -28,6 +26,7 @@ public class TEEAnalyzer extends TileEntityElectric {
 		super(10);
 		stackLimit = 1;
 		baseRKPerTick = -1000;
+		ticksToProcess = 2400;
 		updateRequiredMetals();
 	}
 
@@ -67,6 +66,8 @@ public class TEEAnalyzer extends TileEntityElectric {
 
 		// If an alloy book is present, save the newly-discovered alloy to it
 		if(inventoryStacks[8] != null) {
+			if(!inventoryStacks[8].hasTagCompound())
+				inventoryStacks[8].setTagCompound(new NBTTagCompound());
 			int alloy = inventoryStacks[8].getTagCompound().getInteger("alloy");
 			NBTTagCompound tagCompound;
 
@@ -97,6 +98,10 @@ public class TEEAnalyzer extends TileEntityElectric {
 				inventoryStacks[8].setTagCompound(tagCompound);
 			}
 		}
+
+		if(Funcs.isServer())
+			for(String player : playersUsing)
+				PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEPacketToClient(this), Funcs.getPlayerForUsername(player));
 	}
 
 	@Override
@@ -120,9 +125,9 @@ public class TEEAnalyzer extends TileEntityElectric {
 	}
 
 	private void updateRequiredMetals() {
-		ticksToProcess = ticksToProcessForAlloys[unlockedAlloyCount];
-		for(int i = 0; i < requiredMetals.length; i++)
-			requiredMetals[i] = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[unlockedAlloyCount], Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
+		if(unlockedAlloyCount < Consts.VALID_ALLOY_COUNT)
+			for(int i = 0; i < requiredMetals.length; i++)
+				requiredMetals[i] = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[getUnlockedAlloyCount()], Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
 	}
 
 	@Override

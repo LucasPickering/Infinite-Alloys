@@ -145,7 +145,7 @@ public class PacketHandler implements IPacketHandler {
 	}
 
 	public static Packet getWorldDataPacket() {
-		return getPacket(WORLD_DATA, InfiniteAlloys.instance.worldData.getValidAlloys());
+		return getPacket(WORLD_DATA, Funcs.getValidAlloys());
 	}
 
 	public static Packet getTEPacketToClient(TileEntityMachine tem) {

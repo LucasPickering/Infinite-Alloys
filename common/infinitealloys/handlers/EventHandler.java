@@ -43,11 +43,10 @@ public class EventHandler implements ICraftingHandler {
 					Random random = new Random();
 					int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT];
 					for(int i = 0; i < Consts.VALID_ALLOY_COUNT; i++) {
-						int metalCount = Consts.METAL_COUNT;
-						byte[] alloyDigits = new byte[metalCount];
-						for(int j = 0; j < metalCount; j++) {
-							int min = Funcs.intAtPos(Consts.VALID_ALLOY_MINS[i], Consts.ALLOY_RADIX, metalCount, j);
-							int max = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[i], Consts.ALLOY_RADIX, metalCount, j);
+						byte[] alloyDigits = new byte[Consts.METAL_COUNT];
+						for(int j = 0; j < Consts.METAL_COUNT; j++) {
+							int min = Funcs.intAtPos(Consts.VALID_ALLOY_MINS[i], Consts.ALLOY_RADIX, Consts.METAL_COUNT, j);
+							int max = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[i], Consts.ALLOY_RADIX, Consts.METAL_COUNT, j);
 							alloyDigits[j] = (byte)(min + (max == min ? 0 : random.nextInt(max - min)));
 						}
 						String alloy = "";

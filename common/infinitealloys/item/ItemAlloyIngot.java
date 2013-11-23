@@ -1,6 +1,5 @@
 package infinitealloys.item;
 
-import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import java.util.List;
@@ -40,13 +39,11 @@ public class ItemAlloyIngot extends ItemIA {
 		if(itemstack.hasTagCompound())
 			alloy = itemstack.getTagCompound().getInteger("alloy");
 		else if(damage >= 0 && damage < Consts.VALID_ALLOY_COUNT)
-			alloy = InfiniteAlloys.instance.worldData.getValidAlloys()[damage];
+			alloy = Funcs.getValidAlloys()[damage];
 		else
 			return;
-		for(int i = 0; i < Consts.METAL_COUNT; i++) {
-			metalContent[i] = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i);
-			totalMass += metalContent[i];
-		}
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
+			totalMass += metalContent[i] = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i);
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
 			float percentage = Math.round((float)metalContent[i] / (float)totalMass * 1000F) / 10F;
 			if(percentage != 0)
@@ -63,7 +60,7 @@ public class ItemAlloyIngot extends ItemIA {
 		if(itemstack.hasTagCompound())
 			alloy = itemstack.getTagCompound().getInteger("alloy");
 		else if(itemstack.getItemDamage() > 0 && itemstack.getItemDamage() < Consts.VALID_ALLOY_COUNT)
-			alloy = InfiniteAlloys.instance.worldData.getValidAlloys()[itemstack.getItemDamage() - 1];
+			alloy = Funcs.getValidAlloys()[itemstack.getItemDamage() - 1];
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
 			int ingotColor = Consts.metalColors[Consts.METAL_COUNT - 1 - i];
 			int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i);

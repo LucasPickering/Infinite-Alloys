@@ -1,9 +1,11 @@
 package infinitealloys.util;
 
+import infinitealloys.core.InfiniteAlloys;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class Funcs {
@@ -16,7 +18,8 @@ public class Funcs {
 		return getBlock(world.getBlockId(x, y, z));
 	}
 
-	/** Translate a number n into a radix, add leading zeros to make it length strlen, then get the digit at pos
+	/** Translate a number n into a radix, add leading zeros to make it length strlen, then get the digit at pos. The right-most position is 0 and they increase
+	 * as they move to the left.
 	 * 
 	 * @param n the number that is being used
 	 * @param radix the radix of the number being given, e.g. 10 (decimal) or 2 (binary)\
@@ -24,7 +27,7 @@ public class Funcs {
 	 * @param pos the position of the digit to be found
 	 * @return the digit at pos, after adding leading zeros to make it length strlen */
 	public static int intAtPos(int n, int radix, int strlen, int pos) {
-		return Character.digit(addLeadingZeros(Integer.toString(n, radix), strlen).charAt(pos), radix);
+		return Character.digit(addLeadingZeros(Integer.toString(n, radix), strlen).charAt(strlen - pos - 1), radix);
 	}
 
 	/** Take the log-base-b of x, using the change of base formula: log-base-b(x) = ln(x)/ln(b)
@@ -139,5 +142,15 @@ public class Funcs {
 	 * @return true if block at x, y, z is equals id and metadata */
 	public static boolean blocksEqual(World world, int id, int metadata, int x, int y, int z) {
 		return world.getBlockId(x, y, z) == id && world.getBlockMetadata(x, y, z) == metadata;
+	}
+
+	/** Get the array of ints that represents the valid alloys */
+	public static int[] getValidAlloys() {
+		return InfiniteAlloys.instance.worldData.getValidAlloys();
+	}
+
+	/** Get an instance of a player from their name */
+	public static Player getPlayerForUsername(String name) {
+		return (Player)FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
 	}
 }

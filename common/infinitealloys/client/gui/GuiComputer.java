@@ -12,7 +12,7 @@ public class GuiComputer extends GuiMachine {
 	public TEMComputer tec;
 
 	public GuiComputer(InventoryPlayer inventoryPlayer, TEMComputer tileEntity) {
-		super(176, 176, inventoryPlayer, tileEntity);
+		super(176, 166, inventoryPlayer, tileEntity);
 		tec = tileEntity;
 	}
 

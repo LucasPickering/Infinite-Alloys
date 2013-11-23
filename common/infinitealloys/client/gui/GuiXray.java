@@ -102,10 +102,15 @@ public class GuiXray extends GuiElectric {
 					}
 				}
 			}
+
 			setButtons();
+			// Was the scroll up button clicked?
 			if(mouseInZone(mouseX, mouseY, topLeft.x + 172, topLeft.y + 40, 14, 8))
+				// Scroll up
 				scroll(-1);
+			// Was the scroll down button clicked?
 			else if(mouseInZone(mouseX, mouseY, topLeft.x + 172, topLeft.y + 147, 14, 8))
+				// Scroll down
 				scroll(1);
 		}
 	}

@@ -12,9 +12,9 @@ public class ContainerAnalyzer extends ContainerMachine {
 		inventory = tileEntity;
 
 		for(int x = 0; x < 8; x++)
-			addSlotToContainer(new SlotMachine(inventory, inventory.getID(), x, 28 + x * 18, 58));
-		addSlotToContainer(new SlotMachine(inventory, inventory.getID(), 8, 172, 58));
+			addSlotToContainer(new SlotMachine(inventory, inventory.getID(), x, 17 + x * 18, 58));
+		addSlotToContainer(new SlotMachine(inventory, inventory.getID(), 8, 125, 8));
 
-		initSlots(inventoryPlayer, 20, 84, 172, 8);
+		initSlots(inventoryPlayer, 8, 84, 151, 8);
 	}
 }
