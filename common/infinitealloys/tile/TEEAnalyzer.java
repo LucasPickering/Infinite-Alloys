@@ -9,14 +9,17 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class TEEAnalyzer extends TileEntityElectric {
 
+	/** A boolean for each metal telling whether or not an ingot of that metal is required to being searching for the next alloy */
+	private boolean[] requiredMetals = new boolean[Consts.METAL_COUNT];
+
 	public TEEAnalyzer(int facing) {
 		this();
 		front = facing;
 	}
 
 	public TEEAnalyzer() {
-		super(3);
-		inventoryStacks = new ItemStack[4];
+		super(9);
+		inventoryStacks = new ItemStack[10];
 		stackLimit = 1;
 		baseRKPerTick = -36;
 		ticksToProcess = 3600;
@@ -30,20 +33,24 @@ public class TEEAnalyzer extends TileEntityElectric {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if(inventoryStacks[0] == null && inventoryStacks[1] != null)
-			processProgress = 0;
 	}
 
 	@Override
 	public boolean shouldProcess() {
-		return inventoryStacks[0] != null && inventoryStacks[1] == null;
+		if(processProgress > 0)
+			return true;
+		for(int i = 0; i < requiredMetals.length; i++)
+			if(inventoryStacks[i] == null)
+				return false;
+		return true;
 	}
 
 	@Override
 	public void finishProcess() {
-		if(InfiniteAlloys.instance.worldData.alloysUnlocked == Math.min(inventoryStacks[0].getItemDamage() - 1, Consts.VALID_ALLOY_COUNT))
-			InfiniteAlloys.instance.worldData.alloysUnlocked = inventoryStacks[0].getItemDamage();
-		if(inventoryStacks[2] != null) {
+		InfiniteAlloys.instance.worldData.incrUnlockedAlloyCount();
+
+		// If an alloy book is present, save the newly-discovered alloy to it
+		if(inventoryStacks[8] != null) {
 			int alloy = inventoryStacks[0].getTagCompound().getInteger("alloy");
 			NBTTagCompound tagCompound;
 
@@ -52,8 +59,8 @@ public class TEEAnalyzer extends TileEntityElectric {
 			int[] newSave;
 
 			// init the compound
-			if(inventoryStacks[2].hasTagCompound())
-				tagCompound = inventoryStacks[2].getTagCompound();
+			if(inventoryStacks[8].hasTagCompound())
+				tagCompound = inventoryStacks[8].getTagCompound();
 			else
 				tagCompound = new NBTTagCompound();
 
@@ -71,7 +78,7 @@ public class TEEAnalyzer extends TileEntityElectric {
 			if(newSave.length < Consts.VALID_ALLOY_COUNT && Arrays.binarySearch(newSave, alloy) < 0) {
 				newSave[newSave.length - 1] = alloy;
 				tagCompound.setIntArray("alloys", newSave);
-				inventoryStacks[2].setTagCompound(tagCompound);
+				inventoryStacks[8].setTagCompound(tagCompound);
 			}
 		}
 		inventoryStacks[1] = inventoryStacks[0];

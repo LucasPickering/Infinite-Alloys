@@ -14,9 +14,9 @@ public class ContainerAnalyzer extends ContainerMachine {
 	public ContainerAnalyzer(InventoryPlayer inventoryPlayer, TEEAnalyzer tileEntity) {
 		super(tileEntity);
 		inventory = tileEntity;
-		addSlotToContainer(new SlotAnalyzer(inventory, 0, 28, 58, inventory.getID()));
-		addSlotToContainer(new SlotAnalyzer(inventory, 1, 172, 58, inventory.getID()));
-		addSlotToContainer(new SlotAnalyzer(inventory, 2, 172, 33, inventory.getID()));
+		addSlotToContainer(new SlotMachine(inventory, 0, 28, 58, inventory.getID()));
+		addSlotToContainer(new SlotMachine(inventory, 1, 172, 58, inventory.getID()));
+		addSlotToContainer(new SlotMachine(inventory, 2, 172, 33, inventory.getID()));
 		addSlotToContainer(new SlotUpgrade(inventory, 3, 172, 8));
 		for(int y = 0; y < 3; y++)
 			for(int x = 0; x < 9; x++)

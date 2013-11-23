@@ -4,8 +4,6 @@ import infinitealloys.block.Blocks;
 import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.stats.Achievement;
-import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -26,8 +24,6 @@ public class InfiniteAlloys {
 	public static CommonProxy proxy;
 	public static boolean[] spawnOres = new boolean[Consts.METAL_COUNT];
 	public static CreativeTabs tabIA;
-	public static Achievement[] achievements = new Achievement[7];
-	public static AchievementPage achPage;
 	public WorldData worldData;
 
 	@EventHandler
@@ -60,7 +56,6 @@ public class InfiniteAlloys {
 		proxy.initRecipes();
 		proxy.initTileEntities();
 		proxy.initHandlers();
-		proxy.initAchievements();
 		proxy.initRendering();
 	}
 

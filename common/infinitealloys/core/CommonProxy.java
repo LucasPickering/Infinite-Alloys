@@ -21,8 +21,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.stats.Achievement;
-import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -138,14 +136,6 @@ public class CommonProxy {
 		GameRegistry.registerCraftingHandler(eventHandler);
 		GameRegistry.registerWorldGenerator(new WorldGenHandler());
 		NetworkRegistry.instance().registerGuiHandler(InfiniteAlloys.instance, gfxHandler);
-	}
-
-	public void initAchievements() {
-		InfiniteAlloys.achievements[0] = new Achievement(2000, "craftMetalForge", 0, 0, new ItemStack(Blocks.machine, 1, 1), null).registerAchievement();
-		for(int i = 1; i <= Consts.VALID_ALLOY_COUNT; i++)
-			InfiniteAlloys.achievements[i] = new Achievement(2000 + i, "smeltAlloy" + i, 2 * i, 0, new ItemStack(Items.alloyIngot, 1, i), InfiniteAlloys.achievements[i - 1]).registerAchievement();
-		InfiniteAlloys.achPage = new AchievementPage("Infinite Alloys", InfiniteAlloys.achievements);
-		AchievementPage.registerAchievementPage(InfiniteAlloys.achPage);
 	}
 
 	public void initRendering() {}

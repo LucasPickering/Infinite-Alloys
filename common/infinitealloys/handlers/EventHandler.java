@@ -1,6 +1,5 @@
 package infinitealloys.handlers;
 
-import infinitealloys.block.Blocks;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.WorldData;
 import infinitealloys.util.Consts;
@@ -114,12 +113,7 @@ public class EventHandler implements ICraftingHandler {
 	}
 
 	@Override
-	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {
-		if(item.itemID == Blocks.machine.blockID && item.getItemDamage() == 1) {
-			System.out.println("Adding stat");
-			player.addStat(InfiniteAlloys.achievements[0], 1);
-		}
-	}
+	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {}
 
 	@Override
 	public void onSmelting(EntityPlayer player, ItemStack item) {}
