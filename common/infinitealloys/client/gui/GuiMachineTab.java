@@ -1,6 +1,6 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.tile.TileEntityElectric;
+import infinitealloys.tile.TileEntityMachine;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -10,12 +10,12 @@ import org.lwjgl.opengl.GL11;
 public class GuiMachineTab extends GuiScreen {
 
 	private final RenderItem itemRenderer;
-	public TileEntityElectric tem;
+	public TileEntityMachine tem;
 	public int xPos, yPos;
 	private final boolean leftSide;
 	private final boolean activated;
 
-	public GuiMachineTab(Minecraft mc, RenderItem itemRenderer, int xPos, int yPos, TileEntityElectric tem, boolean leftSide, boolean activated) {
+	public GuiMachineTab(Minecraft mc, RenderItem itemRenderer, int xPos, int yPos, TileEntityMachine tem, boolean leftSide, boolean activated) {
 		this.mc = mc;
 		this.itemRenderer = itemRenderer;
 		this.xPos = xPos;

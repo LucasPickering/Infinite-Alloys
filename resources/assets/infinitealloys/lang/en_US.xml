@@ -104,11 +104,11 @@
 	<entry key="machineHelp.mfSelection.info">The amount of each metal/nto use in the alloy/n /nRight and left click to/nchange amounts</entry>
 
 	<entry key="machineHelp.azBook.title">Alloy Book</entry>
-    <entry key="machineHelp.azBook.info">Place an alloy book here to/nsave the composition of each/nalloy that is discovered/n /nThe book can then be used in the/nmetal forge</entry>
+    <entry key="machineHelp.azBook.info">Place an alloy book here to/nsave the composition of each/nalloy that is discovered/n /nThe book can then be used in/nthe metal forge</entry>
     <entry key="machineHelp.azSupply.title">Alloy Supply</entry>
-    <entry key="machineHelp.azSupply.info">Place an alloy here to/nanalyze its composition and/nsee if it is useful</entry>
+    <entry key="machineHelp.azSupply.info">Place the required metals here/nto research for a new alloy/n /nPut alloy the setting at 0 to see/nthe required metals</entry>
     <entry key="machineHelp.azIngots.title">Alloy Composition</entry>
-    <entry key="machineHelp.azIngots.info">This shows the adjustments/nyou must make to/nachieve the next useful alloy/n /nUseful alloys are discovered/nin order, i.e. you must find/nthe first, then the second,/nand so on</entry>
+    <entry key="machineHelp.azIngots.info">This shows the composition of/neach alloy that you have found/n /nSet it to 0 to see the required/nmetals for the next alloy</entry>
    
     <entry key="machineHelp.prInput.title">Book Input</entry>
     <entry key="machineHelp.prInput.info">Place a book here to make a/ncopy of it</entry>

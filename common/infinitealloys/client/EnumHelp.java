@@ -21,7 +21,7 @@ public enum EnumHelp {
 	MF_PRESETS("mfPresets", 0xff00ff, 39, 51, 18, 18), MF_SELECTION("mfSelection", 0x00ffff, 64, 41, 74, 38),
 
 	AZ_UPGRADE("upgrade", 0x9c00ff, 150, 7, 18, 18), AZ_PROGRESS("progress", 0x00ff16, 7, 6, 110, 20), AZ_BOOK("azBook", 0xffff00, 124, 7, 18, 18),
-	AZ_SUPPLY("azSupply", 0xff0000, 16, 57, 144, 18), AZ_INGOTS("azIngots", 0x00ffff, 3, 28, 144, 24),
+	AZ_SUPPLY("azSupply", 0xff0000, 16, 57, 144, 18), AZ_INGOTS("azIngots", 0x00ffff, 3, 27, 158, 28),
 
 	PR_UPGRADE("upgrade", 0x9c00ff, 147, 5, 18, 18), PR_PROGRESS("progress", 0x00ff16, 30, 13, 110, 20),
 	PR_INPUT("prInput", 0xff0000, 11, 43, 18, 18), PR_SUPPLY("prSupply", 0x0000ff, 79, 43, 18, 18), PR_OUTPUT("prOutput", 0xffff00, 147, 43, 18, 18),

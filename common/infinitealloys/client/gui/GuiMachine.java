@@ -154,7 +154,7 @@ public abstract class GuiMachine extends GuiContainer {
 		Point cont = MachineHelper.controllers.get(mc.thePlayer.username);
 		if(cont != null) {
 			TEMComputer tec = ((TEMComputer)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z));
-			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, (TileEntityElectric)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true,
+			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true,
 					tem.coordsEquals(cont.x, cont.y, cont.z));
 			controllerTab.drawButton();
 			for(int i = 0; i < tec.connectedMachines.size(); i++) {

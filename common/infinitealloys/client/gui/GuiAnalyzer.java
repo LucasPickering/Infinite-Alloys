@@ -22,6 +22,7 @@ public class GuiAnalyzer extends GuiElectric {
 		tea = tileEntity;
 		progressBar.setLocation(8, 7);
 		energyIcon.setLocation(83, 77);
+		updateRequiredMetals();
 	}
 
 	@Override
@@ -41,7 +42,7 @@ public class GuiAnalyzer extends GuiElectric {
 						i * 18 + 28, 42, 0xffffff);
 		}
 
-		drawString(fontRenderer, selectedRecipe == 0 ? "+" : new Integer(selectedRecipe).toString(), 7, 37, 0xffffff);
+		drawString(fontRenderer, new Integer(selectedRecipe).toString(), 7, 37, 0xffffff);
 
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -60,13 +61,16 @@ public class GuiAnalyzer extends GuiElectric {
 			if(mouseInZone(mouseX, mouseY, topLeft.x + 4, topLeft.y + 47, 14, 8) && selectedRecipe > 0)
 				// Decrease the selection
 				selectedRecipe--;
-			for(int i = 0; i < requiredMetals.length; i++) {
-				if(selectedRecipe == 0)
-					requiredMetals[i] = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[tea.getUnlockedAlloyCount()], Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
-				else
-					requiredMetals[i] = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[selectedRecipe - 1], Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
-			}
+			updateRequiredMetals();
+		}
+	}
 
+	private void updateRequiredMetals() {
+		for(int i = 0; i < requiredMetals.length; i++) {
+			if(selectedRecipe == 0)
+				requiredMetals[i] = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[tea.getUnlockedAlloyCount()], Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
+			else
+				requiredMetals[i] = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[selectedRecipe - 1], Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
 		}
 	}
 }
