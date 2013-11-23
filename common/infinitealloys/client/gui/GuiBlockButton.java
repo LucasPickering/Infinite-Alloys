@@ -14,16 +14,16 @@ public class GuiBlockButton extends GuiScreen {
 
 	/** The background pattern of the button, dependent on the elevation. Can be bedrock, stone, dirt, grass, or sky */
 	private final Background[] BACKGROUNDS = { new Background(0, 5, 84, 24), new Background(6, 50, 118, 24), new Background(51, 60, 152, 24),
-			new Background(61, 85, 186, 24), new Background(86, Short.MAX_VALUE, 220, 24) };
+		new Background(61, 85, 186, 24), new Background(86, Short.MAX_VALUE, 220, 24) };
 
-	private RenderItem itemRenderer;
+	private final RenderItem itemRenderer;
 
 	/** The position of the button within the GUI */
-	private int xPos, yPos;
+	private final int xPos, yPos;
 
-	private int blockID, blockAmount, blockMeta;
+	private final int blockID, blockAmount, blockMeta;
 	/** The yValue of blocks that this button represents */
-	private int yValue;
+	private final int yValue;
 	private Background background;
 	public boolean activated;
 
@@ -92,7 +92,7 @@ public class GuiBlockButton extends GuiScreen {
 		private Background(int start, int end, int u, int v) {
 			this.start = start;
 			this.end = end;
-			this.texture = new Rectangle(u, v, 34, 16);
+			texture = new Rectangle(u, v, 34, 16);
 		}
 	}
 }

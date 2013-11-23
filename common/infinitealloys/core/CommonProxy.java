@@ -30,8 +30,8 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class CommonProxy {
 
-	private ItemStack[] alloys = new ItemStack[Consts.VALID_ALLOY_COUNT];
-	private ItemStack[] upgrades = new ItemStack[Consts.UPGRADE_COUNT];
+	private final ItemStack[] alloys = new ItemStack[Consts.VALID_ALLOY_COUNT];
+	private final ItemStack[] upgrades = new ItemStack[Consts.UPGRADE_COUNT];
 	public GfxHandler gfxHandler;
 
 	public void initLocalization() {}

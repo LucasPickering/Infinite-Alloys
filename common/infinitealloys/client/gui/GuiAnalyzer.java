@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiAnalyzer extends GuiElectric {
 
-	private TEEAnalyzer tea;
+	private final TEEAnalyzer tea;
 
 	public GuiAnalyzer(InventoryPlayer inventoryPlayer, TEEAnalyzer tileEntity) {
 		super(216, 166, inventoryPlayer, tileEntity);

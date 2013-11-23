@@ -12,7 +12,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiMetalForge extends GuiElectric {
 
-	private TEEMetalForge temf;
+	private final TEEMetalForge temf;
 
 	public GuiMetalForge(InventoryPlayer inventoryPlayer, TEEMetalForge tileEntity) {
 		super(176, 216, inventoryPlayer, tileEntity);

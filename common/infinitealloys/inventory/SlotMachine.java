@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack;
 
 public class SlotMachine extends Slot {
 
-	private int temID;
-	private int slotIndex;
+	private final int temID;
+	private final int slotIndex;
 
 	/** @param temID The ID number for the type of machine that this slot is in
 	 * @param index The number that refers to the slot in the array of slots that make up the container

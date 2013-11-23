@@ -14,7 +14,7 @@ public class ContainerAnalyzer extends ContainerMachine {
 		for(int x = 0; x < 8; x++)
 			addSlotToContainer(new SlotMachine(inventory, inventory.getID(), x, 28 + x * 18, 58));
 		addSlotToContainer(new SlotMachine(inventory, inventory.getID(), 8, 172, 58));
-		
+
 		initSlots(inventoryPlayer, 20, 84, 172, 8);
 	}
 }

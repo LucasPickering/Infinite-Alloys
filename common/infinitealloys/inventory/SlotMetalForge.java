@@ -5,7 +5,7 @@ import net.minecraft.inventory.IInventory;
 
 public class SlotMetalForge extends SlotMachine {
 
-	private int slotIndex;
+	private final int slotIndex;
 
 	public SlotMetalForge(IInventory inventory, int index, int x, int y, int temID) {
 		super(inventory, temID, index, x, y);

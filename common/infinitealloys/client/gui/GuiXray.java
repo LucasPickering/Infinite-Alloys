@@ -15,7 +15,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiXray extends GuiElectric {
 
-	private TEEXray tex;
+	private final TEEXray tex;
 
 	/** The scroll bar (width is for the scrolling block) */
 	private final Rectangle SCROLL_BAR = new Rectangle(172, 49, 12, 96);

@@ -13,7 +13,7 @@ public class GuiPasture extends GuiElectric {
 	public TEEPasture tep;
 
 	/** The buttons to enable/disable the mob trapping/repulsion in the order of chicken, cow, pig, sheep, creeper, skeleton, spider, zombie */
-	private GuiButton[] mobButtons = new GuiButton[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
+	private final GuiButton[] mobButtons = new GuiButton[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 
 	public GuiPasture(InventoryPlayer inventoryPlayer, TEEPasture tileEntity) {
 		super(210, 186, inventoryPlayer, tileEntity);

@@ -9,11 +9,11 @@ import org.lwjgl.opengl.GL11;
 
 public class GuiMachineTab extends GuiScreen {
 
-	private RenderItem itemRenderer;
+	private final RenderItem itemRenderer;
 	public TileEntityElectric tem;
 	public int xPos, yPos;
-	private boolean leftSide;
-	private boolean activated;
+	private final boolean leftSide;
+	private final boolean activated;
 
 	public GuiMachineTab(Minecraft mc, RenderItem itemRenderer, int xPos, int yPos, TileEntityElectric tem, boolean leftSide, boolean activated) {
 		this.mc = mc;

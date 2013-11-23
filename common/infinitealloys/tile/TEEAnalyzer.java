@@ -9,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 public class TEEAnalyzer extends TileEntityElectric {
 
 	/** A boolean for each metal telling whether or not an ingot of that metal is required to being searching for the next alloy */
-	private boolean[] requiredMetals = new boolean[Consts.METAL_COUNT];
+	private final boolean[] requiredMetals = new boolean[Consts.METAL_COUNT];
 
 	public TEEAnalyzer(int facing) {
 		this();

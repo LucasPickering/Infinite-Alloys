@@ -147,7 +147,7 @@ public class TEEXray extends TileEntityElectric {
 	}
 
 	public void handlePacketDataFromClient(boolean searching) {
-		this.searchingClient = searching;
+		searchingClient = searching;
 	}
 
 	@Override
