@@ -47,12 +47,12 @@ public class TEEPasture extends TileEntityElectric {
 	}
 
 	@Override
-	public boolean shouldProcess() {
+	protected boolean shouldProcess() {
 		return true;
 	}
 
 	@Override
-	public void finishProcess() {
+	protected void finishProcess() {
 		/* NOTE: For this specific machine, ticksToProcess = 0, meaning this function is called every tick. It is essentially an updateEntity() function with
 		 * conditions applied in TileEntityMachine.updateEntity() */
 

@@ -21,24 +21,19 @@ public class TEEPrinter extends TileEntityElectric {
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		if(inventoryStacks[0] != null && inventoryStacks[1] != null && inventoryStacks[2] == null)
-			processProgress = 0;
-	}
-
-	@Override
-	public boolean shouldProcess() {
+	protected boolean shouldProcess() {
 		return inventoryStacks[0] != null && inventoryStacks[1] != null && inventoryStacks[2] == null;
 	}
 
 	@Override
-	public void finishProcess() {
+	protected boolean resetProgress() {
+		return inventoryStacks[0] == null || inventoryStacks[1] == null;
+	}
+
+	@Override
+	protected void finishProcess() {
 		inventoryStacks[2] = inventoryStacks[0].copy();
-		inventoryStacks[1].stackSize--;
-		if(inventoryStacks[1].stackSize == 0)
-			inventoryStacks[1] = null;
-		processProgress = 0;
+		decrStackSize(inventoryStacks[1].stackSize, 1);
 	}
 
 	@Override

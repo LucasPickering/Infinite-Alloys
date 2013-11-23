@@ -58,12 +58,12 @@ public class TEEXray extends TileEntityElectric {
 	}
 
 	@Override
-	public boolean shouldProcess() {
+	protected boolean shouldProcess() {
 		return searchingClient;
 	}
 
 	@Override
-	public void finishProcess() {
+	protected void finishProcess() {
 		searchingClient = false;
 	}
 

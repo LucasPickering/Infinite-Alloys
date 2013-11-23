@@ -35,24 +35,22 @@ public class TEEMetalForge extends TileEntityElectric {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		if(!Arrays.equals(lastRecipeAmts, recipeAmts))
-			processProgress = 0;
 		lastRecipeAmts = Arrays.copyOf(recipeAmts, recipeAmts.length);
 	}
 
 	@Override
 	protected boolean shouldProcess() {
 		int typesInRecipe = 0;
-		ArrayList<Boolean> sufficientIngots = new ArrayList<Boolean>();
 		for(int amt : recipeAmts)
 			if(amt > 0)
 				typesInRecipe++;
-		for(int i = 0; i < getIngotAmts().length; i++)
-			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
-		if(sufficientIngots.contains(false))
-			processProgress = 0;
 		return (inventoryStacks[1] == null || inventoryStacks[1].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[1].stackSize >= 1)
-				&& typesInRecipe > 1 && !sufficientIngots.contains(false);
+				&& typesInRecipe > 1 && hasSufficientIngots();
+	}
+
+	@Override
+	protected boolean resetProgress() {
+		return !hasSufficientIngots() || !Arrays.equals(lastRecipeAmts, recipeAmts);
 	}
 
 	@Override
@@ -107,6 +105,14 @@ public class TEEMetalForge extends TileEntityElectric {
 		result.setTagCompound(tagCompound);
 		result.setItemDamage(getDamageForAlloy(alloy));
 		return result;
+	}
+
+	/** Does the inventory of the forge contain enough ingots to fulfill the current recipe? */
+	private boolean hasSufficientIngots() {
+		for(int i = 0; i < getIngotAmts().length; i++)
+			if(getIngotAmts()[i] < recipeAmts[i])
+				return false;
+		return true;
 	}
 
 	public int getDamageForAlloy(int alloy) {

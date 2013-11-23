@@ -166,7 +166,7 @@ public class PacketHandler implements IPacketHandler {
 				dos.writeInt(((TEMEnergyStorage)tem).getCurrentRK());
 			else if(tem instanceof TileEntityElectric) {
 				TileEntityElectric tee = (TileEntityElectric)tem;
-				dos.writeInt(tee.processProgress);
+				dos.writeInt(tee.getProcessProgress());
 				if(tee instanceof TEEMetalForge)
 					for(byte amt : ((TEEMetalForge)tee).recipeAmts)
 						dos.writeByte(amt);

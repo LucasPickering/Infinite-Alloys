@@ -8,7 +8,6 @@ public class TEEGenerator extends TileEntityElectric {
 
 	/** The ratio between how long an item will burn in a generator and how long it will burn in a furnace. Generator is numerator, furnace is demoninator. */
 	private final float GENERATOR_TO_FURNACE_TICK_RATIO = 0.5F;
-	private boolean burning;
 
 	public TEEGenerator(int facing) {
 		this();
@@ -27,7 +26,7 @@ public class TEEGenerator extends TileEntityElectric {
 
 	@Override
 	protected boolean shouldProcess() {
-		if(burning)
+		if(getProcessProgress() > 0)
 			return true;
 		for(int i = 0; i < inventoryStacks.length - 1; i++)
 			if(inventoryStacks[i] != null)
@@ -42,15 +41,9 @@ public class TEEGenerator extends TileEntityElectric {
 			if(inventoryStacks[i] != null) {
 				ticksToProcess = (int)(TileEntityFurnace.getItemBurnTime(inventoryStacks[i]) * GENERATOR_TO_FURNACE_TICK_RATIO);
 				decrStackSize(i, 1);
-				burning = true;
 				break;
 			}
 		}
-	}
-
-	@Override
-	protected void finishProcess() {
-		burning = false;
 	}
 
 	@Override

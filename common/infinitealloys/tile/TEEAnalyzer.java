@@ -29,13 +29,8 @@ public class TEEAnalyzer extends TileEntityElectric {
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
-	}
-
-	@Override
-	public boolean shouldProcess() {
-		if(processProgress > 0)
+	protected boolean shouldProcess() {
+		if(getProcessProgress() > 0)
 			return true;
 		for(int i = 0; i < requiredMetals.length; i++)
 			if(inventoryStacks[i] == null)
@@ -44,7 +39,7 @@ public class TEEAnalyzer extends TileEntityElectric {
 	}
 
 	@Override
-	public void finishProcess() {
+	protected void finishProcess() {
 		InfiniteAlloys.instance.worldData.incrUnlockedAlloyCount();
 
 		// If an alloy book is present, save the newly-discovered alloy to it

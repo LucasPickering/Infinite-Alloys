@@ -18,7 +18,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	public int ticksToProcess = 200;
 
 	/** Amount of ticks this machine has been running its process for, when this reaches ticksToFinish it is done */
-	public int processProgress;
+	private int processProgress;
 
 	/** A multiplier for the time it takes to process, changed with upgrades. NOTE: Less is faster */
 	protected float processTimeMult = 1.0F;
@@ -36,6 +36,10 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
+
+		// Under certain conditions, reset the progress of the machine
+		if(resetProgress())
+			processProgress = 0;
 
 		// If the machine should be processing and enough energy is available, increment the progress by one. If this is the first tick of the process, call
 		// startProcess(). If it has reached or exceeded the limit for completion, then finish the process and reset the counter.
@@ -58,6 +62,11 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	 * true even if there is not a nearby energy storage unit to support the process */
 	protected abstract boolean shouldProcess();
 
+	/** Should processProgress be reset to 0? */
+	protected boolean resetProgress() {
+		return false;
+	}
+
 	/** Called on the first tick of a process */
 	protected void startProcess() {}
 
@@ -69,6 +78,10 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 		if(shouldProcess())
 			return (int)(baseRKPerTick * rkPerTickMult / processTimeMult);
 		return 0;
+	}
+
+	public int getProcessProgress() {
+		return processProgress;
 	}
 
 	@SideOnly(Side.CLIENT)
