@@ -93,7 +93,7 @@
 	<entry key="machineHelp.cpAdd.info">Add a machine by entering/nits coordinates, which can/nalso be done with a GPS</entry>
 
 	<entry key="machineHelp.mfBook.title">Alloy Book</entry>
-	<entry key="machineHelp.mfBook.info">Place an alloy book here to use/nits preset alloys recipes</entry>
+	<entry key="machineHelp.mfBook.info">Place an alloy book here to use/nits preset alloy recipes</entry>
 	<entry key="machineHelp.mfOutput.title">Alloy Output</entry>
 	<entry key="machineHelp.mfOutput.info">Completed alloys appear here</entry>
 	<entry key="machineHelp.mfSupply.title">Metal Supply</entry>

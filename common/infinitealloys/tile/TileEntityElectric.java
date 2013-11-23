@@ -29,14 +29,8 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	/** The energy storage unit that this machine supplies power to or receives power from */
 	public TEMEnergyStorage energyStorage;
 
-	public TileEntityElectric(int upgradeSlotIndex) {
-		this();
-		this.upgradeSlotIndex = upgradeSlotIndex;
-	}
-
-	public TileEntityElectric() {
-		populateValidUpgrades();
-		updateUpgrades();
+	public TileEntityElectric(int inventoryLength) {
+		super(inventoryLength);
 	}
 
 	@Override

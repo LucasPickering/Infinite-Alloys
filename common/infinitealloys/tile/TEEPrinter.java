@@ -1,7 +1,6 @@
 package infinitealloys.tile;
 
 import infinitealloys.util.MachineHelper;
-import net.minecraft.item.ItemStack;
 
 public class TEEPrinter extends TileEntityElectric {
 
@@ -11,8 +10,7 @@ public class TEEPrinter extends TileEntityElectric {
 	}
 
 	public TEEPrinter() {
-		super(3);
-		inventoryStacks = new ItemStack[4];
+		super(4);
 		ticksToProcess = 200;
 		baseRKPerTick = -36;
 	}

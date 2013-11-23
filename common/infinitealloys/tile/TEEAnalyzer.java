@@ -4,7 +4,6 @@ import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
 import java.util.Arrays;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TEEAnalyzer extends TileEntityElectric {
@@ -18,8 +17,7 @@ public class TEEAnalyzer extends TileEntityElectric {
 	}
 
 	public TEEAnalyzer() {
-		super(9);
-		inventoryStacks = new ItemStack[10];
+		super(10);
 		stackLimit = 1;
 		baseRKPerTick = -36;
 		ticksToProcess = 3600;

@@ -12,18 +12,15 @@ public class ContainerXray extends ContainerMachine {
 	public TEEXray inventory;
 
 	public ContainerXray(InventoryPlayer inventoryPlayer, TEEXray tileEntity) {
-		super(tileEntity);
+		super( tileEntity, 2);
 		inventory = tileEntity;
+
 		addSlotToContainer(new SlotMachine(inventory, inventory.getID(), 0, 32, 6));
-		addSlotToContainer(new SlotUpgrade(inventory, 1, 168, 6));
-		for(int y = 0; y < 3; y++)
-			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 18 + x * 18, 156 + y * 18));
-		for(int x = 0; x < 9; x++)
-			addSlotToContainer(new Slot(inventoryPlayer, x, 18 + x * 18, 214));
+		
+		initSlots(inventoryPlayer, 18, 156, 168, 6);
 	}
 
-	@Override
+	/*@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack itemstack = null;
 		Slot stackInSlot = (Slot)inventorySlots.get(slot);
@@ -53,5 +50,5 @@ public class ContainerXray extends ContainerMachine {
 			stackInSlot.onPickupFromSlot(player, stackInSlotCopy);
 		}
 		return itemstack;
-	}
+	}*/
 }

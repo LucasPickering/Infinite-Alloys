@@ -11,19 +11,33 @@ import net.minecraft.item.ItemStack;
 public class ContainerMachine extends Container {
 
 	public TileEntityMachine inventory;
+	/** The index of the first slot in this container for the regular inventory */
+	private int inventoryStart = 1;
 
-	public ContainerMachine(TileEntityMachine tileEntity) {
+	/** Used for machines that have their own Container class. {@link #initSlots} needs to be run later */
+	public ContainerMachine(TileEntityMachine tileEntity, int inventoryStart) {
 		inventory = tileEntity;
+		this.inventoryStart = inventoryStart;
 	}
 
+	/** Used for machines without their own Container class. {@link #initSlots} doesn't need to be run later */
 	public ContainerMachine(InventoryPlayer inventoryPlayer, TileEntityMachine tileEntity, int invX, int invY, int upgX, int upgY) {
 		inventory = tileEntity;
+		initSlots(inventoryPlayer, invX, invY, upgX, upgY);
+	}
+
+	protected void initSlots(InventoryPlayer inventoryPlayer, int invX, int invY, int upgX, int upgY) {
+		// Add the upgrade slot
 		addSlotToContainer(new SlotUpgrade(inventory, inventory.upgradeSlotIndex, upgX, upgY));
-		for(int y = 0; y < 3; y++)
-			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, invX + x * 18, invY + y * 18));
+
+		// Add the hotbar
 		for(int x = 0; x < 9; x++)
 			addSlotToContainer(new Slot(inventoryPlayer, x, invX + x * 18, invY + 58));
+
+		// Add the main inventory
+		for(int y = 0; y < 3; y++)
+			for(int x = 0; x < 9; x++)
+				addSlotToContainer(new Slot(inventoryPlayer, 9 + x + y * 9, invX + x * 18, invY + y * 18));
 	}
 
 	@Override
@@ -38,20 +52,39 @@ public class ContainerMachine extends Container {
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
 			ItemStack stackInSlotCopy = stackInSlot.getStack();
 			itemstack = stackInSlotCopy.copy();
-			if(slot > 0) {
-				if(inventory.isUpgradeValid(stackInSlotCopy)) {
-					if(!mergeItemStack(stackInSlotCopy, 0, 1, false))
-						return null;
-				}
-				else if(slot <= 27) {
-					if(!mergeItemStack(stackInSlotCopy, 28, 37, false))
-						return null;
+
+			// If an item was clicked in one of the container's slots
+			if(slot < inventoryStart) {
+				if(!mergeItemStack(stackInSlotCopy, inventoryStart, inventoryStart + 36, false))
+					return null;
+			}
+
+			// If an item was clicked in the main inventory or the hotbar
+			else {
+
+				// If the item can go in one of the container's slots, put it there
+				for(int i = 0; i < inventoryStart; i++)
+					if(inventory.isItemValidForSlot(i, stackInSlotCopy))
+						if(!mergeItemStack(stackInSlotCopy, i, i + 1, false) && !inventory.isItemValidForSlot(i + 1, stackInSlotCopy))
+							break;
+
+				if(stackInSlotCopy.stackSize != 0) {
+					// Otherwise, if it's in the hotbar, move it to the main inventory
+					if(slot < inventoryStart + 9) {
+						if(!mergeItemStack(stackInSlotCopy, inventoryStart + 9, inventoryStart + 36, false))
+							return null;
+					}
+
+					// Otherwise, if it's in the main inventory, move it to the hotbar
+					else if(slot >= inventoryStart + 9) {
+						if(!mergeItemStack(stackInSlotCopy, inventoryStart, inventoryStart + 9, false))
+							return null;
+					}
 				}
 			}
-			else if(slot > 27 && !mergeItemStack(stackInSlotCopy, 1, 27, false))
-				return null;
+
 			if(stackInSlotCopy.stackSize == 0)
-				stackInSlot.putStack((ItemStack)null);
+				stackInSlot.putStack(null);
 			else
 				stackInSlot.onSlotChanged();
 			if(stackInSlotCopy.stackSize == itemstack.stackSize)

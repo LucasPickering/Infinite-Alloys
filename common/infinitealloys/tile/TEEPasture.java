@@ -11,7 +11,6 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 
@@ -37,8 +36,7 @@ public class TEEPasture extends TileEntityElectric {
 	}
 
 	public TEEPasture() {
-		super(0);
-		inventoryStacks = new ItemStack[1];
+		super(1);
 		baseRKPerTick = -4;
 		ticksToProcess = 0;
 	}

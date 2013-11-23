@@ -57,7 +57,7 @@ public class MachineHelper {
 
 	/** The TileEntityMachine class for each machine */
 	public static final Class[] MACHINE_CLASSES = { TEMComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEPrinter.class, TEEXray.class, TEEPasture.class,
-			TEMEnergyStorage.class, TEEGenerator.class };
+		TEMEnergyStorage.class, TEEGenerator.class };
 
 	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray", "pasture", "energystorage", "generator" };
 
@@ -123,10 +123,6 @@ public class MachineHelper {
 
 	public static int getDetectableWorth(ItemStack stack) {
 		return detectables.get(stack.itemID + "@" + stack.getItemDamage());
-	}
-
-	public static boolean isAlloyBook(ItemStack stack) {
-		return stack.itemID == Items.alloyBook.itemID && stack.hasTagCompound();
 	}
 
 	public static boolean isBook(ItemStack stack) {
@@ -217,21 +213,19 @@ public class MachineHelper {
 			case METAL_FORGE:
 				switch(index) {
 					case 0:
-						return MachineHelper.isAlloyBook(itemstack);
+						return itemstack.itemID == Items.alloyBook.itemID;
 					case 1:
-					case 2:
 						return false;
 					default:
 						return getIngotNum(itemstack) != -1;
 				}
 			case ANALYZER:
 				switch(index) {
-					case 0:
-						return itemstack.itemID == Items.alloyIngot.itemID && itemstack.hasTagCompound();
-					case 2:
+					case 8:
 						return itemstack.itemID == Items.alloyBook.itemID;
+					default:
+						return itemstack.itemID == Items.ingot.itemID && itemstack.getItemDamage() == index;
 				}
-				break;
 			case PRINTER:
 				switch(index) {
 					case 0:

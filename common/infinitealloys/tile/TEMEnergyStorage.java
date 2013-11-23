@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -46,8 +45,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 	}
 
 	public TEMEnergyStorage() {
-		super();
-		inventoryStacks = new ItemStack[1];
+		super(1);
 	}
 
 	@Override

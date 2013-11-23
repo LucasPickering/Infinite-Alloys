@@ -23,8 +23,7 @@ public class TEEMetalForge extends TileEntityElectric {
 	}
 
 	public TEEMetalForge() {
-		super(1);
-		inventoryStacks = new ItemStack[21];
+		super(21);
 		baseRKPerTick = -18;
 	}
 
@@ -52,7 +51,7 @@ public class TEEMetalForge extends TileEntityElectric {
 			sufficientIngots.add(getIngotAmts()[i] >= recipeAmts[i]);
 		if(sufficientIngots.contains(false))
 			processProgress = 0;
-		return (inventoryStacks[2] == null || inventoryStacks[2].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[2].stackSize >= 1)
+		return (inventoryStacks[1] == null || inventoryStacks[1].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[1].stackSize >= 1)
 				&& typesInRecipe > 1 && !sufficientIngots.contains(false);
 	}
 
@@ -66,10 +65,10 @@ public class TEEMetalForge extends TileEntityElectric {
 			decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
 		}
 		ItemStack result = getIngotResult();
-		if(inventoryStacks[2] == null)
-			inventoryStacks[2] = result;
-		else if(inventoryStacks[2].getTagCompound().getInteger("alloy") == result.getTagCompound().getInteger("alloy"))
-			inventoryStacks[2].stackSize += result.stackSize;
+		if(inventoryStacks[1] == null)
+			inventoryStacks[1] = result;
+		else if(inventoryStacks[1].getTagCompound().getInteger("alloy") == result.getTagCompound().getInteger("alloy"))
+			inventoryStacks[1].stackSize += result.stackSize;
 	}
 
 	@Override
@@ -120,7 +119,7 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	private ArrayList<Integer> getSlotsWithIngot() {
 		ArrayList<Integer> slots = new ArrayList<Integer>();
-		for(int i = 3; i < 21; i++)
+		for(int i = 2; i < 20; i++)
 			if(inventoryStacks[i] != null)
 				slots.add(i);
 		return slots;

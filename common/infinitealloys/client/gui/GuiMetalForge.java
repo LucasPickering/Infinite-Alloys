@@ -54,9 +54,11 @@ public class GuiMetalForge extends GuiElectric {
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
+
+		// If the preset selection slot was clicked
 		if(mouseInZone(mouseX, mouseY, topLeft.x + 39, topLeft.y + 51, 18, 18)) {
 			int[] alloys = new int[0];
-			if(temf.inventoryStacks[0] != null)
+			if(temf.inventoryStacks[0] != null && temf.inventoryStacks[0].hasTagCompound())
 				alloys = temf.inventoryStacks[0].getTagCompound().getIntArray("alloys");
 			if(mouseButton == 0)
 				temf.presetSelection = (byte)Math.min(temf.presetSelection + 1, alloys.length - 1);
@@ -67,6 +69,7 @@ public class GuiMetalForge extends GuiElectric {
 					temf.recipeAmts[i] = (byte)Funcs.intAtPos(alloys[temf.presetSelection], Consts.ALLOY_RADIX, Consts.METAL_COUNT, Consts.METAL_COUNT - i - 1);
 			PacketDispatcher.sendPacketToServer(PacketHandler.getTEPacketToServer(temf));
 		}
+
 		if(temf.presetSelection == -1) {
 			for(int i = 0; i < Consts.METAL_COUNT; i++) {
 				if(mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18)) {

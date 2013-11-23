@@ -12,20 +12,17 @@ public class ContainerPrinter extends ContainerMachine {
 	public TEEPrinter inventory;
 
 	public ContainerPrinter(InventoryPlayer inventoryPlayer, TEEPrinter tileEntity) {
-		super(tileEntity);
+		super( tileEntity, 4);
 		inventory = tileEntity;
+
 		addSlotToContainer(new SlotMachine(inventory, inventory.getID(), 0, 12, 44));
 		addSlotToContainer(new SlotMachine(inventory, inventory.getID(), 1, 80, 44));
 		addSlotToContainer(new SlotMachine(inventory, inventory.getID(), 2, 148, 44));
-		addSlotToContainer(new SlotUpgrade(inventory, 3, 148, 6));
-		for(int y = 0; y < 3; y++)
-			for(int x = 0; x < 9; x++)
-				addSlotToContainer(new Slot(inventoryPlayer, x + y * 9 + 9, 8 + x * 18, 66 + y * 18));
-		for(int x = 0; x < 9; x++)
-			addSlotToContainer(new Slot(inventoryPlayer, x, 8 + x * 18, 124));
+		
+		initSlots(inventoryPlayer,8,66,148,6);
 	}
 
-	@Override
+	/*@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack itemstack = null;
 		Slot stackInSlot = (Slot)inventorySlots.get(slot);
@@ -62,5 +59,5 @@ public class ContainerPrinter extends ContainerMachine {
 			stackInSlot.onPickupFromSlot(player, stackInSlotCopy);
 		}
 		return itemstack;
-	}
+	}*/
 }

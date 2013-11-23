@@ -4,7 +4,6 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -35,8 +34,7 @@ public class TEEXray extends TileEntityElectric {
 	}
 
 	public TEEXray() {
-		super(1);
-		inventoryStacks = new ItemStack[2];
+		super(2);
 		stackLimit = 1;
 		ticksToProcess = 24000;
 		baseRKPerTick = -360;
