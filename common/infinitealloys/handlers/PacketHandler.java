@@ -3,6 +3,7 @@ package infinitealloys.handlers;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.WorldData;
+import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEXray;
@@ -79,6 +80,10 @@ public class PacketHandler implements IPacketHandler {
 							for(int i = 0; i < recipeAmts.length; i++)
 								recipeAmts[i] = data.readByte();
 							((TEEMetalForge)te).handlePacketDataFromClient(recipeAmts);
+						}
+						if(te instanceof TEEAnalyzer) {
+							byte unlockedAlloyCount = data.readByte();
+							((TEEAnalyzer)te).handlePacketDataFromClient(unlockedAlloyCount);
 						}
 						else if(te instanceof TEEXray) {
 							TEEXray tex = (TEEXray)te;
@@ -170,6 +175,8 @@ public class PacketHandler implements IPacketHandler {
 				if(tee instanceof TEEMetalForge)
 					for(byte amt : ((TEEMetalForge)tee).recipeAmts)
 						dos.writeByte(amt);
+				else if(tee instanceof TEEAnalyzer)
+					dos.writeByte(((TEEAnalyzer)tee).getUnlockedAlloyCount());
 				else if(tee instanceof TEEXray) {
 					dos.writeShort(((TEEXray)tee).getDetectedBlocks().size());
 					for(Point p : ((TEEXray)tee).getDetectedBlocks()) {

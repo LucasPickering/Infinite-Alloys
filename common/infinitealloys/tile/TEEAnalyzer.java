@@ -1,15 +1,23 @@
 package infinitealloys.tile;
 
-import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import java.util.Arrays;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TEEAnalyzer extends TileEntityElectric {
 
+	/** The amount of alloys that this machine has unlocked. This can be increased by adding an alloy book containing more recipes than this machine already
+	 * knows. */
+	private byte unlockedAlloyCount;
+
 	/** A boolean for each metal telling whether or not an ingot of that metal is required to being searching for the next alloy */
 	private final boolean[] requiredMetals = new boolean[Consts.METAL_COUNT];
+
+	/** As more alloys are discovered, it takes more time to find new ones. The length of this array should ALWAYS be equal to
+	 * {@link infinitealloys.util.Consts#VALID_ALLOY_COUNT Consts.VALID_ALLOY_COUNT} */
+	private final int[] ticksToProcessForAlloys = new int[] { 5000, 20000, 80000, 320000, 1280000, 5120000 };
 
 	public TEEAnalyzer(int facing) {
 		this();
@@ -19,8 +27,8 @@ public class TEEAnalyzer extends TileEntityElectric {
 	public TEEAnalyzer() {
 		super(10);
 		stackLimit = 1;
-		baseRKPerTick = -36;
-		ticksToProcess = 3600;
+		baseRKPerTick = -1000;
+		updateRequiredMetals();
 	}
 
 	@Override
@@ -30,21 +38,36 @@ public class TEEAnalyzer extends TileEntityElectric {
 
 	@Override
 	protected boolean shouldProcess() {
-		if(getProcessProgress() > 0)
-			return true;
-		for(int i = 0; i < requiredMetals.length; i++)
-			if(inventoryStacks[i] == null)
-				return false;
+		// If we've run out of alloys to discover, don't process
+		if(unlockedAlloyCount >= Consts.VALID_ALLOY_COUNT)
+			return false;
+
+		// Otherwise, if we're not already processing, check for the alloys that we need to start a new process
+		if(getProcessProgress() <= 0)
+			for(int i = 0; i < requiredMetals.length; i++)
+				if(requiredMetals[i] && inventoryStacks[i] == null)
+					return false;
 		return true;
 	}
 
 	@Override
+	protected void startProcess() {
+		for(int i = 0; i < requiredMetals.length; i++)
+			if(requiredMetals[i])
+				decrStackSize(i, 1);
+	}
+
+	@Override
 	protected void finishProcess() {
-		InfiniteAlloys.instance.worldData.incrUnlockedAlloyCount();
+		// Increment the amount of alloys we've discovered (we just found a new one)
+		unlockedAlloyCount++;
+
+		// Update the required time and metals to fit the next alloy
+		updateRequiredMetals();
 
 		// If an alloy book is present, save the newly-discovered alloy to it
 		if(inventoryStacks[8] != null) {
-			int alloy = inventoryStacks[0].getTagCompound().getInteger("alloy");
+			int alloy = inventoryStacks[8].getTagCompound().getInteger("alloy");
 			NBTTagCompound tagCompound;
 
 			// Create two arrays for storing the saved alloys. What's in there, and a copy to edit
@@ -74,8 +97,45 @@ public class TEEAnalyzer extends TileEntityElectric {
 				inventoryStacks[8].setTagCompound(tagCompound);
 			}
 		}
-		inventoryStacks[1] = inventoryStacks[0];
-		inventoryStacks[0] = null;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		unlockedAlloyCount = tagCompound.getByte("UnlockedAlloyCount");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		tagCompound.setByte("UnlockedAlloyCount", unlockedAlloyCount);
+	}
+
+	public void handlePacketDataFromClient(byte unlockedAlloyCount) {
+		this.unlockedAlloyCount = unlockedAlloyCount;
+	}
+
+	public byte getUnlockedAlloyCount() {
+		return unlockedAlloyCount;
+	}
+
+	private void updateRequiredMetals() {
+		ticksToProcess = ticksToProcessForAlloys[unlockedAlloyCount];
+		for(int i = 0; i < requiredMetals.length; i++)
+			requiredMetals[i] = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[unlockedAlloyCount], Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
+	}
+
+	@Override
+	public void onInventoryChanged() {
+		// Is an alloy book in the book slot?
+		if(inventoryStacks[8] != null) {
+			// Does this book have a tag compound with alloys saved in it?
+			NBTTagCompound tagCompound = inventoryStacks[8].getTagCompound();
+			if(tagCompound != null && tagCompound.hasKey("alloys"))
+				// Set the amount of unlocked alloys to whichever is larger: itself, or the amount of alloys in the book
+				// i.e. if the book has more alloys saved than the machine, teach those alloys to the machine
+				unlockedAlloyCount = (byte)Math.max(unlockedAlloyCount, tagCompound.getIntArray("alloys").length);
+		}
 	}
 
 	@Override

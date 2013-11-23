@@ -49,7 +49,7 @@ public class TEEMetalForge extends TileEntityElectric {
 	}
 
 	@Override
-	protected boolean resetProgress() {
+	protected boolean shouldResetProgress() {
 		return !hasSufficientIngots() || !Arrays.equals(lastRecipeAmts, recipeAmts);
 	}
 

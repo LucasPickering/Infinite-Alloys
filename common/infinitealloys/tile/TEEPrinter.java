@@ -26,7 +26,7 @@ public class TEEPrinter extends TileEntityElectric {
 	}
 
 	@Override
-	protected boolean resetProgress() {
+	protected boolean shouldResetProgress() {
 		return inventoryStacks[0] == null || inventoryStacks[1] == null;
 	}
 

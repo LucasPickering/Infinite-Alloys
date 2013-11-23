@@ -38,7 +38,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 		super.updateEntity();
 
 		// Under certain conditions, reset the progress of the machine
-		if(resetProgress())
+		if(shouldResetProgress())
 			processProgress = 0;
 
 		// If the machine should be processing and enough energy is available, increment the progress by one. If this is the first tick of the process, call
@@ -63,7 +63,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	protected abstract boolean shouldProcess();
 
 	/** Should processProgress be reset to 0? */
-	protected boolean resetProgress() {
+	protected boolean shouldResetProgress() {
 		return false;
 	}
 
