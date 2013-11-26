@@ -10,6 +10,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 public class GuiComputer extends GuiMachine {
 
 	public TEMComputer tec;
+	private GuiButton autoSearchButton;
 
 	public GuiComputer(InventoryPlayer inventoryPlayer, TEMComputer tileEntity) {
 		super(176, 166, inventoryPlayer, tileEntity);
@@ -20,7 +21,7 @@ public class GuiComputer extends GuiMachine {
 	public void initGui() {
 		super.initGui();
 		// The button to toggle auto-searching
-		buttonList.add(new GuiButton(1, width / 2 - 63, height / 2 - 42, 92, 20, "Auto-Search: " + (tec.autoSearch ? Funcs.getLoc("general.on") : Funcs.getLoc("general.off"))));
+		buttonList.add(autoSearchButton = new GuiButton(1, width / 2 - 63, height / 2 - 42, 92, 20, "Auto-Search: " + (tec.autoSearch ? Funcs.getLoc("general.on") : Funcs.getLoc("general.off"))));
 	}
 
 	@Override
@@ -28,6 +29,7 @@ public class GuiComputer extends GuiMachine {
 		super.actionPerformed(button);
 		if(button.id == 1) {
 			tec.autoSearch = !tec.autoSearch;
+			autoSearchButton.displayString = "Auto-Search: " + (tec.autoSearch ? Funcs.getLoc("general.on") : Funcs.getLoc("general.off"));
 			PacketDispatcher.sendPacketToServer(PacketHandler.getTEPacketToServer(tec));
 		}
 	}

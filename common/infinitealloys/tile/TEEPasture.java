@@ -25,7 +25,8 @@ public class TEEPasture extends TileEntityElectric {
 	/** 0 is do nothing to the mob, 1 is attract the mob, 2 is repel the mob. The order can be seen in {@link #mobClasses mobClasses} */
 	public byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 	/** The entity classes for each mob to be used in the {@link #updateEntity() updateEntity} function */
-	private final Class[] mobClasses = { EntityChicken.class, EntityCow.class, EntityCow.class, EntitySheep.class, EntityCreeper.class, EntitySkeleton.class, EntitySpider.class, EntityZombie.class };
+	private final Class[] mobClasses = { EntityChicken.class, EntityCow.class, EntityCow.class, EntitySheep.class,
+		EntityCreeper.class, EntitySkeleton.class, EntitySpider.class, EntityZombie.class };
 	private byte maxSpots;
 	private byte trapRange;
 	private byte repelRange;

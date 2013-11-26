@@ -106,9 +106,8 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onEntityJoinWorld(EntityJoinWorldEvent e) {
-		if(!(e.entity instanceof EntityPlayer) || Funcs.isClient())
-			return;
-		PacketDispatcher.sendPacketToPlayer(PacketHandler.getWorldDataPacket(), (Player)e.entity);
+		if(e.entity instanceof EntityPlayer && Funcs.isServer())
+			PacketDispatcher.sendPacketToPlayer(PacketHandler.getWorldDataPacket(), (Player)e.entity);
 	}
 
 	@Override

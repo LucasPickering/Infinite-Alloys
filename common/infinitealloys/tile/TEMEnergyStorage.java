@@ -1,10 +1,13 @@
 package infinitealloys.tile;
 
+import infinitealloys.handlers.PacketHandler;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -57,6 +60,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 
+		System.out.println(currentSearchTicks + " on " + (Funcs.isClient() ? "Client" : "Server"));
 		// Increment the ticks since last search and if it reaches the interval, reset it and run a search
 		if(++currentSearchTicks >= SEARCH_INTERVAL) {
 			currentSearchTicks = 0;
@@ -109,6 +113,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 					if(te instanceof TileEntityElectric && ((TileEntityElectric)te).energyStorage == null) {
 						connectedMachines.add(new Point(xCoord + x, yCoord + y, zCoord + z));
 						((TileEntityElectric)te).energyStorage = this;
+						PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient((TileEntityMachine)te));
 					}
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
