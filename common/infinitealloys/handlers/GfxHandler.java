@@ -1,24 +1,8 @@
 package infinitealloys.handlers;
 
-import infinitealloys.client.gui.GuiAnalyzer;
-import infinitealloys.client.gui.GuiComputer;
-import infinitealloys.client.gui.GuiMetalForge;
-import infinitealloys.client.gui.GuiPasture;
-import infinitealloys.client.gui.GuiPrinter;
-import infinitealloys.client.gui.GuiXray;
-import infinitealloys.inventory.ContainerAnalyzer;
-import infinitealloys.inventory.ContainerMetalForge;
-import infinitealloys.inventory.ContainerPrinter;
-import infinitealloys.inventory.ContainerUpgradable;
-import infinitealloys.inventory.ContainerXray;
-import infinitealloys.tile.TEMAnalyzer;
-import infinitealloys.tile.TEUComputer;
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.tile.TEMMetalForge;
-import infinitealloys.tile.TEMPasture;
-import infinitealloys.tile.TEMPrinter;
-import infinitealloys.tile.TEMXray;
 import infinitealloys.util.Consts;
+import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.block.Block;
@@ -26,7 +10,6 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -48,42 +31,12 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-		switch(id) {
-			case 0:
-				return new ContainerUpgradable(player.inventory, (TileEntityMachine)tileEntity, 8, 84, 140, 43);
-			case 1:
-				return new ContainerMetalForge(player.inventory, (TEMMetalForge)tileEntity);
-			case 2:
-				return new ContainerAnalyzer(player.inventory, (TEMAnalyzer)tileEntity);
-			case 3:
-				return new ContainerPrinter(player.inventory, (TEMPrinter)tileEntity);
-			case 4:
-				return new ContainerXray(player.inventory, (TEMXray)tileEntity);
-			case 5:
-				return new ContainerUpgradable(player.inventory, (TileEntityMachine)tileEntity, 13, 94, 141, 44);
-		}
-		return null;
+		return MachineHelper.getContainerForMachine(player.inventory, (TileEntityMachine)world.getBlockTileEntity(x, y, z));
 	}
 
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity tileEntity = world.getBlockTileEntity(x, y, z);
-		switch(id) {
-			case 0:
-				return new GuiComputer(player.inventory, (TEUComputer)tileEntity);
-			case 1:
-				return new GuiMetalForge(player.inventory, (TEMMetalForge)tileEntity);
-			case 2:
-				return new GuiAnalyzer(player.inventory, (TEMAnalyzer)tileEntity);
-			case 3:
-				return new GuiPrinter(player.inventory, (TEMPrinter)tileEntity);
-			case 4:
-				return new GuiXray(player.inventory, (TEMXray)tileEntity);
-			case 5:
-				return new GuiPasture(player.inventory, (TEMPasture)tileEntity);
-		}
-		return null;
+		return MachineHelper.getGuiForMachine(player.inventory, (TileEntityMachine)world.getBlockTileEntity(x, y, z));
 	}
 
 	@Override

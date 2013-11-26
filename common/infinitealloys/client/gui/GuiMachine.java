@@ -60,7 +60,7 @@ public abstract class GuiMachine extends GuiContainer {
 	private boolean helpEnabled;
 
 	public GuiMachine(int xSize, int ySize, InventoryPlayer inventoryPlayer, TileEntityMachine tileEntity) {
-		super(MachineHelper.getContainerForMachine(tileEntity.getID(), inventoryPlayer, tileEntity));
+		super(MachineHelper.getContainerForMachine(inventoryPlayer, tileEntity));
 		this.xSize = xSize;
 		this.ySize = ySize;
 		tem = tileEntity;

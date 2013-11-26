@@ -157,8 +157,8 @@ public class MachineHelper {
 	 * @param inventoryPlayer An instance of InventoryPlayer (not used, just passed through)
 	 * @param tem A TileEntityMachine instance to be casted and passed to the Container constructor
 	 * @return A new instance of a Container class that extends ContainerMachine */
-	public static ContainerMachine getContainerForMachine(int temID, InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
-		switch(temID) {
+	public static ContainerMachine getContainerForMachine(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
+		switch(tem.getID()) {
 			case COMPUTER:
 				return new ContainerMachine(inventoryPlayer, tem, 8, 84, 140, 43);
 			case METAL_FORGE:
@@ -185,8 +185,8 @@ public class MachineHelper {
 	 * @param inventoryPlayer An instance of InventoryPlayer (not used, just passed through)
 	 * @param tem A TileEntityMachine instance to be casted and passed to the GUI constructor
 	 * @return A new instance of a GUI class that extends GuiMachine */
-	public static GuiMachine getGuiForMachine(int temID, InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
-		switch(temID) {
+	public static GuiMachine getGuiForMachine(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
+		switch(tem.getID()) {
 			case COMPUTER:
 				return new GuiComputer(inventoryPlayer, (TEMComputer)tem);
 			case METAL_FORGE:
