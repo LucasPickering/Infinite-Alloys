@@ -3,6 +3,7 @@ package infinitealloys.tile;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
+import org.apache.commons.lang3.ArrayUtils;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -31,9 +32,9 @@ public class TEEPasture extends TileEntityElectric {
 	private byte trapRange;
 	private byte repelRange;
 
-	public TEEPasture(int facing) {
+	public TEEPasture(byte front) {
 		this();
-		front = facing;
+		this.front = front;
 	}
 
 	public TEEPasture() {
@@ -92,10 +93,6 @@ public class TEEPasture extends TileEntityElectric {
 		}
 	}
 
-	public void handlePacketData(byte[] mobActions) {
-		this.mobActions = mobActions;
-	}
-
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
@@ -108,6 +105,20 @@ public class TEEPasture extends TileEntityElectric {
 		super.writeToNBT(tagCompound);
 		for(int i = 0; i < Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS; i++)
 			tagCompound.setByte("Mob" + i, mobActions[i]);
+	}
+
+	@Override
+	public Object[] getSyncDataToClient() {
+		return ArrayUtils.addAll(super.getSyncDataToClient(), mobActions);
+	}
+
+	@Override
+	public Object[] getSyncDataToServer() {
+		return new Object[] { mobActions };
+	}
+
+	public void handlePacketData(byte[] mobActions) {
+		this.mobActions = mobActions;
 	}
 
 	@Override

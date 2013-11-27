@@ -9,9 +9,9 @@ public class TEEGenerator extends TileEntityElectric {
 	/** The ratio between how long an item will burn in a generator and how long it will burn in a furnace. Generator is numerator, furnace is demoninator. */
 	private final float GENERATOR_TO_FURNACE_TICK_RATIO = 0.5F;
 
-	public TEEGenerator(int facing) {
+	public TEEGenerator(byte front) {
 		this();
-		front = facing;
+		this.front = front;
 	}
 
 	public TEEGenerator() {

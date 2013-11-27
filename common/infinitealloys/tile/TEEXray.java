@@ -4,6 +4,8 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.lang3.ArrayUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,9 +27,9 @@ public class TEEXray extends TileEntityElectric {
 	/** Should searching continue, or is it complete. Set this to true to begin a search. */
 	public boolean shouldSearch;
 
-	public TEEXray(int facing) {
+	public TEEXray(byte front) {
 		this();
-		front = facing;
+		this.front = front;
 	}
 
 	public TEEXray() {
@@ -120,6 +122,17 @@ public class TEEXray extends TileEntityElectric {
 		super.writeToNBT(tagCompound);
 		// True if there are blocks on the GUI, false if there are no blocks
 		tagCompound.setBoolean("ShouldSearch", detectedBlocks.size() > 0);
+	}
+
+	@Override
+	public Object[] getSyncDataToClient() {
+		List<Object> coords = new ArrayList<Object>();
+		for(Point point : detectedBlocks) {
+			coords.add(point.x);
+			coords.add((short)point.y);
+			coords.add(point.z);
+		}
+		return ArrayUtils.addAll(super.getSyncDataToClient(), detectedBlocks.size(), coords.toArray());
 	}
 
 	@Override

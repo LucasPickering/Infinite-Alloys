@@ -1,6 +1,5 @@
 package infinitealloys.tile;
 
-import infinitealloys.handlers.PacketHandler;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
@@ -10,6 +9,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class TEMEnergyStorage extends TileEntityMachine {
@@ -42,9 +42,9 @@ public class TEMEnergyStorage extends TileEntityMachine {
 	/** Should searching continue, or is it complete. Set this to true to begin a search. */
 	public boolean shouldSearch;
 
-	public TEMEnergyStorage(int facing) {
+	public TEMEnergyStorage(byte front) {
 		this();
-		front = facing;
+		this.front = front;
 	}
 
 	public TEMEnergyStorage() {
@@ -90,6 +90,17 @@ public class TEMEnergyStorage extends TileEntityMachine {
 		tagCompound.setInteger("currentRK", currentRK);
 	}
 
+	@Override
+	public Object[] getSyncDataToClient() {
+		List<Object> coords = new ArrayList<Object>();
+		for(Point point : connectedMachines) {
+			coords.add(point.x);
+			coords.add((short)point.y);
+			coords.add(point.z);
+		}
+		return ArrayUtils.addAll(super.getSyncDataToClient(), connectedMachines.size(), coords.toArray());
+	}
+
 	public void handlePacketDataFromServer(int currentRK) {
 		this.currentRK = currentRK;
 	}
@@ -127,7 +138,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 		}
 		lastSearch.x = -autoSearchRange; // If we've search all the x values, reset the x position.
 
-		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(this));
+		PacketDispatcher.sendPacketToAllPlayers(getDescriptionPacket());
 		shouldSearch = false; // The search is done. Stop running the function until another search is initiated.
 	}
 

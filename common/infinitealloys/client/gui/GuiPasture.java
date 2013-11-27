@@ -1,6 +1,6 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.handlers.PacketHandler;
+import infinitealloys.network.PacketTEClientToServer;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -52,6 +52,6 @@ public class GuiPasture extends GuiElectric {
 		}
 
 		// Send a packet to the server to sync the settings
-		PacketDispatcher.sendPacketToServer(PacketHandler.getTEPacketToServer(tep));
+		PacketDispatcher.sendPacketToServer(PacketTEClientToServer.getPacket(tep));
 	}
 }

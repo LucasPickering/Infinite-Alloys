@@ -1,7 +1,7 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
+import infinitealloys.network.PacketTEClientToServer;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -67,7 +67,7 @@ public class GuiMetalForge extends GuiElectric {
 			if(temf.presetSelection > -1)
 				for(int i = 0; i < temf.recipeAmts.length; i++)
 					temf.recipeAmts[i] = (byte)Funcs.intAtPos(alloys[temf.presetSelection], Consts.ALLOY_RADIX, Consts.METAL_COUNT, i);
-			PacketDispatcher.sendPacketToServer(PacketHandler.getTEPacketToServer(temf));
+			PacketDispatcher.sendPacketToServer(PacketTEClientToServer.getPacket(temf));
 		}
 
 		if(temf.presetSelection == -1) {
@@ -77,7 +77,7 @@ public class GuiMetalForge extends GuiElectric {
 						temf.recipeAmts[i] = (byte)Math.min(temf.recipeAmts[i] + 1, Consts.ALLOY_RADIX - 1);
 					else if(mouseButton == 1)
 						temf.recipeAmts[i] = (byte)Math.max(temf.recipeAmts[i] - 1, 0);
-					PacketDispatcher.sendPacketToServer(PacketHandler.getTEPacketToServer(temf));
+					PacketDispatcher.sendPacketToServer(PacketTEClientToServer.getPacket(temf));
 					break;
 				}
 			}

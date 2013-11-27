@@ -4,9 +4,9 @@ import infinitealloys.util.MachineHelper;
 
 public class TEEPrinter extends TileEntityElectric {
 
-	public TEEPrinter(int facing) {
+	public TEEPrinter(byte front) {
 		this();
-		front = facing;
+		this.front = front;
 	}
 
 	public TEEPrinter() {

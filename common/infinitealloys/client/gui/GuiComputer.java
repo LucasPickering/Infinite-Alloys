@@ -1,6 +1,6 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.handlers.PacketHandler;
+import infinitealloys.network.PacketTEClientToServer;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.util.Funcs;
 import net.minecraft.client.gui.GuiButton;
@@ -30,7 +30,7 @@ public class GuiComputer extends GuiMachine {
 		if(button.id == 1) {
 			tec.autoSearch = !tec.autoSearch;
 			autoSearchButton.displayString = "Auto-Search: " + (tec.autoSearch ? Funcs.getLoc("general.on") : Funcs.getLoc("general.off"));
-			PacketDispatcher.sendPacketToServer(PacketHandler.getTEPacketToServer(tec));
+			PacketDispatcher.sendPacketToServer(PacketTEClientToServer.getPacket(tec));
 		}
 	}
 }

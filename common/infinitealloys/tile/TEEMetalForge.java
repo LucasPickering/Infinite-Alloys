@@ -6,6 +6,7 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.apache.commons.lang3.ArrayUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -17,9 +18,9 @@ public class TEEMetalForge extends TileEntityElectric {
 	private byte[] lastRecipeAmts = new byte[Consts.METAL_COUNT];
 	public byte presetSelection = -1;
 
-	public TEEMetalForge(int facing) {
+	public TEEMetalForge(byte front) {
 		this();
-		front = facing;
+		this.front = front;
 	}
 
 	public TEEMetalForge() {
@@ -84,6 +85,16 @@ public class TEEMetalForge extends TileEntityElectric {
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setByteArray("RecipeAmts", recipeAmts);
+	}
+
+	@Override
+	public Object[] getSyncDataToClient() {
+		return ArrayUtils.addAll(super.getSyncDataToClient(), recipeAmts);
+	}
+
+	@Override
+	public Object[] getSyncDataToServer() {
+		return new Object[] { recipeAmts };
 	}
 
 	public void handlePacketDataFromClient(byte[] recipeAmts) {

@@ -8,6 +8,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class TEMComputer extends TileEntityMachine {
 
@@ -39,9 +40,9 @@ public class TEMComputer extends TileEntityMachine {
 	/** Should searching continue, or is it complete. Set this to true to begin a search. */
 	public boolean shouldSearch;
 
-	public TEMComputer(int facing) {
+	public TEMComputer(byte front) {
 		this();
-		front = facing;
+		this.front = front;
 	}
 
 	public TEMComputer() {
@@ -161,6 +162,22 @@ public class TEMComputer extends TileEntityMachine {
 			Point coords = connectedMachines.get(i);
 			tagCompound.setIntArray("Coords" + i, new int[] { coords.x, coords.y, coords.z });
 		}
+	}
+
+	@Override
+	public Object[] getSyncDataToClient() {
+		List<Object> coords = new ArrayList<Object>();
+		for(Point point : connectedMachines) {
+			coords.add(point.x);
+			coords.add((short)point.y);
+			coords.add(point.z);
+		}
+		return ArrayUtils.addAll(super.getSyncDataToClient(), connectedMachines.size(), coords.toArray());
+	}
+
+	@Override
+	public Object[] getSyncDataToServer() {
+		return new Object[] { autoSearch };
 	}
 
 	public void handlePacketDataFromClient(boolean autoSearch) {

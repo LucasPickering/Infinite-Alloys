@@ -1,12 +1,12 @@
 package infinitealloys.tile;
 
-import infinitealloys.handlers.PacketHandler;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import java.util.Arrays;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.nbt.NBTTagCompound;
+import org.apache.commons.lang3.ArrayUtils;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class TEEAnalyzer extends TileEntityElectric {
 
@@ -17,9 +17,9 @@ public class TEEAnalyzer extends TileEntityElectric {
 	/** A boolean for each metal telling whether or not an ingot of that metal is required to being searching for the next alloy */
 	private final boolean[] requiredMetals = new boolean[Consts.METAL_COUNT];
 
-	public TEEAnalyzer(int facing) {
+	public TEEAnalyzer(byte front) {
 		this();
-		front = facing;
+		this.front = front;
 	}
 
 	public TEEAnalyzer() {
@@ -101,9 +101,10 @@ public class TEEAnalyzer extends TileEntityElectric {
 
 		if(Funcs.isServer())
 			for(String player : playersUsing)
-				PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEPacketToClient(this), Funcs.getPlayerForUsername(player));
+				PacketDispatcher.sendPacketToPlayer(getDescriptionPacket(), Funcs.getPlayerForUsername(player));
 	}
 
+	@Override
 	public int getRKChange() {
 		return (int)(baseRKPerTick * rkPerTickMult / processTimeMult * Math.pow(4D, unlockedAlloyCount)); // Every time an alloy is unlocked, it quadruples
 	}
@@ -118,6 +119,11 @@ public class TEEAnalyzer extends TileEntityElectric {
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setByte("UnlockedAlloyCount", unlockedAlloyCount);
+	}
+
+	@Override
+	public Object[] getSyncDataToClient() {
+		return ArrayUtils.addAll(super.getSyncDataToClient(), unlockedAlloyCount);
 	}
 
 	public void handlePacketDataFromClient(byte unlockedAlloyCount) {

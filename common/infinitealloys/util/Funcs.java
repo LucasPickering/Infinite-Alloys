@@ -67,8 +67,8 @@ public class Funcs {
 		return finalKey;
 	}
 
-	/** Convert a Vanilla MC block face int to a ForgeDirection */
-	public static ForgeDirection numToFDSide(int num) {
+	/** Convert a Vanilla MC block face number to a ForgeDirection */
+	public static ForgeDirection numToFDSide(byte num) {
 		switch(num) {
 			case Consts.TOP:
 				return ForgeDirection.UP;
@@ -87,8 +87,8 @@ public class Funcs {
 		}
 	}
 
-	/** Convert a ForgeDirection to a Vanilla MC block face int */
-	public static int fdToNumSide(ForgeDirection fd) {
+	/** Convert a ForgeDirection to a Vanilla MC block face number */
+	public static byte fdToNumSide(ForgeDirection fd) {
 		switch(fd) {
 			case UP:
 				return Consts.TOP;
@@ -107,8 +107,8 @@ public class Funcs {
 		}
 	}
 
-	/** Convert an entity's yaw to a Vanilla MC block face int */
-	public static int yawToNumSide(int rotation) {
+	/** Convert an entity's yaw to a Vanilla MC block face number */
+	public static byte yawToNumSide(int rotation) {
 		switch(rotation) {
 			case 0:
 				return Consts.SOUTH;

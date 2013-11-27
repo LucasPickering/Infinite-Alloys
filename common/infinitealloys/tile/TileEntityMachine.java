@@ -1,8 +1,8 @@
 package infinitealloys.tile;
 
 import infinitealloys.block.BlockMachine;
-import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
+import infinitealloys.network.PacketTEServerToClient;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	protected final ArrayList<Integer> validUpgrades = new ArrayList<Integer>();
 
 	/** A number from 0-5 to represent which side of this block gets the front texture */
-	public int front;
+	public byte front;
 
 	/** A binary integer used to determine what upgrades have been installed */
 	private int upgrades;
@@ -91,7 +91,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setShort("Upgrades", (short)upgrades);
-		tagCompound.setByte("Orientation", (byte)front);
+		tagCompound.setByte("Orientation", front);
 		NBTTagList nbttaglist = new NBTTagList();
 		for(int i = 0; i < inventoryStacks.length; i++) {
 			if(inventoryStacks[i] != null) {
@@ -106,7 +106,17 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	@Override
 	public Packet getDescriptionPacket() {
-		return PacketHandler.getTEPacketToClient(this);
+		return PacketTEServerToClient.getPacket(this);
+	}
+
+	/** A list of the data that gets sent from server to client over the network */
+	public Object[] getSyncDataToClient() {
+		return new Object[] { front, upgrades };
+	}
+
+	/** A list of the data that gets sent from client to server over the network */
+	public Object[] getSyncDataToServer() {
+		return null;
 	}
 
 	public void handlePacketDataFromServer(byte orientation, int upgrades) {

@@ -2,6 +2,7 @@ package infinitealloys.handlers;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.WorldData;
+import infinitealloys.network.PacketWorldData;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import java.io.FileInputStream;
@@ -107,7 +108,7 @@ public class EventHandler implements ICraftingHandler {
 	@ForgeSubscribe
 	public void onEntityJoinWorld(EntityJoinWorldEvent e) {
 		if(e.entity instanceof EntityPlayer && Funcs.isServer())
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.getWorldDataPacket(), (Player)e.entity);
+			PacketDispatcher.sendPacketToPlayer(PacketWorldData.getPacket(), (Player)e.entity);
 	}
 
 	@Override

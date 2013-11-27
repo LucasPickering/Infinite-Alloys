@@ -1,6 +1,7 @@
 package infinitealloys.tile;
 
 import net.minecraft.nbt.NBTTagCompound;
+import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -97,6 +98,11 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("ProcessProgress", processProgress);
+	}
+
+	@Override
+	public Object[] getSyncDataToClient() {
+		return ArrayUtils.addAll(super.getSyncDataToClient(), processProgress);
 	}
 
 	public void handlePacketDataFromServer(int processProgress) {

@@ -1,7 +1,6 @@
 package infinitealloys.block;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.handlers.PacketHandler;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TEMEnergyStorage;
@@ -136,7 +135,7 @@ public class BlockMachine extends BlockContainer {
 		player.openGui(InfiniteAlloys.instance, tem.getID(), world, tem.xCoord, tem.yCoord, tem.zCoord);
 		if(Funcs.isServer()) {
 			tem.playersUsing.add(player.username);
-			PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEPacketToClient(tem), (Player)player);
+			PacketDispatcher.sendPacketToPlayer(tem.getDescriptionPacket(), (Player)player);
 		}
 	}
 

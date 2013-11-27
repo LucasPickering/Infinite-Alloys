@@ -1,7 +1,7 @@
 package infinitealloys.client.gui;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.handlers.PacketHandler;
+import infinitealloys.network.PacketXraySearch;
 import infinitealloys.tile.TEEXray;
 import infinitealloys.util.Point;
 import java.awt.Rectangle;
@@ -160,7 +160,7 @@ public class GuiXray extends GuiElectric {
 			setButtons();
 			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 			tex.shouldSearch = true;
-			PacketDispatcher.sendPacketToServer(PacketHandler.getPacketSearch(tex.xCoord, tex.yCoord, tex.zCoord));
+			PacketDispatcher.sendPacketToServer(PacketXraySearch.getPacket(tex.xCoord, (short)tex.yCoord, tex.zCoord));
 		}
 	}
 }
