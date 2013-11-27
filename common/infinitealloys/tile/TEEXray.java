@@ -132,7 +132,7 @@ public class TEEXray extends TileEntityElectric {
 			coords.add((short)point.y);
 			coords.add(point.z);
 		}
-		return ArrayUtils.addAll(super.getSyncDataToClient(), detectedBlocks.size(), coords.toArray());
+		return ArrayUtils.addAll(super.getSyncDataToClient(), (byte)detectedBlocks.size(), coords.toArray());
 	}
 
 	@Override

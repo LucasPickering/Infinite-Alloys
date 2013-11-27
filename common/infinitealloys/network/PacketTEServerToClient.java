@@ -81,7 +81,7 @@ public class PacketTEServerToClient implements PacketIA {
 	public static Packet250CustomPayload getPacket(TileEntityMachine tem) {
 		Object[] data = tem.getSyncDataToClient();
 		if(data != null)
-			return PacketHandler.getPacket(PacketHandler.TE_CLIENT_TO_SERVER, tem.xCoord, (short)tem.yCoord, tem.zCoord, data);
+			return PacketHandler.getPacket(PacketHandler.TE_SERVER_TO_CLIENT, tem.xCoord, (short)tem.yCoord, tem.zCoord, data);
 		return null;
 	}
 }

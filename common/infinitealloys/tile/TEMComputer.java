@@ -172,7 +172,7 @@ public class TEMComputer extends TileEntityMachine {
 			coords.add((short)point.y);
 			coords.add(point.z);
 		}
-		return ArrayUtils.addAll(super.getSyncDataToClient(), connectedMachines.size(), coords.toArray());
+		return ArrayUtils.addAll(super.getSyncDataToClient(), (byte)connectedMachines.size(), coords.toArray());
 	}
 
 	@Override

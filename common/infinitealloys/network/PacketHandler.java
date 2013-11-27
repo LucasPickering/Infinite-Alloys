@@ -31,44 +31,54 @@ public class PacketHandler implements IPacketHandler {
 		}
 	}
 
-	public static Packet250CustomPayload getPacket(int id, Object... data) {
+	public static Packet250CustomPayload getPacket(byte id, Object... data) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		DataOutputStream dos = new DataOutputStream(bos);
 		try {
 			dos.writeByte(id);
-			for(Object datum : data) {
-				if(datum instanceof Byte)
-					dos.writeByte((Byte)datum);
-
-				else if(datum instanceof byte[])
-					for(byte datum2 : (byte[])datum)
-						dos.writeByte(datum2);
-
-				else if(datum instanceof Short)
-					dos.writeShort((Short)datum);
-
-				else if(datum instanceof short[])
-					for(short datum2 : (short[])datum)
-						dos.writeShort(datum2);
-
-				else if(datum instanceof Integer)
-					dos.writeInt((Integer)datum);
-
-				else if(datum instanceof int[])
-					for(int datum2 : (int[])datum)
-						dos.writeInt(datum2);
-
-				else if(datum instanceof Double)
-					dos.writeDouble((Double)datum);
-
-				else if(datum instanceof Boolean)
-					dos.writeBoolean((Boolean)datum);
-			}
+			for(Object datum : data)
+				writeObject(dos, datum);
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
 		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
 		packet.length = bos.size();
 		return packet;
+	}
+
+	private static void writeObject(DataOutputStream dos, Object o) throws IOException {
+		if(o instanceof Byte)
+			dos.writeByte((Byte)o);
+
+		else if(o instanceof Short)
+			dos.writeShort((Short)o);
+
+		else if(o instanceof Integer)
+			dos.writeInt((Integer)o);
+
+		else if(o instanceof Double)
+			dos.writeDouble((Double)o);
+
+		else if(o instanceof Boolean)
+			dos.writeBoolean((Boolean)o);
+
+		else if(o instanceof Object[])
+			for(Object o2 : (Object[])o)
+				writeObject(dos, o2);
+
+		else if(o instanceof byte[])
+			for(byte b : (byte[])o)
+				writeObject(dos, b);
+
+		else if(o instanceof short[])
+			for(short s : (short[])o)
+				writeObject(dos, s);
+
+		else if(o instanceof int[])
+			for(int i : (int[])o)
+				writeObject(dos, i);
+
+		else
+			System.out.println("Infinite Alloys: Unknown type " + o.getClass().getName() + " for object " + o);
 	}
 }
