@@ -11,7 +11,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class TEEXray extends TileEntityElectric {
 
 	/** A list of the detected blocks, x and z are relative to the machine, y is absolute */
-	private final ArrayList<Point> detectedBlocks = new ArrayList<Point>();
+	public final ArrayList<Point> detectedBlocks = new ArrayList<Point>();
 	public int range;
 
 	/** The selected button for the user, client-side only */
@@ -24,9 +24,6 @@ public class TEEXray extends TileEntityElectric {
 
 	/** Should searching continue, or is it complete. Set this to true to begin a search. */
 	public boolean shouldSearch;
-
-	/** Is it searching client-side. Does not necessarily mean the x-ray is running a search, only that the user sees a loading progress bar */
-	public boolean searchingClient;
 
 	public TEEXray(int facing) {
 		this();
@@ -49,34 +46,25 @@ public class TEEXray extends TileEntityElectric {
 	public void updateEntity() {
 		super.updateEntity();
 		if(inventoryStacks[0] == null) {
-			clearDetectedBlocks();
+			detectedBlocks.clear();
 			shouldSearch = false;
-			searchingClient = false;
 		}
-		else if(shouldSearch)
+		else if(shouldSearch && Funcs.isServer())
 			search();
 	}
 
 	@Override
-	protected boolean shouldProcess() {
-		return searchingClient;
+	public boolean shouldProcess() {
+		return shouldSearch || getProcessProgress() > 0;
 	}
 
-	@Override
-	protected void finishProcess() {
-		searchingClient = false;
+	protected boolean shouldResetProgress() {
+		return inventoryStacks[0] == null;
 	}
 
 	/** Perform a search for the target block. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a tick, then saves
 	 * its place and picks up where it left off next tick. This eliminates stutter during searches. */
 	private void search() {
-		// If there is no target block to search for, return
-		if(inventoryStacks[0] == null)
-			return;
-
-		// Enable the process of searching that appears on the client. Note that this is a just a progress bar and does not actually look for blocks.
-		searchingClient = true;
-
 		// Convenience variables for the data pertaining to the target block that is being searched for
 		int targetID = inventoryStacks[0].itemID;
 		int targetMetadata = inventoryStacks[0].getItemDamage();
@@ -87,7 +75,7 @@ public class TEEXray extends TileEntityElectric {
 		// (-range, 0, -range) is the start point for the search. When lastSearch == (-range, 0, -range), this is the first tick of the search. The block list
 		// is cleared to be repopulated in this search.
 		if(lastSearch.equals(-range, 0, -range))
-			clearDetectedBlocks();
+			detectedBlocks.clear();
 
 		// Iterate over each block that is within the given range horizontally. Note that it searches all blocks below x-ray within that horizontal range, which
 		// is why the y loop comes first and why it looks a bit different from the x and z loops.
@@ -98,7 +86,7 @@ public class TEEXray extends TileEntityElectric {
 					// If the block at the given coords (which have been converted to absolute coordinates) is of the target block's type, add it to the
 					// list of blocks that have been found.
 					if(Funcs.blocksEqual(worldObj, targetID, targetMetadata, xCoord + x, y, zCoord + z))
-						addDetectedBlock(new Point(x, y, z));
+						detectedBlocks.add(new Point(x, y, z));
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
 					// continued next tick.
@@ -120,18 +108,6 @@ public class TEEXray extends TileEntityElectric {
 		shouldSearch = false;
 	}
 
-	public ArrayList<Point> getDetectedBlocks() {
-		return detectedBlocks;
-	}
-
-	public void clearDetectedBlocks() {
-		detectedBlocks.clear();
-	}
-
-	public void addDetectedBlock(Point p) {
-		detectedBlocks.add(p);
-	}
-
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
@@ -143,11 +119,7 @@ public class TEEXray extends TileEntityElectric {
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		// True if there are blocks on the GUI, false if there are no blocks
-		tagCompound.setBoolean("ShouldSearch", getDetectedBlocks().size() > 0);
-	}
-
-	public void handlePacketDataFromClient(boolean searching) {
-		searchingClient = searching;
+		tagCompound.setBoolean("ShouldSearch", detectedBlocks.size() > 0);
 	}
 
 	@Override

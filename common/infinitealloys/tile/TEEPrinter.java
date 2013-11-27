@@ -21,7 +21,7 @@ public class TEEPrinter extends TileEntityElectric {
 	}
 
 	@Override
-	protected boolean shouldProcess() {
+	public boolean shouldProcess() {
 		return inventoryStacks[0] != null && inventoryStacks[1] != null && inventoryStacks[2] == null;
 	}
 

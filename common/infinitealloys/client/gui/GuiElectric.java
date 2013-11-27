@@ -35,10 +35,11 @@ public abstract class GuiElectric extends GuiMachine {
 
 		// Draw the power network info if the mouse is over the energy icon
 		if(mouseInZone(mouseX, mouseY, topLeft.x + energyIcon.x, topLeft.y + energyIcon.y, ENERGY_ICON.width, ENERGY_ICON.height)) {
-			if(tem.energyStorage != null)
+			if(tem.energyStorage != null) {
+				int rkChange = tem.shouldProcess() ? 0 : tem.getRKChange();
 				drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("electric.connected.true") + "(" + tem.energyStorage.getCoords() + ")", 0x00ff00),
-						new ColoredLine((tem.getRKChange() > 0 ? "+" : "") + tem.getRKChange() + " RK/t",
-								tem.getRKChange() < 0 ? 0xff0000 : tem.getRKChange() > 0 ? 0x00ff00 : 0xffffff));
+						new ColoredLine((rkChange > 0 ? "+" : "") + rkChange + " RK/t", rkChange < 0 ? 0xff0000 : rkChange > 0 ? 0x00ff00 : 0xffffff));
+			}
 			else
 				drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("electric.connected.false"), 0xff0000));
 		}

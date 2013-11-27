@@ -58,9 +58,9 @@ public class GuiXray extends GuiElectric {
 		else
 			drawTexturedModalRect(SCROLL_BAR.x, SCROLL_BAR.y + (int)((float)(SCROLL_BAR.height - 15) / (float)(blockButtons.length / 4 - 4) * scrollPos),
 					SCROLL_ON.x, SCROLL_ON.y, SCROLL_ON.width, SCROLL_ON.height);
-		if(wasSearching && !tex.searchingClient)
+		if(wasSearching && tex.getProcessProgress() == 0)
 			setButtons();
-		wasSearching = tex.searchingClient;
+		wasSearching = tex.getProcessProgress() > 0;
 		for(int i = scrollPos * 4; i < blockButtons.length && i < scrollPos * 4 + 20; i++)
 			blockButtons[i].drawButton();
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -94,7 +94,7 @@ public class GuiXray extends GuiElectric {
 						blockButtons[i].activated = true;
 
 						// The blocks that are represented by the newly selected button get highlighted
-						for(Point block : tex.getDetectedBlocks())
+						for(Point block : tex.detectedBlocks)
 							// Is this block represented by the newly selected button?
 							if(block.y == blockButtons[i].getYValue())
 								// If so, add this block to the list of blocks to be highlighted. Convert the x and z coords from relative to absolute
@@ -125,13 +125,13 @@ public class GuiXray extends GuiElectric {
 	}
 
 	private void setButtons() {
-		if(tex.inventoryStacks[0] == null || tex.searchingClient)
+		if(tex.inventoryStacks[0] == null || tem.getProcessProgress() > 0)
 			blockButtons = new GuiBlockButton[0];
 		else {
 			int[] blockCounts = new int[tem.yCoord];
 			List<Integer> levels = new ArrayList<Integer>();
 			// Go through each detected block
-			for(Point block : tex.getDetectedBlocks()) {
+			for(Point block : tex.detectedBlocks) {
 				// For each block if there hasn't been a block for that y-level yet, at that y to the list
 				if(blockCounts[block.y]++ == 0)
 					levels.add(block.y);
@@ -160,7 +160,6 @@ public class GuiXray extends GuiElectric {
 			setButtons();
 			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 			tex.shouldSearch = true;
-			tex.searchingClient = true;
 			PacketDispatcher.sendPacketToServer(PacketHandler.getPacketSearch(tex.xCoord, tex.yCoord, tex.zCoord));
 		}
 	}

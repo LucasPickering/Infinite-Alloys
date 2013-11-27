@@ -39,7 +39,7 @@ public class TEEMetalForge extends TileEntityElectric {
 	}
 
 	@Override
-	protected boolean shouldProcess() {
+	public boolean shouldProcess() {
 		int typesInRecipe = 0;
 		for(int amt : recipeAmts)
 			if(amt > 0)
@@ -71,9 +71,7 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	@Override
 	public int getRKChange() {
-		if(shouldProcess())
-			return (int)(baseRKPerTick * rkPerTickMult / processTimeMult * getIngotsInRecipe());
-		return 0;
+		return (int)(baseRKPerTick * rkPerTickMult / processTimeMult * getIngotsInRecipe());
 	}
 
 	@Override

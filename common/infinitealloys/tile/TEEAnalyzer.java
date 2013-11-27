@@ -36,7 +36,7 @@ public class TEEAnalyzer extends TileEntityElectric {
 	}
 
 	@Override
-	protected boolean shouldProcess() {
+	public boolean shouldProcess() {
 		// If we've run out of alloys to discover, don't process
 		if(unlockedAlloyCount >= Consts.VALID_ALLOY_COUNT)
 			return false;
@@ -102,6 +102,10 @@ public class TEEAnalyzer extends TileEntityElectric {
 		if(Funcs.isServer())
 			for(String player : playersUsing)
 				PacketDispatcher.sendPacketToPlayer(PacketHandler.getTEPacketToClient(this), Funcs.getPlayerForUsername(player));
+	}
+
+	public int getRKChange() {
+		return (int)(baseRKPerTick * rkPerTickMult / processTimeMult * Math.pow(4D, unlockedAlloyCount)); // Every time an alloy is unlocked, it quadruples
 	}
 
 	@Override

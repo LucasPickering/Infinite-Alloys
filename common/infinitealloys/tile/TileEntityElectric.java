@@ -60,7 +60,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 
 	/** Should the process tick be increased? Called every tick to determine if energy should be used and if progress should continue. NOTE: This will return
 	 * true even if there is not a nearby energy storage unit to support the process */
-	protected abstract boolean shouldProcess();
+	public abstract boolean shouldProcess();
 
 	/** Should processProgress be reset to 0? */
 	protected boolean shouldResetProgress() {
@@ -75,9 +75,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 
 	/** Actual amount of RK change per tick, after certain calculations and conditions. Positive is produced RK and negative is consumed RK. */
 	public int getRKChange() {
-		if(shouldProcess())
-			return (int)(baseRKPerTick * rkPerTickMult / processTimeMult);
-		return 0;
+		return (int)(baseRKPerTick * rkPerTickMult / processTimeMult);
 	}
 
 	public int getProcessProgress() {

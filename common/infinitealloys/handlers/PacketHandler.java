@@ -48,6 +48,7 @@ public class PacketHandler implements IPacketHandler {
 					validAlloys[i] = data.readInt();
 				InfiniteAlloys.instance.worldData = new WorldData(validAlloys);
 				break;
+
 			case TE_SERVER_TO_CLIENT:
 				int x = data.readInt();
 				int y = data.readInt();
@@ -60,17 +61,24 @@ public class PacketHandler implements IPacketHandler {
 					if(te instanceof TEMComputer) {
 						TEMComputer tec = (TEMComputer)te;
 						tec.connectedMachines.clear();
-						int networkSize = data.readInt();
-						for(int i = 0; i < networkSize; i++) {
-							int machX = data.readInt();
-							int machY = data.readInt();
-							int machZ = data.readInt();
-							tec.connectedMachines.add(new Point(machX, machY, machZ));
-						}
+						byte size = data.readByte();
+						for(int i = 0; i < size; i++)
+							tec.connectedMachines.add(new Point(data.readInt(), data.readShort(), data.readInt()));
 					}
 					else if(te instanceof TEMEnergyStorage) {
+						TEMEnergyStorage tees = ((TEMEnergyStorage)te);
 						int currentRK = data.readInt();
-						((TEMEnergyStorage)te).handlePacketDataFromServer(currentRK);
+						tees.handlePacketDataFromServer(currentRK);
+						tees.connectedMachines.clear();
+						byte size = data.readByte();
+						for(int i = 0; i < size; i++) {
+							int machX = data.readInt();
+							int machY = data.readShort();
+							int machZ = data.readInt();
+							tees.connectedMachines.add(new Point(machX, machY, machZ));
+							((TileEntityElectric)world.getBlockTileEntity(machX, machY, machZ)).energyStorage = tees;
+
+						}
 					}
 					else if(te instanceof TileEntityElectric) {
 						int processProgress = data.readInt();
@@ -87,10 +95,10 @@ public class PacketHandler implements IPacketHandler {
 						}
 						else if(te instanceof TEEXray) {
 							TEEXray tex = (TEEXray)te;
-							tex.clearDetectedBlocks();
-							short size = data.readShort();
+							tex.detectedBlocks.clear();
+							byte size = data.readByte();
 							for(int i = 0; i < size; i++)
-								tex.addDetectedBlock(new Point(data.readInt(), data.readShort(), data.readInt()));
+								tex.detectedBlocks.add(new Point(data.readInt(), data.readShort(), data.readInt()));
 						}
 						else if(te instanceof TEEPasture) {
 							byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
@@ -101,6 +109,7 @@ public class PacketHandler implements IPacketHandler {
 					}
 				}
 				break;
+
 			case TE_CLIENT_TO_SERVER:
 				x = data.readInt();
 				y = data.readInt();
@@ -116,10 +125,6 @@ public class PacketHandler implements IPacketHandler {
 						recipeAmts[i] = data.readByte();
 					((TEEMetalForge)te).handlePacketDataFromClient(recipeAmts);
 				}
-				else if(te instanceof TEEXray) {
-					boolean searching = data.readBoolean();
-					((TEEXray)te).handlePacketDataFromClient(searching);
-				}
 				else if(te instanceof TEEPasture) {
 					byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 					for(int i = 0; i < mobActions.length; i++)
@@ -127,14 +132,15 @@ public class PacketHandler implements IPacketHandler {
 					((TEEPasture)te).handlePacketData(mobActions);
 				}
 				break;
+
 			case OPEN_GUI:
 				x = data.readInt();
 				y = data.readInt();
 				z = data.readInt();
 				boolean fromComputer = data.readBoolean();
-				((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, (EntityPlayer)player, (TileEntityElectric)world.getBlockTileEntity(x, y, z),
-						fromComputer);
+				((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, (EntityPlayer)player, (TileEntityElectric)world.getBlockTileEntity(x, y, z), fromComputer);
 				break;
+
 			case XRAY_SEARCH:
 				x = data.readInt();
 				y = data.readInt();
@@ -160,15 +166,23 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeInt(tem.getUpgrades());
 			if(tem instanceof TEMComputer) {
 				TEMComputer tec = (TEMComputer)tem;
-				dos.writeInt(tec.connectedMachines.size());
+				dos.writeByte(tec.connectedMachines.size());
 				for(Point coords : tec.connectedMachines) {
 					dos.writeInt(coords.x);
-					dos.writeInt(coords.y);
+					dos.writeShort(coords.y);
 					dos.writeInt(coords.z);
 				}
 			}
-			if(tem instanceof TEMEnergyStorage)
-				dos.writeInt(((TEMEnergyStorage)tem).getCurrentRK());
+			if(tem instanceof TEMEnergyStorage) {
+				TEMEnergyStorage tees = (TEMEnergyStorage)tem;
+				dos.writeInt(tees.getCurrentRK());
+				dos.writeByte(tees.connectedMachines.size());
+				for(Point coords : tees.connectedMachines) {
+					dos.writeInt(coords.x);
+					dos.writeShort(coords.y);
+					dos.writeInt(coords.z);
+				}
+			}
 			else if(tem instanceof TileEntityElectric) {
 				TileEntityElectric tee = (TileEntityElectric)tem;
 				dos.writeInt(tee.getProcessProgress());
@@ -178,10 +192,10 @@ public class PacketHandler implements IPacketHandler {
 				else if(tee instanceof TEEAnalyzer)
 					dos.writeByte(((TEEAnalyzer)tee).getUnlockedAlloyCount());
 				else if(tee instanceof TEEXray) {
-					dos.writeShort(((TEEXray)tee).getDetectedBlocks().size());
-					for(Point p : ((TEEXray)tee).getDetectedBlocks()) {
+					dos.writeByte(((TEEXray)tee).detectedBlocks.size());
+					for(Point p : ((TEEXray)tee).detectedBlocks) {
 						dos.writeInt(p.x);
-						dos.writeShort((short)p.y);
+						dos.writeShort(p.y);
 						dos.writeInt(p.z);
 					}
 				}
@@ -202,8 +216,6 @@ public class PacketHandler implements IPacketHandler {
 			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TEMComputer)tem).autoSearch);
 		if(tem instanceof TEEMetalForge)
 			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TEEMetalForge)tem).recipeAmts);
-		if(tem instanceof TEEXray)
-			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord);
 		if(tem instanceof TEEPasture)
 			return getPacket(TE_CLIENT_TO_SERVER, tem.xCoord, tem.yCoord, tem.zCoord, ((TEEPasture)tem).mobActions);
 		return null;

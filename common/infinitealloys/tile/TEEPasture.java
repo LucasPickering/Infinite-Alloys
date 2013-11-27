@@ -48,7 +48,7 @@ public class TEEPasture extends TileEntityElectric {
 	}
 
 	@Override
-	protected boolean shouldProcess() {
+	public boolean shouldProcess() {
 		return true;
 	}
 

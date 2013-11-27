@@ -7,10 +7,10 @@ import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class TEMEnergyStorage extends TileEntityMachine {
 
@@ -30,7 +30,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 	private int maxRange;
 
 	/** A list of the locations of machines that provide power to or consume power from this storage unit */
-	private final List<Point> connectedMachines = new ArrayList<Point>();
+	public final List<Point> connectedMachines = new ArrayList<Point>();
 
 	/** How many ticks have passed since the last search for machines. When this reaches {@link #SEARCH_INTERVAL the search interval time}, it resets to 0 and a
 	 * search begins. */
@@ -60,7 +60,6 @@ public class TEMEnergyStorage extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 
-		System.out.println(currentSearchTicks + " on " + (Funcs.isClient() ? "Client" : "Server"));
 		// Increment the ticks since last search and if it reaches the interval, reset it and run a search
 		if(++currentSearchTicks >= SEARCH_INTERVAL) {
 			currentSearchTicks = 0;
@@ -68,7 +67,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 		}
 
 		// Run a search
-		if(shouldSearch)
+		if(shouldSearch && Funcs.isServer())
 			search();
 
 		// If a connected machine no longer exists, remove it from the network
@@ -113,7 +112,6 @@ public class TEMEnergyStorage extends TileEntityMachine {
 					if(te instanceof TileEntityElectric && ((TileEntityElectric)te).energyStorage == null) {
 						connectedMachines.add(new Point(xCoord + x, yCoord + y, zCoord + z));
 						((TileEntityElectric)te).energyStorage = this;
-						PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient((TileEntityMachine)te));
 					}
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
@@ -129,6 +127,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 		}
 		lastSearch.x = -autoSearchRange; // If we've search all the x values, reset the x position.
 
+		PacketDispatcher.sendPacketToAllPlayers(PacketHandler.getTEPacketToClient(this));
 		shouldSearch = false; // The search is done. Stop running the function until another search is initiated.
 	}
 

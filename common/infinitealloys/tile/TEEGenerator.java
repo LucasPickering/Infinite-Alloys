@@ -25,7 +25,7 @@ public class TEEGenerator extends TileEntityElectric {
 	}
 
 	@Override
-	protected boolean shouldProcess() {
+	public boolean shouldProcess() {
 		if(getProcessProgress() > 0)
 			return true;
 		for(int i = 0; i < inventoryStacks.length - 1; i++)
