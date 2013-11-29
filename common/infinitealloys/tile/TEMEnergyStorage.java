@@ -98,7 +98,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 			coords.add((short)point.y);
 			coords.add(point.z);
 		}
-		return ArrayUtils.addAll(super.getSyncDataToClient(), (byte)connectedMachines.size(), coords.toArray());
+		return ArrayUtils.addAll(super.getSyncDataToClient(), currentRK, (byte)connectedMachines.size(), coords.toArray());
 	}
 
 	public void handlePacketDataFromServer(int currentRK) {
@@ -121,8 +121,11 @@ public class TEMEnergyStorage extends TileEntityMachine {
 					// energy storage unit, add it to the power network.
 					TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
 					if(te instanceof TileEntityElectric && ((TileEntityElectric)te).energyStorage == null) {
+						TileEntityElectric tee = (TileEntityElectric)te;
 						connectedMachines.add(new Point(xCoord + x, yCoord + y, zCoord + z));
-						((TileEntityElectric)te).energyStorage = this;
+						tee.energyStorage = this;
+						for(String player : tee.playersUsing)
+							PacketDispatcher.sendPacketToPlayer(getDescriptionPacket(), Funcs.getPlayerForUsername(player));
 					}
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
