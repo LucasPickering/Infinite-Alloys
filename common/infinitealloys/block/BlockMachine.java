@@ -67,17 +67,12 @@ public class BlockMachine extends BlockContainer {
 			if(world.getBlockTileEntity(x, y, z) instanceof TEMComputer) {
 				// Does the internet wand have stored data?
 				if(heldItem.hasTagCompound()) {
-					// If so, add all coordinates saved by the wand into the computer
+					// If so, add the next coordinate saved by the wand into the unit, remove that coordinate, and move the rest up one in the list
 					NBTTagCompound tagCompound = heldItem.getTagCompound();
-					for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) {
-						if(!tagCompound.hasKey("coords" + i))
-							continue;
-						int[] coords = tagCompound.getIntArray("coords" + i);
-						if(((TEMComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
-							if(world.isRemote)
-								player.addChatMessage("Adding machine at " + coords[0] + ", " + coords[1] + ", " + coords[2]);
-							tagCompound.removeTag("coords" + i);
-						}
+					if(tagCompound.hasKey("coords0")) {
+						int[] coords = tagCompound.getIntArray("coords0");
+						if(((TEMComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2]))
+							tagCompound.removeTag("coords0");
 					}
 				}
 			}
@@ -86,17 +81,12 @@ public class BlockMachine extends BlockContainer {
 			else if(world.getBlockTileEntity(x, y, z) instanceof TEMEnergyStorage) {
 				// Does the internet wand have stored data?
 				if(heldItem.hasTagCompound()) {
-					// If so, add all coordinates saved by the wand into the unit
+					// If so, add the next coordinate saved by the wand into the unit, remove that coordinate, and move the rest up one in the list
 					NBTTagCompound tagCompound = heldItem.getTagCompound();
-					for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) {
-						if(!tagCompound.hasKey("coords" + i))
-							continue;
-						int[] coords = tagCompound.getIntArray("coords" + i);
-						if(((TEMEnergyStorage)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2])) {
-							if(world.isRemote)
-								player.addChatMessage("Adding machine at " + coords[0] + ", " + coords[1] + ", " + coords[2]);
-							tagCompound.removeTag("coords" + i);
-						}
+					if(tagCompound.hasKey("coords0")) {
+						int[] coords = tagCompound.getIntArray("coords0");
+						if(((TEMEnergyStorage)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2]))
+							tagCompound.removeTag("coords0");
 					}
 				}
 			}

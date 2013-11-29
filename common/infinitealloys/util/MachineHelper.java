@@ -61,7 +61,7 @@ public class MachineHelper {
 
 	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray", "pasture", "energystorage", "generator" };
 
-	/** How many blocks are searched per tick. Used to limit lag. Used by the x-ray, computer, and energy storage unit. */
+	/** How many blocks are searched per tick. Used to limit lag on the x-ray. */
 	public static final int SEARCH_PER_TICK = 2000;
 
 	/** The controlling computer for each player */
