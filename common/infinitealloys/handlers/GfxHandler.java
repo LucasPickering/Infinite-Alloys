@@ -1,5 +1,6 @@
 package infinitealloys.handlers;
 
+import infinitealloys.block.Blocks;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
@@ -116,47 +117,50 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		Tessellator tessellator = Tessellator.instance;
-		int color = Consts.metalColors[world.getBlockMetadata(x, y, z)];
-		float red = (color >> 16 & 255) / 255F;
-		float green = (color >> 8 & 255) / 255F;
-		float blue = (color & 255) / 255F;
 		boolean rendered = renderer.renderStandardBlock(block, x, y, z);
 		int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
-		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y - 1, z, 0)) {
-			tessellator.setBrightness(renderer.renderMinY > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y - 1, z));
-			tessellator.setColorOpaque_F(red * 0.5F, green * 0.5F, blue * 0.5F);
-			renderer.renderFaceYNeg(block, x, y, z, block.getIcon(0, -1));
-			rendered = true;
-		}
-		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y + 1, z, 1)) {
-			tessellator.setBrightness(renderer.renderMaxY < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y + 1, z));
-			tessellator.setColorOpaque_F(red, green, blue);
-			renderer.renderFaceYPos(block, x, y, z, block.getIcon(1, -1));
-			rendered = true;
-		}
-		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x + 1, y, z, 2)) {
-			tessellator.setBrightness(renderer.renderMinZ > 0D ? brightness : block.getMixedBrightnessForBlock(world, x + 1, y, z));
-			tessellator.setColorOpaque_F(red * 0.6F, green * 0.6F, blue * 0.6F);
-			renderer.renderFaceXPos(block, x, y, z, block.getIcon(2, -1));
-			rendered = true;
-		}
-		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x - 1, y, z, 3)) {
-			tessellator.setBrightness(renderer.renderMaxZ < 1D ? brightness : block.getMixedBrightnessForBlock(world, x - 1, y, z));
-			tessellator.setColorOpaque_F(red * 0.6F, green * 0.6F, blue * 0.6F);
-			renderer.renderFaceXNeg(block, x, y, z, block.getIcon(3, -1));
-			rendered = true;
-		}
-		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z - 1, 4)) {
-			tessellator.setBrightness(renderer.renderMinX > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z - 1));
-			tessellator.setColorOpaque_F(red * 0.8F, green * 0.8F, blue * 0.8F);
-			renderer.renderFaceZNeg(block, x, y, z, block.getIcon(4, -1));
-			rendered = true;
-		}
-		if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z + 1, 5)) {
-			tessellator.setBrightness(renderer.renderMaxX < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z + 1));
-			tessellator.setColorOpaque_F(red * 0.8F, green * 0.8F, blue * 0.8F);
-			renderer.renderFaceZPos(block, x, y, z, block.getIcon(5, -1));
-			rendered = true;
+		if(block == Blocks.ore) { // Used to colorize the ores
+			int color = Consts.metalColors[world.getBlockMetadata(x, y, z)];
+			float red = (color >> 16 & 255) / 255F;
+			float green = (color >> 8 & 255) / 255F;
+			float blue = (color & 255) / 255F;
+
+			if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y - 1, z, 0)) {
+				tessellator.setBrightness(renderer.renderMinY > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y - 1, z));
+				tessellator.setColorOpaque_F(red * 0.5F, green * 0.5F, blue * 0.5F);
+				renderer.renderFaceYNeg(block, x, y, z, Blocks.oreForegroundIcon);
+				rendered = true;
+			}
+			if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y + 1, z, 1)) {
+				tessellator.setBrightness(renderer.renderMaxY < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y + 1, z));
+				tessellator.setColorOpaque_F(red, green, blue);
+				renderer.renderFaceYPos(block, x, y, z, Blocks.oreForegroundIcon);
+				rendered = true;
+			}
+			if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x + 1, y, z, 2)) {
+				tessellator.setBrightness(renderer.renderMinZ > 0D ? brightness : block.getMixedBrightnessForBlock(world, x + 1, y, z));
+				tessellator.setColorOpaque_F(red * 0.6F, green * 0.6F, blue * 0.6F);
+				renderer.renderFaceXPos(block, x, y, z, Blocks.oreForegroundIcon);
+				rendered = true;
+			}
+			if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x - 1, y, z, 3)) {
+				tessellator.setBrightness(renderer.renderMaxZ < 1D ? brightness : block.getMixedBrightnessForBlock(world, x - 1, y, z));
+				tessellator.setColorOpaque_F(red * 0.6F, green * 0.6F, blue * 0.6F);
+				renderer.renderFaceXNeg(block, x, y, z, Blocks.oreForegroundIcon);
+				rendered = true;
+			}
+			if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z - 1, 4)) {
+				tessellator.setBrightness(renderer.renderMinX > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z - 1));
+				tessellator.setColorOpaque_F(red * 0.8F, green * 0.8F, blue * 0.8F);
+				renderer.renderFaceZNeg(block, x, y, z, Blocks.oreForegroundIcon);
+				rendered = true;
+			}
+			if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z + 1, 5)) {
+				tessellator.setBrightness(renderer.renderMaxX < 1D ? brightness : block.getMixedBrightnessForBlock(world, x, y, z + 1));
+				tessellator.setColorOpaque_F(red * 0.8F, green * 0.8F, blue * 0.8F);
+				renderer.renderFaceZPos(block, x, y, z, Blocks.oreForegroundIcon);
+				rendered = true;
+			}
 		}
 		return rendered;
 	}
