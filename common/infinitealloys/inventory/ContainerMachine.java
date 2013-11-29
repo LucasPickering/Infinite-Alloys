@@ -61,14 +61,18 @@ public class ContainerMachine extends Container {
 
 			// If an item was clicked in the main inventory or the hotbar
 			else {
+				boolean moved = false;
 
 				// If the item can go in one of the container's slots, put it there
-				for(int i = 0; i < inventoryStart; i++)
-					if(inventory.isItemValidForSlot(i, stackInSlotCopy))
+				for(int i = 0; i < inventoryStart; i++) {
+					if(inventory.isItemValidForSlot(i, stackInSlotCopy)) {
+						moved = true;
 						if(!mergeItemStack(stackInSlotCopy, i, i + 1, false) && !inventory.isItemValidForSlot(i + 1, stackInSlotCopy))
 							break;
+					}
+				}
 
-				if(stackInSlotCopy.stackSize != 0) {
+				if(!moved) {
 					// Otherwise, if it's in the hotbar, move it to the main inventory
 					if(slot < inventoryStart + 9) {
 						if(!mergeItemStack(stackInSlotCopy, inventoryStart + 9, inventoryStart + 36, false))
