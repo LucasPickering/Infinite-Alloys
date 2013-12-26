@@ -1,6 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import java.util.Arrays;
@@ -137,7 +138,7 @@ public class TEEAnalyzer extends TileEntityElectric {
 	private void updateRequiredMetals() {
 		if(unlockedAlloyCount < Consts.VALID_ALLOY_COUNT)
 			for(int i = 0; i < requiredMetals.length; i++)
-				requiredMetals[i] = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[getUnlockedAlloyCount()], Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
+				requiredMetals[i] = Funcs.intAtPos(EnumAlloy.values()[getUnlockedAlloyCount()].max, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
 	}
 
 	@Override

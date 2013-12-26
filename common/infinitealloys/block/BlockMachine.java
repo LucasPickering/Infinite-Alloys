@@ -63,35 +63,11 @@ public class BlockMachine extends BlockContainer {
 		ItemStack heldItem = player.inventory.getCurrentItem();
 		// Is the player holding an internet wand?
 		if(heldItem != null && heldItem.itemID == Items.internetWand.itemID) {
-			// Is this block a computer?
-			if(world.getBlockTileEntity(x, y, z) instanceof TEMComputer) {
-				// Does the internet wand have stored data?
-				if(heldItem.hasTagCompound()) {
-					// If so, add the next coordinate saved by the wand into the unit, remove that coordinate, and move the rest up one in the list
-					NBTTagCompound tagCompound = heldItem.getTagCompound();
-					if(tagCompound.hasKey("coords0")) {
-						int[] coords = tagCompound.getIntArray("coords0");
-						if(((TEMComputer)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2]))
-							tagCompound.removeTag("coords0");
-					}
-				}
-			}
+			// If this block is a computer or energy storage unit, open the wand gui to add a block
+			if(player.isSneaking() && (world.getBlockTileEntity(x, y, z) instanceof TEMComputer || world.getBlockTileEntity(x, y, z) instanceof TEMEnergyStorage))
+				player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI_ADD, world, (int)player.posX, (int)player.posY, (int)player.posZ);
 
-			// Is this block an RK storage unit?
-			else if(world.getBlockTileEntity(x, y, z) instanceof TEMEnergyStorage) {
-				// Does the internet wand have stored data?
-				if(heldItem.hasTagCompound()) {
-					// If so, add the next coordinate saved by the wand into the unit, remove that coordinate, and move the rest up one in the list
-					NBTTagCompound tagCompound = heldItem.getTagCompound();
-					if(tagCompound.hasKey("coords0")) {
-						int[] coords = tagCompound.getIntArray("coords0");
-						if(((TEMEnergyStorage)world.getBlockTileEntity(x, y, z)).addMachine(player, coords[0], coords[1], coords[2]))
-							tagCompound.removeTag("coords0");
-					}
-				}
-			}
-
-			// If it's not a computer, but it is capable of networking, add its data to the wand
+			// If is capable of networking, add its data to the wand
 			else if(((TileEntityMachine)world.getBlockTileEntity(x, y, z)).hasUpgrade(MachineHelper.WIRELESS)) {
 				NBTTagCompound tagCompound = heldItem.hasTagCompound() ? heldItem.getTagCompound() : new NBTTagCompound();
 				int size = 0;

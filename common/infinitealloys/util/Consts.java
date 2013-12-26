@@ -11,7 +11,10 @@ public class Consts {
 	public static final int METAL_COUNT = 8;
 	public static final int MACHINE_COUNT = 8;
 	public static final int UPGRADE_COUNT = 9;
-	public static final int VALID_ALLOY_COUNT = 6;
+	public static final int VALID_ALLOY_COUNT = EnumAlloy.values().length;
+
+	public static final int WAND_GUI_NORMAL = MACHINE_COUNT;
+	public static final int WAND_GUI_ADD = MACHINE_COUNT + 1;
 
 	public static final int TOP = 0;
 	public static final int BOTTOM = 1;
@@ -22,10 +25,6 @@ public class Consts {
 
 	/** The radix of the number system used for the alloys */
 	public static final int ALLOY_RADIX = 10;
-	/** The min for each metal in each valid alloy, the valid alloys will be between these and the maxes */
-	public static final int[] VALID_ALLOY_MINS = { 11, 1111, 11111, 111111, 11111111, 44444444 };
-	/** The max for each metal in each valid alloy, the valid alloys will be between these and the mins */
-	public static final int[] VALID_ALLOY_MAXES = { 55, 24477, 356688, 557799, 44446688, 99999999 };
 
 	/** The colors used to colorize the ingots */
 	public static int[] metalColors = new int[METAL_COUNT];

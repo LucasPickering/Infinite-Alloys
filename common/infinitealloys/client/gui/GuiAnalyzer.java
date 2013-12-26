@@ -1,12 +1,13 @@
 package infinitealloys.client.gui;
 
-import org.lwjgl.opengl.GL11;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 public class GuiAnalyzer extends GuiElectric {
 
@@ -68,9 +69,9 @@ public class GuiAnalyzer extends GuiElectric {
 	private void updateRequiredMetals() {
 		for(int i = 0; i < requiredMetals.length; i++) {
 			if(selectedRecipe == 0)
-				requiredMetals[i] = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[tea.getUnlockedAlloyCount()], Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
+				requiredMetals[i] = Funcs.intAtPos(EnumAlloy.values()[tea.getUnlockedAlloyCount()].max, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
 			else
-				requiredMetals[i] = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[selectedRecipe - 1], Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
+				requiredMetals[i] = Funcs.intAtPos(EnumAlloy.values()[selectedRecipe - 1].max, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
 		}
 	}
 }

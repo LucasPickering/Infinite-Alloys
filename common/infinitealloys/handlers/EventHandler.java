@@ -4,6 +4,7 @@ import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.WorldData;
 import infinitealloys.network.PacketWorldData;
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -46,8 +47,8 @@ public class EventHandler implements ICraftingHandler {
 					for(int i = 0; i < Consts.VALID_ALLOY_COUNT; i++) {
 						byte[] alloyDigits = new byte[Consts.METAL_COUNT];
 						for(int j = 0; j < Consts.METAL_COUNT; j++) {
-							int min = Funcs.intAtPos(Consts.VALID_ALLOY_MINS[i], Consts.ALLOY_RADIX, Consts.METAL_COUNT, j);
-							int max = Funcs.intAtPos(Consts.VALID_ALLOY_MAXES[i], Consts.ALLOY_RADIX, Consts.METAL_COUNT, j);
+							int min = Funcs.intAtPos(EnumAlloy.values()[i].min, Consts.ALLOY_RADIX, Consts.METAL_COUNT, j);
+							int max = Funcs.intAtPos(EnumAlloy.values()[i].max, Consts.ALLOY_RADIX, Consts.METAL_COUNT, j);
 							alloyDigits[j] = (byte)(min + (max == min ? 0 : random.nextInt(max - min)));
 						}
 						String alloy = "";

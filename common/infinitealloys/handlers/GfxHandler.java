@@ -1,6 +1,7 @@
 package infinitealloys.handlers;
 
 import infinitealloys.block.Blocks;
+import infinitealloys.client.gui.GuiInternetWand;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
@@ -32,11 +33,17 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		return MachineHelper.getContainerForMachine(player.inventory, (TileEntityMachine)world.getBlockTileEntity(x, y, z));
+		if(id < Consts.MACHINE_COUNT)
+			return MachineHelper.getContainerForMachine(player.inventory, (TileEntityMachine)world.getBlockTileEntity(x, y, z));
+		return null;
 	}
 
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+		if(id == Consts.WAND_GUI_NORMAL)
+			return new GuiInternetWand(false);
+		else if(id == Consts.WAND_GUI_ADD)
+			return new GuiInternetWand(true);
 		return MachineHelper.getGuiForMachine(player.inventory, (TileEntityMachine)world.getBlockTileEntity(x, y, z));
 	}
 
@@ -83,32 +90,32 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, -1F, 0F);
-			renderer.renderFaceYNeg(block, 0D, 0D, 0D, block.getIcon(0, -1));
+			renderer.renderFaceYNeg(block, 0D, 0D, 0D, Blocks.oreForegroundIcon);
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, 1F, 0F);
-			renderer.renderFaceYPos(block, 0D, 0D, 0D, block.getIcon(1, -1));
+			renderer.renderFaceYPos(block, 0D, 0D, 0D, Blocks.oreForegroundIcon);
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(1F, 0F, 0F);
-			renderer.renderFaceXPos(block, 0D, 0D, 0D, block.getIcon(2, -1));
+			renderer.renderFaceXPos(block, 0D, 0D, 0D, Blocks.oreForegroundIcon);
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(-1F, 0F, 0F);
-			renderer.renderFaceXNeg(block, 0D, 0D, 0D, block.getIcon(3, -1));
+			renderer.renderFaceXNeg(block, 0D, 0D, 0D, Blocks.oreForegroundIcon);
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, 0F, -1F);
-			renderer.renderFaceZNeg(block, 0D, 0D, 0D, block.getIcon(4, -1));
+			renderer.renderFaceZNeg(block, 0D, 0D, 0D, Blocks.oreForegroundIcon);
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, 0F, 1F);
-			renderer.renderFaceZPos(block, 0D, 0D, 0D, block.getIcon(5, -1));
+			renderer.renderFaceZPos(block, 0D, 0D, 0D, Blocks.oreForegroundIcon);
 			tessellator.draw();
 		}
 		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
