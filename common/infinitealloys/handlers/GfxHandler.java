@@ -40,10 +40,8 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		if(id == Consts.WAND_GUI_NORMAL)
-			return new GuiInternetWand(false);
-		else if(id == Consts.WAND_GUI_ADD)
-			return new GuiInternetWand(true);
+		if(id == Consts.WAND_GUI)
+			return new GuiInternetWand();
 		return MachineHelper.getGuiForMachine(player.inventory, (TileEntityMachine)world.getBlockTileEntity(x, y, z));
 	}
 

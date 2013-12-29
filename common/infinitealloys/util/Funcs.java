@@ -2,6 +2,8 @@ package infinitealloys.util;
 
 import infinitealloys.core.InfiniteAlloys;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -152,5 +154,16 @@ public class Funcs {
 	/** Get an instance of a player from their name */
 	public static Player getPlayerForUsername(String name) {
 		return (Player)FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
+	}
+
+	/** Create a texture resource for an IA GUI based on the given texture name */
+	public static ResourceLocation getGuiTexture(String texture) {
+		return new ResourceLocation(Consts.TEXTURE_DOMAIN, "textures/gui/" + texture + ".png");
+	}
+
+	/** Bind the texture with the given resource to the render engine so that it can be used Convenience method for
+	 * {@link net.minecraft.client.renderer.texture.TextureManager#bindTexture TextureManager.bindTexture} */
+	public static void bindTexture(ResourceLocation texture) {
+		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 	}
 }

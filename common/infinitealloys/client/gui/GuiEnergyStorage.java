@@ -1,6 +1,7 @@
 package infinitealloys.client.gui;
 
 import infinitealloys.tile.TEMEnergyStorage;
+import infinitealloys.util.Funcs;
 import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.opengl.GL11;
 
@@ -20,7 +21,7 @@ public class GuiEnergyStorage extends GuiMachine {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		bindTexture(extras);
+		Funcs.bindTexture(extras);
 
 		// Draw the energy meter. It uses the same texture as the progress bar.
 		drawTexturedModalRect(energyMeter.x, energyMeter.y, PROGRESS_BAR.x, PROGRESS_BAR.y, tees.getCurrentRKScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);

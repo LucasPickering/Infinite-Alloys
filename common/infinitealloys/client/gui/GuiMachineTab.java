@@ -1,6 +1,7 @@
 package infinitealloys.client.gui;
 
 import infinitealloys.tile.TileEntityMachine;
+import infinitealloys.util.Funcs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -30,7 +31,7 @@ public class GuiMachineTab extends GuiScreen {
 	/** Draws this button to the screen. */
 	public void drawButton() {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GuiElectric.bindTexture(GuiMachine.extras);
+		Funcs.bindTexture(GuiMachine.extras);
 		if(leftSide) {
 			if(activated)
 				drawTexturedModalRect(xPos, yPos, GuiElectric.TAB_LEFT_ON.x, GuiElectric.TAB_LEFT_ON.y, GuiElectric.TAB_LEFT_ON.width, GuiElectric.TAB_LEFT_ON.height);

@@ -52,7 +52,7 @@ public abstract class GuiElectric extends GuiMachine {
 		super.drawGuiContainerBackgroundLayer(partialTick, mouseX, mouseY);
 		GL11.glPushMatrix();
 		GL11.glTranslatef(topLeft.x, topLeft.y, 0);
-		bindTexture(extras);
+		Funcs.bindTexture(extras);
 
 		// Draw the progress bar overlay
 		if(tem.ticksToProcess > 0)

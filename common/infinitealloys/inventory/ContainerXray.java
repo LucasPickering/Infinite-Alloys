@@ -13,6 +13,6 @@ public class ContainerXray extends ContainerMachine {
 
 		addSlotToContainer(new SlotMachine(inventory, inventory.getID(), 0, 32, 6));
 
-		initSlots(inventoryPlayer, 18, 156, 168, 6);
+		initSlots(inventoryPlayer, 18, 158, 168, 6);
 	}
 }

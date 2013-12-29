@@ -13,8 +13,7 @@ public class Consts {
 	public static final int UPGRADE_COUNT = 9;
 	public static final int VALID_ALLOY_COUNT = EnumAlloy.values().length;
 
-	public static final int WAND_GUI_NORMAL = MACHINE_COUNT;
-	public static final int WAND_GUI_ADD = MACHINE_COUNT + 1;
+	public static final int WAND_GUI = MACHINE_COUNT;
 
 	public static final int TOP = 0;
 	public static final int BOTTOM = 1;

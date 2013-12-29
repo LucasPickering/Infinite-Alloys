@@ -68,6 +68,8 @@
     <entry key="electric.connected.false">NOT CONNECTED</entry>
     <entry key="electric.connected.true">CONNECTED TO </entry>
 
+    <entry key="xray.search">Search</entry>
+
     <entry key="pasture.mode.0">Off</entry>
     <entry key="pasture.mode.1">Att.</entry>
     <entry key="pasture.mode.2">Rep.</entry>
@@ -79,6 +81,9 @@
     <entry key="pasture.monster.1">Skeleton</entry>
     <entry key="pasture.monster.2">Spider</entry>
     <entry key="pasture.monster.3">Zombie</entry>
+    
+    <entry key="wand.addToWand">Add to Wand</entry>
+    <entry key="wand.addSelected">Add Selected</entry>
 
 	<entry key="machineHelp.upgrade.title">Upgrades</entry>
 	<entry key="machineHelp.upgrade.info">Place an upgrade item here/nto add it to the machine</entry>

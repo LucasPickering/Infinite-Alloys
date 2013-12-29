@@ -63,30 +63,10 @@ public class BlockMachine extends BlockContainer {
 		ItemStack heldItem = player.inventory.getCurrentItem();
 		// Is the player holding an internet wand?
 		if(heldItem != null && heldItem.itemID == Items.internetWand.itemID) {
-			// If this block is a computer or energy storage unit, open the wand gui to add a block
-			if(player.isSneaking() && (world.getBlockTileEntity(x, y, z) instanceof TEMComputer || world.getBlockTileEntity(x, y, z) instanceof TEMEnergyStorage))
-				player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI_ADD, world, (int)player.posX, (int)player.posY, (int)player.posZ);
-
-			// If is capable of networking, add its data to the wand
-			else if(((TileEntityMachine)world.getBlockTileEntity(x, y, z)).hasUpgrade(MachineHelper.WIRELESS)) {
-				NBTTagCompound tagCompound = heldItem.hasTagCompound() ? heldItem.getTagCompound() : new NBTTagCompound();
-				int size = 0;
-				for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) {
-					if(!tagCompound.hasKey("coords" + i)) {
-						size = i;
-						break;
-					}
-					int[] nbtCoords = tagCompound.getIntArray("coords" + i);
-					if(nbtCoords[0] == x && nbtCoords[1] == y && nbtCoords[2] == z)
-						return true;
-				}
-				if(size < Consts.WAND_MAX_COORDS) {
-					tagCompound.setIntArray("coords" + size, new int[] { x, y, z });
-					heldItem.setTagCompound(tagCompound);
-					if(world.isRemote)
-						player.addChatMessage("Tracking machine at " + x + ", " + y + ", " + z);
-				}
-			}
+			// Put the coords of this block in a temp tag in the wand so the wand's GUI can access it
+			heldItem.getTagCompound().setIntArray("CoordsCurrent", new int[] { x, y, z });
+			// Open the GUI for the wand to let the player decide what they want to do with this block
+			player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI, world, (int)player.posX, (int)player.posY, (int)player.posZ);
 			return true;
 		}
 		openGui(world, player, (TileEntityMachine)world.getBlockTileEntity(x, y, z), false);

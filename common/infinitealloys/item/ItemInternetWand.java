@@ -22,18 +22,7 @@ public class ItemInternetWand extends ItemIA {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
-		player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI_NORMAL, world, (int)player.posX, (int)player.posY, (int)player.posZ);
+		player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI, world, (int)player.posX, (int)player.posY, (int)player.posZ);
 		return itemstack;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) {
-			if(itemstack.hasTagCompound() && itemstack.getTagCompound().hasKey("coords" + i)) {
-				int[] coords = itemstack.getTagCompound().getIntArray("coords" + i);
-				list.add(coords[0] + ", " + coords[1] + ", " + coords[2]);
-			}
-		}
 	}
 }

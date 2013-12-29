@@ -39,13 +39,15 @@ public abstract class GuiMachine extends GuiContainer {
 	static final Rectangle DOWN_ARROW = new Rectangle(16, 24, 16, 16);
 	static final Rectangle CHECK = new Rectangle(32, 24, 16, 16);
 	static final Rectangle BLOCK_BG_OFF = new Rectangle(48, 24, 36, 18);
+	static final Rectangle SELECTED_OVERLAY = new Rectangle(68, 24, 36, 18);
 	static final Rectangle BLOCK_BG_ON = new Rectangle(84, 24, 36, 18);
 	static final Rectangle ENERGY_ICON = new Rectangle(241, 0, 10, 4);
+	static final Rectangle SCROLL_BAR = new Rectangle(172, 51, 12, 96);
 
+	/** The texture resource for the texture item */
+	static final ResourceLocation extras = Funcs.getGuiTexture("extras");
 	/** The background texture */
 	protected ResourceLocation background;
-	/** The texture resource for the texture item */
-	static ResourceLocation extras;
 
 	/** Coordinates of the top-left corner of the GUI */
 	protected java.awt.Point topLeft = new java.awt.Point();
@@ -64,8 +66,7 @@ public abstract class GuiMachine extends GuiContainer {
 		this.xSize = xSize;
 		this.ySize = ySize;
 		tem = tileEntity;
-		background = createTexture(MachineHelper.MACHINE_NAMES[tileEntity.getID()]);
-		extras = createTexture("extras");
+		background = Funcs.getGuiTexture(MachineHelper.MACHINE_NAMES[tileEntity.getID()]);
 	}
 
 	@Override
@@ -101,7 +102,7 @@ public abstract class GuiMachine extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTick, int mouseX, int mouseY) {
-		bindTexture(background);
+		Funcs.bindTexture(background);
 		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 	}
 
@@ -110,7 +111,7 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		bindTexture(extras);
+		Funcs.bindTexture(extras);
 		GL11.glPushMatrix();
 
 		// Draw the tabs of other machines on the network if this machine is connected to a computer
@@ -191,14 +192,6 @@ public abstract class GuiMachine extends GuiContainer {
 			fontRenderer.drawStringWithShadow(lines[i].text, mouseX, mouseY + i * 10 + (i == 0 ? 0 : 2), lines[i].color);
 		zLevel = 0F;
 		itemRenderer.zLevel = 0F;
-	}
-
-	static ResourceLocation createTexture(String texture) {
-		return new ResourceLocation(Consts.TEXTURE_DOMAIN, "textures/gui/" + texture + ".png");
-	}
-
-	static void bindTexture(ResourceLocation texture) {
-		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 	}
 
 	@Override
