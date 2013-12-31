@@ -21,5 +21,6 @@ public class Items {
 	public static Item alloyBook;
 
 	public static Icon[] multiIcons = new Icon[Consts.MULTI_ITEM_COUNT];
+	public static Icon upgradeBackground;
 	public static Icon[] upgradeIcons = new Icon[Consts.UPGRADE_COUNT];
 }

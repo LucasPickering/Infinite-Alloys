@@ -23,14 +23,23 @@ public class ItemUpgrade extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
+		Items.upgradeBackground = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "upgrade_background");
 		for(int i = 0; i < Consts.UPGRADE_COUNT; i++)
 			Items.upgradeIcons[i] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.UPGRADE_NAMES[i]);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIconFromDamage(int damage) {
+	public Icon getIconFromDamageForRenderPass(int damage, int renderPass) {
+		if(renderPass == 1)
+			return Items.upgradeBackground;
 		return Items.upgradeIcons[damage];
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean requiresMultipleRenderPasses() {
+		return true;
 	}
 
 	@Override

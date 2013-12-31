@@ -161,10 +161,12 @@ public class GuiInternetWand extends GuiScreen {
 		void drawButton() {
 			Funcs.bindTexture(GuiMachine.extras);
 
-			// If this button is selected, draw an overlay to indicate that
-			if((selectedButtons & 1 << buttonID) != 0)
-				drawTexturedModalRect(xPos - 1, yPos - 1, GuiMachine.SELECTED_OVERLAY.x, GuiMachine.SELECTED_OVERLAY.y,
-						GuiMachine.SELECTED_OVERLAY.width, GuiMachine.SELECTED_OVERLAY.height);
+			if((selectedButtons & 1 << buttonID) != 0) { // If this button is selected, draw a white box around it
+				drawHorizontalLine(xPos - 1, yPos - 1, xPos + width + 1, 0xffffff);
+				drawHorizontalLine(xPos - 1, yPos + width + 1, xPos + width + 1, 0xffffff);
+				drawVerticalLine(xPos - 1, yPos - 1, yPos + height + 1, 0xffffff);
+				drawVerticalLine(xPos + width + 1, yPos - 1, yPos + height + 1, 0xffffff);
+			}
 
 			// Draw the string for the coordinates
 			String display = machineX + ", " + machineY + ", " + machineZ;
