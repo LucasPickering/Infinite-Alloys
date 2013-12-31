@@ -57,13 +57,12 @@ public class GuiInternetWand extends GuiScreen {
 	}
 
 	private void setButtons() {
-		ItemStack wandItem = mc.thePlayer.getHeldItem();
-		if(wandItem.hasTagCompound()) {
-			NBTTagCompound tagCompound = wandItem.getTagCompound();
+		if(mc.thePlayer.getHeldItem().hasTagCompound()) {
+			NBTTagCompound tagCompound = mc.thePlayer.getHeldItem().getTagCompound();
 
 			for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) {
 				machineButtons[i] = null;
-				if(wandItem.getTagCompound().hasKey("Coords" + i)) {
+				if(tagCompound.hasKey("Coords" + i)) {
 					int id = tagCompound.getIntArray("Coords" + i)[0];
 					int x = tagCompound.getIntArray("Coords" + i)[1];
 					int y = tagCompound.getIntArray("Coords" + i)[2];
@@ -129,6 +128,12 @@ public class GuiInternetWand extends GuiScreen {
 		return false;
 	}
 
+	@Override
+	public void onGuiClosed() {
+		if(mc.thePlayer.getHeldItem().hasTagCompound())
+			mc.thePlayer.getHeldItem().getTagCompound().removeTag("CoordsCurrent");
+	}
+
 	/** A button that represents a machine with its texture and coordinates */
 	private class MachineButton {
 
@@ -167,6 +172,14 @@ public class GuiInternetWand extends GuiScreen {
 				drawVerticalLine(xPos - 1, yPos - 1, yPos + height + 1, 0xffffff);
 				drawVerticalLine(xPos + width + 1, yPos - 1, yPos + height + 1, 0xffffff);
 			}
+
+			// If the machine is electrical
+			if(isElectric)
+				;// Render an electricity icon on the button
+
+			// If the machine is wireless
+			if(isWireless)
+				;// Render a wireless icon on the button
 
 			// Draw the string for the coordinates
 			String display = machineX + ", " + machineY + ", " + machineZ;

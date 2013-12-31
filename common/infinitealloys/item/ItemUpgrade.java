@@ -32,8 +32,8 @@ public class ItemUpgrade extends ItemIA {
 	@SideOnly(Side.CLIENT)
 	public Icon getIconFromDamageForRenderPass(int damage, int renderPass) {
 		if(renderPass == 1)
-			return Items.upgradeBackground;
-		return Items.upgradeIcons[damage];
+			return Items.upgradeIcons[damage];
+		return Items.upgradeBackground;
 	}
 
 	@Override
