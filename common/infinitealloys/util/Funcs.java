@@ -1,8 +1,10 @@
 package infinitealloys.util;
 
 import infinitealloys.core.InfiniteAlloys;
+import java.awt.Rectangle;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -166,9 +168,13 @@ public class Funcs {
 	public static void bindTexture(ResourceLocation texture) {
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 	}
-	
-	/**Given a mouse X and Y, is the mouse within a zone that starts at xStart, yStart*/
+
+	/** Given a mouse X and Y, is the mouse within a zone that starts at xStart, yStart */
 	public static boolean mouseInZone(int mouseX, int mouseY, int xStart, int yStart, int width, int height) {
 		return mouseX >= xStart && mouseY >= yStart && mouseX < xStart + width && mouseY < yStart + height;
+	}
+
+	public static void drawTexturedModalRect(Gui gui, int x, int y, Rectangle rect) {
+		gui.drawTexturedModalRect(x, y, rect.x, rect.y, rect.width, rect.height);
 	}
 }

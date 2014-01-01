@@ -61,7 +61,7 @@ public abstract class GuiElectric extends GuiMachine {
 
 		// Draw the energy icon overlay
 		if(tem.energyStorage != null)
-			drawTexturedModalRect(energyIcon.x, energyIcon.y, ENERGY_ICON.x, ENERGY_ICON.y, ENERGY_ICON.width, ENERGY_ICON.height);
+			Funcs.drawTexturedModalRect(this,energyIcon.x, energyIcon.y, ENERGY_ICON);
 		GL11.glPopMatrix();
 	}
 

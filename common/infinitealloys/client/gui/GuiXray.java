@@ -60,10 +60,9 @@ public class GuiXray extends GuiElectric {
 
 		searchButton.enabled = tex.inventoryStacks[0] != null;
 		if(blockButtons.length <= 20)
-			drawTexturedModalRect(SCROLL_BAR.x, SCROLL_BAR.y, SCROLL_OFF.x, SCROLL_OFF.y, SCROLL_OFF.width, SCROLL_OFF.height);
+			Funcs.drawTexturedModalRect(this, SCROLL_BAR.x, SCROLL_BAR.y, SCROLL_OFF);
 		else
-			drawTexturedModalRect(SCROLL_BAR.x, SCROLL_BAR.y + (int)((float)(SCROLL_BAR.height - 15) / (float)(blockButtons.length / 4 - 4) * scrollPos),
-					SCROLL_ON.x, SCROLL_ON.y, SCROLL_ON.width, SCROLL_ON.height);
+			Funcs.drawTexturedModalRect(this, SCROLL_BAR.x, SCROLL_BAR.y + (int)((float)(SCROLL_BAR.height - 15) / (float)(blockButtons.length / 4 - 4) * scrollPos), SCROLL_ON);
 		if(wasSearching && tex.getProcessProgress() == 0)
 			setButtons();
 		wasSearching = tex.getProcessProgress() > 0;
@@ -206,10 +205,10 @@ public class GuiXray extends GuiElectric {
 		void drawButton() {
 			if(blockAmount > 0) {
 				// Draw the background texture for the button
-				drawTexturedModalRect(xPos, yPos, background.texture.x, background.texture.y, background.texture.width, background.texture.height);
+				Funcs.drawTexturedModalRect(this, xPos, yPos, background.texture);
 				// If this button is selected, draw an overlay to indicate that
 				if(selected)
-					drawTexturedModalRect(xPos - 1, yPos - 1, SELECTED_OVERLAY.x, SELECTED_OVERLAY.y, SELECTED_OVERLAY.width, SELECTED_OVERLAY.height);
+					Funcs.drawTexturedModalRect(this, xPos - 1, yPos - 1, SELECTED_OVERLAY);
 
 				// Draw the yValue string
 				String display = Integer.toString(yValue);
