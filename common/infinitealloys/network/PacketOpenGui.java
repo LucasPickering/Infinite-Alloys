@@ -8,7 +8,7 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import com.google.common.io.ByteArrayDataInput;
 
-public class PacketOpenGui {
+public class PacketOpenGui implements PacketIA {
 
 	public void execute(EntityPlayer player, ByteArrayDataInput data) {
 		World world = player.worldObj;

@@ -10,18 +10,18 @@ import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Point;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import com.google.common.io.ByteArrayDataInput;
 
 public class PacketTEServerToClient implements PacketIA {
 
-	public void execute(World world, ByteArrayDataInput data) {
+	public void execute(EntityPlayer player, ByteArrayDataInput data) {
 		int x = data.readInt();
 		short y = data.readShort();
 		int z = data.readInt();
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = player.worldObj.getBlockTileEntity(x, y, z);
 		if(te instanceof TileEntityMachine) {
 			byte orientation = data.readByte();
 			int upgrades = data.readInt();
@@ -44,7 +44,7 @@ public class PacketTEServerToClient implements PacketIA {
 					short machY = data.readShort();
 					int machZ = data.readInt();
 					tees.connectedMachines.add(new Point(machX, machY, machZ));
-					((TileEntityElectric)world.getBlockTileEntity(machX, machY, machZ)).energyStorage = tees;
+					((TileEntityElectric)player.worldObj.getBlockTileEntity(machX, machY, machZ)).energyStorage = tees;
 
 				}
 			}

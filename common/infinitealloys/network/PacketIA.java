@@ -1,9 +1,9 @@
 package infinitealloys.network;
 
-import net.minecraft.world.World;
+import net.minecraft.entity.player.EntityPlayer;
 import com.google.common.io.ByteArrayDataInput;
 
 public interface PacketIA {
 
-	public void execute(World world, ByteArrayDataInput data);
+	public void execute(EntityPlayer player, ByteArrayDataInput data);
 }

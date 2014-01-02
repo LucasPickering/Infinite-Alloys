@@ -18,14 +18,16 @@ public class PacketHandler implements IPacketHandler {
 	public static final byte TE_CLIENT_TO_SERVER = 2;
 	public static final byte OPEN_GUI = 3;
 	public static final byte XRAY_SEARCH = 4;
-	private static final Class[] packetClasses = { PacketWorldData.class, PacketTEServerToClient.class, PacketTEClientToServer.class, PacketOpenGui.class, PacketXraySearch.class };
+	public static final byte ADD_TO_WAND = 5;
+	private static final Class[] packetClasses = { PacketWorldData.class, PacketTEServerToClient.class, PacketTEClientToServer.class, PacketOpenGui.class,
+		PacketXraySearch.class, PacketAddToWand.class };
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
 		ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
 		byte packetIndex = data.readByte();
 		try {
-			((PacketIA)packetClasses[packetIndex].newInstance()).execute(((EntityPlayer)player).worldObj, data);
+			((PacketIA)packetClasses[packetIndex].newInstance()).execute((EntityPlayer)player, data);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -169,12 +169,14 @@ public class Funcs {
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 	}
 
+	/** Convenience method for {@link net.minecraft.client.gui.Gui#drawTexturedModalRect(int, int, int, int, int, int) Gui.drawTecturedModalRect} with a
+	 * Rectangle for the last four args */
+	public static void drawTexturedModalRect(Gui gui, int x, int y, Rectangle rect) {
+		gui.drawTexturedModalRect(x, y, rect.x, rect.y, rect.width, rect.height);
+	}
+
 	/** Given a mouse X and Y, is the mouse within a zone that starts at xStart, yStart */
 	public static boolean mouseInZone(int mouseX, int mouseY, int xStart, int yStart, int width, int height) {
 		return mouseX >= xStart && mouseY >= yStart && mouseX < xStart + width && mouseY < yStart + height;
-	}
-
-	public static void drawTexturedModalRect(Gui gui, int x, int y, Rectangle rect) {
-		gui.drawTexturedModalRect(x, y, rect.x, rect.y, rect.width, rect.height);
 	}
 }

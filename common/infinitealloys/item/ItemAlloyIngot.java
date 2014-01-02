@@ -15,11 +15,7 @@ public class ItemAlloyIngot extends ItemIA {
 		super(id, "ingot");
 		setCreativeTab(null);
 		setHasSubtypes(true);
-	}
-
-	@Override
-	public String getUnlocalizedName(ItemStack stack) {
-		return "IAalloyIngot";
+		setUnlocalizedName("IAalloyIngot");
 	}
 
 	@Override
@@ -81,4 +77,9 @@ public class ItemAlloyIngot extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int id, CreativeTabs creativetabs, List list) {}
+
+	@Override
+	public String getUnlocalizedName(ItemStack itemstack) {
+		return getUnlocalizedName();
+	}
 }

@@ -5,18 +5,18 @@ import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import com.google.common.io.ByteArrayDataInput;
 
 public class PacketTEClientToServer implements PacketIA {
 
-	public void execute(World world, ByteArrayDataInput data) {
+	public void execute(EntityPlayer player, ByteArrayDataInput data) {
 		int x = data.readInt();
 		short y = data.readShort();
 		int z = data.readInt();
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = player.worldObj.getBlockTileEntity(x, y, z);
 		if(te instanceof TEMComputer) {
 			boolean autoSearch = data.readBoolean();
 			((TEMComputer)te).handlePacketDataFromClient(autoSearch);

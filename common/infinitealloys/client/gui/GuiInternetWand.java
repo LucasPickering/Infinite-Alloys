@@ -1,12 +1,16 @@
 package infinitealloys.client.gui;
 
+import org.lwjgl.opengl.GL11;
 import infinitealloys.block.Blocks;
+import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.item.ItemInternetWand;
+import infinitealloys.network.PacketAddToWand;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TEMEnergyStorage;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.Point;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -14,21 +18,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiInternetWand extends GuiScreen {
 
 	private final RenderItem itemRenderer = new RenderItem();
 	private final ResourceLocation background;
-	private final int xSize = 196;
-	private final int ySize = 240;
+	private final int xSize = 178;
+	private final int ySize = 236;
 
 	/** If the GUI was opened by clicking on a machine, this button adds the machine that was clicked to the wand */
 	private GuiButton addToWand;
+
 	/** If the GUI was opened by clicking on a machine, this button adds the selected machine to the machine that was clicked */
 	private GuiButton addSelected;
 
+	/** The array of buttons that applies to each machine. It is a fixed length and buttons that do not exist are null */
 	private MachineButton[] machineButtons = new MachineButton[Consts.WAND_MAX_COORDS];
-	private Point currentMachine;
+
+	/** When help is enabled, slots get a colored outline and a mouse-over description */
+	private boolean helpEnabled;
 
 	/** Binary integer to represent the buttons that are selected. Right-most digit is the top of the list.
 	 * There is one bit for each button. 0 is not-selected. 1 is selected. */
@@ -41,8 +50,8 @@ public class GuiInternetWand extends GuiScreen {
 	@Override
 	public void initGui() {
 		buttonList.add(new GuiButton(0, width - 20, 0, 20, 20, "?")); // The button to enable/disable help
-		buttonList.add(addToWand = new GuiButton(1, width / 2 - 91, height / 2 - 112, 80, 20, Funcs.getLoc("wand.addToWand")));
-		buttonList.add(addSelected = new GuiButton(2, width / 2 + 11, height / 2 - 112, 80, 20, Funcs.getLoc("wand.addSelected")));
+		buttonList.add(addToWand = new GuiButton(1, width / 2 - 83, height / 2 - 112, 70, 20, Funcs.getLoc("wand.addToWand")));
+		buttonList.add(addSelected = new GuiButton(2, width / 2 - 10, height / 2 - 112, 70, 20, Funcs.getLoc("wand.addSelected")));
 		setButtons();
 	}
 
@@ -57,70 +66,86 @@ public class GuiInternetWand extends GuiScreen {
 	}
 
 	private void setButtons() {
-		if(mc.thePlayer.getHeldItem().hasTagCompound()) {
-			NBTTagCompound tagCompound = mc.thePlayer.getHeldItem().getTagCompound();
+		addToWand.enabled = false; // Reset button states
+		addSelected.enabled = false;
+		ItemStack heldItem = mc.thePlayer.getHeldItem();
+		if(heldItem.getItem() instanceof ItemInternetWand && heldItem.hasTagCompound()) {
+			NBTTagCompound tagCompound = heldItem.getTagCompound();
 
-			for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) {
-				machineButtons[i] = null;
-				if(tagCompound.hasKey("Coords" + i)) {
-					int id = tagCompound.getIntArray("Coords" + i)[0];
-					int x = tagCompound.getIntArray("Coords" + i)[1];
-					int y = tagCompound.getIntArray("Coords" + i)[2];
-					int z = tagCompound.getIntArray("Coords" + i)[3];
-					if(MachineHelper.isElectric(mc.theWorld, x, y, z) || MachineHelper.isWireless(mc.theWorld, x, y, z))
-						machineButtons[i] = new MachineButton(i, 150, i * 20 + 100, id, x, y, z);
+			for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) { // For each button in the array
+				machineButtons[i] = null; // Reset the button
+				if(tagCompound.hasKey("Coords" + i)) { // If there is a machine that corresponds to this button
+					int[] a = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
+					machineButtons[i] = new MachineButton(i, width / 2 - 82, height / 2 + i * 20 - 86, a[0], a[1], a[2], a[3]); // Create a button
 				}
 			}
 
-			addToWand.enabled = false;
-			addSelected.enabled = true;
 			if(tagCompound.hasKey("CoordsCurrent")) {
 				int[] a = tagCompound.getIntArray("CoordsCurrent");
-				addToWand.enabled = !tagCompound.hasKey("Coords" + (Consts.WAND_MAX_COORDS - 1)) && MachineHelper.isClient(mc.theWorld, a[0], a[1], a[2]);
+				addToWand.enabled = ((ItemInternetWand)heldItem.getItem()).isMachineValid(mc.theWorld, heldItem, a[0], a[1], a[2]);
 
-				boolean noneSelected = true;
-				addSelected.enabled = true;
 				TileEntity te = mc.theWorld.getBlockTileEntity(a[0], a[1], a[2]);
-				for(MachineButton button : machineButtons) { // Go over each button
-					if((selectedButtons & 1 << button.buttonID) != 0) { // If this button is selected
-						noneSelected = false;
+
+				addSelected.enabled = selectedButtons != 0;
+				// Go over each machine button
+				for(MachineButton button : machineButtons)
+					if(button != null && (selectedButtons & 1 << button.buttonID) != 0) // If this button is selected
+						// If the selected machine is not valid for the block that was clicked
 						if(!(te instanceof TEMEnergyStorage && button.isElectric || te instanceof TEMComputer && button.isWireless))
-							addSelected.enabled = false;
-					}
-				}
-				if(noneSelected)
-					addSelected.enabled = false;
+							addSelected.enabled = false; // Set the button to false
 			}
 		}
 	}
 
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-		for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) {
-			MachineButton button = machineButtons[i];
-			if(Funcs.mouseInZone(mouseX, mouseY, button.xPos, button.yPos, button.width, button.height)) { // If this button was clicked
-				selectedButtons ^= 1 << i; // Invert its selected state
-				if(isShiftKeyDown()) {
-					int firstOne = -1; // The index of the position of the rightmost 1 in the binary integer
-					int lastOne = -1; // The index of the position of the leftmost 1 in the binary integer
-					for(int j = 0; j < Consts.WAND_MAX_COORDS; j++) { // Go over each bit in the integer
-						if((selectedButtons & 1 << j) != 0) { // If the bit is 1
-							if(firstOne == -1) // If the leftmost 1 has not been found already
-								firstOne = j; // This is the leftmost 1
-							lastOne = j; // This is the rightmost 1 (so far)
+		super.mouseClicked(mouseX, mouseY, mouseButton);
+		if(mouseButton == 0) { // If it was a left-click
+			for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) {
+				MachineButton button = machineButtons[i];
+				if(button != null && Funcs.mouseInZone(mouseX, mouseY, button.xPos, button.yPos, button.width, button.height)) { // If this button was clicked
+					if(!isCtrlKeyDown() && !isShiftKeyDown()) // If the CTRL or Shift key wasn't held, set all buttons to 0
+						selectedButtons = 0;
+					selectedButtons ^= 1 << i; // Invert its selected state
+
+					if(isShiftKeyDown()) {
+						int firstOne = -1; // The index of the position of the rightmost 1 in the binary integer
+						int lastOne = -1; // The index of the position of the leftmost 1 in the binary integer
+						for(int j = 0; j < Consts.WAND_MAX_COORDS; j++) { // Go over each bit in the integer
+							if((selectedButtons & 1 << j) != 0) { // If the bit is 1
+								if(firstOne == -1) // If the leftmost 1 has not been found already
+									firstOne = j; // This is the leftmost 1
+								lastOne = j; // This is the rightmost 1 (so far)
+							}
 						}
+						if(firstOne != -1) // If there is a 1 in the integer
+							// Loop from the first 1 to the last 1
+							for(int j = firstOne; j <= lastOne; j++)
+								selectedButtons |= 1 << j; // Set each bit to 1
 					}
-					if(firstOne != -1) // If there is a 1 in the integer
-						// Loop from the first 1 to the last 1
-						for(int j = firstOne; j <= lastOne; j++)
-							selectedButtons |= 1 << j; // Set each bit to 1
+					break;
 				}
-				else if(!isCtrlKeyDown()) // If the CTRL or Shift key wasn't held, set all other buttons to 0
-					selectedButtons &= 1 << i;
-				break;
 			}
+			setButtons();
 		}
-		setButtons();
+	}
+
+	@Override
+	public void actionPerformed(GuiButton button) {
+		switch(button.id) {
+			case 0:
+				InfiniteAlloys.instance.proxy.initLocalization(); // TODO: Remove this line, it is for debug only!!!!
+				helpEnabled = !helpEnabled;
+				break;
+			case 1:
+				ItemStack heldItem = mc.thePlayer.getHeldItem();
+				int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
+				PacketDispatcher.sendPacketToServer(PacketAddToWand.getPacket(a[0], (short)a[1], a[2]));
+				((ItemInternetWand)heldItem.getItem()).addMachineToWand(mc.theWorld, heldItem, a[0], a[1], a[2]);
+				break;
+			case 2:
+				break;
+		}
 	}
 
 	@Override
@@ -128,17 +153,11 @@ public class GuiInternetWand extends GuiScreen {
 		return false;
 	}
 
-	@Override
-	public void onGuiClosed() {
-		if(mc.thePlayer.getHeldItem().hasTagCompound())
-			mc.thePlayer.getHeldItem().getTagCompound().removeTag("CoordsCurrent");
-	}
-
 	/** A button that represents a machine with its texture and coordinates */
 	private class MachineButton {
 
-		final int width = 120;
-		final int height = 30;
+		final int width = 140;
+		final int height = 15;
 
 		int buttonID;
 		int xPos;
@@ -152,6 +171,7 @@ public class GuiInternetWand extends GuiScreen {
 		boolean isWireless;
 
 		MachineButton(int buttonID, int xPos, int yPos, int machineID, int machineX, int machineY, int machineZ) {
+			super();
 			this.buttonID = buttonID;
 			this.xPos = xPos;
 			this.yPos = yPos;
@@ -166,26 +186,28 @@ public class GuiInternetWand extends GuiScreen {
 		void drawButton() {
 			Funcs.bindTexture(GuiMachine.extras);
 
-			if((selectedButtons & 1 << buttonID) != 0) { // If this button is selected, draw a white box around it
-				drawHorizontalLine(xPos - 1, yPos - 1, xPos + width + 1, 0xffffff);
-				drawHorizontalLine(xPos - 1, yPos + width + 1, xPos + width + 1, 0xffffff);
-				drawVerticalLine(xPos - 1, yPos - 1, yPos + height + 1, 0xffffff);
-				drawVerticalLine(xPos + width + 1, yPos - 1, yPos + height + 1, 0xffffff);
+			if((selectedButtons & 1 << buttonID) != 0) { // If this button is selected, draw a box around it
+				drawHorizontalLine(xPos - 1, xPos + width + 1, yPos - 1, 0xff22aa22);
+				drawHorizontalLine(xPos - 1, xPos + width + 1, yPos + height + 1, 0xff22aa22);
+				drawVerticalLine(xPos - 1, yPos + height + 1, yPos - 1, 0xff22aa22);
+				drawVerticalLine(xPos + width + 1, yPos + height + 1, yPos - 1, 0xff22aa22);
+				drawRect(xPos, yPos, xPos + width + 1, yPos + height + 1, 0x6022aa22);
 			}
 
+			GL11.glColor3f(1F, 1F, 1F); // Reset the color
 			// If the machine is electrical
 			if(isElectric)
-				;// Render an electricity icon on the button
+				Funcs.drawTexturedModalRect(GuiInternetWand.this, xPos + 121, yPos + 4, GuiMachine.ENERGY_ICON_2); // Render an electricity icon on the button
 
 			// If the machine is wireless
 			if(isWireless)
-				;// Render a wireless icon on the button
+				Funcs.drawTexturedModalRect(GuiInternetWand.this, xPos + 131, yPos + 4, GuiMachine.WIRELESS_ICON); // Render a wireless icon on the button
 
 			// Draw the string for the coordinates
-			String display = machineX + ", " + machineY + ", " + machineZ;
-			mc.fontRenderer.drawStringWithShadow(display, xPos + 90 - (mc.fontRenderer.getStringWidth(display) / 2), yPos + 5, 0xffffff);
+			String display = "X: " + machineX + "  Y: " + machineY + "  Z: " + machineZ;
+			mc.fontRenderer.drawStringWithShadow(display, xPos + 70 - (mc.fontRenderer.getStringWidth(display) / 2), yPos + 4, 0xffffff);
 
-			itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(Blocks.machineID, 1, machineID), xPos + 18, yPos);
+			itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(Blocks.machineID, 1, machineID), xPos, yPos);
 		}
 	}
 }

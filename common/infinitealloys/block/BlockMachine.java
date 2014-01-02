@@ -1,9 +1,8 @@
 package infinitealloys.block;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.item.Items;
+import infinitealloys.item.ItemInternetWand;
 import infinitealloys.tile.TEMComputer;
-import infinitealloys.tile.TEMEnergyStorage;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -62,11 +61,13 @@ public class BlockMachine extends BlockContainer {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
 		ItemStack heldItem = player.inventory.getCurrentItem();
 		// Is the player holding an internet wand?
-		if(heldItem != null && heldItem.itemID == Items.internetWand.itemID && (MachineHelper.isClient(world, x, y, z) || MachineHelper.isHost(world, x, y, z))) {
+		if(heldItem != null && heldItem.getItem() instanceof ItemInternetWand && (MachineHelper.isClient(world, x, y, z) || MachineHelper.isHost(world, x, y, z))) {
+
+			// Put the coords of this block in a temp tag in the wand so the wand's GUI can access it
 			if(!heldItem.hasTagCompound())
 				heldItem.setTagCompound(new NBTTagCompound());
-			// Put the coords of this block in a temp tag in the wand so the wand's GUI can access it
 			heldItem.getTagCompound().setIntArray("CoordsCurrent", new int[] { x, y, z });
+
 			// Open the GUI for the wand to let the player decide what they want to do with this block
 			player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI, world, (int)player.posX, (int)player.posY, (int)player.posZ);
 			return true;

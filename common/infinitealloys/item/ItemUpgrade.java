@@ -18,6 +18,7 @@ public class ItemUpgrade extends ItemIA {
 	public ItemUpgrade(int id) {
 		super(id);
 		setHasSubtypes(true);
+		setUnlocalizedName("IAupgrade");
 	}
 
 	@Override
@@ -57,6 +58,6 @@ public class ItemUpgrade extends ItemIA {
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
-		return "IAupgrade";
+		return getUnlocalizedName();
 	}
 }
