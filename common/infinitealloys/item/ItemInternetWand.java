@@ -43,8 +43,8 @@ public class ItemInternetWand extends ItemIA {
 			itemstack.setTagCompound(tagCompound = new NBTTagCompound());
 
 		// If the wand is not full and the machine is a valid remote client
-		if(!tagCompound.hasKey("Coords" + (Consts.WAND_MAX_COORDS - 1)) && MachineHelper.isClient(world, x, y, z)) {
-			for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) { // Iterate over each coord that the wand contains
+		if(!tagCompound.hasKey("Coords" + (Consts.WAND_SIZE - 1)) && MachineHelper.isClient(world, x, y, z)) {
+			for(int i = 0; i < Consts.WAND_SIZE; i++) { // Iterate over each coord that the wand contains
 				if(tagCompound.hasKey("Coords" + i)) {
 					// If the wand already contains this machine, return false
 					int[] a = tagCompound.getIntArray("Coords" + i);
@@ -59,14 +59,30 @@ public class ItemInternetWand extends ItemIA {
 	}
 
 	/** Checks if the machine at x, y, z, can be added to the wand at itemstack, then adds it if it can */
-	public void addMachineToWand(World world, ItemStack itemstack, int x, int y, int z) {
+	public void addMachine(World world, ItemStack itemstack, int x, int y, int z) {
 		if(itemstack.getItem() instanceof ItemInternetWand && isMachineValid(world, itemstack, x, y, z)) {
 			NBTTagCompound tagCompound = itemstack.getTagCompound();
-			for(int i = 0; i < Consts.WAND_MAX_COORDS; i++) {
+			for(int i = 0; i < Consts.WAND_SIZE; i++) {
 				if(!tagCompound.hasKey("Coords" + i)) {
 					tagCompound.setIntArray("Coords" + i, new int[] { world.getBlockMetadata(x, y, z), x, y, z });
 					break;
 				}
+			}
+		}
+	}
+
+	/** Removes the machine with the given index from the wand */
+	public void removeMachine(ItemStack itemstack, int index) {
+		if(itemstack.getItem() instanceof ItemInternetWand && itemstack.hasTagCompound()) { // If this is a wand and has stored data
+			NBTTagCompound tagCompound = itemstack.getTagCompound();
+			tagCompound.removeTag("Coords" + index); // Remove the tag at index
+			for(int i = index + 1; i < Consts.WAND_SIZE; i++) { // Iterate over each coord below the one that was removed
+				if(tagCompound.hasKey("Coords" + i)) { // If this key exists
+					tagCompound.setIntArray("Coords" + (i - 1), tagCompound.getIntArray("Coords" + i)); // Move this coord up one spot to fill the hole
+					tagCompound.removeTag("Coords" + i);
+				}
+				else
+					break; // If the tag doesn't exist, break because we have reached the end of the list
 			}
 		}
 	}

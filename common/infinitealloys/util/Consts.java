@@ -13,8 +13,6 @@ public class Consts {
 	public static final int UPGRADE_COUNT = 9;
 	public static final int VALID_ALLOY_COUNT = EnumAlloy.values().length;
 
-	public static final int WAND_GUI = MACHINE_COUNT;
-
 	public static final int TOP = 0;
 	public static final int BOTTOM = 1;
 	public static final int NORTH = 2;
@@ -36,7 +34,9 @@ public class Consts {
 	public static final String[] UPGRADE_NAMES = { "speed1", "speed2", "efficiency1", "efficiency2", "capacity1", "capacity2", "range1", "range2", "wireless" };
 
 	/** The amount of coords that the Internet Wand can hold */
-	public static final int WAND_MAX_COORDS = 10;
+	public static final int WAND_SIZE = 10;
+	/** The GUI id for the Wand GUI */
+	public static final int WAND_GUI = MACHINE_COUNT;
 
 	/** The amount of states that each mob can be in. Off, Attract, or Repel */
 	public static final int PASTURE_MODES = 3;
