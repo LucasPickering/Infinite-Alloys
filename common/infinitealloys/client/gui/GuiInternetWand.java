@@ -1,16 +1,16 @@
 package infinitealloys.client.gui;
 
-import org.lwjgl.opengl.GL11;
 import infinitealloys.block.Blocks;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
+import infinitealloys.network.PacketAddMachine;
 import infinitealloys.network.PacketWand;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TEMEnergyStorage;
+import infinitealloys.tile.TileEntityHost;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiInternetWand extends GuiScreen {
@@ -65,7 +66,7 @@ public class GuiInternetWand extends GuiScreen {
 				machineButtons[i] = null; // Reset the button
 				if(tagCompound.hasKey("Coords" + i)) { // If there is a machine that corresponds to this button
 					int[] a = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
-					machineButtons[i] = new MachineButton(i, width / 2 - 82, height / 2 + i * 21 - 91, a[0], a[1], a[2], a[3]); // Create a button
+					machineButtons[i] = new MachineButton(i, width / 2 - 82, height / 2 + i * 21 - 91, a[0], a[1], a[2]); // Create a button
 				}
 			}
 
@@ -143,6 +144,19 @@ public class GuiInternetWand extends GuiScreen {
 				((ItemInternetWand)heldItem.getItem()).addMachine(mc.theWorld, heldItem, a[0], a[1], a[2]);
 				break;
 			case Consts.WAND_SIZE + 2:
+				heldItem = mc.thePlayer.getHeldItem();
+				int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
+
+				if(MachineHelper.isHost(mc.theWorld, host[0], host[1], host[2])) { // If this is a host
+					for(MachineButton machineButton : machineButtons) { // Go over each button
+						if(machineButton != null && (selectedButtons & 1 << machineButton.buttonID) != 0) { // If this button is selected
+							// Add the selected machine to the host
+							int[] client = heldItem.getTagCompound().getIntArray("Coords" + machineButton.buttonID);
+							PacketDispatcher.sendPacketToServer(PacketAddMachine.getPacket(host[0], host[1], host[2], client[0], client[1], client[2]));
+							((TileEntityHost)mc.theWorld.getBlockTileEntity(host[0], host[1], host[2])).addMachine(mc.thePlayer, client[0], client[1], client[2]);
+						}
+					}
+				}
 				break;
 			default:
 				heldItem = mc.thePlayer.getHeldItem();
@@ -175,7 +189,7 @@ public class GuiInternetWand extends GuiScreen {
 		boolean isElectric;
 		boolean isWireless;
 
-		MachineButton(int buttonID, int xPos, int yPos, int machineID, int machineX, int machineY, int machineZ) {
+		MachineButton(int buttonID, int xPos, int yPos, int machineX, int machineY, int machineZ) {
 			super();
 			this.buttonID = buttonID;
 			this.xPos = xPos;

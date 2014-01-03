@@ -25,6 +25,7 @@ import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TEMEnergyStorage;
 import infinitealloys.tile.TileEntityElectric;
+import infinitealloys.tile.TileEntityHost;
 import infinitealloys.tile.TileEntityMachine;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
@@ -248,8 +248,7 @@ public class MachineHelper {
 
 	/** Is the machine at x, y, z capable of hosting other machines? */
 	public static boolean isHost(World world, int x, int y, int z) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
-		return te instanceof TEMComputer || te instanceof TEMEnergyStorage;
+		return world.getBlockTileEntity(x, y, z) instanceof TileEntityHost;
 	}
 
 	/** Is the machine capable of connecting to an ESU? */

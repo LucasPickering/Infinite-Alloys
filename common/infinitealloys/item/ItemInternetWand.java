@@ -64,7 +64,7 @@ public class ItemInternetWand extends ItemIA {
 			NBTTagCompound tagCompound = itemstack.getTagCompound();
 			for(int i = 0; i < Consts.WAND_SIZE; i++) {
 				if(!tagCompound.hasKey("Coords" + i)) {
-					tagCompound.setIntArray("Coords" + i, new int[] { world.getBlockMetadata(x, y, z), x, y, z });
+					tagCompound.setIntArray("Coords" + i, new int[] { x, y, z });
 					break;
 				}
 			}

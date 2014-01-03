@@ -4,22 +4,14 @@ import infinitealloys.block.Blocks;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import org.apache.commons.lang3.ArrayUtils;
 
-public class TEMComputer extends TileEntityMachine {
-
-	/** That amount of machines that the computer can control */
-	private int networkCapacity;
-
-	/** The max range that machines can be added at with the Internet Wand */
-	private int range;
-
-	/** 3D coords for each machine that is connected to the computer */
-	public final List<Point> connectedMachines;
+public class TEMComputer extends TileEntityHost {
 
 	/** The last point that was checked for a machine in the previous iteration of {@link #search}. The coords are relative to this TE block. */
 	private Point lastSearch;
@@ -33,8 +25,6 @@ public class TEMComputer extends TileEntityMachine {
 
 	public TEMComputer() {
 		super(1);
-		networkCapacity = 3;
-		connectedMachines = new ArrayList<Point>(networkCapacity);
 	}
 
 	@Override
@@ -46,10 +36,12 @@ public class TEMComputer extends TileEntityMachine {
 	public void updateEntity() {
 		super.updateEntity();
 
-		// If a connected machine no longer exists or its networking upgrade was removed, remove it from the network list
-		for(Point p : connectedMachines)
-			if(!(worldObj.getBlockTileEntity(p.x, p.y, p.z) instanceof TileEntityMachine && ((TileEntityMachine)worldObj.getBlockTileEntity(p.x, p.y, p.z)).hasUpgrade(MachineHelper.WIRELESS)))
-				connectedMachines.remove(p);
+		// If a connected machine no longer exists, remove it from the network
+		for(Iterator iterator = connectedMachines.iterator(); iterator.hasNext();) {
+			Point p = (Point)iterator.next();
+			if(!MachineHelper.isWireless(worldObj, p.x, p.y, p.z))
+				iterator.remove();
+		}
 	}
 
 	@Deprecated
@@ -87,36 +79,16 @@ public class TEMComputer extends TileEntityMachine {
 		shouldSearch = false; // The search is done. Stop running the function until another search is initiated.
 	}
 
-	public boolean addMachine(EntityPlayer player, int temX, int temY, int temZ) {
-		for(Point coords : connectedMachines) {
-			if(coords.x == temX && coords.y == temY && coords.z == temZ) {
-				if(worldObj.isRemote)
-					player.addChatMessage("Error: Machine is already in network");
-				return false;
-			}
-		}
-		if(connectedMachines.size() >= networkCapacity) {
-			if(worldObj.isRemote)
-				player.addChatMessage("Error: Network full");
-		}
-		else if(worldObj.getBlockId(temX, temY, temZ) != Blocks.machine.blockID) {
+	@Override
+	public boolean addMachine(EntityPlayer player, int machineX, int machineY, int machineZ) {
+		if(!super.addMachine(player, machineX, machineY, machineZ))
+			return false;
+		else if(!MachineHelper.isWireless(worldObj, machineX, machineY, machineZ)) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Block is not capable of networking");
 		}
-		else if(temX == xCoord && temY == yCoord && temZ == zCoord) {
-			if(worldObj.isRemote)
-				player.addChatMessage("Error: Cannot add self to network");
-		}
-		else if(new Point(temX, temY, temZ).distanceTo(xCoord, yCoord, zCoord) > range) {
-			if(worldObj.isRemote)
-				player.addChatMessage("Error: Block out of range");
-		}
-		else if(!((TileEntityMachine)worldObj.getBlockTileEntity(temX, temY, temZ)).hasUpgrade(MachineHelper.WIRELESS)) {
-			if(worldObj.isRemote)
-				player.addChatMessage("Error: Block does not have a networking upgrade");
-		}
 		else {
-			connectedMachines.add(new Point(temX, temY, temZ));
+			connectedMachines.add(new Point(machineX, machineY, machineZ));
 			return true;
 		}
 		return false;

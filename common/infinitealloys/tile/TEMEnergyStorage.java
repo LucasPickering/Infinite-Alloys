@@ -10,19 +10,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import org.apache.commons.lang3.ArrayUtils;
 
-public class TEMEnergyStorage extends TileEntityMachine {
+public class TEMEnergyStorage extends TileEntityHost {
 
 	/** The maximum amount of RK that this machine can store */
 	private int maxRK;
 
 	/** The amount of RK currently stored in the unit */
 	private int currentRK;
-
-	/** The max range that machines can be added at with the Internet Wand */
-	private int range;
-
-	/** A list of the locations of machines that provide power to or consume power from this storage unit */
-	public final List<Point> connectedMachines = new ArrayList<Point>();
 
 	public TEMEnergyStorage(byte front) {
 		this();
@@ -45,7 +39,7 @@ public class TEMEnergyStorage extends TileEntityMachine {
 		// If a connected machine no longer exists, remove it from the network
 		for(Iterator iterator = connectedMachines.iterator(); iterator.hasNext();) {
 			Point p = (Point)iterator.next();
-			if(worldObj.getBlockTileEntity(p.x, p.y, p.z) == null || !(worldObj.getBlockTileEntity(p.x, p.y, p.z) instanceof TileEntityElectric))
+			if(!MachineHelper.isElectric(worldObj, p.x, p.y, p.z))
 				iterator.remove();
 		}
 	}
@@ -77,43 +71,28 @@ public class TEMEnergyStorage extends TileEntityMachine {
 		this.currentRK = currentRK;
 	}
 
-	public boolean addMachine(EntityPlayer player, int teX, int teY, int teZ) {
-		for(Point coords : connectedMachines) {
-			if(coords.x == teX && coords.y == teY && coords.z == teZ) {
-				if(worldObj.isRemote)
-					player.addChatMessage("Error: Machine is already in network");
-				return false;
-			}
-		}
-		TileEntity te = worldObj.getBlockTileEntity(teX, teY, teZ);
-		if(te == null || !(te instanceof TileEntityElectric)) {
+	public boolean addMachine(EntityPlayer player, int machineX, int machineY, int machineZ) {
+		if(!super.addMachine(player, machineX, machineY, machineZ))
+			return false;
+		if(!MachineHelper.isElectric(worldObj, machineX, machineY, machineZ)) {
 			if(worldObj.isRemote)
-				player.addChatMessage("Error: Only electrical machines can be powered");
-		}
-		else if(new Point(teX, teY, teZ).distanceTo(xCoord, yCoord, zCoord) > range) {
-			if(worldObj.isRemote)
-				player.addChatMessage("Error: Machine out of range");
-		}
-		else if(((TileEntityElectric)te).energyStorage != null) {
-			if(worldObj.isRemote)
-				player.addChatMessage("Error: This machine is already connected to another source");
+				player.addChatMessage("Error: Block is not electrical");
 		}
 		else {
+			TileEntity te = worldObj.getBlockTileEntity(machineX, machineY, machineZ);
 			if(((TileEntityElectric)te).energyStorage != null) { // If the machine is already connected to another storage unit, disconnect it from that
 				for(Iterator iterator = ((TileEntityElectric)te).energyStorage.connectedMachines.iterator(); iterator.hasNext();) {
 					Point p = (Point)iterator.next();
-					if(p.equals(teX, teY, teZ)) {
+					if(p.equals(machineX, machineY, machineZ)) {
 						iterator.remove();
 						break;
 					}
 				}
 				((TileEntityElectric)te).energyStorage = null;
-				if(worldObj.isRemote)
-					player.addChatMessage("Removed machine at " + teX + ", " + teY + ", " + teZ + " from another energy storage unit");
 			}
-			connectedMachines.add(new Point(teX, teY, teZ));
+			connectedMachines.add(new Point(machineX, machineY, machineZ));
 			if(worldObj.isRemote)
-				player.addChatMessage("Adding machine at " + teX + ", " + teY + ", " + teZ);
+				player.addChatMessage("Adding machine at " + machineX + ", " + machineY + ", " + machineZ);
 			return true;
 		}
 		return false;

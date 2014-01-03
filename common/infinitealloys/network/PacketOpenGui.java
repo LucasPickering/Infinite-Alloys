@@ -1,7 +1,7 @@
 package infinitealloys.network;
 
 import infinitealloys.block.BlockMachine;
-import infinitealloys.tile.TileEntityElectric;
+import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Funcs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -16,7 +16,7 @@ public class PacketOpenGui implements PacketIA {
 		int y = data.readShort();
 		int z = data.readInt();
 		boolean fromComputer = data.readBoolean();
-		((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, player, (TileEntityElectric)world.getBlockTileEntity(x, y, z), fromComputer);
+		((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, player, (TileEntityMachine)world.getBlockTileEntity(x, y, z), fromComputer);
 	}
 
 	public static Packet250CustomPayload getPacket(int x, short y, int z, boolean fromComputer) {
