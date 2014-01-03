@@ -53,7 +53,7 @@ public class EventHandler implements ICraftingHandler {
 							alloy += (min + (max == min ? 0 : random.nextInt(max - min + 1))) * Math.pow(Consts.ALLOY_RADIX, j);
 						}
 
-						validAlloys[i] = alloy; // Add the new alloy to the array
+						validAlloys[i] = Funcs.reduceAlloy(alloy); // Add the new alloy to the array
 						if(Loader.isModLoaded("mcp"))
 							System.out.println("SPOILER ALERT! Alloy " + i + ": " + validAlloys[i]); // Debug line, only runs in MCP
 					}

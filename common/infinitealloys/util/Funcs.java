@@ -167,4 +167,27 @@ public class Funcs {
 	public static boolean mouseInZone(int mouseX, int mouseY, int xStart, int yStart, int width, int height) {
 		return mouseX >= xStart && mouseY >= yStart && mouseX < xStart + width && mouseY < yStart + height;
 	}
+
+	/** Reduce the values within an alloy, i.e. 44442222 becomes 22221111
+	 * Rightmost digits are the lesser metals
+	 * 
+	 * @param alloy the raw alloy data, before reduction
+	 * @return an alloy with reduced digits */
+	public static int reduceAlloy(int alloy) {
+		int gcf = 1;
+		factors:
+		for(int i = 2; i < Consts.ALLOY_RADIX; i++) { // Iterate over every integer in [2, Consts.ALLOY_RADIX)
+			for(int j = 0; j < Consts.METAL_COUNT; j++) { // Iterate over every digit in the number
+				int metalAmt = intAtPos(alloy, Consts.ALLOY_RADIX, j);
+				if(metalAmt == 0)
+					continue; // Go to the next metal if this one is 0
+				else if(i > metalAmt)
+					break factors; // Break the whole loop if the factors have exceeded one of the digits
+				else if(metalAmt % i != 0)
+					continue factors; // If i is not a factor of the digit of alloy at j, skip to the next factor
+			}
+			gcf = i;
+		}
+		return alloy / gcf;
+	}
 }

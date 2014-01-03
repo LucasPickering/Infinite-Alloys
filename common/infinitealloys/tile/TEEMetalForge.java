@@ -108,6 +108,7 @@ public class TEEMetalForge extends TileEntityElectric {
 		int alloy = 0;
 		for(int i = 0; i < recipeAmts.length; i++)
 			alloy += Math.pow(Consts.ALLOY_RADIX, i) * recipeAmts[i];
+		alloy = Funcs.reduceAlloy(alloy);
 		ItemStack result = new ItemStack(Items.alloyIngot);
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		tagCompound.setInteger("alloy", alloy);
