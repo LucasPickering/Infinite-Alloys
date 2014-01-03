@@ -17,10 +17,6 @@ public class PacketTEClientToServer implements PacketIA {
 		short y = data.readShort();
 		int z = data.readInt();
 		TileEntity te = player.worldObj.getBlockTileEntity(x, y, z);
-		if(te instanceof TEMComputer) {
-			boolean autoSearch = data.readBoolean();
-			((TEMComputer)te).handlePacketDataFromClient(autoSearch);
-		}
 		if(te instanceof TEEMetalForge) {
 			byte[] recipeAmts = new byte[Consts.METAL_COUNT];
 			for(int i = 0; i < recipeAmts.length; i++)
