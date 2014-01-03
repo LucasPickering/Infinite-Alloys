@@ -39,7 +39,7 @@ public class ItemAlloyIngot extends ItemIA {
 		else
 			return;
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			totalMass += metalContent[i] = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i);
+			totalMass += metalContent[i] = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
 			float percentage = Math.round((float)metalContent[i] / (float)totalMass * 1000F) / 10F;
 			if(percentage != 0)
@@ -59,7 +59,7 @@ public class ItemAlloyIngot extends ItemIA {
 			alloy = Funcs.getValidAlloys()[itemstack.getItemDamage() - 1];
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
 			int ingotColor = Consts.metalColors[Consts.METAL_COUNT - 1 - i];
-			int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i);
+			int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
 			colorCount += alloyAmt;
 			redTot += (ingotColor >> 16 & 255) * alloyAmt;
 			greenTot += (ingotColor >> 8 & 255) * alloyAmt;

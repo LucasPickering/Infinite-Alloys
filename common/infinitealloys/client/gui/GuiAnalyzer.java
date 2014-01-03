@@ -39,7 +39,7 @@ public class GuiAnalyzer extends GuiElectric {
 				break;
 			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.ingot, 1, i), i * 18 + 17, 33);
 			if(selectedRecipe > 0)
-				fontRenderer.drawStringWithShadow(new Integer(Funcs.intAtPos(Funcs.getValidAlloys()[selectedRecipe - 1], Consts.ALLOY_RADIX, Consts.METAL_COUNT, i)).toString(),
+				fontRenderer.drawStringWithShadow(new Integer(Funcs.intAtPos(Funcs.getValidAlloys()[selectedRecipe - 1], Consts.ALLOY_RADIX, i)).toString(),
 						i * 18 + 28, 42, 0xffffff);
 		}
 
@@ -69,9 +69,9 @@ public class GuiAnalyzer extends GuiElectric {
 	private void updateRequiredMetals() {
 		for(int i = 0; i < requiredMetals.length; i++) {
 			if(selectedRecipe == 0)
-				requiredMetals[i] = Funcs.intAtPos(EnumAlloy.values()[tea.getUnlockedAlloyCount()].max, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
+				requiredMetals[i] = Funcs.intAtPos(EnumAlloy.values()[tea.getUnlockedAlloyCount()].max, Consts.ALLOY_RADIX, i) > 0;
 			else
-				requiredMetals[i] = Funcs.intAtPos(EnumAlloy.values()[selectedRecipe - 1].max, Consts.ALLOY_RADIX, Consts.METAL_COUNT, i) > 0;
+				requiredMetals[i] = Funcs.intAtPos(EnumAlloy.values()[selectedRecipe - 1].max, Consts.ALLOY_RADIX, i) > 0;
 		}
 	}
 }

@@ -66,7 +66,7 @@ public class GuiMetalForge extends GuiElectric {
 				temf.presetSelection = (byte)Math.max(temf.presetSelection - 1, -1);
 			if(temf.presetSelection > -1)
 				for(int i = 0; i < temf.recipeAmts.length; i++)
-					temf.recipeAmts[i] = (byte)Funcs.intAtPos(alloys[temf.presetSelection], Consts.ALLOY_RADIX, Consts.METAL_COUNT, i);
+					temf.recipeAmts[i] = (byte)Funcs.intAtPos(alloys[temf.presetSelection], Consts.ALLOY_RADIX, i);
 			PacketDispatcher.sendPacketToServer(PacketTEClientToServer.getPacket(temf));
 		}
 

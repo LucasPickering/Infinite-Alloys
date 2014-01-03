@@ -25,40 +25,40 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
+// KEEP IN MIND: RIGHTMOST DIGITS ARE THE LESSER METALS WHILE LEFTMOST DIGITS ARE THE FANTASTICAL METALS
 public class EventHandler implements ICraftingHandler {
 
 	private String world;
 
 	@ForgeSubscribe
 	public void onWorldLoad(Load event) {
-
 		// If it's the server, look for stored alloy data and if they exist, load them. If not, generate new data.
 		if(Funcs.isServer()) {
 			world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(0).getChunkSaveLocation().getPath();
 			ObjectInputStream ois = null;
 			try {
-				ois = new ObjectInputStream(new FileInputStream(world + "/WorldData.dat"));
+				ois = new ObjectInputStream(new FileInputStream(world + "/WorldData.dat")); // Try to load existing data
 				InfiniteAlloys.instance.worldData = (WorldData)ois.readObject();
 				System.out.println("Successfully loaded IA alloys");
 			}catch(IOException e) {
-				if(InfiniteAlloys.instance.worldData == null) {
+				if(InfiniteAlloys.instance.worldData == null) { // If the world has no data, i.e. this is a new world
 					Random random = new Random();
-					int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT];
-					for(int i = 0; i < Consts.VALID_ALLOY_COUNT; i++) {
-						byte[] alloyDigits = new byte[Consts.METAL_COUNT];
-						for(int j = 0; j < Consts.METAL_COUNT; j++) {
-							int min = Funcs.intAtPos(EnumAlloy.values()[i].min, Consts.ALLOY_RADIX, Consts.METAL_COUNT, j);
-							int max = Funcs.intAtPos(EnumAlloy.values()[i].max, Consts.ALLOY_RADIX, Consts.METAL_COUNT, j);
-							alloyDigits[j] = (byte)(min + (max == min ? 0 : random.nextInt(max - min)));
+					int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT]; // An array to hold the generated alloys
+					for(int i = 0; i < Consts.VALID_ALLOY_COUNT; i++) { // For each alloy that needs to be generated
+						int alloy = 0; // An int to hold each digit that is generated
+						for(int j = 0; j < Consts.METAL_COUNT; j++) { // For each metal, i.e. for each digit in the alloy
+							int min = Funcs.intAtPos(EnumAlloy.values()[i].min, Consts.ALLOY_RADIX, j); // Metal's min value in the alloy
+							int max = Funcs.intAtPos(EnumAlloy.values()[i].max, Consts.ALLOY_RADIX, j); // Metal's max value in the alloy
+							// Randomly gen a value in [min, max] and add it to the alloy
+							alloy += (min + (max == min ? 0 : random.nextInt(max - min + 1))) * Math.pow(Consts.ALLOY_RADIX, j);
 						}
-						String alloy = "";
-						for(int digit : alloyDigits)
-							alloy = alloy + digit;
-						validAlloys[i] = new Integer(alloy);
+
+						validAlloys[i] = alloy; // Add the new alloy to the array
 						if(Loader.isModLoaded("mcp"))
-							System.out.println("SPOILER ALERT! Alloy " + i + ": " + validAlloys[i]);
+							System.out.println("SPOILER ALERT! Alloy " + i + ": " + validAlloys[i]); // Debug line, only runs in MCP
 					}
-					InfiniteAlloys.instance.worldData = new WorldData(validAlloys);
+
+					InfiniteAlloys.instance.worldData = new WorldData(validAlloys); // Create a WorldData instance to save these alloys
 					System.out.println("Successfully generated IA alloys");
 				}
 			}catch(Exception e) {

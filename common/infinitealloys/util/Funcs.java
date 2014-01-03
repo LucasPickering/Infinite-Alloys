@@ -22,16 +22,16 @@ public class Funcs {
 		return getBlock(world.getBlockId(x, y, z));
 	}
 
-	/** Translate a number n into a radix, add leading zeros to make it length strlen, then get the digit at pos. The right-most position is 0 and they increase
-	 * as they move to the left.
+	/** Translate a number n into a radix, then get the digit at pos. The right-most position is 0 and they increase as they move to the left.
 	 * 
 	 * @param n the number that is being used
 	 * @param radix the radix of the number being given, e.g. 10 (decimal) or 2 (binary)\
-	 * @param strlen the length to make the number (will be filled in with leading zeros) before finding the digit
 	 * @param pos the position of the digit to be found
 	 * @return the digit at pos, after adding leading zeros to make it length strlen */
-	public static int intAtPos(int n, int radix, int strlen, int pos) {
-		return Character.digit(addLeadingZeros(Integer.toString(n, radix), strlen).charAt(strlen - pos - 1), radix);
+	public static int intAtPos(int n, int radix, int pos) {
+		if(pos != 0)
+			n /= (Math.pow(radix, pos));
+		return n % radix;
 	}
 
 	/** Take the log-base-b of x, using the change of base formula: log-base-b(x) = ln(x)/ln(b)
@@ -40,18 +40,6 @@ public class Funcs {
 	 * @param x the number to be used */
 	public static double logn(int b, double x) {
 		return Math.log(x) / Math.log(b);
-	}
-
-	/** Add leading zeros to a number to make it a certain length
-	 * 
-	 * @param s the string to be extended
-	 * @param finalSize the length to be acheived */
-	public static String addLeadingZeros(String s, int finalSize) {
-		s.trim();
-		int length = s.length();
-		for(int i = 0; i < finalSize - length; i++)
-			s = "0" + s;
-		return s;
 	}
 
 	/** Get a localization or series of localization with keys. Add '/' to the start of a key to have it added to the final string without being localized. e.g.

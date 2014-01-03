@@ -39,12 +39,15 @@ public class CommonProxy {
 	public void initBlocks() {
 		Blocks.ore = new BlockOre(Blocks.oreID).setHardness(3F).setUnlocalizedName("IAore");
 		Blocks.machine = new BlockMachine(Blocks.machineID).setHardness(3F).setUnlocalizedName("IAmachine");
+
 		GameRegistry.registerBlock(Blocks.ore, ItemBlockIA.class, "IAore");
 		GameRegistry.registerBlock(Blocks.machine, ItemBlockIA.class, "IAmachine");
+
 		OreDictionary.registerOre("oreZinc", new ItemStack(Blocks.ore, 1, 0));
 		OreDictionary.registerOre("oreMagnesium", new ItemStack(Blocks.ore, 1, 1));
 		OreDictionary.registerOre("oreScandium", new ItemStack(Blocks.ore, 1, 2));
 		OreDictionary.registerOre("oreTantalum", new ItemStack(Blocks.ore, 1, 3));
+
 		MinecraftForge.setBlockHarvestLevel(Blocks.ore, 0, "pickaxe", 1);
 		MinecraftForge.setBlockHarvestLevel(Blocks.ore, 1, "pickaxe", 1);
 		MinecraftForge.setBlockHarvestLevel(Blocks.ore, 2, "pickaxe", 1);
@@ -66,10 +69,12 @@ public class CommonProxy {
 		Items.upgrade = new ItemUpgrade(Items.upgradeID);
 		Items.internetWand = new ItemInternetWand(Items.internetWandID).setMaxStackSize(1);
 		Items.alloyBook = new ItemAlloyBook(Items.alloyBookID).setMaxStackSize(1);
+
 		OreDictionary.registerOre("ingotZinc", new ItemStack(Items.ingot));
 		OreDictionary.registerOre("ingotMagnesium", new ItemStack(Items.ingot, 1, 1));
 		OreDictionary.registerOre("ingotScandium", new ItemStack(Items.ingot, 1, 2));
 		OreDictionary.registerOre("ingotTantalum", new ItemStack(Items.ingot, 1, 3));
+
 		for(int i = 0; i < alloys.length; i++)
 			alloys[i] = new ItemStack(Items.alloyIngot, 1, i + 1);
 		for(int i = 0; i < upgrades.length; i++)

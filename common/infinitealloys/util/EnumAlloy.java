@@ -1,6 +1,7 @@
 package infinitealloys.util;
 
 public enum EnumAlloy {
+	// KEEP IN MIND: RIGHTMOST DIGITS ARE THE LESSER METALS WHILE LEFTMOST DIGITS ARE THE FANTASTICAL METALS
 
 	ALLOY1("alloy1", 11, 55),
 	ALLOY2("alloy2", 1111, 4477),
