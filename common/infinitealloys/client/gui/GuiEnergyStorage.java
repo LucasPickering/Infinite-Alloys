@@ -1,16 +1,16 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.tile.TEHEnergyStorage;
+import infinitealloys.tile.TEMEnergyStorage;
 import infinitealloys.util.Funcs;
 import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.opengl.GL11;
 
 public class GuiEnergyStorage extends GuiMachine {
 
-	public TEHEnergyStorage tees;
+	public TEMEnergyStorage tees;
 	private final java.awt.Point energyMeter = new java.awt.Point(19, 42);
 
-	public GuiEnergyStorage(InventoryPlayer inventoryPlayer, TEHEnergyStorage tileEntity) {
+	public GuiEnergyStorage(InventoryPlayer inventoryPlayer, TEMEnergyStorage tileEntity) {
 		super(176, 166, inventoryPlayer, tileEntity);
 		tees = tileEntity;
 	}

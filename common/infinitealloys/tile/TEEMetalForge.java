@@ -125,9 +125,8 @@ public class TEEMetalForge extends TileEntityElectric {
 	}
 
 	public int getDamageForAlloy(int alloy) {
-		int[] validAlloys = Funcs.getValidAlloys();
-		for(int i = 0; i < validAlloys.length; i++)
-			if(alloy == validAlloys[i])
+		for(int i = 0; i < Consts.VALID_ALLOY_COUNT; i++)
+			if(alloy == Funcs.getValidAlloys()[i])
 				return i + 1;
 		return -1;
 	}

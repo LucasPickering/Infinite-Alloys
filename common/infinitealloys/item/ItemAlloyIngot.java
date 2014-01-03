@@ -43,7 +43,7 @@ public class ItemAlloyIngot extends ItemIA {
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
 			float percentage = Math.round((float)metalContent[i] / (float)totalMass * 1000F) / 10F;
 			if(percentage != 0)
-				list.add(percentage + "% " + Funcs.getLoc("metal." + Consts.METAL_NAMES[Consts.METAL_COUNT - 1 - i] + ".name"));
+				list.add(percentage + "% " + Funcs.getLoc("metal." + Consts.METAL_NAMES[i] + ".name"));
 		}
 	}
 
@@ -58,18 +58,18 @@ public class ItemAlloyIngot extends ItemIA {
 		else if(itemstack.getItemDamage() > 0 && itemstack.getItemDamage() < Consts.VALID_ALLOY_COUNT)
 			alloy = Funcs.getValidAlloys()[itemstack.getItemDamage() - 1];
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
-			int ingotColor = Consts.metalColors[Consts.METAL_COUNT - 1 - i];
+			int ingotColor = Consts.metalColors[i];
 			int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
 			colorCount += alloyAmt;
-			redTot += (ingotColor >> 16 & 255) * alloyAmt;
-			greenTot += (ingotColor >> 8 & 255) * alloyAmt;
-			blueTot += (ingotColor & 255) * alloyAmt;
+			redTot += (ingotColor >> 16 & 255) * alloyAmt; // Get the red byte from the ingot's hex color code
+			greenTot += (ingotColor >> 8 & 255) * alloyAmt; // Get the green byte from the ingot's hex color code
+			blueTot += (ingotColor & 255) * alloyAmt; // Get the blue byte from the ingot's hex color code
 		}
 		int redAvg = 0, greenAvg = 0, blueAvg = 0;
 		if(colorCount != 0) {
-			redAvg = (int)((float)redTot / (float)colorCount);
-			greenAvg = (int)((float)greenTot / (float)colorCount);
-			blueAvg = (int)((float)blueTot / (float)colorCount);
+			redAvg = redTot / colorCount;
+			greenAvg = greenTot / colorCount;
+			blueAvg = blueTot / colorCount;
 		}
 		return (redAvg << 16) + (greenAvg << 8) + blueAvg;
 	}

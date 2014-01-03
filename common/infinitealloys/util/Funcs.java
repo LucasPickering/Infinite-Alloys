@@ -22,7 +22,7 @@ public class Funcs {
 		return getBlock(world.getBlockId(x, y, z));
 	}
 
-	/** Translate a number n into a radix, then get the digit at pos. The right-most position is 0 and they increase as they move to the left.
+	/** Translate a number n into a radix, then get the digit at pos. The right-most position is 0 and the index increases to the left.
 	 * 
 	 * @param n the number that is being used
 	 * @param radix the radix of the number being given, e.g. 10 (decimal) or 2 (binary)\

@@ -5,9 +5,9 @@ import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.network.PacketAddMachine;
 import infinitealloys.network.PacketWand;
-import infinitealloys.tile.TEHComputer;
-import infinitealloys.tile.TEHEnergyStorage;
-import infinitealloys.tile.TileEntityHost;
+import infinitealloys.tile.IHost;
+import infinitealloys.tile.TEMComputer;
+import infinitealloys.tile.TEMEnergyStorage;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
@@ -87,7 +87,7 @@ public class GuiInternetWand extends GuiScreen {
 				for(MachineButton button : machineButtons)
 					if(button != null && (selectedButtons & 1 << button.buttonID) != 0) // If this button is selected
 						// If the selected machine is not valid for the block that was clicked
-						if(!(te instanceof TEHEnergyStorage && button.isElectric || te instanceof TEHComputer && button.isWireless))
+						if(!(te instanceof TEMEnergyStorage && button.isElectric || te instanceof TEMComputer && button.isWireless))
 							addSelected.enabled = false; // Set the button to false
 			}
 		}
@@ -159,7 +159,7 @@ public class GuiInternetWand extends GuiScreen {
 							// Add the selected machine to the host
 							int[] client = heldItem.getTagCompound().getIntArray("Coords" + machineButton.buttonID);
 							PacketDispatcher.sendPacketToServer(PacketAddMachine.getPacket(host[0], host[1], host[2], client[0], client[1], client[2]));
-							((TileEntityHost)mc.theWorld.getBlockTileEntity(host[0], host[1], host[2])).addMachine(mc.thePlayer, client[0], client[1], client[2]);
+							((IHost)mc.theWorld.getBlockTileEntity(host[0], host[1], host[2])).addMachine(mc.thePlayer, client[0], client[1], client[2]);
 						}
 					}
 				}

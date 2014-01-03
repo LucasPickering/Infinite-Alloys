@@ -16,16 +16,16 @@ import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.inventory.ContainerPrinter;
 import infinitealloys.inventory.ContainerXray;
 import infinitealloys.item.Items;
+import infinitealloys.tile.IHost;
 import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEGenerator;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEPrinter;
 import infinitealloys.tile.TEEXray;
-import infinitealloys.tile.TEHComputer;
-import infinitealloys.tile.TEHEnergyStorage;
+import infinitealloys.tile.TEMComputer;
+import infinitealloys.tile.TEMEnergyStorage;
 import infinitealloys.tile.TileEntityElectric;
-import infinitealloys.tile.TileEntityHost;
 import infinitealloys.tile.TileEntityMachine;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,8 +59,8 @@ public class MachineHelper {
 	public static final int WIRELESS = 256;
 
 	/** The TileEntityMachine class for each machine */
-	public static final Class[] MACHINE_CLASSES = { TEHComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEPrinter.class, TEEXray.class, TEEPasture.class,
-		TEHEnergyStorage.class, TEEGenerator.class };
+	public static final Class[] MACHINE_CLASSES = { TEMComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEPrinter.class, TEEXray.class, TEEPasture.class,
+		TEMEnergyStorage.class, TEEGenerator.class };
 
 	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray", "pasture", "energystorage", "generator" };
 
@@ -191,7 +191,7 @@ public class MachineHelper {
 	public static GuiMachine getGuiForMachine(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
 		switch(tem.getID()) {
 			case COMPUTER:
-				return new GuiComputer(inventoryPlayer, (TEHComputer)tem);
+				return new GuiComputer(inventoryPlayer, (TEMComputer)tem);
 			case METAL_FORGE:
 				return new GuiMetalForge(inventoryPlayer, (TEEMetalForge)tem);
 			case ANALYZER:
@@ -203,7 +203,7 @@ public class MachineHelper {
 			case PASTURE:
 				return new GuiPasture(inventoryPlayer, (TEEPasture)tem);
 			case ENERGY_STORAGE:
-				return new GuiEnergyStorage(inventoryPlayer, (TEHEnergyStorage)tem);
+				return new GuiEnergyStorage(inventoryPlayer, (TEMEnergyStorage)tem);
 			case GENERATOR:
 				return new GuiGenerator(inventoryPlayer, (TEEGenerator)tem);
 		}
@@ -248,7 +248,7 @@ public class MachineHelper {
 
 	/** Is the machine at x, y, z capable of hosting other machines? */
 	public static boolean isHost(World world, int x, int y, int z) {
-		return world.getBlockTileEntity(x, y, z) instanceof TileEntityHost;
+		return world.getBlockTileEntity(x, y, z) instanceof IHost;
 	}
 
 	/** Is the machine capable of connecting to an ESU? */

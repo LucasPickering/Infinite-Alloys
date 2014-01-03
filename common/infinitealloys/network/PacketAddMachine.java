@@ -1,6 +1,6 @@
 package infinitealloys.network;
 
-import infinitealloys.tile.TileEntityHost;
+import infinitealloys.tile.IHost;
 import infinitealloys.util.MachineHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -17,7 +17,7 @@ public class PacketAddMachine implements PacketIA {
 		short clientY = data.readShort();
 		int clientZ = data.readInt();
 		if(MachineHelper.isHost(player.worldObj, hostX, hostY, hostZ))
-			((TileEntityHost)player.worldObj.getBlockTileEntity(hostX, hostY, hostZ)).addMachine(player, clientX, clientY, clientZ);
+			((IHost)player.worldObj.getBlockTileEntity(hostX, hostY, hostZ)).addMachine(player, clientX, clientY, clientZ);
 	}
 
 	public static Packet250CustomPayload getPacket(int hostX, int hostY, int hostZ, int clientX, int clientY, int clientZ) {

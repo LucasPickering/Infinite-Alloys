@@ -2,7 +2,7 @@ package infinitealloys.network;
 
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
-import infinitealloys.tile.TEHComputer;
+import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import net.minecraft.entity.player.EntityPlayer;

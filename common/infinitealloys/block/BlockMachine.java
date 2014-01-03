@@ -2,7 +2,7 @@ package infinitealloys.block;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
-import infinitealloys.tile.TEHComputer;
+import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -79,7 +79,7 @@ public class BlockMachine extends BlockContainer {
 	public void openGui(World world, EntityPlayer player, TileEntityMachine tem, boolean fromComputer) {
 		if(!fromComputer && Funcs.isClient())
 			MachineHelper.controllers.remove(player.username);
-		if(tem instanceof TEHComputer)
+		if(tem instanceof TEMComputer)
 			MachineHelper.controllers.put(player.username, new Point(tem.xCoord, tem.yCoord, tem.zCoord));
 		player.openGui(InfiniteAlloys.instance, tem.getID(), world, tem.xCoord, tem.yCoord, tem.zCoord);
 		if(Funcs.isServer()) {
