@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import org.apache.commons.lang3.ArrayUtils;
 
-public class TEMEnergyStorage extends TileEntityHost {
+public class TEHEnergyStorage extends TileEntityHost {
 
 	/** The maximum amount of RK that this machine can store */
 	private int maxRK;
@@ -18,12 +18,12 @@ public class TEMEnergyStorage extends TileEntityHost {
 	/** The amount of RK currently stored in the unit */
 	private int currentRK;
 
-	public TEMEnergyStorage(byte front) {
+	public TEHEnergyStorage(byte front) {
 		this();
 		this.front = front;
 	}
 
-	public TEMEnergyStorage() {
+	public TEHEnergyStorage() {
 		super(1);
 	}
 

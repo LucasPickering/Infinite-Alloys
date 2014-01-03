@@ -4,7 +4,7 @@ import infinitealloys.block.BlockMachine;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.network.PacketOpenGui;
-import infinitealloys.tile.TEMComputer;
+import infinitealloys.tile.TEHComputer;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
@@ -120,7 +120,7 @@ public abstract class GuiMachine extends GuiContainer {
 		machineTabs.clear();
 		Point cont = MachineHelper.controllers.get(mc.thePlayer.username);
 		if(cont != null) {
-			TEMComputer tec = ((TEMComputer)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z));
+			TEHComputer tec = ((TEHComputer)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z));
 			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true,
 					tem.coordsEquals(cont.x, cont.y, cont.z));
 			controllerTab.drawButton();

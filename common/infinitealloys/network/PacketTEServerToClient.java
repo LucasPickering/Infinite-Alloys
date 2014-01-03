@@ -4,8 +4,8 @@ import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEXray;
-import infinitealloys.tile.TEMComputer;
-import infinitealloys.tile.TEMEnergyStorage;
+import infinitealloys.tile.TEHComputer;
+import infinitealloys.tile.TEHEnergyStorage;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
@@ -26,15 +26,15 @@ public class PacketTEServerToClient implements PacketIA {
 			byte orientation = data.readByte();
 			int upgrades = data.readInt();
 			((TileEntityMachine)te).handlePacketDataFromServer(orientation, upgrades);
-			if(te instanceof TEMComputer) {
-				TEMComputer tec = (TEMComputer)te;
+			if(te instanceof TEHComputer) {
+				TEHComputer tec = (TEHComputer)te;
 				tec.connectedMachines.clear();
 				byte size = data.readByte();
 				for(int i = 0; i < size; i++)
 					tec.connectedMachines.add(new Point(data.readInt(), data.readShort(), data.readInt()));
 			}
-			else if(te instanceof TEMEnergyStorage) {
-				TEMEnergyStorage tees = ((TEMEnergyStorage)te);
+			else if(te instanceof TEHEnergyStorage) {
+				TEHEnergyStorage tees = ((TEHEnergyStorage)te);
 				int currentRK = data.readInt();
 				tees.handlePacketDataFromServer(currentRK);
 				tees.connectedMachines.clear();

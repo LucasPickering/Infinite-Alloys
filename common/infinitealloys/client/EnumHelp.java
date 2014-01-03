@@ -6,8 +6,8 @@ import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEPrinter;
 import infinitealloys.tile.TEEXray;
-import infinitealloys.tile.TEMComputer;
-import infinitealloys.tile.TEMEnergyStorage;
+import infinitealloys.tile.TEHComputer;
+import infinitealloys.tile.TEHEnergyStorage;
 import infinitealloys.tile.TileEntityMachine;
 
 public enum EnumHelp {
@@ -59,7 +59,7 @@ public enum EnumHelp {
 	}
 
 	public static EnumHelp[] getBoxesForTEM(TileEntityMachine tem) {
-		if(tem instanceof TEMComputer)
+		if(tem instanceof TEHComputer)
 			return new EnumHelp[] { CP_UPGRADE, CP_TAB, CP_AUTO };
 		if(tem instanceof TEEMetalForge)
 			return new EnumHelp[] { MF_UPGRADE, MF_PROGRESS, MF_ENERGY, MF_BOOK, MF_OUTPUT, MF_SUPPLY, MF_PRESETS, MF_SELECTION };
@@ -71,7 +71,7 @@ public enum EnumHelp {
 			return new EnumHelp[] { XR_UPGRADE, XR_PROGRESS, XR_ENERGY, XR_ORE, XR_SEARCH, XR_RESULTS };
 		if(tem instanceof TEEPasture)
 			return new EnumHelp[] { PS_UPGRADE, PS_CREATURES };
-		if(tem instanceof TEMEnergyStorage)
+		if(tem instanceof TEHEnergyStorage)
 			return new EnumHelp[] { ES_UPGRADE };
 		if(tem instanceof TEEGenerator)
 			return new EnumHelp[] { GE_UPGRADE, GE_PROGRESS, GE_ENERGY, GE_SUPPLY };

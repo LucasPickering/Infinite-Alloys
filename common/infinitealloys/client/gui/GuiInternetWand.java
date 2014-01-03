@@ -5,8 +5,8 @@ import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.network.PacketAddMachine;
 import infinitealloys.network.PacketWand;
-import infinitealloys.tile.TEMComputer;
-import infinitealloys.tile.TEMEnergyStorage;
+import infinitealloys.tile.TEHComputer;
+import infinitealloys.tile.TEHEnergyStorage;
 import infinitealloys.tile.TileEntityHost;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -65,8 +65,14 @@ public class GuiInternetWand extends GuiScreen {
 			for(int i = 0; i < Consts.WAND_SIZE; i++) { // For each button in the array
 				machineButtons[i] = null; // Reset the button
 				if(tagCompound.hasKey("Coords" + i)) { // If there is a machine that corresponds to this button
-					int[] a = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
-					machineButtons[i] = new MachineButton(i, width / 2 - 82, height / 2 + i * 21 - 91, a[0], a[1], a[2]); // Create a button
+					int[] client = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
+					if(!MachineHelper.isClient(mc.theWorld, client[0], client[1], client[2])) { // If the block is no longer valid for the wand
+						PacketDispatcher.sendPacketToServer(PacketWand.getPacketRemove((byte)i)); // Remove it
+						((ItemInternetWand)heldItem.getItem()).removeMachine(heldItem, i);
+						i--; // Decrement i so that it repeats this number again with the new button
+					}
+					else
+						machineButtons[i] = new MachineButton(i, width / 2 - 82, height / 2 + i * 21 - 91, client[0], client[1], client[2]); // Create a button
 				}
 			}
 
@@ -81,7 +87,7 @@ public class GuiInternetWand extends GuiScreen {
 				for(MachineButton button : machineButtons)
 					if(button != null && (selectedButtons & 1 << button.buttonID) != 0) // If this button is selected
 						// If the selected machine is not valid for the block that was clicked
-						if(!(te instanceof TEMEnergyStorage && button.isElectric || te instanceof TEMComputer && button.isWireless))
+						if(!(te instanceof TEHEnergyStorage && button.isElectric || te instanceof TEHComputer && button.isWireless))
 							addSelected.enabled = false; // Set the button to false
 			}
 		}
@@ -194,7 +200,7 @@ public class GuiInternetWand extends GuiScreen {
 			this.buttonID = buttonID;
 			this.xPos = xPos;
 			this.yPos = yPos;
-			this.machineID = machineID;
+			this.machineID = mc.theWorld.getBlockMetadata(machineX, machineY, machineZ);
 			this.machineX = machineX;
 			this.machineY = machineY;
 			this.machineZ = machineZ;

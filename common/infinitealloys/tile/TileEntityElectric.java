@@ -28,7 +28,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	protected float rkPerTickMult = 1.0F;
 
 	/** The energy storage unit that this machine supplies power to or receives power from */
-	public TEMEnergyStorage energyStorage;
+	public TEHEnergyStorage energyStorage;
 
 	public TileEntityElectric(int inventoryLength) {
 		super(inventoryLength);

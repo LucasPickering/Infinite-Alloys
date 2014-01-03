@@ -11,19 +11,19 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import org.apache.commons.lang3.ArrayUtils;
 
-public class TEMComputer extends TileEntityHost {
+public class TEHComputer extends TileEntityHost {
 
 	/** The last point that was checked for a machine in the previous iteration of {@link #search}. The coords are relative to this TE block. */
 	private Point lastSearch;
 
 	public boolean shouldSearch;
 
-	public TEMComputer(byte front) {
+	public TEHComputer(byte front) {
 		this();
 		this.front = front;
 	}
 
-	public TEMComputer() {
+	public TEHComputer() {
 		super(1);
 	}
 
@@ -60,7 +60,7 @@ public class TEMComputer extends TileEntityHost {
 					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to an
 					// energy storage unit, add it to the power network.
 					TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
-					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(MachineHelper.WIRELESS))
+					if(te instanceof TileEntityMachine && !(te instanceof TEHComputer) && hasUpgrade(MachineHelper.WIRELESS))
 						connectedMachines.add(new Point(xCoord + x, yCoord + y, zCoord + z));
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
@@ -89,6 +89,8 @@ public class TEMComputer extends TileEntityHost {
 		}
 		else {
 			connectedMachines.add(new Point(machineX, machineY, machineZ));
+			if(worldObj.isRemote)
+				player.addChatMessage("Adding machine at " + machineX + ", " + machineY + ", " + machineZ);
 			return true;
 		}
 		return false;
