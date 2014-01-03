@@ -25,6 +25,9 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	/** 3D coords for each machine that is connected to the computer */
 	public final List<Point> connectedMachines = new ArrayList<Point>();
 
+	/** Machines that have been loaded from NBT that need to be added to the actual list */
+	private List<Point> machinesToBeAdded;
+
 	public boolean shouldSearch;
 
 	public TEMComputer(byte front) {
@@ -45,6 +48,12 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	public void updateEntity() {
 		super.updateEntity();
 
+		if(machinesToBeAdded != null) {
+			for(Point machine : machinesToBeAdded)
+				addMachine(null, machine.x, machine.y, machine.z);
+			machinesToBeAdded = null;
+		}
+		
 		// If a connected machine no longer exists, remove it from the network
 		for(Iterator iterator = connectedMachines.iterator(); iterator.hasNext();) {
 			Point p = (Point)iterator.next();
@@ -98,24 +107,24 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 			}
 		}
 		if(connectedMachines.size() >= networkCapacity) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Network full");
 		}
 		else if(machineX == xCoord && machineY == yCoord && machineZ == zCoord) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Cannot add self to network");
 		}
 		else if(new Point(machineX, machineY, machineZ).distanceTo(xCoord, yCoord, zCoord) > range) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Block out of range");
 		}
 		else if(!MachineHelper.isWireless(worldObj, machineX, machineY, machineZ)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Block is not capable of networking");
 		}
 		else {
 			connectedMachines.add(new Point(machineX, machineY, machineZ));
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Adding machine at " + machineX + ", " + machineY + ", " + machineZ);
 			return true;
 		}
@@ -125,20 +134,17 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		for(int i = 0; i < tagCompound.getInteger("NetworkSize"); i++) {
-			int[] coords = tagCompound.getIntArray("Coords" + i);
-			connectedMachines.add(new Point(coords[0], coords[1], coords[2]));
+		for(int i = 0; tagCompound.hasKey("Client" + i); i++) {
+			int[] client = tagCompound.getIntArray("Client" + i);
+			machinesToBeAdded.add(new Point(client[0], client[1], client[2]));
 		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		tagCompound.setInteger("NetworkSize", connectedMachines.size());
-		for(int i = 0; i < connectedMachines.size(); i++) {
-			Point coords = connectedMachines.get(i);
-			tagCompound.setIntArray("Coords" + i, new int[] { coords.x, coords.y, coords.z });
-		}
+		for(int i = 0; i < connectedMachines.size(); i++)
+			tagCompound.setIntArray("Client" + i, new int[] { connectedMachines.get(i).x, connectedMachines.get(i).y, connectedMachines.get(i).z });
 	}
 
 	@Override

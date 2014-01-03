@@ -24,6 +24,9 @@ public class TEMEnergyStorage extends TileEntityMachine implements IHost {
 	/** 3D coords for each machine that is connected to the computer */
 	public final List<Point> connectedMachines = new ArrayList<Point>();
 
+	/** Machines that have been loaded from NBT that need to be added to the actual list */
+	private List<Point> machinesToBeAdded;
+
 	public TEMEnergyStorage(byte front) {
 		this();
 		this.front = front;
@@ -42,6 +45,12 @@ public class TEMEnergyStorage extends TileEntityMachine implements IHost {
 	public void updateEntity() {
 		super.updateEntity();
 
+		if(machinesToBeAdded != null) {
+			for(Point machine : machinesToBeAdded)
+				addMachine(null, machine.x, machine.y, machine.z);
+			machinesToBeAdded = null;
+		}
+
 		// If a connected machine no longer exists, remove it from the network
 		for(Iterator iterator = connectedMachines.iterator(); iterator.hasNext();) {
 			Point p = (Point)iterator.next();
@@ -54,12 +63,19 @@ public class TEMEnergyStorage extends TileEntityMachine implements IHost {
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		currentRK = tagCompound.getInteger("currentRK");
+		machinesToBeAdded = new ArrayList<Point>();
+		for(int i = 0; tagCompound.hasKey("Client" + i); i++) {
+			int[] client = tagCompound.getIntArray("Client" + i);
+			machinesToBeAdded.add(new Point(client[0], client[1], client[2]));
+		}
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("currentRK", currentRK);
+		for(int i = 0; i < connectedMachines.size(); i++)
+			tagCompound.setIntArray("Client" + i, new int[] { connectedMachines.get(i).x, connectedMachines.get(i).y, connectedMachines.get(i).z });
 	}
 
 	@Override
@@ -80,21 +96,21 @@ public class TEMEnergyStorage extends TileEntityMachine implements IHost {
 	public boolean addMachine(EntityPlayer player, int machineX, int machineY, int machineZ) {
 		for(Point coords : connectedMachines) {
 			if(coords.x == machineX && coords.y == machineY && coords.z == machineZ) {
-				if(worldObj.isRemote)
+				if(player != null && worldObj.isRemote)
 					player.addChatMessage("Error: Machine is already in network");
 				return false;
 			}
 		}
 		if(machineX == xCoord && machineY == yCoord && machineZ == zCoord) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Cannot add self to network");
 		}
 		else if(new Point(machineX, machineY, machineZ).distanceTo(xCoord, yCoord, zCoord) > range) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Block out of range");
 		}
 		else if(!MachineHelper.isElectric(worldObj, machineX, machineY, machineZ)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Block is not electrical");
 		}
 		else {
