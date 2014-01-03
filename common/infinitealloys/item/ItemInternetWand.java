@@ -48,7 +48,7 @@ public class ItemInternetWand extends ItemIA {
 				if(tagCompound.hasKey("Coords" + i)) {
 					// If the wand already contains this machine, return false
 					int[] a = tagCompound.getIntArray("Coords" + i);
-					if(a[1] == x && a[2] == y && a[3] == z)
+					if(a[0] == x && a[1] == y && a[2] == z)
 						return false;
 				}
 			}
