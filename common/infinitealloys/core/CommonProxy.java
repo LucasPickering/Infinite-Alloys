@@ -86,10 +86,8 @@ public class CommonProxy {
 		/* Upgrade Component */addRecipeDict(new ItemStack(Items.multi, 1, 1), "CTC", "IWI", 'C', "ingotCopper", 'I', Item.ingotIron, 'T', "ingotTin", 'W', "copperWire");
 
 		/* Computer */addRecipe(new ItemStack(Blocks.machine), "ASA", "WCG", "ABA", 'A', alloys[2], 'B', alloys[3], 'C', Items.multi, 'G', Block.thinGlass, 'S', Block.stoneButton, 'W', upgrades[8]);
-		/* Metal Forge */addRecipe(new ItemStack(Blocks.machine, 1, 1), "BDB", "BCB", "NNN", 'B', Block.brick, 'C', Items.multi, 'D', Item.doorIron, 'N', Block.netherrack); // Metal
-		/* Analyzer */addRecipe(new ItemStack(Blocks.machine, 1, 2), " G ", "RCR", "III", 'C', Items.multi, 'G', Block.glowStone, 'I', Item.ingotIron, 'R', Item.redstone); // Analyzer
-		/* Printer */addRecipe(new ItemStack(Blocks.machine, 1, 3), "APA", "BCB", "OIO", 'A', alloys[0], 'B', alloys[1], 'C', Items.multi, 'I', new ItemStack(Item.dyePowder, 1, 15), 'O',
-				Block.obsidian, 'P', Block.pistonBase);
+		/* Metal Forge */addRecipe(new ItemStack(Blocks.machine, 1, 1), "B B", " C ", "B B", 'B', Item.brick, 'C', Items.multi);
+		/* Analyzer */addRecipe(new ItemStack(Blocks.machine, 1, 2), "I I", " C ", "I I", 'C', Items.multi, 'I', Item.ingotIron);
 		/* X-ray */addRecipe(new ItemStack(Blocks.machine, 1, 4), "ADA", "BCB", "EGE", 'A', alloys[4], 'B', alloys[5], 'C', Items.multi, 'D', Item.diamond, 'E', Item.enderPearl, 'G', Block.thinGlass);
 
 		/* Speed I */addRecipeDict(upgrades[0], "AGA", "AUA", 'A', alloys[2], 'G', Item.ingotGold, 'U', new ItemStack(Items.multi, 1, 1));
@@ -102,8 +100,7 @@ public class CommonProxy {
 		/* Range II */addRecipeDict(upgrades[7], "AGA", "AUA", 'A', alloys[5], 'G', Item.swordGold, 'U', upgrades[6]);
 		/* Wireless */addRecipeDict(upgrades[8], "AEA", "AUA", 'A', alloys[1], 'E', Item.enderPearl, 'U', new ItemStack(Items.multi, 1, 1));
 
-		/* Internet Wand */addRecipeDict(new ItemStack(Items.internetWand), " W ", "RSR", 'R', Item.redstone, 'S', "basicCircuit", 'W', upgrades[8]);
-		/* Alloy Book */addRecipe(new ItemStack(Items.alloyBook), "R", "B", 'B', Item.writableBook, 'R', Item.redstone);
+		/* Internet Wand */addRecipeDict(new ItemStack(Items.internetWand), " W ", "RSR", 'R', Item.redstone, 'S', Item.stick, 'W', upgrades[8]);
 
 		addSmelting(Blocks.ore.blockID, 0, new ItemStack(Items.ingot, 1, 0), 0.6F);
 		addSmelting(Blocks.ore.blockID, 1, new ItemStack(Items.ingot, 1, 1), 0.6F);

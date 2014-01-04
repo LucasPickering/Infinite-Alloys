@@ -7,13 +7,11 @@ import infinitealloys.client.gui.GuiGenerator;
 import infinitealloys.client.gui.GuiMachine;
 import infinitealloys.client.gui.GuiMetalForge;
 import infinitealloys.client.gui.GuiPasture;
-import infinitealloys.client.gui.GuiPrinter;
 import infinitealloys.client.gui.GuiXray;
 import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.inventory.ContainerGenerator;
 import infinitealloys.inventory.ContainerMachine;
 import infinitealloys.inventory.ContainerMetalForge;
-import infinitealloys.inventory.ContainerPrinter;
 import infinitealloys.inventory.ContainerXray;
 import infinitealloys.item.Items;
 import infinitealloys.tile.IHost;
@@ -21,7 +19,6 @@ import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEGenerator;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
-import infinitealloys.tile.TEEPrinter;
 import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TEMEnergyStorage;
@@ -42,11 +39,10 @@ public class MachineHelper {
 	public static final int COMPUTER = 0;
 	public static final int METAL_FORGE = 1;
 	public static final int ANALYZER = 2;
-	public static final int PRINTER = 3;
-	public static final int XRAY = 4;
-	public static final int PASTURE = 5;
-	public static final int ENERGY_STORAGE = 6;
-	public static final int GENERATOR = 7;
+	public static final int XRAY = 3;
+	public static final int PASTURE = 4;
+	public static final int ENERGY_STORAGE = 5;
+	public static final int GENERATOR = 6;
 
 	public static final int SPEED1 = 1;
 	public static final int SPEED2 = 2;
@@ -59,10 +55,10 @@ public class MachineHelper {
 	public static final int WIRELESS = 256;
 
 	/** The TileEntityMachine class for each machine */
-	public static final Class[] MACHINE_CLASSES = { TEMComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEPrinter.class, TEEXray.class, TEEPasture.class,
+	public static final Class[] MACHINE_CLASSES = { TEMComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEXray.class, TEEPasture.class,
 		TEMEnergyStorage.class, TEEGenerator.class };
 
-	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "printer", "xray", "pasture", "energystorage", "generator" };
+	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "xray", "pasture", "energystorage", "generator" };
 
 	/** How many blocks are searched per tick. Used to limit lag on the x-ray. */
 	public static final int SEARCH_PER_TICK = 2000;
@@ -168,8 +164,6 @@ public class MachineHelper {
 				return new ContainerMetalForge(inventoryPlayer, (TEEMetalForge)tem);
 			case ANALYZER:
 				return new ContainerAnalyzer(inventoryPlayer, (TEEAnalyzer)tem);
-			case PRINTER:
-				return new ContainerPrinter(inventoryPlayer, (TEEPrinter)tem);
 			case XRAY:
 				return new ContainerXray(inventoryPlayer, (TEEXray)tem);
 			case PASTURE:
@@ -196,8 +190,6 @@ public class MachineHelper {
 				return new GuiMetalForge(inventoryPlayer, (TEEMetalForge)tem);
 			case ANALYZER:
 				return new GuiAnalyzer(inventoryPlayer, (TEEAnalyzer)tem);
-			case PRINTER:
-				return new GuiPrinter(inventoryPlayer, (TEEPrinter)tem);
 			case XRAY:
 				return new GuiXray(inventoryPlayer, (TEEXray)tem);
 			case PASTURE:
@@ -229,15 +221,6 @@ public class MachineHelper {
 					default:
 						return itemstack.itemID == Items.ingot.itemID && itemstack.getItemDamage() == index;
 				}
-			case PRINTER:
-				switch(index) {
-					case 0:
-						return (itemstack.itemID == Items.alloyBook.itemID || itemstack.itemID == Item.writableBook.itemID || itemstack.itemID == Item.writtenBook.itemID)
-								&& itemstack.hasTagCompound();
-					case 1:
-						return itemstack.itemID == Item.book.itemID;
-				}
-				break;
 			case XRAY:
 				return MachineHelper.isDetectable(itemstack);
 			case GENERATOR:

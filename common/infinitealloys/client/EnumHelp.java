@@ -4,7 +4,6 @@ import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEGenerator;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
-import infinitealloys.tile.TEEPrinter;
 import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TEMEnergyStorage;
@@ -65,8 +64,6 @@ public enum EnumHelp {
 			return new EnumHelp[] { MF_UPGRADE, MF_PROGRESS, MF_ENERGY, MF_BOOK, MF_OUTPUT, MF_SUPPLY, MF_PRESETS, MF_SELECTION };
 		if(tem instanceof TEEAnalyzer)
 			return new EnumHelp[] { AZ_UPGRADE, AZ_PROGRESS, AZ_ENERGY, AZ_BOOK, AZ_SUPPLY, AZ_INGOTS };
-		if(tem instanceof TEEPrinter)
-			return new EnumHelp[] { PR_UPGRADE, PR_PROGRESS, PR_ENERGY, PR_INPUT, PR_SUPPLY, PR_OUTPUT };
 		if(tem instanceof TEEXray)
 			return new EnumHelp[] { XR_UPGRADE, XR_PROGRESS, XR_ENERGY, XR_ORE, XR_SEARCH, XR_RESULTS };
 		if(tem instanceof TEEPasture)
