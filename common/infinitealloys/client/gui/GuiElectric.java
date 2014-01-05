@@ -43,8 +43,8 @@ public abstract class GuiElectric extends GuiMachine {
 				// If the ESU for this machine is this machine, display SELF, otherwise display the coords of the ESU
 				String line1 = Funcs.getLoc("machine.connected.true") + (esu.equals(tem.getCoords()) ? Funcs.getLoc("machine.connected.self") : esu);
 
-				// If the rk change is positive, add '+'. If it's negative, add a '-', then display the rate of change of RK
-				String line2 = (rkChange > 0 ? "+" : rkChange < 0 ? "-" : "") + rkChange + " RK/t";
+				// If the rk change is positive, add '+', then display the rate of change of RK
+				String line2 = (rkChange > 0 ? "+" : "") + rkChange + " RK/t";
 
 				// Draw all the information, with colors for the change based on pos/neg
 				drawTextBox(mouseX, mouseY, new ColoredLine(line1, 0x00ff00), new ColoredLine(line2, rkChange < 0 ? 0xff0000 : rkChange > 0 ? 0x00ff00 : 0xffffff));

@@ -18,6 +18,7 @@ public class GuiPasture extends GuiElectric {
 	public GuiPasture(InventoryPlayer inventoryPlayer, TEEPasture tileEntity) {
 		super(210, 186, inventoryPlayer, tileEntity);
 		tep = tileEntity;
+		energyIcon.setLocation(18, 40);
 	}
 
 	@Override

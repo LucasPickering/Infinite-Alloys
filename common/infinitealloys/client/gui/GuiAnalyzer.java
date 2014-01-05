@@ -21,8 +21,8 @@ public class GuiAnalyzer extends GuiElectric {
 	public GuiAnalyzer(InventoryPlayer inventoryPlayer, TEEAnalyzer tileEntity) {
 		super(176, 166, inventoryPlayer, tileEntity);
 		tea = tileEntity;
-		progressBar.setLocation(8, 7);
-		energyIcon.setLocation(83, 77);
+		progressBar.setLocation(28, 7);
+		energyIcon.setLocation(7, 8);
 		updateRequiredMetals();
 	}
 
@@ -31,7 +31,6 @@ public class GuiAnalyzer extends GuiElectric {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 
 		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
@@ -43,9 +42,8 @@ public class GuiAnalyzer extends GuiElectric {
 						i * 18 + 28, 42, 0xffffff);
 		}
 
-		drawString(fontRenderer, new Integer(selectedRecipe).toString(), 7, 37, 0xffffff);
+		fontRenderer.drawStringWithShadow(new Integer(selectedRecipe).toString(), 7, 37, 0xffffff);
 
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 

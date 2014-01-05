@@ -120,10 +120,6 @@ public class MachineHelper {
 		return detectables.get(stack.itemID + "@" + stack.getItemDamage());
 	}
 
-	public static boolean isBook(ItemStack stack) {
-		return (stack.itemID == Items.alloyBook.itemID || stack.itemID == Item.writableBook.itemID || stack.itemID == Item.writtenBook.itemID) && stack.hasTagCompound();
-	}
-
 	/** Is the upgrade a prerequisite for another
 	 * 
 	 * @param upgrade
@@ -200,16 +196,12 @@ public class MachineHelper {
 			case METAL_FORGE:
 				switch(index) {
 					case 0:
-						return itemstack.itemID == Items.alloyBook.itemID;
-					case 1:
 						return false;
 					default:
 						return getIngotNum(itemstack) != -1;
 				}
 			case ANALYZER:
 				switch(index) {
-					case 8:
-						return itemstack.itemID == Items.alloyBook.itemID;
 					default:
 						return itemstack.itemID == Items.ingot.itemID && itemstack.getItemDamage() == index;
 				}

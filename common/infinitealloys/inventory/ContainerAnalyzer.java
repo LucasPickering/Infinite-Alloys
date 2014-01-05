@@ -8,7 +8,7 @@ public class ContainerAnalyzer extends ContainerMachine {
 	public TEEAnalyzer inventory;
 
 	public ContainerAnalyzer(InventoryPlayer inventoryPlayer, TEEAnalyzer tileEntity) {
-		super(tileEntity, 10);
+		super(tileEntity, 9);
 		inventory = tileEntity;
 
 		for(int x = 0; x < 8; x++)

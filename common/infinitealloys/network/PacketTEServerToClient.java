@@ -36,7 +36,6 @@ public class PacketTEServerToClient implements PacketIA {
 			}
 			else if(te instanceof TileEntityElectric) {
 				final int processProgress = data.readInt();
-				System.out.println("weroiujwer" + processProgress);
 				((TileEntityElectric)te).handlePacketDataFromServerElectric(processProgress);
 				if(te instanceof TEEMetalForge) {
 					final byte[] recipeAmts = new byte[Consts.METAL_COUNT];

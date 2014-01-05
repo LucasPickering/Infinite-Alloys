@@ -6,7 +6,6 @@ import infinitealloys.block.Blocks;
 import infinitealloys.handlers.EventHandler;
 import infinitealloys.handlers.GfxHandler;
 import infinitealloys.handlers.WorldGenHandler;
-import infinitealloys.item.ItemAlloyBook;
 import infinitealloys.item.ItemAlloyIngot;
 import infinitealloys.item.ItemBlockIA;
 import infinitealloys.item.ItemIngot;
@@ -68,7 +67,6 @@ public class CommonProxy {
 		Items.alloyIngot = new ItemAlloyIngot(Items.alloyIngotID);
 		Items.upgrade = new ItemUpgrade(Items.upgradeID);
 		Items.internetWand = new ItemInternetWand(Items.internetWandID).setMaxStackSize(1);
-		Items.alloyBook = new ItemAlloyBook(Items.alloyBookID).setMaxStackSize(1);
 
 		OreDictionary.registerOre("ingotZinc", new ItemStack(Items.ingot));
 		OreDictionary.registerOre("ingotMagnesium", new ItemStack(Items.ingot, 1, 1));

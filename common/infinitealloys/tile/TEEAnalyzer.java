@@ -24,7 +24,7 @@ public class TEEAnalyzer extends TileEntityElectric {
 	}
 
 	public TEEAnalyzer() {
-		super(10);
+		super(9);
 		stackLimit = 1;
 		baseRKPerTick = -1000;
 		ticksToProcess = 2400;
@@ -66,7 +66,7 @@ public class TEEAnalyzer extends TileEntityElectric {
 		updateRequiredMetals();
 
 		// If an alloy book is present, save the newly-discovered alloy to it
-		if(inventoryStacks[8] != null) {
+		/*if(inventoryStacks[8] != null) {
 			if(!inventoryStacks[8].hasTagCompound())
 				inventoryStacks[8].setTagCompound(new NBTTagCompound());
 			final int alloy = inventoryStacks[8].getTagCompound().getInteger("alloy");
@@ -98,7 +98,7 @@ public class TEEAnalyzer extends TileEntityElectric {
 				tagCompound.setIntArray("alloys", newSave);
 				inventoryStacks[8].setTagCompound(tagCompound);
 			}
-		}
+		}*/
 
 		if(Funcs.isServer())
 			for(final String player : playersUsing)
