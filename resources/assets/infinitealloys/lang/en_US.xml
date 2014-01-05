@@ -42,24 +42,21 @@
 
     <entry key="machine.connected.false">NOT CONNECTED</entry>
     <entry key="machine.connected.true">CONNECTED TO </entry>
+    <entry key="machine.connected.self">SELF</entry>
 
 	<entry key="machine.computer.name">Computer</entry>
 	<entry key="machine.metalforge.name">Metal Forge</entry>
 	<entry key="machine.analyzer.name">Analyzer</entry>
-	<entry key="machine.printer.name">Printer</entry>
-	
 	<entry key="machine.xray.name">X-Ray</entry>
+    <entry key="machine.pasture.name">Pasture</entry>
+    <entry key="machine.energystorage.name">Energy Storage Unit</entry>
+	
     <entry key="machine.xray.search">Search</entry>
 	
-    <entry key="machine.pasture.name">Pasture</entry>
     <entry key="machine.pasture.mode.0">Off</entry>
     <entry key="machine.pasture.mode.1">Att.</entry>
     <entry key="machine.pasture.mode.2">Rep.</entry>
     
-    <entry key="machine.generator.name">Generator</entry>
-    <entry key="machine.energystorage.name">Energy Storage Unit</entry>
-    <entry key="machine.generator.name">Generator</entry>
-
     
     <entry key="wand.addToWand">Add to Wand</entry>
     <entry key="wand.addSelected">Add Selected</entry>

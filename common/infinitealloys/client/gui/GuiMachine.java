@@ -41,10 +41,10 @@ public abstract class GuiMachine extends GuiContainer {
 	static final Rectangle BLOCK_BG_OFF = new Rectangle(48, 24, 36, 18);
 	static final Rectangle SELECTED_OVERLAY = new Rectangle(68, 24, 36, 18);
 	static final Rectangle BLOCK_BG_ON = new Rectangle(84, 24, 36, 18);
-	static final Rectangle ENERGY_ICON = new Rectangle(241, 0, 10, 4);
+	static final Rectangle ENERGY_ICON_ON = new Rectangle(16, 40, 16, 16);
+	static final Rectangle ENERGY_ICON_OFF = new Rectangle(32, 40, 16, 16);
+	static final Rectangle WIRELESS_ICON = new Rectangle(0, 40, 16, 16);
 	static final Rectangle SCROLL_BAR = new Rectangle(172, 51, 12, 96);
-	static final Rectangle WIRELESS_ICON = new Rectangle(217, 15, 8, 8);
-	static final Rectangle ENERGY_ICON_2 = new Rectangle(225, 15, 8, 8);
 
 	/** The texture resource for the texture item */
 	static final ResourceLocation extras = Funcs.getGuiTexture("extras");

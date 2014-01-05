@@ -13,7 +13,7 @@ public class GuiEnergyStorage extends GuiElectric {
 		super(214, 176, inventoryPlayer, tileEntity);
 		tees = tileEntity;
 		progressBar.setLocation(70, 39);
-		energyIcon.setLocation(102, 82);
+		energyIcon.setLocation(31, 4);
 	}
 
 	@Override

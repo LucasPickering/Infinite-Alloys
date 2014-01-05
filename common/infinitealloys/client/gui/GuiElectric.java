@@ -2,6 +2,7 @@ package infinitealloys.client.gui;
 
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.util.Funcs;
+import infinitealloys.util.Point;
 import java.text.DecimalFormat;
 import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.opengl.GL11;
@@ -34,11 +35,19 @@ public abstract class GuiElectric extends GuiMachine {
 				drawTextBox(mouseX, mouseY, new ColoredLine(new DecimalFormat("0.0").format(tem.getProcessProgressScaled(100F)) + "%", 0xffffff));
 
 		// Draw the power network info if the mouse is over the energy icon
-		if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + energyIcon.x, topLeft.y + energyIcon.y, ENERGY_ICON.width, ENERGY_ICON.height)) {
+		if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + energyIcon.x, topLeft.y + energyIcon.y, ENERGY_ICON_ON.width, ENERGY_ICON_ON.height)) {
 			if(tem.energyStorage != null) {
-				final int rkChange = tem.shouldProcess() ? 0 : tem.getRKChange();
-				drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("machine.connected.true") + "(" + tem.energyStorage.getCoords() + ")", 0x00ff00),
-						new ColoredLine((rkChange > 0 ? "+" : "") + rkChange + " RK/t", rkChange < 0 ? 0xff0000 : rkChange > 0 ? 0x00ff00 : 0xffffff));
+				int rkChange = tem.shouldProcess() ? tem.getRKChange() : 0;// The rate of change of RK
+				Point esu = tem.energyStorage.getCoords(); // The coordinates of the energy storage unit
+
+				// If the ESU for this machine is this machine, display SELF, otherwise display the coords of the ESU
+				String line1 = Funcs.getLoc("machine.connected.true") + (esu.equals(tem.getCoords()) ? Funcs.getLoc("machine.connected.self") : esu);
+
+				// If the rk change is positive, add '+'. If it's negative, add a '-', then display the rate of change of RK
+				String line2 = (rkChange > 0 ? "+" : rkChange < 0 ? "-" : "") + rkChange + " RK/t";
+
+				// Draw all the information, with colors for the change based on pos/neg
+				drawTextBox(mouseX, mouseY, new ColoredLine(line1, 0x00ff00), new ColoredLine(line2, rkChange < 0 ? 0xff0000 : rkChange > 0 ? 0x00ff00 : 0xffffff));
 			}
 			else
 				drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("machine.connected.false"), 0xff0000));
@@ -61,7 +70,9 @@ public abstract class GuiElectric extends GuiMachine {
 
 		// Draw the energy icon overlay
 		if(tem.energyStorage != null)
-			Funcs.drawTexturedModalRect(this, energyIcon.x, energyIcon.y, ENERGY_ICON);
+			Funcs.drawTexturedModalRect(this, energyIcon.x, energyIcon.y, ENERGY_ICON_ON);
+		else
+			Funcs.drawTexturedModalRect(this, energyIcon.x, energyIcon.y, ENERGY_ICON_OFF);
 		GL11.glPopMatrix();
 	}
 

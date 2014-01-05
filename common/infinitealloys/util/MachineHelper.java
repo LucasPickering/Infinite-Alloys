@@ -54,7 +54,7 @@ public class MachineHelper {
 	/** The TileEntityMachine class for each machine */
 	public static final Class[] MACHINE_CLASSES = { TEMComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEXray.class, TEEPasture.class, TEMEnergyStorage.class };
 
-	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "xray", "pasture", "energystorage", "generator" };
+	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "xray", "pasture", "energystorage" };
 
 	/** How many blocks are searched per tick. Used to limit lag on the x-ray. */
 	public static final int SEARCH_PER_TICK = 2000;

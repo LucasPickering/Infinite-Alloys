@@ -221,13 +221,18 @@ public class GuiInternetWand extends GuiScreen {
 			}
 
 			GL11.glColor3f(1F, 1F, 1F); // Reset the color
+			
+			GL11.glPushMatrix();
+			GL11.glTranslatef(xPos+100, yPos+3, 0);
+			GL11.glScalef(0.75F, 0.75F, 1F);
 			// If the machine is electrical
 			if(isElectric)
-				Funcs.drawTexturedModalRect(GuiInternetWand.this, xPos + 100, yPos + 5, GuiMachine.ENERGY_ICON_2); // Render an electricity icon on the button
+				Funcs.drawTexturedModalRect(GuiInternetWand.this, 0, 0, GuiMachine.ENERGY_ICON_OFF); // Render an electricity icon on the button
 
 			// If the machine is wireless
 			if(isWireless)
-				Funcs.drawTexturedModalRect(GuiInternetWand.this, xPos + 112, yPos + 5, GuiMachine.WIRELESS_ICON); // Render a wireless icon on the button
+				Funcs.drawTexturedModalRect(GuiInternetWand.this, 15, 0, GuiMachine.WIRELESS_ICON); // Render a wireless icon on the button
+			GL11.glPopMatrix();
 
 			// Draw the string for the coordinates
 			final String display = machineX + "   " + machineY + "   " + machineZ;

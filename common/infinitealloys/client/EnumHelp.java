@@ -14,20 +14,20 @@ public enum EnumHelp {
 
 	CP_UPGRADE("upgrade", 0x9c00ff, 139, 42, 18, 18), CP_TAB("cpTab", 0xff8900, -24, 6, 27, 24), CP_AUTO("cpAuto", 0x00ff16, 25, 41, 92, 20),
 
-	MF_UPGRADE("upgrade", 0x9c00ff, 147, 7, 18, 18), MF_PROGRESS("progress", 0x00ff16, 30, 13, 110, 20), MF_ENERGY("energy", 0xff8900, 82, 122, 12, 6),
+	MF_UPGRADE("upgrade", 0x9c00ff, 147, 7, 18, 18), MF_PROGRESS("progress", 0x00ff16, 30, 13, 110, 20), MF_ENERGY("energy", 0xfff600, 82, 122, 12, 6),
 	MF_BOOK("mfBook", 0xffff00, 7, 51, 18, 18), MF_OUTPUT("mfOutput", 0x0000ff, 143, 47, 26, 26), MF_SUPPLY("mfSupply", 0xff0000, 6, 80, 164, 38),
 	MF_PRESETS("mfPresets", 0xff00ff, 39, 51, 18, 18), MF_SELECTION("mfSelection", 0x00ffff, 64, 41, 74, 38),
 
-	AZ_UPGRADE("upgrade", 0x9c00ff, 150, 7, 18, 18), AZ_PROGRESS("progress", 0x00ff16, 7, 6, 110, 20), AZ_ENERGY("energy", 0xff8900, 82, 76, 12, 6),
+	AZ_UPGRADE("upgrade", 0x9c00ff, 150, 7, 18, 18), AZ_PROGRESS("progress", 0x00ff16, 7, 6, 110, 20), AZ_ENERGY("energy", 0xfff600, 82, 76, 12, 6),
 	AZ_BOOK("azBook", 0xffff00, 124, 7, 18, 18), AZ_SUPPLY("azSupply", 0xff0000, 15, 56, 146, 20), AZ_INGOTS("azIngots", 0x00ffff, 3, 27, 158, 28),
 
-	XR_UPGRADE("upgrade", 0x9c00ff, 167, 5, 18, 18), XR_PROGRESS("progress", 0x00ff16, 53, 4, 110, 20), XR_ENERGY("energy", 0xff8900, 92, 24, 12, 6),
+	XR_UPGRADE("upgrade", 0x9c00ff, 167, 5, 18, 18), XR_PROGRESS("progress", 0x00ff16, 53, 4, 110, 20), XR_ENERGY("energy", 0xfff600, 92, 24, 12, 6),
 	XR_ORE("xrOre", 0xff0000, 31, 5, 18, 18), XR_SEARCH("xrSearch", 0x00ffff, 68, 30, 80, 20), XR_RESULTS("xrResults", 0xff00ff, 7, 50, 160, 102),
 
 	PS_UPGRADE("upgrade", 0x9c00ff, 140, 43, 18, 18), PS_CREATURES("psCreatures", 0x00ffff, 42, 4, 74, 88),
 
-	ES_UPGRADE("upgrade", 0x9c00ff, 139, 42, 18, 18), ES_PROGRESS("progress", 0x00ff16, 70, 38, 110, 20), ES_ENERGY("energy", 0xff8900, 101, 81, 12, 6),
-	ES_SUPPLY("geSupply", 0xff0000, 11, 20, 56, 56), ES_STORED_ENERGY("storedEnergy", 0xff1100, 70, 20, 110, 20);
+	ES_UPGRADE("upgrade", 0x9c00ff, 150, 40, 18, 18), ES_PROGRESS("progress", 0x00ff16, 69, 38, 110, 20), ES_ENERGY("energy", 0xfff600, 101, 81, 12, 6),
+	ES_SUPPLY("esSupply", 0xff0000, 11, 20, 56, 56), ES_STORED_ENERGY("esEnergyBar", 0xff8900, 70, 20, 110, 20);
 
 	/** Name used to get the title and info from localization */
 	public final String name;
