@@ -7,10 +7,11 @@ import com.google.common.io.ByteArrayDataInput;
 
 public class PacketXraySearch implements PacketIA {
 
+	@Override
 	public void execute(EntityPlayer player, ByteArrayDataInput data) {
-		int x = data.readInt();
-		short y = data.readShort();
-		int z = data.readInt();
+		final int x = data.readInt();
+		final short y = data.readShort();
+		final int z = data.readInt();
 		((TEEXray)player.worldObj.getBlockTileEntity(x, y, z)).shouldSearch = true;
 	}
 

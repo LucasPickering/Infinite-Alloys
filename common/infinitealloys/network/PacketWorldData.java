@@ -10,8 +10,9 @@ import com.google.common.io.ByteArrayDataInput;
 
 public class PacketWorldData implements PacketIA {
 
+	@Override
 	public void execute(EntityPlayer player, ByteArrayDataInput data) {
-		int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT];
+		final int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT];
 		for(int i = 0; i < validAlloys.length; i++)
 			validAlloys[i] = data.readInt();
 		InfiniteAlloys.instance.worldData = new WorldData(validAlloys);

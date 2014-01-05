@@ -1,6 +1,5 @@
 package infinitealloys.tile;
 
-import infinitealloys.block.Blocks;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -49,14 +48,14 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 		super.updateEntity();
 
 		if(machinesToBeAdded != null) {
-			for(Point machine : machinesToBeAdded)
+			for(final Point machine : machinesToBeAdded)
 				addMachine(null, machine.x, machine.y, machine.z);
 			machinesToBeAdded = null;
 		}
-		
+
 		// If a connected machine no longer exists, remove it from the network
-		for(Iterator iterator = connectedMachines.iterator(); iterator.hasNext();) {
-			Point p = (Point)iterator.next();
+		for(final Iterator iterator = connectedMachines.iterator(); iterator.hasNext();) {
+			final Point p = (Point)iterator.next();
 			if(!MachineHelper.isWireless(worldObj, p.x, p.y, p.z))
 				iterator.remove();
 		}
@@ -77,7 +76,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to an
 					// energy storage unit, add it to the power network.
-					TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
+					final TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
 					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(MachineHelper.WIRELESS))
 						connectedMachines.add(new Point(xCoord + x, yCoord + y, zCoord + z));
 
@@ -99,7 +98,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 	@Override
 	public boolean addMachine(EntityPlayer player, int machineX, int machineY, int machineZ) {
-		for(Point coords : connectedMachines) {
+		for(final Point coords : connectedMachines) {
 			if(coords.x == machineX && coords.y == machineY && coords.z == machineZ) {
 				if(worldObj.isRemote)
 					player.addChatMessage("Error: Machine is already in network");
@@ -135,7 +134,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		for(int i = 0; tagCompound.hasKey("Client" + i); i++) {
-			int[] client = tagCompound.getIntArray("Client" + i);
+			final int[] client = tagCompound.getIntArray("Client" + i);
 			machinesToBeAdded.add(new Point(client[0], client[1], client[2]));
 		}
 	}
@@ -149,8 +148,8 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		List<Object> coords = new ArrayList<Object>();
-		for(Point point : connectedMachines) {
+		final List<Object> coords = new ArrayList<Object>();
+		for(final Point point : connectedMachines) {
 			coords.add(point.x);
 			coords.add((short)point.y);
 			coords.add(point.z);

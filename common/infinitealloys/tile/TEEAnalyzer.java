@@ -69,7 +69,7 @@ public class TEEAnalyzer extends TileEntityElectric {
 		if(inventoryStacks[8] != null) {
 			if(!inventoryStacks[8].hasTagCompound())
 				inventoryStacks[8].setTagCompound(new NBTTagCompound());
-			int alloy = inventoryStacks[8].getTagCompound().getInteger("alloy");
+			final int alloy = inventoryStacks[8].getTagCompound().getInteger("alloy");
 			NBTTagCompound tagCompound;
 
 			// Create two arrays for storing the saved alloys. What's in there, and a copy to edit
@@ -101,7 +101,7 @@ public class TEEAnalyzer extends TileEntityElectric {
 		}
 
 		if(Funcs.isServer())
-			for(String player : playersUsing)
+			for(final String player : playersUsing)
 				PacketDispatcher.sendPacketToPlayer(getDescriptionPacket(), Funcs.getPlayerForUsername(player));
 	}
 
@@ -146,7 +146,7 @@ public class TEEAnalyzer extends TileEntityElectric {
 		// Is an alloy book in the book slot?
 		if(inventoryStacks[8] != null) {
 			// Does this book have a tag compound with alloys saved in it?
-			NBTTagCompound tagCompound = inventoryStacks[8].getTagCompound();
+			final NBTTagCompound tagCompound = inventoryStacks[8].getTagCompound();
 			if(tagCompound != null && tagCompound.hasKey("alloys"))
 				// Set the amount of unlocked alloys to whichever is larger: itself, or the amount of alloys in the book
 				// i.e. if the book has more alloys saved than the machine, teach those alloys to the machine

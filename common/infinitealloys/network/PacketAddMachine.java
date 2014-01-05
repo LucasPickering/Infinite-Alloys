@@ -10,12 +10,12 @@ public class PacketAddMachine implements PacketIA {
 
 	@Override
 	public void execute(EntityPlayer player, ByteArrayDataInput data) {
-		int hostX = data.readInt();
-		short hostY = data.readShort();
-		int hostZ = data.readInt();
-		int clientX = data.readInt();
-		short clientY = data.readShort();
-		int clientZ = data.readInt();
+		final int hostX = data.readInt();
+		final short hostY = data.readShort();
+		final int hostZ = data.readInt();
+		final int clientX = data.readInt();
+		final short clientY = data.readShort();
+		final int clientZ = data.readInt();
 		if(MachineHelper.isHost(player.worldObj, hostX, hostY, hostZ))
 			((IHost)player.worldObj.getBlockTileEntity(hostX, hostY, hostZ)).addMachine(player, clientX, clientY, clientZ);
 	}

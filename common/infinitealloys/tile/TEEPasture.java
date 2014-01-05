@@ -3,7 +3,6 @@ package infinitealloys.tile;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
-import org.apache.commons.lang3.ArrayUtils;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
@@ -14,6 +13,7 @@ import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class TEEPasture extends TileEntityElectric {
 
@@ -58,23 +58,23 @@ public class TEEPasture extends TileEntityElectric {
 		/* NOTE: For this specific machine, ticksToProcess = 0, meaning this function is called every tick. It is essentially an updateEntity() function with
 		 * conditions applied in TileEntityMachine.updateEntity() */
 
-		ArrayList<EntityCreature> trapList = new ArrayList<EntityCreature>();
-		ArrayList<EntityCreature> repelList = new ArrayList<EntityCreature>();
+		final ArrayList<EntityCreature> trapList = new ArrayList<EntityCreature>();
+		final ArrayList<EntityCreature> repelList = new ArrayList<EntityCreature>();
 
 		for(int i = 0; i < mobActions.length; i++) {
 			if(mobActions[i] == 1)
-				for(EntityCreature creature : (ArrayList<EntityChicken>)worldObj.getEntitiesWithinAABB(mobClasses[i],
+				for(final EntityCreature creature : (ArrayList<EntityChicken>)worldObj.getEntitiesWithinAABB(mobClasses[i],
 						AxisAlignedBB.getAABBPool().getAABB(xCoord - trapRange - 1, 0, zCoord - trapRange - 1, xCoord + trapRange + 2, worldObj.getHeight(), zCoord + trapRange + 2)))
 					trapList.add(creature);
 			else if(mobActions[i] == 2) {
-				for(EntityCreature creature : (ArrayList<EntityChicken>)worldObj.getEntitiesWithinAABB(mobClasses[i],
+				for(final EntityCreature creature : (ArrayList<EntityChicken>)worldObj.getEntitiesWithinAABB(mobClasses[i],
 						AxisAlignedBB.getAABBPool().getAABB(xCoord - repelRange, 0, zCoord - repelRange, xCoord + repelRange + 1, worldObj.getHeight(), zCoord + repelRange + 1))) {
 					repelList.add(creature);
 				}
 			}
 		}
 
-		for(EntityCreature creature : trapList) {
+		for(final EntityCreature creature : trapList) {
 			if(Math.abs(xCoord - creature.posX) > trapRange + 1) // Is the creature too far away in the x direction
 				creature.moveEntity(xCoord + Math.signum(creature.posX - xCoord) * trapRange - creature.posX, 0, 0); // Move it back to the edge of the radius
 																														// in the x direction
@@ -83,7 +83,7 @@ public class TEEPasture extends TileEntityElectric {
 																														// in the z direction
 		}
 
-		for(EntityCreature creature : repelList) {
+		for(final EntityCreature creature : repelList) {
 			if(Math.abs(xCoord - creature.posX) > repelRange) // Is the creature too close in the x direction
 				creature.moveEntity(creature.posX - xCoord - Math.signum(creature.posX - xCoord) * repelRange, 0, 0); // Move it back to the edge of the radius
 																														// in the x direction
@@ -167,7 +167,7 @@ public class TEEPasture extends TileEntityElectric {
 	 * @return true if there is enough space to enable another animal or monster */
 	public boolean hasFreeSpots() {
 		int usedSpots = 0;
-		for(byte mob : mobActions)
+		for(final byte mob : mobActions)
 			if(mob > 0)
 				usedSpots++;
 		return usedSpots < maxSpots;

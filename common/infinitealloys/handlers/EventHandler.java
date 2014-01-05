@@ -40,15 +40,15 @@ public class EventHandler implements ICraftingHandler {
 				ois = new ObjectInputStream(new FileInputStream(world + "/WorldData.dat")); // Try to load existing data
 				InfiniteAlloys.instance.worldData = (WorldData)ois.readObject();
 				System.out.println("Successfully loaded IA alloys");
-			}catch(IOException e) {
+			}catch(final IOException e) {
 				if(InfiniteAlloys.instance.worldData == null) { // If the world has no data, i.e. this is a new world
-					Random random = new Random();
-					int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT]; // An array to hold the generated alloys
+					final Random random = new Random();
+					final int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT]; // An array to hold the generated alloys
 					for(int i = 0; i < Consts.VALID_ALLOY_COUNT; i++) { // For each alloy that needs to be generated
 						int alloy = 0; // An int to hold each digit that is generated
 						for(int j = 0; j < Consts.METAL_COUNT; j++) { // For each metal, i.e. for each digit in the alloy
-							int min = Funcs.intAtPos(EnumAlloy.values()[i].min, Consts.ALLOY_RADIX, j); // Metal's min value in the alloy
-							int max = Funcs.intAtPos(EnumAlloy.values()[i].max, Consts.ALLOY_RADIX, j); // Metal's max value in the alloy
+							final int min = Funcs.intAtPos(EnumAlloy.values()[i].min, Consts.ALLOY_RADIX, j); // Metal's min value in the alloy
+							final int max = Funcs.intAtPos(EnumAlloy.values()[i].max, Consts.ALLOY_RADIX, j); // Metal's max value in the alloy
 							// Randomly gen a value in [min, max] and add it to the alloy
 							alloy += (min + (max == min ? 0 : random.nextInt(max - min + 1))) * Math.pow(Consts.ALLOY_RADIX, j);
 						}
@@ -61,7 +61,7 @@ public class EventHandler implements ICraftingHandler {
 					InfiniteAlloys.instance.worldData = new WorldData(validAlloys); // Create a WorldData instance to save these alloys
 					System.out.println("Successfully generated IA alloys");
 				}
-			}catch(Exception e) {
+			}catch(final Exception e) {
 				System.out.println("Error while deserializing Infinite Alloys world data");
 				e.printStackTrace();
 			}
@@ -69,7 +69,7 @@ public class EventHandler implements ICraftingHandler {
 				try {
 					if(ois != null)
 						ois.close();
-				}catch(Exception e) {
+				}catch(final Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -90,7 +90,7 @@ public class EventHandler implements ICraftingHandler {
 			try {
 				oos = new ObjectOutputStream(new FileOutputStream(world + "/WorldData.dat"));
 				oos.writeObject(InfiniteAlloys.instance.worldData);
-			}catch(Exception e) {
+			}catch(final Exception e) {
 				System.out.println("Error while serializing Infinite Alloys world data");
 				e.printStackTrace();
 			}
@@ -98,7 +98,7 @@ public class EventHandler implements ICraftingHandler {
 				try {
 					if(oos != null)
 						oos.close();
-				}catch(Exception e) {
+				}catch(final Exception e) {
 					e.printStackTrace();
 				}
 			}

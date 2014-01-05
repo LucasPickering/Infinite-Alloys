@@ -133,7 +133,7 @@ public class CommonProxy {
 
 	public void initHandlers() {
 		gfxHandler = new GfxHandler();
-		EventHandler eventHandler = new EventHandler();
+		final EventHandler eventHandler = new EventHandler();
 		MinecraftForge.EVENT_BUS.register(eventHandler);
 		GameRegistry.registerCraftingHandler(eventHandler);
 		GameRegistry.registerWorldGenerator(new WorldGenHandler());
@@ -144,7 +144,7 @@ public class CommonProxy {
 
 	protected void addName(Object obj, String... keys) {
 		String name = "";
-		for(String key : keys)
+		for(final String key : keys)
 			name = name + Funcs.getLoc(key);
 		LanguageRegistry.addName(obj, name);
 	}

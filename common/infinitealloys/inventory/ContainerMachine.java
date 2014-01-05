@@ -48,9 +48,9 @@ public class ContainerMachine extends Container {
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack itemstack = null;
-		Slot stackInSlot = (Slot)inventorySlots.get(slot);
+		final Slot stackInSlot = (Slot)inventorySlots.get(slot);
 		if(stackInSlot != null && stackInSlot.getHasStack()) {
-			ItemStack stackInSlotCopy = stackInSlot.getStack();
+			final ItemStack stackInSlotCopy = stackInSlot.getStack();
 			itemstack = stackInSlotCopy.copy();
 
 			// If an item was clicked in one of the container's slots
@@ -121,7 +121,7 @@ public class ContainerMachine extends Container {
 				stackInSlot = slot.getStack();
 				if(stackInSlot != null && stackInSlot.itemID == itemstack.itemID && (!itemstack.getHasSubtypes() || itemstack.getItemDamage() == stackInSlot.getItemDamage())
 						&& ItemStack.areItemStackTagsEqual(itemstack, stackInSlot)) {
-					int var9 = stackInSlot.stackSize + itemstack.stackSize;
+					final int var9 = stackInSlot.stackSize + itemstack.stackSize;
 					if(var9 <= maxStackSize) {
 						itemstack.stackSize = 0;
 						stackInSlot.stackSize = var9;
@@ -151,7 +151,7 @@ public class ContainerMachine extends Container {
 				maxStackSize = Math.min(itemstack.getMaxStackSize(), slot.getSlotStackLimit());
 				stackInSlot = slot.getStack();
 				if(stackInSlot == null) {
-					ItemStack itemstack2 = itemstack.copy();
+					final ItemStack itemstack2 = itemstack.copy();
 					itemstack2.stackSize = Math.min(itemstack2.stackSize, maxStackSize);
 					slot.putStack(itemstack2);
 					slot.onSlotChanged();

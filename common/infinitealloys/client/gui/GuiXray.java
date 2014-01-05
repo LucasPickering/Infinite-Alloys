@@ -8,10 +8,8 @@ import infinitealloys.util.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Mouse;
@@ -101,7 +99,7 @@ public class GuiXray extends GuiElectric {
 						blockButtons[i].selected = true;
 
 						// The blocks that are represented by the newly selected button get highlighted
-						for(Point block : tex.detectedBlocks)
+						for(final Point block : tex.detectedBlocks)
 							// Is this block represented by the newly selected button?
 							if(block.y == blockButtons[i].getYValue())
 								// If so, add this block to the list of blocks to be highlighted. Convert the x and z coords from relative to absolute
@@ -125,7 +123,7 @@ public class GuiXray extends GuiElectric {
 	@Override
 	public void handleMouseInput() {
 		super.handleMouseInput();
-		int scrollAmt = Mouse.getEventDWheel();
+		final int scrollAmt = Mouse.getEventDWheel();
 		// Scroll one line up or down based on the movement, if the list is long enough to need scrolling
 		if(blockButtons.length > 20)
 			scroll(scrollAmt > 0 ? -1 : scrollAmt < 0 ? 1 : 0);
@@ -135,10 +133,10 @@ public class GuiXray extends GuiElectric {
 		if(tex.inventoryStacks[0] == null || tem.getProcessProgress() > 0)
 			blockButtons = new BlockButton[0];
 		else {
-			int[] blockCounts = new int[tem.yCoord];
-			List<Integer> levels = new ArrayList<Integer>();
+			final int[] blockCounts = new int[tem.yCoord];
+			final List<Integer> levels = new ArrayList<Integer>();
 			// Go through each detected block
-			for(Point block : tex.detectedBlocks) {
+			for(final Point block : tex.detectedBlocks) {
 				// For each block if there hasn't been a block for that y-level yet, at that y to the list
 				if(blockCounts[block.y]++ == 0)
 					levels.add(block.y);
@@ -194,7 +192,7 @@ public class GuiXray extends GuiElectric {
 			height = 18;
 
 			// Set the background of the button based on its y-value
-			for(Background bg : Background.values()) {
+			for(final Background bg : Background.values()) {
 				if(bg.start <= yValue && yValue <= bg.end) {
 					background = bg;
 					break;
@@ -211,7 +209,7 @@ public class GuiXray extends GuiElectric {
 					Funcs.drawTexturedModalRect(this, xPos - 1, yPos - 1, SELECTED_OVERLAY);
 
 				// Draw the yValue string
-				String display = Integer.toString(yValue);
+				final String display = Integer.toString(yValue);
 				mc.fontRenderer.drawStringWithShadow(display, xPos + 9 - (mc.fontRenderer.getStringWidth(display) / 2), yPos + 5, 0xffffff);
 
 				itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(blockID, 1, blockMeta), xPos + 18, yPos);

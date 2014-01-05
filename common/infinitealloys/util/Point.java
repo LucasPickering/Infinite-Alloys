@@ -17,9 +17,9 @@ public class Point {
 	}
 
 	public void set(Point p2) {
-		this.x = p2.x;
-		this.y = p2.y;
-		this.z = p2.z;
+		x = p2.x;
+		y = p2.y;
+		z = p2.z;
 	}
 
 	public boolean equals(int x2, int y2, int z2) {

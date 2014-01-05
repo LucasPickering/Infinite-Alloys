@@ -48,7 +48,7 @@ public class Funcs {
 	 * @param keys the list of keys to be localized and spliced together into a final string */
 	public static String getLoc(String... keys) {
 		String finalKey = "";
-		for(String key : keys) {
+		for(final String key : keys) {
 			if(key.length() == 0)
 				continue;
 			if(key.charAt(0) == '/')
@@ -178,7 +178,7 @@ public class Funcs {
 		factors:
 		for(int i = 2; i < Consts.ALLOY_RADIX; i++) { // Iterate over every integer in [2, Consts.ALLOY_RADIX)
 			for(int j = 0; j < Consts.METAL_COUNT; j++) { // Iterate over every digit in the number
-				int metalAmt = intAtPos(alloy, Consts.ALLOY_RADIX, j);
+				final int metalAmt = intAtPos(alloy, Consts.ALLOY_RADIX, j);
 				if(metalAmt == 0)
 					continue; // Go to the next metal if this one is 0
 				else if(i > metalAmt)

@@ -37,7 +37,7 @@ public class GuiMetalForge extends GuiElectric {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		if(temf.inventoryStacks[0] != null && temf.presetSelection > -1) {
-			int[] alloys = temf.inventoryStacks[0].getTagCompound().getIntArray("alloys");
+			final int[] alloys = temf.inventoryStacks[0].getTagCompound().getIntArray("alloys");
 			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.alloyIngot, 1, temf.getDamageForAlloy(alloys[temf.presetSelection])), 40, 52);
 		}
 		for(int i = 0; i < Consts.METAL_COUNT; i++)

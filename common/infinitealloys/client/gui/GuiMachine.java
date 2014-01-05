@@ -85,12 +85,12 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
 		// Draw the upgrade list if the mouse is over the upgrade slot
-		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
+		final Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
 		if(Funcs.mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x, slot.yDisplayPosition + topLeft.y, 16, 16)) {
-			List<ColoredLine> lines = new ArrayList<ColoredLine>();
+			final List<ColoredLine> lines = new ArrayList<ColoredLine>();
 			lines.add(new ColoredLine(Funcs.getLoc("upgrade.name"), 0xffffff));
 			for(int i = 0; i < Consts.UPGRADE_COUNT; i++) {
-				int upg = (int)Math.pow(2, i);
+				final int upg = (int)Math.pow(2, i);
 				if(MachineHelper.isPrereqUpgrade(upg) && tem.hasUpgrade(upg << 1) || !tem.hasUpgrade(upg))
 					continue;
 				lines.add(new ColoredLine(Funcs.getLoc("upgrade." + Consts.UPGRADE_NAMES[i] + ".name"), 0xaaaaaa));
@@ -118,14 +118,14 @@ public abstract class GuiMachine extends GuiContainer {
 
 		// Draw the tabs of other machines on the network if this machine is connected to a computer
 		machineTabs.clear();
-		Point cont = MachineHelper.controllers.get(mc.thePlayer.username);
+		final Point cont = MachineHelper.controllers.get(mc.thePlayer.username);
 		if(cont != null) {
-			TEMComputer tec = ((TEMComputer)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z));
+			final TEMComputer tec = ((TEMComputer)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z));
 			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true,
 					tem.coordsEquals(cont.x, cont.y, cont.z));
 			controllerTab.drawButton();
 			for(int i = 0; i < tec.connectedMachines.size(); i++) {
-				Point coords = tec.connectedMachines.get(i);
+				final Point coords = tec.connectedMachines.get(i);
 				machineTabs.add(new GuiMachineTab(mc, itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityElectric)mc.theWorld.getBlockTileEntity(
 						coords.x, coords.y, coords.z), i / 5 == 0, tem.coordsEquals(coords.x, coords.y, coords.z)));
 				machineTabs.get(i).drawButton();
@@ -135,7 +135,7 @@ public abstract class GuiMachine extends GuiContainer {
 		// Draw the help dialogue and shade the help zone if help is enabled and the mouse is over a help zone
 		if(helpEnabled) {
 			EnumHelp hoveredZone = null; // The help zone that the mouse is over to render to dialogue later, null if mouse is not over a zone\
-			for(EnumHelp help : EnumHelp.getBoxesForTEM(tem)) {
+			for(final EnumHelp help : EnumHelp.getBoxesForTEM(tem)) {
 				// Draw zone outline, add alpha to make the rectangles opaque
 				drawRect(help.x, help.y, help.x + help.w, help.y + 1, 0xff000000 + help.color); // Top of outline box
 				drawRect(help.x, help.y + help.h, help.x + help.w, help.y + help.h - 1, 0xff000000 + help.color); // Bottom of outline box
@@ -152,9 +152,9 @@ public abstract class GuiMachine extends GuiContainer {
 				drawRect(hoveredZone.x, hoveredZone.y, hoveredZone.x + hoveredZone.w, hoveredZone.y + hoveredZone.h, 0x60000000 + hoveredZone.color);
 
 				// Draw text box with help info
-				List<ColoredLine> lines = new ArrayList<ColoredLine>();
+				final List<ColoredLine> lines = new ArrayList<ColoredLine>();
 				lines.add(new ColoredLine(Funcs.getLoc("machineHelp." + hoveredZone.name + ".title"), 0xffffff));
-				for(String s : Funcs.getLoc("machineHelp." + hoveredZone.name + ".info").split("/n"))
+				for(final String s : Funcs.getLoc("machineHelp." + hoveredZone.name + ".info").split("/n"))
 					lines.add(new ColoredLine(s, 0xaaaaaa));
 				drawTextBox(-topLeft.x - 8, -topLeft.y + 17, lines.toArray(new ColoredLine[lines.size()]));
 			}
@@ -168,7 +168,7 @@ public abstract class GuiMachine extends GuiContainer {
 	protected void drawTextBox(int mouseX, int mouseY, ColoredLine... lines) {
 		// Set the width of the box to the length of the longest line
 		int boxWidth = 0;
-		for(ColoredLine line : lines)
+		for(final ColoredLine line : lines)
 			boxWidth = Math.max(boxWidth, fontRenderer.getStringWidth(line.text));
 
 		// This is from vanilla, I have no idea what it does, other than make it work
@@ -177,14 +177,14 @@ public abstract class GuiMachine extends GuiContainer {
 		int var9 = 8;
 		if(lines.length > 1)
 			var9 += 2 + (lines.length - 1) * 10;
-		int var10 = -267386864;
+		final int var10 = -267386864;
 		drawGradientRect(mouseX - 3, mouseY - 4, mouseX + boxWidth + 3, mouseY - 3, var10, var10);
 		drawGradientRect(mouseX - 3, mouseY + var9 + 3, mouseX + boxWidth + 3, mouseY + var9 + 4, var10, var10);
 		drawGradientRect(mouseX - 3, mouseY - 3, mouseX + boxWidth + 3, mouseY + var9 + 3, var10, var10);
 		drawGradientRect(mouseX - 4, mouseY - 3, mouseX - 3, mouseY + var9 + 3, var10, var10);
 		drawGradientRect(mouseX + boxWidth + 3, mouseY - 3, mouseX + boxWidth + 4, mouseY + var9 + 3, var10, var10);
-		int var11 = 1347420415;
-		int var12 = (var11 & 16711422) >> 1 | var11 & -16777216;
+		final int var11 = 1347420415;
+		final int var12 = (var11 & 16711422) >> 1 | var11 & -16777216;
 		drawGradientRect(mouseX - 3, mouseY - 3 + 1, mouseX - 3 + 1, mouseY + var9 + 3 - 1, var11, var12);
 		drawGradientRect(mouseX + boxWidth + 2, mouseY - 3 + 1, mouseX + boxWidth + 3, mouseY + var9 + 3 - 1, var11, var12);
 		drawGradientRect(mouseX - 3, mouseY - 3, mouseX + boxWidth + 3, mouseY - 3 + 1, var11, var11);
@@ -207,14 +207,14 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
-		World world = Minecraft.getMinecraft().theWorld;
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		final World world = Minecraft.getMinecraft().theWorld;
+		final EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
 		// Was the network tab of the controlling computer clicked? Go to that computer
 		if(controllerTab != null && controllerTab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
-			int x = controllerTab.tem.xCoord;
-			int y = controllerTab.tem.yCoord;
-			int z = controllerTab.tem.zCoord;
+			final int x = controllerTab.tem.xCoord;
+			final int y = controllerTab.tem.yCoord;
+			final int z = controllerTab.tem.zCoord;
 			if(!tem.coordsEquals(x, y, z)) {
 				((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, player, controllerTab.tem, false);
 				PacketDispatcher.sendPacketToServer(PacketOpenGui.getPacket(x, (short)y, z, false));
@@ -223,11 +223,11 @@ public abstract class GuiMachine extends GuiContainer {
 		}
 
 		// Was the network tab of another machine clicked? Go to that machine
-		for(GuiMachineTab tab : machineTabs) {
+		for(final GuiMachineTab tab : machineTabs) {
 			if(tab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
-				int x = tab.tem.xCoord;
-				int y = tab.tem.yCoord;
-				int z = tab.tem.zCoord;
+				final int x = tab.tem.xCoord;
+				final int y = tab.tem.yCoord;
+				final int z = tab.tem.zCoord;
 				if(!tem.coordsEquals(x, y, z)) {
 					((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, player, tab.tem, true);
 					PacketDispatcher.sendPacketToServer(PacketOpenGui.getPacket(x, (short)y, z, false));

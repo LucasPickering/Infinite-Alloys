@@ -17,69 +17,71 @@ import com.google.common.io.ByteArrayDataInput;
 
 public class PacketTEServerToClient implements PacketIA {
 
+	@Override
 	public void execute(EntityPlayer player, ByteArrayDataInput data) {
-		int x = data.readInt();
-		short y = data.readShort();
-		int z = data.readInt();
-		TileEntity te = player.worldObj.getBlockTileEntity(x, y, z);
+		final int x = data.readInt();
+		final short y = data.readShort();
+		final int z = data.readInt();
+		final TileEntity te = player.worldObj.getBlockTileEntity(x, y, z);
 		if(te instanceof TileEntityMachine) {
-			byte orientation = data.readByte();
-			int upgrades = data.readInt();
+			final byte orientation = data.readByte();
+			final int upgrades = data.readInt();
 			((TileEntityMachine)te).handlePacketDataFromServer(orientation, upgrades);
 			if(te instanceof TEMComputer) {
-				TEMComputer tec = (TEMComputer)te;
+				final TEMComputer tec = (TEMComputer)te;
 				tec.connectedMachines.clear();
-				byte size = data.readByte();
+				final byte size = data.readByte();
 				for(int i = 0; i < size; i++)
 					tec.connectedMachines.add(new Point(data.readInt(), data.readShort(), data.readInt()));
 			}
-			else if(te instanceof TEMEnergyStorage) {
-				TEMEnergyStorage tees = ((TEMEnergyStorage)te);
-				int currentRK = data.readInt();
-				tees.handlePacketDataFromServer(currentRK);
-				tees.connectedMachines.clear();
-				byte size = data.readByte();
-				for(int i = 0; i < size; i++) {
-					int machX = data.readInt();
-					short machY = data.readShort();
-					int machZ = data.readInt();
-					tees.connectedMachines.add(new Point(machX, machY, machZ));
-					((TileEntityElectric)player.worldObj.getBlockTileEntity(machX, machY, machZ)).energyStorage = tees;
-
-				}
-			}
 			else if(te instanceof TileEntityElectric) {
-				int processProgress = data.readInt();
-				((TileEntityElectric)te).handlePacketDataFromServer(processProgress);
+				final int processProgress = data.readInt();
+				System.out.println("weroiujwer" + processProgress);
+				((TileEntityElectric)te).handlePacketDataFromServerElectric(processProgress);
 				if(te instanceof TEEMetalForge) {
-					byte[] recipeAmts = new byte[Consts.METAL_COUNT];
+					final byte[] recipeAmts = new byte[Consts.METAL_COUNT];
 					for(int i = 0; i < recipeAmts.length; i++)
 						recipeAmts[i] = data.readByte();
 					((TEEMetalForge)te).handlePacketDataFromClient(recipeAmts);
 				}
 				if(te instanceof TEEAnalyzer) {
-					byte unlockedAlloyCount = data.readByte();
+					final byte unlockedAlloyCount = data.readByte();
 					((TEEAnalyzer)te).handlePacketDataFromClient(unlockedAlloyCount);
 				}
 				else if(te instanceof TEEXray) {
-					TEEXray tex = (TEEXray)te;
+					final TEEXray tex = (TEEXray)te;
 					tex.detectedBlocks.clear();
-					byte size = data.readByte();
+					final byte size = data.readByte();
 					for(int i = 0; i < size; i++)
 						tex.detectedBlocks.add(new Point(data.readInt(), data.readShort(), data.readInt()));
 				}
 				else if(te instanceof TEEPasture) {
-					byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
+					final byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 					for(int i = 0; i < mobActions.length; i++)
 						mobActions[i] = data.readByte();
 					((TEEPasture)te).handlePacketData(mobActions);
+				}
+				else if(te instanceof TEMEnergyStorage) {
+					final TEMEnergyStorage tees = ((TEMEnergyStorage)te);
+					final int currentRK = data.readInt();
+					tees.handlePacketDataFromServer(currentRK);
+					tees.connectedMachines.clear();
+					final byte size = data.readByte();
+					for(int i = 0; i < size; i++) {
+						final int machX = data.readInt();
+						final short machY = data.readShort();
+						final int machZ = data.readInt();
+						tees.connectedMachines.add(new Point(machX, machY, machZ));
+						((TileEntityElectric)player.worldObj.getBlockTileEntity(machX, machY, machZ)).energyStorage = tees;
+
+					}
 				}
 			}
 		}
 	}
 
 	public static Packet250CustomPayload getPacket(TileEntityMachine tem) {
-		Object[] data = tem.getSyncDataToClient();
+		final Object[] data = tem.getSyncDataToClient();
 		if(data != null)
 			return PacketHandler.getPacket(PacketHandler.TE_SERVER_TO_CLIENT, tem.xCoord, (short)tem.yCoord, tem.zCoord, data);
 		return null;

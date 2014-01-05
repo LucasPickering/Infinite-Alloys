@@ -36,7 +36,7 @@ public abstract class GuiElectric extends GuiMachine {
 		// Draw the power network info if the mouse is over the energy icon
 		if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + energyIcon.x, topLeft.y + energyIcon.y, ENERGY_ICON.width, ENERGY_ICON.height)) {
 			if(tem.energyStorage != null) {
-				int rkChange = tem.shouldProcess() ? 0 : tem.getRKChange();
+				final int rkChange = tem.shouldProcess() ? 0 : tem.getRKChange();
 				drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("machine.connected.true") + "(" + tem.energyStorage.getCoords() + ")", 0x00ff00),
 						new ColoredLine((rkChange > 0 ? "+" : "") + rkChange + " RK/t", rkChange < 0 ? 0xff0000 : rkChange > 0 ? 0x00ff00 : 0xffffff));
 			}
@@ -61,7 +61,7 @@ public abstract class GuiElectric extends GuiMachine {
 
 		// Draw the energy icon overlay
 		if(tem.energyStorage != null)
-			Funcs.drawTexturedModalRect(this,energyIcon.x, energyIcon.y, ENERGY_ICON);
+			Funcs.drawTexturedModalRect(this, energyIcon.x, energyIcon.y, ENERGY_ICON);
 		GL11.glPopMatrix();
 	}
 

@@ -35,7 +35,7 @@ public class GuiInternetWand extends GuiScreen {
 	private GuiButton addSelected;
 
 	/** The array of buttons that applies to each machine. It is a fixed length and buttons that do not exist are null */
-	private MachineButton[] machineButtons = new MachineButton[Consts.WAND_SIZE];
+	private final MachineButton[] machineButtons = new MachineButton[Consts.WAND_SIZE];
 
 	/** When help is enabled, slots get a colored outline and a mouse-over description */
 	private boolean helpEnabled;
@@ -58,14 +58,14 @@ public class GuiInternetWand extends GuiScreen {
 		addToWand.enabled = false; // Reset button states
 		addSelected.enabled = false;
 
-		ItemStack heldItem = mc.thePlayer.getHeldItem();
+		final ItemStack heldItem = mc.thePlayer.getHeldItem();
 		if(heldItem.getItem() instanceof ItemInternetWand && heldItem.hasTagCompound()) {
-			NBTTagCompound tagCompound = heldItem.getTagCompound();
+			final NBTTagCompound tagCompound = heldItem.getTagCompound();
 
 			for(int i = 0; i < Consts.WAND_SIZE; i++) { // For each button in the array
 				machineButtons[i] = null; // Reset the button
 				if(tagCompound.hasKey("Coords" + i)) { // If there is a machine that corresponds to this button
-					int[] client = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
+					final int[] client = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
 					if(!MachineHelper.isClient(mc.theWorld, client[0], client[1], client[2])) { // If the block is no longer valid for the wand
 						PacketDispatcher.sendPacketToServer(PacketWand.getPacketRemove((byte)i)); // Remove it
 						((ItemInternetWand)heldItem.getItem()).removeMachine(heldItem, i);
@@ -77,14 +77,14 @@ public class GuiInternetWand extends GuiScreen {
 			}
 
 			if(tagCompound.hasKey("CoordsCurrent")) {
-				int[] a = tagCompound.getIntArray("CoordsCurrent");
+				final int[] a = tagCompound.getIntArray("CoordsCurrent");
 				addToWand.enabled = ((ItemInternetWand)heldItem.getItem()).isMachineValid(mc.theWorld, heldItem, a[0], a[1], a[2]);
 
-				TileEntity te = mc.theWorld.getBlockTileEntity(a[0], a[1], a[2]);
+				final TileEntity te = mc.theWorld.getBlockTileEntity(a[0], a[1], a[2]);
 
 				addSelected.enabled = selectedButtons != 0;
 				// Go over each machine button
-				for(MachineButton button : machineButtons)
+				for(final MachineButton button : machineButtons)
 					if(button != null && (selectedButtons & 1 << button.buttonID) != 0) // If this button is selected
 						// If the selected machine is not valid for the block that was clicked
 						if(!(te instanceof TEMEnergyStorage && button.isElectric || te instanceof TEMComputer && button.isWireless))
@@ -98,7 +98,7 @@ public class GuiInternetWand extends GuiScreen {
 		Funcs.bindTexture(background);
 		drawTexturedModalRect((width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, ySize);
 		super.drawScreen(mouseX, mouseY, partialTick);
-		for(MachineButton button : machineButtons)
+		for(final MachineButton button : machineButtons)
 			if(button != null)
 				button.drawButton();
 	}
@@ -108,7 +108,7 @@ public class GuiInternetWand extends GuiScreen {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		if(mouseButton == 0) { // If it was a left-click
 			for(int i = 0; i < Consts.WAND_SIZE; i++) {
-				MachineButton button = machineButtons[i];
+				final MachineButton button = machineButtons[i];
 				if(button != null && Funcs.mouseInZone(mouseX, mouseY, button.xPos, button.yPos, button.width, button.height)) { // If this button was clicked
 					if(!isCtrlKeyDown() && !isShiftKeyDown()) // If the CTRL or Shift key wasn't held, set all buttons to 0
 						selectedButtons = 0;
@@ -145,19 +145,19 @@ public class GuiInternetWand extends GuiScreen {
 				break;
 			case Consts.WAND_SIZE + 1:
 				ItemStack heldItem = mc.thePlayer.getHeldItem();
-				int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
+				final int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 				PacketDispatcher.sendPacketToServer(PacketWand.getPacketAdd(a[0], (short)a[1], a[2]));
 				((ItemInternetWand)heldItem.getItem()).addMachine(mc.theWorld, heldItem, a[0], a[1], a[2]);
 				break;
 			case Consts.WAND_SIZE + 2:
 				heldItem = mc.thePlayer.getHeldItem();
-				int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
+				final int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 
 				if(MachineHelper.isHost(mc.theWorld, host[0], host[1], host[2])) { // If this is a host
-					for(MachineButton machineButton : machineButtons) { // Go over each button
+					for(final MachineButton machineButton : machineButtons) { // Go over each button
 						if(machineButton != null && (selectedButtons & 1 << machineButton.buttonID) != 0) { // If this button is selected
 							// Add the selected machine to the host
-							int[] client = heldItem.getTagCompound().getIntArray("Coords" + machineButton.buttonID);
+							final int[] client = heldItem.getTagCompound().getIntArray("Coords" + machineButton.buttonID);
 							PacketDispatcher.sendPacketToServer(PacketAddMachine.getPacket(host[0], host[1], host[2], client[0], client[1], client[2]));
 							((IHost)mc.theWorld.getBlockTileEntity(host[0], host[1], host[2])).addMachine(mc.thePlayer, client[0], client[1], client[2]);
 						}
@@ -200,7 +200,7 @@ public class GuiInternetWand extends GuiScreen {
 			this.buttonID = buttonID;
 			this.xPos = xPos;
 			this.yPos = yPos;
-			this.machineID = mc.theWorld.getBlockMetadata(machineX, machineY, machineZ);
+			machineID = mc.theWorld.getBlockMetadata(machineX, machineY, machineZ);
 			this.machineX = machineX;
 			this.machineY = machineY;
 			this.machineZ = machineZ;
@@ -230,7 +230,7 @@ public class GuiInternetWand extends GuiScreen {
 				Funcs.drawTexturedModalRect(GuiInternetWand.this, xPos + 112, yPos + 5, GuiMachine.WIRELESS_ICON); // Render a wireless icon on the button
 
 			// Draw the string for the coordinates
-			String display = machineX + "   " + machineY + "   " + machineZ;
+			final String display = machineX + "   " + machineY + "   " + machineZ;
 			mc.fontRenderer.drawStringWithShadow(display, xPos + 60 - (mc.fontRenderer.getStringWidth(display) / 2), yPos + 5, 0xffffff);
 
 			itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(Blocks.machineID, 1, machineID), xPos, yPos + 1);

@@ -1,7 +1,6 @@
 package infinitealloys.client;
 
 import infinitealloys.tile.TEEAnalyzer;
-import infinitealloys.tile.TEEGenerator;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEXray;
@@ -11,7 +10,7 @@ import infinitealloys.tile.TileEntityMachine;
 
 public enum EnumHelp {
 
-	/* CP - Computer, MF - Metal Forge, AZ - Analyzer, PR - Printer, XR - X-ray, PS - Pasture, ES - Energy Storage, GE - Generator */
+	/* CP - Computer, MF - Metal Forge, AZ - Analyzer, XR - X-ray, PS - Pasture, ES - Energy Storage */
 
 	CP_UPGRADE("upgrade", 0x9c00ff, 139, 42, 18, 18), CP_TAB("cpTab", 0xff8900, -24, 6, 27, 24), CP_AUTO("cpAuto", 0x00ff16, 25, 41, 92, 20),
 
@@ -22,18 +21,13 @@ public enum EnumHelp {
 	AZ_UPGRADE("upgrade", 0x9c00ff, 150, 7, 18, 18), AZ_PROGRESS("progress", 0x00ff16, 7, 6, 110, 20), AZ_ENERGY("energy", 0xff8900, 82, 76, 12, 6),
 	AZ_BOOK("azBook", 0xffff00, 124, 7, 18, 18), AZ_SUPPLY("azSupply", 0xff0000, 15, 56, 146, 20), AZ_INGOTS("azIngots", 0x00ffff, 3, 27, 158, 28),
 
-	PR_UPGRADE("upgrade", 0x9c00ff, 147, 5, 18, 18), PR_PROGRESS("progress", 0x00ff16, 30, 13, 110, 20), PR_ENERGY("energy", 0xff8900, 82, 34, 12, 6),
-	PR_INPUT("prInput", 0xff0000, 11, 43, 18, 18), PR_SUPPLY("prSupply", 0x0000ff, 79, 43, 18, 18), PR_OUTPUT("prOutput", 0xffff00, 147, 43, 18, 18),
-
 	XR_UPGRADE("upgrade", 0x9c00ff, 167, 5, 18, 18), XR_PROGRESS("progress", 0x00ff16, 53, 4, 110, 20), XR_ENERGY("energy", 0xff8900, 92, 24, 12, 6),
 	XR_ORE("xrOre", 0xff0000, 31, 5, 18, 18), XR_SEARCH("xrSearch", 0x00ffff, 68, 30, 80, 20), XR_RESULTS("xrResults", 0xff00ff, 7, 50, 160, 102),
 
 	PS_UPGRADE("upgrade", 0x9c00ff, 140, 43, 18, 18), PS_CREATURES("psCreatures", 0x00ffff, 42, 4, 74, 88),
 
-	ES_UPGRADE("upgrade", 0x9c00ff, 139, 42, 18, 18),
-
-	GE_UPGRADE("upgrade", 0x9c00ff, 184, 39, 18, 18), GE_PROGRESS("progress", 0x00ff16, 70, 38, 110, 20), GE_ENERGY("energy", 0xff8900, 101, 81, 12, 6),
-	GE_SUPPLY("geSupply", 0xff0000, 11, 20, 56, 56);
+	ES_UPGRADE("upgrade", 0x9c00ff, 139, 42, 18, 18), ES_PROGRESS("progress", 0x00ff16, 70, 38, 110, 20), ES_ENERGY("energy", 0xff8900, 101, 81, 12, 6),
+	ES_SUPPLY("geSupply", 0xff0000, 11, 20, 56, 56), ES_STORED_ENERGY("storedEnergy", 0xff1100, 70, 20, 110, 20);
 
 	/** Name used to get the title and info from localization */
 	public final String name;
@@ -69,9 +63,7 @@ public enum EnumHelp {
 		if(tem instanceof TEEPasture)
 			return new EnumHelp[] { PS_UPGRADE, PS_CREATURES };
 		if(tem instanceof TEMEnergyStorage)
-			return new EnumHelp[] { ES_UPGRADE };
-		if(tem instanceof TEEGenerator)
-			return new EnumHelp[] { GE_UPGRADE, GE_PROGRESS, GE_ENERGY, GE_SUPPLY };
+			return new EnumHelp[] { ES_UPGRADE, ES_PROGRESS, ES_ENERGY, ES_SUPPLY, ES_STORED_ENERGY };
 		return null;
 	}
 }

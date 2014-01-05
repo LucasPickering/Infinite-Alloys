@@ -105,7 +105,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 		return ArrayUtils.addAll(super.getSyncDataToClient(), processProgress);
 	}
 
-	public void handlePacketDataFromServer(int processProgress) {
+	public void handlePacketDataFromServerElectric(int processProgress) {
 		this.processProgress = processProgress;
 	}
 }

@@ -3,13 +3,10 @@ package infinitealloys.item;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
-import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemInternetWand extends ItemIA {
 
@@ -47,7 +44,7 @@ public class ItemInternetWand extends ItemIA {
 			for(int i = 0; i < Consts.WAND_SIZE; i++) { // Iterate over each coord that the wand contains
 				if(tagCompound.hasKey("Coords" + i)) {
 					// If the wand already contains this machine, return false
-					int[] a = tagCompound.getIntArray("Coords" + i);
+					final int[] a = tagCompound.getIntArray("Coords" + i);
 					if(a[0] == x && a[1] == y && a[2] == z)
 						return false;
 				}
@@ -61,7 +58,7 @@ public class ItemInternetWand extends ItemIA {
 	/** Checks if the machine at x, y, z, can be added to the wand at itemstack, then adds it if it can */
 	public void addMachine(World world, ItemStack itemstack, int x, int y, int z) {
 		if(itemstack.getItem() instanceof ItemInternetWand && isMachineValid(world, itemstack, x, y, z)) {
-			NBTTagCompound tagCompound = itemstack.getTagCompound();
+			final NBTTagCompound tagCompound = itemstack.getTagCompound();
 			for(int i = 0; i < Consts.WAND_SIZE; i++) {
 				if(!tagCompound.hasKey("Coords" + i)) {
 					tagCompound.setIntArray("Coords" + i, new int[] { x, y, z });
@@ -74,7 +71,7 @@ public class ItemInternetWand extends ItemIA {
 	/** Removes the machine with the given index from the wand */
 	public void removeMachine(ItemStack itemstack, int index) {
 		if(itemstack.getItem() instanceof ItemInternetWand && itemstack.hasTagCompound()) { // If this is a wand and has stored data
-			NBTTagCompound tagCompound = itemstack.getTagCompound();
+			final NBTTagCompound tagCompound = itemstack.getTagCompound();
 			tagCompound.removeTag("Coords" + index); // Remove the tag at index
 			for(int i = index + 1; i < Consts.WAND_SIZE; i++) { // Iterate over each coord below the one that was removed
 				if(tagCompound.hasKey("Coords" + i)) { // If this key exists

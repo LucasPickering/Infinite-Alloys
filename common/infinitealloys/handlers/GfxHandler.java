@@ -47,7 +47,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
-		Tessellator tessellator = Tessellator.instance;
+		final Tessellator tessellator = Tessellator.instance;
 		block.setBlockBoundsForItemRender();
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 
@@ -83,7 +83,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 		// Draw ore pieces on top of stone background
 		if(metadata < Consts.METAL_COUNT) {
-			int mult = Consts.metalColors[metadata];
+			final int mult = Consts.metalColors[metadata];
 			GL11.glColor4f((mult >> 16 & 255) / 255F, (mult >> 8 & 255) / 255F, (mult & 255) / 255F, 1F);
 
 			tessellator.startDrawingQuads();
@@ -121,14 +121,14 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-		Tessellator tessellator = Tessellator.instance;
+		final Tessellator tessellator = Tessellator.instance;
 		boolean rendered = renderer.renderStandardBlock(block, x, y, z);
-		int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
+		final int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
 		if(block == Blocks.ore) { // Used to colorize the ores
-			int color = Consts.metalColors[world.getBlockMetadata(x, y, z)];
-			float red = (color >> 16 & 255) / 255F;
-			float green = (color >> 8 & 255) / 255F;
-			float blue = (color & 255) / 255F;
+			final int color = Consts.metalColors[world.getBlockMetadata(x, y, z)];
+			final float red = (color >> 16 & 255) / 255F;
+			final float green = (color >> 8 & 255) / 255F;
+			final float blue = (color & 255) / 255F;
 
 			if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y - 1, z, 0)) {
 				tessellator.setBrightness(renderer.renderMinY > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y - 1, z));
@@ -191,11 +191,11 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glTranslated(-RenderManager.renderPosX, -RenderManager.renderPosY, 1 - RenderManager.renderPosZ);
 		GL11.glColor3f(255, 0, 0);
-		Tessellator tess = Tessellator.instance;
+		final Tessellator tess = Tessellator.instance;
 		Tessellator.renderingWorldRenderer = false;
 
-		Point last = new Point(0, 0, 0);
-		for(Point block : xrayBlocks) {
+		final Point last = new Point(0, 0, 0);
+		for(final Point block : xrayBlocks) {
 			GL11.glTranslatef(block.x - last.x, block.y - last.y, block.z - last.z);
 			renderOutlineBox(tess);
 			last.set(block);

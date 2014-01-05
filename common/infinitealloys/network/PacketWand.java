@@ -3,25 +3,24 @@ package infinitealloys.network;
 import infinitealloys.item.ItemInternetWand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.world.World;
 import com.google.common.io.ByteArrayDataInput;
 
 public class PacketWand implements PacketIA {
 
+	@Override
 	public void execute(EntityPlayer player, ByteArrayDataInput data) {
-		boolean adding = data.readBoolean();
-		ItemStack heldItem = player.getHeldItem();
+		final boolean adding = data.readBoolean();
+		final ItemStack heldItem = player.getHeldItem();
 		if(heldItem.getItem() instanceof ItemInternetWand) {
 			if(adding) {
-				int x = data.readInt();
-				short y = data.readShort();
-				int z = data.readInt();
+				final int x = data.readInt();
+				final short y = data.readShort();
+				final int z = data.readInt();
 				((ItemInternetWand)heldItem.getItem()).addMachine(player.worldObj, heldItem, x, y, z);
 			}
 			else {
-				byte id = data.readByte();
+				final byte id = data.readByte();
 				((ItemInternetWand)heldItem.getItem()).removeMachine(heldItem, id);
 			}
 		}

@@ -3,20 +3,18 @@ package infinitealloys.util;
 import infinitealloys.client.gui.GuiAnalyzer;
 import infinitealloys.client.gui.GuiComputer;
 import infinitealloys.client.gui.GuiEnergyStorage;
-import infinitealloys.client.gui.GuiGenerator;
 import infinitealloys.client.gui.GuiMachine;
 import infinitealloys.client.gui.GuiMetalForge;
 import infinitealloys.client.gui.GuiPasture;
 import infinitealloys.client.gui.GuiXray;
 import infinitealloys.inventory.ContainerAnalyzer;
-import infinitealloys.inventory.ContainerGenerator;
+import infinitealloys.inventory.ContainerESU;
 import infinitealloys.inventory.ContainerMachine;
 import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.inventory.ContainerXray;
 import infinitealloys.item.Items;
 import infinitealloys.tile.IHost;
 import infinitealloys.tile.TEEAnalyzer;
-import infinitealloys.tile.TEEGenerator;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEXray;
@@ -42,7 +40,6 @@ public class MachineHelper {
 	public static final int XRAY = 3;
 	public static final int PASTURE = 4;
 	public static final int ENERGY_STORAGE = 5;
-	public static final int GENERATOR = 6;
 
 	public static final int SPEED1 = 1;
 	public static final int SPEED2 = 2;
@@ -55,8 +52,7 @@ public class MachineHelper {
 	public static final int WIRELESS = 256;
 
 	/** The TileEntityMachine class for each machine */
-	public static final Class[] MACHINE_CLASSES = { TEMComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEXray.class, TEEPasture.class,
-		TEMEnergyStorage.class, TEEGenerator.class };
+	public static final Class[] MACHINE_CLASSES = { TEMComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEXray.class, TEEPasture.class, TEMEnergyStorage.class };
 
 	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "xray", "pasture", "energystorage", "generator" };
 
@@ -108,7 +104,7 @@ public class MachineHelper {
 	 * @param dictName the ore dictionary string from which the block(s) is/are retrieved
 	 * @param worth the amount the block(s) is/are worth, higher worth requires more energy to detect */
 	public static void addDictDetectables(String dictName, int worth) {
-		for(ItemStack block : OreDictionary.getOres(dictName))
+		for(final ItemStack block : OreDictionary.getOres(dictName))
 			detectables.put(block.itemID + "@" + block.getItemDamage(), worth);
 	}
 
@@ -169,9 +165,7 @@ public class MachineHelper {
 			case PASTURE:
 				return new ContainerMachine(inventoryPlayer, tem, 13, 94, 141, 44);
 			case ENERGY_STORAGE:
-				return new ContainerMachine(inventoryPlayer, tem, 8, 84, 140, 43);
-			case GENERATOR:
-				return new ContainerGenerator(inventoryPlayer, (TEEGenerator)tem);
+				return new ContainerESU(inventoryPlayer, (TEMEnergyStorage)tem);
 		}
 		return null;
 	}
@@ -196,8 +190,6 @@ public class MachineHelper {
 				return new GuiPasture(inventoryPlayer, (TEEPasture)tem);
 			case ENERGY_STORAGE:
 				return new GuiEnergyStorage(inventoryPlayer, (TEMEnergyStorage)tem);
-			case GENERATOR:
-				return new GuiGenerator(inventoryPlayer, (TEEGenerator)tem);
 		}
 		return null;
 	}
@@ -223,7 +215,7 @@ public class MachineHelper {
 				}
 			case XRAY:
 				return MachineHelper.isDetectable(itemstack);
-			case GENERATOR:
+			case ENERGY_STORAGE:
 				return TileEntityFurnace.getItemBurnTime(itemstack) > 0;
 		}
 		return false;

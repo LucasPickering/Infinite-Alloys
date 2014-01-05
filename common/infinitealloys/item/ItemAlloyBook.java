@@ -21,9 +21,9 @@ public class ItemAlloyBook extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		NBTTagCompound tagCompound = itemstack.getTagCompound();
+		final NBTTagCompound tagCompound = itemstack.getTagCompound();
 		if(tagCompound != null) // && tagCompound.hasKey("title"))
-			for(int alloy : tagCompound.getIntArray("alloys"))
+			for(final int alloy : tagCompound.getIntArray("alloys"))
 				list.add(Integer.toString(alloy));
 	}
 }

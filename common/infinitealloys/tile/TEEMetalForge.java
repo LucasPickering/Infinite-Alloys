@@ -6,9 +6,9 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.apache.commons.lang3.ArrayUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import org.apache.commons.lang3.ArrayUtils;
 
 public class TEEMetalForge extends TileEntityElectric {
 
@@ -42,7 +42,7 @@ public class TEEMetalForge extends TileEntityElectric {
 	@Override
 	public boolean shouldProcess() {
 		int typesInRecipe = 0;
-		for(int amt : recipeAmts)
+		for(final int amt : recipeAmts)
 			if(amt > 0)
 				typesInRecipe++;
 		return (inventoryStacks[1] == null || inventoryStacks[1].isItemEqual(getIngotResult()) && getInventoryStackLimit() - inventoryStacks[1].stackSize >= 1)
@@ -56,14 +56,14 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	@Override
 	protected void finishProcess() {
-		byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
-		for(int slot : getSlotsWithIngot()) {
-			int ingotNum = MachineHelper.getIngotNum(inventoryStacks[slot]);
-			int ingots = ingotsToRemove[ingotNum];
+		final byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
+		for(final int slot : getSlotsWithIngot()) {
+			final int ingotNum = MachineHelper.getIngotNum(inventoryStacks[slot]);
+			final int ingots = ingotsToRemove[ingotNum];
 			ingotsToRemove[ingotNum] -= Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize);
 			decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
 		}
-		ItemStack result = getIngotResult();
+		final ItemStack result = getIngotResult();
 		if(inventoryStacks[1] == null)
 			inventoryStacks[1] = result;
 		else if(inventoryStacks[1].getTagCompound().getInteger("alloy") == result.getTagCompound().getInteger("alloy"))
@@ -109,8 +109,8 @@ public class TEEMetalForge extends TileEntityElectric {
 		for(int i = 0; i < recipeAmts.length; i++)
 			alloy += Math.pow(Consts.ALLOY_RADIX, i) * recipeAmts[i];
 		alloy = Funcs.reduceAlloy(alloy);
-		ItemStack result = new ItemStack(Items.alloyIngot);
-		NBTTagCompound tagCompound = new NBTTagCompound();
+		final ItemStack result = new ItemStack(Items.alloyIngot);
+		final NBTTagCompound tagCompound = new NBTTagCompound();
 		tagCompound.setInteger("alloy", alloy);
 		result.setTagCompound(tagCompound);
 		result.setItemDamage(getDamageForAlloy(alloy));
@@ -133,7 +133,7 @@ public class TEEMetalForge extends TileEntityElectric {
 	}
 
 	private ArrayList<Integer> getSlotsWithIngot() {
-		ArrayList<Integer> slots = new ArrayList<Integer>();
+		final ArrayList<Integer> slots = new ArrayList<Integer>();
 		for(int i = 2; i < 20; i++)
 			if(inventoryStacks[i] != null)
 				slots.add(i);
@@ -141,15 +141,15 @@ public class TEEMetalForge extends TileEntityElectric {
 	}
 
 	private int[] getIngotAmts() {
-		int[] amts = new int[Consts.METAL_COUNT];
-		for(int slot : getSlotsWithIngot())
+		final int[] amts = new int[Consts.METAL_COUNT];
+		for(final int slot : getSlotsWithIngot())
 			amts[MachineHelper.getIngotNum(inventoryStacks[slot])] += inventoryStacks[slot].stackSize;
 		return amts;
 	}
 
 	private int getIngotsInRecipe() {
 		int ingots = 0;
-		for(int amt : recipeAmts)
+		for(final int amt : recipeAmts)
 			ingots += amt;
 		return ingots;
 	}

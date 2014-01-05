@@ -28,7 +28,7 @@ public class InfiniteAlloys {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+		final Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 		Blocks.oreID = config.getBlock("Ore", 3000).getInt();
 		Blocks.machineID = config.getBlock("Machine", 3001).getInt();
@@ -39,7 +39,7 @@ public class InfiniteAlloys {
 		Items.internetWandID = config.getItem(Configuration.CATEGORY_ITEM, "Internet Wand", 15004).getInt();
 		Items.alloyBookID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyBook", 15005).getInt();
 
-		int[] metalColors = { 0x2a2a2a, 0xd2cda3, 0xccc34f, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
+		final int[] metalColors = { 0x2a2a2a, 0xd2cda3, 0xccc34f, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			Consts.metalColors[i] = config.get("Metal Colors", Consts.METAL_NAMES[i], metalColors[i]).getInt();
 		for(int i = 0; i < Consts.METAL_COUNT; i++)

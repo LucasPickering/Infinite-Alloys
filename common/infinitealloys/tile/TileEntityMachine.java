@@ -77,11 +77,11 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		super.readFromNBT(tagCompound);
 		upgrades = tagCompound.getShort("Upgrades");
 		front = tagCompound.getByte("Orientation");
-		NBTTagList nbttaglist = tagCompound.getTagList("Items");
+		final NBTTagList nbttaglist = tagCompound.getTagList("Items");
 		inventoryStacks = new ItemStack[getSizeInventory()];
 		for(int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttag = (NBTTagCompound)nbttaglist.tagAt(i);
-			byte var5 = nbttag.getByte("Slot");
+			final NBTTagCompound nbttag = (NBTTagCompound)nbttaglist.tagAt(i);
+			final byte var5 = nbttag.getByte("Slot");
 			if(var5 >= 0 && var5 < inventoryStacks.length)
 				inventoryStacks[var5] = ItemStack.loadItemStackFromNBT(nbttag);
 		}
@@ -92,10 +92,10 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		super.writeToNBT(tagCompound);
 		tagCompound.setShort("Upgrades", (short)upgrades);
 		tagCompound.setByte("Orientation", front);
-		NBTTagList nbttaglist = new NBTTagList();
+		final NBTTagList nbttaglist = new NBTTagList();
 		for(int i = 0; i < inventoryStacks.length; i++) {
 			if(inventoryStacks[i] != null) {
-				NBTTagCompound nbt = new NBTTagCompound();
+				final NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setByte("Slot", (byte)i);
 				inventoryStacks[i].writeToNBT(nbt);
 				nbttaglist.appendTag(nbt);
@@ -188,7 +188,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
 		if(inventoryStacks[slot] != null) {
-			ItemStack stack = inventoryStacks[slot];
+			final ItemStack stack = inventoryStacks[slot];
 			inventoryStacks[slot] = null;
 			return stack;
 		}
@@ -210,19 +210,19 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	/** Drops the items in the block's inventory */
 	public void dropItems() {
-		Random random = new Random();
+		final Random random = new Random();
 		for(int i = 0; i < getSizeInventory(); i++) {
-			ItemStack stack = getStackInSlot(i);
+			final ItemStack stack = getStackInSlot(i);
 			if(stack != null) {
-				float f1 = random.nextFloat() * 0.8F + 0.1F;
-				float f2 = random.nextFloat() * 0.8F + 0.1F;
-				float f3 = random.nextFloat() * 0.8F + 0.1F;
+				final float f1 = random.nextFloat() * 0.8F + 0.1F;
+				final float f2 = random.nextFloat() * 0.8F + 0.1F;
+				final float f3 = random.nextFloat() * 0.8F + 0.1F;
 				while(stack.stackSize > 0) {
 					int j = random.nextInt(21) + 10;
 					if(j > stack.stackSize)
 						j = stack.stackSize;
 					stack.stackSize -= j;
-					EntityItem item = new EntityItem(worldObj, xCoord + f1, yCoord + f2, zCoord + f3, new ItemStack(stack.itemID, j, stack.getItemDamage()));
+					final EntityItem item = new EntityItem(worldObj, xCoord + f1, yCoord + f2, zCoord + f3, new ItemStack(stack.itemID, j, stack.getItemDamage()));
 					if(stack.hasTagCompound())
 						item.getEntityItem().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
 					item.motionX = random.nextGaussian() * 0.05F;
@@ -244,13 +244,13 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	/** Drops the applied upgrades as items */
 	public final void dropUpgrades() {
-		Random random = new Random();
+		final Random random = new Random();
 		for(int i = 0; i <= Consts.UPGRADE_COUNT; i++) {
 			if(hasUpgrade((int)Math.pow(2D, i))) {
-				float f = random.nextFloat() * 0.8F + 0.1F;
-				float f1 = random.nextFloat() * 0.8F + 0.1F;
-				float f2 = random.nextFloat() * 0.8F + 0.1F;
-				EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(Items.upgrade, 1, i));
+				final float f = random.nextFloat() * 0.8F + 0.1F;
+				final float f1 = random.nextFloat() * 0.8F + 0.1F;
+				final float f2 = random.nextFloat() * 0.8F + 0.1F;
+				final EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(Items.upgrade, 1, i));
 				item.motionX = random.nextGaussian() * 0.05F;
 				item.motionY = random.nextGaussian() * 0.25F;
 				item.motionZ = random.nextGaussian() * 0.05F;
@@ -266,7 +266,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	 * @param ItemStack for upgrade item with a binary upgrade damage value (see {@link infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
 	 * @return true if valid */
 	public final boolean isUpgradeValid(ItemStack upgrade) {
-		int upg = (int)Math.pow(2, upgrade.getItemDamage());
+		final int upg = (int)Math.pow(2, upgrade.getItemDamage());
 		return upgrade.itemID == Items.upgrade.itemID && (!MachineHelper.hasPrereqUpgrade(upg) || hasUpgrade(upg >> 1)) && !hasUpgrade(upg) && validUpgrades.contains(upg);
 	}
 

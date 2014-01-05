@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -7,10 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import org.apache.commons.lang3.ArrayUtils;
 
-public class TEMEnergyStorage extends TileEntityMachine implements IHost {
+public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 
 	/** The maximum amount of RK that this machine can store */
 	private int maxRK;
@@ -27,13 +28,17 @@ public class TEMEnergyStorage extends TileEntityMachine implements IHost {
 	/** Machines that have been loaded from NBT that need to be added to the actual list */
 	private List<Point> machinesToBeAdded;
 
+	/** The ratio between how long an item will burn in an ESU and how long it will burn in a furnace. ESU is numerator, furnace is denominator. */
+	private final float ESU_TO_FURNACE_TICK_RATIO = 0.5F;
+
 	public TEMEnergyStorage(byte front) {
 		this();
 		this.front = front;
 	}
 
 	public TEMEnergyStorage() {
-		super(1);
+		super(10);
+		baseRKPerTick = 72;
 	}
 
 	@Override
@@ -46,16 +51,41 @@ public class TEMEnergyStorage extends TileEntityMachine implements IHost {
 		super.updateEntity();
 
 		if(machinesToBeAdded != null) {
-			for(Point machine : machinesToBeAdded)
+			for(final Point machine : machinesToBeAdded)
 				addMachine(null, machine.x, machine.y, machine.z);
 			machinesToBeAdded = null;
 		}
 
+		if(energyStorage == null)
+			energyStorage = this;
+
 		// If a connected machine no longer exists, remove it from the network
-		for(Iterator iterator = connectedMachines.iterator(); iterator.hasNext();) {
-			Point p = (Point)iterator.next();
+		for(final Iterator iterator = connectedMachines.iterator(); iterator.hasNext();) {
+			final Point p = (Point)iterator.next();
 			if(!MachineHelper.isElectric(worldObj, p.x, p.y, p.z))
 				iterator.remove();
+		}
+	}
+
+	@Override
+	public boolean shouldProcess() {
+		if(getProcessProgress() > 0)
+			return true;
+		for(int i = 0; i < inventoryStacks.length - 1; i++)
+			if(inventoryStacks[i] != null)
+				return true;
+		return false;
+	}
+
+	@Override
+	protected void startProcess() {
+		// Take one piece of fuel out of the first slot that has fuel
+		for(int i = 0; i < 9; i++) {
+			if(inventoryStacks[i] != null) {
+				ticksToProcess = (int)(TileEntityFurnace.getItemBurnTime(inventoryStacks[i]) * ESU_TO_FURNACE_TICK_RATIO);
+				decrStackSize(i, 1);
+				break;
+			}
 		}
 	}
 
@@ -65,7 +95,7 @@ public class TEMEnergyStorage extends TileEntityMachine implements IHost {
 		currentRK = tagCompound.getInteger("currentRK");
 		machinesToBeAdded = new ArrayList<Point>();
 		for(int i = 0; tagCompound.hasKey("Client" + i); i++) {
-			int[] client = tagCompound.getIntArray("Client" + i);
+			final int[] client = tagCompound.getIntArray("Client" + i);
 			machinesToBeAdded.add(new Point(client[0], client[1], client[2]));
 		}
 	}
@@ -80,8 +110,8 @@ public class TEMEnergyStorage extends TileEntityMachine implements IHost {
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		List<Object> coords = new ArrayList<Object>();
-		for(Point point : connectedMachines) {
+		final List<Object> coords = new ArrayList<Object>();
+		for(final Point point : connectedMachines) {
 			coords.add(point.x);
 			coords.add((short)point.y);
 			coords.add(point.z);
@@ -93,8 +123,9 @@ public class TEMEnergyStorage extends TileEntityMachine implements IHost {
 		this.currentRK = currentRK;
 	}
 
+	@Override
 	public boolean addMachine(EntityPlayer player, int machineX, int machineY, int machineZ) {
-		for(Point coords : connectedMachines) {
+		for(final Point coords : connectedMachines) {
 			if(coords.x == machineX && coords.y == machineY && coords.z == machineZ) {
 				if(player != null && worldObj.isRemote)
 					player.addChatMessage("Error: Machine is already in network");
@@ -114,10 +145,10 @@ public class TEMEnergyStorage extends TileEntityMachine implements IHost {
 				player.addChatMessage("Error: Block is not electrical");
 		}
 		else {
-			TileEntityElectric tee = (TileEntityElectric)worldObj.getBlockTileEntity(machineX, machineY, machineZ);
+			final TileEntityElectric tee = (TileEntityElectric)worldObj.getBlockTileEntity(machineX, machineY, machineZ);
 			if(tee.energyStorage != null) { // If the machine is already connected to another storage unit, disconnect it from that
-				for(Iterator iterator = tee.energyStorage.connectedMachines.iterator(); iterator.hasNext();) {
-					Point p = (Point)iterator.next();
+				for(final Iterator iterator = tee.energyStorage.connectedMachines.iterator(); iterator.hasNext();) {
+					final Point p = (Point)iterator.next();
 					if(p.equals(machineX, machineY, machineZ)) {
 						iterator.remove();
 						break;
@@ -151,10 +182,6 @@ public class TEMEnergyStorage extends TileEntityMachine implements IHost {
 		return currentRK;
 	}
 
-	public int getCurrentRKScaled(int scale) {
-		return currentRK * scale / maxRK;
-	}
-
 	public int getMaxRK() {
 		return maxRK;
 	}
@@ -174,13 +201,39 @@ public class TEMEnergyStorage extends TileEntityMachine implements IHost {
 			range = 45;
 		else
 			range = 30;
+
+		if(hasUpgrade(MachineHelper.SPEED2))
+			processTimeMult = 0.5F;
+		else if(hasUpgrade(MachineHelper.SPEED1))
+			processTimeMult = 0.75F;
+		else
+			processTimeMult = 1.0F;
+
+		if(hasUpgrade(MachineHelper.EFFICIENCY2))
+			rkPerTickMult = 2.0F;
+		else if(hasUpgrade(MachineHelper.EFFICIENCY1))
+			rkPerTickMult = 1.5F;
+		else
+			rkPerTickMult = 1.0F;
+
+		if(hasUpgrade(MachineHelper.CAPACITY2))
+			stackLimit = 64;
+		else if(hasUpgrade(MachineHelper.CAPACITY1))
+			stackLimit = 48;
+		else
+			stackLimit = 32;
 	}
 
 	@Override
 	protected void populateValidUpgrades() {
+		validUpgrades.add(MachineHelper.SPEED1);
+		validUpgrades.add(MachineHelper.SPEED2);
+		validUpgrades.add(MachineHelper.EFFICIENCY1);
+		validUpgrades.add(MachineHelper.EFFICIENCY2);
 		validUpgrades.add(MachineHelper.CAPACITY1);
 		validUpgrades.add(MachineHelper.CAPACITY2);
 		validUpgrades.add(MachineHelper.RANGE1);
 		validUpgrades.add(MachineHelper.RANGE2);
+		validUpgrades.add(MachineHelper.WIRELESS);
 	}
 }

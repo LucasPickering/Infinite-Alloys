@@ -5,8 +5,8 @@ import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.ArrayUtils;
 import net.minecraft.nbt.NBTTagCompound;
+import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -60,6 +60,7 @@ public class TEEXray extends TileEntityElectric {
 		return shouldSearch || getProcessProgress() > 0;
 	}
 
+	@Override
 	protected boolean shouldResetProgress() {
 		return inventoryStacks[0] == null;
 	}
@@ -68,8 +69,8 @@ public class TEEXray extends TileEntityElectric {
 	 * its place and picks up where it left off next tick. This eliminates stutter during searches. */
 	private void search() {
 		// Convenience variables for the data pertaining to the target block that is being searched for
-		int targetID = inventoryStacks[0].itemID;
-		int targetMetadata = inventoryStacks[0].getItemDamage();
+		final int targetID = inventoryStacks[0].itemID;
+		final int targetMetadata = inventoryStacks[0].getItemDamage();
 
 		// The amount of blocks that have been iterated over this tick. When this reaches TEHelper.SEARCH_PER_TICK, the loops break
 		int blocksSearched = 0;
@@ -126,8 +127,8 @@ public class TEEXray extends TileEntityElectric {
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		List<Object> coords = new ArrayList<Object>();
-		for(Point point : detectedBlocks) {
+		final List<Object> coords = new ArrayList<Object>();
+		for(final Point point : detectedBlocks) {
 			coords.add(point.x);
 			coords.add((short)point.y);
 			coords.add(point.z);

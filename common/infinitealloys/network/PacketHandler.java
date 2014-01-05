@@ -25,26 +25,26 @@ public class PacketHandler implements IPacketHandler {
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
-		ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
-		byte packetIndex = data.readByte();
+		final ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
+		final byte packetIndex = data.readByte();
 		try {
 			((PacketIA)packetClasses[packetIndex].newInstance()).execute((EntityPlayer)player, data);
-		}catch(Exception e) {
+		}catch(final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static Packet250CustomPayload getPacket(byte id, Object... data) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		DataOutputStream dos = new DataOutputStream(bos);
+		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		final DataOutputStream dos = new DataOutputStream(bos);
 		try {
 			dos.writeByte(id);
-			for(Object datum : data)
+			for(final Object datum : data)
 				writeObject(dos, datum);
-		}catch(IOException e) {
+		}catch(final IOException e) {
 			e.printStackTrace();
 		}
-		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
+		final Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
 		packet.length = bos.size();
 		return packet;
 	}
@@ -66,19 +66,19 @@ public class PacketHandler implements IPacketHandler {
 			dos.writeBoolean((Boolean)o);
 
 		else if(o instanceof Object[])
-			for(Object o2 : (Object[])o)
+			for(final Object o2 : (Object[])o)
 				writeObject(dos, o2);
 
 		else if(o instanceof byte[])
-			for(byte b : (byte[])o)
+			for(final byte b : (byte[])o)
 				writeObject(dos, b);
 
 		else if(o instanceof short[])
-			for(short s : (short[])o)
+			for(final short s : (short[])o)
 				writeObject(dos, s);
 
 		else if(o instanceof int[])
-			for(int i : (int[])o)
+			for(final int i : (int[])o)
 				writeObject(dos, i);
 
 		else

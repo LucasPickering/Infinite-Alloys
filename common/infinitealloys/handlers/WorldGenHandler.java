@@ -22,9 +22,9 @@ public class WorldGenHandler implements IWorldGenerator {
 			if(!InfiniteAlloys.spawnOres[i] || random.nextInt(spawnChance[i]) == 0)
 				continue;
 			for(int j = 0; j < rarities[i]; j++) {
-				int x = chunkX * 16 + random.nextInt(16);
-				int y = random.nextInt(heights[i]);
-				int z = chunkZ * 16 + random.nextInt(16);
+				final int x = chunkX * 16 + random.nextInt(16);
+				final int y = random.nextInt(heights[i]);
+				final int z = chunkZ * 16 + random.nextInt(16);
 				new WorldGenMinable(Blocks.ore.blockID, i, groupSizes[i]).generate(world, random, x, y, z);
 			}
 		}
