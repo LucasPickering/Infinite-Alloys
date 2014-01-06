@@ -7,10 +7,12 @@ import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TEMEnergyStorage;
 import infinitealloys.tile.TileEntityMachine;
+import infinitealloys.util.Consts;
+import infinitealloys.util.MachineHelper;
 
 public enum EnumHelp {
 
-	/* CP - Computer, MF - Metal Forge, AZ - Analyzer, XR - X-ray, PS - Pasture, ES - Energy Storage */
+	/* CP - Computer, MF - Metal Forge, AZ - Analyzer, XR - X-ray, PS - Pasture, ES - Energy Storage, IW - Internet Wand */
 
 	CP_UPGRADE("upgrade", 0x9c00ff, 139, 42, 18, 18), CP_TAB("cpTab", 0xff8900, -24, 6, 27, 24),
 
@@ -27,7 +29,10 @@ public enum EnumHelp {
 	PS_UPGRADE("upgrade", 0x9c00ff, 140, 43, 18, 18), PS_ENERGY("energy", 0xfff600, 17, 39, 18, 18), PS_CREATURES("psCreatures", 0x00ffff, 42, 4, 74, 88),
 
 	ES_UPGRADE("upgrade", 0x9c00ff, 184, 39, 18, 18), ES_PROGRESS("progress", 0x00ff16, 69, 38, 110, 20), ES_ENERGY("energy", 0xfff600, 30, 3, 18, 18),
-	ES_SUPPLY("esSupply", 0xff0000, 11, 20, 56, 56);
+	ES_SUPPLY("esSupply", 0xff0000, 11, 20, 56, 56),
+
+	IW_ADD_TO_WAND("iwAddToWand", 0xff0000, 6, 6, 70, 20), IW_ADD_SELECTED("iwAddSelected", 0x00ff00, 79, 6, 70, 20),
+	IW_LIST("iwList", 0x9c00ff, 6, 30, 125, 209), IW_REMOVE("iwRemove", 0x00ffff, 133, 30, 16, 209);
 
 	/** Name used to get the title and info from localization */
 	public final String name;
@@ -51,19 +56,23 @@ public enum EnumHelp {
 		this.h = h;
 	}
 
-	public static EnumHelp[] getBoxesForTEM(TileEntityMachine tem) {
-		if(tem instanceof TEMComputer)
-			return new EnumHelp[] { CP_UPGRADE, CP_TAB };
-		if(tem instanceof TEEMetalForge)
-			return new EnumHelp[] { MF_UPGRADE, MF_PROGRESS, MF_ENERGY, MF_OUTPUT, MF_SUPPLY, MF_PRESETS, MF_SELECTION };
-		if(tem instanceof TEEAnalyzer)
-			return new EnumHelp[] { AZ_UPGRADE, AZ_PROGRESS, AZ_ENERGY, AZ_SUPPLY, AZ_INGOTS };
-		if(tem instanceof TEEXray)
-			return new EnumHelp[] { XR_UPGRADE, XR_PROGRESS, XR_ENERGY, XR_ORE, XR_SEARCH, XR_RESULTS };
-		if(tem instanceof TEEPasture)
-			return new EnumHelp[] { PS_UPGRADE, PS_ENERGY, PS_CREATURES };
-		if(tem instanceof TEMEnergyStorage)
-			return new EnumHelp[] { ES_UPGRADE, ES_PROGRESS, ES_ENERGY, ES_SUPPLY };
+	public static EnumHelp[] getBoxes(int id) {
+		switch(id) {
+			case MachineHelper.COMPUTER:
+				return new EnumHelp[] { CP_UPGRADE, CP_TAB };
+			case MachineHelper.METAL_FORGE:
+				return new EnumHelp[] { MF_UPGRADE, MF_PROGRESS, MF_ENERGY, MF_OUTPUT, MF_SUPPLY, MF_PRESETS, MF_SELECTION };
+			case MachineHelper.ANALYZER:
+				return new EnumHelp[] { AZ_UPGRADE, AZ_PROGRESS, AZ_ENERGY, AZ_SUPPLY, AZ_INGOTS };
+			case MachineHelper.XRAY:
+				return new EnumHelp[] { XR_UPGRADE, XR_PROGRESS, XR_ENERGY, XR_ORE, XR_SEARCH, XR_RESULTS };
+			case MachineHelper.PASTURE:
+				return new EnumHelp[] { PS_UPGRADE, PS_ENERGY, PS_CREATURES };
+			case MachineHelper.ENERGY_STORAGE:
+				return new EnumHelp[] { ES_UPGRADE, ES_PROGRESS, ES_ENERGY, ES_SUPPLY };
+			case Consts.MACHINE_COUNT:
+				return new EnumHelp[] { IW_ADD_SELECTED, IW_ADD_TO_WAND, IW_LIST, IW_REMOVE };
+		}
 		return null;
 	}
 }

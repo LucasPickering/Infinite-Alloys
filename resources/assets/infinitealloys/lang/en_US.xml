@@ -96,4 +96,13 @@
     
     <entry key="machineHelp.esSupply.title">Fuel Supply</entry>
     <entry key="machineHelp.esSupply.info">Fuel is placed in here/nThis uses the same fuel items/nas the vanilla furnace</entry>
+    
+    <entry key="machineHelp.iwAddToWand.title">Add to Wand</entry>
+    <entry key="machineHelp.iwAddToWand.info">Add the machine that was/nright-clicked to this wand list</entry>
+    <entry key="machineHelp.iwAddSelected.title">Add Selected</entry>
+    <entry key="machineHelp.iwAddSelected.info">Add the machines that are/ncurrently selected in the wand to/nthe block that was right-clicked</entry>
+    <entry key="machineHelp.iwList.title">Machine List</entry>
+    <entry key="machineHelp.iwList.info">Info for each machine in the list,/nincluding type and location</entry>
+    <entry key="machineHelp.iwRemove.title">Remove Machine</entry>
+    <entry key="machineHelp.iwRemove.info">Remove this machine from the list</entry>
 </properties>

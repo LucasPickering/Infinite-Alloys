@@ -135,7 +135,7 @@ public abstract class GuiMachine extends GuiContainer {
 		// Draw the help dialogue and shade the help zone if help is enabled and the mouse is over a help zone
 		if(helpEnabled) {
 			EnumHelp hoveredZone = null; // The help zone that the mouse is over to render to dialogue later, null if mouse is not over a zone\
-			for(final EnumHelp help : EnumHelp.getBoxesForTEM(tem)) {
+			for(final EnumHelp help : EnumHelp.getBoxes(tem.getID())) {
 				// Draw zone outline, add alpha to make the rectangles opaque
 				drawRect(help.x, help.y, help.x + help.w, help.y + 1, 0xff000000 + help.color); // Top of outline box
 				drawRect(help.x, help.y + help.h, help.x + help.w, help.y + help.h - 1, 0xff000000 + help.color); // Bottom of outline box
@@ -237,7 +237,7 @@ public abstract class GuiMachine extends GuiContainer {
 		}
 	}
 
-	protected class ColoredLine {
+	public static class ColoredLine {
 		/** The line's text */
 		String text;
 		/** The line's hexadecimal color */

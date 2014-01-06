@@ -1,6 +1,10 @@
 package infinitealloys.client.gui;
 
+import java.util.ArrayList;
+import java.util.List;
 import infinitealloys.block.Blocks;
+import infinitealloys.client.EnumHelp;
+import infinitealloys.client.gui.GuiMachine.ColoredLine;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.network.PacketAddMachine;
@@ -27,6 +31,9 @@ public class GuiInternetWand extends GuiScreen {
 	private final ResourceLocation background;
 	private final int xSize = 178;
 	private final int ySize = 245;
+
+	/** Coordinates of the top-left corner of the GUI */
+	protected java.awt.Point topLeft = new java.awt.Point();
 
 	/** If the GUI was opened by clicking on a machine, this button adds the machine that was clicked to the wand */
 	private GuiButton addToWand;
@@ -95,12 +102,44 @@ public class GuiInternetWand extends GuiScreen {
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTick) {
+		topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
 		Funcs.bindTexture(background);
-		drawTexturedModalRect((width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, ySize);
+		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 		super.drawScreen(mouseX, mouseY, partialTick);
 		for(final MachineButton button : machineButtons)
 			if(button != null)
 				button.drawButton();
+
+		GL11.glPushMatrix();
+		GL11.glTranslatef(topLeft.x, topLeft.y, 0);
+		// Draw the help dialogue and shade the help zone if help is enabled and the mouse is over a help zone
+		if(helpEnabled) {
+			EnumHelp hoveredZone = null; // The help zone that the mouse is over to render to dialogue later, null if mouse is not over a zone\
+			for(final EnumHelp help : EnumHelp.getBoxes(Consts.MACHINE_COUNT)) {
+				// Draw zone outline, add alpha to make the rectangles opaque
+				drawRect(help.x, help.y, help.x + help.w, help.y + 1, 0xff000000 + help.color); // Top of outline box
+				drawRect(help.x, help.y + help.h, help.x + help.w, help.y + help.h - 1, 0xff000000 + help.color); // Bottom of outline box
+				drawRect(help.x, help.y, help.x + 1, help.y + help.h - 1, 0xff000000 + help.color); // Left side of outline box
+				drawRect(help.x + help.w - 1, help.y, help.x + help.w, help.y + help.h, 0xff000000 + help.color); // Right side of outline box
+
+				// Set hoveredZone to this zone if it hasn't been set already and the mouse is over this zone
+				if(hoveredZone == null && Funcs.mouseInZone(mouseX, mouseY, topLeft.x + help.x, topLeft.y + help.y, help.w, help.h))
+					hoveredZone = help;
+			}
+
+			if(hoveredZone != null) {
+				// Fill in the zone with an smaller 4th hex pair for less alpha
+				drawRect(hoveredZone.x, hoveredZone.y, hoveredZone.x + hoveredZone.w, hoveredZone.y + hoveredZone.h, 0x60000000 + hoveredZone.color);
+
+				// Draw text box with help info
+				final List<ColoredLine> lines = new ArrayList<ColoredLine>();
+				lines.add(new ColoredLine(Funcs.getLoc("machineHelp." + hoveredZone.name + ".title"), 0xffffff));
+				for(final String s : Funcs.getLoc("machineHelp." + hoveredZone.name + ".info").split("/n"))
+					lines.add(new ColoredLine(s, 0xaaaaaa));
+				drawTextBox(-8 - topLeft.x, 17 - topLeft.y, lines.toArray(new ColoredLine[lines.size()]));
+			}
+		}
+		GL11.glPopMatrix();
 	}
 
 	@Override
@@ -177,6 +216,37 @@ public class GuiInternetWand extends GuiScreen {
 		return false;
 	}
 
+	protected void drawTextBox(int mouseX, int mouseY, ColoredLine... lines) {
+		// Set the width of the box to the length of the longest line
+		int boxWidth = 0;
+		for(final ColoredLine line : lines)
+			boxWidth = Math.max(boxWidth, fontRenderer.getStringWidth(line.text));
+
+		// This is from vanilla, I have no idea what it does, other than make it work
+		mouseX += 12;
+		mouseY -= 12;
+		int var9 = 8;
+		if(lines.length > 1)
+			var9 += 2 + (lines.length - 1) * 10;
+		final int var10 = -267386864;
+		drawGradientRect(mouseX - 3, mouseY - 4, mouseX + boxWidth + 3, mouseY - 3, var10, var10);
+		drawGradientRect(mouseX - 3, mouseY + var9 + 3, mouseX + boxWidth + 3, mouseY + var9 + 4, var10, var10);
+		drawGradientRect(mouseX - 3, mouseY - 3, mouseX + boxWidth + 3, mouseY + var9 + 3, var10, var10);
+		drawGradientRect(mouseX - 4, mouseY - 3, mouseX - 3, mouseY + var9 + 3, var10, var10);
+		drawGradientRect(mouseX + boxWidth + 3, mouseY - 3, mouseX + boxWidth + 4, mouseY + var9 + 3, var10, var10);
+		final int var11 = 1347420415;
+		final int var12 = (var11 & 16711422) >> 1 | var11 & -16777216;
+		drawGradientRect(mouseX - 3, mouseY - 3 + 1, mouseX - 3 + 1, mouseY + var9 + 3 - 1, var11, var12);
+		drawGradientRect(mouseX + boxWidth + 2, mouseY - 3 + 1, mouseX + boxWidth + 3, mouseY + var9 + 3 - 1, var11, var12);
+		drawGradientRect(mouseX - 3, mouseY - 3, mouseX + boxWidth + 3, mouseY - 3 + 1, var11, var11);
+		drawGradientRect(mouseX - 3, mouseY + var9 + 2, mouseX + boxWidth + 3, mouseY + var9 + 3, var12, var12);
+
+		for(int i = 0; i < lines.length; i++)
+			fontRenderer.drawStringWithShadow(lines[i].text, mouseX, mouseY + i * 10 + (i == 0 ? 0 : 2), lines[i].color);
+		zLevel = 0F;
+		itemRenderer.zLevel = 0F;
+	}
+
 	/** A button that represents a machine with its texture and coordinates */
 	private class MachineButton {
 
@@ -221,9 +291,9 @@ public class GuiInternetWand extends GuiScreen {
 			}
 
 			GL11.glColor3f(1F, 1F, 1F); // Reset the color
-			
+
 			GL11.glPushMatrix();
-			GL11.glTranslatef(xPos+100, yPos+3, 0);
+			GL11.glTranslatef(xPos + 100, yPos + 3, 0);
 			GL11.glScalef(0.75F, 0.75F, 1F);
 			// If the machine is electrical
 			if(isElectric)
