@@ -1,6 +1,5 @@
 package infinitealloys.tile;
 
-import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;

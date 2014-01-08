@@ -1,12 +1,5 @@
 package infinitealloys.client;
 
-import infinitealloys.tile.TEEAnalyzer;
-import infinitealloys.tile.TEEMetalForge;
-import infinitealloys.tile.TEEPasture;
-import infinitealloys.tile.TEEXray;
-import infinitealloys.tile.TEMComputer;
-import infinitealloys.tile.TEMEnergyStorage;
-import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
 

@@ -1,7 +1,5 @@
 package infinitealloys.client.gui;
 
-import java.util.ArrayList;
-import java.util.List;
 import infinitealloys.block.Blocks;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.client.gui.GuiMachine.ColoredLine;
@@ -15,6 +13,8 @@ import infinitealloys.tile.TEMEnergyStorage;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.RenderItem;

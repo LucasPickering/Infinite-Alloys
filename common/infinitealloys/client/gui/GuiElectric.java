@@ -37,14 +37,14 @@ public abstract class GuiElectric extends GuiMachine {
 		// Draw the power network info if the mouse is over the energy icon
 		if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + energyIcon.x, topLeft.y + energyIcon.y, ENERGY_ICON_ON.width, ENERGY_ICON_ON.height)) {
 			if(tem.energyStorage != null) {
-				int rkChange = tem.shouldProcess() ? tem.getRKChange() : 0;// The rate of change of RK
-				Point esu = tem.energyStorage.getCoords(); // The coordinates of the energy storage unit
+				final int rkChange = tem.shouldProcess() ? tem.getRKChange() : 0;// The rate of change of RK
+				final Point esu = tem.energyStorage.getCoords(); // The coordinates of the energy storage unit
 
 				// If the ESU for this machine is this machine, display SELF, otherwise display the coords of the ESU
-				String line1 = Funcs.getLoc("machine.connected.true") + (esu.equals(tem.getCoords()) ? Funcs.getLoc("machine.connected.self") : esu);
+				final String line1 = Funcs.getLoc("machine.connected.true") + (esu.equals(tem.getCoords()) ? Funcs.getLoc("machine.connected.self") : esu);
 
 				// If the rk change is positive, add '+', then display the rate of change of RK
-				String line2 = (rkChange > 0 ? "+" : "") + rkChange + " RK/t";
+				final String line2 = (rkChange > 0 ? "+" : "") + rkChange + " RK/t";
 
 				// Draw all the information, with colors for the change based on pos/neg
 				drawTextBox(mouseX, mouseY, new ColoredLine(line1, 0x00ff00), new ColoredLine(line2, rkChange < 0 ? 0xff0000 : rkChange > 0 ? 0x00ff00 : 0xffffff));

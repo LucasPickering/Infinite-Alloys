@@ -4,7 +4,6 @@ import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
-import java.util.Arrays;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -64,41 +63,6 @@ public class TEEAnalyzer extends TileEntityElectric {
 
 		// Update the required time and metals to fit the next alloy
 		updateRequiredMetals();
-
-		// If an alloy book is present, save the newly-discovered alloy to it
-		/*if(inventoryStacks[8] != null) {
-			if(!inventoryStacks[8].hasTagCompound())
-				inventoryStacks[8].setTagCompound(new NBTTagCompound());
-			final int alloy = inventoryStacks[8].getTagCompound().getInteger("alloy");
-			NBTTagCompound tagCompound;
-
-			// Create two arrays for storing the saved alloys. What's in there, and a copy to edit
-			int[] oldSave = new int[0];
-			int[] newSave;
-
-			// init the compound
-			if(inventoryStacks[8].hasTagCompound())
-				tagCompound = inventoryStacks[8].getTagCompound();
-			else
-				tagCompound = new NBTTagCompound();
-
-			// If it has a save, set oldSave to it
-			if(tagCompound.hasKey("alloys"))
-				oldSave = tagCompound.getIntArray("alloys");
-
-			// Make new save a copy of oldSave with one more spot
-			newSave = Arrays.copyOf(oldSave, oldSave.length + 1);
-
-			// Sort newSave so that it can be searched in the next step
-			Arrays.sort(newSave);
-
-			// Add the new alloy to newSave if there is room and it is not a repeat then set the compound to newSave
-			if(newSave.length < Consts.VALID_ALLOY_COUNT && Arrays.binarySearch(newSave, alloy) < 0) {
-				newSave[newSave.length - 1] = alloy;
-				tagCompound.setIntArray("alloys", newSave);
-				inventoryStacks[8].setTagCompound(tagCompound);
-			}
-		}*/
 
 		if(Funcs.isServer())
 			for(final String player : playersUsing)

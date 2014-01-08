@@ -78,7 +78,7 @@ public class TEEMetalForge extends TileEntityElectric {
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		recipeAmts = tagCompound.getByteArray("RecipeAmts");
+		lastRecipeAmts = recipeAmts = tagCompound.getByteArray("RecipeAmts");
 	}
 
 	@Override
