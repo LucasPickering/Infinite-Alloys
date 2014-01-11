@@ -1,5 +1,6 @@
 package infinitealloys.network;
 
+import infinitealloys.tile.IHost;
 import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
@@ -9,6 +10,7 @@ import infinitealloys.tile.TEMEnergyStorage;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
+import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -27,54 +29,48 @@ public class PacketTEServerToClient implements PacketIA {
 			final byte orientation = data.readByte();
 			final int upgrades = data.readInt();
 			((TileEntityMachine)te).handlePacketDataFromServer(orientation, upgrades);
-			if(te instanceof TEMComputer) {
-				final TEMComputer tec = (TEMComputer)te;
-				tec.connectedMachines.clear();
-				final byte size = data.readByte();
-				for(int i = 0; i < size; i++)
-					tec.connectedMachines.add(new Point(data.readInt(), data.readShort(), data.readInt()));
-			}
-			else if(te instanceof TileEntityElectric) {
+
+			if(te instanceof TileEntityElectric) {
 				final int processProgress = data.readInt();
 				((TileEntityElectric)te).handlePacketDataFromServerElectric(processProgress);
-				if(te instanceof TEEMetalForge) {
-					final byte[] recipeAmts = new byte[Consts.METAL_COUNT];
-					for(int i = 0; i < recipeAmts.length; i++)
-						recipeAmts[i] = data.readByte();
-					((TEEMetalForge)te).handlePacketDataFromClient(recipeAmts);
-				}
-				if(te instanceof TEEAnalyzer) {
-					final byte unlockedAlloyCount = data.readByte();
-					((TEEAnalyzer)te).handlePacketDataFromClient(unlockedAlloyCount);
-				}
-				else if(te instanceof TEEXray) {
-					final TEEXray tex = (TEEXray)te;
-					tex.detectedBlocks.clear();
-					final byte size = data.readByte();
-					for(int i = 0; i < size; i++)
-						tex.detectedBlocks.add(new Point(data.readInt(), data.readShort(), data.readInt()));
-				}
-				else if(te instanceof TEEPasture) {
-					final byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
-					for(int i = 0; i < mobActions.length; i++)
-						mobActions[i] = data.readByte();
-					((TEEPasture)te).handlePacketData(mobActions);
-				}
-				else if(te instanceof TEMEnergyStorage) {
-					final TEMEnergyStorage tees = ((TEMEnergyStorage)te);
-					final int currentRK = data.readInt();
-					tees.handlePacketDataFromServer(currentRK);
-					tees.connectedMachines.clear();
-					final byte size = data.readByte();
-					for(int i = 0; i < size; i++) {
-						final int machX = data.readInt();
-						final short machY = data.readShort();
-						final int machZ = data.readInt();
-						tees.connectedMachines.add(new Point(machX, machY, machZ));
-						((TileEntityElectric)player.worldObj.getBlockTileEntity(machX, machY, machZ)).energyStorage = tees;
 
-					}
+				switch(((TileEntityElectric)te).getID()) {
+					case MachineHelper.METAL_FORGE:
+						final byte[] recipeAmts = new byte[Consts.METAL_COUNT];
+						for(int i = 0; i < recipeAmts.length; i++)
+							recipeAmts[i] = data.readByte();
+						((TEEMetalForge)te).handlePacketDataFromClient(recipeAmts);
+						break;
+
+					case MachineHelper.ANALYZER:
+						((TEEAnalyzer)te).handlePacketDataFromClient(data.readByte()/* unlockedAlloyCount */);
+						break;
+
+					case MachineHelper.XRAY:
+						final TEEXray tex = (TEEXray)te;
+						tex.detectedBlocks.clear();
+						for(int i = 0; i < data.readByte()/* Size */; i++)
+							tex.detectedBlocks.add(new Point(data.readInt()/* X */, data.readShort()/* Y */, data.readInt()/* Z */));
+						break;
+
+					case MachineHelper.PASTURE:
+						final byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
+						for(int i = 0; i < mobActions.length; i++)
+							mobActions[i] = data.readByte();
+						((TEEPasture)te).handlePacketData(mobActions);
+						break;
+
+					case MachineHelper.ENERGY_STORAGE:
+						((TEMEnergyStorage)te).handlePacketDataFromServer(data.readInt()/* ticksToProcess */, data.readInt()/* currentRK */);
+						break;
 				}
+			}
+
+			if(te instanceof IHost) {
+				((IHost)te).clearMachines();
+				byte size = data.readByte();
+				for(int i = 0; i < size; i++)
+					((IHost)te).addMachine(null, data.readInt()/* X */, data.readShort()/* Y */, data.readInt()/* Z */);
 			}
 		}
 	}

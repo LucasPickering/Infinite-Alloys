@@ -91,13 +91,13 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		processProgress = tagCompound.getInteger("ProcessProgress");
+		processProgress = tagCompound.getInteger("processProgress");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		tagCompound.setInteger("ProcessProgress", processProgress);
+		tagCompound.setInteger("processProgress", processProgress);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -47,7 +48,8 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public void updateEntity() {
-		super.updateEntity();
+		if(energyStorage == null)
+			energyStorage = this;
 
 		if(machinesToBeAdded != null) {
 			for(final Point machine : machinesToBeAdded)
@@ -55,15 +57,14 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 			machinesToBeAdded = null;
 		}
 
-		if(energyStorage == null)
-			energyStorage = this;
-
 		// If a connected machine no longer exists, remove it from the network
 		for(final Iterator iterator = connectedMachines.iterator(); iterator.hasNext();) {
 			final Point p = (Point)iterator.next();
 			if(!MachineHelper.isElectric(worldObj, p.x, p.y, p.z))
 				iterator.remove();
 		}
+
+		super.updateEntity();
 	}
 
 	@Override
@@ -92,6 +93,7 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		currentRK = tagCompound.getInteger("currentRK");
+		ticksToProcess = tagCompound.getInteger("ticksToProcess");
 		machinesToBeAdded = new ArrayList<Point>();
 		for(int i = 0; tagCompound.hasKey("Client" + i); i++) {
 			final int[] client = tagCompound.getIntArray("Client" + i);
@@ -103,6 +105,7 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("currentRK", currentRK);
+		tagCompound.setInteger("ticksToProcess", ticksToProcess);
 		for(int i = 0; i < connectedMachines.size(); i++)
 			tagCompound.setIntArray("Client" + i, new int[] { connectedMachines.get(i).x, connectedMachines.get(i).y, connectedMachines.get(i).z });
 	}
@@ -115,10 +118,11 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 			coords.add((short)point.y);
 			coords.add(point.z);
 		}
-		return ArrayUtils.addAll(super.getSyncDataToClient(), currentRK, (byte)connectedMachines.size(), coords.toArray());
+		return ArrayUtils.addAll(super.getSyncDataToClient(), ticksToProcess, currentRK, (byte)connectedMachines.size(), coords.toArray());
 	}
 
-	public void handlePacketDataFromServer(int currentRK) {
+	public void handlePacketDataFromServer(int ticksToProcess, int currentRK) {
+		this.ticksToProcess = ticksToProcess;
 		this.currentRK = currentRK;
 	}
 
@@ -157,11 +161,16 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 			}
 			connectedMachines.add(new Point(machineX, machineY, machineZ));
 			tee.energyStorage = this;
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Adding machine at " + machineX + ", " + machineY + ", " + machineZ);
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void clearMachines() {
+		connectedMachines.clear();
 	}
 
 	/** Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK, will the result be less than zero or overflow the machine? If

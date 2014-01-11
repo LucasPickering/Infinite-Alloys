@@ -6,4 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 public interface IHost {
 
 	public boolean addMachine(EntityPlayer player, int machineX, int machineY, int machineZ);
+
+	public void clearMachines();
 }

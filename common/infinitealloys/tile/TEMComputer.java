@@ -131,6 +131,11 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	}
 
 	@Override
+	public void clearMachines() {
+		connectedMachines.clear();
+	}
+
+	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		for(int i = 0; tagCompound.hasKey("Client" + i); i++) {
