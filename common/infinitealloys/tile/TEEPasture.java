@@ -54,7 +54,7 @@ public class TEEPasture extends TileEntityElectric {
 	}
 
 	@Override
-	protected void finishProcess() {
+	protected void onFinishProcess() {
 		/* NOTE: For this specific machine, ticksToProcess = 0, meaning this function is called every tick. It is essentially an updateEntity() function with
 		 * conditions applied in TileEntityMachine.updateEntity() */
 

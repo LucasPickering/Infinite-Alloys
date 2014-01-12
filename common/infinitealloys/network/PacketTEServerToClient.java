@@ -26,9 +26,7 @@ public class PacketTEServerToClient implements PacketIA {
 		final int z = data.readInt();
 		final TileEntity te = player.worldObj.getBlockTileEntity(x, y, z);
 		if(te instanceof TileEntityMachine) {
-			final byte orientation = data.readByte();
-			final int upgrades = data.readInt();
-			((TileEntityMachine)te).handlePacketDataFromServer(orientation, upgrades);
+			((TileEntityMachine)te).handlePacketDataFromServer(data.readByte()/* orientation */, data.readShort()/* upgrades */);
 
 			if(te instanceof TileEntityElectric) {
 				final int processProgress = data.readInt();

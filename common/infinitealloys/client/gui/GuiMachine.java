@@ -90,7 +90,7 @@ public abstract class GuiMachine extends GuiContainer {
 			final List<ColoredLine> lines = new ArrayList<ColoredLine>();
 			lines.add(new ColoredLine(Funcs.getLoc("upgrade.name"), 0xffffff));
 			for(int i = 0; i < Consts.UPGRADE_COUNT; i++) {
-				final int upg = (int)Math.pow(2, i);
+				final int upg = 1 << i; // upg = 2^i
 				if(MachineHelper.isPrereqUpgrade(upg) && tem.hasUpgrade(upg << 1) || !tem.hasUpgrade(upg))
 					continue;
 				lines.add(new ColoredLine(Funcs.getLoc("upgrade." + Consts.UPGRADE_NAMES[i] + ".name"), 0xaaaaaa));

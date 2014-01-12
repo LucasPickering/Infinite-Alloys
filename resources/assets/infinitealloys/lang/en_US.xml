@@ -11,7 +11,6 @@
 	<entry key="multi.upgradecomponent.name">Upgrade Component</entry>
 
 	<entry key="item.ingot.name"> Ingot</entry>
-	<entry key="item.alloyIngot.name">Alloy Ingot</entry>
 	<entry key="item.upgrade.name">Upgrade</entry>
 	<entry key="item.internetWand.name">Internet Wand</entry>
 
@@ -23,6 +22,13 @@
 	<entry key="metal.verdite.name">Verdite</entry>
 	<entry key="metal.hydronium.name">Hydronium</entry>
 	<entry key="metal.swagtanium.name">Swagtanium</entry>
+	
+    <entry key="metal.alloy0.name">Alloy 0</entry>
+    <entry key="metal.alloy1.name">Alloy 1</entry>
+    <entry key="metal.alloy2.name">Alloy 2</entry>
+    <entry key="metal.alloy3.name">Alloy 3</entry>
+    <entry key="metal.alloy4.name">Alloy 4</entry>
+    <entry key="metal.alloy5.name">Alloy 5</entry>
 
 	<entry key="upgrade.name">Upgrades</entry>
 	<entry key="upgrade.speed1.name">Speed I</entry>

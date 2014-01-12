@@ -76,7 +76,7 @@ public class CommonProxy {
 		for(int i = 0; i < alloys.length; i++)
 			alloys[i] = new ItemStack(Items.alloyIngot, 1, i + 1);
 		for(int i = 0; i < upgrades.length; i++)
-			upgrades[i] = new ItemStack(Items.upgrade, 1, (int)Math.pow(2D, i));
+			upgrades[i] = new ItemStack(Items.upgrade, 1, 1 << i);
 	}
 
 	public void initRecipes() {

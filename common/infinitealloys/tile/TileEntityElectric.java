@@ -46,10 +46,10 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 		// startProcess(). If it has reached or exceeded the limit for completion, then finish the process and reset the counter.
 		if(shouldProcess() && energyStorage != null && energyStorage.changeRK(getRKChange())) {
 			if(processProgress == 0)
-				startProcess();
+				onStartProcess();
 			if(++processProgress >= ticksToProcess) {
 				processProgress = 0;
-				finishProcess();
+				onFinishProcess();
 				onInventoryChanged();
 			}
 		}
@@ -69,10 +69,10 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	}
 
 	/** Called on the first tick of a process */
-	protected void startProcess() {}
+	protected void onStartProcess() {}
 
 	/** Called when processProgress reaches ticksToProgress */
-	protected void finishProcess() {}
+	protected void onFinishProcess() {}
 
 	/** Actual amount of RK change per tick, after certain calculations and conditions. Positive is produced RK and negative is consumed RK. */
 	public int getRKChange() {

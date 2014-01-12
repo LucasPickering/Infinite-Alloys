@@ -15,7 +15,6 @@ public class ItemAlloyIngot extends ItemIA {
 		super(id, "ingot");
 		setCreativeTab(null);
 		setHasSubtypes(true);
-		setUnlocalizedName("IAalloyIngot");
 	}
 
 	@Override

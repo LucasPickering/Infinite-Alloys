@@ -1,21 +1,28 @@
 package infinitealloys.tile;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
+import infinitealloys.util.Point;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
-public class TEEAnalyzer extends TileEntityElectric {
+public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
-	/** The amount of alloys that this machine has unlocked. This can be increased by adding an alloy book containing more recipes than this machine already
-	 * knows. */
-	private byte unlockedAlloyCount;
+	/** 3D coords for each metal forge that is connected to this analyzer */
+	public final List<Point> connectedMachines = new ArrayList<Point>();
 
-	/** A boolean for each metal telling whether or not an ingot of that metal is required to being searching for the next alloy */
-	private final boolean[] requiredMetals = new boolean[Consts.METAL_COUNT];
+	/** A binary integer that represents all the alloys that this machine has discovered, this works the same way as the upgrade int */
+	private short alloys;
+
+	/** A binary integer that represents the metals that were consumed and are currently being processed */
+	private short usedMetals;
 
 	public TEEAnalyzer(byte front) {
 		this();
@@ -27,7 +34,6 @@ public class TEEAnalyzer extends TileEntityElectric {
 		stackLimit = 1;
 		baseRKPerTick = -1000;
 		ticksToProcess = 2400;
-		updateRequiredMetals();
 	}
 
 	@Override
@@ -37,85 +43,104 @@ public class TEEAnalyzer extends TileEntityElectric {
 
 	@Override
 	public boolean shouldProcess() {
-		// If we've run out of alloys to discover, don't process
-		if(unlockedAlloyCount >= Consts.VALID_ALLOY_COUNT)
-			return false;
-
-		// Otherwise, if we're not already processing, check for the alloys that we need to start a new process
-		if(getProcessProgress() <= 0)
-			for(int i = 0; i < requiredMetals.length; i++)
-				if(requiredMetals[i] && inventoryStacks[i] == null)
-					return false;
-		return true;
+		return getAlloyForMetals() != 0;
 	}
 
 	@Override
-	protected void startProcess() {
-		for(int i = 0; i < requiredMetals.length; i++)
-			if(requiredMetals[i])
+	protected void onStartProcess() {
+		for(int i = 0; i < Consts.METAL_COUNT; i++) {
+			if(inventoryStacks != null) {
+				usedMetals &= 1 << i;
 				decrStackSize(i, 1);
+			}
+		}
 	}
 
 	@Override
-	protected void finishProcess() {
-		// Increment the amount of alloys we've discovered (we just found a new one)
-		unlockedAlloyCount++;
-
-		// Update the required time and metals to fit the next alloy
-		updateRequiredMetals();
-
+	protected void onFinishProcess() {
 		if(Funcs.isServer())
 			for(final String player : playersUsing)
 				PacketDispatcher.sendPacketToPlayer(getDescriptionPacket(), Funcs.getPlayerForUsername(player));
 	}
 
+	/** Has the alloy with the given index been discovered? */
+	public boolean hasAlloy(short alloy) {
+		return (alloys >> alloy & 1) == 1;
+	}
+
+	public short getAlloys() {
+		return alloys;
+	}
+
+	/** Return an alloy that can be made using the metals that are currently in the machine. This will return the alloy that uses the most of the the metals. */
+	private short getAlloyForMetals() {
+		return 0;
+	}
+
 	@Override
 	public int getRKChange() {
-		return (int)(baseRKPerTick * rkPerTickMult / processTimeMult * Math.pow(4D, unlockedAlloyCount)); // Every time an alloy is unlocked, it quadruples
+		int metalModifier = 0;
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
+			if((usedMetals >> i & 1) == 1)
+				metalModifier += Math.pow(10, i); // Each alloy contributes to the required RK based on its value
+		return (int)(baseRKPerTick * rkPerTickMult / processTimeMult) * metalModifier * 10;
+	}
+
+	@Override
+	public boolean addMachine(EntityPlayer player, int machineX, int machineY, int machineZ) {
+
+		// Machine is already connected
+		for(final Point coords : connectedMachines)
+			if(coords.x == machineX && coords.y == machineY && coords.z == machineZ)
+				return false;
+
+		// Machine is not a metal forge
+		if(!(worldObj.getBlockTileEntity(machineX, machineY, machineZ) instanceof TEEMetalForge))
+			return false;
+
+		// Add the machine
+		else {
+			final TEEMetalForge temf = (TEEMetalForge)worldObj.getBlockTileEntity(machineX, machineY, machineZ);
+			if(temf.energyStorage != null) { // If the machine is already connected to another storage unit, disconnect it from that
+				for(final Iterator iterator = temf.energyStorage.connectedMachines.iterator(); iterator.hasNext();) {
+					final Point p = (Point)iterator.next();
+					if(p.equals(machineX, machineY, machineZ)) {
+						iterator.remove();
+						break;
+					}
+				}
+				temf.energyStorage = null;
+			}
+			connectedMachines.add(new Point(machineX, machineY, machineZ));
+			temf.analyzer = this;
+			return true;
+		}
+	}
+
+	@Override
+	public void clearMachines() {
+		connectedMachines.clear();
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		unlockedAlloyCount = tagCompound.getByte("UnlockedAlloyCount");
+		alloys = tagCompound.getShort("alloys");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		tagCompound.setByte("UnlockedAlloyCount", unlockedAlloyCount);
+		tagCompound.setShort("alloys", alloys);
 	}
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		return ArrayUtils.addAll(super.getSyncDataToClient(), unlockedAlloyCount);
+		return ArrayUtils.addAll(super.getSyncDataToClient(), alloys);
 	}
 
-	public void handlePacketDataFromClient(byte unlockedAlloyCount) {
-		this.unlockedAlloyCount = unlockedAlloyCount;
-	}
-
-	public byte getUnlockedAlloyCount() {
-		return unlockedAlloyCount;
-	}
-
-	private void updateRequiredMetals() {
-		if(unlockedAlloyCount < Consts.VALID_ALLOY_COUNT)
-			for(int i = 0; i < requiredMetals.length; i++)
-				requiredMetals[i] = Funcs.intAtPos(EnumAlloy.values()[getUnlockedAlloyCount()].max, Consts.ALLOY_RADIX, i) > 0;
-	}
-
-	@Override
-	public void onInventoryChanged() {
-		// Is an alloy book in the book slot?
-		if(inventoryStacks[8] != null) {
-			// Does this book have a tag compound with alloys saved in it?
-			final NBTTagCompound tagCompound = inventoryStacks[8].getTagCompound();
-			if(tagCompound != null && tagCompound.hasKey("alloys"))
-				// Set the amount of unlocked alloys to whichever is larger: itself, or the amount of alloys in the book
-				// i.e. if the book has more alloys saved than the machine, teach those alloys to the machine
-				unlockedAlloyCount = (byte)Math.max(unlockedAlloyCount, tagCompound.getIntArray("alloys").length);
-		}
+	public void handlePacketDataFromClient(short alloys) {
+		this.alloys = alloys;
 	}
 
 	@Override

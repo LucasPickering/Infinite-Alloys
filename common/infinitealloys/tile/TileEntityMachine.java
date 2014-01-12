@@ -35,7 +35,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public byte front;
 
 	/** A binary integer used to determine what upgrades have been installed */
-	private int upgrades;
+	private short upgrades;
 
 	/** A binary integer containing upgrades that the machine starts with, e.g. the computer starts with the Wireless upgrade */
 	protected int startingUpgrades;
@@ -65,7 +65,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 		// Check for upgrades in the upgrade inventory slot. If there is one, remove it from the slot and add it to the machine.
 		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
-			upgrades |= (int)Math.pow(2, inventoryStacks[upgradeSlotIndex].getItemDamage());
+			upgrades |= 1 << inventoryStacks[upgradeSlotIndex].getItemDamage();
 			inventoryStacks[upgradeSlotIndex] = null;
 			updateUpgrades();
 		}
@@ -91,7 +91,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		tagCompound.setShort("Upgrades", (short)upgrades);
+		tagCompound.setShort("Upgrades", upgrades);
 		tagCompound.setByte("Orientation", front);
 		final NBTTagList nbttaglist = new NBTTagList();
 		for(int i = 0; i < inventoryStacks.length; i++) {
@@ -120,7 +120,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		return null;
 	}
 
-	public void handlePacketDataFromServer(byte orientation, int upgrades) {
+	public void handlePacketDataFromServer(byte orientation, short upgrades) {
 		front = orientation;
 		this.upgrades = upgrades;
 	}
@@ -247,7 +247,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public final void dropUpgrades() {
 		final Random random = new Random();
 		for(int i = 0; i <= Consts.UPGRADE_COUNT; i++) {
-			if(hasUpgrade((int)Math.pow(2D, i))) {
+			if(hasUpgrade(1 << i)) {
 				final float f = random.nextFloat() * 0.8F + 0.1F;
 				final float f1 = random.nextFloat() * 0.8F + 0.1F;
 				final float f2 = random.nextFloat() * 0.8F + 0.1F;
@@ -267,13 +267,13 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	 * @param ItemStack for upgrade item with a binary upgrade damage value (see {@link infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
 	 * @return true if valid */
 	public final boolean isUpgradeValid(ItemStack upgrade) {
-		final int upg = (int)Math.pow(2, upgrade.getItemDamage());
+		final int upg = 1 << upgrade.getItemDamage();
 		return upgrade.itemID == Items.upgrade.itemID && (!MachineHelper.hasPrereqUpgrade(upg) || hasUpgrade(upg >> 1)) && !hasUpgrade(upg) && validUpgrades.contains(upg);
 	}
 
 	/** Does the machine have the upgrade
 	 * 
-	 * @param binary upgrade damage value (see {@link infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
+	 * @param binary upgrade damage value (see {@link infinitealloys.util.MachineHelper MachineHelper} for upgrade numbers)
 	 * @return true if the machine has the upgrade */
 	public boolean hasUpgrade(int upgrade) {
 		return (upgrades & upgrade) == upgrade;

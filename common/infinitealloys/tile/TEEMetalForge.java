@@ -14,8 +14,14 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	/** An array for the "stack sizes" of each ingot in the recipe setting */
 	public byte[] recipeAmts = new byte[Consts.METAL_COUNT];
+
 	/** recipeAmts from last tick, used to tell if the recipe has changed to reset progress */
 	private byte[] lastRecipeAmts = new byte[Consts.METAL_COUNT];
+
+	/** The analyzer that is handling this forge. The forge can use recipes that are stored in the analyzer */
+	public TEEAnalyzer analyzer;
+
+	/** The index of the preset alloy that is currently selected */
 	public byte presetSelection = -1;
 
 	public TEEMetalForge(byte front) {
@@ -55,7 +61,7 @@ public class TEEMetalForge extends TileEntityElectric {
 	}
 
 	@Override
-	protected void finishProcess() {
+	protected void onFinishProcess() {
 		final byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
 		for(final int slot : getSlotsWithIngot()) {
 			final int ingotNum = MachineHelper.getIngotNum(inventoryStacks[slot]);
@@ -64,8 +70,10 @@ public class TEEMetalForge extends TileEntityElectric {
 			decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
 		}
 		final ItemStack result = getIngotResult();
+
 		if(inventoryStacks[0] == null)
-			inventoryStacks[0] = result;
+			inventoryStacks[0] = result; // If there are no alloys in the output slot, add this one
+
 		else if(inventoryStacks[0].getTagCompound().getInteger("alloy") == result.getTagCompound().getInteger("alloy"))
 			inventoryStacks[0].stackSize += result.stackSize;
 	}

@@ -22,7 +22,7 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 	/** The max range that machines can be added at with the Internet Wand */
 	public int range;
 
-	/** 3D coords for each machine that is connected to the computer */
+	/** 3D coords for each machine that is connected to this ESU */
 	public final List<Point> connectedMachines = new ArrayList<Point>();
 
 	/** Machines that have been loaded from NBT that need to be added to the actual list */
@@ -78,7 +78,7 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	protected void startProcess() {
+	protected void onStartProcess() {
 		// Take one piece of fuel out of the first slot that has fuel
 		for(int i = 0; i < 9; i++) {
 			if(inventoryStacks[i] != null) {
