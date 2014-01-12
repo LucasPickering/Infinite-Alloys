@@ -15,28 +15,7 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void initLocalization() {
 		for(final String file : Consts.langFiles)
-			LanguageRegistry.instance().loadLocalization(Consts.LANG_PATH + file, file.substring(file.lastIndexOf('/') + 1, file.lastIndexOf('.')), true);
-	}
-
-	@Override
-	public void initBlocks() {
-		super.initBlocks();
-		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			addName(new ItemStack(Blocks.ore, 0, i), "metal." + Consts.METAL_NAMES[i] + ".name", "tile.ore.name");
-		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
-			addName(new ItemStack(Blocks.machine, 1, i), "machine." + MachineHelper.MACHINE_NAMES[i] + ".name");
-	}
-
-	@Override
-	public void initItems() {
-		super.initItems();
-		for(int i = 0; i < Consts.MULTI_ITEM_COUNT; i++)
-			addName(new ItemStack(Items.multi, 1, i), "multi." + Consts.MULTI_ITEM_NAMES[i] + ".name");
-		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			addName(new ItemStack(Items.ingot, 1, i), "metal." + Consts.METAL_NAMES[i] + ".name", "item.ingot.name");
-		addName(new ItemStack(Items.alloyIngot), "item.alloyIngot.name");
-		addName(new ItemStack(Items.upgrade), "item.upgrade.name");
-		addName(new ItemStack(Items.internetWand), "item.internetWand.name");
+			LanguageRegistry.instance().loadLocalization(Consts.LANG_PATH + file, file.substring(file.lastIndexOf('/') + 1, file.lastIndexOf('.')), false);
 	}
 
 	@Override

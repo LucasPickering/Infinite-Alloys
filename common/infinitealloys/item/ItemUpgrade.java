@@ -55,9 +55,4 @@ public class ItemUpgrade extends ItemIA {
 		for(int i = 0; i < Consts.UPGRADE_COUNT; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
-
-	@Override
-	public String getUnlocalizedName(ItemStack itemstack) {
-		return getUnlocalizedName();
-	}
 }

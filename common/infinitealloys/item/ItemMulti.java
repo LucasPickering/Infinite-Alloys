@@ -35,4 +35,11 @@ public class ItemMulti extends ItemIA {
 		for(int i = 0; i < Consts.MULTI_ITEM_COUNT; i++)
 			list.add(new ItemStack(id, 1, i));
 	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack itemstack) {
+		if(itemstack.getItemDamage() < Consts.MULTI_ITEM_COUNT)
+			return "item.IA" + Consts.MULTI_ITEM_NAMES[itemstack.getItemDamage()];
+		return super.getUnlocalizedName(itemstack);
+	}
 }

@@ -7,7 +7,8 @@ import infinitealloys.handlers.EventHandler;
 import infinitealloys.handlers.GfxHandler;
 import infinitealloys.handlers.WorldGenHandler;
 import infinitealloys.item.ItemAlloyIngot;
-import infinitealloys.item.ItemBlockIA;
+import infinitealloys.item.ItemBlockMachine;
+import infinitealloys.item.ItemBlockOre;
 import infinitealloys.item.ItemIngot;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.item.ItemMulti;
@@ -39,8 +40,8 @@ public class CommonProxy {
 		Blocks.ore = new BlockOre(Blocks.oreID).setHardness(3F).setUnlocalizedName("IAore");
 		Blocks.machine = new BlockMachine(Blocks.machineID).setHardness(3F).setUnlocalizedName("IAmachine");
 
-		GameRegistry.registerBlock(Blocks.ore, ItemBlockIA.class, "IAore");
-		GameRegistry.registerBlock(Blocks.machine, ItemBlockIA.class, "IAmachine");
+		GameRegistry.registerBlock(Blocks.ore, ItemBlockOre.class, Blocks.ore.getUnlocalizedName());
+		GameRegistry.registerBlock(Blocks.machine, ItemBlockMachine.class, Blocks.machine.getUnlocalizedName());
 
 		OreDictionary.registerOre("oreZinc", new ItemStack(Blocks.ore, 1, 0));
 		OreDictionary.registerOre("oreMagnesium", new ItemStack(Blocks.ore, 1, 1));
@@ -62,11 +63,17 @@ public class CommonProxy {
 	}
 
 	public void initItems() {
-		Items.multi = new ItemMulti(Items.multiID);
-		Items.ingot = new ItemIngot(Items.ingotID);
-		Items.alloyIngot = new ItemAlloyIngot(Items.alloyIngotID);
-		Items.upgrade = new ItemUpgrade(Items.upgradeID);
-		Items.internetWand = new ItemInternetWand(Items.internetWandID).setMaxStackSize(1);
+		Items.multi = new ItemMulti(Items.multiID).setUnlocalizedName("IAmulti");
+		Items.ingot = new ItemIngot(Items.ingotID).setUnlocalizedName("IAingot");
+		Items.alloyIngot = new ItemAlloyIngot(Items.alloyIngotID).setUnlocalizedName("IAalloyingot");
+		Items.upgrade = new ItemUpgrade(Items.upgradeID).setUnlocalizedName("IAupgrade");
+		Items.internetWand = new ItemInternetWand(Items.internetWandID).setMaxStackSize(1).setUnlocalizedName("IAinternetwand");
+
+		GameRegistry.registerItem(Items.multi, Items.multi.getUnlocalizedName());
+		GameRegistry.registerItem(Items.ingot, Items.ingot.getUnlocalizedName());
+		GameRegistry.registerItem(Items.alloyIngot, Items.alloyIngot.getUnlocalizedName());
+		GameRegistry.registerItem(Items.upgrade, Items.upgrade.getUnlocalizedName());
+		GameRegistry.registerItem(Items.internetWand, Items.internetWand.getUnlocalizedName());
 
 		OreDictionary.registerOre("ingotZinc", new ItemStack(Items.ingot));
 		OreDictionary.registerOre("ingotMagnesium", new ItemStack(Items.ingot, 1, 1));
@@ -139,13 +146,6 @@ public class CommonProxy {
 	}
 
 	public void initRendering() {}
-
-	protected void addName(Object obj, String... keys) {
-		String name = "";
-		for(final String key : keys)
-			name = name + Funcs.getLoc(key);
-		LanguageRegistry.addName(obj, name);
-	}
 
 	private static void addRecipe(ItemStack result, Object... params) {
 		GameRegistry.addRecipe(result, params);

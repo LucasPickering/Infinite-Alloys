@@ -1,0 +1,112 @@
+itemGroup.main=Infinite Alloys
+
+general.on=On
+general.off=Off
+
+item.IAmachinecomponent.name=Machine Component
+item.IAupgradecomponent.name=Upgrade Component
+
+item.IAzincingot.name=Zinc Ingot
+item.IAmagnesiumingot.name=Magnesium Ingot
+item.IAscandiumingot.name=Scandium Ingot
+item.IAtantalumingot.name=Tantalum Ingot
+item.IAroguiteingot.name=Roguite Ingot
+item.IAverditeingot.name=Verdite Ingot
+item.IAhydroniumingot.name=Hydronium Ingot
+item.IAswagtaniumingot.name=Swagtanium Ingot
+
+item.IAupgrade.name=Upgrade
+item.IAinternetwand.name=Internet Wand
+	
+item.IAalloy0.name=Alloy 0
+item.IAalloy1.name=Alloy 1
+item.IAalloy2.name=Alloy 2
+item.IAalloy3.name=Alloy 3
+item.IAalloy4.name=Alloy 4
+item.IAalloy5.name=Alloy 5
+
+upgrade.name=Upgrades
+upgrade.speed1.name=Speed I
+upgrade.speed2.name=Speed II
+upgrade.efficiency1.name=Efficiency I
+upgrade.efficiency2.name=Efficiency II
+upgrade.capacity1.name=Capacity I
+upgrade.capacity2.name=Capacity II
+upgrade.range1.name=Range I
+upgrade.range2.name=Range II
+upgrade.wireless.name=Wireless Networking
+upgrade.eleccapacity1.name=Energy Capacity I
+upgrade.eleccapacity2.name=Energy Capacity II
+
+tile.IAzincore.name=Zinc Ore
+tile.IAmagnesiumore.name=Magnesium Ore
+tile.IAscandiumore.name=Scandium Ore
+tile.IAtantalumore.name=Tantalum Ore
+tile.IAroguiteore.name=Roguite Ore
+tile.IAverditeore.name=Verdite Ore
+tile.IAhydroniumore.name=Hydronium Ore
+tile.IAswagtaniumore.name=Swagtanium Ore
+
+tile.IAcomputer.name=Computer
+tile.IAmetalforge.name=Metal Forge
+tile.IAanalyzer.name=Analyzer
+tile.IAxray.name=X-Ray
+tile.IApasture.name=Pasture
+tile.IAenergystorage.name=Energy Storage Unit
+	
+machine.connected.false=NOT CONNECTED
+machine.connected.true=CONNECTED TO 
+machine.connected.self=SELF
+machine.xray.search=Search
+machine.pasture.mode.0=Off
+machine.pasture.mode.1=Att.
+machine.pasture.mode.2=Rep.
+
+wand.addToWand=Add to Wand
+wand.addSelected=Add Selected
+
+machineHelp.upgrade.title=Upgrades
+machineHelp.upgrade.info=Place an upgrade item here/nto add it to the machine
+machineHelp.progress.title=Progress
+machineHelp.progress.info=Shows the progress of the/nmachine's current process
+machineHelp.energy.title=Energy Connection
+machineHelp.energy.info=Shows the status of the/npower network
+
+machineHelp.cpTab.title=Machine Tabs
+machineHelp.cpTab.info=Use these to switch between/nmachines connected to/nthe network
+
+machineHelp.mfOutput.title=Alloy Output
+machineHelp.mfOutput.info=Completed alloys appear here
+machineHelp.mfSupply.title=Metal Supply
+machineHelp.mfSupply.info=All base metal ingots that are used to make the alloy are stored here
+machineHelp.mfPresets.title=Alloy Presets
+machineHelp.mfPresets.info=Useful alloys are found with the/nanalyzer and can be stored/nand reused/n /nRight and left click to scroll
+machineHelp.mfSelection.title=Alloy Selection
+machineHelp.mfSelection.info=The amount of each metal to use in the alloy/nRight and left click to change amounts
+
+machineHelp.azSupply.title=Alloy Supply
+machineHelp.azSupply.info=Place the required metals here to research for a new alloy/n /nPut alloy the setting at 0 to see the required metals
+machineHelp.azIngots.title=Alloy Composition
+machineHelp.azIngots.info=This shows the composition of each alloy that you have found/n /nSet it to 0 to see the required metals for the next alloy
+   
+machineHelp.xrOre.title=Ore Input
+machineHelp.xrOre.info=Place an ore here to conduct/na search for it
+machineHelp.xrSearch.title=Search Button
+machineHelp.xrSearch.info=Start the search for ores/n /nThis is be long and will use a/nlot of energy
+machineHelp.xrResults.title=Search Results
+machineHelp.xrResults.info=Ores found in the search will/nappear here
+
+machineHelp.psCreatures.title=Creature Selections
+machineHelp.psCreatures.info=Each type of creature can/nbe unaffected by this/nmachine, attracted to it, or/nrepelled by it
+
+machineHelp.esSupply.title=Fuel Supply
+machineHelp.esSupply.info=Fuel is placed in here/nThis uses the same fuel items/nas the vanilla furnace
+
+machineHelp.iwAddToWand.title=Add to Wand
+machineHelp.iwAddToWand.info=Add the machine that was/nright-clicked to this wand list
+machineHelp.iwAddSelected.title=Add Selected
+machineHelp.iwAddSelected.info=Add the machines that are/ncurrently selected in the wand to/nthe block that was right-clicked
+machineHelp.iwList.title=Machine List
+machineHelp.iwList.info=info= for each machine in the list,/nincluding type and location
+machineHelp.iwRemove.title=Remove Machine
+machineHelp.iwRemove.info=Remove this machine from the list

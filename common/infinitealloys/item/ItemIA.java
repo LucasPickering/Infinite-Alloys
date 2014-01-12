@@ -15,7 +15,6 @@ public class ItemIA extends Item {
 	public ItemIA(int id) {
 		super(id);
 		setCreativeTab(InfiniteAlloys.tabIA);
-		setUnlocalizedName("IAitem" + itemID);
 	}
 
 	public ItemIA(int id, String textureName) {
@@ -27,10 +26,5 @@ public class ItemIA extends Item {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister iconRegister) {
 		itemIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + textureName);
-	}
-
-	@Override
-	public String getUnlocalizedName(ItemStack itemstack) {
-		return getUnlocalizedName() + "@" + itemstack.getItemDamage();
 	}
 }

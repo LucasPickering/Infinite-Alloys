@@ -1,6 +1,7 @@
 package infinitealloys.item;
 
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
 import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
@@ -79,6 +80,8 @@ public class ItemAlloyIngot extends ItemIA {
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
-		return getUnlocalizedName();
+		if(itemstack.getItemDamage() > 0 && itemstack.getItemDamage() <= Consts.VALID_ALLOY_COUNT)
+			return "item.IA" + EnumAlloy.values()[itemstack.getItemDamage()].name;
+		return super.getUnlocalizedName(itemstack);
 	}
 }

@@ -28,4 +28,11 @@ public class ItemIngot extends ItemIA {
 			return Consts.metalColors[itemstack.getItemDamage()];
 		return 0xffffff;
 	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack itemstack) {
+		if(itemstack.getItemDamage() < Consts.METAL_COUNT)
+			return "item.IA" + Consts.METAL_NAMES[itemstack.getItemDamage()] + "ingot";
+		return super.getUnlocalizedName(itemstack);
+	}
 }
