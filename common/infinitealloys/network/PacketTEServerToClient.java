@@ -5,7 +5,6 @@ import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEXray;
-import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TEMEnergyStorage;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
@@ -41,7 +40,7 @@ public class PacketTEServerToClient implements PacketIA {
 						break;
 
 					case MachineHelper.ANALYZER:
-						((TEEAnalyzer)te).handlePacketDataFromClient(data.readByte()/* unlockedAlloyCount */);
+						((TEEAnalyzer)te).handlePacketDataFromClient(data.readInt(), data.readInt()/* unlockedAlloyCount */);
 						break;
 
 					case MachineHelper.XRAY:

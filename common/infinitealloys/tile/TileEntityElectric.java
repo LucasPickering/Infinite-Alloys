@@ -58,7 +58,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 		if(energyStorage != null && worldObj.getBlockTileEntity(energyStorage.xCoord, energyStorage.yCoord, energyStorage.zCoord) == null)
 			energyStorage = null;
 	}
-
+	
 	/** Should the process tick be increased? Called every tick to determine if energy should be used and if progress should continue. NOTE: This will return
 	 * true even if there is not a nearby energy storage unit to support the process */
 	public abstract boolean shouldProcess();

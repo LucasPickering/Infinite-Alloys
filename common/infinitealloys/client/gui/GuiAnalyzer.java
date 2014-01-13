@@ -14,7 +14,7 @@ public class GuiAnalyzer extends GuiElectric {
 	private final TEEAnalyzer tea;
 
 	/** The number for the selected recipe, from 0 to {@link infinitealloys.util.Consts#VALID_ALLOY_COUNT Consts.VALID_ALLOY_COUNT} */
-	private int selectedRecipe = -1;
+	private int selectedRecipe;
 
 	public GuiAnalyzer(InventoryPlayer inventoryPlayer, TEEAnalyzer tileEntity) {
 		super(176, 166, inventoryPlayer, tileEntity);
@@ -27,20 +27,18 @@ public class GuiAnalyzer extends GuiElectric {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-
-		if(selectedRecipe >= 0) { // If an alloy if selected
+		if(tea.getAlloys() != 0) { // If an alloy is available
 			for(int i = 0; i < Consts.METAL_COUNT; i++) { // For each metal
-				int amt = Funcs.intAtPos(Funcs.getValidAlloys()[selectedRecipe - 1], Consts.ALLOY_RADIX, i); // The amount of this metal the the currently
+				int amt = Funcs.intAtPos(EnumAlloy.getAlloy(selectedRecipe), Consts.ALLOY_RADIX, i); // The amount of this metal the the currently
 				if(amt > 0) { // If this metal is in this alloy
-					itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.ingot, 1, i), i * 18 + 17, 33); // Draw the metal ingot
-					fontRenderer.drawStringWithShadow(Integer.toString(amt), i * 18 + 28, 42, 0xffffff); // Draw the amount of the metal required
+					itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.ingot, 1, i), i * 18 + 26, 33); // Draw the metal ingot
+					GL11.glDisable(GL11.GL_LIGHTING);
+					fontRenderer.drawStringWithShadow(Integer.toString(amt), i * 18 + 37, 42, 0xffffff); // Draw the amount of the metal required
 				}
 			}
 
-			ItemStack alloy = new ItemStack(Items.alloyIngot, 1, selectedRecipe);
-			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, alloy, 18, 33); // Draw the alloy that it creates
+			ItemStack alloy = new ItemStack(Items.alloyIngot, 1, selectedRecipe + 1);
+			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, alloy, 6, 33); // Draw the alloy that it creates
 			fontRenderer.drawStringWithShadow(Funcs.getLoc(alloy.getItem().getUnlocalizedName(alloy)), 28, 42, 0xffffff); // Draw the name of the alloy
 		}
 
@@ -51,20 +49,21 @@ public class GuiAnalyzer extends GuiElectric {
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		// Was the left mouse button clicked and are the buttons being drawn?
-		if(mouseButton == 0 && tea.getAlloys() > 0) {
-			// Was the up button clicked and is the selection not already maxed?
-			if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 4, topLeft.y + 28, 14, 8)) {
-				for(int i = selectedRecipe + 1; i < Consts.VALID_ALLOY_COUNT; i++) { // Iterate over each alloy with an index greater than the current one
-					if(tea.hasAlloy((short)i))
-						selectedRecipe = i; // If this alloy has been discovered, select it
+		if(tea.getAlloys() != 0) {
+			// Was the ingot clicked?
+			if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 6, topLeft.y + 35, 16, 16)) {
+				if(mouseButton == 0) { // Left-click
+					// Iterate over each alloy with an index greater than the current one
+					for(int i = selectedRecipe + 1; i < Consts.VALID_ALLOY_COUNT; i++)
+						if(tea.hasAlloy(i))
+							selectedRecipe = i; // If this alloy has been discovered, select it
 				}
-			}
 
-			// Was the down button clicked and is the selection not already one?
-			else if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 4, topLeft.y + 47, 14, 8) && selectedRecipe > 0) {
-				for(int i = selectedRecipe - 1; i > 0; i--) { // Iterate over each alloy with an index less than the current one
-					if(tea.hasAlloy((short)i))
-						selectedRecipe = i; // If this alloy has been discovered, select it
+				else if(mouseButton == 1) { // Right-click
+					// Iterate over each alloy with an index less than the current one
+					for(int i = selectedRecipe - 1; i >= 0; i--)
+						if(tea.hasAlloy(i))
+							selectedRecipe = i; // If this alloy has been discovered, select it
 				}
 			}
 		}

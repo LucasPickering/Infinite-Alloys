@@ -2,6 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
@@ -51,8 +52,7 @@ public class TEEMetalForge extends TileEntityElectric {
 		for(final int amt : recipeAmts)
 			if(amt > 0)
 				typesInRecipe++;
-		return (inventoryStacks[0] == null || inventoryStacks[0].isItemEqual(getIngotResult()) && inventoryStacks[0].stackSize < getInventoryStackLimit())
-				&& typesInRecipe > 1 && hasSufficientIngots();
+		return (inventoryStacks[0] == null || inventoryStacks[0].isItemEqual(getIngotResult()) && inventoryStacks[0].stackSize < getInventoryStackLimit()) && typesInRecipe > 1 && hasSufficientIngots();
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	public int getDamageForAlloy(int alloy) {
 		for(int i = 0; i < Consts.VALID_ALLOY_COUNT; i++)
-			if(alloy == Funcs.getValidAlloys()[i])
+			if(alloy == EnumAlloy.getAlloy(i))
 				return i + 1;
 		return -1;
 	}

@@ -256,7 +256,6 @@ public class GuiInternetWand extends GuiScreen {
 		int buttonID;
 		int xPos;
 		int yPos;
-		GuiButton remove;
 
 		int machineID;
 		int machineX;
@@ -276,7 +275,7 @@ public class GuiInternetWand extends GuiScreen {
 			this.machineZ = machineZ;
 			isElectric = MachineHelper.isElectric(mc.theWorld, machineX, machineY, machineZ);
 			isWireless = MachineHelper.isWireless(mc.theWorld, machineX, machineY, machineZ);
-			buttonList.add(remove = new GuiButton(buttonID, xPos + 126, yPos - 1, 16, 20, "X"));
+			buttonList.add(new GuiButton(buttonID, xPos + 126, yPos - 1, 16, 20, "X"));
 		}
 
 		void drawButton() {

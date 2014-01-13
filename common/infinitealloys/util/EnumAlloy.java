@@ -1,5 +1,7 @@
 package infinitealloys.util;
 
+import infinitealloys.core.InfiniteAlloys;
+
 public enum EnumAlloy {
 	// KEEP IN MIND: RIGHTMOST DIGITS ARE THE LESSER METALS WHILE LEFTMOST DIGITS ARE THE FANTASTICAL METALS
 
@@ -10,15 +12,28 @@ public enum EnumAlloy {
 	ALLOY4("alloy4", 11110000, 55550000),
 	ALLOY5("alloy5", 44444444, 99999999);
 
-	public final int id;
 	public final String name;
 	public final int min;
 	public final int max;
 
 	private EnumAlloy(String name, int min, int max) {
-		this.id = 1 << ordinal(); // The ID of this alloy is 2 raised to its position in the anum, e.g. alloy 0 is 1 and alloy 4 is 16
 		this.name = name;
 		this.min = min;
 		this.max = max;
+	}
+
+	/** Get the alloy value of the alloy with the given ID */
+	public static int getAlloy(int id) {
+		return InfiniteAlloys.instance.worldData.getValidAlloys()[id];
+	}
+
+	/** Get the alloy value of this alloy */
+	public int getAlloy() {
+		return InfiniteAlloys.instance.worldData.getValidAlloys()[ordinal()];
+	}
+
+	/** Get the ID of this alloy. The ID is this alloy's index in the enum. */
+	public short getID() {
+		return (short)ordinal();
 	}
 }

@@ -1,6 +1,5 @@
 package infinitealloys.util;
 
-import infinitealloys.core.InfiniteAlloys;
 import java.awt.Rectangle;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -134,11 +133,6 @@ public class Funcs {
 	 * @return true if block at x, y, z is equals id and metadata */
 	public static boolean blocksEqual(World world, int id, int metadata, int x, int y, int z) {
 		return world.getBlockId(x, y, z) == id && world.getBlockMetadata(x, y, z) == metadata;
-	}
-
-	/** Get the array of ints that represents the valid alloys */
-	public static int[] getValidAlloys() {
-		return InfiniteAlloys.instance.worldData.getValidAlloys();
 	}
 
 	/** Get an instance of a player from their name */

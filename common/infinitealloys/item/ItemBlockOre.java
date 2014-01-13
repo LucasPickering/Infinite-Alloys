@@ -1,7 +1,6 @@
 package infinitealloys.item;
 
 import infinitealloys.util.Consts;
-import infinitealloys.util.MachineHelper;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 

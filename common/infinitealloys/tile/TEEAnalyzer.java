@@ -19,10 +19,13 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	public final List<Point> connectedMachines = new ArrayList<Point>();
 
 	/** A binary integer that represents all the alloys that this machine has discovered, this works the same way as the upgrade int */
-	private short alloys;
+	private int alloys;
 
-	/** A binary integer that represents the metals that were consumed and are currently being processed */
+	/** A binary integer that represents the metals that were consumed and are currently being processed. This is used to compute how much energy to use. */
 	private short usedMetals;
+
+	/** The damage value of the alloy that is going to be made from the current process */
+	private int targetAlloy = -1;
 
 	public TEEAnalyzer(byte front) {
 		this();
@@ -30,10 +33,10 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	}
 
 	public TEEAnalyzer() {
-		super(9);
+		super(Consts.METAL_COUNT + 1);
 		stackLimit = 1;
 		baseRKPerTick = -1000;
-		ticksToProcess = 2400;
+		ticksToProcess = 20; // TODO: Change this back to 2400
 	}
 
 	@Override
@@ -43,14 +46,15 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
 	@Override
 	public boolean shouldProcess() {
-		return getAlloyForMetals() != 0;
+		return targetAlloy >= 0 || getAlloyForMetals() >= 0; // Return true if we are already processing or we are ready for a new process
 	}
 
 	@Override
 	protected void onStartProcess() {
-		for(int i = 0; i < Consts.METAL_COUNT; i++) {
-			if(inventoryStacks != null) {
-				usedMetals &= 1 << i;
+		targetAlloy = getAlloyForMetals(); // Set the alloy that we are looking for
+		for(int i = 0; i < Consts.METAL_COUNT; i++) { // Remove the ingots that are in the inventory
+			if(inventoryStacks[i] != null) {
+				usedMetals |= 1 << i;
 				decrStackSize(i, 1);
 			}
 		}
@@ -58,23 +62,47 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
 	@Override
 	protected void onFinishProcess() {
+		alloys |= 1 << targetAlloy; // Add the alloy that we discovered to the alloys that have been discovered
+		targetAlloy = -1; // Reset the alloy that we are discovering
 		if(Funcs.isServer())
 			for(final String player : playersUsing)
-				PacketDispatcher.sendPacketToPlayer(getDescriptionPacket(), Funcs.getPlayerForUsername(player));
+				PacketDispatcher.sendPacketToPlayer(getDescriptionPacket(), Funcs.getPlayerForUsername(player)); // Sync with users
 	}
 
 	/** Has the alloy with the given index been discovered? */
-	public boolean hasAlloy(short alloy) {
+	public boolean hasAlloy(int alloy) {
 		return (alloys >> alloy & 1) == 1;
 	}
 
-	public short getAlloys() {
+	public int getAlloys() {
 		return alloys;
 	}
 
-	/** Return an alloy that can be made using the metals that are currently in the machine. This will return the alloy that uses the most of the the metals. */
-	private short getAlloyForMetals() {
-		return 0;
+	/** Get the alloy that best fits the metals that are currently in the machine. This will return the ID of the alloy that uses the most of the the metals.
+	 * If the alloy has already been discovered, it will not be returned. */
+	private int getAlloyForMetals() {
+		int bestAlloy = -1; // The index of the best match
+		int mostCorrectMetals = 0;
+		alloys:
+		for(EnumAlloy alloy : EnumAlloy.values()) {
+			if(!hasAlloy(alloy.ordinal())) {
+				int correctMetals = 0;
+				for(int i = 0; i < Consts.METAL_COUNT; i++) {
+					boolean isMetalInAnalyzer = inventoryStacks[i] != null; // Is this metal currently in the analyzer? Check the inventory for it.
+					boolean isMetalInAlloy = Funcs.intAtPos(alloy.getAlloy(), Consts.ALLOY_RADIX, i) != 0; // Is this metal used in the alloy?
+
+					if(isMetalInAlloy && !isMetalInAnalyzer)
+						continue alloys; // If this alloy requires a metal that the analyzer doesn't have, skip to the next alloy
+					if(isMetalInAlloy == isMetalInAnalyzer)
+						correctMetals++; // If the presence of this metal in the analyzer matches its presence in the alloy,
+				}
+				if(correctMetals > mostCorrectMetals) {
+					mostCorrectMetals = correctMetals;
+					bestAlloy = alloy.getID();
+				}
+			}
+		}
+		return bestAlloy;
 	}
 
 	@Override
@@ -82,8 +110,8 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		int metalModifier = 0;
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			if((usedMetals >> i & 1) == 1)
-				metalModifier += Math.pow(10, i); // Each alloy contributes to the required RK based on its value
-		return (int)(baseRKPerTick * rkPerTickMult / processTimeMult) * metalModifier * 10;
+				metalModifier += Math.pow(4, i); // Each alloy contributes to the required RK based on its value
+		return (int)(baseRKPerTick * rkPerTickMult / processTimeMult) * metalModifier;
 	}
 
 	@Override
@@ -99,22 +127,20 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 			return false;
 
 		// Add the machine
-		else {
-			final TEEMetalForge temf = (TEEMetalForge)worldObj.getBlockTileEntity(machineX, machineY, machineZ);
-			if(temf.energyStorage != null) { // If the machine is already connected to another storage unit, disconnect it from that
-				for(final Iterator iterator = temf.energyStorage.connectedMachines.iterator(); iterator.hasNext();) {
-					final Point p = (Point)iterator.next();
-					if(p.equals(machineX, machineY, machineZ)) {
-						iterator.remove();
-						break;
-					}
+		final TEEMetalForge temf = (TEEMetalForge)worldObj.getBlockTileEntity(machineX, machineY, machineZ);
+		if(temf.energyStorage != null) { // If the machine is already connected to another storage unit, disconnect it from that
+			for(final Iterator iterator = temf.energyStorage.connectedMachines.iterator(); iterator.hasNext();) {
+				final Point p = (Point)iterator.next();
+				if(p.equals(machineX, machineY, machineZ)) {
+					iterator.remove();
+					break;
 				}
-				temf.energyStorage = null;
 			}
-			connectedMachines.add(new Point(machineX, machineY, machineZ));
-			temf.analyzer = this;
-			return true;
+			temf.energyStorage = null;
 		}
+		connectedMachines.add(new Point(machineX, machineY, machineZ));
+		temf.analyzer = this;
+		return true;
 	}
 
 	@Override
@@ -125,39 +151,48 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		alloys = tagCompound.getShort("alloys");
+		alloys = tagCompound.getInteger("alloys");
+		targetAlloy = tagCompound.getInteger("targetAlloy");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		tagCompound.setShort("alloys", alloys);
+		tagCompound.setInteger("alloys", alloys);
+		tagCompound.setInteger("targetAlloy", targetAlloy);
 	}
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		return ArrayUtils.addAll(super.getSyncDataToClient(), alloys);
+		final List<Object> coords = new ArrayList<Object>();
+		for(final Point point : connectedMachines) {
+			coords.add(point.x);
+			coords.add((short)point.y);
+			coords.add(point.z);
+		}
+		return ArrayUtils.addAll(super.getSyncDataToClient(), alloys, targetAlloy, (byte)connectedMachines.size(), coords.toArray());
 	}
 
-	public void handlePacketDataFromClient(short alloys) {
+	public void handlePacketDataFromClient(int alloys, int targetAlloy) {
 		this.alloys = alloys;
+		this.targetAlloy = targetAlloy;
 	}
 
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(MachineHelper.SPEED2))
-			processTimeMult = 1800;
+			processTimeMult = 0.5F;
 		else if(hasUpgrade(MachineHelper.SPEED1))
-			processTimeMult = 2700;
+			processTimeMult = 0.75F;
 		else
-			processTimeMult = 3600;
+			processTimeMult = 1.0F;
 
 		if(hasUpgrade(MachineHelper.EFFICIENCY2))
 			rkPerTickMult = 0.5F;
 		else if(hasUpgrade(MachineHelper.EFFICIENCY1))
 			rkPerTickMult = 0.75F;
 		else
-			rkPerTickMult = 1.0F;
+			rkPerTickMult = 0.001F; // TODO: Change this back to 1.0F
 	}
 
 	@Override

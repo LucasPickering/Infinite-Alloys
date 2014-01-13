@@ -15,7 +15,6 @@ import infinitealloys.item.ItemMulti;
 import infinitealloys.item.ItemUpgrade;
 import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
-import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -26,7 +25,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class CommonProxy {
 

@@ -1,11 +1,7 @@
 package infinitealloys.client;
 
-import infinitealloys.block.Blocks;
 import infinitealloys.core.CommonProxy;
-import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
-import infinitealloys.util.MachineHelper;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;

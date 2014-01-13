@@ -3,7 +3,6 @@ package infinitealloys.network;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.core.WorldData;
 import infinitealloys.util.Consts;
-import infinitealloys.util.Funcs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import com.google.common.io.ByteArrayDataInput;
@@ -19,6 +18,6 @@ public class PacketWorldData implements PacketIA {
 	}
 
 	public static Packet250CustomPayload getPacket() {
-		return PacketHandler.getPacket(PacketHandler.WORLD_DATA, Funcs.getValidAlloys());
+		return PacketHandler.getPacket(PacketHandler.WORLD_DATA, InfiniteAlloys.instance.worldData.getValidAlloys());
 	}
 }

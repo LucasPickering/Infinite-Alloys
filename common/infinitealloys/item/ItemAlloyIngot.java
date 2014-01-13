@@ -35,7 +35,7 @@ public class ItemAlloyIngot extends ItemIA {
 		if(itemstack.hasTagCompound())
 			alloy = itemstack.getTagCompound().getInteger("alloy");
 		else if(damage >= 0 && damage < Consts.VALID_ALLOY_COUNT)
-			alloy = Funcs.getValidAlloys()[damage];
+			alloy = EnumAlloy.getAlloy(damage);
 		else
 			return;
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
@@ -56,7 +56,7 @@ public class ItemAlloyIngot extends ItemIA {
 		if(itemstack.hasTagCompound())
 			alloy = itemstack.getTagCompound().getInteger("alloy");
 		else if(itemstack.getItemDamage() > 0 && itemstack.getItemDamage() < Consts.VALID_ALLOY_COUNT)
-			alloy = Funcs.getValidAlloys()[itemstack.getItemDamage() - 1];
+			alloy = EnumAlloy.getAlloy(itemstack.getItemDamage() - 1);
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
 			final int ingotColor = Consts.metalColors[i];
 			final int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
