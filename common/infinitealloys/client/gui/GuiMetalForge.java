@@ -55,22 +55,27 @@ public class GuiMetalForge extends GuiElectric {
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
-		// If the preset selection slot was clicked
+		// If the preset selection slot was clicked, adjust its value accordingly
 		if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 39, topLeft.y + 51, 18, 18)) {
-			int[] alloys = new int[0];
-			if(temf.inventoryStacks[0] != null && temf.inventoryStacks[0].hasTagCompound())
-				alloys = temf.inventoryStacks[0].getTagCompound().getIntArray("alloys");
-			if(mouseButton == 0)
-				temf.presetSelection = (byte)Math.min(temf.presetSelection + 1, alloys.length - 1);
-			else if(mouseButton == 1)
-				temf.presetSelection = (byte)Math.max(temf.presetSelection - 1, -1);
-			if(temf.presetSelection > -1)
-				for(int i = 0; i < temf.recipeAmts.length; i++)
-					temf.recipeAmts[i] = (byte)Funcs.intAtPos(alloys[temf.presetSelection], Consts.ALLOY_RADIX, i);
-			PacketDispatcher.sendPacketToServer(PacketTEClientToServer.getPacket(temf));
+			if(mouseButton == 0) { // Left-click
+				// Iterate over each alloy with an index greater than the current one
+				for(int i = temf.presetSelection + 1; i < Consts.VALID_ALLOY_COUNT; i++)
+					if(temf.analyzer.hasAlloy(i))
+						temf.presetSelection = (byte)i; // If this alloy has been discovered, select it
+			}
+
+			else if(mouseButton == 1) { // Right-click
+				// Iterate over each alloy with an index less than the current one
+				for(int i = temf.presetSelection - 1; i >= 0; i--)
+					if(temf.analyzer.hasAlloy(i))
+						temf.presetSelection = (byte)i; // If this alloy has been discovered, select it
+			}
+
+			PacketDispatcher.sendPacketToServer(PacketTEClientToServer.getPacket(temf)); // Sync the new recipe to the server
 		}
 
-		if(temf.presetSelection == -1) {
+		// Otherwise, if the preset is not set, iterate over each metal and if it was clicked, adjust its amount accordingly
+		else if(temf.presetSelection == -1) {
 			for(int i = 0; i < Consts.METAL_COUNT; i++) {
 				if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18)) {
 					if(mouseButton == 0)

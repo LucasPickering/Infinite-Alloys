@@ -33,10 +33,11 @@ public class PacketTEServerToClient implements PacketIA {
 
 				switch(((TileEntityElectric)te).getID()) {
 					case MachineHelper.METAL_FORGE:
+						byte presetSelection = data.readByte();
 						final byte[] recipeAmts = new byte[Consts.METAL_COUNT];
 						for(int i = 0; i < recipeAmts.length; i++)
 							recipeAmts[i] = data.readByte();
-						((TEEMetalForge)te).handlePacketDataFromClient(recipeAmts);
+						((TEEMetalForge)te).handlePacketDataFromClient(presetSelection, recipeAmts);
 						break;
 
 					case MachineHelper.ANALYZER:
