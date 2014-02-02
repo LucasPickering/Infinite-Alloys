@@ -39,22 +39,35 @@ public class BlockMachine extends BlockContainer {
 	public void registerIcons(IconRegister iconRegister) {
 		for(int i = 0; i < Consts.MACHINE_COUNT; i++) {
 			Blocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_top");
-			Blocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_front");
-			Blocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_side");
+			Blocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_bottom");
+			Blocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_front");
+			Blocks.machineIcons[i][3] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_side");
 		}
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
-		final int type = side <= Consts.BOTTOM ? 0 : side == ((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z)).front ? 1 : 2;
-		return Blocks.machineIcons[blockAccess.getBlockMetadata(x, y, z)][type];
+		side = side <= Consts.TOP ? side : side == ((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z)).front ? Consts.SOUTH : Consts.NORTH;
+		return getIcon(side, blockAccess.getBlockMetadata(x, y, z));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int metadata) {
-		return Blocks.machineIcons[metadata][side <= Consts.BOTTOM ? 0 : side == Consts.SOUTH ? 1 : 2];
+		int i = 3;
+		switch(side) {
+			case Consts.TOP:
+				i = 0;
+				break;
+			case Consts.BOTTOM:
+				i = 1;
+				break;
+			case Consts.SOUTH:
+				i = 2;
+				break;
+		}
+		return Blocks.machineIcons[metadata][i];
 	}
 
 	@Override

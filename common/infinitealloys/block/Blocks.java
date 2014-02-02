@@ -12,7 +12,7 @@ public class Blocks {
 	public static Block ore;
 	public static Block machine;
 
-	public static Icon[][] machineIcons = new Icon[Consts.MACHINE_COUNT][3];
+	public static Icon[][] machineIcons = new Icon[Consts.MACHINE_COUNT][4];
 	public static Icon oreForegroundIcon;
 	public static Icon oreBackgroundIcon;
 }
