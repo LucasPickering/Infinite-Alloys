@@ -28,8 +28,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy {
 
-	private final ItemStack[] alloys = new ItemStack[Consts.VALID_ALLOY_COUNT];
-	private final ItemStack[] upgrades = new ItemStack[Consts.UPGRADE_COUNT];
 	public GfxHandler gfxHandler;
 
 	public void initLocalization() {}
@@ -65,7 +63,7 @@ public class CommonProxy {
 		Items.ingot = new ItemIngot(Items.ingotID).setUnlocalizedName("IAingot");
 		Items.alloyIngot = new ItemAlloyIngot(Items.alloyIngotID).setUnlocalizedName("IAalloyingot");
 		Items.upgrade = new ItemUpgrade(Items.upgradeID).setUnlocalizedName("IAupgrade");
-		Items.internetWand = new ItemInternetWand(Items.internetWandID).setMaxStackSize(1).setUnlocalizedName("IAinternetwand");
+		Items.internetWand = new ItemInternetWand(Items.internetWandID).setUnlocalizedName("IAinternetwand");
 
 		GameRegistry.registerItem(Items.multi, Items.multi.getUnlocalizedName());
 		GameRegistry.registerItem(Items.ingot, Items.ingot.getUnlocalizedName());
@@ -78,32 +76,65 @@ public class CommonProxy {
 		OreDictionary.registerOre("ingotScandium", new ItemStack(Items.ingot, 1, 2));
 		OreDictionary.registerOre("ingotTantalum", new ItemStack(Items.ingot, 1, 3));
 
+	}
+
+	public void initRecipes() {
+		ItemStack[] alloys = new ItemStack[Consts.VALID_ALLOY_COUNT];
+		ItemStack[] upgrades = new ItemStack[Consts.UPGRADE_COUNT];
 		for(int i = 0; i < alloys.length; i++)
 			alloys[i] = new ItemStack(Items.alloyIngot, 1, i + 1);
 		for(int i = 0; i < upgrades.length; i++)
 			upgrades[i] = new ItemStack(Items.upgrade, 1, 1 << i);
-	}
 
-	public void initRecipes() {
-		/* Machine Component */addRecipeDict(new ItemStack(Items.multi, 1, 0), " W ", "CBC", " W ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire");
-		/* Upgrade Component */addRecipeDict(new ItemStack(Items.multi, 1, 1), "CTC", "IWI", 'C', "ingotCopper", 'I', Item.ingotIron, 'T', "ingotTin", 'W', "copperWire");
+		/*---MACHINES---*/
+		/* Computer */addRecipe(new ItemStack(Blocks.machine),
+				"W3G", "2C2", "R3R", '2', alloys[2], '3', alloys[3], 'C', Items.multi, 'G', Block.thinGlass, 'R', Item.redstone, 'W', upgrades[8]);
+		/* Metal Forge */addRecipe(new ItemStack(Blocks.machine, 1, 1),
+				"BBB", "BCB", "BBB", 'B', Item.brick, 'C', Items.multi);
+		/* Analyzer */addRecipe(new ItemStack(Blocks.machine, 1, 2), // TODO: Replace Qs with real items
+				"QIQ", "ICI", "QIQ", 'C', Items.multi, 'I', Item.ingotIron);
+		/* X-ray */addRecipe(new ItemStack(Blocks.machine, 1, 4),
+				"E5E", "4C4", "D5G", '4', alloys[4], '5', alloys[5], 'C', Items.multi, 'D', Item.diamond, 'E', Item.enderPearl, 'G', Block.thinGlass);
+		/* Pasture */addRecipe(new ItemStack(Blocks.machine, 1, 4),
+				"F4F", "3C3", "F4F", '3', alloys[3], '4', alloys[4], 'C', Items.multi, 'F', Block.fence);
+		/* ESU */addRecipe(new ItemStack(Blocks.machine, 1, 4), // TODO: Replace Qs with real items
+				"QIQ", "ICI", "QIQ", 'C', Items.multi, 'I', Item.ingotIron);
 
-		/* Computer */addRecipe(new ItemStack(Blocks.machine), "ASA", "WCG", "ABA", 'A', alloys[2], 'B', alloys[3], 'C', Items.multi, 'G', Block.thinGlass, 'S', Block.stoneButton, 'W', upgrades[8]);
-		/* Metal Forge */addRecipe(new ItemStack(Blocks.machine, 1, 1), "B B", " C ", "B B", 'B', Item.brick, 'C', Items.multi);
-		/* Analyzer */addRecipe(new ItemStack(Blocks.machine, 1, 2), "I I", " C ", "I I", 'C', Items.multi, 'I', Item.ingotIron);
-		/* X-ray */addRecipe(new ItemStack(Blocks.machine, 1, 4), "ADA", "BCB", "EGE", 'A', alloys[4], 'B', alloys[5], 'C', Items.multi, 'D', Item.diamond, 'E', Item.enderPearl, 'G', Block.thinGlass);
+		/*---UPGRADES---*/
+		/* Speed I */addRecipeDict(upgrades[0],
+				"AGA", "AUA", 'A', alloys[2], 'G', Item.ingotGold, 'U', new ItemStack(Items.multi, 1, 1));
 
-		/* Speed I */addRecipeDict(upgrades[0], "AGA", "AUA", 'A', alloys[2], 'G', Item.ingotGold, 'U', new ItemStack(Items.multi, 1, 1));
-		/* Speed II */addRecipeDict(upgrades[1], "ADA", "AUA", 'A', alloys[5], 'D', Item.diamond, 'U', upgrades[0]);
-		/* Efficiency I */addRecipeDict(upgrades[2], "AIA", "AUA", 'A', alloys[1], 'I', Item.shovelIron, 'U', new ItemStack(Items.multi, 1, 1));
-		/* Efficiency II */addRecipeDict(upgrades[3], "AGA", "AUA", 'A', alloys[4], 'G', Item.shovelGold, 'U', upgrades[2]);
-		/* Capacity I */addRecipeDict(upgrades[4], "ASA", "AUA", 'A', alloys[0], 'S', Block.chest, 'U', new ItemStack(Items.multi, 1, 1));
-		/* Capacity II */addRecipeDict(upgrades[5], "ASA", "AUA", 'A', alloys[3], 'S', Block.chest, 'U', upgrades[4]);
-		/* Range I */addRecipeDict(upgrades[6], "AIA", "AUA", 'A', alloys[3], 'I', Item.swordIron, 'U', new ItemStack(Items.multi, 1, 1));
-		/* Range II */addRecipeDict(upgrades[7], "AGA", "AUA", 'A', alloys[5], 'G', Item.swordGold, 'U', upgrades[6]);
-		/* Wireless */addRecipeDict(upgrades[8], "AEA", "AUA", 'A', alloys[1], 'E', Item.enderPearl, 'U', new ItemStack(Items.multi, 1, 1));
+		/* Speed II */addRecipeDict(upgrades[1],
+				"ADA", "AUA", 'A', alloys[5], 'D', Item.diamond, 'U', upgrades[0]);
 
-		/* Internet Wand */addRecipeDict(new ItemStack(Items.internetWand), " W ", "RSR", 'R', Item.redstone, 'S', Item.stick, 'W', upgrades[8]);
+		/* Efficiency I */addRecipeDict(upgrades[2],
+				"AIA", "AUA", 'A', alloys[1], 'I', Item.shovelIron, 'U', new ItemStack(Items.multi, 1, 1));
+
+		/* Efficiency II */addRecipeDict(upgrades[3],
+				"AGA", "AUA", 'A', alloys[4], 'G', Item.shovelGold, 'U', upgrades[2]);
+
+		/* Capacity I */addRecipeDict(upgrades[4],
+				"ASA", "AUA", 'A', alloys[0], 'S', Block.chest, 'U', new ItemStack(Items.multi, 1, 1));
+
+		/* Capacity II */addRecipeDict(upgrades[5],
+				"ASA", "AUA", 'A', alloys[3], 'S', Block.chest, 'U', upgrades[4]);
+
+		/* Range I */addRecipeDict(upgrades[6],
+				"AIA", "AUA", 'A', alloys[3], 'I', Item.swordIron, 'U', new ItemStack(Items.multi, 1, 1));
+
+		/* Range II */addRecipeDict(upgrades[7],
+				"AGA", "AUA", 'A', alloys[5], 'G', Item.swordGold, 'U', upgrades[6]);
+
+		/* Wireless */addRecipeDict(upgrades[8],
+				"AEA", "AUA", 'A', alloys[1], 'E', Item.enderPearl, 'U', new ItemStack(Items.multi, 1, 1));
+
+		/*---OTHER ITEMS---*/
+		/* Internet Wand */addRecipeDict(new ItemStack(Items.internetWand),
+				" W ", "RSR", 'R', Item.redstone, 'S', Item.stick, 'W', upgrades[8]);
+		/* Machine Component */addRecipeDict(new ItemStack(Items.multi, 1, 0), // TODO: Make a real recipe
+				" W ", "CBC", " W ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire");
+		/* Upgrade Component */addRecipeDict(new ItemStack(Items.multi, 1, 1), // TODO: Make a real recipe
+				"CTC", "IWI", 'C', "ingotCopper", 'I', Item.ingotIron, 'T', "ingotTin", 'W', "copperWire");
 
 		addSmelting(Blocks.ore.blockID, 0, new ItemStack(Items.ingot, 1, 0), 0.6F);
 		addSmelting(Blocks.ore.blockID, 1, new ItemStack(Items.ingot, 1, 1), 0.6F);

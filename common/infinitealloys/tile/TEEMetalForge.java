@@ -1,31 +1,24 @@
 package infinitealloys.tile;
 
 import infinitealloys.item.Items;
-import infinitealloys.network.PacketTEServerToClient;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
-import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
-import java.util.Arrays;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
-import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class TEEMetalForge extends TileEntityElectric {
 
-	/** An array for the "stack sizes" of each ingot in the recipe setting */
-	public byte[] recipeAmts = new byte[Consts.METAL_COUNT];
+	/** The ID of the alloy that is currently set as the recipe. This is drawn from the connected analyzer. */
+	public int recipeAlloyID = -1;
 
-	/** recipeAmts from last tick, used to tell if the recipe has changed to reset progress */
-	private byte[] lastRecipeAmts = new byte[Consts.METAL_COUNT];
+	/** True if the allot recipe has been changed by the client, used to reset progress */
+	private boolean recipeChanged;
 
 	/** The analyzer that is handling this forge. The forge can use recipes that are stored in the analyzer */
 	public TEEAnalyzer analyzer;
-
-	/** The index of the preset alloy that is currently selected */
-	public byte presetSelection = -1;
 
 	public TEEMetalForge(byte front) {
 		this();
@@ -45,26 +38,24 @@ public class TEEMetalForge extends TileEntityElectric {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		lastRecipeAmts = Arrays.copyOf(recipeAmts, recipeAmts.length);
+		recipeChanged = false;
 	}
 
 	@Override
 	public boolean shouldProcess() {
-		int typesInRecipe = 0;
-		for(final int amt : recipeAmts)
-			if(amt > 0)
-				typesInRecipe++;
-		return (inventoryStacks[0] == null || inventoryStacks[0].isItemEqual(getIngotResult()) && inventoryStacks[0].stackSize < getInventoryStackLimit()) && typesInRecipe > 1 && hasSufficientIngots();
+		return (inventoryStacks[0] == null || inventoryStacks[0].isItemEqual(getIngotResult()) && inventoryStacks[0].stackSize < getInventoryStackLimit()) && hasSufficientIngots();
 	}
 
 	@Override
 	protected boolean shouldResetProgress() {
-		return !hasSufficientIngots() || !Arrays.equals(lastRecipeAmts, recipeAmts);
+		return !hasSufficientIngots() || recipeChanged;
 	}
 
 	@Override
 	protected void onFinishProcess() {
-		final byte[] ingotsToRemove = Arrays.copyOf(recipeAmts, recipeAmts.length);
+		final int[] ingotsToRemove = new int[Consts.METAL_COUNT];
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
+			ingotsToRemove[i] = EnumAlloy.getMetalAmt(recipeAlloyID, i);
 		for(final int slot : getSlotsWithIngot()) {
 			final int ingotNum = MachineHelper.getIngotNum(inventoryStacks[slot]);
 			final int ingots = ingotsToRemove[ingotNum];
@@ -88,53 +79,49 @@ public class TEEMetalForge extends TileEntityElectric {
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		lastRecipeAmts = recipeAmts = tagCompound.getByteArray("RecipeAmts");
-		presetSelection = tagCompound.getByte("presetSelection");
+		recipeAlloyID = tagCompound.getByte("recipeAlloyID");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		tagCompound.setByteArray("RecipeAmts", recipeAmts);
-		tagCompound.setByte("presetSelection", presetSelection);
+		tagCompound.setByte("recipeAlloyID", (byte)recipeAlloyID);
 	}
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		return ArrayUtils.addAll(super.getSyncDataToClient(), presetSelection, recipeAmts);
+		return ArrayUtils.addAll(super.getSyncDataToClient(), recipeAlloyID);
 	}
 
 	@Override
 	public Object[] getSyncDataToServer() {
-		return new Object[] { presetSelection, recipeAmts };
+		return new Object[] { recipeAlloyID };
 	}
 
-	public void handlePacketDataFromClient(byte presetSelection, byte[] recipeAmts) {
-		this.presetSelection = presetSelection;
-		this.recipeAmts = recipeAmts;
-		setRecipeAmts();
+	public void handlePacketDataFromClient(byte recipeAlloyID) {
+		if(recipeAlloyID != this.recipeAlloyID)
+			recipeChanged = true;
+		this.recipeAlloyID = recipeAlloyID;
 	}
 
 	/** Return the resulting ingot for the smelted ingots
 	 * 
 	 * @return The resulting ingot. */
 	private ItemStack getIngotResult() {
-		int alloy = 0;
-		for(int i = 0; i < recipeAmts.length; i++)
-			alloy += Math.pow(Consts.ALLOY_RADIX, i) * recipeAmts[i];
-		alloy = Funcs.reduceAlloy(alloy);
 		final ItemStack result = new ItemStack(Items.alloyIngot);
 		final NBTTagCompound tagCompound = new NBTTagCompound();
-		tagCompound.setInteger("alloy", alloy);
+		tagCompound.setInteger("alloy", EnumAlloy.getAlloy(recipeAlloyID));
 		result.setTagCompound(tagCompound);
-		result.setItemDamage(getDamageForAlloy(alloy));
+		result.setItemDamage(getDamageForAlloy(EnumAlloy.getAlloy(recipeAlloyID)));
 		return result;
 	}
 
 	/** Does the inventory of the forge contain enough ingots to fulfill the current recipe? */
 	private boolean hasSufficientIngots() {
-		for(int i = 0; i < getIngotAmts().length; i++)
-			if(getIngotAmts()[i] < recipeAmts[i])
+		if(recipeAlloyID == -1)
+			return false;
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
+			if(getAvailableIngots()[i] < EnumAlloy.getMetalAmt(recipeAlloyID, i))
 				return false;
 		return true;
 	}
@@ -155,27 +142,20 @@ public class TEEMetalForge extends TileEntityElectric {
 		return slots;
 	}
 
-	private int[] getIngotAmts() {
+	/** Get the amount of ingots of each metal in the inventory that are available for use */
+	private int[] getAvailableIngots() {
 		final int[] amts = new int[Consts.METAL_COUNT];
 		for(final int slot : getSlotsWithIngot())
 			amts[MachineHelper.getIngotNum(inventoryStacks[slot])] += inventoryStacks[slot].stackSize;
 		return amts;
 	}
 
+	/** Get the total quantity of ingots in the recipe */
 	private int getIngotsInRecipe() {
 		int ingots = 0;
-		for(final int amt : recipeAmts)
-			ingots += amt;
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
+			ingots += EnumAlloy.getMetalAmt(recipeAlloyID, i);
 		return ingots;
-	}
-
-	private void setRecipeAmts() {
-		if(presetSelection < -1) {
-			int alloy = EnumAlloy.getAlloy(presetSelection);
-			for(int i = 0; i < Consts.METAL_COUNT; i++)
-				recipeAmts[i] = (byte)Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
-		}
-		PacketDispatcher.sendPacketToServer(PacketTEServerToClient.getPacket(this));
 	}
 
 	@Override

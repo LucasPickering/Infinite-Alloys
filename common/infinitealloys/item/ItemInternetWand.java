@@ -12,6 +12,7 @@ public class ItemInternetWand extends ItemIA {
 
 	public ItemInternetWand(int id) {
 		super(id, "internetwand");
+		setMaxStackSize(1);
 	}
 
 	@Override
