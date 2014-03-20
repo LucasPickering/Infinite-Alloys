@@ -37,17 +37,20 @@ public class GuiMetalForge extends GuiElectric {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		if(temf.inventoryStacks[0] != null && temf.recipeAlloyID > -1) {
-			final int[] alloys = temf.inventoryStacks[0].getTagCompound().getIntArray("alloys");
-			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.alloyIngot, 1, temf.getDamageForAlloy(alloys[temf.recipeAlloyID])), 40, 52);
-		}
+
+		// If there is an alloy available and selected
+		if(temf.recipeAlloyID >= 0)
+			// Render the item icon for the alloy. The itemstack for a valid alloy is obtained by setting the damage to one more than the alloy's ID.
+			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.alloyIngot, 1, temf.recipeAlloyID + 1), 40, 52);
+
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.ingot, 1, i), i % 4 * 18 + 66, i / 4 * 18 + 43);
+
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			fontRenderer.drawStringWithShadow(EnumAlloy.getMetalAmt(temf.recipeAlloyID, i) + "", i % 4 * 18 + 77, i / 4 * 18 + 52, 0xffffff);
+			fontRenderer.drawStringWithShadow((temf.recipeAlloyID < 0 ? 0 : EnumAlloy.getMetalAmt(temf.recipeAlloyID, i)) + "", i % 4 * 18 + 77, i / 4 * 18 + 52, 0xffffff);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
@@ -57,7 +60,7 @@ public class GuiMetalForge extends GuiElectric {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		// If the preset selection slot was clicked, adjust its value accordingly
-		if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 39, topLeft.y + 51, 18, 18)) {
+		if(temf.analyzer != null && Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 39, topLeft.y + 51, 18, 18)) {
 			if(mouseButton == 0) { // Left-click
 				// Iterate over each alloy with an index greater than the current one
 				for(int i = temf.recipeAlloyID + 1; i < Consts.VALID_ALLOY_COUNT; i++)
@@ -67,7 +70,7 @@ public class GuiMetalForge extends GuiElectric {
 
 			else if(mouseButton == 1) { // Right-click
 				// Iterate over each alloy with an index less than the current one
-				for(int i = temf.recipeAlloyID- 1; i >= 0; i--)
+				for(int i = temf.recipeAlloyID - 1; i >= 0; i--)
 					if(temf.analyzer.hasAlloy(i))
 						temf.recipeAlloyID = (byte)i; // If this alloy has been discovered, select it
 			}

@@ -1,13 +1,13 @@
 package infinitealloys.tile;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
@@ -69,13 +69,13 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 				PacketDispatcher.sendPacketToPlayer(getDescriptionPacket(), Funcs.getPlayerForUsername(player)); // Sync with users
 	}
 
+	public int getAlloys() {
+		return alloys;
+	}
+
 	/** Has the alloy with the given index been discovered? */
 	public boolean hasAlloy(int alloy) {
 		return (alloys >> alloy & 1) == 1;
-	}
-
-	public int getAlloys() {
-		return alloys;
 	}
 
 	/** Get the alloy that best fits the metals that are currently in the machine. This will return the ID of the alloy that uses the most of the the metals.
@@ -128,15 +128,15 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
 		// Add the machine
 		final TEEMetalForge temf = (TEEMetalForge)worldObj.getBlockTileEntity(machineX, machineY, machineZ);
-		if(temf.energyStorage != null) { // If the machine is already connected to another storage unit, disconnect it from that
-			for(final Iterator iterator = temf.energyStorage.connectedMachines.iterator(); iterator.hasNext();) {
+		if(temf.analyzer != null) { // If the machine is already connected to another analyzer, disconnect it from that
+			for(final Iterator iterator = temf.analyzer.connectedMachines.iterator(); iterator.hasNext();) {
 				final Point p = (Point)iterator.next();
 				if(p.equals(machineX, machineY, machineZ)) {
 					iterator.remove();
 					break;
 				}
 			}
-			temf.energyStorage = null;
+			temf.analyzer = null;
 		}
 		connectedMachines.add(new Point(machineX, machineY, machineZ));
 		temf.analyzer = this;

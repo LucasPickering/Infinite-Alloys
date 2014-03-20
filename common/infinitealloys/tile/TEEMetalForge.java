@@ -39,6 +39,13 @@ public class TEEMetalForge extends TileEntityElectric {
 	public void updateEntity() {
 		super.updateEntity();
 		recipeChanged = false;
+		
+		// If the analyzer that was connected to this no longer exists, make it null
+		if(analyzer != null && worldObj.getBlockTileEntity(energyStorage.xCoord, energyStorage.yCoord, energyStorage.zCoord) == null)
+			analyzer = null;
+		
+		if(analyzer == null)
+			recipeAlloyID = -1;
 	}
 
 	@Override
@@ -110,9 +117,9 @@ public class TEEMetalForge extends TileEntityElectric {
 	private ItemStack getIngotResult() {
 		final ItemStack result = new ItemStack(Items.alloyIngot);
 		final NBTTagCompound tagCompound = new NBTTagCompound();
-		tagCompound.setInteger("alloy", EnumAlloy.getAlloy(recipeAlloyID));
+		tagCompound.setInteger("alloy", EnumAlloy.getAlloyForID(recipeAlloyID));
 		result.setTagCompound(tagCompound);
-		result.setItemDamage(getDamageForAlloy(EnumAlloy.getAlloy(recipeAlloyID)));
+		result.setItemDamage(recipeAlloyID + 1);
 		return result;
 	}
 
@@ -124,13 +131,6 @@ public class TEEMetalForge extends TileEntityElectric {
 			if(getAvailableIngots()[i] < EnumAlloy.getMetalAmt(recipeAlloyID, i))
 				return false;
 		return true;
-	}
-
-	public int getDamageForAlloy(int alloy) {
-		for(int i = 0; i < Consts.VALID_ALLOY_COUNT; i++)
-			if(alloy == EnumAlloy.getAlloy(i))
-				return i + 1;
-		return -1;
 	}
 
 	/** Get a list of the metal slots that contain an ingot */

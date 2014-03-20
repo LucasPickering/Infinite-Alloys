@@ -56,10 +56,10 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 			machinesToBeAdded = null;
 		}
 
-		// If a connected machine no longer exists, remove it from the network
+		// If a connected machine no longer exists or has connected to another machine, remove it from this network
 		for(final Iterator iterator = connectedMachines.iterator(); iterator.hasNext();) {
 			final Point p = (Point)iterator.next();
-			if(!MachineHelper.isElectric(worldObj, p.x, p.y, p.z))
+			if(!MachineHelper.isElectric(worldObj, p.x, p.y, p.z) || ((TileEntityElectric)worldObj.getBlockTileEntity(p.x, p.y, p.z)).energyStorage != this)
 				iterator.remove();
 		}
 

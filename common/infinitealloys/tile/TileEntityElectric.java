@@ -41,6 +41,10 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 		// Under certain conditions, reset the progress of the machine
 		if(shouldResetProgress())
 			processProgress = 0;
+		
+		// If the ESU that was connected to this no longer exists, make it null
+		if(energyStorage != null && worldObj.getBlockTileEntity(energyStorage.xCoord, energyStorage.yCoord, energyStorage.zCoord) == null)
+			energyStorage = null;
 
 		// If the machine should be processing and enough energy is available, increment the progress by one. If this is the first tick of the process, call
 		// startProcess(). If it has reached or exceeded the limit for completion, then finish the process and reset the counter.
@@ -53,10 +57,6 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 				onInventoryChanged();
 			}
 		}
-
-		// If the energy storage unit that was connected to this no longer exists, make it null
-		if(energyStorage != null && worldObj.getBlockTileEntity(energyStorage.xCoord, energyStorage.yCoord, energyStorage.zCoord) == null)
-			energyStorage = null;
 	}
 	
 	/** Should the process tick be increased? Called every tick to determine if energy should be used and if progress should continue. NOTE: This will return

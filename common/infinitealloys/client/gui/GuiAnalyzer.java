@@ -29,7 +29,7 @@ public class GuiAnalyzer extends GuiElectric {
 
 		if(tea.getAlloys() != 0) { // If an alloy is available
 			for(int i = 0; i < Consts.METAL_COUNT; i++) { // For each metal
-				int amt = Funcs.intAtPos(EnumAlloy.getAlloy(selectedRecipe), Consts.ALLOY_RADIX, i); // The amount of this metal the the currently
+				int amt = Funcs.intAtPos(EnumAlloy.getAlloyForID(selectedRecipe), Consts.ALLOY_RADIX, i); // The amount of this metal the the currently
 				if(amt > 0) { // If this metal is in this alloy
 					itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.ingot, 1, i), i * 18 + 26, 33); // Draw the metal ingot
 					GL11.glDisable(GL11.GL_LIGHTING);
