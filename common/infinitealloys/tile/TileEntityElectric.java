@@ -69,6 +69,11 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 			energyNetworkID = -1;
 	}
 
+	@SideOnly(Side.CLIENT)
+	public int getEnergyNetworkID() {
+		return energyNetworkID;
+	}
+
 	/** Should the process tick be increased? Called every tick to determine if energy should be used and if progress should continue. NOTE: This will return
 	 * true even if there is not a nearby energy storage unit to support the process */
 	public abstract boolean shouldProcess();

@@ -2,6 +2,7 @@ package infinitealloys.client.gui;
 
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.util.Funcs;
+import infinitealloys.util.NetworkManager;
 import infinitealloys.util.Point;
 import java.text.DecimalFormat;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -15,11 +16,11 @@ public abstract class GuiElectric extends GuiMachine {
 	/** Coordinates of the energy icon, that indicates power network status */
 	protected java.awt.Point energyIcon = new java.awt.Point();
 
-	protected TileEntityElectric tem;
+	protected TileEntityElectric tee;
 
 	public GuiElectric(int xSize, int ySize, InventoryPlayer inventoryPlayer, TileEntityElectric tileEntity) {
 		super(xSize, ySize, inventoryPlayer, tileEntity);
-		tem = tileEntity;
+		tee = tileEntity;
 	}
 
 	@Override
@@ -29,19 +30,19 @@ public abstract class GuiElectric extends GuiMachine {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
 		// Draw the progress info if the mouse is over the progress bar
-		if(tem.ticksToProcess > 0)
+		if(tee.ticksToProcess > 0)
 			if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height))
 				// Draw the progress as a percentage, rounded to the nearest tenth
-				drawTextBox(mouseX, mouseY, new ColoredLine(new DecimalFormat("0.0").format(tem.getProcessProgressScaled(100F)) + "%", 0xffffff));
+				drawTextBox(mouseX, mouseY, new ColoredLine(new DecimalFormat("0.0").format(tee.getProcessProgressScaled(100F)) + "%", 0xffffff));
 
 		// Draw the power network info if the mouse is over the energy icon
 		if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + energyIcon.x, topLeft.y + energyIcon.y, ENERGY_ICON_ON.width, ENERGY_ICON_ON.height)) {
-			if(tem.energyStorage != null) {
-				final int rkChange = tem.shouldProcess() ? tem.getRKChange() : 0;// The rate of change of RK
-				final Point esu = tem.energyStorage.getCoords(); // The coordinates of the energy storage unit
+			if(tee.getEnergyNetworkID() != -1) {
+				final int rkChange = tee.shouldProcess() ? tee.getRKChange() : 0;// The rate of change of RK
+				final Point esu = NetworkManager.getHost(tee.getEnergyNetworkID()); // The coordinates of the energy storage unit
 
 				// If the ESU for this machine is this machine, display SELF, otherwise display the coords of the ESU
-				final String line1 = Funcs.getLoc("machine.connected.true") + (esu.equals(tem.getCoords()) ? Funcs.getLoc("machine.connected.self") : esu);
+				final String line1 = Funcs.getLoc("machine.connected.true") + (esu.equals(tee.xCoord, tee.yCoord, tee.zCoord) ? Funcs.getLoc("machine.connected.self") : esu);
 
 				// If the rk change is positive, add '+', then display the rate of change of RK
 				final String line2 = (rkChange > 0 ? "+" : "") + rkChange + " RK/t";
@@ -64,12 +65,12 @@ public abstract class GuiElectric extends GuiMachine {
 		Funcs.bindTexture(extras);
 
 		// Draw the progress bar overlay
-		if(tem.ticksToProcess > 0)
-			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, (int)tem.getProcessProgressScaled(PROGRESS_BAR.width),
+		if(tee.ticksToProcess > 0)
+			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, (int)tee.getProcessProgressScaled(PROGRESS_BAR.width),
 					PROGRESS_BAR.height);
 
 		// Draw the energy icon overlay
-		if(tem.energyStorage != null)
+		if(tee.getEnergyNetworkID() != -1)
 			Funcs.drawTexturedModalRect(this, energyIcon.x, energyIcon.y, ENERGY_ICON_ON);
 		else
 			Funcs.drawTexturedModalRect(this, energyIcon.x, energyIcon.y, ENERGY_ICON_OFF);

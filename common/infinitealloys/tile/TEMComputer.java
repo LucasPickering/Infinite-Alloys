@@ -1,5 +1,7 @@
 package infinitealloys.tile;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.NetworkManager;
 import infinitealloys.util.Point;
@@ -51,6 +53,11 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	public void notifyForNetworkDeletion(int networkID) {
 		if(networkID == computerNetworkID)
 			computerNetworkID = -1;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public int getComputerNetworkID() {
+		return computerNetworkID;
 	}
 
 	@SuppressWarnings("unused")

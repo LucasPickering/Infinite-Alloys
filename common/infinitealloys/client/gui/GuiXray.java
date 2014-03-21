@@ -130,10 +130,10 @@ public class GuiXray extends GuiElectric {
 	}
 
 	private void setButtons() {
-		if(tex.inventoryStacks[0] == null || tem.getProcessProgress() > 0)
+		if(tex.inventoryStacks[0] == null || tee.getProcessProgress() > 0)
 			blockButtons = new BlockButton[0];
 		else {
-			final int[] blockCounts = new int[tem.yCoord];
+			final int[] blockCounts = new int[tee.yCoord];
 			final List<Integer> levels = new ArrayList<Integer>();
 			// Go through each detected block
 			for(final Point block : tex.detectedBlocks) {

@@ -57,6 +57,15 @@ public class NetworkManager {
 		networks.get(networkID).clients.remove(client);
 	}
 
+	/** Get a specific client from a network
+	 * 
+	 * @param networkID the ID of the network in question
+	 * @param clientIndex the index of the client in the network's list of clients
+	 * @return a Point that contains the coordinates to the client */
+	public static Point getClient(int networkID, int clientIndex) {
+		return networks.get(networkID).clients.get(clientIndex);
+	}
+
 	/** Get an array of the clients on a specific network
 	 * 
 	 * @param networkID the ID of the network in question

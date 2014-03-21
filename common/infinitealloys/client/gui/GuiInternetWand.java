@@ -5,7 +5,6 @@ import infinitealloys.client.EnumHelp;
 import infinitealloys.client.gui.GuiMachine.ColoredLine;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
-import infinitealloys.network.PacketAddMachine;
 import infinitealloys.network.PacketWand;
 import infinitealloys.tile.IHost;
 import infinitealloys.tile.TEMComputer;
@@ -178,17 +177,17 @@ public class GuiInternetWand extends GuiScreen {
 	@Override
 	public void actionPerformed(GuiButton button) {
 		switch(button.id) {
-			case Consts.WAND_SIZE:
-				InfiniteAlloys.instance.proxy.initLocalization(); // TODO: Remove this line, it is for debug only!!!!
+			case Consts.WAND_SIZE: // Help button
+				InfiniteAlloys.instance.proxy.initLocalization(); // TODO: Remove this line, it is for debug only!
 				helpEnabled = !helpEnabled;
 				break;
-			case Consts.WAND_SIZE + 1:
+			case Consts.WAND_SIZE + 1: // Add the block that was clicked to the wand's list
 				ItemStack heldItem = mc.thePlayer.getHeldItem();
 				final int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 				PacketDispatcher.sendPacketToServer(PacketWand.getPacketAdd(a[0], (short)a[1], a[2]));
 				((ItemInternetWand)heldItem.getItem()).addMachine(mc.theWorld, heldItem, a[0], a[1], a[2]);
 				break;
-			case Consts.WAND_SIZE + 2:
+			case Consts.WAND_SIZE + 2: // Add selected machines to a host
 				heldItem = mc.thePlayer.getHeldItem();
 				final int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 

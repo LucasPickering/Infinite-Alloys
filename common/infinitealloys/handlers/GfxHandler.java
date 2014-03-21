@@ -182,7 +182,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 	@SideOnly(Side.CLIENT)
 	@ForgeSubscribe
-	public void renderOutlines(RenderWorldLastEvent event) {
+	public void renderOutlines(@SuppressWarnings("unused") RenderWorldLastEvent event) {
 		if(xrayBlocks.isEmpty())
 			return;
 		GL11.glPushMatrix();

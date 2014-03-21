@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TEEMetalForge extends TileEntityElectric {
 
@@ -84,6 +86,11 @@ public class TEEMetalForge extends TileEntityElectric {
 	@Override
 	public int getRKChange() {
 		return (int)(baseRKPerTick * rkPerTickMult / processTimeMult * getIngotsInRecipe());
+	}
+
+	@SideOnly(Side.CLIENT)
+	public int getAnalyzerNetworkID() {
+		return analyzerNetworkID;
 	}
 
 	@Override

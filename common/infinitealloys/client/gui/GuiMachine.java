@@ -10,6 +10,7 @@ import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
+import infinitealloys.util.NetworkManager;
 import infinitealloys.util.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -124,10 +125,10 @@ public abstract class GuiMachine extends GuiContainer {
 			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(cont.x, cont.y, cont.z), true,
 					tem.coordsEquals(cont.x, cont.y, cont.z));
 			controllerTab.drawButton();
-			for(int i = 0; i < tec.connectedMachines.size(); i++) {
-				final Point coords = tec.connectedMachines.get(i);
+			for(int i = 0; i < NetworkManager.getSize(tec.getComputerNetworkID()); i++) {
+				final Point client = NetworkManager.getClient(tec.getComputerNetworkID(), i);
 				machineTabs.add(new GuiMachineTab(mc, itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityElectric)mc.theWorld.getBlockTileEntity(
-						coords.x, coords.y, coords.z), i / 5 == 0, tem.coordsEquals(coords.x, coords.y, coords.z)));
+						client.x, client.y, client.z), i / 5 == 0, client.equals(tem.xCoord, tem.yCoord, tem.zCoord)));
 				machineTabs.get(i).drawButton();
 			}
 		}

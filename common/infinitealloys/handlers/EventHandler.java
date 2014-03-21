@@ -31,7 +31,7 @@ public class EventHandler implements ICraftingHandler {
 	private String world;
 
 	@ForgeSubscribe
-	public void onWorldLoad(Load event) {
+	public void onWorldLoad(@SuppressWarnings("unused") Load event) {
 		// If it's the server, look for stored alloy data and if they exist, load them. If not, generate new data.
 		if(Funcs.isServer()) {
 			world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(0).getChunkSaveLocation().getPath();
@@ -77,7 +77,7 @@ public class EventHandler implements ICraftingHandler {
 	}
 
 	@ForgeSubscribe
-	public void onWorldUnload(Unload event) {
+	public void onWorldUnload(@SuppressWarnings("unused") Unload event) {
 		// Clear the list of blocks to be outlines by the x-ray on unload. Alloys are not stored client-side, so return.
 		if(Funcs.isClient()) {
 			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();

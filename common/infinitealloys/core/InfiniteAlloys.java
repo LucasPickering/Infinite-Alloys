@@ -47,7 +47,7 @@ public class InfiniteAlloys {
 	}
 
 	@EventHandler
-	public void load(FMLInitializationEvent event) {
+	public void load(@SuppressWarnings("unused") FMLInitializationEvent event) {
 		tabIA = new CreativeTabIA(CreativeTabs.getNextID(), "main");
 		proxy.initLocalization();
 		proxy.initBlocks();
@@ -59,5 +59,5 @@ public class InfiniteAlloys {
 	}
 
 	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {}
+	public void postInit(@SuppressWarnings("unused") FMLPostInitializationEvent event) {}
 }
