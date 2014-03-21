@@ -26,8 +26,11 @@ public class Point {
 		return x == x2 && y == y2 && z == z2;
 	}
 
-	public boolean equals(Point p2) {
-		return equals(p2.x, p2.y, p2.z);
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof Point)
+			return equals(((Point)o).x, ((Point)o).y, ((Point)o).z);
+		return false;
 	}
 
 	public double distanceTo(int x2, int y2, int z2) {

@@ -1,6 +1,5 @@
 package infinitealloys.network;
 
-import infinitealloys.tile.IHost;
 import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
@@ -59,13 +58,6 @@ public class PacketTEServerToClient implements PacketIA {
 						((TEMEnergyStorage)te).handlePacketDataFromServer(data.readInt()/* ticksToProcess */, data.readInt()/* currentRK */);
 						break;
 				}
-			}
-
-			if(te instanceof IHost) {
-				((IHost)te).clearMachines();
-				byte size = data.readByte();
-				for(int i = 0; i < size; i++)
-					((IHost)te).addMachine(null, data.readInt()/* X */, data.readShort()/* Y */, data.readInt()/* Z */);
 			}
 		}
 	}

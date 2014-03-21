@@ -5,6 +5,7 @@ import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
+import infinitealloys.util.NetworkRegistry.Network;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,6 +27,9 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
 	/** The damage value of the alloy that is going to be made from the current process */
 	private int targetAlloy = -1;
+
+	/** The wireless network that this block is hosting */
+	private Network network;
 
 	public TEEAnalyzer(byte front) {
 		this();

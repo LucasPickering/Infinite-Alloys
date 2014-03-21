@@ -1,6 +1,8 @@
 package infinitealloys.tile;
 
 import infinitealloys.util.MachineHelper;
+import infinitealloys.util.NetworkRegistry;
+import infinitealloys.util.NetworkRegistry.Network;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,11 +23,8 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 	/** The max range that machines can be added at with the Internet Wand */
 	public int range;
 
-	/** 3D coords for each machine that is connected to this ESU */
-	public final List<Point> connectedMachines = new ArrayList<Point>();
-
-	/** Machines that have been loaded from NBT that need to be added to the actual list */
-	private List<Point> machinesToBeAdded;
+	/** The wireless network that this block is hosting */
+	private Network hostedNetwork;
 
 	/** The ratio between how long an item will burn in an ESU and how long it will burn in a furnace. ESU is numerator, furnace is denominator. */
 	private final float ESU_TO_FURNACE_TICK_RATIO = 0.5F;
@@ -47,22 +46,9 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public void updateEntity() {
-		if(energyStorage == null)
-			energyStorage = this;
-
-		if(machinesToBeAdded != null) {
-			for(final Point machine : machinesToBeAdded)
-				addMachine(null, machine.x, machine.y, machine.z);
-			machinesToBeAdded = null;
-		}
-
-		// If a connected machine no longer exists or has connected to another machine, remove it from this network
-		for(final Iterator iterator = connectedMachines.iterator(); iterator.hasNext();) {
-			final Point p = (Point)iterator.next();
-			if(!MachineHelper.isElectric(worldObj, p.x, p.y, p.z) || ((TileEntityElectric)worldObj.getBlockTileEntity(p.x, p.y, p.z)).energyStorage != this)
-				iterator.remove();
-		}
-
+		if(hostedNetwork == null)
+			hostedNetwork = NetworkRegistry.buildNetwork(new Point(xCoord, yCoord, zCoord));
+		
 		super.updateEntity();
 	}
 
@@ -93,11 +79,6 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 		super.readFromNBT(tagCompound);
 		currentRK = tagCompound.getInteger("currentRK");
 		ticksToProcess = tagCompound.getInteger("ticksToProcess");
-		machinesToBeAdded = new ArrayList<Point>();
-		for(int i = 0; tagCompound.hasKey("Client" + i); i++) {
-			final int[] client = tagCompound.getIntArray("Client" + i);
-			machinesToBeAdded.add(new Point(client[0], client[1], client[2]));
-		}
 	}
 
 	@Override
@@ -105,19 +86,11 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("currentRK", currentRK);
 		tagCompound.setInteger("ticksToProcess", ticksToProcess);
-		for(int i = 0; i < connectedMachines.size(); i++)
-			tagCompound.setIntArray("Client" + i, new int[] { connectedMachines.get(i).x, connectedMachines.get(i).y, connectedMachines.get(i).z });
 	}
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		final List<Object> coords = new ArrayList<Object>();
-		for(final Point point : connectedMachines) {
-			coords.add(point.x);
-			coords.add((short)point.y);
-			coords.add(point.z);
-		}
-		return ArrayUtils.addAll(super.getSyncDataToClient(), ticksToProcess, currentRK, (byte)connectedMachines.size(), coords.toArray());
+		return ArrayUtils.addAll(super.getSyncDataToClient(), ticksToProcess, currentRK);
 	}
 
 	public void handlePacketDataFromServer(int ticksToProcess, int currentRK) {
@@ -126,25 +99,19 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public boolean addMachine(EntityPlayer player, int machineX, int machineY, int machineZ) {
-		for(final Point coords : connectedMachines) {
-			if(coords.x == machineX && coords.y == machineY && coords.z == machineZ) {
-				if(player != null && worldObj.isRemote)
-					player.addChatMessage("Error: Machine is already in network");
-				return false;
-			}
+	public boolean addClient(EntityPlayer player, Point client) {
+		if(hostedNetwork.hasClient(client)) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Machine is already in network");
+			return false;
 		}
-		if(machineX == xCoord && machineY == yCoord && machineZ == zCoord) {
+		else if(client.equals(xCoord, yCoord, zCoord)) {
 			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Cannot add self to network");
 		}
-		else if(new Point(machineX, machineY, machineZ).distanceTo(xCoord, yCoord, zCoord) > range) {
+		else if(client.distanceTo(xCoord, yCoord, zCoord) > range) {
 			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Block out of range");
-		}
-		else if(!MachineHelper.isElectric(worldObj, machineX, machineY, machineZ)) {
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Block is not electrical");
 		}
 		else {
 			final TileEntityElectric tee = (TileEntityElectric)worldObj.getBlockTileEntity(machineX, machineY, machineZ);
@@ -165,11 +132,6 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public void clearMachines() {
-		connectedMachines.clear();
 	}
 
 	/** Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK, will the result be less than zero or overflow the machine? If
