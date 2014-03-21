@@ -5,7 +5,7 @@ import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
-import infinitealloys.util.NetworkRegistry.Network;
+import infinitealloys.util.NetworkManager.Network;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

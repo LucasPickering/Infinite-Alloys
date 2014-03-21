@@ -5,9 +5,9 @@ import java.util.Iterator;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-/** This is not meant for in-game IA networks, not real computer networks. It organizes and manages the connections between hosts, such as an ESU, and their
+/** This is meant for in-game IA networks, not real computer networks. It organizes and manages the connections between hosts, such as an ESU, and their
  * clients. */
-public class NetworkRegistry {
+public class NetworkManager {
 
 	private static ArrayList<Network> networks = new ArrayList<Network>();
 
@@ -22,8 +22,9 @@ public class NetworkRegistry {
 		for(Iterator iterator = networks.iterator(); iterator.hasNext();) {
 			Network network = (Network)iterator.next();
 			if(network.getHost().equals(host)) {
-				network = null;
-				networks.remove(network);
+				for(Point client : network.getClients()) {
+					
+				}
 			}
 		}
 	}

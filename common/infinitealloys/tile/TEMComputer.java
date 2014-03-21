@@ -1,7 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.NetworkRegistry.Network;
+import infinitealloys.util.NetworkManager.Network;
 import infinitealloys.util.Point;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

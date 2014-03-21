@@ -1,6 +1,6 @@
 package infinitealloys.tile;
 
-import infinitealloys.util.NetworkRegistry.Network;
+import infinitealloys.util.NetworkManager.Network;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.relauncher.Side;

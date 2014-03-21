@@ -1,8 +1,8 @@
 package infinitealloys.tile;
 
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.NetworkRegistry;
-import infinitealloys.util.NetworkRegistry.Network;
+import infinitealloys.util.NetworkManager;
+import infinitealloys.util.NetworkManager.Network;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -47,7 +47,7 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 	@Override
 	public void updateEntity() {
 		if(hostedNetwork == null)
-			hostedNetwork = NetworkRegistry.buildNetwork(new Point(xCoord, yCoord, zCoord));
+			hostedNetwork = NetworkManager.buildNetwork(new Point(xCoord, yCoord, zCoord));
 		
 		super.updateEntity();
 	}

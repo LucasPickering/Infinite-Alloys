@@ -4,6 +4,7 @@ import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.MachineHelper;
+import infinitealloys.util.NetworkManager.Network;
 import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,11 +15,11 @@ public class TEEMetalForge extends TileEntityElectric {
 	/** The ID of the alloy that is currently set as the recipe. This is drawn from the connected analyzer. */
 	public int recipeAlloyID = -1;
 
-	/** True if the allot recipe has been changed by the client, used to reset progress */
+	/** True if the alloy recipe has been changed by the client, used to reset progress */
 	private boolean recipeChanged;
 
-	/** The analyzer that is handling this forge. The forge can use recipes that are stored in the analyzer */
-	public TEEAnalyzer analyzer;
+	/** The id of the network to which this metal forge is connected */
+	private int analyzerNetworkID = -1;
 
 	public TEEMetalForge(byte front) {
 		this();
@@ -39,12 +40,8 @@ public class TEEMetalForge extends TileEntityElectric {
 	public void updateEntity() {
 		super.updateEntity();
 		recipeChanged = false;
-		
-		// If the analyzer that was connected to this no longer exists, make it null
-		if(analyzer != null && worldObj.getBlockTileEntity(energyStorage.xCoord, energyStorage.yCoord, energyStorage.zCoord) == null)
-			analyzer = null;
-		
-		if(analyzer == null)
+
+		if(analyzerNetworkID == -1)
 			recipeAlloyID = -1;
 	}
 
