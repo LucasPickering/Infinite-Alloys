@@ -1,7 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.NetworkManager.Network;
+import infinitealloys.util.NetworkManager;
 import infinitealloys.util.Point;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -18,7 +18,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	public int networkCapacity = 0;
 
 	/** The wireless network that this block is hosting */
-	private Network hostedNetwork;
+	private int computerNetworkID = -1;
 
 	public boolean shouldSearch;
 
@@ -36,6 +36,24 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 		return MachineHelper.COMPUTER;
 	}
 
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+
+		if(computerNetworkID == -1)
+			computerNetworkID = NetworkManager.buildNetwork(MachineHelper.COMPUTER_NETWORK, worldObj, new Point(xCoord, yCoord, zCoord));
+	}
+
+	@Override
+	public void connectToNetwork(int networkType, int networkID) {};
+
+	@Override
+	public void notifyForNetworkDeletion(int networkID) {
+		if(networkID == computerNetworkID)
+			computerNetworkID = -1;
+	}
+
+	@SuppressWarnings("unused")
 	@Deprecated
 	/** Perform a search for machines that can be controlled. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a
 	 * tick, then saves its place and picks up where it left off next tick, which eliminates stutter during searches. */
@@ -53,7 +71,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 					// energy storage unit, add it to the power network.
 					final TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
 					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(MachineHelper.WIRELESS))
-						hostedNetwork.addClient(new Point(xCoord + x, yCoord + y, zCoord + z));
+						NetworkManager.addClient(computerNetworkID, new Point(xCoord + x, yCoord + y, zCoord + z));
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
 					// continued next tick.
@@ -73,11 +91,11 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 	@Override
 	public boolean addClient(EntityPlayer player, Point client) {
-		if(hostedNetwork.hasClient(client)) {
+		if(NetworkManager.hasClient(computerNetworkID, client)) {
 			if(worldObj.isRemote)
-				player.addChatMessage("Error: Machine is already in network");
+				player.addChatMessage("Error: Machine is already in this network");
 		}
-		else if(hostedNetwork.getSize() >= networkCapacity) {
+		else if(NetworkManager.getSize(computerNetworkID) >= networkCapacity) {
 			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Network full");
 		}
@@ -94,17 +112,12 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 				player.addChatMessage("Error: Block is not capable of networking");
 		}
 		else {
-			hostedNetwork.addClient(client);
+			NetworkManager.addClient(computerNetworkID, client);
 			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
 			return true;
 		}
 		return false;
-	}
-
-	@Override
-	public boolean isClientValid(Point p) {
-		return MachineHelper.isWireless(worldObj, p.x, p.y, p.z);
 	}
 
 	@Override

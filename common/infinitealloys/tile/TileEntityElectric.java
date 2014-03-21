@@ -1,6 +1,7 @@
 package infinitealloys.tile;
 
-import infinitealloys.util.NetworkManager.Network;
+import infinitealloys.util.MachineHelper;
+import infinitealloys.util.NetworkManager;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -28,8 +29,8 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	/** A multiplier for the power used, changed with upgrades. NOTE: Less will consume less power, but also generate less */
 	protected float rkPerTickMult = 1.0F;
 
-	/** The network hosted by the ESU from which this machine receives power */
-	public Network energyNetwork;
+	/** The ID of the network through which this machine receives power */
+	private int energyNetworkID = -1;
 
 	public TileEntityElectric(int inventoryLength) {
 		super(inventoryLength);
@@ -45,7 +46,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 
 		// If the machine should be processing and enough energy is available, increment the progress by one. If this is the first tick of the process, call
 		// startProcess(). If it has reached or exceeded the limit for completion, then finish the process and reset the counter.
-		if(shouldProcess() && energyNetwork != null && ((TEMEnergyStorage)energyNetwork.getHostTE()).changeRK(getRKChange())) {
+		if(shouldProcess() && energyNetworkID != -1 && ((TEMEnergyStorage)NetworkManager.getHostTE(energyNetworkID)).changeRK(getRKChange())) {
 			if(processProgress == 0)
 				onStartProcess();
 			if(++processProgress >= ticksToProcess) {
@@ -54,6 +55,18 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 				onInventoryChanged();
 			}
 		}
+	}
+
+	@Override
+	public void connectToNetwork(int networkType, int networkID) {
+		if(networkType == MachineHelper.ENERGY_NETWORK)
+			energyNetworkID = networkID;
+	}
+
+	@Override
+	public void notifyForNetworkDeletion(int networkID) {
+		if(networkID == energyNetworkID)
+			energyNetworkID = -1;
 	}
 
 	/** Should the process tick be increased? Called every tick to determine if energy should be used and if progress should continue. NOTE: This will return

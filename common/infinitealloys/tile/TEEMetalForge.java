@@ -4,7 +4,6 @@ import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.NetworkManager.Network;
 import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -43,6 +42,13 @@ public class TEEMetalForge extends TileEntityElectric {
 
 		if(analyzerNetworkID == -1)
 			recipeAlloyID = -1;
+	}
+
+	@Override
+	public void connectToNetwork(int networkType, int networkID) {
+		super.connectToNetwork(networkType, networkID);
+		if(networkType == MachineHelper.ANALYZER_NETWORK)
+			analyzerNetworkID = networkID;
 	}
 
 	@Override

@@ -5,7 +5,6 @@ import infinitealloys.item.Items;
 import infinitealloys.network.PacketTEServerToClient;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.Random;
 import net.minecraft.entity.item.EntityItem;
@@ -73,6 +72,15 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 	}
 
+	/** Connect to a network of a certain type with a certain ID
+	 * 
+	 * @param networkType the kind of the network, e.g. computer, energy, etc. These types are defined in {@link infinitealloys.util.MachineHelper}
+	 * @param networkID the ID of the network to which this machine is connecting */
+	public abstract void connectToNetwork(int networkType, int networkID);
+
+	/** This is called from {@link infinitealloys.util.NetworkManager} for the host and all clients of a network when that network is deleted */
+	public abstract void notifyForNetworkDeletion(int networkID);
+
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
@@ -123,11 +131,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public void handlePacketDataFromServer(byte orientation, short upgrades) {
 		front = orientation;
 		this.upgrades = upgrades;
-	}
-
-	/** Get a string containing this machine's coordinates */
-	public Point getCoords() {
-		return new Point(xCoord, yCoord, zCoord);
 	}
 
 	public boolean coordsEquals(int x2, int y2, int z2) {

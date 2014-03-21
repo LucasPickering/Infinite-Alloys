@@ -4,10 +4,9 @@ import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
+import infinitealloys.util.NetworkManager;
 import infinitealloys.util.Point;
-import infinitealloys.util.NetworkManager.Network;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,8 +27,8 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	/** The damage value of the alloy that is going to be made from the current process */
 	private int targetAlloy = -1;
 
-	/** The wireless network that this block is hosting */
-	private Network network;
+	/** The ID of the network hosted by this block that supplies alloy information to metal forges */
+	private int analyzerNetworkID = -1;
 
 	public TEEAnalyzer(byte front) {
 		this();
@@ -46,6 +45,13 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	@Override
 	public int getID() {
 		return MachineHelper.ANALYZER;
+	}
+
+	@Override
+	public void notifyForNetworkDeletion(int networkID) {
+		super.notifyForNetworkDeletion(networkID);
+		if(networkID == analyzerNetworkID)
+			analyzerNetworkID = -1;
 	}
 
 	@Override
@@ -119,37 +125,22 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public boolean addMachine(EntityPlayer player, int machineX, int machineY, int machineZ) {
-
-		// Machine is already connected
-		for(final Point coords : connectedMachines)
-			if(coords.x == machineX && coords.y == machineY && coords.z == machineZ)
-				return false;
-
-		// Machine is not a metal forge
-		if(!(worldObj.getBlockTileEntity(machineX, machineY, machineZ) instanceof TEEMetalForge))
-			return false;
-
-		// Add the machine
-		final TEEMetalForge temf = (TEEMetalForge)worldObj.getBlockTileEntity(machineX, machineY, machineZ);
-		if(temf.analyzer != null) { // If the machine is already connected to another analyzer, disconnect it from that
-			for(final Iterator iterator = temf.analyzer.connectedMachines.iterator(); iterator.hasNext();) {
-				final Point p = (Point)iterator.next();
-				if(p.equals(machineX, machineY, machineZ)) {
-					iterator.remove();
-					break;
-				}
-			}
-			temf.analyzer = null;
+	public boolean addClient(EntityPlayer player, Point client) {
+		if(NetworkManager.hasClient(analyzerNetworkID, client)) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Machine is already in this network");
 		}
-		connectedMachines.add(new Point(machineX, machineY, machineZ));
-		temf.analyzer = this;
-		return true;
-	}
-
-	@Override
-	public void clearMachines() {
-		connectedMachines.clear();
+		else if(!(worldObj.getBlockTileEntity(client.x, client.y, client.z) instanceof TEEMetalForge)) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Machine is not a metal forge");
+		}
+		else {
+			// Add the machine
+			((TileEntityMachine)worldObj.getBlockTileEntity(client.x, client.y, client.z)).connectToNetwork(MachineHelper.ANALYZER_NETWORK, analyzerNetworkID);
+			NetworkManager.addClient(analyzerNetworkID, client);
+			return true;
+		}
+		return false;
 	}
 
 	@Override

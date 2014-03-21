@@ -7,6 +7,4 @@ import net.minecraft.entity.player.EntityPlayer;
 public interface IHost {
 
 	public boolean addClient(EntityPlayer player, Point client);
-
-	public boolean isClientValid(Point p);
 }
