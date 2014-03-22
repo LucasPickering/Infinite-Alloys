@@ -47,13 +47,10 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	}
 
 	@Override
-	public void connectToNetwork(int networkType, int networkID) {};
+	public void connectToNetwork(int networkType, int networkID) {}
 
 	@Override
-	public void notifyForNetworkDeletion(int networkID) {
-		if(networkID == computerNetworkID)
-			computerNetworkID = -1;
-	}
+	public void disconnectFromNetwork(int networkType, int networkID) {}
 
 	@SideOnly(Side.CLIENT)
 	public int getComputerNetworkID() {

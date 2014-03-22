@@ -55,8 +55,8 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public void notifyForNetworkDeletion(int networkID) {
-		if(networkID == energyNetworkID)
+	public void disconnectFromNetwork(int networkType, int networkID) {
+		if(networkType == MachineHelper.ENERGY_NETWORK)
 			energyNetworkID = -1;
 	}
 

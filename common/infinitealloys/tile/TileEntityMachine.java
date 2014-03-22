@@ -74,12 +74,15 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	/** Connect to a network of a certain type with a certain ID
 	 * 
-	 * @param networkType the kind of the network, e.g. computer, energy, etc. These types are defined in {@link infinitealloys.util.MachineHelper}
+	 * @param networkType the type of the network, e.g. computer, energy, etc. These types are defined in {@link infinitealloys.util.MachineHelper}
 	 * @param networkID the ID of the network to which this machine is connecting */
 	public abstract void connectToNetwork(int networkType, int networkID);
-
-	/** This is called from {@link infinitealloys.util.NetworkManager} for the host and all clients of a network when that network is deleted */
-	public abstract void notifyForNetworkDeletion(int networkID);
+	
+	/** Disconnect from a certain network
+	 * 
+	 * @param networkType the type of the network, e.g. computer, energy, etc. These types are defined in {@link infinitealloys.util.MachineHelper}
+	 * @param networkID the ID of the network to which from which this machine is disconnecting */
+	public abstract void disconnectFromNetwork(int networkType, int networkID);
 
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {

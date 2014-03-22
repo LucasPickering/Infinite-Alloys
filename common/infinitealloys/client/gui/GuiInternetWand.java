@@ -12,6 +12,7 @@ import infinitealloys.tile.TEMEnergyStorage;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
+import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.gui.GuiButton;
@@ -196,8 +197,7 @@ public class GuiInternetWand extends GuiScreen {
 						if(machineButton != null && (selectedButtons & 1 << machineButton.buttonID) != 0) { // If this button is selected
 							// Add the selected machine to the host
 							final int[] client = heldItem.getTagCompound().getIntArray("Coords" + machineButton.buttonID);
-							PacketDispatcher.sendPacketToServer(PacketAddMachine.getPacket(host[0], host[1], host[2], client[0], client[1], client[2]));
-							((IHost)mc.theWorld.getBlockTileEntity(host[0], host[1], host[2])).addMachine(mc.thePlayer, client[0], client[1], client[2]);
+							((IHost)mc.theWorld.getBlockTileEntity(host[0], host[1], host[2])).addClient(mc.thePlayer, new Point(client[0], client[1], client[2]));
 						}
 					}
 				}

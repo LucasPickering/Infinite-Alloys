@@ -48,13 +48,6 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public void notifyForNetworkDeletion(int networkID) {
-		super.notifyForNetworkDeletion(networkID);
-		if(networkID == analyzerNetworkID)
-			analyzerNetworkID = -1;
-	}
-
-	@Override
 	public boolean shouldProcess() {
 		return targetAlloy >= 0 || getAlloyForMetals() >= 0; // Return true if we are already processing or we are ready for a new process
 	}

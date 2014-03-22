@@ -54,6 +54,13 @@ public class TEEMetalForge extends TileEntityElectric {
 	}
 
 	@Override
+	public void disconnectFromNetwork(int networkType, int networkID) {
+		super.disconnectFromNetwork(networkType, networkID);
+		if(networkType == MachineHelper.ANALYZER_NETWORK)
+			analyzerNetworkID = -1;
+	}
+
+	@Override
 	public boolean shouldProcess() {
 		return (inventoryStacks[0] == null || inventoryStacks[0].isItemEqual(getIngotResult()) && inventoryStacks[0].stackSize < getInventoryStackLimit()) && hasSufficientIngots();
 	}

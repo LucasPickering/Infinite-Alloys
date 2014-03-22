@@ -64,8 +64,8 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	}
 
 	@Override
-	public void notifyForNetworkDeletion(int networkID) {
-		if(networkID == energyNetworkID)
+	public void disconnectFromNetwork(int networkType, int networkID) {
+		if(networkType == MachineHelper.ENERGY_NETWORK)
 			energyNetworkID = -1;
 	}
 
