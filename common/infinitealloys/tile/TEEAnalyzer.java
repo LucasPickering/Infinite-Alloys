@@ -119,12 +119,17 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	}
 
 	@Override
+	public boolean isClientValid(Point client) {
+		return worldObj.getBlockTileEntity(client.x, client.y, client.z) instanceof TEEMetalForge;
+	}
+
+	@Override
 	public boolean addClient(EntityPlayer player, Point client) {
 		if(NetworkManager.hasClient(analyzerNetworkID, client)) {
 			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Machine is already in this network");
 		}
-		else if(!(worldObj.getBlockTileEntity(client.x, client.y, client.z) instanceof TEEMetalForge)) {
+		else if(!isClientValid(client)) {
 			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Machine is not a metal forge");
 		}

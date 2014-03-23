@@ -1,13 +1,13 @@
 package infinitealloys.inventory;
 
-import infinitealloys.tile.TEMEnergyStorage;
+import infinitealloys.tile.TEEEnergyStorage;
 import net.minecraft.entity.player.InventoryPlayer;
 
 public class ContainerESU extends ContainerMachine {
 
-	public TEMEnergyStorage inventory;
+	public TEEEnergyStorage inventory;
 
-	public ContainerESU(InventoryPlayer inventoryPlayer, TEMEnergyStorage tileEntity) {
+	public ContainerESU(InventoryPlayer inventoryPlayer, TEEEnergyStorage tileEntity) {
 		super(tileEntity, 10);
 		inventory = tileEntity;
 

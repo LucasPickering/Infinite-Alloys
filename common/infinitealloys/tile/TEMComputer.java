@@ -94,6 +94,12 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	}
 
 	@Override
+	public boolean isClientValid(Point client) {
+		return worldObj.getBlockTileEntity(client.x, client.y, client.z) instanceof TileEntityMachine &&
+				((TileEntityMachine)worldObj.getBlockTileEntity(client.x, client.y, client.z)).hasUpgrade(MachineHelper.WIRELESS);
+	}
+
+	@Override
 	public boolean addClient(EntityPlayer player, Point client) {
 		if(NetworkManager.hasClient(computerNetworkID, client)) {
 			if(player != null && worldObj.isRemote)
@@ -111,7 +117,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Block out of range");
 		}
-		else if(!MachineHelper.isWireless(worldObj, client.x, client.y, client.z)) {
+		else if(!isClientValid(client)) {
 			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Block is not capable of networking");
 		}

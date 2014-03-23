@@ -6,5 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 /** Machines that can host networks between other machines, e.g. the computer */
 public interface IHost {
 
+	public boolean isClientValid(Point client);
+
 	public boolean addClient(EntityPlayer player, Point client);
 }

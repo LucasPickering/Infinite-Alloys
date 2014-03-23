@@ -7,8 +7,7 @@ import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.network.PacketWand;
 import infinitealloys.tile.IHost;
-import infinitealloys.tile.TEMComputer;
-import infinitealloys.tile.TEMEnergyStorage;
+import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
@@ -94,7 +93,7 @@ public class GuiInternetWand extends GuiScreen {
 				for(final MachineButton button : machineButtons)
 					if(button != null && (selectedButtons & 1 << button.buttonID) != 0) // If this button is selected
 						// If the selected machine is not valid for the block that was clicked
-						if(!(te instanceof TEMEnergyStorage && button.isElectric || te instanceof TEMComputer && button.isWireless))
+						if(!(te instanceof IHost) || !((IHost)te).isClientValid(new Point(button.machineX, button.machineY, button.machineZ)))
 							addSelected.enabled = false; // Set the button to false
 			}
 		}
@@ -158,9 +157,9 @@ public class GuiInternetWand extends GuiScreen {
 						int lastOne = -1; // The index of the position of the leftmost 1 in the binary integer
 						for(int j = 0; j < Consts.WAND_SIZE; j++) { // Go over each bit in the integer
 							if((selectedButtons & 1 << j) != 0) { // If the bit is 1
-								if(firstOne == -1) // If the leftmost 1 has not been found already
-									firstOne = j; // This is the leftmost 1
-								lastOne = j; // This is the rightmost 1 (so far)
+								if(firstOne == -1) // If the rightmost 1 has not been found already
+									firstOne = j; // This is the rightmost 1
+								lastOne = j; // This is the leftmost 1 (so far)
 							}
 						}
 						if(firstOne != -1) // If there is a 1 in the integer
@@ -260,7 +259,6 @@ public class GuiInternetWand extends GuiScreen {
 		int machineX;
 		int machineY;
 		int machineZ;
-		boolean isElectric;
 		boolean isWireless;
 
 		MachineButton(int buttonID, int xPos, int yPos, int machineX, int machineY, int machineZ) {
@@ -272,8 +270,8 @@ public class GuiInternetWand extends GuiScreen {
 			this.machineX = machineX;
 			this.machineY = machineY;
 			this.machineZ = machineZ;
-			isElectric = MachineHelper.isElectric(mc.theWorld, machineX, machineY, machineZ);
-			isWireless = MachineHelper.isWireless(mc.theWorld, machineX, machineY, machineZ);
+			isWireless = mc.theWorld.getBlockTileEntity(machineX, machineY, machineZ) instanceof TileEntityMachine &&
+					((TileEntityMachine)mc.theWorld.getBlockTileEntity(machineX, machineY, machineZ)).hasUpgrade(MachineHelper.WIRELESS);
 			buttonList.add(new GuiButton(buttonID, xPos + 126, yPos - 1, 16, 20, "X"));
 		}
 
@@ -293,9 +291,6 @@ public class GuiInternetWand extends GuiScreen {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(xPos + 100, yPos + 3, 0);
 			GL11.glScalef(0.75F, 0.75F, 1F);
-			// If the machine is electrical
-			if(isElectric)
-				Funcs.drawTexturedModalRect(GuiInternetWand.this, 0, 0, GuiMachine.ENERGY_ICON_OFF); // Render an electricity icon on the button
 
 			// If the machine is wireless
 			if(isWireless)

@@ -19,7 +19,7 @@ import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TEMComputer;
-import infinitealloys.tile.TEMEnergyStorage;
+import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class MachineHelper {
 	public static final int ANALYZER_NETWORK = 2;
 
 	/** The TileEntityMachine class for each machine */
-	public static final Class[] MACHINE_CLASSES = { TEMComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEXray.class, TEEPasture.class, TEMEnergyStorage.class };
+	public static final Class[] MACHINE_CLASSES = { TEMComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEXray.class, TEEPasture.class, TEEEnergyStorage.class };
 
 	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "xray", "pasture", "energystorage" };
 
@@ -164,7 +164,7 @@ public class MachineHelper {
 			case PASTURE:
 				return new ContainerMachine(inventoryPlayer, tem, 13, 94, 141, 44);
 			case ENERGY_STORAGE:
-				return new ContainerESU(inventoryPlayer, (TEMEnergyStorage)tem);
+				return new ContainerESU(inventoryPlayer, (TEEEnergyStorage)tem);
 		}
 		return null;
 	}
@@ -188,7 +188,7 @@ public class MachineHelper {
 			case PASTURE:
 				return new GuiPasture(inventoryPlayer, (TEEPasture)tem);
 			case ENERGY_STORAGE:
-				return new GuiEnergyStorage(inventoryPlayer, (TEMEnergyStorage)tem);
+				return new GuiEnergyStorage(inventoryPlayer, (TEEEnergyStorage)tem);
 		}
 		return null;
 	}
@@ -221,18 +221,9 @@ public class MachineHelper {
 		return world.getBlockTileEntity(x, y, z) instanceof IHost;
 	}
 
-	/** Is the machine capable of connecting to an ESU? */
-	public static boolean isElectric(World world, int x, int y, int z) {
-		return world.getBlockTileEntity(x, y, z) instanceof TileEntityElectric;
-	}
-
-	/** Is the machine at x, y, z capable of connecting to a computer? */
-	public static boolean isWireless(World world, int x, int y, int z) {
-		return world.getBlockTileEntity(x, y, z) instanceof TileEntityMachine && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).hasUpgrade(WIRELESS);
-	}
-
 	/** Is the machine at x, y, z capable of connecting to an ESU or computer? */
 	public static boolean isClient(World world, int x, int y, int z) {
-		return isElectric(world, x, y, z) || isWireless(world, x, y, z);
+		return (world.getBlockTileEntity(x, y, z) instanceof TileEntityMachine && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).hasUpgrade(MachineHelper.WIRELESS)) ||
+				world.getBlockTileEntity(x, y, z) instanceof TileEntityElectric;
 	}
 }

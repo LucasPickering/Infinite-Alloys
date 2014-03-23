@@ -1,15 +1,15 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.tile.TEMEnergyStorage;
+import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.util.Funcs;
 import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.opengl.GL11;
 
 public class GuiEnergyStorage extends GuiElectric {
 
-	public TEMEnergyStorage tees;
+	public TEEEnergyStorage tees;
 
-	public GuiEnergyStorage(InventoryPlayer inventoryPlayer, TEMEnergyStorage tileEntity) {
+	public GuiEnergyStorage(InventoryPlayer inventoryPlayer, TEEEnergyStorage tileEntity) {
 		super(214, 176, inventoryPlayer, tileEntity);
 		tees = tileEntity;
 		progressBar.setLocation(70, 39);
