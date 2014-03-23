@@ -40,6 +40,7 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		stackLimit = 1;
 		baseRKPerTick = -1000;
 		ticksToProcess = 20; // TODO: Change this back to 2400
+		analyzerNetworkID = NetworkManager.buildNetwork(MachineHelper.ANALYZER_NETWORK, worldObj, new Point(xCoord, yCoord, zCoord));
 	}
 
 	@Override
@@ -120,17 +121,18 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	@Override
 	public boolean addClient(EntityPlayer player, Point client) {
 		if(NetworkManager.hasClient(analyzerNetworkID, client)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Machine is already in this network");
 		}
 		else if(!(worldObj.getBlockTileEntity(client.x, client.y, client.z) instanceof TEEMetalForge)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Machine is not a metal forge");
 		}
 		else {
 			// Add the machine
-			((TileEntityMachine)worldObj.getBlockTileEntity(client.x, client.y, client.z)).connectToNetwork(MachineHelper.ANALYZER_NETWORK, analyzerNetworkID);
 			NetworkManager.addClient(analyzerNetworkID, client);
+			if(player != null && worldObj.isRemote)
+				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
 			return true;
 		}
 		return false;

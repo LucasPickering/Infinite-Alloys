@@ -75,7 +75,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 					// energy storage unit, add it to the power network.
 					final TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
 					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(MachineHelper.WIRELESS))
-						NetworkManager.addClient(computerNetworkID, new Point(xCoord + x, yCoord + y, zCoord + z));
+						addClient(null, new Point(xCoord + x, yCoord + y, zCoord + z));
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
 					// continued next tick.
@@ -96,7 +96,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	@Override
 	public boolean addClient(EntityPlayer player, Point client) {
 		if(NetworkManager.hasClient(computerNetworkID, client)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Machine is already in this network");
 		}
 		else if(NetworkManager.getSize(computerNetworkID) >= networkCapacity) {

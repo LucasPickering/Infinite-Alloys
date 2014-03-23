@@ -1,7 +1,9 @@
 package infinitealloys.util;
 
+import infinitealloys.network.PacketRemoveClient;
 import infinitealloys.tile.TileEntityMachine;
 import java.util.ArrayList;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -42,7 +44,13 @@ public class NetworkManager {
 	 * @param networkID the ID of the network in question
 	 * @param client the coordinates of the block that is being added as a client */
 	public static void addClient(int networkID, Point client) {
-		networks.get(networkID).clients.add(client);
+		Network network = networks.get(networkID);
+		network.clients.add(client);
+		((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).connectToNetwork(network.type, networkID);
+		if(Funcs.isServer())
+			PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(networkID, client.x, (short)client.y, client.z), network.world.provider.dimensionId);
+		else
+			PacketDispatcher.sendPacketToServer(PacketRemoveClient.getPacket(networkID, client.x, (short)client.y, client.z));
 	}
 
 	/** Remove a client from a network
@@ -50,7 +58,13 @@ public class NetworkManager {
 	 * @param networkID the ID of the network in question
 	 * @param client the coordinates of the block that is being removed */
 	public static void removeClient(int networkID, Point client) {
-		networks.get(networkID).clients.remove(client);
+		Network network = networks.get(networkID);
+		network.clients.remove(client);
+		((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).disconnectFromNetwork(network.type, networkID);
+		if(Funcs.isServer())
+			PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(networkID, client.x, (short)client.y, client.z), network.world.provider.dimensionId);
+		else
+			PacketDispatcher.sendPacketToServer(PacketRemoveClient.getPacket(networkID, client.x, (short)client.y, client.z));
 	}
 
 	/** Get a specific client from a network

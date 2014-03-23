@@ -109,11 +109,11 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 	@Override
 	public boolean addClient(EntityPlayer player, Point client) {
 		if(!NetworkManager.getHost(energyNetworkID).equals(xCoord, yCoord, zCoord)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: This machine is not currently hosting a network because it is connected to another host");
 		}
 		else if(NetworkManager.hasClient(energyNetworkID, client)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Machine is already in network");
 		}
 		else if(client.equals(xCoord, yCoord, zCoord)) {
@@ -126,8 +126,9 @@ public class TEMEnergyStorage extends TileEntityElectric implements IHost {
 		}
 		else {
 			// Add the machine
-			((TileEntityMachine)worldObj.getBlockTileEntity(client.x, client.y, client.z)).connectToNetwork(MachineHelper.ENERGY_NETWORK, energyNetworkID);
 			NetworkManager.addClient(energyNetworkID, client);
+			if(player != null && worldObj.isRemote)
+				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
 			return true;
 		}
 		return false;
