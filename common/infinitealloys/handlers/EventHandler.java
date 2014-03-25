@@ -6,6 +6,7 @@ import infinitealloys.network.PacketWorldData;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
+import infinitealloys.util.NetworkManager;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,9 +32,13 @@ public class EventHandler implements ICraftingHandler {
 	private String world;
 
 	@ForgeSubscribe
-	public void onWorldLoad(@SuppressWarnings("unused") Load event) {
-		// If it's the server, look for stored alloy data and if they exist, load them. If not, generate new data.
+	public void onWorldLoad(Load event) {
+		// If it's the server
 		if(Funcs.isServer()) {
+			// Load the stored network data for NetworkManager
+			NetworkManager.loadData();
+			
+			// Look for stored alloy data and if they exist, load them. If not, generate new data.
 			world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(0).getChunkSaveLocation().getPath();
 			ObjectInputStream ois = null;
 			try {
@@ -77,13 +82,16 @@ public class EventHandler implements ICraftingHandler {
 	}
 
 	@ForgeSubscribe
-	public void onWorldUnload(@SuppressWarnings("unused") Unload event) {
+	public void onWorldUnload(Unload event) {
 		// Clear the list of blocks to be outlines by the x-ray on unload. Alloys are not stored client-side, so return.
 		if(Funcs.isClient()) {
 			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 			return;
 		}
 
+		//Call a function in NetworkManager to store all the data for machine networks
+		NetworkManager.saveData();
+		
 		// If there is stored alloy data for this world, serialize them to be saved and reloaded next session
 		if(InfiniteAlloys.instance.worldData != null) {
 			ObjectOutputStream oos = null;

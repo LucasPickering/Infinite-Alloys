@@ -3,16 +3,26 @@ package infinitealloys.util;
 import infinitealloys.network.PacketRemoveClient;
 import infinitealloys.tile.TileEntityMachine;
 import java.util.ArrayList;
-import cpw.mods.fml.common.network.PacketDispatcher;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 /** This is meant for in-game IA networks, not real computer networks. It organizes and manages the connections between hosts, such as an ESU, and their
  * clients. */
 public class NetworkManager {
 
+	private NBTTagCompound nbtTagCompound;
 	private static ArrayList<Network> networks = new ArrayList<Network>();
 
+	public static void loadData(){
+		nbtTagCompound
+	}
+	
+	public static void saveData(){
+		
+	}
+	
 	/** Create a new network for this host */
 	public static int buildNetwork(int type, World world, Point host) {
 		networks.add(new Network(type, world, host));
