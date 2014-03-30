@@ -16,7 +16,6 @@ public class NetworkManager {
 	private static ArrayList<Network> networks = new ArrayList<Network>();
 
 	public static void loadData(){
-		nbtTagCompound
 	}
 	
 	public static void saveData(){

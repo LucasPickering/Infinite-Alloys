@@ -29,6 +29,7 @@ import cpw.mods.fml.common.network.Player;
 // KEEP IN MIND: RIGHTMOST DIGITS ARE THE LESSER METALS WHILE LEFTMOST DIGITS ARE THE FANTASTICAL METALS
 public class EventHandler implements ICraftingHandler {
 
+	private final String fileName = "IAWorldData.dat";
 	private String world;
 
 	@ForgeSubscribe
@@ -37,12 +38,12 @@ public class EventHandler implements ICraftingHandler {
 		if(Funcs.isServer()) {
 			// Load the stored network data for NetworkManager
 			NetworkManager.loadData();
-			
+
 			// Look for stored alloy data and if they exist, load them. If not, generate new data.
 			world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(0).getChunkSaveLocation().getPath();
 			ObjectInputStream ois = null;
 			try {
-				ois = new ObjectInputStream(new FileInputStream(world + "/WorldData.dat")); // Try to load existing data
+				ois = new ObjectInputStream(new FileInputStream(world + "/" + fileName)); // Try to load existing data
 				InfiniteAlloys.instance.worldData = (WorldData)ois.readObject();
 				System.out.println("Successfully loaded IA alloys");
 			}catch(final IOException e) {
@@ -89,14 +90,14 @@ public class EventHandler implements ICraftingHandler {
 			return;
 		}
 
-		//Call a function in NetworkManager to store all the data for machine networks
+		// Call a function in NetworkManager to store all the data for machine networks
 		NetworkManager.saveData();
-		
+
 		// If there is stored alloy data for this world, serialize them to be saved and reloaded next session
 		if(InfiniteAlloys.instance.worldData != null) {
 			ObjectOutputStream oos = null;
 			try {
-				oos = new ObjectOutputStream(new FileOutputStream(world + "/WorldData.dat"));
+				oos = new ObjectOutputStream(new FileOutputStream(world + "/" + fileName));
 				oos.writeObject(InfiniteAlloys.instance.worldData);
 			}catch(final Exception e) {
 				System.out.println("Error while serializing Infinite Alloys world data");
