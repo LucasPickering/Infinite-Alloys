@@ -88,12 +88,12 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		int bestAlloy = -1; // The index of the best match
 		int mostCorrectMetals = 0;
 		alloys:
-		for(EnumAlloy alloy : EnumAlloy.values()) {
+		for(final EnumAlloy alloy : EnumAlloy.values()) {
 			if(!hasAlloy(alloy.ordinal())) {
 				int correctMetals = 0;
 				for(int i = 0; i < Consts.METAL_COUNT; i++) {
-					boolean isMetalInAnalyzer = inventoryStacks[i] != null; // Is this metal currently in the analyzer? Check the inventory for it.
-					boolean isMetalInAlloy = Funcs.intAtPos(alloy.getAlloy(), Consts.ALLOY_RADIX, i) != 0; // Is this metal used in the alloy?
+					final boolean isMetalInAnalyzer = inventoryStacks[i] != null; // Is this metal currently in the analyzer? Check the inventory for it.
+					final boolean isMetalInAlloy = Funcs.intAtPos(alloy.getAlloy(), Consts.ALLOY_RADIX, i) != 0; // Is this metal used in the alloy?
 
 					if(isMetalInAlloy && !isMetalInAnalyzer)
 						continue alloys; // If this alloy requires a metal that the analyzer doesn't have, skip to the next alloy

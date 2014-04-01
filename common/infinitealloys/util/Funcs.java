@@ -29,7 +29,7 @@ public class Funcs {
 	 * @return the digit at pos, after adding leading zeros to make it length strlen */
 	public static int intAtPos(int n, int radix, int pos) {
 		if(pos != 0)
-			n /= (Math.pow(radix, pos));
+			n /= Math.pow(radix, pos);
 		return n % radix;
 	}
 

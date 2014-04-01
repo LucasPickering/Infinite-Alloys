@@ -1,12 +1,12 @@
 package infinitealloys.tile;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.NetworkManager;
 import infinitealloys.util.Point;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TEMComputer extends TileEntityMachine implements IHost {
 

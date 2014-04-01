@@ -15,7 +15,7 @@ public class NetworkManager {
 	private static ArrayList<Network> networks = new ArrayList<Network>();
 
 	public static void loadData(NBTTagCompound nbtTagCompound) {
-		
+
 	}
 
 	public static void saveData(NBTTagCompound nbtTagCompound) {
@@ -33,9 +33,9 @@ public class NetworkManager {
 	}
 
 	public static void deleteNetwork(int networkID) {
-		Network network = networks.get(networkID);
+		final Network network = networks.get(networkID);
 		((TileEntityMachine)network.world.getBlockTileEntity(network.host.x, network.host.y, network.host.z)).disconnectFromNetwork(network.type, networkID);
-		for(Point client : network.clients)
+		for(final Point client : network.clients)
 			((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).disconnectFromNetwork(network.type, networkID);
 	}
 
@@ -44,7 +44,7 @@ public class NetworkManager {
 	}
 
 	public static TileEntity getHostTE(int networkID) {
-		Network network = networks.get(networkID);
+		final Network network = networks.get(networkID);
 		return network.world.getBlockTileEntity(network.host.x, network.host.y, network.host.z);
 	}
 
@@ -53,7 +53,7 @@ public class NetworkManager {
 	 * @param networkID the ID of the network in question
 	 * @param client the coordinates of the block that is being added as a client */
 	public static void addClient(int networkID, Point client) {
-		Network network = networks.get(networkID);
+		final Network network = networks.get(networkID);
 		network.clients.add(client);
 		((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).connectToNetwork(network.type, networkID);
 		if(Funcs.isServer())
@@ -67,7 +67,7 @@ public class NetworkManager {
 	 * @param networkID the ID of the network in question
 	 * @param client the coordinates of the block that is being removed */
 	public static void removeClient(int networkID, Point client) {
-		Network network = networks.get(networkID);
+		final Network network = networks.get(networkID);
 		network.clients.remove(client);
 		((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).disconnectFromNetwork(network.type, networkID);
 		if(Funcs.isServer())
@@ -112,10 +112,10 @@ public class NetworkManager {
 
 	private static class Network {
 
-		private int type;
-		private World world;
-		private Point host;
-		private ArrayList<Point> clients = new ArrayList<Point>();
+		private final int type;
+		private final World world;
+		private final Point host;
+		private final ArrayList<Point> clients = new ArrayList<Point>();
 
 		private Network(int type, World world, Point host) {
 			this.type = type;

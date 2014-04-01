@@ -1,10 +1,10 @@
 package infinitealloys.network;
 
 import infinitealloys.tile.TEEAnalyzer;
+import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEXray;
-import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
@@ -32,7 +32,7 @@ public class PacketTEServerToClient implements PacketIA {
 
 				switch(((TileEntityElectric)te).getID()) {
 					case MachineHelper.METAL_FORGE:
-						byte recipeAlloyID = data.readByte();
+						final byte recipeAlloyID = data.readByte();
 						((TEEMetalForge)te).handlePacketDataFromClient(recipeAlloyID);
 						break;
 

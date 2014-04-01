@@ -15,11 +15,11 @@ import infinitealloys.inventory.ContainerXray;
 import infinitealloys.item.Items;
 import infinitealloys.tile.IHost;
 import infinitealloys.tile.TEEAnalyzer;
+import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TEMComputer;
-import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import java.util.ArrayList;
@@ -223,7 +223,7 @@ public class MachineHelper {
 
 	/** Is the machine at x, y, z capable of connecting to an ESU or computer? */
 	public static boolean isClient(World world, int x, int y, int z) {
-		return (world.getBlockTileEntity(x, y, z) instanceof TileEntityMachine && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).hasUpgrade(MachineHelper.WIRELESS)) ||
+		return world.getBlockTileEntity(x, y, z) instanceof TileEntityMachine && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).hasUpgrade(MachineHelper.WIRELESS) ||
 				world.getBlockTileEntity(x, y, z) instanceof TileEntityElectric;
 	}
 }

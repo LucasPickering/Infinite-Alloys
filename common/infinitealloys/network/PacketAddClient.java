@@ -10,10 +10,10 @@ public class PacketAddClient implements PacketIA {
 
 	@Override
 	public void execute(EntityPlayer player, ByteArrayDataInput data) {
-		int networkID = data.readInt();
-		int x = data.readInt();
-		int y = data.readShort();
-		int z = data.readInt();
+		final int networkID = data.readInt();
+		final int x = data.readInt();
+		final int y = data.readShort();
+		final int z = data.readInt();
 		NetworkManager.addClient(networkID, new Point(x, y, z));
 	}
 

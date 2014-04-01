@@ -32,7 +32,7 @@ public class Consts {
 	public static final String[] MULTI_ITEM_NAMES = { "machinecomponent", "upgradecomponent" };
 	/** The names of each upgrade that can be used on machines */
 	public static final String[] UPGRADE_NAMES = { "speed1", "speed2", "efficiency1", "efficiency2", "capacity1", "capacity2", "range1", "range2", "wireless" };
-	
+
 	/** The amount of coords that the Internet Wand can hold */
 	public static final int WAND_SIZE = 10;
 	/** The GUI id for the Wand GUI */

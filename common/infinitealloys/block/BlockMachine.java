@@ -72,7 +72,7 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
-		final ItemStack heldItem = player.inventory.getCurrentItem();
+		ItemStack heldItem = player.inventory.getCurrentItem();
 		// Is the player holding an internet wand?
 		if(heldItem != null && heldItem.getItem() instanceof ItemInternetWand && (MachineHelper.isClient(world, x, y, z) || MachineHelper.isHost(world, x, y, z))) {
 

@@ -28,7 +28,7 @@ public class EventHandler implements ICraftingHandler {
 	@ForgeSubscribe
 	public void onWorldLoad(Load event) {
 		if(Funcs.isServer()) {
-			File file = new File(world + "/" + fileName);
+			final File file = new File(world + "/" + fileName);
 			if(file.exists()) {
 				NBTTagCompound nbtTagCompound = new NBTTagCompound();
 				try {
@@ -47,13 +47,13 @@ public class EventHandler implements ICraftingHandler {
 	@ForgeSubscribe
 	public void onWorldUnload(Unload event) {
 		if(Funcs.isServer()) {
-			NBTTagCompound nbtTagCompound = new NBTTagCompound(); // An NBTTagCompound for the info to be stored in
+			final NBTTagCompound nbtTagCompound = new NBTTagCompound(); // An NBTTagCompound for the info to be stored in
 			InfiniteAlloys.instance.saveAlloyData(nbtTagCompound); // Add the alloy data to the NBTTagCompound
 			NetworkManager.saveData(nbtTagCompound); // Add the network data to the NBTTagCompound
 
 			try {
 				CompressedStreamTools.writeCompressed(nbtTagCompound, new FileOutputStream(new File(world + "/" + fileName))); // Write the NBT data to a file
-			}catch(Exception e) {
+			}catch(final Exception e) {
 				e.printStackTrace();
 			}
 		}

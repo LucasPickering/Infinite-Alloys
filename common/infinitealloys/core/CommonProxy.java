@@ -164,7 +164,7 @@ public class CommonProxy {
 
 	public void initHandlers() {
 		gfxHandler = new GfxHandler();
-		final EventHandler eventHandler = new EventHandler();
+		EventHandler eventHandler = new EventHandler();
 		MinecraftForge.EVENT_BUS.register(eventHandler);
 		GameRegistry.registerCraftingHandler(eventHandler);
 		GameRegistry.registerWorldGenerator(new WorldGenHandler());

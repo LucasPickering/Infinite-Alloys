@@ -77,7 +77,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	 * @param networkType the type of the network, e.g. computer, energy, etc. These types are defined in {@link infinitealloys.util.MachineHelper}
 	 * @param networkID the ID of the network to which this machine is connecting */
 	public abstract void connectToNetwork(int networkType, int networkID);
-	
+
 	/** Disconnect from a certain network
 	 * 
 	 * @param networkType the type of the network, e.g. computer, energy, etc. These types are defined in {@link infinitealloys.util.MachineHelper}
@@ -147,7 +147,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	@Override
 	public final boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return (slot == upgradeSlotIndex && isUpgradeValid(itemstack)) || (slot < upgradeSlotIndex && MachineHelper.stackValidForSlot(getID(), slot, itemstack));
+		return slot == upgradeSlotIndex && isUpgradeValid(itemstack) || slot < upgradeSlotIndex && MachineHelper.stackValidForSlot(getID(), slot, itemstack);
 	}
 
 	@Override

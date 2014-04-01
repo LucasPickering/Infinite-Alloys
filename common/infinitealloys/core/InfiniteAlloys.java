@@ -1,11 +1,11 @@
 package infinitealloys.core;
 
-import java.util.Random;
 import infinitealloys.block.Blocks;
 import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
+import java.util.Random;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.Configuration;
@@ -71,7 +71,7 @@ public class InfiniteAlloys {
 	}
 
 	public void loadAlloyData(NBTTagCompound nbtTagCompound) {
-		this.validAlloys = nbtTagCompound.getIntArray("validAlloys");
+		validAlloys = nbtTagCompound.getIntArray("validAlloys");
 	}
 
 	/** Generate new validAlloys. This should only be called when a world is first generated, and will not do anything if validAlloys already has a value. */
