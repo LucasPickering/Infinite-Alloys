@@ -12,16 +12,16 @@ import cpw.mods.fml.common.network.PacketDispatcher;
  * clients. */
 public class NetworkManager {
 
-	private NBTTagCompound nbtTagCompound;
 	private static ArrayList<Network> networks = new ArrayList<Network>();
 
-	public static void loadData(){
-	}
-	
-	public static void saveData(){
+	public static void loadData(NBTTagCompound nbtTagCompound) {
 		
 	}
-	
+
+	public static void saveData(NBTTagCompound nbtTagCompound) {
+
+	}
+
 	/** Create a new network for this host */
 	public static int buildNetwork(int type, World world, Point host) {
 		networks.add(new Network(type, world, host));

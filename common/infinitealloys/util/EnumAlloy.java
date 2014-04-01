@@ -16,7 +16,7 @@ public enum EnumAlloy {
 	public static int getAlloyForID(int id) {
 		if(id < 0)
 			return 0;
-		return InfiniteAlloys.instance.worldData.getValidAlloys()[id];
+		return InfiniteAlloys.instance.getValidAlloys()[id];
 	}
 
 	/** Get the ID of the of the alloy with the given alloy value (which lists its metal composition) */
@@ -31,7 +31,7 @@ public enum EnumAlloy {
 	public static int getMetalAmt(int alloyID, int metalID) {
 		return Funcs.intAtPos(getAlloyForID(alloyID), Consts.ALLOY_RADIX, metalID);
 	}
-	
+
 	public final String name;
 	public final int min;
 	public final int max;
@@ -44,7 +44,7 @@ public enum EnumAlloy {
 
 	/** Get the alloy value of this alloy */
 	public int getAlloy() {
-		return InfiniteAlloys.instance.worldData.getValidAlloys()[ordinal()];
+		return InfiniteAlloys.instance.getValidAlloys()[ordinal()];
 	}
 
 	/** Get the ID of this alloy. The ID is this alloy's index in the enum. */

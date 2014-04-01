@@ -1,10 +1,15 @@
 package infinitealloys.core;
 
+import java.util.Random;
 import infinitealloys.block.Blocks;
 import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumAlloy;
+import infinitealloys.util.Funcs;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.Configuration;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -24,7 +29,7 @@ public class InfiniteAlloys {
 	public static CommonProxy proxy;
 	public static boolean[] spawnOres = new boolean[Consts.METAL_COUNT];
 	public static CreativeTabs tabIA;
-	public WorldData worldData;
+	private int[] validAlloys;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -47,7 +52,7 @@ public class InfiniteAlloys {
 	}
 
 	@EventHandler
-	public void load(@SuppressWarnings("unused") FMLInitializationEvent event) {
+	public void load(FMLInitializationEvent event) {
 		tabIA = new CreativeTabIA(CreativeTabs.getNextID(), "main");
 		proxy.initLocalization();
 		proxy.initBlocks();
@@ -59,5 +64,44 @@ public class InfiniteAlloys {
 	}
 
 	@EventHandler
-	public void postInit(@SuppressWarnings("unused") FMLPostInitializationEvent event) {}
+	public void postInit(FMLPostInitializationEvent event) {}
+
+	public void saveAlloyData(NBTTagCompound nbtTagCompound) {
+		nbtTagCompound.setIntArray("validAlloys", validAlloys);
+	}
+
+	public void loadAlloyData(NBTTagCompound nbtTagCompound) {
+		this.validAlloys = nbtTagCompound.getIntArray("validAlloys");
+	}
+
+	/** Generate new validAlloys. This should only be called when a world is first generated, and will not do anything if validAlloys already has a value. */
+	public void generateAlloyData() {
+		if(validAlloys == null) {
+			final Random random = new Random();
+			for(int i = 0; i < Consts.VALID_ALLOY_COUNT; i++) { // For each alloy that needs to be generated
+				int alloy = 0; // An int to hold each digit that is generated
+				for(int j = 0; j < Consts.METAL_COUNT; j++) { // For each metal, i.e. for each digit in the alloy
+					final int min = Funcs.intAtPos(EnumAlloy.values()[i].min, Consts.ALLOY_RADIX, j); // Metal's min value in the alloy
+					final int max = Funcs.intAtPos(EnumAlloy.values()[i].max, Consts.ALLOY_RADIX, j); // Metal's max value in the alloy
+					// Randomly gen a value in [min, max] and add it to the alloy
+					alloy += (min + (max == min ? 0 : random.nextInt(max - min + 1))) * Math.pow(Consts.ALLOY_RADIX, j);
+				}
+
+				validAlloys[i] = Funcs.reduceAlloy(alloy); // Add the new alloy to the array
+				if(Loader.isModLoaded("mcp"))
+					System.out.println("SPOILER ALERT! Alloy " + i + ": " + validAlloys[i]); // Debug line, only runs in MCP
+			}
+			System.out.println("Successfully generated IA alloys");
+		}
+	}
+
+	public int[] getValidAlloys() {
+		return validAlloys;
+	}
+
+	/** Set validAlloys to the given value, but only if this is called client-side. This is only used when syncing data from the server. */
+	public void setValidAlloys(int[] validAlloys) {
+		if(Funcs.isClient())
+			this.validAlloys = validAlloys;
+	}
 }
