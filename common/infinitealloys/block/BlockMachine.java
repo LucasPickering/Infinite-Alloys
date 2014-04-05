@@ -105,7 +105,7 @@ public class BlockMachine extends BlockContainer {
 	public TileEntity createTileEntity(World world, int metadata) {
 		try {
 			return (TileEntity)MachineHelper.MACHINE_CLASSES[metadata].newInstance();
-		}catch(final Exception e) {
+		}catch( Exception e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -117,7 +117,7 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	public static void updateBlockState(World world, int x, int y, int z) {
-		final TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getBlockTileEntity(x, y, z);
 		if(te != null) {
 			te.validate();
 			world.setBlockTileEntity(x, y, z, te);
@@ -132,7 +132,7 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemstack) {
-		final TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
+		 TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
 			tem.front = Funcs.yawToNumSide(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
 			world.markBlockForUpdate(x, y, z);
@@ -141,7 +141,7 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int blockID, int metadata) {
-		final TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
+		 TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		if(tem != null) {
 			tem.dropItems();
 			tem.dropUpgrades();

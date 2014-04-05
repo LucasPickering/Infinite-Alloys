@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 /** This is meant for in-game IA networks, not real computer networks. It organizes and manages the connections between hosts, such as an ESU, and their
@@ -15,11 +16,36 @@ public class NetworkManager {
 	private static ArrayList<Network> networks = new ArrayList<Network>();
 
 	public static void loadData(NBTTagCompound nbtTagCompound) {
+		for(int i = 0; nbtTagCompound.hasKey("network" + i); i++) {
+			NBTTagCompound network = nbtTagCompound.getCompoundTag("network" + i);
 
+			int type = network.getByte("type");
+			int dimensionID = network.getInteger("dimensionID");
+			int[] host = network.getIntArray("host");
+			int networkID = buildNetwork(type, DimensionManager.getWorld(dimensionID), new Point(host[0], host[1], host[2]));
+
+			for(int j = 0; network.hasKey("client" + j); j++) {
+				int[] client = network.getIntArray("client" + j);
+				addClient(networkID, new Point(client[0], client[1], client[2]));
+			}
+		}
 	}
 
 	public static void saveData(NBTTagCompound nbtTagCompound) {
+		for(int i = 0; i < networks.size(); i++) {
+			NBTTagCompound networkNBT = new NBTTagCompound();
+			Network network = getNetwork(i);
 
+			networkNBT.setByte("type", (byte)network.type);
+			networkNBT.setInteger("dimensionID", network.world.provider.dimensionId);
+			networkNBT.setIntArray("host", new int[] { network.host.x, network.host.y, network.host.z });
+
+			for(int j = 0; j < network.clients.size(); j++) {
+				Point client = network.clients.get(j);
+				networkNBT.setIntArray("client" + j, new int[] { client.x, client.y, client.z });
+			}
+			nbtTagCompound.setCompoundTag("network" + i, networkNBT);
+		}
 	}
 
 	/** Create a new network for this host */
@@ -33,9 +59,9 @@ public class NetworkManager {
 	}
 
 	public static void deleteNetwork(int networkID) {
-		final Network network = networks.get(networkID);
+		Network network = networks.get(networkID);
 		((TileEntityMachine)network.world.getBlockTileEntity(network.host.x, network.host.y, network.host.z)).disconnectFromNetwork(network.type, networkID);
-		for(final Point client : network.clients)
+		for(Point client : network.clients)
 			((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).disconnectFromNetwork(network.type, networkID);
 	}
 
@@ -44,7 +70,7 @@ public class NetworkManager {
 	}
 
 	public static TileEntity getHostTE(int networkID) {
-		final Network network = networks.get(networkID);
+		Network network = networks.get(networkID);
 		return network.world.getBlockTileEntity(network.host.x, network.host.y, network.host.z);
 	}
 
@@ -53,9 +79,11 @@ public class NetworkManager {
 	 * @param networkID the ID of the network in question
 	 * @param client the coordinates of the block that is being added as a client */
 	public static void addClient(int networkID, Point client) {
-		final Network network = networks.get(networkID);
+		Network network = networks.get(networkID);
 		network.clients.add(client);
-		((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).connectToNetwork(network.type, networkID);
+		((TileEntityMachine)network.world.
+				getBlockTileEntity(client.x, client.y, client.z)).
+				connectToNetwork(network.type, networkID);
 		if(Funcs.isServer())
 			PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(networkID, client.x, (short)client.y, client.z), network.world.provider.dimensionId);
 		else
@@ -67,7 +95,7 @@ public class NetworkManager {
 	 * @param networkID the ID of the network in question
 	 * @param client the coordinates of the block that is being removed */
 	public static void removeClient(int networkID, Point client) {
-		final Network network = networks.get(networkID);
+		Network network = networks.get(networkID);
 		network.clients.remove(client);
 		((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).disconnectFromNetwork(network.type, networkID);
 		if(Funcs.isServer())

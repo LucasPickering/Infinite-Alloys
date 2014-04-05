@@ -145,8 +145,8 @@ public class Funcs {
 		return new ResourceLocation(Consts.TEXTURE_DOMAIN, "textures/gui/" + texture + ".png");
 	}
 
-	/** Bind the texture with the given resource to the render engine so that it can be used Convenience method for
-	 * {@link net.minecraft.client.renderer.texture.TextureManager#bindTexture TextureManager.bindTexture} */
+	/** Bind the texture with the given resource to the render engine so that it can be used.
+	 * Convenience method for {@link net.minecraft.client.renderer.texture.TextureManager#bindTexture TextureManager.bindTexture} */
 	public static void bindTexture(ResourceLocation texture) {
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 	}

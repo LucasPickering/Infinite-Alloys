@@ -36,16 +36,16 @@ public abstract class GuiElectric extends GuiMachine {
 				drawTextBox(mouseX, mouseY, new ColoredLine(new DecimalFormat("0.0").format(tee.getProcessProgressScaled(100F)) + "%", 0xffffff));
 
 		// Draw the power network info if the mouse is over the energy icon
-		if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + energyIcon.x, topLeft.y + energyIcon.y, ENERGY_ICON_ON.width, ENERGY_ICON_ON.height)) {
+		if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + energyIcon.x, topLeft.y + energyIcon.y, ENERGY_ICON.width, ENERGY_ICON.height)) {
 			if(tee.getEnergyNetworkID() != -1) {
-				final int rkChange = tee.shouldProcess() ? tee.getRKChange() : 0;// The rate of change of RK
-				final Point esu = NetworkManager.getHost(tee.getEnergyNetworkID()); // The coordinates of the energy storage unit
+				int rkChange = tee.shouldProcess() ? tee.getRKChange() : 0;// The rate of change of RK
+				Point esu = NetworkManager.getHost(tee.getEnergyNetworkID()); // The coordinates of the energy storage unit
 
 				// If the ESU for this machine is this machine, display SELF, otherwise display the coords of the ESU
-				final String line1 = Funcs.getLoc("machine.connected.true") + (esu.equals(tee.xCoord, tee.yCoord, tee.zCoord) ? Funcs.getLoc("machine.connected.self") : esu);
+				String line1 = Funcs.getLoc("machine.connected.true") + (esu.equals(tee.xCoord, tee.yCoord, tee.zCoord) ? Funcs.getLoc("machine.connected.self") : esu);
 
 				// If the rk change is positive, add '+', then display the rate of change of RK
-				final String line2 = (rkChange > 0 ? "+" : "") + rkChange + " RK/t";
+				String line2 = (rkChange > 0 ? "+" : "") + rkChange + " RK/t";
 
 				// Draw all the information, with colors for the change based on pos/neg
 				drawTextBox(mouseX, mouseY, new ColoredLine(line1, 0x00ff00), new ColoredLine(line2, rkChange < 0 ? 0xff0000 : rkChange > 0 ? 0x00ff00 : 0xffffff));
@@ -66,14 +66,9 @@ public abstract class GuiElectric extends GuiMachine {
 
 		// Draw the progress bar overlay
 		if(tee.ticksToProcess > 0)
-			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, (int)tee.getProcessProgressScaled(PROGRESS_BAR.width),
-					PROGRESS_BAR.height);
+			drawTexturedModalRect(progressBar.x, progressBar.y, PROGRESS_BAR.x, PROGRESS_BAR.y, (int)tee.getProcessProgressScaled(PROGRESS_BAR.width), PROGRESS_BAR.height);
 
-		// Draw the energy icon overlay
-		if(tee.getEnergyNetworkID() != -1)
-			Funcs.drawTexturedModalRect(this, energyIcon.x, energyIcon.y, ENERGY_ICON_ON);
-		else
-			Funcs.drawTexturedModalRect(this, energyIcon.x, energyIcon.y, ENERGY_ICON_OFF);
+		Funcs.drawTexturedModalRect(this, energyIcon.x, energyIcon.y, ENERGY_ICON);// Draw the energy icon overlay
 		GL11.glPopMatrix();
 	}
 

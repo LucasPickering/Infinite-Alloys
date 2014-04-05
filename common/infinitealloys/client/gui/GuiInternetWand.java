@@ -7,7 +7,6 @@ import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.network.PacketWand;
 import infinitealloys.tile.IHost;
-import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
@@ -64,14 +63,14 @@ public class GuiInternetWand extends GuiScreen {
 		addToWand.enabled = false; // Reset button states
 		addSelected.enabled = false;
 
-		final ItemStack heldItem = mc.thePlayer.getHeldItem();
+		ItemStack heldItem = mc.thePlayer.getHeldItem();
 		if(heldItem.getItem() instanceof ItemInternetWand && heldItem.hasTagCompound()) {
-			final NBTTagCompound tagCompound = heldItem.getTagCompound();
+			 NBTTagCompound tagCompound = heldItem.getTagCompound();
 
 			for(int i = 0; i < Consts.WAND_SIZE; i++) { // For each button in the array
 				machineButtons[i] = null; // Reset the button
 				if(tagCompound.hasKey("Coords" + i)) { // If there is a machine that corresponds to this button
-					final int[] client = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
+					 int[] client = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
 					if(!MachineHelper.isClient(mc.theWorld, client[0], client[1], client[2])) { // If the block is no longer valid for the wand
 						PacketDispatcher.sendPacketToServer(PacketWand.getPacketRemove((byte)i)); // Remove it
 						((ItemInternetWand)heldItem.getItem()).removeMachine(heldItem, i);
@@ -83,14 +82,14 @@ public class GuiInternetWand extends GuiScreen {
 			}
 
 			if(tagCompound.hasKey("CoordsCurrent")) {
-				final int[] a = tagCompound.getIntArray("CoordsCurrent");
+				 int[] a = tagCompound.getIntArray("CoordsCurrent");
 				addToWand.enabled = ((ItemInternetWand)heldItem.getItem()).isMachineValid(mc.theWorld, heldItem, a[0], a[1], a[2]);
 
-				final TileEntity te = mc.theWorld.getBlockTileEntity(a[0], a[1], a[2]);
+				 TileEntity te = mc.theWorld.getBlockTileEntity(a[0], a[1], a[2]);
 
 				addSelected.enabled = selectedButtons != 0;
 				// Go over each machine button
-				for(final MachineButton button : machineButtons)
+				for( MachineButton button : machineButtons)
 					if(button != null && (selectedButtons & 1 << button.buttonID) != 0) // If this button is selected
 						// If the selected machine is not valid for the block that was clicked
 						if(!(te instanceof IHost) || !((IHost)te).isClientValid(new Point(button.machineX, button.machineY, button.machineZ)))
@@ -105,7 +104,7 @@ public class GuiInternetWand extends GuiScreen {
 		Funcs.bindTexture(background);
 		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 		super.drawScreen(mouseX, mouseY, partialTick);
-		for(final MachineButton button : machineButtons)
+		for( MachineButton button : machineButtons)
 			if(button != null)
 				button.drawButton();
 
@@ -114,7 +113,7 @@ public class GuiInternetWand extends GuiScreen {
 		// Draw the help dialogue and shade the help zone if help is enabled and the mouse is over a help zone
 		if(helpEnabled) {
 			EnumHelp hoveredZone = null; // The help zone that the mouse is over to render to dialogue later, null if mouse is not over a zone\
-			for(final EnumHelp help : EnumHelp.getBoxes(Consts.MACHINE_COUNT)) {
+			for( EnumHelp help : EnumHelp.getBoxes(Consts.MACHINE_COUNT)) {
 				// Draw zone outline, add alpha to make the rectangles opaque
 				drawRect(help.x, help.y, help.x + help.w, help.y + 1, 0xff000000 + help.color); // Top of outline box
 				drawRect(help.x, help.y + help.h, help.x + help.w, help.y + help.h - 1, 0xff000000 + help.color); // Bottom of outline box
@@ -131,9 +130,9 @@ public class GuiInternetWand extends GuiScreen {
 				drawRect(hoveredZone.x, hoveredZone.y, hoveredZone.x + hoveredZone.w, hoveredZone.y + hoveredZone.h, 0x60000000 + hoveredZone.color);
 
 				// Draw text box with help info
-				final List<ColoredLine> lines = new ArrayList<ColoredLine>();
+				 List<ColoredLine> lines = new ArrayList<ColoredLine>();
 				lines.add(new ColoredLine(Funcs.getLoc("machineHelp." + hoveredZone.name + ".title"), 0xffffff));
-				for(final String s : Funcs.getLoc("machineHelp." + hoveredZone.name + ".info").split("/n"))
+				for( String s : Funcs.getLoc("machineHelp." + hoveredZone.name + ".info").split("/n"))
 					lines.add(new ColoredLine(s, 0xaaaaaa));
 				drawTextBox(-8 - topLeft.x, 17 - topLeft.y, lines.toArray(new ColoredLine[lines.size()]));
 			}
@@ -146,7 +145,7 @@ public class GuiInternetWand extends GuiScreen {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		if(mouseButton == 0) { // If it was a left-click
 			for(int i = 0; i < Consts.WAND_SIZE; i++) {
-				final MachineButton button = machineButtons[i];
+				 MachineButton button = machineButtons[i];
 				if(button != null && Funcs.mouseInZone(mouseX, mouseY, button.xPos, button.yPos, button.width, button.height)) { // If this button was clicked
 					if(!isCtrlKeyDown() && !isShiftKeyDown()) // If the CTRL or Shift key wasn't held, set all buttons to 0
 						selectedButtons = 0;
@@ -183,19 +182,19 @@ public class GuiInternetWand extends GuiScreen {
 				break;
 			case Consts.WAND_SIZE + 1: // Add the block that was clicked to the wand's list
 				ItemStack heldItem = mc.thePlayer.getHeldItem();
-				final int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
+				 int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 				PacketDispatcher.sendPacketToServer(PacketWand.getPacketAdd(a[0], (short)a[1], a[2]));
 				((ItemInternetWand)heldItem.getItem()).addMachine(mc.theWorld, heldItem, a[0], a[1], a[2]);
 				break;
 			case Consts.WAND_SIZE + 2: // Add selected machines to a host
 				heldItem = mc.thePlayer.getHeldItem();
-				final int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
+				 int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 
 				if(MachineHelper.isHost(mc.theWorld, host[0], host[1], host[2])) { // If this is a host
-					for(final MachineButton machineButton : machineButtons) { // Go over each button
+					for( MachineButton machineButton : machineButtons) { // Go over each button
 						if(machineButton != null && (selectedButtons & 1 << machineButton.buttonID) != 0) { // If this button is selected
 							// Add the selected machine to the host
-							final int[] client = heldItem.getTagCompound().getIntArray("Coords" + machineButton.buttonID);
+							 int[] client = heldItem.getTagCompound().getIntArray("Coords" + machineButton.buttonID);
 							((IHost)mc.theWorld.getBlockTileEntity(host[0], host[1], host[2])).addClient(mc.thePlayer, new Point(client[0], client[1], client[2]));
 						}
 					}
@@ -217,7 +216,7 @@ public class GuiInternetWand extends GuiScreen {
 	protected void drawTextBox(int mouseX, int mouseY, ColoredLine... lines) {
 		// Set the width of the box to the length of the longest line
 		int boxWidth = 0;
-		for(final ColoredLine line : lines)
+		for( ColoredLine line : lines)
 			boxWidth = Math.max(boxWidth, fontRenderer.getStringWidth(line.text));
 
 		// This is from vanilla, I have no idea what it does, other than make it work
@@ -226,14 +225,14 @@ public class GuiInternetWand extends GuiScreen {
 		int var9 = 8;
 		if(lines.length > 1)
 			var9 += 2 + (lines.length - 1) * 10;
-		final int var10 = -267386864;
+		 int var10 = -267386864;
 		drawGradientRect(mouseX - 3, mouseY - 4, mouseX + boxWidth + 3, mouseY - 3, var10, var10);
 		drawGradientRect(mouseX - 3, mouseY + var9 + 3, mouseX + boxWidth + 3, mouseY + var9 + 4, var10, var10);
 		drawGradientRect(mouseX - 3, mouseY - 3, mouseX + boxWidth + 3, mouseY + var9 + 3, var10, var10);
 		drawGradientRect(mouseX - 4, mouseY - 3, mouseX - 3, mouseY + var9 + 3, var10, var10);
 		drawGradientRect(mouseX + boxWidth + 3, mouseY - 3, mouseX + boxWidth + 4, mouseY + var9 + 3, var10, var10);
-		final int var11 = 1347420415;
-		final int var12 = (var11 & 16711422) >> 1 | var11 & -16777216;
+		 int var11 = 1347420415;
+		 int var12 = (var11 & 16711422) >> 1 | var11 & -16777216;
 		drawGradientRect(mouseX - 3, mouseY - 3 + 1, mouseX - 3 + 1, mouseY + var9 + 3 - 1, var11, var12);
 		drawGradientRect(mouseX + boxWidth + 2, mouseY - 3 + 1, mouseX + boxWidth + 3, mouseY + var9 + 3 - 1, var11, var12);
 		drawGradientRect(mouseX - 3, mouseY - 3, mouseX + boxWidth + 3, mouseY - 3 + 1, var11, var11);
@@ -248,7 +247,7 @@ public class GuiInternetWand extends GuiScreen {
 	/** A button that represents a machine with its texture and coordinates */
 	private class MachineButton {
 
-		final int width = 122;
+		final int width = 118;
 		final int height = 17;
 
 		int buttonID;
@@ -259,7 +258,6 @@ public class GuiInternetWand extends GuiScreen {
 		int machineX;
 		int machineY;
 		int machineZ;
-		boolean isWireless;
 
 		MachineButton(int buttonID, int xPos, int yPos, int machineX, int machineY, int machineZ) {
 			super();
@@ -270,9 +268,7 @@ public class GuiInternetWand extends GuiScreen {
 			this.machineX = machineX;
 			this.machineY = machineY;
 			this.machineZ = machineZ;
-			isWireless = mc.theWorld.getBlockTileEntity(machineX, machineY, machineZ) instanceof TileEntityMachine &&
-					((TileEntityMachine)mc.theWorld.getBlockTileEntity(machineX, machineY, machineZ)).hasUpgrade(MachineHelper.WIRELESS);
-			buttonList.add(new GuiButton(buttonID, xPos + 126, yPos - 1, 16, 20, "X"));
+			buttonList.add(new GuiButton(buttonID, xPos + 122, yPos - 1, 20, 20, "X"));
 		}
 
 		void drawButton() {
@@ -287,15 +283,6 @@ public class GuiInternetWand extends GuiScreen {
 			}
 
 			GL11.glColor3f(1F, 1F, 1F); // Reset the color
-
-			GL11.glPushMatrix();
-			GL11.glTranslatef(xPos + 100, yPos + 3, 0);
-			GL11.glScalef(0.75F, 0.75F, 1F);
-
-			// If the machine is wireless
-			if(isWireless)
-				Funcs.drawTexturedModalRect(GuiInternetWand.this, 15, 0, GuiMachine.WIRELESS_ICON); // Render a wireless icon on the button
-			GL11.glPopMatrix();
 
 			// Draw the string for the coordinates
 			final String display = machineX + "   " + machineY + "   " + machineZ;

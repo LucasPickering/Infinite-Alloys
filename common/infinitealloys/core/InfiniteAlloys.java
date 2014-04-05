@@ -77,12 +77,13 @@ public class InfiniteAlloys {
 	/** Generate new validAlloys. This should only be called when a world is first generated, and will not do anything if validAlloys already has a value. */
 	public void generateAlloyData() {
 		if(validAlloys == null) {
-			final Random random = new Random();
+			validAlloys = new int[Consts.VALID_ALLOY_COUNT];
+			Random random = new Random();
 			for(int i = 0; i < Consts.VALID_ALLOY_COUNT; i++) { // For each alloy that needs to be generated
 				int alloy = 0; // An int to hold each digit that is generated
 				for(int j = 0; j < Consts.METAL_COUNT; j++) { // For each metal, i.e. for each digit in the alloy
-					final int min = Funcs.intAtPos(EnumAlloy.values()[i].min, Consts.ALLOY_RADIX, j); // Metal's min value in the alloy
-					final int max = Funcs.intAtPos(EnumAlloy.values()[i].max, Consts.ALLOY_RADIX, j); // Metal's max value in the alloy
+					int min = Funcs.intAtPos(EnumAlloy.values()[i].min, Consts.ALLOY_RADIX, j); // Metal's min value in the alloy
+					int max = Funcs.intAtPos(EnumAlloy.values()[i].max, Consts.ALLOY_RADIX, j); // Metal's max value in the alloy
 					// Randomly gen a value in [min, max] and add it to the alloy
 					alloy += (min + (max == min ? 0 : random.nextInt(max - min + 1))) * Math.pow(Consts.ALLOY_RADIX, j);
 				}

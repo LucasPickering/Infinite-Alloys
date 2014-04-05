@@ -3,14 +3,15 @@ package infinitealloys.core;
 import infinitealloys.network.PacketValidAlloys;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.NetworkManager;
-import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
@@ -19,7 +20,6 @@ import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
-// KEEP IN MIND: RIGHTMOST DIGITS ARE THE LESSER METALS WHILE LEFTMOST DIGITS ARE THE FANTASTICAL METALS
 public class EventHandler implements ICraftingHandler {
 
 	private final String fileName = "IAWorldData.dat";
@@ -27,33 +27,31 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onWorldLoad(Load event) {
+		world = DimensionManager.getWorld(0).getChunkSaveLocation().getPath();
 		if(Funcs.isServer()) {
-			final File file = new File(world + "/" + fileName);
-			if(file.exists()) {
-				NBTTagCompound nbtTagCompound = new NBTTagCompound();
-				try {
-					nbtTagCompound = CompressedStreamTools.readCompressed(new FileInputStream(file));
-				}catch(final Exception e) {
-					e.printStackTrace();
-				}
+			try {
+				NBTTagCompound nbtTagCompound = CompressedStreamTools.readCompressed(new FileInputStream(world + "/" + fileName));
 				InfiniteAlloys.instance.loadAlloyData(nbtTagCompound);
 				NetworkManager.loadData(nbtTagCompound);
-			}
-			else
+			}catch(FileNotFoundException e) {
 				InfiniteAlloys.instance.generateAlloyData();
+			}catch(Exception e) {
+				InfiniteAlloys.instance.generateAlloyData();
+				e.printStackTrace();
+			}
 		}
 	}
 
 	@ForgeSubscribe
 	public void onWorldUnload(Unload event) {
 		if(Funcs.isServer()) {
-			final NBTTagCompound nbtTagCompound = new NBTTagCompound(); // An NBTTagCompound for the info to be stored in
+			NBTTagCompound nbtTagCompound = new NBTTagCompound(); // An NBTTagCompound for the info to be stored in
 			InfiniteAlloys.instance.saveAlloyData(nbtTagCompound); // Add the alloy data to the NBTTagCompound
 			NetworkManager.saveData(nbtTagCompound); // Add the network data to the NBTTagCompound
 
 			try {
-				CompressedStreamTools.writeCompressed(nbtTagCompound, new FileOutputStream(new File(world + "/" + fileName))); // Write the NBT data to a file
-			}catch(final Exception e) {
+				CompressedStreamTools.writeCompressed(nbtTagCompound, new FileOutputStream(world + "/" + fileName)); // Write the NBT data to a file
+			}catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
