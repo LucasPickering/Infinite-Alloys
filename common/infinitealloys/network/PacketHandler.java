@@ -19,10 +19,12 @@ public class PacketHandler implements IPacketHandler {
 	public static final byte OPEN_GUI = 3;
 	public static final byte XRAY_SEARCH = 4;
 	public static final byte WAND = 5;
-	public static final byte ADD_CLIENT = 6;
-	public static final byte REMOVE_CLIENT = 7;
+	public static final byte CREATE_NETWORK = 6;
+	public static final byte REMOVE_NETWORK = 7;
+	public static final byte ADD_CLIENT = 8;
+	public static final byte REMOVE_CLIENT = 9;
 	private static final Class[] packetClasses = { PacketValidAlloys.class, PacketTEServerToClient.class, PacketTEClientToServer.class, PacketOpenGui.class,
-		PacketXraySearch.class, PacketWand.class, PacketAddClient.class, PacketRemoveClient.class };
+		PacketXraySearch.class, PacketWand.class, PacketCreateNetwork.class, PacketRemoveClient.class, PacketAddClient.class, PacketRemoveClient.class };
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
@@ -36,16 +38,16 @@ public class PacketHandler implements IPacketHandler {
 	}
 
 	public static Packet250CustomPayload getPacket(byte id, Object... data) {
-		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		final DataOutputStream dos = new DataOutputStream(bos);
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		DataOutputStream dos = new DataOutputStream(bos);
 		try {
 			dos.writeByte(id);
-			for(final Object datum : data)
+			for(Object datum : data)
 				writeObject(dos, datum);
-		}catch(final IOException e) {
+		}catch(IOException e) {
 			e.printStackTrace();
 		}
-		final Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
+		Packet250CustomPayload packet = new Packet250CustomPayload("InfiniteAlloys", bos.toByteArray());
 		packet.length = bos.size();
 		return packet;
 	}

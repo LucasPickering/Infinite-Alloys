@@ -1,6 +1,7 @@
 package infinitealloys.util;
 
-import infinitealloys.network.PacketRemoveClient;
+import infinitealloys.network.PacketAddClient;
+import infinitealloys.network.PacketCreateNetwork;
 import infinitealloys.tile.TileEntityMachine;
 import java.util.ArrayList;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,6 +9,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /** This is meant for in-game IA networks, not real computer networks. It organizes and manages the connections between hosts, such as an ESU, and their
  * clients. */
@@ -49,8 +52,20 @@ public class NetworkManager {
 	}
 
 	/** Create a new network for this host */
+	@SideOnly(Side.SERVER)
 	public static int buildNetwork(int type, World world, Point host) {
+		// Look through the list for null spaces that were left by deleted networks
+		for(int i = 0; i < networks.size(); i++) {
+			if(networks.get(i) == null) {
+				networks.set(i, new Network(type, world, host));
+				PacketDispatcher.sendPacketToAllPlayers(PacketCreateNetwork.getPacket(i, (byte)type, world.provider.dimensionId, host.x, (short)host.y, host.z));
+				return i;
+			}
+		}
+
+		// If there are no empty spaces to be filled, add a new network to the end of the list
 		networks.add(new Network(type, world, host));
+		PacketDispatcher.sendPacketToAllPlayers(PacketCreateNetwork.getPacket(networks.size() - 1, (byte)type, world.provider.dimensionId, host.x, (short)host.y, host.z));
 		return networks.size() - 1;
 	}
 
@@ -63,6 +78,7 @@ public class NetworkManager {
 		((TileEntityMachine)network.world.getBlockTileEntity(network.host.x, network.host.y, network.host.z)).disconnectFromNetwork(network.type, networkID);
 		for(Point client : network.clients)
 			((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).disconnectFromNetwork(network.type, networkID);
+		networks.set(networkID, null);
 	}
 
 	public static Point getHost(int networkID) {
@@ -84,24 +100,22 @@ public class NetworkManager {
 		((TileEntityMachine)network.world.
 				getBlockTileEntity(client.x, client.y, client.z)).
 				connectToNetwork(network.type, networkID);
-		if(Funcs.isServer())
-			PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(networkID, client.x, (short)client.y, client.z), network.world.provider.dimensionId);
+		if(Funcs.isClient())
+			PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(networkID, client.x, (short)client.y, client.z));
 		else
-			PacketDispatcher.sendPacketToServer(PacketRemoveClient.getPacket(networkID, client.x, (short)client.y, client.z));
+			PacketDispatcher.sendPacketToAllPlayers(PacketAddClient.getPacket(networkID, client.x, (short)client.y, client.z));
 	}
 
 	/** Remove a client from a network
 	 * 
 	 * @param networkID the ID of the network in question
 	 * @param client the coordinates of the block that is being removed */
+	@SideOnly(Side.SERVER)
 	public static void removeClient(int networkID, Point client) {
 		Network network = networks.get(networkID);
 		network.clients.remove(client);
 		((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).disconnectFromNetwork(network.type, networkID);
-		if(Funcs.isServer())
-			PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(networkID, client.x, (short)client.y, client.z), network.world.provider.dimensionId);
-		else
-			PacketDispatcher.sendPacketToServer(PacketRemoveClient.getPacket(networkID, client.x, (short)client.y, client.z));
+		PacketDispatcher.sendPacketToAllPlayers(PacketAddClient.getPacket(networkID, client.x, (short)client.y, client.z));
 	}
 
 	/** Get a specific client from a network
@@ -136,6 +150,12 @@ public class NetworkManager {
 	 * @return the amount of clients on the network */
 	public static int getSize(int networkID) {
 		return networks.get(networkID).clients.size();
+	}
+
+	/** Create a new network in a certain position, only used on client to sync with server */
+	@SideOnly(Side.CLIENT)
+	public static void createNetwork(int networkID, int type, int dimensionID, Point host) {
+		networks.set(networkID, new Network(type, DimensionManager.getWorld(dimensionID), host));
 	}
 
 	private static class Network {
