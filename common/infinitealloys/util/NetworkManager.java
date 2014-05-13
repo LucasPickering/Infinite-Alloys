@@ -75,9 +75,9 @@ public class NetworkManager {
 
 	public static void deleteNetwork(int networkID) {
 		Network network = networks.get(networkID);
-		((TileEntityMachine)network.world.getBlockTileEntity(network.host.x, network.host.y, network.host.z)).disconnectFromNetwork(network.type, networkID);
+		((TileEntityMachine)network.world.getBlockTileEntity(network.host.x, network.host.y, network.host.z)).disconnectFromNetwork(network.type);
 		for(Point client : network.clients)
-			((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).disconnectFromNetwork(network.type, networkID);
+			((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).disconnectFromNetwork(network.type);
 		networks.set(networkID, null);
 	}
 
@@ -114,7 +114,7 @@ public class NetworkManager {
 	public static void removeClient(int networkID, Point client) {
 		Network network = networks.get(networkID);
 		network.clients.remove(client);
-		((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).disconnectFromNetwork(network.type, networkID);
+		((TileEntityMachine)network.world.getBlockTileEntity(client.x, client.y, client.z)).disconnectFromNetwork(network.type);
 		PacketDispatcher.sendPacketToAllPlayers(PacketAddClient.getPacket(networkID, client.x, (short)client.y, client.z));
 	}
 

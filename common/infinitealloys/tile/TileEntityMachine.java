@@ -80,9 +80,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	/** Disconnect from a certain network
 	 * 
-	 * @param networkType the type of the network, e.g. computer, energy, etc. These types are defined in {@link infinitealloys.util.MachineHelper}
-	 * @param networkID the ID of the network to which from which this machine is disconnecting */
-	public abstract void disconnectFromNetwork(int networkType, int networkID);
+	 * @param networkType the type of the network, e.g. computer, energy, etc. These types are defined in {@link infinitealloys.util.MachineHelper} */
+	public abstract void disconnectFromNetwork(int networkType);
 
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {

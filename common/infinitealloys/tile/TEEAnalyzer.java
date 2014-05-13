@@ -12,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
@@ -40,12 +42,25 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		stackLimit = 1;
 		baseRKPerTick = -1000;
 		ticksToProcess = 20; // TODO: Change this back to 2400
-		analyzerNetworkID = NetworkManager.buildNetwork(MachineHelper.ANALYZER_NETWORK, worldObj, new Point(xCoord, yCoord, zCoord));
+		if(worldObj.isRemote && analyzerNetworkID == -1)
+			analyzerNetworkID = NetworkManager.buildNetwork(MachineHelper.ANALYZER_NETWORK, worldObj, new Point(xCoord, yCoord, zCoord));
 	}
 
 	@Override
 	public int getID() {
 		return MachineHelper.ANALYZER;
+	}
+
+	@Override
+	public void deleteNetworks() {
+		NetworkManager.deleteNetwork(analyzerNetworkID);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void createNetwork(int networkID, int type) {
+		if(type == MachineHelper.ANALYZER_NETWORK)
+			analyzerNetworkID = networkID;
 	}
 
 	@Override

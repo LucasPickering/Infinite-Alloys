@@ -54,8 +54,8 @@ public class TEEMetalForge extends TileEntityElectric {
 	}
 
 	@Override
-	public void disconnectFromNetwork(int networkType, int networkID) {
-		super.disconnectFromNetwork(networkType, networkID);
+	public void disconnectFromNetwork(int networkType) {
+		super.disconnectFromNetwork(networkType);
 		if(networkType == MachineHelper.ANALYZER_NETWORK)
 			analyzerNetworkID = -1;
 	}
