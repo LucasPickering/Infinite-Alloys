@@ -5,8 +5,10 @@ import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
+import infinitealloys.util.NetworkManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
 
 public class GuiAnalyzer extends GuiElectric {
@@ -20,7 +22,7 @@ public class GuiAnalyzer extends GuiElectric {
 		super(176, 166, inventoryPlayer, tileEntity);
 		tea = tileEntity;
 		progressBar.setLocation(28, 7);
-		energyIcon.setLocation(7, 8);
+		networkIcon = new java.awt.Point(7, 8);
 	}
 
 	@Override
@@ -67,5 +69,12 @@ public class GuiAnalyzer extends GuiElectric {
 				}
 			}
 		}
+	}
+
+	@Override
+	protected ColoredLine[] getNetworkStatuses() {
+		int clients = NetworkManager.getClients(tea.getAnalyzerNetworkID()).length;
+		String status = Funcs.getLoc("machine.network.hosting") + " " + clients + " " + (clients == 1 ? Funcs.getLoc("machine.network.client") : Funcs.getLoc("machine.network.clients"));
+		return ArrayUtils.addAll(super.getNetworkStatuses(), new ColoredLine(Funcs.getLoc("machine.network.analyzer") + ": " + status, 0x00ff00));
 	}
 }

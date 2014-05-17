@@ -11,15 +11,15 @@ public class PacketCreateNetwork implements PacketIA {
 	@Override
 	public void execute(EntityPlayer player, ByteArrayDataInput data) {
 		int networkID = data.readInt();
-		int type = data.readByte();
+		byte type = data.readByte();
 		int dimensionID = data.readInt();
-		int x = data.readInt();
-		int y = data.readShort();
-		int z = data.readInt();
-		NetworkManager.createNetwork(networkID, type, dimensionID, new Point(x, y, z));
+		int hostX = data.readInt();
+		int hostY = data.readShort();
+		int hostZ = data.readInt();
+		NetworkManager.createNetwork(networkID, type, dimensionID, new Point(hostX, hostY, hostZ));
 	}
 
-	public static Packet250CustomPayload getPacket(int networkID, byte type, int dimensionID, int x, short y, int z) {
-		return PacketHandler.getPacket(PacketHandler.CREATE_NETWORK, networkID, type, dimensionID, x, y, z);
+	public static Packet250CustomPayload getPacket(int networkID, byte type, int dimensionID, int hostX, short hostY, int hostZ) {
+		return PacketHandler.getPacket(PacketHandler.CREATE_NETWORK, networkID, type, dimensionID, hostX, hostY, hostZ);
 	}
 }

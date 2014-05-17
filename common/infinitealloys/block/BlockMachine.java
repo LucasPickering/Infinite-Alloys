@@ -2,6 +2,7 @@ package infinitealloys.block;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
+import infinitealloys.tile.IHost;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
@@ -145,6 +146,8 @@ public class BlockMachine extends BlockContainer {
 		if(tem != null) {
 			tem.dropItems();
 			tem.dropUpgrades();
+			if(tem instanceof IHost)
+				((IHost)tem).deleteNetworks();
 		}
 		super.breakBlock(world, x, y, z, blockID, metadata);
 	}

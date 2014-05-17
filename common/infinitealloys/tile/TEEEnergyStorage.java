@@ -7,8 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import org.apache.commons.lang3.ArrayUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
@@ -44,8 +42,8 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public void updateEntity() {
-		if(!worldObj.isRemote && energyNetworkID == -1)
-			energyNetworkID = NetworkManager.buildNetwork(MachineHelper.ENERGY_NETWORK, worldObj, new Point(xCoord, yCoord, zCoord));
+		if(energyNetworkID == -1)
+			energyNetworkID = NetworkManager.buildNetwork(MachineHelper.ENERGY_NETWORK, worldObj.provider.dimensionId, new Point(xCoord, yCoord, zCoord));
 
 		super.updateEntity();
 	}
@@ -65,13 +63,6 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	@Override
 	public void deleteNetworks() {
 		NetworkManager.deleteNetwork(energyNetworkID);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void createNetwork(int networkID, int type) {
-		if(type == MachineHelper.ENERGY_NETWORK)
-			energyNetworkID = networkID;
 	}
 
 	@Override

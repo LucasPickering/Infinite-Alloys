@@ -50,9 +50,9 @@ public class MachineHelper {
 	public static final int RANGE2 = 128;
 	public static final int WIRELESS = 256;
 
-	public static final int COMPUTER_NETWORK = 0;
-	public static final int ENERGY_NETWORK = 1;
-	public static final int ANALYZER_NETWORK = 2;
+	public static final byte COMPUTER_NETWORK = 0;
+	public static final byte ENERGY_NETWORK = 1;
+	public static final byte ANALYZER_NETWORK = 2;
 
 	/** The TileEntityMachine class for each machine */
 	public static final Class[] MACHINE_CLASSES = { TEMComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEXray.class, TEEPasture.class, TEEEnergyStorage.class };

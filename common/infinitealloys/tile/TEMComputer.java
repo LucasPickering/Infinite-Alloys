@@ -40,10 +40,10 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 	@Override
 	public void updateEntity() {
-		super.updateEntity();
+		if(computerNetworkID == -1)
+			computerNetworkID = NetworkManager.buildNetwork(MachineHelper.COMPUTER_NETWORK, worldObj.provider.dimensionId, new Point(xCoord, yCoord, zCoord));
 
-		if(worldObj.isRemote && computerNetworkID == -1)
-			computerNetworkID = NetworkManager.buildNetwork(MachineHelper.COMPUTER_NETWORK, worldObj, new Point(xCoord, yCoord, zCoord));
+		super.updateEntity();
 	}
 
 	@Override
@@ -55,13 +55,6 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	@Override
 	public void deleteNetworks() {
 		NetworkManager.deleteNetwork(computerNetworkID);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void createNetwork(int networkID, int type) {
-		if(type == MachineHelper.COMPUTER_NETWORK)
-			computerNetworkID = networkID;
 	}
 
 	@SideOnly(Side.CLIENT)

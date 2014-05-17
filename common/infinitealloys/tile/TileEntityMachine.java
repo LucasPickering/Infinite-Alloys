@@ -5,6 +5,7 @@ import infinitealloys.item.Items;
 import infinitealloys.network.PacketTEServerToClient;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
+import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.Random;
 import net.minecraft.entity.item.EntityItem;
@@ -135,8 +136,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		this.upgrades = upgrades;
 	}
 
-	public boolean coordsEquals(int x2, int y2, int z2) {
-		return xCoord == x2 && yCoord == y2 && zCoord == z2;
+	public Point coords() {
+		return new Point(xCoord, yCoord, zCoord);
 	}
 
 	@Override

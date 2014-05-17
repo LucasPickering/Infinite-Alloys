@@ -10,6 +10,7 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.NetworkManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
@@ -21,7 +22,7 @@ public class GuiMetalForge extends GuiElectric {
 		super(176, 216, inventoryPlayer, tileEntity);
 		temf = tileEntity;
 		progressBar.setLocation(31, 14);
-		energyIcon.setLocation(9, 15);
+		networkIcon = new java.awt.Point(9, 15);
 	}
 
 	@Override
@@ -79,5 +80,22 @@ public class GuiMetalForge extends GuiElectric {
 
 			PacketDispatcher.sendPacketToServer(PacketTEClientToServer.getPacket(temf)); // Sync the new recipe to the server
 		}
+	}
+
+	@Override
+	protected ColoredLine[] getNetworkStatuses() {
+		int color;
+		String status;
+
+		if(temf.getAnalyzerNetworkID() == -1) {
+			color = 0xff0000;
+			status = Funcs.getLoc("machine.network.noconnection");
+		}
+		else {
+			color = 0x00ff00;
+			status = Funcs.getLoc("machine.network.hostedby") + " " + NetworkManager.getHost(temf.getAnalyzerNetworkID());
+		}
+
+		return ArrayUtils.addAll(super.getNetworkStatuses(), new ColoredLine(Funcs.getLoc("machine.network.analyzer") + ": " + status, color));
 	}
 }

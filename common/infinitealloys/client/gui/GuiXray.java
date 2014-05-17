@@ -36,7 +36,7 @@ public class GuiXray extends GuiElectric {
 		super(196, 240, inventoryPlayer, tileEntity);
 		tex = tileEntity;
 		progressBar.setLocation(54, 5);
-		energyIcon.setLocation(9, 6);
+		networkIcon = new java.awt.Point(9, 6);
 	}
 
 	@Override

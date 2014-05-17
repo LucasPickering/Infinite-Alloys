@@ -63,9 +63,13 @@ tile.IAxray.name=X-Ray
 tile.IApasture.name=Pasture
 tile.IAenergystorage.name=Energy Storage Unit
 	
-machine.connected.false=NOT CONNECTED
-machine.connected.true=CONNECTED TO 
-machine.connected.self=SELF
+machine.network.energy=Energy
+machine.network.analyzer=Analyzer
+machine.network.hosting=Hosting
+machine.network.hostedby=Hosted by
+machine.network.client=Client
+machine.network.clients=Clients
+machine.network.noconnection=No Connection
 machine.xray.search=Search
 machine.pasture.mode.0=Off
 machine.pasture.mode.1=Att.

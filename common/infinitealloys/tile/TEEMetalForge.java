@@ -114,7 +114,7 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		return ArrayUtils.addAll(super.getSyncDataToClient(), recipeAlloyID);
+		return ArrayUtils.addAll(super.getSyncDataToClient(), analyzerNetworkID, recipeAlloyID);
 	}
 
 	@Override

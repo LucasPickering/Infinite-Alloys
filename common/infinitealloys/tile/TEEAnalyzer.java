@@ -42,8 +42,6 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		stackLimit = 1;
 		baseRKPerTick = -1000;
 		ticksToProcess = 20; // TODO: Change this back to 2400
-		if(worldObj.isRemote && analyzerNetworkID == -1)
-			analyzerNetworkID = NetworkManager.buildNetwork(MachineHelper.ANALYZER_NETWORK, worldObj, new Point(xCoord, yCoord, zCoord));
 	}
 
 	@Override
@@ -52,15 +50,27 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public void deleteNetworks() {
-		NetworkManager.deleteNetwork(analyzerNetworkID);
+	public void updateEntity() {
+		if(analyzerNetworkID == -1) {
+			System.out.println((Funcs.isClient() ? "Client" : "Server") + " - loop - " + this + " - " + analyzerNetworkID + " - " + worldObj);
+			analyzerNetworkID = NetworkManager.buildNetwork(MachineHelper.ANALYZER_NETWORK, worldObj.provider.dimensionId, new Point(xCoord, yCoord, zCoord));
+		}
+
+		super.updateEntity();
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void createNetwork(int networkID, int type) {
-		if(type == MachineHelper.ANALYZER_NETWORK)
+	public void connectToNetwork(int networkType, int networkID) {
+		super.connectToNetwork(networkType, networkID);
+		System.out.println((Funcs.isClient() ? "Client" : "Server") + " - pre-set - " + this + " - " + analyzerNetworkID + " - " + networkID);
+		if(networkType == MachineHelper.ANALYZER_NETWORK)
 			analyzerNetworkID = networkID;
+		System.out.println((Funcs.isClient() ? "Client" : "Server") + " - post-set - " + this + " - " + analyzerNetworkID);
+	}
+
+	@Override
+	public void deleteNetworks() {
+		NetworkManager.deleteNetwork(analyzerNetworkID);
 	}
 
 	@Override
@@ -131,6 +141,11 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 			if((usedMetals >> i & 1) == 1)
 				metalModifier += Math.pow(4, i); // Each alloy contributes to the required RK based on its value
 		return (int)(baseRKPerTick * rkPerTickMult / processTimeMult) * metalModifier;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public int getAnalyzerNetworkID() {
+		return analyzerNetworkID;
 	}
 
 	@Override

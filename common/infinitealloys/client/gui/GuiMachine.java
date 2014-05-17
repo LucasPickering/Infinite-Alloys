@@ -43,7 +43,7 @@ public abstract class GuiMachine extends GuiContainer {
 	static final Rectangle BLOCK_BG_OFF = new Rectangle(48, 24, 36, 18);
 	static final Rectangle SELECTED_OVERLAY = new Rectangle(68, 24, 36, 18);
 	static final Rectangle BLOCK_BG_ON = new Rectangle(84, 24, 36, 18);
-	static final Rectangle ENERGY_ICON = new Rectangle(16, 40, 16, 16);
+	static final Rectangle NETWORK_ICON = new Rectangle(0, 40, 16, 16);
 	static final Rectangle SCROLL_BAR = new Rectangle(172, 51, 12, 96);
 
 	/** The texture resource for the texture item */
@@ -58,6 +58,8 @@ public abstract class GuiMachine extends GuiContainer {
 	protected infinitealloys.util.Point controllingComputer = new infinitealloys.util.Point();
 	protected GuiMachineTab controllerTab;
 	protected final List<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
+	/** Coordinates of the network icon, which shows network statuses when hovered over */
+	protected java.awt.Point networkIcon;
 	/** When help is enabled, slots get a colored outline and a mouse-over description */
 	private boolean helpEnabled;
 
@@ -96,6 +98,11 @@ public abstract class GuiMachine extends GuiContainer {
 			drawTextBox(mouseX, mouseY, lines.toArray(new ColoredLine[lines.size()]));
 		}
 
+		// Draw the network info if the mouse is over the network icon
+		if(networkIcon != null && Funcs.mouseInZone(mouseX, mouseY, topLeft.x + networkIcon.x, topLeft.y + networkIcon.y, NETWORK_ICON.width, NETWORK_ICON.height))
+			// Draw a text box with a line for each network show its status and information
+			drawTextBox(mouseX, mouseY, getNetworkStatuses());
+
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
@@ -114,13 +121,17 @@ public abstract class GuiMachine extends GuiContainer {
 		Funcs.bindTexture(extras);
 		GL11.glPushMatrix();
 
+		// Draw the network icon if this GUI has one
+		if(networkIcon != null)
+			Funcs.drawTexturedModalRect(this, networkIcon.x, networkIcon.y, NETWORK_ICON); // Draw the network icon
+
 		// Draw the tabs of other machines on the network if this machine is connected to a computer
 		machineTabs.clear();
 		Point controller = MachineHelper.controllers.get(mc.thePlayer.username);
 		if(controller != null) {
 			TEMComputer tec = ((TEMComputer)mc.theWorld.getBlockTileEntity(controller.x, controller.y, controller.z));
 			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(controller.x, controller.y, controller.z), true,
-					tem.coordsEquals(controller.x, controller.y, controller.z));
+					tem.coords().equals(controller));
 			controllerTab.drawButton();
 			for(int i = 0; i < NetworkManager.getSize(tec.getComputerNetworkID()); i++) {
 				Point client = NetworkManager.getClient(tec.getComputerNetworkID(), i);
@@ -197,9 +208,9 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	public void actionPerformed(GuiButton button) {
 		if(button.id == 0) {
-			if(Loader.isModLoaded("mcp"))
-				InfiniteAlloys.instance.proxy.initLocalization(); // Debug line to make it easier to edit help dialogues
 			helpEnabled = !helpEnabled;
+			if(Loader.isModLoaded("mcp"))
+				InfiniteAlloys.instance.proxy.initLocalization(); // Debug line, reloads localization to update edits
 		}
 	}
 
@@ -214,7 +225,7 @@ public abstract class GuiMachine extends GuiContainer {
 			int x = controllerTab.tem.xCoord;
 			int y = controllerTab.tem.yCoord;
 			int z = controllerTab.tem.zCoord;
-			if(!tem.coordsEquals(x, y, z)) {
+			if(!tem.coords().equals(x, y, z)) {
 				((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, player, controllerTab.tem, false);
 				PacketDispatcher.sendPacketToServer(PacketOpenGui.getPacket(x, (short)y, z, false));
 			}
@@ -227,7 +238,7 @@ public abstract class GuiMachine extends GuiContainer {
 				int x = tab.tem.xCoord;
 				int y = tab.tem.yCoord;
 				int z = tab.tem.zCoord;
-				if(!tem.coordsEquals(x, y, z)) {
+				if(!tem.coords().equals(tab.tem.coords())) {
 					((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, player, tab.tem, true);
 					PacketDispatcher.sendPacketToServer(PacketOpenGui.getPacket(x, (short)y, z, false));
 				}
@@ -235,6 +246,8 @@ public abstract class GuiMachine extends GuiContainer {
 			}
 		}
 	}
+
+	protected abstract ColoredLine[] getNetworkStatuses();
 
 	public static class ColoredLine {
 		/** The line's text */
