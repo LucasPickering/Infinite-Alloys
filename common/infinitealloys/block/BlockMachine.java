@@ -23,8 +23,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -98,7 +96,7 @@ public class BlockMachine extends BlockContainer {
 		player.openGui(InfiniteAlloys.instance, tem.getID(), world, tem.xCoord, tem.yCoord, tem.zCoord);
 		if(Funcs.isServer()) {
 			tem.playersUsing.add(player.username);
-			PacketDispatcher.sendPacketToPlayer(tem.getDescriptionPacket(), (Player)player);
+			world.markBlockForUpdate(tem.xCoord, tem.yCoord, tem.zCoord);
 		}
 	}
 

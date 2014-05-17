@@ -11,7 +11,6 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -51,10 +50,8 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
 	@Override
 	public void updateEntity() {
-		if(analyzerNetworkID == -1) {
-			System.out.println((Funcs.isClient() ? "Client" : "Server") + " - loop - " + this + " - " + analyzerNetworkID + " - " + worldObj);
+		if(analyzerNetworkID == -1)
 			analyzerNetworkID = NetworkManager.buildNetwork(MachineHelper.ANALYZER_NETWORK, worldObj.provider.dimensionId, new Point(xCoord, yCoord, zCoord));
-		}
 
 		super.updateEntity();
 	}
@@ -62,10 +59,8 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	@Override
 	public void connectToNetwork(int networkType, int networkID) {
 		super.connectToNetwork(networkType, networkID);
-		System.out.println((Funcs.isClient() ? "Client" : "Server") + " - pre-set - " + this + " - " + analyzerNetworkID + " - " + networkID);
 		if(networkType == MachineHelper.ANALYZER_NETWORK)
 			analyzerNetworkID = networkID;
-		System.out.println((Funcs.isClient() ? "Client" : "Server") + " - post-set - " + this + " - " + analyzerNetworkID);
 	}
 
 	@Override
@@ -94,8 +89,7 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		alloys |= 1 << targetAlloy; // Add the alloy that we discovered to the alloys that have been discovered
 		targetAlloy = -1; // Reset the alloy that we are discovering
 		if(Funcs.isServer())
-			for(final String player : playersUsing)
-				PacketDispatcher.sendPacketToPlayer(getDescriptionPacket(), Funcs.getPlayerForUsername(player)); // Sync with users
+			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	public int getAlloys() {
@@ -150,7 +144,7 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
 	@Override
 	public boolean isClientValid(Point client) {
-		return worldObj.getBlockTileEntity(client.x, client.y, client.z) instanceof TEEMetalForge;
+		return Funcs.getBlockTileEntity(worldObj, client) instanceof TEEMetalForge;
 	}
 
 	@Override

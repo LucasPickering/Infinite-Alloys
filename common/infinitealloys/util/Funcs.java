@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
@@ -151,7 +152,7 @@ public class Funcs {
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 	}
 
-	/** Convenience method for {@link net.minecraft.client.gui.Gui#drawTexturedModalRect(int, int, int, int, int, int) Gui.drawTecturedModalRect} with a
+	/** Convenience method for {@link net.minecraft.client.gui.Gui#drawTexturedModalRect Gui.drawTecturedModalRect} with a
 	 * Rectangle for the last four args */
 	public static void drawTexturedModalRect(Gui gui, int x, int y, Rectangle rect) {
 		gui.drawTexturedModalRect(x, y, rect.x, rect.y, rect.width, rect.height);
@@ -183,5 +184,10 @@ public class Funcs {
 			gcf = i;
 		}
 		return alloy / gcf;
+	}
+
+	/** Convenience method for getting a TE in a specific world when the coordinates are stored in a {@link Point} */
+	public static TileEntity getBlockTileEntity(World world, Point p) {
+		return world.getBlockTileEntity(p.x, p.y, p.z);
 	}
 }

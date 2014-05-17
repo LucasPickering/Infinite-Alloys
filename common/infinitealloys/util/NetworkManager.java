@@ -6,6 +6,7 @@ import infinitealloys.tile.TileEntityMachine;
 import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -19,41 +20,49 @@ public class NetworkManager {
 
 	private static ArrayList<Network> networks = new ArrayList<Network>();
 
-	@SideOnly(Side.SERVER)
-	public static void loadData(NBTTagCompound nbtTagCompound) {
-		networks.clear();
-		for(int i = 0; nbtTagCompound.hasKey("network" + i); i++) {
-			NBTTagCompound network = nbtTagCompound.getCompoundTag("network" + i);
+	/** Read network data from the tag compound and add these networks to the list
+	 * 
+	 * @param nbtTagCompound the tag compound containing the network data
+	 * @param world the world that is being loaded, used for {@link #notifyNetwork} */
+	public static void loadData(NBTTagCompound nbtTagCompound, World world) {
+		if(Funcs.isServer()) {
+			networks.clear();
+			for(int i = 0; nbtTagCompound.hasKey("network" + i); i++) {
+				NBTTagCompound network = nbtTagCompound.getCompoundTag("network" + i);
 
-			byte type = network.getByte("type");
-			int dimensionID = network.getInteger("dimensionID");
-			int[] host = network.getIntArray("host");
-			int networkID = buildNetwork(type, dimensionID, new Point(host[0], host[1], host[2]));
+				byte type = network.getByte("type");
+				int dimensionID = network.getInteger("dimensionID");
+				int[] host = network.getIntArray("host");
+				int networkID = buildNetwork(type, dimensionID, new Point(host[0], host[1], host[2]));
 
-			for(int j = 0; network.hasKey("client" + j); j++) {
-				int[] client = network.getIntArray("client" + j);
-				addClient(networkID, new Point(client[0], client[1], client[2]));
+				for(int j = 0; network.hasKey("client" + j); j++) {
+					int[] client = network.getIntArray("client" + j);
+					addClient(networkID, new Point(client[0], client[1], client[2]));
+				}
+
+				notifyNetwork(networkID, world);
 			}
-
-			notifyNetwork(networkID);
 		}
 	}
 
-	@SideOnly(Side.SERVER)
 	public static void saveData(NBTTagCompound nbtTagCompound) {
-		for(int i = 0; i < networks.size(); i++) {
-			NBTTagCompound networkNBT = new NBTTagCompound();
-			Network network = getNetwork(i);
+		if(Funcs.isServer()) {
+			for(int i = 0; i < networks.size(); i++) {
+				NBTTagCompound networkNBT = new NBTTagCompound();
+				Network network = getNetwork(i);
 
-			networkNBT.setByte("type", network.type);
-			networkNBT.setInteger("dimensionID", network.dimensionID);
-			networkNBT.setIntArray("host", new int[] { network.host.x, network.host.y, network.host.z });
+				if(network != null) {
+					networkNBT.setByte("type", network.type);
+					networkNBT.setInteger("dimensionID", network.dimensionID);
+					networkNBT.setIntArray("host", new int[] { network.host.x, network.host.y, network.host.z });
 
-			for(int j = 0; j < network.clients.size(); j++) {
-				Point client = network.clients.get(j);
-				networkNBT.setIntArray("client" + j, new int[] { client.x, client.y, client.z });
+					for(int j = 0; j < network.clients.size(); j++) {
+						Point client = network.clients.get(j);
+						networkNBT.setIntArray("client" + j, new int[] { client.x, client.y, client.z });
+					}
+					nbtTagCompound.setCompoundTag("network" + i, networkNBT);
+				}
 			}
-			nbtTagCompound.setCompoundTag("network" + i, networkNBT);
 		}
 	}
 
@@ -78,30 +87,12 @@ public class NetworkManager {
 		return networks.size() - 1;
 	}
 
-	public static Network getNetwork(int networkID) {
-		return networks.get(networkID);
-	}
-
-	public static void deleteNetwork(int networkID) {
-		Network network = networks.get(networkID);
-		((TileEntityMachine)network.getWorld().getBlockTileEntity(network.host.x, network.host.y, network.host.z)).disconnectFromNetwork(network.type);
-		for(Point client : network.clients)
-			((TileEntityMachine)network.getWorld().getBlockTileEntity(client.x, client.y, client.z)).disconnectFromNetwork(network.type);
-		networks.set(networkID, null);
-	}
-
-	public static Point getHost(int networkID) {
-		return networks.get(networkID).host;
-	}
-
-	public static TileEntityMachine getHostTE(int networkID) {
-		Network network = getNetwork(networkID);
-		World world;
-		if(Funcs.isServer())
-			world = network.getWorld();
-		else
-			world = Minecraft.getMinecraft().theWorld;
-		return (TileEntityMachine)world.getBlockTileEntity(network.host.x, network.host.y, network.host.z);
+	/** Create a new network in a certain position, only used on client to sync with server */
+	public static void createNetwork(int networkID, byte type, int dimensionID, Point host) {
+		if(Funcs.isClient()) {
+			networks.set(networkID, new Network(type, dimensionID, host));
+			notifyNetwork(networkID, Minecraft.getMinecraft().theWorld);
+		}
 	}
 
 	/** Add a client to a network
@@ -111,7 +102,7 @@ public class NetworkManager {
 	public static void addClient(int networkID, Point client) {
 		Network network = networks.get(networkID);
 		network.clients.add(client);
-		((TileEntityMachine)network.getWorld().getBlockTileEntity(client.x, client.y, client.z)).connectToNetwork(network.type, networkID);
+		((TileEntityMachine)Funcs.getBlockTileEntity(network.getWorld(), client)).connectToNetwork(network.type, networkID);
 		if(Funcs.isClient())
 			PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(networkID, client.x, (short)client.y, client.z));
 		else
@@ -122,12 +113,37 @@ public class NetworkManager {
 	 * 
 	 * @param networkID the ID of the network in question
 	 * @param client the coordinates of the block that is being removed */
-	@SideOnly(Side.SERVER)
 	public static void removeClient(int networkID, Point client) {
+		if(Funcs.isServer()) {
+			Network network = networks.get(networkID);
+			network.clients.remove(client);
+			((TileEntityMachine)Funcs.getBlockTileEntity(network.getWorld(), client)).disconnectFromNetwork(network.type);
+			PacketDispatcher.sendPacketToAllPlayers(PacketAddClient.getPacket(networkID, client.x, (short)client.y, client.z));
+		}
+	}
+
+	public static Network getNetwork(int networkID) {
+		return networks.get(networkID);
+	}
+
+	/** Get the amount of clients on a specific network
+	 * 
+	 * @param networkID the ID of the network in question
+	 * @return the amount of clients on the network */
+	public static int getSize(int networkID) {
+		return networks.get(networkID).clients.size();
+	}
+
+	public static void deleteNetwork(int networkID) {
 		Network network = networks.get(networkID);
-		network.clients.remove(client);
-		((TileEntityMachine)network.getWorld().getBlockTileEntity(client.x, client.y, client.z)).disconnectFromNetwork(network.type);
-		PacketDispatcher.sendPacketToAllPlayers(PacketAddClient.getPacket(networkID, client.x, (short)client.y, client.z));
+		((TileEntityMachine)Funcs.getBlockTileEntity(network.getWorld(), network.host)).disconnectFromNetwork(network.type);
+		for(Point client : network.clients)
+			((TileEntityMachine)Funcs.getBlockTileEntity(network.getWorld(), client)).disconnectFromNetwork(network.type);
+		networks.set(networkID, null);
+	}
+
+	public static Point getHost(int networkID) {
+		return networks.get(networkID).host;
 	}
 
 	/** Get a specific client from a network
@@ -156,54 +172,34 @@ public class NetworkManager {
 		return networks.get(networkID).clients.contains(p);
 	}
 
-	/** Get the amount of clients on a specific network
-	 * 
-	 * @param networkID the ID of the network in question
-	 * @return the amount of clients on the network */
-	public static int getSize(int networkID) {
-		return networks.get(networkID).clients.size();
+	/** Sends packets to a certain client to completely sync all network data */
+	public static void syncAllNetworks(Player player) {
+		if(Funcs.isServer()) {
+			for(int id = 0; id < networks.size(); id++) {
+				if(getNetwork(id) != null) {
+					Network network = getNetwork(id);
+					PacketDispatcher.sendPacketToPlayer(PacketCreateNetwork.getPacket(id, network.type, network.dimensionID, network.host.x, (short)network.host.y, network.host.z), player);
+					for(Point client : getClients(id))
+						PacketDispatcher.sendPacketToAllPlayers(PacketAddClient.getPacket(id, client.x, (short)client.y, client.z));
+				}
+			}
+		}
 	}
 
 	/** Tell the TE for the host and each client in the network to connect to this network */
-	private static void notifyNetwork(int networkID) {
+	private static void notifyNetwork(int networkID, World world) {
 		Network network = getNetwork(networkID);
-		getHostTE(networkID).connectToNetwork(network.type, networkID);
+		TileEntity te = Funcs.getBlockTileEntity(world, getHost(networkID));
+		((TileEntityMachine)te).connectToNetwork(network.type, networkID);
 
 		for(Point client : network.clients)
-			((TileEntityMachine)network.getWorld().getBlockTileEntity(client.x, client.y, client.z)).connectToNetwork(network.type, networkID);
-	}
-
-	/** Create a new network in a certain position, only used on client to sync with server */
-	@SideOnly(Side.CLIENT)
-	public static void createNetwork(int networkID, byte type, int dimensionID, Point host) {
-		networks.set(networkID, new Network(type, dimensionID, host));
-		notifyNetwork(networkID);
-	}
-
-	/** Delete all networks. Typically precedes a full network sync */
-	@SideOnly(Side.CLIENT)
-	public static void clearNetworks() {
-		networks.clear();
-	}
-
-	/** Sends packets to a certain client to completely sync all network data */
-	@SideOnly(Side.SERVER)
-	public static void syncAllNetworks(Player player) {
-		for(int id = 0; id < networks.size(); id++) {
-			if(getNetwork(id) != null) {
-				System.out.println("Sending " + id);
-				Network network = getNetwork(id);
-				PacketDispatcher.sendPacketToPlayer(PacketCreateNetwork.getPacket(id, network.type, network.dimensionID, network.host.x, (short)network.host.y, network.host.z), player);
-				for(Point client : getClients(id))
-					PacketDispatcher.sendPacketToAllPlayers(PacketAddClient.getPacket(id, client.x, (short)client.y, client.z));
-			}
-		}
+			((TileEntityMachine)Funcs.getBlockTileEntity(world, client)).connectToNetwork(network.type, networkID);
 	}
 
 	private static class Network {
 
 		private final byte type;
-		private int dimensionID = 0;
+		private int dimensionID;
 		private final Point host;
 		private final ArrayList<Point> clients = new ArrayList<Point>();
 

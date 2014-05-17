@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.NetworkManager;
 import infinitealloys.util.Point;
@@ -89,7 +90,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public boolean isClientValid(Point client) {
-		return worldObj.getBlockTileEntity(client.x, client.y, client.z) instanceof TEEMetalForge;
+		return Funcs.getBlockTileEntity(worldObj, client) instanceof TEEMetalForge;
 	}
 
 	@Override

@@ -129,14 +129,13 @@ public abstract class GuiMachine extends GuiContainer {
 		machineTabs.clear();
 		Point controller = MachineHelper.controllers.get(mc.thePlayer.username);
 		if(controller != null) {
-			TEMComputer tec = ((TEMComputer)mc.theWorld.getBlockTileEntity(controller.x, controller.y, controller.z));
-			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, (TileEntityMachine)mc.theWorld.getBlockTileEntity(controller.x, controller.y, controller.z), true,
-					tem.coords().equals(controller));
+			TEMComputer tec = ((TEMComputer)Funcs.getBlockTileEntity(mc.theWorld, controller));
+			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, tec, true, tem.coords().equals(controller));
 			controllerTab.drawButton();
 			for(int i = 0; i < NetworkManager.getSize(tec.getComputerNetworkID()); i++) {
 				Point client = NetworkManager.getClient(tec.getComputerNetworkID(), i);
-				machineTabs.add(new GuiMachineTab(mc, itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityElectric)mc.theWorld.getBlockTileEntity(
-						client.x, client.y, client.z), i / 5 == 0, client.equals(tem.xCoord, tem.yCoord, tem.zCoord)));
+				machineTabs.add(new GuiMachineTab(mc, itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityElectric)Funcs.getBlockTileEntity(mc.theWorld, client),
+						i / 5 == 0, client.equals(tem.coords())));
 				machineTabs.get(i).drawButton();
 			}
 		}

@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.NetworkManager;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,7 +47,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 
 		// If the machine should be processing and enough energy is available, increment the progress by one. If this is the first tick of the process, call
 		// startProcess(). If it has reached or exceeded the limit for completion, then finish the process and reset the counter.
-		if(shouldProcess() && energyNetworkID != -1 && ((TEEEnergyStorage)NetworkManager.getHostTE(energyNetworkID)).changeRK(getRKChange())) {
+		if(shouldProcess() && energyNetworkID != -1 && ((TEEEnergyStorage)Funcs.getBlockTileEntity(worldObj, NetworkManager.getHost(energyNetworkID))).changeRK(getRKChange())) {
 			if(processProgress == 0)
 				onStartProcess();
 			if(++processProgress >= ticksToProcess) {

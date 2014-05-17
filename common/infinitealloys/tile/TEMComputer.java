@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.NetworkManager;
 import infinitealloys.util.Point;
@@ -100,8 +101,8 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 	@Override
 	public boolean isClientValid(Point client) {
-		return worldObj.getBlockTileEntity(client.x, client.y, client.z) instanceof TileEntityMachine &&
-				((TileEntityMachine)worldObj.getBlockTileEntity(client.x, client.y, client.z)).hasUpgrade(MachineHelper.WIRELESS);
+		TileEntity te = Funcs.getBlockTileEntity(worldObj, client);
+		return te instanceof TileEntityMachine && ((TileEntityMachine)te).hasUpgrade(MachineHelper.WIRELESS);
 	}
 
 	@Override

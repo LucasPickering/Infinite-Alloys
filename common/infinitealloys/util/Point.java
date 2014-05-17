@@ -1,5 +1,6 @@
 package infinitealloys.util;
 
+/** A 3D coordinate */
 public class Point {
 
 	public int x, y, z;
