@@ -31,7 +31,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	protected float rkPerTickMult = 1.0F;
 
 	/** The ID of the network through which this machine receives power */
-	private int energyNetworkID = -1;
+	protected int energyNetworkID = -1;
 
 	public TileEntityElectric(int inventoryLength) {
 		super(inventoryLength);

@@ -20,9 +20,6 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	/** The max range that machines can be added at with the Internet Wand */
 	public int range;
 
-	/** The wireless network that this block is hosting, or the ID of the network that this block is providing power to if it is connected to another ESU */
-	private int energyNetworkID = -1;
-
 	/** The ratio between how long an item will burn in an ESU and how long it will burn in a furnace. ESU is numerator, furnace is denominator. */
 	private final float ESU_TO_FURNACE_TICK_RATIO = 0.5F;
 
@@ -49,18 +46,6 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 			NetworkManager.clientNotifyCheck(energyNetworkID);
 
 		super.updateEntity();
-	}
-
-	@Override
-	public void connectToNetwork(int networkType, int networkID) {
-		if(networkType == MachineHelper.ENERGY_NETWORK)
-			energyNetworkID = networkID;
-	}
-
-	@Override
-	public void disconnectFromNetwork(int networkType) {
-		if(networkType == MachineHelper.ENERGY_NETWORK)
-			energyNetworkID = -1;
 	}
 
 	@Override
@@ -92,7 +77,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public boolean isClientValid(Point client) {
-		return Funcs.getBlockTileEntity(worldObj, client) instanceof TEEMetalForge;
+		return Funcs.getBlockTileEntity(worldObj, client) instanceof TileEntityElectric;
 	}
 
 	@Override

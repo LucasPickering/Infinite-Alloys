@@ -15,6 +15,6 @@ public class ContainerESU extends ContainerMachine {
 			for(int x = 0; x < 3; x++)
 				addSlotToContainer(new SlotMachine(inventory, inventory.getID(), x + y * 3, 13 + x * 18, 22 + y * 18));
 
-		initSlots(inventoryPlayer, 27, 94, 185, 40);
+		initSlots(inventoryPlayer, 27, 94, 185, 22);
 	}
 }

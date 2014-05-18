@@ -13,7 +13,7 @@ public class GuiEnergyStorage extends GuiElectric {
 	public GuiEnergyStorage(InventoryPlayer inventoryPlayer, TEEEnergyStorage tileEntity) {
 		super(214, 176, inventoryPlayer, tileEntity);
 		tees = tileEntity;
-		progressBar.setLocation(70, 39);
+		progressBar.setLocation(70, 57);
 		networkIcon = new java.awt.Point(31, 4);
 	}
 
@@ -24,7 +24,7 @@ public class GuiEnergyStorage extends GuiElectric {
 		Funcs.bindTexture(extras);
 
 		// Draw the energy amount
-		drawString(fontRenderer, tees.getCurrentRK() + "/" + tees.getMaxRK() + " RK", 70, 28, 0xffffff);
+		drawString(fontRenderer, tees.getCurrentRK() + "/" + tees.getMaxRK() + " RK", 70, 26, 0xffffff);
 
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
@@ -40,7 +40,6 @@ public class GuiEnergyStorage extends GuiElectric {
 			// A string that says this TE is hosting a network and how many clients are connected
 			status = Funcs.getLoc("machine.network.hosting") + " " + clients + " " +
 					(clients == 1 ? Funcs.getLoc("machine.network.client") : Funcs.getLoc("machine.network.clients")); // A switch between "Client" and
-																														// "Clients"
 		}
 		else 
 			status = Funcs.getLoc("machine.network.hostedby") + " " + NetworkManager.getHost(tee.getEnergyNetworkID());
