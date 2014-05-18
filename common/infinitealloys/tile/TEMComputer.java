@@ -42,7 +42,9 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	@Override
 	public void updateEntity() {
 		if(computerNetworkID == -1)
-			computerNetworkID = NetworkManager.buildNetwork(MachineHelper.COMPUTER_NETWORK, worldObj.provider.dimensionId, new Point(xCoord, yCoord, zCoord));
+			computerNetworkID = NetworkManager.buildNetwork(MachineHelper.COMPUTER_NETWORK, worldObj.provider.dimensionId, new Point(xCoord, yCoord, zCoord), true);
+		else
+			NetworkManager.clientNotifyCheck(computerNetworkID);
 
 		super.updateEntity();
 	}

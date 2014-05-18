@@ -7,10 +7,10 @@ import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -21,6 +21,10 @@ import cpw.mods.fml.common.network.Player;
 public class NetworkManager {
 
 	private static ArrayList<Network> networks = new ArrayList<Network>();
+
+	/** A map of networks that have not yet been synced to certain clients, with those client's names as strings. This is populated when a client joins and
+	 * should quickly empty out. */
+	private static Map<Integer, String> networksToBeCreated = new HashMap<Integer, String>();
 
 	/** Read network data from the tag compound and add these networks to the list
 	 * 
@@ -34,7 +38,7 @@ public class NetworkManager {
 				byte type = network.getByte("type");
 				int dimensionID = network.getInteger("dimensionID");
 				int[] host = network.getIntArray("host");
-				int networkID = buildNetwork(type, dimensionID, new Point(host[0], host[1], host[2]));
+				int networkID = buildNetwork(type, dimensionID, new Point(host[0], host[1], host[2]), false);
 
 				for(int j = 0; network.hasKey("client" + j); j++) {
 					int[] client = network.getIntArray("client" + j);
@@ -65,15 +69,33 @@ public class NetworkManager {
 		}
 	}
 
-	/** Create a new network for this host */
-	public static int buildNetwork(byte type, int dimensionID, Point host) {
+	/** Create a new network for this host
+	 * 
+	 * @param notifyClients If true, a packet will be sent to all clients to create this network. This is true except for when the world is being loaded. */
+	public static int buildNetwork(byte type, int dimensionID, Point host, boolean notifyClients) {
 		if(Funcs.isClient())
 			return -1;
 
 		networks.add(new Network(type, dimensionID, host));
-		System.out.println("Creating new network with index " + (networks.size() - 1));
-		PacketDispatcher.sendPacketToAllPlayers(PacketCreateNetwork.getPacket(networks.size() - 1, type, dimensionID, host));
-		return networks.size() - 1;
+		int networkID = networks.size() - 1;
+
+		System.out.println("Creating new network with index " + networkID);
+
+		if(notifyClients)
+			PacketDispatcher.sendPacketToAllPlayers(PacketCreateNetwork.getPacket(networkID, type, dimensionID, host));
+
+		return networkID;
+	}
+
+	/** Check if there are any players that need a certain network to be synced because they just joined */
+	public static void clientNotifyCheck(int networkID) {
+		if(Funcs.isServer() && networksToBeCreated.containsKey(networkID)) {
+			Player player = Funcs.getPlayerForUsername(networksToBeCreated.get(networkID));
+			PacketDispatcher.sendPacketToPlayer(PacketCreateNetwork.getPacket(networkID, getType(networkID), getDimensionID(networkID), getHost(networkID)), player);
+			for(Point client : getClients(networkID))
+				PacketDispatcher.sendPacketToPlayer(PacketAddClient.getPacket(networkID, client), player);
+			networksToBeCreated.remove(networkID);
+		}
 	}
 
 	/** Create a new network in a certain position, only used on client to sync with server */
@@ -85,12 +107,16 @@ public class NetworkManager {
 	}
 
 	public static void deleteNetwork(int networkID) {
-		notifyForDisconnect(networkID, getWorld(networkID));
+		// Disconnect the network and each one above it in the list because the ones above will drop down to a new ID
+		for(int i = networkID; i < networks.size(); i++)
+			notifyForDisconnect(networkID, getWorld(networkID));
+
+		// Remove this network
 		networks.remove(networkID);
-		for(int i = networkID; i < networks.size(); i++) {
-			notifyForDisconnect(i + 1, getWorld(networkID));
+
+		// Re-connect all the networks that were above the deleted one with a new ID that is one lower than before
+		for(int i = networkID; i < networks.size(); i++)
 			notifyForConnect(i, getWorld(networkID));
-		}
 	}
 
 	/** Add a client to a network
@@ -158,14 +184,9 @@ public class NetworkManager {
 	}
 
 	/** Sends packets to a certain client to completely sync all network data */
-	public static void syncAllNetworks(EntityPlayer player) {
-		if(Funcs.isServer()) {
-			for(int id = 0; id < networks.size(); id++) {
-				PacketDispatcher.sendPacketToPlayer(PacketCreateNetwork.getPacket(id, getType(id), getDimensionID(id), getHost(id)), (Player)player);
-				for(Point client : getClients(id))
-					PacketDispatcher.sendPacketToPlayer(PacketAddClient.getPacket(id, client), (Player)player);
-			}
-		}
+	public static void syncAllNetworks(String playerName) {
+		for(int id = 0; id < networks.size(); id++)
+			networksToBeCreated.put(id, playerName);
 	}
 
 	/** Delete all networks from the list. Only called when the world is unloaded. */
@@ -175,9 +196,7 @@ public class NetworkManager {
 
 	/** Tell the host and each client in the network to connect to this network */
 	private static void notifyForConnect(int networkID, World world) {
-		Point host = getHost(networkID);
-		TileEntity te = Funcs.getBlockTileEntity(world, host);
-		((TileEntityMachine)te).connectToNetwork(getType(networkID), networkID);
+		((TileEntityMachine)Funcs.getBlockTileEntity(world, getHost(networkID))).connectToNetwork(getType(networkID), networkID);
 
 		for(Point client : getClients(networkID))
 			((TileEntityMachine)Funcs.getBlockTileEntity(world, client)).connectToNetwork(getType(networkID), networkID);

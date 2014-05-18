@@ -44,7 +44,9 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	@Override
 	public void updateEntity() {
 		if(energyNetworkID == -1)
-			energyNetworkID = NetworkManager.buildNetwork(MachineHelper.ENERGY_NETWORK, worldObj.provider.dimensionId, new Point(xCoord, yCoord, zCoord));
+			energyNetworkID = NetworkManager.buildNetwork(MachineHelper.ENERGY_NETWORK, worldObj.provider.dimensionId, new Point(xCoord, yCoord, zCoord), true);
+		else
+			NetworkManager.clientNotifyCheck(energyNetworkID);
 
 		super.updateEntity();
 	}

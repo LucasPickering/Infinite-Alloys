@@ -61,16 +61,18 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onWorldUnload(Unload event) {
-		NetworkManager.clearNetworks();
-		if(Funcs.isClient())
-			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
+		if(event.world.provider.dimensionId == 0) {
+			NetworkManager.clearNetworks();
+			if(Funcs.isClient())
+				InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
+		}
 	}
 
 	@ForgeSubscribe
 	public void onEntityJoinWorld(EntityJoinWorldEvent e) {
 		if(Funcs.isServer() && e.entity instanceof EntityPlayer) {
 			PacketDispatcher.sendPacketToPlayer(PacketValidAlloys.getPacket(), (Player)e.entity);
-			NetworkManager.syncAllNetworks((EntityPlayer)e.entity);
+			NetworkManager.syncAllNetworks(((EntityPlayer)e.entity).username);
 		}
 	}
 

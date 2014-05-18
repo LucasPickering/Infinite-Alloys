@@ -51,7 +51,9 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	@Override
 	public void updateEntity() {
 		if(analyzerNetworkID == -1)
-			analyzerNetworkID = NetworkManager.buildNetwork(MachineHelper.ANALYZER_NETWORK, worldObj.provider.dimensionId, new Point(xCoord, yCoord, zCoord));
+			analyzerNetworkID = NetworkManager.buildNetwork(MachineHelper.ANALYZER_NETWORK, worldObj.provider.dimensionId, new Point(xCoord, yCoord, zCoord), true);
+		else
+			NetworkManager.clientNotifyCheck(analyzerNetworkID);
 
 		super.updateEntity();
 	}
