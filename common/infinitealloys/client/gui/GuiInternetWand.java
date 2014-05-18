@@ -177,6 +177,7 @@ public class GuiInternetWand extends GuiScreen {
 	public void actionPerformed(GuiButton button) {
 		switch(button.id) {
 			case Consts.WAND_SIZE: // Help button
+				
 				InfiniteAlloys.instance.proxy.initLocalization(); // TODO: Remove this line, it is for debug only!
 				helpEnabled = !helpEnabled;
 				break;

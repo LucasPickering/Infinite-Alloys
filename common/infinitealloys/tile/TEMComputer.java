@@ -130,7 +130,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 				player.addChatMessage("Error: Block is not capable of networking");
 		}
 		else {
-			NetworkManager.addClient(computerNetworkID, client);
+			NetworkManager.addClientAndSync(computerNetworkID, client);
 			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
 			return true;

@@ -15,7 +15,6 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
-import net.minecraftforge.event.world.WorldEvent.Unload;
 import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -27,21 +26,24 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onWorldLoad(Load event) {
-		if(Funcs.isServer() && event.world.provider.dimensionId == 0) {
-			worldDir = DimensionManager.getWorld(0).getChunkSaveLocation().getPath();
-			try {
-				NBTTagCompound nbtTagCompound = CompressedStreamTools.readCompressed(new FileInputStream(worldDir + "/" + fileName));
-				InfiniteAlloys.instance.loadAlloyData(nbtTagCompound);
-				NetworkManager.loadData(nbtTagCompound, event.world);
-			}catch(FileNotFoundException e) {
-				InfiniteAlloys.instance.generateAlloyData();
-			}catch(Exception e) {
-				InfiniteAlloys.instance.generateAlloyData();
-				e.printStackTrace();
+		if(event.world.provider.dimensionId == 0) {
+			if(Funcs.isServer()) {
+				NetworkManager.clearNetworks();
+				worldDir = DimensionManager.getWorld(0).getChunkSaveLocation().getPath();
+				try {
+					NBTTagCompound nbtTagCompound = CompressedStreamTools.readCompressed(new FileInputStream(worldDir + "/" + fileName));
+					InfiniteAlloys.instance.loadAlloyData(nbtTagCompound); // Load the valid alloys
+					NetworkManager.loadData(nbtTagCompound, event.world); // Load machine networks
+				}catch(FileNotFoundException e) {
+					InfiniteAlloys.instance.generateAlloyData(); // There is no saved data, probably because this is a new world. Generate new alloy data.
+				}catch(Exception e) {
+					InfiniteAlloys.instance.generateAlloyData();
+					e.printStackTrace();
+				}
 			}
+			else
+				InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear(); // Clear the list of blocks to be outlines by the x-ray on unload. This is only run client-side
 		}
-		else
-			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear(); // Clear the list of blocks to be outlines by the x-ray on unload. This is only run client-side
 	}
 
 	@ForgeSubscribe
@@ -56,15 +58,6 @@ public class EventHandler implements ICraftingHandler {
 			}catch(Exception e) {
 				e.printStackTrace();
 			}
-		}
-	}
-
-	@ForgeSubscribe
-	public void onWorldUnload(Unload event) {
-		if(event.world.provider.dimensionId == 0) {
-			NetworkManager.clearNetworks();
-			if(Funcs.isClient())
-				InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 		}
 	}
 

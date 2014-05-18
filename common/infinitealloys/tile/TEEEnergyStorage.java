@@ -115,7 +115,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 		}
 		else {
 			// Add the machine
-			NetworkManager.addClient(energyNetworkID, client);
+			NetworkManager.addClientAndSync(energyNetworkID, client);
 			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
 			return true;

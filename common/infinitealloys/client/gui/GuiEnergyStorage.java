@@ -35,7 +35,7 @@ public class GuiEnergyStorage extends GuiElectric {
 		String status;
 
 		if(hosting) {
-			int clients = NetworkManager.getClients(tees.getEnergyNetworkID()).length;
+			int clients = NetworkManager.getSize(tees.getEnergyNetworkID());
 
 			// A string that says this TE is hosting a network and how many clients are connected
 			status = Funcs.getLoc("machine.network.hosting") + " " + clients + " " +

@@ -161,7 +161,7 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		}
 		else {
 			// Add the machine
-			NetworkManager.addClient(analyzerNetworkID, client);
+			NetworkManager.addClientAndSync(analyzerNetworkID, client);
 			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
 			return true;

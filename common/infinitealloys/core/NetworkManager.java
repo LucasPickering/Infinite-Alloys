@@ -42,7 +42,7 @@ public class NetworkManager {
 
 				for(int j = 0; network.hasKey("client" + j); j++) {
 					int[] client = network.getIntArray("client" + j);
-					addClient(networkID, new Point(client[0], client[1], client[2]));
+					addClientAndSync(networkID, new Point(client[0], client[1], client[2]));
 				}
 
 				notifyForConnect(networkID, world);
@@ -119,18 +119,23 @@ public class NetworkManager {
 			notifyForConnect(i, getWorld(networkID));
 	}
 
-	/** Add a client to a network
-	 * 
-	 * @param networkID the ID of the network in question
-	 * @param client the coordinates of the block that is being added as a client */
-	public static void addClient(int networkID, Point client) {
-		Network network = networks.get(networkID);
-		network.clients.add(client);
-		((TileEntityMachine)Funcs.getBlockTileEntity(getWorld(networkID), client)).connectToNetwork(network.type, networkID);
+	/** Add a client to a network and send a packet to the client/server to sync the added client */
+	public static void addClientAndSync(int networkID, Point client) {
+		addClient(networkID, client);
 		if(Funcs.isClient())
 			PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(networkID, client));
 		else
 			PacketDispatcher.sendPacketToAllPlayers(PacketAddClient.getPacket(networkID, client));
+	}
+
+	/** Add a client to a network */
+	public static void addClient(int networkID, Point client) {
+		Network network = networks.get(networkID);
+		if(!network.clients.contains(client)) {
+			System.out.println("Adding client " + client + " on " + Funcs.getSideAsString());
+			network.clients.add(client);
+			((TileEntityMachine)Funcs.getBlockTileEntity(getWorld(networkID), client)).connectToNetwork(network.type, networkID);
+		}
 	}
 
 	/** Remove a client from a network
@@ -162,7 +167,7 @@ public class NetworkManager {
 
 	/** Get the amount of clients on a specific network */
 	public static int getSize(int networkID) {
-		return networks.get(networkID).clients.size();
+		return getClients(networkID).length;
 	}
 
 	/** Get the number that corresponds to the network's type. See {@link infinitealloys.util.MachineHelper MachineHelper} for the IDs */
