@@ -129,6 +129,10 @@ public class Funcs {
 		return FMLCommonHandler.instance().getEffectiveSide().isServer();
 	}
 
+	public static String getSideAsString() {
+		return isClient() ? "Client" : "Server";
+	}
+
 	/** Check if the block at x, y, z is of a certain type
 	 * 
 	 * @return true if block at x, y, z is equals id and metadata */

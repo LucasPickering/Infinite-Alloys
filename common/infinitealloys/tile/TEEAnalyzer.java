@@ -1,10 +1,10 @@
 package infinitealloys.tile;
 
+import infinitealloys.core.NetworkManager;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.NetworkManager;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.List;

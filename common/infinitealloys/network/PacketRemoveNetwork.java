@@ -1,6 +1,6 @@
 package infinitealloys.network;
 
-import infinitealloys.util.NetworkManager;
+import infinitealloys.core.NetworkManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import com.google.common.io.ByteArrayDataInput;

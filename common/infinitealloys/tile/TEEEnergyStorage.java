@@ -1,8 +1,8 @@
 package infinitealloys.tile;
 
+import infinitealloys.core.NetworkManager;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.NetworkManager;
 import infinitealloys.util.Point;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;

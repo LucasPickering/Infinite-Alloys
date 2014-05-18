@@ -2,7 +2,6 @@ package infinitealloys.core;
 
 import infinitealloys.network.PacketValidAlloys;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.NetworkManager;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,6 +15,7 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
+import net.minecraftforge.event.world.WorldEvent.Unload;
 import cpw.mods.fml.common.ICraftingHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -27,7 +27,7 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onWorldLoad(Load event) {
-		if(Funcs.isServer()) {
+		if(Funcs.isServer() && event.world.provider.dimensionId == 0) {
 			worldDir = DimensionManager.getWorld(0).getChunkSaveLocation().getPath();
 			try {
 				NBTTagCompound nbtTagCompound = CompressedStreamTools.readCompressed(new FileInputStream(worldDir + "/" + fileName));
@@ -46,7 +46,7 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onWorldSave(Save event) {
-		if(Funcs.isServer()) {
+		if(Funcs.isServer() && event.world.provider.dimensionId == 0) {
 			NBTTagCompound nbtTagCompound = new NBTTagCompound(); // An NBTTagCompound for the info to be stored in
 			InfiniteAlloys.instance.saveAlloyData(nbtTagCompound); // Add the alloy data to the NBTTagCompound
 			NetworkManager.saveData(nbtTagCompound); // Add the network data to the NBTTagCompound
@@ -60,10 +60,17 @@ public class EventHandler implements ICraftingHandler {
 	}
 
 	@ForgeSubscribe
+	public void onWorldUnload(Unload event) {
+		NetworkManager.clearNetworks();
+		if(Funcs.isClient())
+			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
+	}
+
+	@ForgeSubscribe
 	public void onEntityJoinWorld(EntityJoinWorldEvent e) {
 		if(Funcs.isServer() && e.entity instanceof EntityPlayer) {
 			PacketDispatcher.sendPacketToPlayer(PacketValidAlloys.getPacket(), (Player)e.entity);
-			NetworkManager.syncAllNetworks((Player)e.entity);
+			NetworkManager.syncAllNetworks((EntityPlayer)e.entity);
 		}
 	}
 

@@ -1,11 +1,11 @@
 package infinitealloys.client.gui;
 
+import infinitealloys.core.NetworkManager;
 import infinitealloys.item.Items;
 import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.NetworkManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.ArrayUtils;

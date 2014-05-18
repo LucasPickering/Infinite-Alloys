@@ -3,6 +3,7 @@ package infinitealloys.client.gui;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.core.NetworkManager;
 import infinitealloys.network.PacketOpenGui;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityElectric;
@@ -10,7 +11,6 @@ import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.NetworkManager;
 import infinitealloys.util.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -132,10 +132,10 @@ public abstract class GuiMachine extends GuiContainer {
 			TEMComputer tec = ((TEMComputer)Funcs.getBlockTileEntity(mc.theWorld, controller));
 			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, tec, true, tem.coords().equals(controller));
 			controllerTab.drawButton();
-			for(int i = 0; i < NetworkManager.getSize(tec.getComputerNetworkID()); i++) {
-				Point client = NetworkManager.getClient(tec.getComputerNetworkID(), i);
-				machineTabs.add(new GuiMachineTab(mc, itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityElectric)Funcs.getBlockTileEntity(mc.theWorld, client),
-						i / 5 == 0, client.equals(tem.coords())));
+			Point[] clients = NetworkManager.getClients(tec.getComputerNetworkID());
+			for(int i = 0; i < clients.length; i++) {
+				machineTabs.add(new GuiMachineTab(mc, itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityElectric)Funcs.getBlockTileEntity(mc.theWorld, clients[i]),
+						i / 5 == 0, clients[i].equals(tem.coords())));
 				machineTabs.get(i).drawButton();
 			}
 		}

@@ -1,6 +1,6 @@
 package infinitealloys.network;
 
-import infinitealloys.util.NetworkManager;
+import infinitealloys.core.NetworkManager;
 import infinitealloys.util.Point;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -19,7 +19,7 @@ public class PacketCreateNetwork implements PacketIA {
 		NetworkManager.createNetwork(networkID, type, dimensionID, new Point(hostX, hostY, hostZ));
 	}
 
-	public static Packet250CustomPayload getPacket(int networkID, byte type, int dimensionID, int hostX, short hostY, int hostZ) {
-		return PacketHandler.getPacket(PacketHandler.CREATE_NETWORK, networkID, type, dimensionID, hostX, hostY, hostZ);
+	public static Packet250CustomPayload getPacket(int networkID, byte type, int dimensionID, Point host) {
+		return PacketHandler.getPacket(PacketHandler.CREATE_NETWORK, networkID, type, dimensionID, host.x, (short)host.y, host.z);
 	}
 }

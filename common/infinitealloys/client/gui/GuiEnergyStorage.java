@@ -1,8 +1,8 @@
 package infinitealloys.client.gui;
 
+import infinitealloys.core.NetworkManager;
 import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.NetworkManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.opengl.GL11;
 

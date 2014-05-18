@@ -1,8 +1,8 @@
 package infinitealloys.client.gui;
 
+import infinitealloys.core.NetworkManager;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.NetworkManager;
 import java.text.DecimalFormat;
 import net.minecraft.entity.player.InventoryPlayer;
 import org.lwjgl.opengl.GL11;
