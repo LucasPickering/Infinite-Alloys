@@ -113,7 +113,9 @@ machineHelp.psCreatures.title=Creature Selections
 machineHelp.psCreatures.info=Each type of creature can/nbe unaffected by this/nmachine, attracted to it, or/nrepelled by it
 
 machineHelp.esSupply.title=Fuel Supply
-machineHelp.esSupply.info=Fuel is placed in here/nThis uses the same fuel items/nas the vanilla furnace
+machineHelp.esSupply.info=Fuel is placed in here/nThis uses the same fuel/nas the vanilla furnace
+machineHelp.esRK.title=Energy Stored
+machineHelp.esRK.info=This shows the ESU's current stored energy and energy capacity
 
 machineHelp.iwAddToWand.title=Add to Wand
 machineHelp.iwAddToWand.info=Add the machine that was/nright-clicked to this wand list

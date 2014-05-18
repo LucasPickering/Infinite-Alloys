@@ -37,15 +37,19 @@ public class NetworkManager {
 
 				byte type = network.getByte("type");
 				int dimensionID = network.getInteger("dimensionID");
-				int[] host = network.getIntArray("host");
-				int networkID = buildNetwork(type, dimensionID, new Point(host[0], host[1], host[2]), false);
+				int[] hostArray = network.getIntArray("host");
+				Point host = new Point(hostArray[0], hostArray[1], hostArray[2]);
 
-				for(int j = 0; network.hasKey("client" + j); j++) {
-					int[] client = network.getIntArray("client" + j);
-					addClientAndSync(networkID, new Point(client[0], client[1], client[2]));
+				if(Funcs.getBlockTileEntity(world, host) instanceof TileEntityMachine) {
+					int networkID = buildNetwork(type, dimensionID, host, false);
+
+					for(int j = 0; network.hasKey("client" + j); j++) {
+						int[] client = network.getIntArray("client" + j);
+						addClientAndSync(networkID, new Point(client[0], client[1], client[2]));
+					}
+
+					notifyForConnect(networkID, world);
 				}
-
-				notifyForConnect(networkID, world);
 			}
 		}
 	}
