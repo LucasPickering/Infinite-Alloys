@@ -3,6 +3,7 @@ package infinitealloys.tile;
 import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -165,23 +166,23 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(MachineHelper.SPEED2))
+		if(hasUpgrade(EnumUpgrade.SPEED2))
 			processTimeMult = 0.5F;
-		else if(hasUpgrade(MachineHelper.SPEED1))
+		else if(hasUpgrade(EnumUpgrade.SPEED1))
 			processTimeMult = 0.75F;
 		else
 			processTimeMult = 1.0F;
 
-		if(hasUpgrade(MachineHelper.EFFICIENCY2))
+		if(hasUpgrade(EnumUpgrade.EFFICIENCY2))
 			rkPerTickMult = 0.5F;
-		else if(hasUpgrade(MachineHelper.EFFICIENCY1))
+		else if(hasUpgrade(EnumUpgrade.EFFICIENCY1))
 			rkPerTickMult = 0.75F;
 		else
 			rkPerTickMult = 1.0F;
 
-		if(hasUpgrade(MachineHelper.CAPACITY2))
+		if(hasUpgrade(EnumUpgrade.CAPACITY2))
 			stackLimit = 64;
-		else if(hasUpgrade(MachineHelper.CAPACITY1))
+		else if(hasUpgrade(EnumUpgrade.CAPACITY1))
 			stackLimit = 48;
 		else
 			stackLimit = 32;
@@ -189,12 +190,12 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(MachineHelper.SPEED1);
-		validUpgrades.add(MachineHelper.SPEED2);
-		validUpgrades.add(MachineHelper.EFFICIENCY1);
-		validUpgrades.add(MachineHelper.EFFICIENCY2);
-		validUpgrades.add(MachineHelper.CAPACITY1);
-		validUpgrades.add(MachineHelper.CAPACITY2);
-		validUpgrades.add(MachineHelper.WIRELESS);
+		validUpgrades.add(EnumUpgrade.SPEED1);
+		validUpgrades.add(EnumUpgrade.SPEED2);
+		validUpgrades.add(EnumUpgrade.EFFICIENCY1);
+		validUpgrades.add(EnumUpgrade.EFFICIENCY2);
+		validUpgrades.add(EnumUpgrade.CAPACITY1);
+		validUpgrades.add(EnumUpgrade.CAPACITY2);
+		validUpgrades.add(EnumUpgrade.WIRELESS);
 	}
 }

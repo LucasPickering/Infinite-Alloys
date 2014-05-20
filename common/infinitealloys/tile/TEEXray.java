@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
@@ -138,23 +139,23 @@ public class TEEXray extends TileEntityElectric {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(MachineHelper.SPEED2))
+		if(hasUpgrade(EnumUpgrade.SPEED2))
 			processTimeMult = 0.5F;
-		else if(hasUpgrade(MachineHelper.SPEED1))
+		else if(hasUpgrade(EnumUpgrade.SPEED1))
 			processTimeMult = 0.75F;
 		else
 			processTimeMult = 1.0F;
 
-		if(hasUpgrade(MachineHelper.EFFICIENCY2))
+		if(hasUpgrade(EnumUpgrade.EFFICIENCY2))
 			rkPerTickMult = 0.5F;
-		else if(hasUpgrade(MachineHelper.EFFICIENCY1))
+		else if(hasUpgrade(EnumUpgrade.EFFICIENCY1))
 			rkPerTickMult = 0.75F;
 		else
 			rkPerTickMult = 1.0F;
 
-		if(hasUpgrade(MachineHelper.RANGE2))
+		if(hasUpgrade(EnumUpgrade.RANGE2))
 			range = 10;
-		else if(hasUpgrade(MachineHelper.RANGE1))
+		else if(hasUpgrade(EnumUpgrade.RANGE1))
 			range = 8;
 		else
 			range = 5;
@@ -166,12 +167,12 @@ public class TEEXray extends TileEntityElectric {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(MachineHelper.SPEED1);
-		validUpgrades.add(MachineHelper.SPEED2);
-		validUpgrades.add(MachineHelper.EFFICIENCY1);
-		validUpgrades.add(MachineHelper.EFFICIENCY2);
-		validUpgrades.add(MachineHelper.RANGE1);
-		validUpgrades.add(MachineHelper.RANGE2);
-		validUpgrades.add(MachineHelper.WIRELESS);
+		validUpgrades.add(EnumUpgrade.SPEED1);
+		validUpgrades.add(EnumUpgrade.SPEED2);
+		validUpgrades.add(EnumUpgrade.EFFICIENCY1);
+		validUpgrades.add(EnumUpgrade.EFFICIENCY2);
+		validUpgrades.add(EnumUpgrade.RANGE1);
+		validUpgrades.add(EnumUpgrade.RANGE2);
+		validUpgrades.add(EnumUpgrade.WIRELESS);
 	}
 }

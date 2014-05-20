@@ -43,16 +43,6 @@ public class MachineHelper {
 	public static final int PASTURE = 4;
 	public static final int ENERGY_STORAGE = 5;
 
-	public static final int SPEED1 = 1;
-	public static final int SPEED2 = 2;
-	public static final int EFFICIENCY1 = 4;
-	public static final int EFFICIENCY2 = 8;
-	public static final int CAPACITY1 = 16;
-	public static final int CAPACITY2 = 32;
-	public static final int RANGE1 = 64;
-	public static final int RANGE2 = 128;
-	public static final int WIRELESS = 256;
-
 	/** The TileEntityMachine class for each machine */
 	public static final Class[] MACHINE_CLASSES = { TEMComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEXray.class, TEEPasture.class, TEEEnergyStorage.class };
 
@@ -64,29 +54,13 @@ public class MachineHelper {
 	/** The controlling computer for each player */
 	public static HashMap<String, Point> controllers = new HashMap<String, Point>();
 
-	/** A list of upgrades that are prerequisites for other upgrades, e.g. Speed I is a prereq for Speed II */
-	public static final ArrayList<Integer> prereqUpgrades = new ArrayList<Integer>();
-
-	/** A list of upgrades that require other upgrades to work, e.g. Speed II because it requires Speed I */
-	public static final ArrayList<Integer> prereqNeedingUpgrades = new ArrayList<Integer>();
-
 	/** The blocks that the x-ray can detect and their worths */
 	private static HashMap<String, Integer> detectables = new HashMap<String, Integer>();
 
-	/** When a player joins a world, all the TEs in that dimension that are hosting a network are added to this list. The TEs go through and check to see if any need to be synced.
+	/** When a player joins a world, all the TEs in that dimension that are hosting a network are added to this list. The TEs go through and check to see if any
+	 * need to be synced.
 	 * The player's name and the location of the host are stored. */
 	private static HashMap<Point, String> networksToSync = new HashMap<Point, String>();
-
-	static {
-		prereqUpgrades.add(SPEED1);
-		prereqUpgrades.add(EFFICIENCY1);
-		prereqUpgrades.add(CAPACITY1);
-		prereqUpgrades.add(RANGE1);
-		prereqNeedingUpgrades.add(SPEED2);
-		prereqNeedingUpgrades.add(EFFICIENCY2);
-		prereqNeedingUpgrades.add(CAPACITY2);
-		prereqNeedingUpgrades.add(RANGE2);
-	}
 
 	/** Add a block to the list of blocks that can be detected by the x-ray
 	 * 
@@ -124,22 +98,6 @@ public class MachineHelper {
 
 	public static int getDetectableWorth(ItemStack stack) {
 		return detectables.get(stack.itemID + "@" + stack.getItemDamage());
-	}
-
-	/** Is the upgrade a prerequisite for another
-	 * 
-	 * @param upgrade
-	 * @return true if it is a prereq */
-	public static boolean isPrereqUpgrade(int upg) {
-		return MachineHelper.prereqUpgrades.contains(upg);
-	}
-
-	/** Does the upgrade require another to work?
-	 * 
-	 * @param upgrade
-	 * @return true if it has a prereq */
-	public static boolean hasPrereqUpgrade(int upg) {
-		return MachineHelper.prereqNeedingUpgrades.contains(upg);
 	}
 
 	public static int getIngotNum(ItemStack ingot) {
@@ -221,7 +179,7 @@ public class MachineHelper {
 
 	/** Is the machine at x, y, z capable of connecting to an ESU or computer? */
 	public static boolean isClient(World world, int x, int y, int z) {
-		return world.getBlockTileEntity(x, y, z) instanceof TileEntityMachine && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).hasUpgrade(MachineHelper.WIRELESS) ||
+		return world.getBlockTileEntity(x, y, z) instanceof TileEntityMachine && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).hasUpgrade(EnumUpgrade.WIRELESS) ||
 				world.getBlockTileEntity(x, y, z) instanceof TileEntityElectric;
 	}
 

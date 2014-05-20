@@ -1,6 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
 import net.minecraft.entity.EntityCreature;
@@ -123,25 +124,25 @@ public class TEEPasture extends TileEntityElectric {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(MachineHelper.EFFICIENCY2))
+		if(hasUpgrade(EnumUpgrade.EFFICIENCY2))
 			rkPerTickMult = 0.5F;
-		else if(hasUpgrade(MachineHelper.EFFICIENCY1))
+		else if(hasUpgrade(EnumUpgrade.EFFICIENCY1))
 			rkPerTickMult = 0.75F;
 		else
 			rkPerTickMult = 1.0F;
 
-		if(hasUpgrade(MachineHelper.CAPACITY2))
+		if(hasUpgrade(EnumUpgrade.CAPACITY2))
 			maxSpots = 8;
-		else if(hasUpgrade(MachineHelper.CAPACITY1))
+		else if(hasUpgrade(EnumUpgrade.CAPACITY1))
 			maxSpots = 4;
 		else
 			maxSpots = 2;
 
-		if(hasUpgrade(MachineHelper.RANGE2)) {
+		if(hasUpgrade(EnumUpgrade.RANGE2)) {
 			trapRange = 15;
 			repelRange = 24;
 		}
-		else if(hasUpgrade(MachineHelper.RANGE1)) {
+		else if(hasUpgrade(EnumUpgrade.RANGE1)) {
 			trapRange = 10;
 			repelRange = 16;
 		}
@@ -153,13 +154,13 @@ public class TEEPasture extends TileEntityElectric {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(MachineHelper.EFFICIENCY1);
-		validUpgrades.add(MachineHelper.EFFICIENCY2);
-		validUpgrades.add(MachineHelper.CAPACITY1);
-		validUpgrades.add(MachineHelper.CAPACITY2);
-		validUpgrades.add(MachineHelper.RANGE1);
-		validUpgrades.add(MachineHelper.RANGE2);
-		validUpgrades.add(MachineHelper.WIRELESS);
+		validUpgrades.add(EnumUpgrade.EFFICIENCY1);
+		validUpgrades.add(EnumUpgrade.EFFICIENCY2);
+		validUpgrades.add(EnumUpgrade.CAPACITY1);
+		validUpgrades.add(EnumUpgrade.CAPACITY2);
+		validUpgrades.add(EnumUpgrade.RANGE1);
+		validUpgrades.add(EnumUpgrade.RANGE2);
+		validUpgrades.add(EnumUpgrade.WIRELESS);
 	}
 
 	/** Does the pasture have enough space to enable another animal or monster

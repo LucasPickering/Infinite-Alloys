@@ -2,7 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.item.Items;
 import infinitealloys.network.PacketTEServerToClient;
-import infinitealloys.util.Consts;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public final ArrayList<String> playersUsing = new ArrayList<String>();
 
 	/** A list of the upgrades that can be used on this machine */
-	protected final ArrayList<Integer> validUpgrades = new ArrayList<Integer>();
+	protected final ArrayList<EnumUpgrade> validUpgrades = new ArrayList<EnumUpgrade>();
 
 	/** A number from 0-5 to represent which side of this block gets the front texture */
 	public byte front;
@@ -44,7 +44,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	/** The size limit for one stack in this machine */
 	protected int stackLimit = 64;
-	
+
 	public TileEntityMachine(int inventoryLength) {
 		this();
 		inventoryStacks = new ItemStack[inventoryLength];
@@ -241,12 +241,12 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	/** Drops the applied upgrades as items */
 	public final void dropUpgrades() {
 		final Random random = new Random();
-		for(int i = 0; i <= Consts.UPGRADE_COUNT; i++) {
-			if(hasUpgrade(1 << i)) {
+		for(EnumUpgrade upgrade:EnumUpgrade.values()) {
+			if(hasUpgrade(upgrade)) {
 				final float f = random.nextFloat() * 0.8F + 0.1F;
 				final float f1 = random.nextFloat() * 0.8F + 0.1F;
 				final float f2 = random.nextFloat() * 0.8F + 0.1F;
-				final EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(Items.upgrade, 1, i));
+				final EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(Items.upgrade, 1, upgrade.ordinal()));
 				item.motionX = random.nextGaussian() * 0.05F;
 				item.motionY = random.nextGaussian() * 0.25F;
 				item.motionZ = random.nextGaussian() * 0.05F;
@@ -262,15 +262,15 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	 * @param ItemStack for upgrade item with a binary upgrade damage value (see {@link infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
 	 * @return true if valid */
 	public final boolean isUpgradeValid(ItemStack upgrade) {
-		final int upg = 1 << upgrade.getItemDamage();
-		return upgrade.itemID == Items.upgrade.itemID && (!MachineHelper.hasPrereqUpgrade(upg) || hasUpgrade(upg >> 1)) && !hasUpgrade(upg) && validUpgrades.contains(upg);
+		EnumUpgrade upg = EnumUpgrade.values()[upgrade.getItemDamage()];
+		return upgrade.itemID == Items.upgrade.itemID && (!upg.needsPrereq() || hasUpgrade(upg)) && !hasUpgrade(upg) && validUpgrades.contains(upg);
 	}
 
 	/** Does the machine have the upgrade
 	 * 
 	 * @param binary upgrade damage value (see {@link infinitealloys.util.MachineHelper MachineHelper} for upgrade numbers)
 	 * @return true if the machine has the upgrade */
-	public boolean hasUpgrade(int upgrade) {
-		return (upgrades & upgrade) == upgrade;
+	public boolean hasUpgrade(EnumUpgrade upgrade) {
+		return (upgrades & upgrade.getID()) == upgrade.getID();
 	}
 }

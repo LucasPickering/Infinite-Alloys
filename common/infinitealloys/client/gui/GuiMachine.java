@@ -7,7 +7,7 @@ import infinitealloys.network.PacketOpenGui;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.util.Consts;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
@@ -88,11 +88,10 @@ public abstract class GuiMachine extends GuiContainer {
 		if(Funcs.mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x, slot.yDisplayPosition + topLeft.y, 16, 16)) {
 			List<ColoredLine> lines = new ArrayList<ColoredLine>();
 			lines.add(new ColoredLine(Funcs.getLoc("upgrade.name"), 0xffffff));
-			for(int i = 0; i < Consts.UPGRADE_COUNT; i++) {
-				int upg = 1 << i; // upg = 2^i
-				if(MachineHelper.isPrereqUpgrade(upg) && tem.hasUpgrade(upg << 1) || !tem.hasUpgrade(upg))
+			for(EnumUpgrade upgrade : EnumUpgrade.values()) {
+				if(upgrade.isPrereq() && tem.hasUpgrade(upgrade.getPrereqUpgrade()) || !tem.hasUpgrade(upgrade))
 					continue;
-				lines.add(new ColoredLine(Funcs.getLoc("upgrade." + Consts.UPGRADE_NAMES[i] + ".name"), 0xaaaaaa));
+				lines.add(new ColoredLine(Funcs.getLoc("upgrade." + upgrade.getName() + ".name"), 0xaaaaaa));
 			}
 			drawTextBox(mouseX, mouseY, lines.toArray(new ColoredLine[lines.size()]));
 		}

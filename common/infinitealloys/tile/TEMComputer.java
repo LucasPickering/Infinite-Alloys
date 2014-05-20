@@ -2,6 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.network.PacketAddClient;
 import infinitealloys.network.PacketRemoveClient;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
@@ -60,7 +61,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	@Override
 	public boolean isClientValid(Point client) {
 		TileEntity te = Funcs.getBlockTileEntity(worldObj, client);
-		return te instanceof TileEntityMachine && ((TileEntityMachine)te).hasUpgrade(MachineHelper.WIRELESS);
+		return te instanceof TileEntityMachine && ((TileEntityMachine)te).hasUpgrade(EnumUpgrade.WIRELESS);
 	}
 
 	@Override
@@ -140,7 +141,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to an
 					// energy storage unit, add it to the power network.
 					final TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
-					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(MachineHelper.WIRELESS))
+					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(EnumUpgrade.WIRELESS))
 						addClient(null, new Point(xCoord + x, yCoord + y, zCoord + z), true);
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
@@ -161,16 +162,16 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(MachineHelper.CAPACITY2))
+		if(hasUpgrade(EnumUpgrade.CAPACITY2))
 			networkCapacity = 10;
-		else if(hasUpgrade(MachineHelper.CAPACITY1))
+		else if(hasUpgrade(EnumUpgrade.CAPACITY1))
 			networkCapacity = 6;
 		else
 			networkCapacity = 3;
 
-		if(hasUpgrade(MachineHelper.RANGE2))
+		if(hasUpgrade(EnumUpgrade.RANGE2))
 			range = 60;
-		else if(hasUpgrade(MachineHelper.RANGE1))
+		else if(hasUpgrade(EnumUpgrade.RANGE1))
 			range = 45;
 		else
 			range = 30;
@@ -178,10 +179,9 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(MachineHelper.CAPACITY1);
-		validUpgrades.add(MachineHelper.CAPACITY2);
-		validUpgrades.add(MachineHelper.RANGE1);
-		validUpgrades.add(MachineHelper.RANGE2);
-		validUpgrades.add(MachineHelper.WIRELESS);
+		validUpgrades.add(EnumUpgrade.CAPACITY1);
+		validUpgrades.add(EnumUpgrade.CAPACITY2);
+		validUpgrades.add(EnumUpgrade.RANGE1);
+		validUpgrades.add(EnumUpgrade.RANGE2);
 	}
 }
