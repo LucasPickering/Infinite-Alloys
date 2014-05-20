@@ -203,13 +203,13 @@ public class GuiInternetWand extends GuiScreen {
 				heldItem = mc.thePlayer.getHeldItem();
 				int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 
-				if(MachineHelper.isHost(mc.theWorld, host[1], host[2], host[3])) { // If this is a host
+				if(mc.theWorld.getBlockTileEntity(host[1], host[2], host[3]) instanceof IHost) { // If this is a host
 					for(MachineButton machineButton : machineButtons) { // Go over each button
 						if(machineButton != null && (selectedButtons & 1 << machineButton.buttonID) != 0) { // If this button is selected
 							// Add the selected machine to the host
 							int[] client = heldItem.getTagCompound().getIntArray("Coords" + machineButton.buttonID);
 							if(host[0] == client[0]) // They're in the same dimension
-								((IHost)mc.theWorld.getBlockTileEntity(host[1], host[2], host[3])).addClient(mc.thePlayer, new Point(client[1], client[2], client[3]));
+								((IHost)mc.theWorld.getBlockTileEntity(host[1], host[2], host[3])).addClient(mc.thePlayer, new Point(client[1], client[2], client[3]),true);
 						}
 					}
 				}

@@ -62,18 +62,18 @@ public class GuiMetalForge extends GuiElectric {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		// If the preset selection slot was clicked, adjust its value accordingly
-		if(temf.getAnalyzerHost() != null && Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 39, topLeft.y + 51, 18, 18)) {
+		if(temf.analyzerHost != null && Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 39, topLeft.y + 51, 18, 18)) {
 			if(mouseButton == 0) { // Left-click
 				// Iterate over each alloy with an index greater than the current one
 				for(int i = temf.recipeAlloyID + 1; i < Consts.VALID_ALLOY_COUNT; i++)
-					if(((TEEAnalyzer)Funcs.getBlockTileEntity(mc.theWorld, temf.getAnalyzerHost())).hasAlloy(i))
+					if(((TEEAnalyzer)Funcs.getBlockTileEntity(mc.theWorld, temf.analyzerHost)).hasAlloy(i))
 						temf.recipeAlloyID = i; // If this alloy has been discovered, select it
 			}
 
 			else if(mouseButton == 1) { // Right-click
 				// Iterate over each alloy with an index less than the current one
 				for(int i = temf.recipeAlloyID - 1; i >= 0; i--)
-					if(((TEEAnalyzer)Funcs.getBlockTileEntity(mc.theWorld, temf.getAnalyzerHost())).hasAlloy(i))
+					if(((TEEAnalyzer)Funcs.getBlockTileEntity(mc.theWorld, temf.analyzerHost)).hasAlloy(i))
 						temf.recipeAlloyID = (byte)i; // If this alloy has been discovered, select it
 			}
 
@@ -86,13 +86,13 @@ public class GuiMetalForge extends GuiElectric {
 		int color;
 		String status;
 
-		if(temf.getAnalyzerHost() == null) {
+		if(temf.analyzerHost == null) {
 			color = 0xff0000;
 			status = Funcs.getLoc("machine.network.noconnection");
 		}
 		else {
 			color = 0x00ff00;
-			status = Funcs.getLoc("machine.network.hostedby") + " " + temf.getAnalyzerHost();
+			status = Funcs.getLoc("machine.network.hostedby") + " " + temf.analyzerHost;
 		}
 
 		return ArrayUtils.addAll(super.getNetworkStatuses(), new ColoredLine(Funcs.getLoc("machine.network.analyzer") + ": " + status, color));

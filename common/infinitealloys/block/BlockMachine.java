@@ -73,7 +73,7 @@ public class BlockMachine extends BlockContainer {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
 		ItemStack heldItem = player.inventory.getCurrentItem();
 		// Is the player holding an internet wand?
-		if(heldItem != null && heldItem.getItem() instanceof ItemInternetWand && (MachineHelper.isClient(world, x, y, z) || MachineHelper.isHost(world, x, y, z))) {
+		if(heldItem != null && heldItem.getItem() instanceof ItemInternetWand && (MachineHelper.isClient(world, x, y, z) || world.getBlockTileEntity(x, y, z) instanceof IHost)) {
 
 			// Put the coords of this block in a temp tag in the wand so the wand's GUI can access it
 			if(!heldItem.hasTagCompound())

@@ -21,12 +21,12 @@ public class PacketRemoveClient implements PacketIA {
 		if(Funcs.isClient()) {
 			TileEntity host = player.worldObj.getBlockTileEntity(hostX, hostY, hostZ);
 			if(host instanceof IHost)
-				((IHost)host).removeClient(client);
+				((IHost)host).removeClient(client, false);
 		}
 		else {
 			TileEntity host = DimensionManager.getWorld(dimensionID).getBlockTileEntity(hostX, hostY, hostZ);
 			if(host instanceof IHost)
-				((IHost)host).removeClient(client);
+				((IHost)host).removeClient(client, false);
 		}
 	}
 

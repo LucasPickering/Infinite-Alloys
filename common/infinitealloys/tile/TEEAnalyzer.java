@@ -1,6 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.network.PacketAddClient;
+import infinitealloys.network.PacketRemoveClient;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
@@ -12,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 
 public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
@@ -48,10 +50,19 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	}
 
 	@Override
+	public void updateEntity() {
+		EntityPlayer syncPlayer = MachineHelper.networkSyncCheck(worldObj.provider.dimensionId, coords());
+		if(syncPlayer != null)
+			for(Point client : networkClients)
+				PacketDispatcher.sendPacketToPlayer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), (Player)syncPlayer);
+
+		super.updateEntity();
+	}
+
+	@Override
 	public void deleteNetwork() {
 		for(Point client : networkClients)
-			((TEEMetalForge)Funcs.getBlockTileEntity(worldObj, client)).disconnectFromAnalyzerNetwork();
-		networkClients.clear();
+			removeClient(client, true);
 	}
 
 	@Override
@@ -60,7 +71,7 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public boolean addClient(EntityPlayer player, Point client) {
+	public boolean addClient(EntityPlayer player, Point client, boolean sync) {
 		if(networkClients.contains(client)) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Machine is already in this network");
@@ -71,11 +82,16 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		}
 		else {
 			// Add the machine
+			networkClients.add(client);
+			((TEEMetalForge)Funcs.getBlockTileEntity(worldObj, client)).analyzerHost = coords();
+
+			// Sync the data to the server/all clients
 			if(worldObj.isRemote) {
-				PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client));
-				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
+				player.addChatMessage("Adding machine at " + client);
+				if(sync)
+					PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client));
 			}
-			else
+			else if(sync)
 				PacketDispatcher.sendPacketToAllInDimension(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
 
 			return true;
@@ -84,8 +100,15 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public void removeClient(Point client) {
+	public void removeClient(Point client, boolean sync) {
+		((TEEMetalForge)Funcs.getBlockTileEntity(worldObj, client)).disconnectFromAnalyzerNetwork();
 		networkClients.remove(client);
+		if(sync) {
+			if(worldObj.isRemote)
+				PacketDispatcher.sendPacketToServer(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client));
+			else
+				PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
+		}
 	}
 
 	@Override

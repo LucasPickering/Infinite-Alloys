@@ -1,6 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.network.PacketAddClient;
+import infinitealloys.network.PacketRemoveClient;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
@@ -10,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 
 public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
@@ -45,6 +47,11 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public void updateEntity() {
+		EntityPlayer syncPlayer = MachineHelper.networkSyncCheck(worldObj.provider.dimensionId, coords());
+		if(syncPlayer != null)
+			for(Point client : networkClients)
+				PacketDispatcher.sendPacketToPlayer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), (Player)syncPlayer);
+
 		if(energyHost == null)
 			energyHost = coords();
 
@@ -54,8 +61,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	@Override
 	public void deleteNetwork() {
 		for(Point client : networkClients)
-			((TileEntityElectric)Funcs.getBlockTileEntity(worldObj, client)).disconnectFromEnergyNetwork();
-		networkClients.clear();
+			removeClient(client, true);
 	}
 
 	@Override
@@ -70,7 +76,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public boolean addClient(EntityPlayer player, Point client) {
+	public boolean addClient(EntityPlayer player, Point client, boolean sync) {
 		if(!energyHost.equals(coords())) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: This machine is not currently hosting a network because it is connected to another host");
@@ -89,12 +95,16 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 		}
 		else {
 			// Add the machine
+			networkClients.add(client);
+			((TileEntityElectric)Funcs.getBlockTileEntity(worldObj, client)).energyHost = coords();
 
+			// Sync the data to the server/all clients
 			if(worldObj.isRemote) {
 				PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client));
-				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
+				if(sync)
+					player.addChatMessage("Adding machine at " + client);
 			}
-			else
+			else if(sync)
 				PacketDispatcher.sendPacketToAllInDimension(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
 
 			return true;
@@ -103,8 +113,15 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public void removeClient(Point client) {
+	public void removeClient(Point client, boolean sync) {
+		((TileEntityElectric)Funcs.getBlockTileEntity(worldObj, client)).disconnectFromEnergyNetwork();
 		networkClients.remove(client);
+		if(sync) {
+			if(worldObj.isRemote)
+				PacketDispatcher.sendPacketToServer(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client));
+			else
+				PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
+		}
 	}
 
 	@Override

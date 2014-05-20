@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 
 public class TEMComputer extends TileEntityMachine implements IHost {
 
@@ -41,8 +42,19 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	}
 
 	@Override
+	public void updateEntity() {
+		EntityPlayer syncPlayer = MachineHelper.networkSyncCheck(worldObj.provider.dimensionId, coords());
+		if(syncPlayer != null)
+			for(Point client : networkClients)
+				PacketDispatcher.sendPacketToPlayer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), (Player)syncPlayer);
+
+		super.updateEntity();
+	}
+
+	@Override
 	public void deleteNetwork() {
-		networkClients.clear();
+		for(Point client : networkClients)
+			removeClient(client, true);
 	}
 
 	@Override
@@ -52,7 +64,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	}
 
 	@Override
-	public boolean addClient(EntityPlayer player, Point client) {
+	public boolean addClient(EntityPlayer player, Point client, boolean sync) {
 		if(networkClients.contains(client)) {
 			if(worldObj.isRemote)
 				player.addChatMessage("Error: Machine is already in this network");
@@ -75,11 +87,15 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 		}
 		else {
 			// Add the machine
+			networkClients.add(client);
+
+			// Sync the data to the server/all clients
 			if(worldObj.isRemote) {
 				PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client));
-				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
+				if(sync)
+					player.addChatMessage("Adding machine at " + client);
 			}
-			else
+			else if(sync)
 				PacketDispatcher.sendPacketToAllInDimension(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
 
 			return true;
@@ -88,12 +104,14 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	}
 
 	@Override
-	public void removeClient(Point client) {
+	public void removeClient(Point client, boolean sync) {
 		networkClients.remove(client);
-		if(worldObj.isRemote)
-			PacketDispatcher.sendPacketToServer(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client));
-		else
-			PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
+		if(sync) {
+			if(worldObj.isRemote)
+				PacketDispatcher.sendPacketToServer(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client));
+			else
+				PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
+		}
 	}
 
 	@Override
@@ -123,7 +141,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 					// energy storage unit, add it to the power network.
 					final TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
 					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(MachineHelper.WIRELESS))
-						addClient(null, new Point(xCoord + x, yCoord + y, zCoord + z));
+						addClient(null, new Point(xCoord + x, yCoord + y, zCoord + z), true);
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
 					// continued next tick.

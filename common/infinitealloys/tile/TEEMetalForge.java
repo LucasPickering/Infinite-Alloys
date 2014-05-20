@@ -19,7 +19,7 @@ public class TEEMetalForge extends TileEntityElectric {
 	private boolean recipeChanged;
 
 	/** The coordinates of the analyzer that is providing alloy data to this machine */
-	private Point analyzerHost;
+	public Point analyzerHost;
 
 	public TEEMetalForge(byte front) {
 		this();
@@ -51,10 +51,6 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	public void disconnectFromAnalyzerNetwork() {
 		analyzerHost = null;
-	}
-
-	public Point getAnalyzerHost() {
-		return analyzerHost;
 	}
 
 	@Override
@@ -106,7 +102,7 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		return ArrayUtils.addAll(super.getSyncDataToClient(), analyzerHost.x, analyzerHost.y, analyzerHost.z, recipeAlloyID);
+		return ArrayUtils.addAll(super.getSyncDataToClient(), recipeAlloyID);
 	}
 
 	@Override

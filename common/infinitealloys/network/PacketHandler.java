@@ -19,12 +19,10 @@ public class PacketHandler implements IPacketHandler {
 	public static final byte OPEN_GUI = 3;
 	public static final byte XRAY_SEARCH = 4;
 	public static final byte WAND = 5;
-	public static final byte CREATE_NETWORK = 6;
-	public static final byte REMOVE_NETWORK = 7;
-	public static final byte ADD_CLIENT = 8;
-	public static final byte REMOVE_CLIENT = 9;
+	public static final byte ADD_CLIENT = 6;
+	public static final byte REMOVE_CLIENT = 7;
 	private static final Class[] packetClasses = { PacketValidAlloys.class, PacketTEServerToClient.class, PacketTEClientToServer.class, PacketOpenGui.class,
-		PacketXraySearch.class, PacketWand.class, PacketCreateNetwork.class, PacketRemoveClient.class, PacketAddClient.class, PacketRemoveClient.class };
+		PacketXraySearch.class, PacketWand.class, PacketRemoveClient.class, PacketAddClient.class, PacketRemoveClient.class };
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {

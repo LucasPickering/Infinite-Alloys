@@ -61,13 +61,13 @@ public abstract class GuiElectric extends GuiMachine {
 		int color;
 		String status;
 
-		if(tee.getEnergyHost() == null) {
+		if(tee.energyHost == null) {
 			color = 0xff0000;
 			status = Funcs.getLoc("machine.network.noconnection");
 		}
 		else {
 			color = 0x00ff00;
-			status = Funcs.getLoc("machine.network.hostedby") + " " + tee.getEnergyHost();
+			status = Funcs.getLoc("machine.network.hostedby") + " " + tee.energyHost;
 		}
 
 		return new ColoredLine[] { new ColoredLine(Funcs.getLoc("machine.network.energy") + ": " + status, color) };

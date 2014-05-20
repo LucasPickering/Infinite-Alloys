@@ -30,7 +30,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	protected float rkPerTickMult = 1.0F;
 
 	/** The coordinates of the ESU that is providing energy to this machine */
-	protected Point energyHost;
+	public Point energyHost;
 
 	public TileEntityElectric(int inventoryLength) {
 		super(inventoryLength);
@@ -55,10 +55,6 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 				onInventoryChanged();
 			}
 		}
-	}
-
-	public Point getEnergyHost() {
-		return energyHost;
 	}
 
 	public void connectToEnergyNetwork(Point host) {

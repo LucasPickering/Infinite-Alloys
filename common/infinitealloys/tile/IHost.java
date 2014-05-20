@@ -12,11 +12,14 @@ public interface IHost {
 
 	/** Add a client to the network
 	 * 
-	 * @param player the player that is adding the client, this is used to send chat messages to them */
-	public boolean addClient(EntityPlayer player, Point client);
+	 * @param player the player that is adding the client, this is used to send chat messages to them
+	 * @param sync if true, a packet will be sent to the other side to add the client */
+	public boolean addClient(EntityPlayer player, Point client, boolean sync);
 
-	/** Remove a client from the network */
-	public void removeClient(Point client);
+	/** Remove a client from the network
+	 * 
+	 * @param sync if true, a packet will be sent to the other side to remove the client */
+	public void removeClient(Point client, boolean sync);
 
 	/** Delete all the network hosted by this machine. This is typically called when the TE block is broken. */
 	public void deleteNetwork();

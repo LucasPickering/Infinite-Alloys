@@ -21,12 +21,12 @@ public class PacketAddClient implements PacketIA {
 		if(Funcs.isClient()) {
 			TileEntity host = player.worldObj.getBlockTileEntity(hostX, hostY, hostZ);
 			if(host instanceof IHost)
-				((IHost)host).addClient(player, client);
+				((IHost)host).addClient(player, client, false);
 		}
-		else{
+		else {
 			TileEntity host = DimensionManager.getWorld(dimensionID).getBlockTileEntity(hostX, hostY, hostZ);
 			if(host instanceof IHost)
-				((IHost)host).addClient(player, client);
+				((IHost)host).addClient(player, client, false);
 		}
 	}
 

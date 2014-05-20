@@ -2,6 +2,7 @@ package infinitealloys.core;
 
 import infinitealloys.network.PacketValidAlloys;
 import infinitealloys.util.Funcs;
+import infinitealloys.util.MachineHelper;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,14 +27,12 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onWorldLoad(Load event) {
-		if(event.world.provider.dimensionId == 0) {
-			if(Funcs.isServer()) {
-				NetworkManager.clearNetworks();
+		if(Funcs.isServer()) {
+			if(event.world.provider.dimensionId == 0) {
 				worldDir = DimensionManager.getWorld(0).getChunkSaveLocation().getPath();
 				try {
 					NBTTagCompound nbtTagCompound = CompressedStreamTools.readCompressed(new FileInputStream(worldDir + "/" + fileName));
 					InfiniteAlloys.instance.loadAlloyData(nbtTagCompound); // Load the valid alloys
-					NetworkManager.loadData(nbtTagCompound, event.world); // Load machine networks
 				}catch(FileNotFoundException e) {
 					InfiniteAlloys.instance.generateAlloyData(); // There is no saved data, probably because this is a new world. Generate new alloy data.
 				}catch(Exception e) {
@@ -41,9 +40,9 @@ public class EventHandler implements ICraftingHandler {
 					e.printStackTrace();
 				}
 			}
-			else
-				InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear(); // Clear the list of blocks to be outlines by the x-ray on unload. This is only run client-side
 		}
+		else
+			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear(); // Clear the list of blocks to be outlines by the x-ray on unload. This is only run client-side
 	}
 
 	@ForgeSubscribe
@@ -51,7 +50,6 @@ public class EventHandler implements ICraftingHandler {
 		if(Funcs.isServer() && event.world.provider.dimensionId == 0) {
 			NBTTagCompound nbtTagCompound = new NBTTagCompound(); // An NBTTagCompound for the info to be stored in
 			InfiniteAlloys.instance.saveAlloyData(nbtTagCompound); // Add the alloy data to the NBTTagCompound
-			NetworkManager.saveData(nbtTagCompound); // Add the network data to the NBTTagCompound
 
 			try {
 				CompressedStreamTools.writeCompressed(nbtTagCompound, new FileOutputStream(worldDir + "/" + fileName)); // Write the NBT data to a file
@@ -64,8 +62,8 @@ public class EventHandler implements ICraftingHandler {
 	@ForgeSubscribe
 	public void onEntityJoinWorld(EntityJoinWorldEvent e) {
 		if(Funcs.isServer() && e.entity instanceof EntityPlayer) {
+			MachineHelper.populateNetworksToSync((EntityPlayer)e.entity);
 			PacketDispatcher.sendPacketToPlayer(PacketValidAlloys.getPacket(), (Player)e.entity);
-			NetworkManager.syncAllNetworks(((EntityPlayer)e.entity).username);
 		}
 	}
 

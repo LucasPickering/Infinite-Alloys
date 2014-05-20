@@ -40,7 +40,7 @@ public class GuiEnergyStorage extends GuiElectric {
 					(clients == 1 ? Funcs.getLoc("machine.network.client") : Funcs.getLoc("machine.network.clients")); // A switch between "Client" and
 		}
 		else
-			status = Funcs.getLoc("machine.network.hostedby") + " " + tees.getEnergyHost();
+			status = Funcs.getLoc("machine.network.hostedby") + " " + tees.energyHost;
 
 		return new ColoredLine[] { new ColoredLine(Funcs.getLoc("machine.network.energy") + ": " + status, 0x00ff00) };
 	}
