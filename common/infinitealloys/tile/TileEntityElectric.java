@@ -1,8 +1,7 @@
 package infinitealloys.tile;
 
-import infinitealloys.core.NetworkManager;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.MachineHelper;
+import infinitealloys.util.Point;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -30,8 +29,8 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	/** A multiplier for the power used, changed with upgrades. NOTE: Less will consume less power, but also generate less */
 	protected float rkPerTickMult = 1.0F;
 
-	/** The ID of the network through which this machine receives power */
-	protected int energyNetworkID = -1;
+	/** The coordinates of the ESU that is providing energy to this machine */
+	protected Point energyHost;
 
 	public TileEntityElectric(int inventoryLength) {
 		super(inventoryLength);
@@ -47,7 +46,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 
 		// If the machine should be processing and enough energy is available, increment the progress by one. If this is the first tick of the process, call
 		// startProcess(). If it has reached or exceeded the limit for completion, then finish the process and reset the counter.
-		if(shouldProcess() && energyNetworkID != -1 && ((TEEEnergyStorage)Funcs.getBlockTileEntity(worldObj, NetworkManager.getHost(energyNetworkID))).changeRK(getRKChange())) {
+		if(shouldProcess() && energyHost != null && ((TEEEnergyStorage)Funcs.getBlockTileEntity(worldObj, energyHost)).changeRK(getRKChange())) {
 			if(processProgress == 0)
 				onStartProcess();
 			if(++processProgress >= ticksToProcess) {
@@ -58,21 +57,16 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 		}
 	}
 
-	@Override
-	public void connectToNetwork(int networkType, int networkID) {
-		if(networkType == MachineHelper.ENERGY_NETWORK)
-			energyNetworkID = networkID;
+	public Point getEnergyHost() {
+		return energyHost;
 	}
 
-	@Override
-	public void disconnectFromNetwork(int networkType) {
-		if(networkType == MachineHelper.ENERGY_NETWORK)
-			energyNetworkID = -1;
+	public void connectToEnergyNetwork(Point host) {
+		energyHost = host;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public int getEnergyNetworkID() {
-		return energyNetworkID;
+	public void disconnectFromEnergyNetwork() {
+		energyHost = null;
 	}
 
 	/** Should the process tick be increased? Called every tick to determine if energy should be used and if progress should continue. NOTE: This will return

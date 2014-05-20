@@ -1,13 +1,15 @@
 package infinitealloys.tile;
 
-import infinitealloys.core.NetworkManager;
+import infinitealloys.network.PacketAddClient;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
+import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import org.apache.commons.lang3.ArrayUtils;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
@@ -22,6 +24,9 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	/** The ratio between how long an item will burn in an ESU and how long it will burn in a furnace. ESU is numerator, furnace is denominator. */
 	private final float ESU_TO_FURNACE_TICK_RATIO = 0.5F;
+
+	/** A list of clients currently connected to this energy network */
+	private ArrayList<Point> networkClients = new ArrayList<Point>();
 
 	public TEEEnergyStorage(byte front) {
 		this();
@@ -40,17 +45,76 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public void updateEntity() {
-		if(energyNetworkID == -1)
-			energyNetworkID = NetworkManager.buildNetwork(MachineHelper.ENERGY_NETWORK, worldObj.provider.dimensionId, new Point(xCoord, yCoord, zCoord), true);
-		else
-			NetworkManager.clientNotifyCheck(energyNetworkID);
+		if(energyHost == null)
+			energyHost = coords();
 
 		super.updateEntity();
 	}
 
 	@Override
-	public void deleteNetworks() {
-		NetworkManager.deleteNetwork(energyNetworkID);
+	public void deleteNetwork() {
+		for(Point client : networkClients)
+			((TileEntityElectric)Funcs.getBlockTileEntity(worldObj, client)).disconnectFromEnergyNetwork();
+		networkClients.clear();
+	}
+
+	@Override
+	public void connectToEnergyNetwork(Point host) {
+		super.connectToEnergyNetwork(host);
+		deleteNetwork();
+	}
+
+	@Override
+	public boolean isClientValid(Point client) {
+		return Funcs.getBlockTileEntity(worldObj, client) instanceof TileEntityElectric;
+	}
+
+	@Override
+	public boolean addClient(EntityPlayer player, Point client) {
+		if(!energyHost.equals(coords())) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: This machine is not currently hosting a network because it is connected to another host");
+		}
+		else if(networkClients.contains(client)) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Machine is already in network");
+		}
+		else if(client.equals(xCoord, yCoord, zCoord)) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Cannot add self to network");
+		}
+		else if(client.distanceTo(xCoord, yCoord, zCoord) > range) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Block out of range");
+		}
+		else {
+			// Add the machine
+
+			if(worldObj.isRemote) {
+				PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client));
+				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
+			}
+			else
+				PacketDispatcher.sendPacketToAllInDimension(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
+
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void removeClient(Point client) {
+		networkClients.remove(client);
+	}
+
+	@Override
+	public int getNetworkSize() {
+		return networkClients.size();
+	}
+
+	/** Is this ESU hosting the energy network that it's connected to, or is it just acting as a generator for another ESU */
+	public boolean isHostingNetwork() {
+		return energyHost.equals(coords());
 	}
 
 	@Override
@@ -73,39 +137,6 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 				break;
 			}
 		}
-	}
-
-	@Override
-	public boolean isClientValid(Point client) {
-		return Funcs.getBlockTileEntity(worldObj, client) instanceof TileEntityElectric;
-	}
-
-	@Override
-	public boolean addClient(EntityPlayer player, Point client) {
-		if(!NetworkManager.getHost(energyNetworkID).equals(xCoord, yCoord, zCoord)) {
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: This machine is not currently hosting a network because it is connected to another host");
-		}
-		else if(NetworkManager.hasClient(energyNetworkID, client)) {
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Machine is already in network");
-		}
-		else if(client.equals(xCoord, yCoord, zCoord)) {
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Cannot add self to network");
-		}
-		else if(client.distanceTo(xCoord, yCoord, zCoord) > range) {
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Block out of range");
-		}
-		else {
-			// Add the machine
-			NetworkManager.addClientAndSync(energyNetworkID, client);
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
-			return true;
-		}
-		return false;
 	}
 
 	@Override

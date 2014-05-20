@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.DimensionManager;
 import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -57,7 +58,7 @@ public class GuiInternetWand extends GuiScreen {
 	@Override
 	public void initGui() {
 		buttonList.clear();
-		buttonList.add(new GuiButton(Consts.WAND_SIZE, width - 20, 0, 20, 20, "?")); // The button to enable/disable help
+		buttonList.add(new GuiButton(Consts.WAND_SIZE, width - 20, 0, 20, 20, "?")); // Help button
 		buttonList.add(addToWand = new GuiButton(Consts.WAND_SIZE + 1, width / 2 - 83, height / 2 - 116, 70, 20, Funcs.getLoc("wand.addToWand")));
 		buttonList.add(addSelected = new GuiButton(Consts.WAND_SIZE + 2, width / 2 - 10, height / 2 - 116, 70, 20, Funcs.getLoc("wand.addSelected")));
 
@@ -73,28 +74,29 @@ public class GuiInternetWand extends GuiScreen {
 				machineButtons[i] = null; // Reset the button
 				if(tagCompound.hasKey("Coords" + i)) { // If there is a machine that corresponds to this button
 					int[] client = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
-					if(!MachineHelper.isClient(mc.theWorld, client[0], client[1], client[2])) { // If the block is no longer valid for the wand
+					if(!MachineHelper.isClient(DimensionManager.getWorld(client[0]), client[1], client[2], client[3])) { // If the block is no longer valid
 						PacketDispatcher.sendPacketToServer(PacketWand.getPacketRemove((byte)i)); // Remove it
 						((ItemInternetWand)heldItem.getItem()).removeMachine(heldItem, i);
-						i--; // Decrement i so that it repeats this number again with the new button
+						i--; // Decrement i so that it repeats this number for the new button
 					}
 					else
-						machineButtons[i] = new MachineButton(i, width / 2 - 82, height / 2 + i * 21 - 91, client[0], client[1], client[2]); // Create a button
+						machineButtons[i] = new MachineButton(i, width / 2 - 82, height / 2 + i * 21 - 80, client[0], client[1], client[2], client[3]); // Create a button
 				}
 			}
 
 			if(tagCompound.hasKey("CoordsCurrent")) {
 				int[] a = tagCompound.getIntArray("CoordsCurrent");
-				addToWand.enabled = ((ItemInternetWand)heldItem.getItem()).isMachineValid(mc.theWorld, heldItem, a[0], a[1], a[2]);
+				addToWand.enabled = ((ItemInternetWand)heldItem.getItem()).isMachineValid(DimensionManager.getWorld(a[0]), heldItem, a[1], a[2], a[3]);
 
-				TileEntity te = mc.theWorld.getBlockTileEntity(a[0], a[1], a[2]);
+				TileEntity te = DimensionManager.getWorld(a[0]).getBlockTileEntity(a[1], a[2], a[3]);
 
 				addSelected.enabled = selectedButtons != 0;
 				// Go over each machine button
 				for(MachineButton button : machineButtons)
 					if(button != null && (selectedButtons & 1 << button.buttonID) != 0) // If this button is selected
 						// If the selected machine is not valid for the block that was clicked
-						if(!(te instanceof IHost) || !((IHost)te).isClientValid(new Point(button.machineX, button.machineY, button.machineZ)))
+						if(!(te instanceof IHost) || button.dimensionID != te.worldObj.provider.dimensionId ||
+								!((IHost)te).isClientValid(new Point(button.machineX, button.machineY, button.machineZ)))
 							addSelected.enabled = false; // Set the button to false
 			}
 		}
@@ -112,6 +114,12 @@ public class GuiInternetWand extends GuiScreen {
 
 		GL11.glPushMatrix();
 		GL11.glTranslatef(topLeft.x, topLeft.y, 0);
+
+		mc.fontRenderer.drawStringWithShadow("D", 30, 32, 0xffffff);
+		mc.fontRenderer.drawStringWithShadow("X", 62, 32, 0xffffff);
+		mc.fontRenderer.drawStringWithShadow("Y", 86, 32, 0xffffff);
+		mc.fontRenderer.drawStringWithShadow("Z", 110, 32, 0xffffff);
+
 		// Draw the help dialogue and shade the help zone if help is enabled and the mouse is over a help zone
 		if(helpEnabled) {
 			EnumHelp hoveredZone = null; // The help zone that the mouse is over to render to dialogue later, null if mouse is not over a zone\
@@ -187,20 +195,21 @@ public class GuiInternetWand extends GuiScreen {
 			case Consts.WAND_SIZE + 1: // Add the block that was clicked to the wand's list
 				ItemStack heldItem = mc.thePlayer.getHeldItem();
 				int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
-				PacketDispatcher.sendPacketToServer(PacketWand.getPacketAdd(a[0], (short)a[1], a[2]));
-				((ItemInternetWand)heldItem.getItem()).addMachine(mc.theWorld, heldItem, a[0], a[1], a[2]);
+				PacketDispatcher.sendPacketToServer(PacketWand.getPacketAdd(a[1], (short)a[2], a[3]));
+				((ItemInternetWand)heldItem.getItem()).addMachine(mc.theWorld, heldItem, a[1], a[2], a[3]);
 				break;
 
 			case Consts.WAND_SIZE + 2: // Add selected machines to a host
 				heldItem = mc.thePlayer.getHeldItem();
 				int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 
-				if(MachineHelper.isHost(mc.theWorld, host[0], host[1], host[2])) { // If this is a host
+				if(MachineHelper.isHost(mc.theWorld, host[1], host[2], host[3])) { // If this is a host
 					for(MachineButton machineButton : machineButtons) { // Go over each button
 						if(machineButton != null && (selectedButtons & 1 << machineButton.buttonID) != 0) { // If this button is selected
 							// Add the selected machine to the host
 							int[] client = heldItem.getTagCompound().getIntArray("Coords" + machineButton.buttonID);
-							((IHost)mc.theWorld.getBlockTileEntity(host[0], host[1], host[2])).addClient(mc.thePlayer, new Point(client[0], client[1], client[2]));
+							if(host[0] == client[0]) // They're in the same dimension
+								((IHost)mc.theWorld.getBlockTileEntity(host[1], host[2], host[3])).addClient(mc.thePlayer, new Point(client[1], client[2], client[3]));
 						}
 					}
 				}
@@ -261,16 +270,18 @@ public class GuiInternetWand extends GuiScreen {
 		int yPos;
 
 		int machineID;
+		int dimensionID;
 		int machineX;
 		int machineY;
 		int machineZ;
 
-		MachineButton(int buttonID, int xPos, int yPos, int machineX, int machineY, int machineZ) {
+		MachineButton(int buttonID, int xPos, int yPos, int dimensionID, int machineX, int machineY, int machineZ) {
 			super();
 			this.buttonID = buttonID;
 			this.xPos = xPos;
 			this.yPos = yPos;
-			machineID = mc.theWorld.getBlockMetadata(machineX, machineY, machineZ);
+			this.dimensionID = dimensionID;
+			machineID = DimensionManager.getWorld(dimensionID).getBlockMetadata(machineX, machineY, machineZ);
 			this.machineX = machineX;
 			this.machineY = machineY;
 			this.machineZ = machineZ;
@@ -291,8 +302,10 @@ public class GuiInternetWand extends GuiScreen {
 			GL11.glColor3f(1F, 1F, 1F); // Reset the color
 
 			// Draw the string for the coordinates
-			final String display = machineX + "   " + machineY + "   " + machineZ;
-			mc.fontRenderer.drawStringWithShadow(display, xPos + 60 - (mc.fontRenderer.getStringWidth(display) / 2), yPos + 5, 0xffffff);
+			mc.fontRenderer.drawStringWithShadow(dimensionID + "", xPos + 26 - (mc.fontRenderer.getStringWidth(dimensionID + "") / 2), yPos + 5, 0xffffff);
+			mc.fontRenderer.drawStringWithShadow(machineX + "", xPos + 58 - (mc.fontRenderer.getStringWidth(machineX + "") / 2), yPos + 5, 0xffffff);
+			mc.fontRenderer.drawStringWithShadow(machineY + "", xPos + 82 - (mc.fontRenderer.getStringWidth(machineY + "") / 2), yPos + 5, 0xffffff);
+			mc.fontRenderer.drawStringWithShadow(machineZ + "", xPos + 106 - (mc.fontRenderer.getStringWidth(machineZ + "") / 2), yPos + 5, 0xffffff);
 
 			itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(Blocks.machineID, 1, machineID), xPos, yPos + 1);
 		}

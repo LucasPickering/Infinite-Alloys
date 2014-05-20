@@ -1,6 +1,6 @@
 package infinitealloys.tile;
 
-import infinitealloys.core.NetworkManager;
+import infinitealloys.network.PacketAddClient;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
@@ -11,8 +11,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
@@ -28,8 +27,8 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	/** The damage value of the alloy that is going to be made from the current process */
 	private int targetAlloy = -1;
 
-	/** The ID of the network hosted by this block that supplies alloy information to metal forges */
-	private int analyzerNetworkID = -1;
+	/** A list of clients currently connected to this energy network */
+	private ArrayList<Point> networkClients = new ArrayList<Point>();
 
 	public TEEAnalyzer(byte front) {
 		this();
@@ -49,25 +48,49 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public void updateEntity() {
-		if(analyzerNetworkID == -1)
-			analyzerNetworkID = NetworkManager.buildNetwork(MachineHelper.ANALYZER_NETWORK, worldObj.provider.dimensionId, new Point(xCoord, yCoord, zCoord), true);
-		else
-			NetworkManager.clientNotifyCheck(analyzerNetworkID);
-
-		super.updateEntity();
+	public void deleteNetwork() {
+		for(Point client : networkClients)
+			((TEEMetalForge)Funcs.getBlockTileEntity(worldObj, client)).disconnectFromAnalyzerNetwork();
+		networkClients.clear();
 	}
 
 	@Override
-	public void connectToNetwork(int networkType, int networkID) {
-		super.connectToNetwork(networkType, networkID);
-		if(networkType == MachineHelper.ANALYZER_NETWORK)
-			analyzerNetworkID = networkID;
+	public boolean isClientValid(Point client) {
+		return Funcs.getBlockTileEntity(worldObj, client) instanceof TEEMetalForge;
 	}
 
 	@Override
-	public void deleteNetworks() {
-		NetworkManager.deleteNetwork(analyzerNetworkID);
+	public boolean addClient(EntityPlayer player, Point client) {
+		if(networkClients.contains(client)) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Machine is already in this network");
+		}
+		else if(!isClientValid(client)) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Machine is not a metal forge");
+		}
+		else {
+			// Add the machine
+			if(worldObj.isRemote) {
+				PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client));
+				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
+			}
+			else
+				PacketDispatcher.sendPacketToAllInDimension(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
+
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void removeClient(Point client) {
+		networkClients.remove(client);
+	}
+
+	@Override
+	public int getNetworkSize() {
+		return networkClients.size();
 	}
 
 	@Override
@@ -137,36 +160,6 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 			if((usedMetals >> i & 1) == 1)
 				metalModifier += Math.pow(4, i); // Each alloy contributes to the required RK based on its value
 		return (int)(baseRKPerTick * rkPerTickMult / processTimeMult) * metalModifier;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public int getAnalyzerNetworkID() {
-		return analyzerNetworkID;
-	}
-
-	@Override
-	public boolean isClientValid(Point client) {
-		return Funcs.getBlockTileEntity(worldObj, client) instanceof TEEMetalForge;
-	}
-
-	@Override
-	public boolean addClient(EntityPlayer player, Point client) {
-		if(NetworkManager.hasClient(analyzerNetworkID, client)) {
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Machine is already in this network");
-		}
-		else if(!isClientValid(client)) {
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Machine is not a metal forge");
-		}
-		else {
-			// Add the machine
-			NetworkManager.addClientAndSync(analyzerNetworkID, client);
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
-			return true;
-		}
-		return false;
 	}
 
 	@Override

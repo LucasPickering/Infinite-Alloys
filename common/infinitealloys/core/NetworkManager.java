@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
@@ -83,10 +84,10 @@ public class NetworkManager {
 		networks.add(new Network(type, dimensionID, host));
 		int networkID = networks.size() - 1;
 
-		System.out.println("Creating new network with index " + networkID);
+		System.out.println("Creating new network with index " + networkID + " on dimension " + dimensionID);
 
 		if(notifyClients)
-			PacketDispatcher.sendPacketToAllPlayers(PacketCreateNetwork.getPacket(networkID, type, dimensionID, host));
+			PacketDispatcher.sendPacketToAllInDimension(PacketCreateNetwork.getPacket(networkID, type, dimensionID, host), dimensionID);
 
 		return networkID;
 	}
@@ -94,10 +95,12 @@ public class NetworkManager {
 	/** Check if there are any players that need a certain network to be synced because they just joined */
 	public static void clientNotifyCheck(int networkID) {
 		if(Funcs.isServer() && networksToBeCreated.containsKey(networkID)) {
-			Player player = Funcs.getPlayerForUsername(networksToBeCreated.get(networkID));
-			PacketDispatcher.sendPacketToPlayer(PacketCreateNetwork.getPacket(networkID, getType(networkID), getDimensionID(networkID), getHost(networkID)), player);
-			for(Point client : getClients(networkID))
-				PacketDispatcher.sendPacketToPlayer(PacketAddClient.getPacket(networkID, client), player);
+			EntityPlayer player = Funcs.getPlayerForUsername(networksToBeCreated.get(networkID));
+			if(getDimensionID(networkID) == player.dimension) { // If the player is in the same dimension as this network
+				PacketDispatcher.sendPacketToPlayer(PacketCreateNetwork.getPacket(networkID, getType(networkID), getDimensionID(networkID), getHost(networkID)), (Player)player);
+				for(Point client : getClients(networkID))
+					PacketDispatcher.sendPacketToPlayer(PacketAddClient.getPacket(networkID, client), (Player)player);
+			}
 			networksToBeCreated.remove(networkID);
 		}
 	}
@@ -129,14 +132,14 @@ public class NetworkManager {
 		if(Funcs.isClient())
 			PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(networkID, client));
 		else
-			PacketDispatcher.sendPacketToAllPlayers(PacketAddClient.getPacket(networkID, client));
+			PacketDispatcher.sendPacketToAllInDimension(PacketAddClient.getPacket(networkID, client), getDimensionID(networkID));
 	}
 
 	/** Add a client to a network */
 	public static void addClient(int networkID, Point client) {
 		Network network = networks.get(networkID);
 		if(!network.clients.contains(client)) {
-			System.out.println("Adding client " + client + " on " + Funcs.getSideAsString());
+			System.out.println("Adding client " + client + " on " + Funcs.getSideAsString() + " in dimension " + getDimensionID(networkID));
 			network.clients.add(client);
 			((TileEntityMachine)Funcs.getBlockTileEntity(getWorld(networkID), client)).connectToNetwork(network.type, networkID);
 		}
@@ -150,7 +153,7 @@ public class NetworkManager {
 		if(Funcs.isServer()) {
 			networks.get(networkID).clients.remove(client);
 			((TileEntityMachine)Funcs.getBlockTileEntity(getWorld(networkID), client)).disconnectFromNetwork(getType(networkID));
-			PacketDispatcher.sendPacketToAllPlayers(PacketRemoveClient.getPacket(networkID, client));
+			PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(networkID, client), getDimensionID(networkID));
 		}
 	}
 
@@ -205,6 +208,7 @@ public class NetworkManager {
 
 	/** Tell the host and each client in the network to connect to this network */
 	private static void notifyForConnect(int networkID, World world) {
+		System.out.println("Client received " + networkID + ", " + world);
 		((TileEntityMachine)Funcs.getBlockTileEntity(world, getHost(networkID))).connectToNetwork(getType(networkID), networkID);
 
 		for(Point client : getClients(networkID))

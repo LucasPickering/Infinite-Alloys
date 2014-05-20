@@ -3,7 +3,6 @@ package infinitealloys.client.gui;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.core.NetworkManager;
 import infinitealloys.network.PacketOpenGui;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityElectric;
@@ -132,7 +131,7 @@ public abstract class GuiMachine extends GuiContainer {
 			TEMComputer tec = ((TEMComputer)Funcs.getBlockTileEntity(mc.theWorld, controller));
 			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, tec, true, tem.coords().equals(controller));
 			controllerTab.drawButton();
-			Point[] clients = NetworkManager.getClients(tec.getComputerNetworkID());
+			Point[] clients = tec.getClients();
 			for(int i = 0; i < clients.length; i++) {
 				machineTabs.add(new GuiMachineTab(mc, itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityElectric)Funcs.getBlockTileEntity(mc.theWorld, clients[i]),
 						i / 5 == 0, clients[i].equals(tem.coords())));

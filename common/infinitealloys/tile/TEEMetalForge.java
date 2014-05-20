@@ -4,12 +4,11 @@ import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.MachineHelper;
+import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TEEMetalForge extends TileEntityElectric {
 
@@ -19,8 +18,8 @@ public class TEEMetalForge extends TileEntityElectric {
 	/** True if the alloy recipe has been changed by the client, used to reset progress */
 	private boolean recipeChanged;
 
-	/** The id of the network to which this metal forge is connected */
-	private int analyzerNetworkID = -1;
+	/** The coordinates of the analyzer that is providing alloy data to this machine */
+	private Point analyzerHost;
 
 	public TEEMetalForge(byte front) {
 		this();
@@ -42,22 +41,20 @@ public class TEEMetalForge extends TileEntityElectric {
 		super.updateEntity();
 		recipeChanged = false;
 
-		if(analyzerNetworkID == -1)
+		if(analyzerHost == null)
 			recipeAlloyID = -1;
 	}
 
-	@Override
-	public void connectToNetwork(int networkType, int networkID) {
-		super.connectToNetwork(networkType, networkID);
-		if(networkType == MachineHelper.ANALYZER_NETWORK)
-			analyzerNetworkID = networkID;
+	public void connectToAnalyzerNetwork(Point host) {
+		analyzerHost = host;
 	}
 
-	@Override
-	public void disconnectFromNetwork(int networkType) {
-		super.disconnectFromNetwork(networkType);
-		if(networkType == MachineHelper.ANALYZER_NETWORK)
-			analyzerNetworkID = -1;
+	public void disconnectFromAnalyzerNetwork() {
+		analyzerHost = null;
+	}
+
+	public Point getAnalyzerHost() {
+		return analyzerHost;
 	}
 
 	@Override
@@ -95,11 +92,6 @@ public class TEEMetalForge extends TileEntityElectric {
 		return (int)(baseRKPerTick * rkPerTickMult / processTimeMult * getIngotsInRecipe());
 	}
 
-	@SideOnly(Side.CLIENT)
-	public int getAnalyzerNetworkID() {
-		return analyzerNetworkID;
-	}
-
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
@@ -114,7 +106,7 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		return ArrayUtils.addAll(super.getSyncDataToClient(), analyzerNetworkID, recipeAlloyID);
+		return ArrayUtils.addAll(super.getSyncDataToClient(), analyzerHost.x, analyzerHost.y, analyzerHost.z, recipeAlloyID);
 	}
 
 	@Override

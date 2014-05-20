@@ -46,7 +46,7 @@ public class ItemInternetWand extends ItemIA {
 				if(tagCompound.hasKey("Coords" + i)) {
 					// If the wand already contains this machine, return false
 					final int[] a = tagCompound.getIntArray("Coords" + i);
-					if(a[0] == x && a[1] == y && a[2] == z)
+					if(a[0] == world.provider.dimensionId && a[1] == x && a[2] == y && a[3] == z)
 						return false;
 				}
 			}
@@ -62,7 +62,7 @@ public class ItemInternetWand extends ItemIA {
 			final NBTTagCompound tagCompound = itemstack.getTagCompound();
 			for(int i = 0; i < Consts.WAND_SIZE; i++) {
 				if(!tagCompound.hasKey("Coords" + i)) {
-					tagCompound.setIntArray("Coords" + i, new int[] { x, y, z });
+					tagCompound.setIntArray("Coords" + i, new int[] { world.provider.dimensionId, x, y, z });
 					break;
 				}
 			}

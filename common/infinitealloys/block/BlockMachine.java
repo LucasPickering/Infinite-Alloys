@@ -78,7 +78,7 @@ public class BlockMachine extends BlockContainer {
 			// Put the coords of this block in a temp tag in the wand so the wand's GUI can access it
 			if(!heldItem.hasTagCompound())
 				heldItem.setTagCompound(new NBTTagCompound());
-			heldItem.getTagCompound().setIntArray("CoordsCurrent", new int[] { x, y, z });
+			heldItem.getTagCompound().setIntArray("CoordsCurrent", new int[] { world.provider.dimensionId, x, y, z });
 
 			// Open the GUI for the wand to let the player decide what they want to do with this block
 			player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI, world, (int)player.posX, (int)player.posY, (int)player.posZ);
@@ -145,7 +145,7 @@ public class BlockMachine extends BlockContainer {
 			tem.dropItems();
 			tem.dropUpgrades();
 			if(tem instanceof IHost)
-				((IHost)tem).deleteNetworks();
+				((IHost)tem).deleteNetwork();
 		}
 		super.breakBlock(world, x, y, z, blockID, metadata);
 	}

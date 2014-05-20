@@ -1,6 +1,5 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.core.NetworkManager;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.util.Funcs;
 import java.text.DecimalFormat;
@@ -62,13 +61,13 @@ public abstract class GuiElectric extends GuiMachine {
 		int color;
 		String status;
 
-		if(tee.getEnergyNetworkID() == -1) {
+		if(tee.getEnergyHost() == null) {
 			color = 0xff0000;
 			status = Funcs.getLoc("machine.network.noconnection");
 		}
 		else {
 			color = 0x00ff00;
-			status = Funcs.getLoc("machine.network.hostedby") + " " + NetworkManager.getHost(tee.getEnergyNetworkID());
+			status = Funcs.getLoc("machine.network.hostedby") + " " + tee.getEnergyHost();
 		}
 
 		return new ColoredLine[] { new ColoredLine(Funcs.getLoc("machine.network.energy") + ": " + status, color) };

@@ -4,12 +4,12 @@ import java.awt.Rectangle;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class Funcs {
@@ -141,8 +141,8 @@ public class Funcs {
 	}
 
 	/** Get an instance of a player from their name */
-	public static Player getPlayerForUsername(String name) {
-		return (Player)FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
+	public static EntityPlayer getPlayerForUsername(String name) {
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
 	}
 
 	/** Create a texture resource for an IA GUI based on the given texture name */

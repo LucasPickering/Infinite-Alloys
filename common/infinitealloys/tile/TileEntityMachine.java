@@ -1,6 +1,5 @@
 package infinitealloys.tile;
 
-import infinitealloys.block.BlockMachine;
 import infinitealloys.item.Items;
 import infinitealloys.network.PacketTEServerToClient;
 import infinitealloys.util.Consts;
@@ -45,7 +44,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	/** The size limit for one stack in this machine */
 	protected int stackLimit = 64;
-
+	
 	public TileEntityMachine(int inventoryLength) {
 		this();
 		inventoryStacks = new ItemStack[inventoryLength];
@@ -70,19 +69,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 			updateUpgrades();
 		}
 
-		BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
+		// BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 	}
-
-	/** Connect to a network of a certain type with a certain ID
-	 * 
-	 * @param networkType the type of the network, e.g. computer, energy, etc. These types are defined in {@link infinitealloys.util.MachineHelper}
-	 * @param networkID the ID of the network to which this machine is connecting */
-	public abstract void connectToNetwork(int networkType, int networkID);
-
-	/** Disconnect from a certain network
-	 * 
-	 * @param networkType the type of the network, e.g. computer, energy, etc. These types are defined in {@link infinitealloys.util.MachineHelper} */
-	public abstract void disconnectFromNetwork(int networkType);
 
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
@@ -136,6 +124,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		this.upgrades = upgrades;
 	}
 
+	/** Get the current (x, y, z) coordinates of this machine in the form of a {@link infinitealloys.util.Point Point} */
 	public Point coords() {
 		return new Point(xCoord, yCoord, zCoord);
 	}

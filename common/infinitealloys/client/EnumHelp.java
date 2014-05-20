@@ -25,7 +25,7 @@ public enum EnumHelp {
 	ES_SUPPLY("esSupply", 0xff0000, 12, 21, 54, 54), ES_RK("esRK", 0xff00ff, 68, 24, 80, 12),
 
 	IW_ADD_TO_WAND("iwAddToWand", 0xff0000, 6, 6, 70, 20), IW_ADD_SELECTED("iwAddSelected", 0x00ff00, 79, 6, 70, 20),
-	IW_LIST("iwList", 0x9c00ff, 6, 30, 125, 209), IW_REMOVE("iwRemove", 0x00ffff, 133, 30, 16, 209);
+	IW_LIST("iwList", 0x9c00ff, 6, 41, 121, 20), IW_REMOVE("iwRemove", 0x00ffff, 129, 41, 20, 20);
 
 	/** Name used to get the title and info from localization */
 	public final String name;

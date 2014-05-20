@@ -1,13 +1,14 @@
 package infinitealloys.tile;
 
-import infinitealloys.core.NetworkManager;
+import infinitealloys.network.PacketAddClient;
+import infinitealloys.network.PacketRemoveClient;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
+import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class TEMComputer extends TileEntityMachine implements IHost {
 
@@ -20,8 +21,8 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	/** The number of machines that this block can host */
 	public int networkCapacity = 0;
 
-	/** The wireless network that this block is hosting */
-	private int computerNetworkID = -1;
+	/** A list of clients currently connected to this computer control network */
+	private ArrayList<Point> networkClients = new ArrayList<Point>();
 
 	public boolean shouldSearch;
 
@@ -40,29 +41,68 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	}
 
 	@Override
-	public void updateEntity() {
-		if(computerNetworkID == -1)
-			computerNetworkID = NetworkManager.buildNetwork(MachineHelper.COMPUTER_NETWORK, worldObj.provider.dimensionId, new Point(xCoord, yCoord, zCoord), true);
+	public void deleteNetwork() {
+		networkClients.clear();
+	}
+
+	@Override
+	public boolean isClientValid(Point client) {
+		TileEntity te = Funcs.getBlockTileEntity(worldObj, client);
+		return te instanceof TileEntityMachine && ((TileEntityMachine)te).hasUpgrade(MachineHelper.WIRELESS);
+	}
+
+	@Override
+	public boolean addClient(EntityPlayer player, Point client) {
+		if(networkClients.contains(client)) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Machine is already in this network");
+		}
+		else if(networkClients.size() >= networkCapacity) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Network full");
+		}
+		else if(client.equals(xCoord, yCoord, zCoord)) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Cannot add self to network");
+		}
+		else if(client.distanceTo(xCoord, yCoord, zCoord) > range) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Block out of range");
+		}
+		else if(!isClientValid(client)) {
+			if(worldObj.isRemote)
+				player.addChatMessage("Error: Block is not capable of networking");
+		}
+		else {
+			// Add the machine
+			if(worldObj.isRemote) {
+				PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client));
+				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
+			}
+			else
+				PacketDispatcher.sendPacketToAllInDimension(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
+
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void removeClient(Point client) {
+		networkClients.remove(client);
+		if(worldObj.isRemote)
+			PacketDispatcher.sendPacketToServer(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client));
 		else
-			NetworkManager.clientNotifyCheck(computerNetworkID);
-
-		super.updateEntity();
+			PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
 	}
 
 	@Override
-	public void connectToNetwork(int networkType, int networkID) {}
-
-	@Override
-	public void disconnectFromNetwork(int networkType) {}
-
-	@Override
-	public void deleteNetworks() {
-		NetworkManager.deleteNetwork(computerNetworkID);
+	public int getNetworkSize() {
+		return networkClients.size();
 	}
 
-	@SideOnly(Side.CLIENT)
-	public int getComputerNetworkID() {
-		return computerNetworkID;
+	public Point[] getClients() {
+		return networkClients.toArray(new Point[] {});
 	}
 
 	@SuppressWarnings("unused")
@@ -99,43 +139,6 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 		lastSearch.x = -range; // If we've search all the x values, reset the x position.
 
 		shouldSearch = false; // The search is done. Stop running the function until another search is initiated.
-	}
-
-	@Override
-	public boolean isClientValid(Point client) {
-		TileEntity te = Funcs.getBlockTileEntity(worldObj, client);
-		return te instanceof TileEntityMachine && ((TileEntityMachine)te).hasUpgrade(MachineHelper.WIRELESS);
-	}
-
-	@Override
-	public boolean addClient(EntityPlayer player, Point client) {
-		if(NetworkManager.hasClient(computerNetworkID, client)) {
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Machine is already in this network");
-		}
-		else if(NetworkManager.getSize(computerNetworkID) >= networkCapacity) {
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Network full");
-		}
-		else if(client.equals(xCoord, yCoord, zCoord)) {
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Cannot add self to network");
-		}
-		else if(client.distanceTo(xCoord, yCoord, zCoord) > range) {
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Block out of range");
-		}
-		else if(!isClientValid(client)) {
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Block is not capable of networking");
-		}
-		else {
-			NetworkManager.addClientAndSync(computerNetworkID, client);
-			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Adding machine at " + client.x + ", " + client.y + ", " + client.z);
-			return true;
-		}
-		return false;
 	}
 
 	@Override

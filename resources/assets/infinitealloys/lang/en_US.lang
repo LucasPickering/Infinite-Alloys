@@ -122,6 +122,6 @@ machineHelp.iwAddToWand.info=Add the machine that was/nright-clicked to this wan
 machineHelp.iwAddSelected.title=Add Selected
 machineHelp.iwAddSelected.info=Add the machines that are/ncurrently selected in the wand to/nthe block that was right-clicked
 machineHelp.iwList.title=Machine List
-machineHelp.iwList.info=info= for each machine in the list,/nincluding type and location
+machineHelp.iwList.info=Shows the type, dimension, and/ncoordinates for each machine
 machineHelp.iwRemove.title=Remove Machine
 machineHelp.iwRemove.info=Remove this machine from the list
