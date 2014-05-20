@@ -8,6 +8,7 @@ import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -122,6 +123,24 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 	public Point[] getClients() {
 		return networkClients.toArray(new Point[] {});
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		for(int i = 0; tagCompound.hasKey("client" + i); i++) {
+			int[] client = tagCompound.getIntArray("client" + i);
+			networkClients.add(new Point(client[0], client[1], client[2]));
+		}
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		for(int i = 0; i < networkClients.size(); i++) {
+			Point client = networkClients.get(i);
+			tagCompound.setIntArray("client" + i, new int[] { client.x, client.y, client.z });
+		}
 	}
 
 	@SuppressWarnings("unused")

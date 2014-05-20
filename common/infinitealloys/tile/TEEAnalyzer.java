@@ -191,6 +191,10 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		super.readFromNBT(tagCompound);
 		alloys = tagCompound.getInteger("alloys");
 		targetAlloy = tagCompound.getInteger("targetAlloy");
+		for(int i = 0; tagCompound.hasKey("client" + i); i++) {
+			int[] client = tagCompound.getIntArray("client" + i);
+			networkClients.add(new Point(client[0], client[1], client[2]));
+		}
 	}
 
 	@Override
@@ -198,6 +202,10 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("alloys", alloys);
 		tagCompound.setInteger("targetAlloy", targetAlloy);
+		for(int i = 0; i < networkClients.size(); i++) {
+			Point client = networkClients.get(i);
+			tagCompound.setIntArray("client" + i, new int[] { client.x, client.y, client.z });
+		}
 	}
 
 	@Override
