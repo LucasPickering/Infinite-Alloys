@@ -11,7 +11,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 
 public class TEMComputer extends TileEntityMachine implements IHost {
 
@@ -44,16 +43,6 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	}
 
 	@Override
-	public void updateEntity() {
-		EntityPlayer syncPlayer = MachineHelper.networkSyncCheck(worldObj.provider.dimensionId, coords());
-		if(syncPlayer != null)
-			for(Point client : networkClients)
-				PacketDispatcher.sendPacketToPlayer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), (Player)syncPlayer);
-
-		super.updateEntity();
-	}
-
-	@Override
 	public void deleteNetwork() {
 		for(Point client : networkClients)
 			removeClient(client, true);
@@ -68,23 +57,23 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	@Override
 	public boolean addClient(EntityPlayer player, Point client, boolean sync) {
 		if(networkClients.contains(client)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Machine is already in this network");
 		}
 		else if(networkClients.size() >= networkCapacity) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Network full");
 		}
 		else if(client.equals(xCoord, yCoord, zCoord)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Cannot add self to network");
 		}
 		else if(client.distanceTo(xCoord, yCoord, zCoord) > range) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Block out of range");
 		}
 		else if(!isClientValid(client)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Block is not capable of networking");
 		}
 		else {
@@ -93,9 +82,10 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 			// Sync the data to the server/all clients
 			if(worldObj.isRemote) {
-				PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client));
-				if(sync)
+				if(player != null)
 					player.addChatMessage("Adding machine at " + client);
+				if(sync)
+					PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client));
 			}
 			else if(sync)
 				PacketDispatcher.sendPacketToAllInDimension(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
@@ -114,6 +104,11 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 			else
 				PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
 		}
+	}
+	
+	@Override
+	public void syncAllClients(Player player){
+		for()
 	}
 
 	@Override

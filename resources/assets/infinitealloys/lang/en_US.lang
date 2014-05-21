@@ -76,7 +76,7 @@ machine.pasture.mode.1=Att.
 machine.pasture.mode.2=Rep.
 
 wand.addToWand=Add to Wand
-wand.addSelected=Add Selected
+wand.addSelected=Add to Mach.
 
 machineHelp.upgrade.title=Upgrades
 machineHelp.upgrade.info=Place an upgrade item here/nto add it to the machine
@@ -119,7 +119,7 @@ machineHelp.esRK.info=This shows the ESU's current stored energy and energy capa
 
 machineHelp.iwAddToWand.title=Add to Wand
 machineHelp.iwAddToWand.info=Add the machine that was/nright-clicked to this wand list
-machineHelp.iwAddSelected.title=Add Selected
+machineHelp.iwAddSelected.title=Add to Machine
 machineHelp.iwAddSelected.info=Add the machines that are/ncurrently selected in the wand to/nthe block that was right-clicked
 machineHelp.iwList.title=Machine List
 machineHelp.iwList.info=Shows the type, dimension, and/ncoordinates for each machine

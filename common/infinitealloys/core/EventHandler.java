@@ -1,8 +1,8 @@
 package infinitealloys.core;
 
 import infinitealloys.network.PacketValidAlloys;
+import infinitealloys.tile.IHost;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.MachineHelper;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,6 +11,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -62,8 +63,12 @@ public class EventHandler implements ICraftingHandler {
 	@ForgeSubscribe
 	public void onEntityJoinWorld(EntityJoinWorldEvent e) {
 		if(Funcs.isServer() && e.entity instanceof EntityPlayer) {
-			MachineHelper.populateNetworksToSync((EntityPlayer)e.entity);
 			PacketDispatcher.sendPacketToPlayer(PacketValidAlloys.getPacket(), (Player)e.entity);
+			for(Object te:e.world.loadedTileEntityList){
+				if(te instanceof IHost){
+					PacketDispatcher.sendPacketToPlayer(PacketAddClient,e.entity)
+				}
+			}
 		}
 	}
 

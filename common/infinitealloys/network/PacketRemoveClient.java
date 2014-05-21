@@ -15,7 +15,7 @@ public class PacketRemoveClient implements PacketIA {
 	public void execute(EntityPlayer player, ByteArrayDataInput data) {
 		int dimensionID = data.readInt();
 		int hostX = data.readInt();
-		int hostY = data.readShort();
+		int hostY = data.readInt();
 		int hostZ = data.readInt();
 		Point client = new Point(data.readInt(), data.readShort(), data.readInt());
 		if(Funcs.isClient()) {
@@ -31,6 +31,6 @@ public class PacketRemoveClient implements PacketIA {
 	}
 
 	public static Packet250CustomPayload getPacket(int dimensionID, Point host, Point client) {
-		return PacketHandler.getPacket(PacketHandler.ADD_CLIENT, dimensionID, host.x, (short)host.y, host.z, client.x, (short)client.y, client.z);
+		return PacketHandler.getPacket(PacketHandler.ADD_CLIENT, dimensionID, host, client);
 	}
 }

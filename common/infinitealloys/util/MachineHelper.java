@@ -13,7 +13,6 @@ import infinitealloys.inventory.ContainerMachine;
 import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.inventory.ContainerXray;
 import infinitealloys.item.Items;
-import infinitealloys.tile.IHost;
 import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.tile.TEEMetalForge;
@@ -22,16 +21,12 @@ import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
-import java.util.ArrayList;
 import java.util.HashMap;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class MachineHelper {
@@ -56,11 +51,6 @@ public class MachineHelper {
 
 	/** The blocks that the x-ray can detect and their worths */
 	private static HashMap<String, Integer> detectables = new HashMap<String, Integer>();
-
-	/** When a player joins a world, all the TEs in that dimension that are hosting a network are added to this list. The TEs go through and check to see if any
-	 * need to be synced.
-	 * The player's name and the location of the host are stored. */
-	private static HashMap<Point, String> networksToSync = new HashMap<Point, String>();
 
 	/** Add a block to the list of blocks that can be detected by the x-ray
 	 * 
@@ -181,27 +171,5 @@ public class MachineHelper {
 	public static boolean isClient(World world, int x, int y, int z) {
 		return world.getBlockTileEntity(x, y, z) instanceof TileEntityMachine && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).hasUpgrade(EnumUpgrade.WIRELESS) ||
 				world.getBlockTileEntity(x, y, z) instanceof TileEntityElectric;
-	}
-
-	/** Add all network host TEs in the specified dimension to networksToSync */
-	public static void populateNetworksToSync(EntityPlayer player) {
-		for(TileEntity te : (ArrayList<TileEntity>)DimensionManager.getWorld(player.dimension).loadedTileEntityList)
-			if(te instanceof IHost)
-				networksToSync.put(new Point(te.xCoord, te.yCoord, te.zCoord), player.username);
-
-	}
-
-	/** A host TE calls to see if any players need that TE's client data
-	 * 
-	 * @return null if no players need data, otherwise the players that need data */
-	public static EntityPlayer networkSyncCheck(int dimensionID, Point host) {
-		if(networksToSync.containsKey(host)) {
-			EntityPlayer player = Funcs.getPlayerForUsername(networksToSync.get(host));
-			if(dimensionID == player.dimension) {
-				networksToSync.remove(host);
-				return player;
-			}
-		}
-		return null;
 	}
 }

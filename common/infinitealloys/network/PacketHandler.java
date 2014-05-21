@@ -1,5 +1,6 @@
 package infinitealloys.network;
 
+import infinitealloys.util.Point;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class PacketHandler implements IPacketHandler {
 	public static final byte ADD_CLIENT = 6;
 	public static final byte REMOVE_CLIENT = 7;
 	private static final Class[] packetClasses = { PacketValidAlloys.class, PacketTEServerToClient.class, PacketTEClientToServer.class, PacketOpenGui.class,
-		PacketXraySearch.class, PacketWand.class, PacketRemoveClient.class, PacketAddClient.class, PacketRemoveClient.class };
+		PacketXraySearch.class, PacketWand.class, PacketAddClient.class, PacketRemoveClient.class };
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
@@ -51,7 +52,12 @@ public class PacketHandler implements IPacketHandler {
 	}
 
 	private static void writeObject(DataOutputStream dos, Object o) throws IOException {
-		if(o instanceof Byte)
+		if(o instanceof Point) {
+			writeObject(dos, ((Point)o).x);
+			writeObject(dos, ((Point)o).y);
+			writeObject(dos, ((Point)o).z);
+		}
+		else if(o instanceof Byte)
 			dos.writeByte((Byte)o);
 
 		else if(o instanceof Short)

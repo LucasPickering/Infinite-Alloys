@@ -2,6 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.util.Point;
 import net.minecraft.entity.player.EntityPlayer;
+import cpw.mods.fml.common.network.Player;
 
 /** Machines that can host networks between other machines, e.g. the computer */
 public interface IHost {
@@ -23,6 +24,9 @@ public interface IHost {
 
 	/** Delete all the network hosted by this machine. This is typically called when the TE block is broken. */
 	public void deleteNetwork();
+
+	/** Send the client data to a client */
+	public void syncAllClients(Player player);
 
 	/** Get the amount of clients in the network */
 	public int getNetworkSize();

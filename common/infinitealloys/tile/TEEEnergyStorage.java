@@ -12,7 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 
 public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
@@ -25,8 +24,8 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	/** The max range that machines can be added at with the Internet Wand */
 	public int range;
 
-	/** The ratio between how long an item will burn in an ESU and how long it will burn in a furnace. ESU is numerator, furnace is denominator. */
-	private final float ESU_TO_FURNACE_TICK_RATIO = 0.5F;
+	/** The ratio between how much RK an item produces and how long it will burn in a furnace. furnace is numerator, ESU is denominator. */
+	private final float FURNACE_TO_ESU__RATIO = 0.18F;
 
 	/** A list of clients currently connected to this energy network */
 	private ArrayList<Point> networkClients = new ArrayList<Point>();
@@ -38,7 +37,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	public TEEEnergyStorage() {
 		super(10);
-		baseRKPerTick = 72;
+		baseRKPerTick = 1;
 	}
 
 	@Override
@@ -48,11 +47,6 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public void updateEntity() {
-		EntityPlayer syncPlayer = MachineHelper.networkSyncCheck(worldObj.provider.dimensionId, coords());
-		if(syncPlayer != null)
-			for(Point client : networkClients)
-				PacketDispatcher.sendPacketToPlayer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), (Player)syncPlayer);
-
 		if(energyHost == null)
 			energyHost = coords();
 
@@ -79,19 +73,19 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	@Override
 	public boolean addClient(EntityPlayer player, Point client, boolean sync) {
 		if(!energyHost.equals(coords())) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: This machine is not currently hosting a network because it is connected to another host");
 		}
 		else if(networkClients.contains(client)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Machine is already in network");
 		}
 		else if(client.equals(xCoord, yCoord, zCoord)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Cannot add self to network");
 		}
 		else if(client.distanceTo(xCoord, yCoord, zCoord) > range) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Block out of range");
 		}
 		else {
@@ -101,9 +95,10 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 			// Sync the data to the server/all clients
 			if(worldObj.isRemote) {
-				PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client));
-				if(sync)
+				if(player != null)
 					player.addChatMessage("Adding machine at " + client);
+				if(sync)
+					PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client));
 			}
 			else if(sync)
 				PacketDispatcher.sendPacketToAllInDimension(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
@@ -146,11 +141,22 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	}
 
 	@Override
+	public void onInventoryChanged() {
+		super.onInventoryChanged();
+		// Set baseRKPerTick based on the first fuel in the supply slots
+		for(int i = 0; i < 9; i++) {
+			if(inventoryStacks[i] != null) {
+				baseRKPerTick = (int)(TileEntityFurnace.getItemBurnTime(inventoryStacks[i]) * FURNACE_TO_ESU__RATIO);
+				break;
+			}
+		}
+	}
+
+	@Override
 	protected void onStartProcess() {
 		// Take one piece of fuel out of the first slot that has fuel
 		for(int i = 0; i < 9; i++) {
 			if(inventoryStacks[i] != null) {
-				ticksToProcess = (int)(TileEntityFurnace.getItemBurnTime(inventoryStacks[i]) * ESU_TO_FURNACE_TICK_RATIO);
 				decrStackSize(i, 1);
 				break;
 			}
@@ -161,7 +167,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		currentRK = tagCompound.getInteger("currentRK");
-		ticksToProcess = tagCompound.getInteger("ticksToProcess");
+		baseRKPerTick = tagCompound.getInteger("baseRKPerTick");
 		for(int i = 0; tagCompound.hasKey("client" + i); i++) {
 			int[] client = tagCompound.getIntArray("client" + i);
 			networkClients.add(new Point(client[0], client[1], client[2]));
@@ -172,7 +178,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("currentRK", currentRK);
-		tagCompound.setInteger("ticksToProcess", ticksToProcess);
+		tagCompound.setInteger("baseRKPerTick", baseRKPerTick);
 		for(int i = 0; i < networkClients.size(); i++) {
 			Point client = networkClients.get(i);
 			tagCompound.setIntArray("client" + i, new int[] { client.x, client.y, client.z });
@@ -181,12 +187,12 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		return ArrayUtils.addAll(super.getSyncDataToClient(), ticksToProcess, currentRK);
+		return ArrayUtils.addAll(super.getSyncDataToClient(), currentRK, baseRKPerTick);
 	}
 
-	public void handlePacketDataFromServer(int ticksToProcess, int currentRK) {
-		this.ticksToProcess = ticksToProcess;
+	public void handlePacketDataFromServer(int currentRK, int baseRKPerTick) {
 		this.currentRK = currentRK;
+		this.baseRKPerTick = baseRKPerTick;
 	}
 
 	/** Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK, will the result be less than zero or overflow the machine? If
@@ -195,7 +201,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	 * @param changeInRK the specified change in RK
 	 * @return True if changeInRK plus currentRK is between 0 and maxRK, False otherwise */
 	public boolean changeRK(int changeInRK) {
-		if(0 <= currentRK + changeInRK && currentRK + changeInRK <= maxRK) {
+		if(currentRK + changeInRK > 0 && currentRK + changeInRK <= maxRK) {
 			currentRK += changeInRK;
 			return true;
 		}
@@ -213,11 +219,11 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	@Override
 	protected void updateUpgrades() {
 		if(hasUpgrade(EnumUpgrade.CAPACITY2))
-			maxRK = 400000000; // 400,000,000 (400 million)
+			maxRK = 400000000; // 400 million
 		else if(hasUpgrade(EnumUpgrade.CAPACITY1))
-			maxRK = 200000000; // 200,000,000 (200 million)
+			maxRK = 200000000; // 200 million
 		else
-			maxRK = 100000000; // 100,000,000 (100 million)
+			maxRK = 100000000; // 100 million
 
 		if(hasUpgrade(EnumUpgrade.RANGE2))
 			range = 60;

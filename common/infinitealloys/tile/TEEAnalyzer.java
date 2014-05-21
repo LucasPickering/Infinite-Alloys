@@ -14,7 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 
 public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
@@ -51,16 +50,6 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public void updateEntity() {
-		EntityPlayer syncPlayer = MachineHelper.networkSyncCheck(worldObj.provider.dimensionId, coords());
-		if(syncPlayer != null)
-			for(Point client : networkClients)
-				PacketDispatcher.sendPacketToPlayer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), (Player)syncPlayer);
-
-		super.updateEntity();
-	}
-
-	@Override
 	public void deleteNetwork() {
 		for(Point client : networkClients)
 			removeClient(client, true);
@@ -74,11 +63,11 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	@Override
 	public boolean addClient(EntityPlayer player, Point client, boolean sync) {
 		if(networkClients.contains(client)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Machine is already in this network");
 		}
 		else if(!isClientValid(client)) {
-			if(worldObj.isRemote)
+			if(player != null && worldObj.isRemote)
 				player.addChatMessage("Error: Machine is not a metal forge");
 		}
 		else {
@@ -88,7 +77,8 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
 			// Sync the data to the server/all clients
 			if(worldObj.isRemote) {
-				player.addChatMessage("Adding machine at " + client);
+				if(player != null)
+					player.addChatMessage("Adding machine at " + client);
 				if(sync)
 					PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client));
 			}
@@ -156,17 +146,18 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		int bestAlloy = -1; // The index of the best match
 		int mostCorrectMetals = 0;
 		alloys:
-		for(final EnumAlloy alloy : EnumAlloy.values()) {
+		for(EnumAlloy alloy : EnumAlloy.values()) {
 			if(!hasAlloy(alloy.ordinal())) {
 				int correctMetals = 0;
 				for(int i = 0; i < Consts.METAL_COUNT; i++) {
-					final boolean isMetalInAnalyzer = inventoryStacks[i] != null; // Is this metal currently in the analyzer? Check the inventory for it.
-					final boolean isMetalInAlloy = Funcs.intAtPos(alloy.getAlloy(), Consts.ALLOY_RADIX, i) != 0; // Is this metal used in the alloy?
+					boolean isMetalInAnalyzer = inventoryStacks[i] != null; // Is this metal currently in the analyzer? Check the inventory for it.
+					boolean isMetalInAlloy = Funcs.intAtPos(alloy.getAlloy(), Consts.ALLOY_RADIX, i) != 0; // Is this metal used in the alloy?
 
-					if(isMetalInAlloy && !isMetalInAnalyzer)
-						continue alloys; // If this alloy requires a metal that the analyzer doesn't have, skip to the next alloy
-					if(isMetalInAlloy == isMetalInAnalyzer)
+					if(isMetalInAlloy) {
+						if(!isMetalInAnalyzer)
+							continue alloys; // If this alloy requires a metal that the analyzer doesn't have, skip to the next alloy
 						correctMetals++; // If the presence of this metal in the analyzer matches its presence in the alloy,
+					}
 				}
 				if(correctMetals > mostCorrectMetals) {
 					mostCorrectMetals = correctMetals;

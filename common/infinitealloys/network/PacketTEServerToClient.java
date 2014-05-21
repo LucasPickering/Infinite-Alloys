@@ -55,7 +55,10 @@ public class PacketTEServerToClient implements PacketIA {
 						break;
 
 					case MachineHelper.ENERGY_STORAGE:
-						((TEEEnergyStorage)te).handlePacketDataFromServer(data.readInt()/* ticksToProcess */, data.readInt()/* currentRK */);
+						int currentRK = data.readInt();
+						int baseRKPerTick = data.readInt();
+						
+						((TEEEnergyStorage)te).handlePacketDataFromServer(currentRK, baseRKPerTick);
 						break;
 				}
 			}
@@ -63,7 +66,7 @@ public class PacketTEServerToClient implements PacketIA {
 	}
 
 	public static Packet250CustomPayload getPacket(TileEntityMachine tem) {
-		final Object[] data = tem.getSyncDataToClient();
+		Object[] data = tem.getSyncDataToClient();
 		if(data != null)
 			return PacketHandler.getPacket(PacketHandler.TE_SERVER_TO_CLIENT, tem.xCoord, (short)tem.yCoord, tem.zCoord, data);
 		return null;

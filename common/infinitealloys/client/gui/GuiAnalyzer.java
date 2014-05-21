@@ -74,6 +74,6 @@ public class GuiAnalyzer extends GuiElectric {
 	protected ColoredLine[] getNetworkStatuses() {
 		int clients = tea.getNetworkSize();
 		String status = Funcs.getLoc("machine.network.hosting") + " " + clients + " " + (clients == 1 ? Funcs.getLoc("machine.network.client") : Funcs.getLoc("machine.network.clients"));
-		return ArrayUtils.addAll(super.getNetworkStatuses(), new ColoredLine(Funcs.getLoc("machine.network.analyzer") + ": " + status, 0x00ff00));
+		return ArrayUtils.addAll(super.getNetworkStatuses(), new ColoredLine(Funcs.getLoc("machine.network.analyzer") + ": " + status, 0x0060ff));
 	}
 }

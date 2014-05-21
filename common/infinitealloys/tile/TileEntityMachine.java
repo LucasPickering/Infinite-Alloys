@@ -241,7 +241,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	/** Drops the applied upgrades as items */
 	public final void dropUpgrades() {
 		final Random random = new Random();
-		for(EnumUpgrade upgrade:EnumUpgrade.values()) {
+		for(EnumUpgrade upgrade : EnumUpgrade.values()) {
 			if(hasUpgrade(upgrade)) {
 				final float f = random.nextFloat() * 0.8F + 0.1F;
 				final float f1 = random.nextFloat() * 0.8F + 0.1F;
@@ -271,6 +271,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	 * @param binary upgrade damage value (see {@link infinitealloys.util.MachineHelper MachineHelper} for upgrade numbers)
 	 * @return true if the machine has the upgrade */
 	public boolean hasUpgrade(EnumUpgrade upgrade) {
+		if(upgrade == null)
+			return false;
 		return (upgrades & upgrade.getID()) == upgrade.getID();
 	}
 }

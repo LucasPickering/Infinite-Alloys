@@ -31,8 +31,10 @@ public class GuiEnergyStorage extends GuiElectric {
 	@Override
 	protected ColoredLine[] getNetworkStatuses() {
 		String status;
+		int color=0x00ff00;
 
 		if(tees.isHostingNetwork()) {
+			color=0x0060ff;
 			int clients = tees.getNetworkSize();
 
 			// A string that says this TE is hosting a network and how many clients are connected
@@ -42,7 +44,7 @@ public class GuiEnergyStorage extends GuiElectric {
 		else
 			status = Funcs.getLoc("machine.network.hostedby") + " " + tees.energyHost;
 
-		return new ColoredLine[] { new ColoredLine(Funcs.getLoc("machine.network.energy") + ": " + status, 0x00ff00) };
+		return new ColoredLine[] { new ColoredLine(Funcs.getLoc("machine.network.energy") + ": " + status, color) };
 	}
 
 	/** Shorten a full number to 3 digits with K, M, and B suffixes, e.g. 1411 become 1.41K and 67,000,000 becomes 67.0M */
