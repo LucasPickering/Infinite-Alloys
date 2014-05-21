@@ -11,7 +11,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -64,11 +63,9 @@ public class EventHandler implements ICraftingHandler {
 	public void onEntityJoinWorld(EntityJoinWorldEvent e) {
 		if(Funcs.isServer() && e.entity instanceof EntityPlayer) {
 			PacketDispatcher.sendPacketToPlayer(PacketValidAlloys.getPacket(), (Player)e.entity);
-			for(Object te:e.world.loadedTileEntityList){
-				if(te instanceof IHost){
-					PacketDispatcher.sendPacketToPlayer(PacketAddClient,e.entity)
-				}
-			}
+			for(Object te : e.world.loadedTileEntityList)
+				if(te instanceof IHost)
+					((IHost)te).syncAllClients((Player)e.entity);
 		}
 	}
 

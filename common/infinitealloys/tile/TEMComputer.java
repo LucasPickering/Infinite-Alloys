@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 
 public class TEMComputer extends TileEntityMachine implements IHost {
 
@@ -105,10 +106,11 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 				PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
 		}
 	}
-	
+
 	@Override
-	public void syncAllClients(Player player){
-		for()
+	public void syncAllClients(Player player) {
+		for(Point client : networkClients)
+			PacketDispatcher.sendPacketToPlayer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), player);
 	}
 
 	@Override

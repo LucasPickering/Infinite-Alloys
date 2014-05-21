@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 
 public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
@@ -118,6 +119,12 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 			else
 				PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
 		}
+	}
+
+	@Override
+	public void syncAllClients(Player player) {
+		for(Point client : networkClients)
+			PacketDispatcher.sendPacketToPlayer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), player);
 	}
 
 	@Override

@@ -31,6 +31,6 @@ public class PacketAddClient implements PacketIA {
 	}
 
 	public static Packet250CustomPayload getPacket(int dimensionID, Point host, Point client) {
-		return PacketHandler.getPacket(PacketHandler.ADD_CLIENT, dimensionID, host.x, (short)host.y, host.z, client.x, (short)client.y, client.z);
+		return PacketHandler.getPacket(PacketHandler.ADD_CLIENT, dimensionID, host, client);
 	}
 }
