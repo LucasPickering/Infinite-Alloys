@@ -1,6 +1,7 @@
 package infinitealloys.item;
 
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import java.util.List;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -26,7 +27,7 @@ public class ItemUpgrade extends ItemIA {
 	public void registerIcons(IconRegister iconRegister) {
 		Items.upgradeBackground = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "upgradecomponent");
 		for(int i = 0; i < Consts.UPGRADE_COUNT; i++)
-			Items.upgradeIcons[i] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.UPGRADE_NAMES[i]);
+			Items.upgradeIcons[i] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + EnumUpgrade.values()[i].getName());
 	}
 
 	@Override
@@ -46,7 +47,7 @@ public class ItemUpgrade extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
-		list.add(Funcs.getLoc("upgrade." + Consts.UPGRADE_NAMES[itemstack.getItemDamage()] + ".name"));
+		list.add(Funcs.getLoc("upgrade." + EnumUpgrade.values()[itemstack.getItemDamage()].getName() + ".name"));
 	}
 
 	@Override

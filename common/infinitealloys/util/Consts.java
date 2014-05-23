@@ -10,7 +10,7 @@ public class Consts {
 	public static final int MULTI_ITEM_COUNT = 2;
 	public static final int METAL_COUNT = 8;
 	public static final int MACHINE_COUNT = 6;
-	public static final int UPGRADE_COUNT = 9;
+	public static final int UPGRADE_COUNT = EnumUpgrade.values().length;
 	public static final int VALID_ALLOY_COUNT = EnumAlloy.values().length;
 
 	public static final int BOTTOM = 0;
@@ -30,8 +30,6 @@ public class Consts {
 	public static final String[] METAL_NAMES = { "zinc", "magnesium", "scandium", "tantalum", "roguite", "verdite", "hydronium", "swagtanium" };
 	/** The names of each item that has damage values */
 	public static final String[] MULTI_ITEM_NAMES = { "machinecomponent", "upgradecomponent" };
-	/** The names of each upgrade that can be used on machines */
-	public static final String[] UPGRADE_NAMES = { "speed1", "speed2", "efficiency1", "efficiency2", "capacity1", "capacity2", "range1", "range2", "wireless" };
 
 	/** The amount of coords that the Internet Wand can hold */
 	public static final int WAND_SIZE = 10;

@@ -25,8 +25,8 @@ import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class MachineHelper {
@@ -168,8 +168,7 @@ public class MachineHelper {
 	}
 
 	/** Is the machine at x, y, z capable of connecting to an ESU or computer? */
-	public static boolean isClient(World world, int x, int y, int z) {
-		return world.getBlockTileEntity(x, y, z) instanceof TileEntityMachine && ((TileEntityMachine)world.getBlockTileEntity(x, y, z)).hasUpgrade(EnumUpgrade.WIRELESS) ||
-				world.getBlockTileEntity(x, y, z) instanceof TileEntityElectric;
+	public static boolean isClient(TileEntity te) {
+		return te instanceof TileEntityMachine && ((TileEntityMachine)te).hasUpgrade(EnumUpgrade.WIRELESS) || te instanceof TileEntityElectric;
 	}
 }

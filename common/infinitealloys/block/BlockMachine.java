@@ -23,6 +23,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -54,26 +55,27 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int side, int metadata) {
-		int i = 3;
 		switch(side) {
 			case Consts.TOP:
-				i = 0;
-				break;
+				return Blocks.machineIcons[metadata][0];
+
 			case Consts.BOTTOM:
-				i = 1;
-				break;
+				return Blocks.machineIcons[metadata][1];
+
 			case Consts.SOUTH:
-				i = 2;
-				break;
+				return Blocks.machineIcons[metadata][2];
+
+			default:
+				return Blocks.machineIcons[metadata][3];
 		}
-		return Blocks.machineIcons[metadata][i];
 	}
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
 		ItemStack heldItem = player.inventory.getCurrentItem();
+		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
 		// Is the player holding an internet wand?
-		if(heldItem != null && heldItem.getItem() instanceof ItemInternetWand && (MachineHelper.isClient(world, x, y, z) || world.getBlockTileEntity(x, y, z) instanceof IHost)) {
+		if(heldItem != null && heldItem.getItem() instanceof ItemInternetWand && (MachineHelper.isClient(tem) || tem instanceof IHost)) {
 
 			// Put the coords of this block in a temp tag in the wand so the wand's GUI can access it
 			if(!heldItem.hasTagCompound())
@@ -84,7 +86,9 @@ public class BlockMachine extends BlockContainer {
 			player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI, world, (int)player.posX, (int)player.posY, (int)player.posZ);
 			return true;
 		}
-		openGui(world, player, (TileEntityMachine)world.getBlockTileEntity(x, y, z), false);
+		if(tem instanceof IHost)
+			((IHost)tem).syncAllClients((Player)player);
+		openGui(world, player, tem, false);
 		return true;
 	}
 

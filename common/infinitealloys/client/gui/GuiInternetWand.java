@@ -74,13 +74,16 @@ public class GuiInternetWand extends GuiScreen {
 				machineButtons[i] = null; // Reset the button
 				if(tagCompound.hasKey("Coords" + i)) { // If there is a machine that corresponds to this button
 					int[] client = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
-					if(!MachineHelper.isClient(DimensionManager.getWorld(client[0]), client[1], client[2], client[3])) { // If the block is no longer valid
+					if(!MachineHelper.isClient(DimensionManager.getWorld(client[0])
+							.getBlockTileEntity(client[1], client[2], client[3]))) { // If the block is no longer valid
 						PacketDispatcher.sendPacketToServer(PacketWand.getPacketRemove((byte)i)); // Remove it
 						((ItemInternetWand)heldItem.getItem()).removeMachine(heldItem, i);
 						i--; // Decrement i so that it repeats this number for the new button
 					}
 					else
-						machineButtons[i] = new MachineButton(i, width / 2 - 82, height / 2 + i * 21 - 80, client[0], client[1], client[2], client[3]); // Create a button
+						machineButtons[i] = new MachineButton(i, width / 2 - 82, height / 2 + i * 21 - 80, client[0], client[1], client[2], client[3]); // Create
+																																						// a
+																																						// button
 				}
 			}
 
@@ -209,7 +212,7 @@ public class GuiInternetWand extends GuiScreen {
 							// Add the selected machine to the host
 							int[] client = heldItem.getTagCompound().getIntArray("Coords" + machineButton.buttonID);
 							if(host[0] == client[0]) // They're in the same dimension
-								((IHost)mc.theWorld.getBlockTileEntity(host[1], host[2], host[3])).addClient(mc.thePlayer, new Point(client[1], client[2], client[3]),true);
+								((IHost)mc.theWorld.getBlockTileEntity(host[1], host[2], host[3])).addClient(mc.thePlayer, new Point(client[1], client[2], client[3]), true);
 						}
 					}
 				}
