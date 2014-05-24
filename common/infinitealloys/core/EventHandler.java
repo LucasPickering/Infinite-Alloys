@@ -1,7 +1,6 @@
 package infinitealloys.core;
 
 import infinitealloys.network.PacketValidAlloys;
-import infinitealloys.util.Funcs;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,7 +25,7 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onWorldLoad(Load event) {
-		if(Funcs.isServer()) {
+		if(!event.world.isRemote) {
 			if(event.world.provider.dimensionId == 0) {
 				worldDir = DimensionManager.getWorld(0).getChunkSaveLocation().getPath();
 				try {
@@ -46,7 +45,7 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onWorldSave(Save event) {
-		if(Funcs.isServer() && event.world.provider.dimensionId == 0) {
+		if(!event.world.isRemote && event.world.provider.dimensionId == 0) {
 			NBTTagCompound nbtTagCompound = new NBTTagCompound(); // An NBTTagCompound for the info to be stored in
 			InfiniteAlloys.instance.saveAlloyData(nbtTagCompound); // Add the alloy data to the NBTTagCompound
 
@@ -59,9 +58,9 @@ public class EventHandler implements ICraftingHandler {
 	}
 
 	@ForgeSubscribe
-	public void onEntityJoinWorld(EntityJoinWorldEvent e) {
-		if(Funcs.isServer() && e.entity instanceof EntityPlayer)
-			PacketDispatcher.sendPacketToPlayer(PacketValidAlloys.getPacket(), (Player)e.entity);
+	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+		if(!event.world.isRemote && event.entity instanceof EntityPlayer)
+			PacketDispatcher.sendPacketToPlayer(PacketValidAlloys.getPacket(), (Player)event.entity);
 	}
 
 	@Override

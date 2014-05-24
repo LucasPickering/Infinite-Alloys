@@ -1,7 +1,6 @@
 package infinitealloys.network;
 
 import infinitealloys.tile.IHost;
-import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -19,7 +18,7 @@ public class PacketClient implements PacketIA {
 		int hostY = data.readInt();
 		int hostZ = data.readInt();
 		Point client = new Point(data.readInt(), data.readInt(), data.readInt());
-		if(Funcs.isClient()) {
+		if(player.worldObj.isRemote) {
 			TileEntity host = player.worldObj.getBlockTileEntity(hostX, hostY, hostZ);
 			if(host instanceof IHost) {
 				if(adding)

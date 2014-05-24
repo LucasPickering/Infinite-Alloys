@@ -115,22 +115,8 @@ public class Funcs {
 		}
 	}
 
-	/** See if the running side is client
-	 * 
-	 * @return true if the running side is client */
-	public static boolean isClient() {
-		return FMLCommonHandler.instance().getEffectiveSide().isClient();
-	}
-
-	/** See if the running side is server
-	 * 
-	 * @return true if the running side is server */
-	public static boolean isServer() {
-		return FMLCommonHandler.instance().getEffectiveSide().isServer();
-	}
-
 	public static String getSideAsString() {
-		return isClient() ? "Client" : "Server";
+		return FMLCommonHandler.instance().getEffectiveSide().isClient() ? "Client" : "Server";
 	}
 
 	/** Check if the block at x, y, z is of a certain type

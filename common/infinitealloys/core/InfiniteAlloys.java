@@ -9,6 +9,7 @@ import java.util.Random;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.Configuration;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -102,7 +103,7 @@ public class InfiniteAlloys {
 
 	/** Set validAlloys to the given value, but only if this is called client-side. This is only used when syncing data from the server. */
 	public void setValidAlloys(int[] validAlloys) {
-		if(Funcs.isClient())
+		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
 			this.validAlloys = validAlloys;
 	}
 }

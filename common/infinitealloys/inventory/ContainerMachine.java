@@ -1,7 +1,6 @@
 package infinitealloys.inventory;
 
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.util.Funcs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -101,7 +100,7 @@ public class ContainerMachine extends Container {
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
-		if(Funcs.isServer())
+		if(!player.worldObj.isRemote)
 			inventory.playersUsing.remove(player.username);
 	}
 

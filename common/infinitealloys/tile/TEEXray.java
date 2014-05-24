@@ -52,7 +52,7 @@ public class TEEXray extends TileEntityElectric {
 			detectedBlocks.clear();
 			shouldSearch = false;
 		}
-		else if(shouldSearch && Funcs.isServer())
+		else if(shouldSearch && !worldObj.isRemote)
 			search();
 	}
 

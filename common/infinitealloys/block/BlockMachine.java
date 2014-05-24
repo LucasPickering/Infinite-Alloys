@@ -99,12 +99,12 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	public void openGui(World world, EntityPlayer player, TileEntityMachine tem, boolean fromComputer) {
-		if(!fromComputer && Funcs.isClient())
+		if(!fromComputer && world.isRemote)
 			MachineHelper.controllers.remove(player.username);
 		if(tem instanceof TEMComputer)
 			MachineHelper.controllers.put(player.username, new Point(tem.xCoord, tem.yCoord, tem.zCoord));
 		player.openGui(InfiniteAlloys.instance, tem.getID(), world, tem.xCoord, tem.yCoord, tem.zCoord);
-		if(Funcs.isServer()) {
+		if(!world.isRemote) {
 			tem.playersUsing.add(player.username);
 			world.markBlockForUpdate(tem.xCoord, tem.yCoord, tem.zCoord);
 		}

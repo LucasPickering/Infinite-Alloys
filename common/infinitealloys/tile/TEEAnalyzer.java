@@ -133,7 +133,7 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	protected void onFinishProcess() {
 		alloys |= 1 << targetAlloy; // Add the alloy that we discovered to the alloys that have been discovered
 		targetAlloy = -1; // Reset the alloy that we are discovering
-		if(Funcs.isServer())
+		if(!worldObj.isRemote)
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
