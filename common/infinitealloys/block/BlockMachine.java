@@ -2,6 +2,7 @@ package infinitealloys.block;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
+import infinitealloys.network.PacketRequestSync;
 import infinitealloys.tile.IHost;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityMachine;
@@ -23,6 +24,7 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -86,8 +88,12 @@ public class BlockMachine extends BlockContainer {
 			player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI, world, (int)player.posX, (int)player.posY, (int)player.posZ);
 			return true;
 		}
-		if(tem instanceof IHost)
-			((IHost)tem).syncAllClients((Player)player);
+		if(tem instanceof IHost) {
+			if(world.isRemote)
+				PacketDispatcher.sendPacketToServer(PacketRequestSync.getPacket(x, y, z));
+			else
+				((IHost)tem).syncAllClients((Player)player);
+		}
 		openGui(world, player, tem, false);
 		return true;
 	}

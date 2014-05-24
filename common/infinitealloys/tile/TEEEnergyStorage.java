@@ -1,7 +1,6 @@
 package infinitealloys.tile;
 
-import infinitealloys.network.PacketAddClient;
-import infinitealloys.network.PacketRemoveClient;
+import infinitealloys.network.PacketClient;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
@@ -99,10 +98,10 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 				if(player != null)
 					player.addChatMessage("Adding machine at " + client);
 				if(sync)
-					PacketDispatcher.sendPacketToServer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client));
+					PacketDispatcher.sendPacketToServer(PacketClient.getPacket(true, worldObj.provider.dimensionId, coords(), client));
 			}
 			else if(sync)
-				PacketDispatcher.sendPacketToAllInDimension(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
+				PacketDispatcher.sendPacketToAllInDimension(PacketClient.getPacket(true, worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
 
 			return true;
 		}
@@ -115,16 +114,16 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 		networkClients.remove(client);
 		if(sync) {
 			if(worldObj.isRemote)
-				PacketDispatcher.sendPacketToServer(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client));
+				PacketDispatcher.sendPacketToServer(PacketClient.getPacket(false, worldObj.provider.dimensionId, coords(), client));
 			else
-				PacketDispatcher.sendPacketToAllInDimension(PacketRemoveClient.getPacket(worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
+				PacketDispatcher.sendPacketToAllInDimension(PacketClient.getPacket(false, worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
 		}
 	}
 
 	@Override
 	public void syncAllClients(Player player) {
 		for(Point client : networkClients)
-			PacketDispatcher.sendPacketToPlayer(PacketAddClient.getPacket(worldObj.provider.dimensionId, coords(), client), player);
+			PacketDispatcher.sendPacketToPlayer(PacketClient.getPacket(true, worldObj.provider.dimensionId, coords(), client), player);
 	}
 
 	@Override
