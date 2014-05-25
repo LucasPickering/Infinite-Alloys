@@ -165,7 +165,7 @@ public class GuiXray extends GuiElectric {
 			setButtons();
 			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 			tex.shouldSearch = true;
-			PacketDispatcher.sendPacketToServer(PacketXraySearch.getPacket(tex.xCoord, (short)tex.yCoord, tex.zCoord));
+			PacketDispatcher.sendPacketToServer(PacketXraySearch.getPacket(tex.coords()));
 		}
 	}
 

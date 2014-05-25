@@ -19,20 +19,20 @@ public class PacketTEServerToClient implements PacketIA {
 
 	@Override
 	public void execute(EntityPlayer player, ByteArrayDataInput data) {
-		final int x = data.readInt();
-		final short y = data.readShort();
-		final int z = data.readInt();
-		final TileEntity te = player.worldObj.getBlockTileEntity(x, y, z);
+		int x = data.readInt();
+		int y = data.readInt();
+		int z = data.readInt();
+		TileEntity te = player.worldObj.getBlockTileEntity(x, y, z);
 		if(te instanceof TileEntityMachine) {
 			((TileEntityMachine)te).handlePacketDataFromServer(data.readByte()/* orientation */, data.readShort()/* upgrades */);
 
 			if(te instanceof TileEntityElectric) {
-				final int processProgress = data.readInt();
+				int processProgress = data.readInt();
 				((TileEntityElectric)te).handlePacketDataFromServerElectric(processProgress);
 
 				switch(((TileEntityElectric)te).getID()) {
 					case MachineHelper.METAL_FORGE:
-						final byte recipeAlloyID = data.readByte();
+						byte recipeAlloyID = data.readByte();
 						((TEEMetalForge)te).handlePacketDataFromClient(recipeAlloyID);
 						break;
 
@@ -41,14 +41,13 @@ public class PacketTEServerToClient implements PacketIA {
 						break;
 
 					case MachineHelper.XRAY:
-						final TEEXray tex = (TEEXray)te;
-						tex.detectedBlocks.clear();
+						((TEEXray)te).detectedBlocks.clear();
 						for(int i = 0; i < data.readByte()/* Size */; i++)
-							tex.detectedBlocks.add(new Point(data.readInt()/* X */, data.readShort()/* Y */, data.readInt()/* Z */));
+							((TEEXray)te).detectedBlocks.add(new Point(data.readInt()/* X */, data.readShort()/* Y */, data.readInt()/* Z */));
 						break;
 
 					case MachineHelper.PASTURE:
-						final byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
+						byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 						for(int i = 0; i < mobActions.length; i++)
 							mobActions[i] = data.readByte();
 						((TEEPasture)te).handlePacketData(mobActions);
@@ -57,7 +56,6 @@ public class PacketTEServerToClient implements PacketIA {
 					case MachineHelper.ENERGY_STORAGE:
 						int currentRK = data.readInt();
 						int baseRKPerTick = data.readInt();
-						
 						((TEEEnergyStorage)te).handlePacketDataFromServer(currentRK, baseRKPerTick);
 						break;
 				}
@@ -68,7 +66,7 @@ public class PacketTEServerToClient implements PacketIA {
 	public static Packet250CustomPayload getPacket(TileEntityMachine tem) {
 		Object[] data = tem.getSyncDataToClient();
 		if(data != null)
-			return PacketHandler.getPacket(PacketHandler.TE_SERVER_TO_CLIENT, tem.xCoord, (short)tem.yCoord, tem.zCoord, data);
+			return PacketHandler.getPacket(PacketHandler.TE_SERVER_TO_CLIENT, tem.coords(), data);
 		return null;
 	}
 }

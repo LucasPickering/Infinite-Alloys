@@ -21,6 +21,7 @@ import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
+import java.util.ArrayList;
 import java.util.HashMap;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -51,6 +52,9 @@ public class MachineHelper {
 
 	/** The blocks that the x-ray can detect and their worths */
 	private static HashMap<String, Integer> detectables = new HashMap<String, Integer>();
+
+	/** A list of the players who still need network information for the machines to be synced. This sync is done when they first activate a machine. */
+	public static ArrayList<String> playersToSync = new ArrayList<String>();
 
 	/** Add a block to the list of blocks that can be detected by the x-ray
 	 * 

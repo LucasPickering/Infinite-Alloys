@@ -1,6 +1,7 @@
 package infinitealloys.core;
 
 import infinitealloys.network.PacketValidAlloys;
+import infinitealloys.util.MachineHelper;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -59,8 +60,10 @@ public class EventHandler implements ICraftingHandler {
 
 	@ForgeSubscribe
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
-		if(!event.world.isRemote && event.entity instanceof EntityPlayer)
+		if(!event.world.isRemote && event.entity instanceof EntityPlayer) {
 			PacketDispatcher.sendPacketToPlayer(PacketValidAlloys.getPacket(), (Player)event.entity);
+			MachineHelper.playersToSync.add(((EntityPlayer)event.entity).username);
+		}
 	}
 
 	@Override

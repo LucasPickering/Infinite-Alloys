@@ -1,6 +1,7 @@
 package infinitealloys.network;
 
 import infinitealloys.tile.IHost;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -14,31 +15,29 @@ public class PacketClient implements PacketIA {
 	public void execute(EntityPlayer player, ByteArrayDataInput data) {
 		boolean adding = data.readBoolean();
 		int dimensionID = data.readInt();
-		int hostX = data.readInt();
-		int hostY = data.readInt();
-		int hostZ = data.readInt();
+		Point host = new Point(data.readInt(), data.readInt(), data.readInt());
 		Point client = new Point(data.readInt(), data.readInt(), data.readInt());
 		if(player.worldObj.isRemote) {
-			TileEntity host = player.worldObj.getBlockTileEntity(hostX, hostY, hostZ);
-			if(host instanceof IHost) {
+			TileEntity te = Funcs.getBlockTileEntity(player.worldObj, host);
+			if(te instanceof IHost) {
 				if(adding)
-					((IHost)host).addClient(player, client, false);
+					((IHost)te).addClient(null, client, false);
 				else
-					((IHost)host).removeClient(client, false);
+					((IHost)te).removeClient(client, false);
 			}
 		}
 		else {
-			TileEntity host = DimensionManager.getWorld(dimensionID).getBlockTileEntity(hostX, hostY, hostZ);
-			if(host instanceof IHost) {
+			TileEntity te = Funcs.getBlockTileEntity(DimensionManager.getWorld(dimensionID), host);
+			if(te instanceof IHost) {
 				if(adding)
-					((IHost)host).addClient(player, client, false);
+					((IHost)te).addClient(player, client, false);
 				else
-					((IHost)host).removeClient(client, false);
+					((IHost)te).removeClient(client, false);
 			}
 		}
 	}
 
 	public static Packet250CustomPayload getPacket(boolean adding, int dimensionID, Point host, Point client) {
-		return PacketHandler.getPacket(PacketHandler.CLIENT, adding, dimensionID, host, client);
+		return PacketHandler.getPacket(PacketHandler.CLIENT, adding, dimensionID, host.x, host.y, host.z, client.x, client.y, client.z);
 	}
 }

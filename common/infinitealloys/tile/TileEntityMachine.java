@@ -123,7 +123,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		front = orientation;
 		this.upgrades = upgrades;
 	}
-
+	
 	/** Get the current (x, y, z) coordinates of this machine in the form of a {@link infinitealloys.util.Point Point} */
 	public Point coords() {
 		return new Point(xCoord, yCoord, zCoord);

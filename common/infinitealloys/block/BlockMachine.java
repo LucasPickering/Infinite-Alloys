@@ -2,7 +2,6 @@ package infinitealloys.block;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
-import infinitealloys.network.PacketRequestSync;
 import infinitealloys.tile.IHost;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityMachine;
@@ -24,7 +23,6 @@ import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -76,6 +74,16 @@ public class BlockMachine extends BlockContainer {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
 		ItemStack heldItem = player.inventory.getCurrentItem();
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
+
+		// Sync the network data for each host TE in this world if it has not already been done for this player
+		if(!world.isRemote && MachineHelper.playersToSync.contains(player.username)) {
+			for(Object te : world.loadedTileEntityList) {
+				if(te instanceof IHost)
+					((IHost)te).syncAllClients((Player)player);
+			}
+			MachineHelper.playersToSync.remove(player.username);
+		}
+
 		// Is the player holding an internet wand?
 		if(heldItem != null && heldItem.getItem() instanceof ItemInternetWand && (MachineHelper.isClient(tem) || tem instanceof IHost)) {
 
@@ -88,12 +96,7 @@ public class BlockMachine extends BlockContainer {
 			player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI, world, (int)player.posX, (int)player.posY, (int)player.posZ);
 			return true;
 		}
-		if(tem instanceof IHost) {
-			if(world.isRemote)
-				PacketDispatcher.sendPacketToServer(PacketRequestSync.getPacket(x, y, z));
-			else
-				((IHost)tem).syncAllClients((Player)player);
-		}
+
 		openGui(world, player, tem, false);
 		return true;
 	}

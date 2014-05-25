@@ -47,6 +47,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public void updateEntity() {
+		System.out.println("Size on " + Funcs.getSideAsString() + " is " + networkClients.size());
 		if(energyHost == null)
 			energyHost = coords();
 

@@ -13,7 +13,7 @@ public class PacketTEClientToServer implements PacketIA {
 
 	@Override
 	public void execute(EntityPlayer player, ByteArrayDataInput data) {
-		final TileEntity te = player.worldObj.getBlockTileEntity(data.readInt()/* X */, data.readShort()/* Y */, data.readInt()/* Z */);
+		final TileEntity te = player.worldObj.getBlockTileEntity(data.readInt()/* X */, data.readInt()/* Y */, data.readInt()/* Z */);
 
 		if(te instanceof TEEMetalForge) {
 			final byte recipeAlloyID = data.readByte();
@@ -31,7 +31,7 @@ public class PacketTEClientToServer implements PacketIA {
 	public static Packet250CustomPayload getPacket(TileEntityMachine tem) {
 		final Object[] data = tem.getSyncDataToServer();
 		if(data != null)
-			return PacketHandler.getPacket(PacketHandler.TE_CLIENT_TO_SERVER, tem.xCoord, (short)tem.yCoord, tem.zCoord, data);
+			return PacketHandler.getPacket(PacketHandler.TE_CLIENT_TO_SERVER, tem.coords(), data);
 		return null;
 	}
 }

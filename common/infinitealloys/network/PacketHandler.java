@@ -22,12 +22,12 @@ public class PacketHandler implements IPacketHandler {
 	public static final byte WAND = 5;
 	public static final byte CLIENT = 6;
 	private static final Class[] packetClasses = { PacketValidAlloys.class, PacketTEServerToClient.class, PacketTEClientToServer.class, PacketOpenGui.class,
-		PacketXraySearch.class, PacketWand.class, PacketClient.class };
+		PacketXraySearch.class, PacketWand.class, PacketClient.class, };
 
 	@Override
 	public void onPacketData(INetworkManager manager, Packet250CustomPayload packet, Player player) {
-		final ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
-		final byte packetIndex = data.readByte();
+		ByteArrayDataInput data = ByteStreams.newDataInput(packet.data);
+		byte packetIndex = data.readByte();
 		try {
 			((PacketIA)packetClasses[packetIndex].newInstance()).execute((EntityPlayer)player, data);
 		}catch(final Exception e) {

@@ -224,7 +224,7 @@ public abstract class GuiMachine extends GuiContainer {
 			int z = controllerTab.tem.zCoord;
 			if(!tem.coords().equals(x, y, z)) {
 				((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, player, controllerTab.tem, false);
-				PacketDispatcher.sendPacketToServer(PacketOpenGui.getPacket(x, (short)y, z, false));
+				PacketDispatcher.sendPacketToServer(PacketOpenGui.getPacket(controllerTab.tem.coords(), false));
 			}
 			return;
 		}
@@ -237,7 +237,7 @@ public abstract class GuiMachine extends GuiContainer {
 				int z = tab.tem.zCoord;
 				if(!tem.coords().equals(tab.tem.coords())) {
 					((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, player, tab.tem, true);
-					PacketDispatcher.sendPacketToServer(PacketOpenGui.getPacket(x, (short)y, z, false));
+					PacketDispatcher.sendPacketToServer(PacketOpenGui.getPacket(tab.tem.coords(), false));
 				}
 				return;
 			}
