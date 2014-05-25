@@ -210,11 +210,11 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 		this.baseRKPerTick = baseRKPerTick;
 	}
 
-	/** Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK, will the result be less than zero or overflow the machine? If
-	 * this condition is true, make said change, i.e. actually add changeInRK to currentRK
+	/** Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK, will the result be between zero and the machine's capacity? If
+	 * this condition is true, make the change, i.e. add changeInRK to currentRK
 	 * 
 	 * @param changeInRK the specified change in RK
-	 * @return True if changeInRK plus currentRK is between 0 and maxRK, False otherwise */
+	 * @return true if changeInRK plus currentRK is between 0 and maxRK, False otherwise */
 	public boolean changeRK(int changeInRK) {
 		if(currentRK + changeInRK > 0 && currentRK + changeInRK <= maxRK) {
 			currentRK += changeInRK;

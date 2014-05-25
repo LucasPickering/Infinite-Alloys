@@ -113,6 +113,10 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		return networkClients.size();
 	}
 
+	/** Should the process tick be increased? Called every tick to determine if energy should be used and if progress should continue. NOTE: This will return
+	 * true even if there is not a nearby energy storage unit to support the process
+	 * 
+	 * @return true if we are already processing or we are ready for a new process */
 	@Override
 	public boolean shouldProcess() {
 		return targetAlloy >= 0 || getAlloyForMetals() >= 0; // Return true if we are already processing or we are ready for a new process
@@ -152,18 +156,16 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		int bestAlloy = -1; // The index of the best match
 		int mostCorrectMetals = 0;
 		alloys:
-		for(EnumAlloy alloy : EnumAlloy.values()) {
-			if(!hasAlloy(alloy.ordinal())) {
+		for(EnumAlloy alloy : EnumAlloy.values()) { // For each allot
+			if(!hasAlloy(alloy.ordinal())) { // If the alloy hasn't already been discovered
 				int correctMetals = 0;
-				for(int i = 0; i < Consts.METAL_COUNT; i++) {
+				for(int i = 0; i < Consts.METAL_COUNT; i++) { // For each metal
 					boolean isMetalInAnalyzer = inventoryStacks[i] != null; // Is this metal currently in the analyzer? Check the inventory for it.
 					boolean isMetalInAlloy = Funcs.intAtPos(alloy.getAlloy(), Consts.ALLOY_RADIX, i) != 0; // Is this metal used in the alloy?
 
-					if(isMetalInAlloy) {
-						if(!isMetalInAnalyzer)
-							continue alloys; // If this alloy requires a metal that the analyzer doesn't have, skip to the next alloy
-						correctMetals++; // If the presence of this metal in the analyzer matches its presence in the alloy,
-					}
+					if(isMetalInAlloy != isMetalInAnalyzer) // If the presence of this metal in the analyzer doesn't match its presence in the alloy
+						continue alloys; // Skip to the next alloy
+					correctMetals++; // Otherwise, if the presence of this metal in the analyzer matches its presence in the alloy, count it as "correct"
 				}
 				if(correctMetals > mostCorrectMetals) {
 					mostCorrectMetals = correctMetals;
