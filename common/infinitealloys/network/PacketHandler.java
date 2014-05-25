@@ -51,7 +51,9 @@ public class PacketHandler implements IPacketHandler {
 	}
 
 	private static void writeObject(DataOutputStream dos, Object o) throws IOException {
-		if(o instanceof Point) {
+		if(o == null)
+			return;
+		else if(o instanceof Point) {
 			writeObject(dos, ((Point)o).x);
 			writeObject(dos, ((Point)o).y);
 			writeObject(dos, ((Point)o).z);

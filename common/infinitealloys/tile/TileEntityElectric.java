@@ -57,12 +57,20 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 		}
 	}
 
+	@Override
+	public void onBlockDestroyed() {
+		super.onBlockDestroyed();
+		if(energyHost != null)
+			((IHost)Funcs.getBlockTileEntity(worldObj, energyHost)).removeClient(coords(), true);
+	}
+
 	public void connectToEnergyNetwork(Point host) {
 		energyHost = host;
 	}
 
 	public void disconnectFromEnergyNetwork() {
 		energyHost = null;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	/** Should the process tick be increased? Called every tick to determine if energy should be used and if progress should continue. NOTE: This will return
@@ -108,10 +116,13 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		return ArrayUtils.addAll(super.getSyncDataToClient(), processProgress);
+		if(energyHost == null)
+			return ArrayUtils.addAll(super.getSyncDataToClient(), processProgress, new Point());
+		return ArrayUtils.addAll(super.getSyncDataToClient(), processProgress, energyHost);
 	}
 
-	public void handlePacketDataFromServerElectric(int processProgress) {
+	public void handlePacketDataFromServer(int processProgress, Point energyHost) {
 		this.processProgress = processProgress;
+		this.energyHost = energyHost;
 	}
 }

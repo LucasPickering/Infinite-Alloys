@@ -8,17 +8,14 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 public class TEEAnalyzer extends TileEntityElectric implements IHost {
-
-	/** 3D coords for each metal forge that is connected to this analyzer */
-	public final List<Point> connectedMachines = new ArrayList<Point>();
 
 	/** A binary integer that represents all the alloys that this machine has discovered, this works the same way as the upgrade int */
 	private int alloys;
@@ -50,7 +47,8 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public void deleteNetwork() {
+	public void onBlockDestroyed() {
+		super.onBlockDestroyed();
 		for(Point client : networkClients)
 			removeClient(client, true);
 	}
@@ -92,7 +90,9 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
 	@Override
 	public void removeClient(Point client, boolean sync) {
-		((TEEMetalForge)Funcs.getBlockTileEntity(worldObj, client)).disconnectFromAnalyzerNetwork();
+		TileEntity te = Funcs.getBlockTileEntity(worldObj, client);
+		if(te instanceof TEEMetalForge)
+			((TEEMetalForge)te).disconnectFromAnalyzerNetwork();
 		networkClients.remove(client);
 		if(sync) {
 			if(worldObj.isRemote)
@@ -207,13 +207,7 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		final List<Object> coords = new ArrayList<Object>();
-		for(final Point point : connectedMachines) {
-			coords.add(point.x);
-			coords.add((short)point.y);
-			coords.add(point.z);
-		}
-		return ArrayUtils.addAll(super.getSyncDataToClient(), alloys, targetAlloy, (byte)connectedMachines.size(), coords.toArray());
+		return ArrayUtils.addAll(super.getSyncDataToClient(), alloys, targetAlloy);
 	}
 
 	public void handlePacketDataFromClient(int alloys, int targetAlloy) {

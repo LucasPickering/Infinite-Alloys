@@ -77,10 +77,9 @@ public class BlockMachine extends BlockContainer {
 
 		// Sync the network data for each host TE in this world if it has not already been done for this player
 		if(!world.isRemote && MachineHelper.playersToSync.contains(player.username)) {
-			for(Object te : world.loadedTileEntityList) {
+			for(Object te : world.loadedTileEntityList)
 				if(te instanceof IHost)
 					((IHost)te).syncAllClients((Player)player);
-			}
 			MachineHelper.playersToSync.remove(player.username);
 		}
 
@@ -154,12 +153,8 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public void breakBlock(World world, int x, int y, int z, int blockID, int metadata) {
 		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
-		if(tem != null) {
-			tem.dropItems();
-			tem.dropUpgrades();
-			if(tem instanceof IHost)
-				((IHost)tem).deleteNetwork();
-		}
+		if(tem != null)
+			tem.onBlockDestroyed();
 		super.breakBlock(world, x, y, z, blockID, metadata);
 	}
 }

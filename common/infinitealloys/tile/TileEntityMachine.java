@@ -72,6 +72,48 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		// BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 	}
 
+	/** Called when the TE's block is destroyed. Ends network connections and drops items and upgrades */
+	public void onBlockDestroyed() {
+		// Drop items
+		Random random = new Random();
+		for(int i = 0; i < getSizeInventory(); i++) {
+			ItemStack stack = getStackInSlot(i);
+			if(stack != null) {
+				float f1 = random.nextFloat() * 0.8F + 0.1F;
+				float f2 = random.nextFloat() * 0.8F + 0.1F;
+				float f3 = random.nextFloat() * 0.8F + 0.1F;
+				while(stack.stackSize > 0) {
+					int j = random.nextInt(21) + 10;
+					if(j > stack.stackSize)
+						j = stack.stackSize;
+					stack.stackSize -= j;
+					EntityItem item = new EntityItem(worldObj, xCoord + f1, yCoord + f2, zCoord + f3, new ItemStack(stack.itemID, j, stack.getItemDamage()));
+					if(stack.hasTagCompound())
+						item.getEntityItem().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
+					item.motionX = random.nextGaussian() * 0.05F;
+					item.motionY = random.nextGaussian() * 0.25F;
+					item.motionZ = random.nextGaussian() * 0.05F;
+					worldObj.spawnEntityInWorld(item);
+				}
+			}
+		}
+
+		// Drop upgrades
+		for(EnumUpgrade upgrade : EnumUpgrade.values()) {
+			if(hasUpgrade(upgrade)) {
+				float f = random.nextFloat() * 0.8F + 0.1F;
+				float f1 = random.nextFloat() * 0.8F + 0.1F;
+				float f2 = random.nextFloat() * 0.8F + 0.1F;
+				EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(Items.upgrade, 1, upgrade.ordinal()));
+				item.motionX = random.nextGaussian() * 0.05F;
+				item.motionY = random.nextGaussian() * 0.25F;
+				item.motionZ = random.nextGaussian() * 0.05F;
+				worldObj.spawnEntityInWorld(item);
+			}
+		}
+		upgrades = 0;
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
@@ -123,7 +165,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		front = orientation;
 		this.upgrades = upgrades;
 	}
-	
+
 	/** Get the current (x, y, z) coordinates of this machine in the form of a {@link infinitealloys.util.Point Point} */
 	public Point coords() {
 		return new Point(xCoord, yCoord, zCoord);
@@ -204,32 +246,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	@Override
 	public void closeChest() {}
 
-	/** Drops the items in the block's inventory */
-	public void dropItems() {
-		final Random random = new Random();
-		for(int i = 0; i < getSizeInventory(); i++) {
-			final ItemStack stack = getStackInSlot(i);
-			if(stack != null) {
-				final float f1 = random.nextFloat() * 0.8F + 0.1F;
-				final float f2 = random.nextFloat() * 0.8F + 0.1F;
-				final float f3 = random.nextFloat() * 0.8F + 0.1F;
-				while(stack.stackSize > 0) {
-					int j = random.nextInt(21) + 10;
-					if(j > stack.stackSize)
-						j = stack.stackSize;
-					stack.stackSize -= j;
-					final EntityItem item = new EntityItem(worldObj, xCoord + f1, yCoord + f2, zCoord + f3, new ItemStack(stack.itemID, j, stack.getItemDamage()));
-					if(stack.hasTagCompound())
-						item.getEntityItem().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
-					item.motionX = random.nextGaussian() * 0.05F;
-					item.motionY = random.nextGaussian() * 0.25F;
-					item.motionZ = random.nextGaussian() * 0.05F;
-					worldObj.spawnEntityInWorld(item);
-				}
-			}
-		}
-	}
-
 	public final int getUpgrades() {
 		return upgrades;
 	}
@@ -237,24 +253,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	protected abstract void updateUpgrades();
 
 	protected abstract void populateValidUpgrades();
-
-	/** Drops the applied upgrades as items */
-	public final void dropUpgrades() {
-		final Random random = new Random();
-		for(EnumUpgrade upgrade : EnumUpgrade.values()) {
-			if(hasUpgrade(upgrade)) {
-				final float f = random.nextFloat() * 0.8F + 0.1F;
-				final float f1 = random.nextFloat() * 0.8F + 0.1F;
-				final float f2 = random.nextFloat() * 0.8F + 0.1F;
-				final EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(Items.upgrade, 1, upgrade.ordinal()));
-				item.motionX = random.nextGaussian() * 0.05F;
-				item.motionY = random.nextGaussian() * 0.25F;
-				item.motionZ = random.nextGaussian() * 0.05F;
-				worldObj.spawnEntityInWorld(item);
-			}
-		}
-		upgrades = 0;
-	}
 
 	/** Determines if the given itemstack is a valid upgrade for the machine. Criteria: Does this machine take this type of upgrade? Does this machine already
 	 * have this upgrade? Does this upgrade have a prerequisite upgrade and if so, does this machine already have that upgrade?

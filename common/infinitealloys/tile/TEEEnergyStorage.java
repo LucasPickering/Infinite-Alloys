@@ -8,6 +8,7 @@ import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -47,7 +48,6 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public void updateEntity() {
-		System.out.println("Size on " + Funcs.getSideAsString() + " is " + networkClients.size());
 		if(energyHost == null)
 			energyHost = coords();
 
@@ -55,15 +55,21 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public void deleteNetwork() {
-		for(Point client : networkClients)
-			removeClient(client, true);
+	public void onBlockDestroyed() {
+		if(energyHost.equals(coords()))
+			deleteNetwork();
+		super.onBlockDestroyed();
 	}
 
 	@Override
 	public void connectToEnergyNetwork(Point host) {
-		super.connectToEnergyNetwork(host);
 		deleteNetwork();
+		super.connectToEnergyNetwork(host);
+	}
+
+	public void deleteNetwork() {
+		for(Point client : networkClients)
+			((TileEntityElectric)Funcs.getBlockTileEntity(worldObj, client)).disconnectFromEnergyNetwork();
 	}
 
 	@Override
@@ -92,7 +98,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 		else {
 			// Add the machine
 			networkClients.add(client);
-			((TileEntityElectric)Funcs.getBlockTileEntity(worldObj, client)).energyHost = coords();
+			((TileEntityElectric)Funcs.getBlockTileEntity(worldObj, client)).connectToEnergyNetwork(coords());
 
 			// Sync the data to the server/all clients
 			if(worldObj.isRemote) {
@@ -111,7 +117,9 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public void removeClient(Point client, boolean sync) {
-		((TileEntityElectric)Funcs.getBlockTileEntity(worldObj, client)).disconnectFromEnergyNetwork();
+		TileEntity te = Funcs.getBlockTileEntity(worldObj, client);
+		if(te instanceof TileEntityElectric)
+			((TileEntityElectric)te).disconnectFromEnergyNetwork();
 		networkClients.remove(client);
 		if(sync) {
 			if(worldObj.isRemote)

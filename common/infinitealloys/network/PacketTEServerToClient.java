@@ -28,16 +28,30 @@ public class PacketTEServerToClient implements PacketIA {
 
 			if(te instanceof TileEntityElectric) {
 				int processProgress = data.readInt();
-				((TileEntityElectric)te).handlePacketDataFromServerElectric(processProgress);
+				int energyHostX = data.readInt();
+				int energyHostY = data.readInt();
+				int energyHostZ = data.readInt();
+				if(energyHostY < 0)
+					((TileEntityElectric)te).handlePacketDataFromServer(processProgress, null);
+				else
+					((TileEntityElectric)te).handlePacketDataFromServer(processProgress, new Point(energyHostX, energyHostY, energyHostZ));
 
 				switch(((TileEntityElectric)te).getID()) {
 					case MachineHelper.METAL_FORGE:
-						byte recipeAlloyID = data.readByte();
-						((TEEMetalForge)te).handlePacketDataFromClient(recipeAlloyID);
+						int recipeAlloyID = data.readInt();
+						int analyzerHostX = data.readInt();
+						int analyzerHostY = data.readInt();
+						int analyzerHostZ = data.readInt();
+						if(analyzerHostY < 0)
+							((TEEMetalForge)te).handlePacketDataFromServer(recipeAlloyID, null);
+						else
+							((TEEMetalForge)te).handlePacketDataFromServer(recipeAlloyID, new Point(analyzerHostX, analyzerHostY, analyzerHostZ));
 						break;
 
 					case MachineHelper.ANALYZER:
-						((TEEAnalyzer)te).handlePacketDataFromClient(data.readInt(), data.readInt()/* unlockedAlloyCount */);
+						int alloys = data.readInt();
+						int targetAlloy = data.readInt();
+						((TEEAnalyzer)te).handlePacketDataFromClient(alloys, targetAlloy);
 						break;
 
 					case MachineHelper.XRAY:

@@ -43,7 +43,8 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	}
 
 	@Override
-	public void deleteNetwork() {
+	public void onBlockDestroyed() {
+		super.onBlockDestroyed();
 		for(Point client : networkClients)
 			removeClient(client, true);
 	}

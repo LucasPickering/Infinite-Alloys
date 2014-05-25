@@ -5,7 +5,10 @@ public class Point {
 
 	public int x, y, z;
 
-	public Point() {}
+	/** Create an "invalid" point. The negative y, which is impossible in the world, will indicate that this point is essentially null */
+	public Point() {
+		y = -1;
+	}
 
 	public Point(int x, int y, int z) {
 		set(x, y, z);

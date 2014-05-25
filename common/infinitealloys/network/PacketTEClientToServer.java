@@ -16,12 +16,12 @@ public class PacketTEClientToServer implements PacketIA {
 		final TileEntity te = player.worldObj.getBlockTileEntity(data.readInt()/* X */, data.readInt()/* Y */, data.readInt()/* Z */);
 
 		if(te instanceof TEEMetalForge) {
-			final byte recipeAlloyID = data.readByte();
+			int recipeAlloyID = data.readInt();
 			((TEEMetalForge)te).handlePacketDataFromClient(recipeAlloyID);
 		}
 
 		else if(te instanceof TEEPasture) {
-			final byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
+			byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 			for(int i = 0; i < mobActions.length; i++)
 				mobActions[i] = data.readByte();
 			((TEEPasture)te).handlePacketData(mobActions);

@@ -22,9 +22,6 @@ public interface IHost {
 	 * @param sync if true, a packet will be sent to the other side to remove the client */
 	public void removeClient(Point client, boolean sync);
 
-	/** Delete all the network hosted by this machine. This is typically called when the TE block is broken. */
-	public void deleteNetwork();
-
 	/** Send the client data to a client */
 	public void syncAllClients(Player player);
 

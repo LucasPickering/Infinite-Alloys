@@ -32,6 +32,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class MachineHelper {
 
+	// Machine types
 	public static final int COMPUTER = 0;
 	public static final int METAL_FORGE = 1;
 	public static final int ANALYZER = 2;
@@ -43,6 +44,12 @@ public class MachineHelper {
 	public static final Class[] MACHINE_CLASSES = { TEMComputer.class, TEEMetalForge.class, TEEAnalyzer.class, TEEXray.class, TEEPasture.class, TEEEnergyStorage.class };
 
 	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "xray", "pasture", "energystorage" };
+
+	// Network types
+	public static final int NET_ALL = 0;
+	public static final int NET_COMPUTER = 1;
+	public static final int NET_ENERGY = 2;
+	public static final int NET_ANALYZER = 3;
 
 	/** How many blocks are searched per tick. Used to limit lag on the x-ray. */
 	public static final int SEARCH_PER_TICK = 2000;

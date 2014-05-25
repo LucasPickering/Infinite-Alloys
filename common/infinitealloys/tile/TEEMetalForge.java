@@ -4,6 +4,7 @@ import infinitealloys.item.Items;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.EnumUpgrade;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -44,6 +45,13 @@ public class TEEMetalForge extends TileEntityElectric {
 
 		if(analyzerHost == null)
 			recipeAlloyID = -1;
+	}
+
+	@Override
+	public void onBlockDestroyed() {
+		super.onBlockDestroyed();
+		if(analyzerHost != null)
+			((IHost)Funcs.getBlockTileEntity(worldObj, analyzerHost)).removeClient(coords(), true);
 	}
 
 	public void connectToAnalyzerNetwork(Point host) {
@@ -103,7 +111,9 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		return ArrayUtils.addAll(super.getSyncDataToClient(), recipeAlloyID);
+		if(analyzerHost == null)
+			return ArrayUtils.addAll(super.getSyncDataToClient(), recipeAlloyID, new Point());
+		return ArrayUtils.addAll(super.getSyncDataToClient(), recipeAlloyID, analyzerHost);
 	}
 
 	@Override
@@ -111,7 +121,14 @@ public class TEEMetalForge extends TileEntityElectric {
 		return new Object[] { recipeAlloyID };
 	}
 
-	public void handlePacketDataFromClient(byte recipeAlloyID) {
+	public void handlePacketDataFromServer(int recipeAlloyID, Point analyzerHost) {
+		if(recipeAlloyID != this.recipeAlloyID)
+			recipeChanged = true;
+		this.recipeAlloyID = recipeAlloyID;
+		this.analyzerHost = analyzerHost;
+	}
+
+	public void handlePacketDataFromClient(int recipeAlloyID) {
 		if(recipeAlloyID != this.recipeAlloyID)
 			recipeChanged = true;
 		this.recipeAlloyID = recipeAlloyID;

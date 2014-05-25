@@ -119,8 +119,13 @@ public class CommonProxy {
 
 		/*---OTHER ITEMS---*/
 		/* Internet Wand */addRecipeDict(new ItemStack(Items.internetWand), " W ", "RSR", 'R', Item.redstone, 'S', Item.stick, 'W', upgrades[8]);
-		/* Machine Component */addRecipeDict(new ItemStack(Items.multi, 1, 0), " W ", "CBC", " W ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire"); // TODO: Make a real recipe
-		/* Upgrade Component */addRecipeDict(new ItemStack(Items.multi, 1, 1), "CTC", "IWI", 'C', "ingotCopper", 'I', Item.ingotIron, 'T', "ingotTin", 'W', "copperWire"); // TODO: Make a real recipe
+		/* Machine Component */addRecipeDict(new ItemStack(Items.multi, 1, 0), " W ", "CBC", " W ", 'B', "battery", 'C', "ingotCopper", 'W', "copperWire"); // TODO: Make a real
+																																							// recipe
+		/* Upgrade Component */addRecipeDict(new ItemStack(Items.multi, 1, 1), "CTC", "IWI", 'C', "ingotCopper", 'I', Item.ingotIron, 'T', "ingotTin", 'W', "copperWire"); // TODO:
+																																											// Make
+																																											// a
+																																											// real
+																																											// recipe
 
 		addSmelting(Blocks.ore.blockID, 0, new ItemStack(Items.ingot, 1, 0), 0.6F);
 		addSmelting(Blocks.ore.blockID, 1, new ItemStack(Items.ingot, 1, 1), 0.6F);
