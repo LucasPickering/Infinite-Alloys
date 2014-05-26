@@ -34,13 +34,11 @@ public class GuiPasture extends GuiElectric {
 	@Override
 	public void actionPerformed(GuiButton button) {
 		super.actionPerformed(button);
-		// If a mob button is clicked
-		if(0 < button.id)
-			// Cycle the value of the field associated with the button
-			tep.mobActions[button.id - 1] = (byte)(++tep.mobActions[button.id - 1] % Consts.PASTURE_MODES);
 
-		// Update all buttons when any is clicked
-		updateButtons();
+		if(button.id > 0) { // If a mob button is clicked
+			tep.mobActions[button.id - 1] = (byte)(++tep.mobActions[button.id - 1] % Consts.PASTURE_MODES); // Cycle the value of the field associated with the button
+			updateButtons(); // Update all buttons when any is clicked (other than the help button
+		}
 	}
 
 	/** Called when buttons are initialized or when any button is clicked, updates text, TE values, etc. */
@@ -51,7 +49,6 @@ public class GuiPasture extends GuiElectric {
 			mobButtons[i].displayString = Funcs.getLoc("machine.pasture.mode." + tep.mobActions[i]);
 		}
 
-		// Send a packet to the server to sync the settings
-		Funcs.sendPacketToServer(new PacketTESync(tep));
+		Funcs.sendPacketToServer(new PacketTESync(tep)); // Send a packet to the server to sync the settings
 	}
 }

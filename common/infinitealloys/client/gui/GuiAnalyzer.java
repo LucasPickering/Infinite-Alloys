@@ -30,11 +30,13 @@ public class GuiAnalyzer extends GuiElectric {
 
 		if(tea.getAlloys() != 0) { // If an alloy is available
 			for(int i = 0; i < Consts.METAL_COUNT; i++) { // For each metal
-				int amt = Funcs.intAtPos(EnumAlloy.getAlloyForID(selectedRecipe), Consts.ALLOY_RADIX, i); // The amount of this metal the the currently
-				if(amt > 0) { // If this metal is in this alloy
-					itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, new ItemStack(IAItems.ingot, 1, i), i * 18 + 26, 33); // Draw the metal ingot
-					GL11.glDisable(GL11.GL_LIGHTING);
-					fontRendererObj.drawStringWithShadow(Integer.toString(amt), i * 18 + 37, 42, 0xffffff); // Draw the amount of the metal required
+				ItemStack metal = new ItemStack(IAItems.ingot, 1, i);
+
+				// Render the alloy and the amount of each metal needed for currently selected alloy
+				metal.stackSize = Funcs.intAtPos(EnumAlloy.getAlloyForID(selectedRecipe), Consts.ALLOY_RADIX, i); // Amount of this metal in the selected alloy
+				if(metal.stackSize > 0) { // If this metal is in this alloy
+					itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, metal, i * 18 + 26, 33); // Draw the metal ingot
+					itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine, metal, i * 18 + 26, 33, metal.stackSize + ""); // Draw the overlay with the amount needed
 				}
 			}
 

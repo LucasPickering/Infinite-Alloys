@@ -14,7 +14,7 @@ public enum EnumHelp {
 	MF_SELECTION("mfSelection", 0x00ffff, 64, 41, 74, 38),
 
 	AZ_UPGRADE("upgrade", 0x9c00ff, 150, 7, 18, 18), AZ_PROGRESS("progress", 0x00ff16, 27, 6, 110, 20), AZ_ENERGY("energy", 0xfff600, 6, 7, 18, 18),
-	AZ_SUPPLY("azSupply", 0xff0000, 15, 56, 146, 20), AZ_INGOTS("azIngots", 0x00ffff, 3, 27, 158, 28),
+	AZ_SUPPLY("azSupply", 0xff0000, 24, 56, 146, 20), AZ_INGOTS("azIngots", 0x00ffff, 13, 27, 158, 28),
 
 	XR_UPGRADE("upgrade", 0x9c00ff, 167, 5, 18, 18), XR_PROGRESS("progress", 0x00ff16, 53, 4, 110, 20), XR_ENERGY("energy", 0xfff600, 8, 5, 18, 18),
 	XR_ORE("xrOre", 0xff0000, 31, 5, 18, 18), XR_SEARCH("xrSearch", 0x00ffff, 68, 30, 80, 20), XR_RESULTS("xrResults", 0xff00ff, 7, 50, 160, 102),

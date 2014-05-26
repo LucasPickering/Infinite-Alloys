@@ -48,8 +48,11 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	@Override
 	public void onBlockDestroyed() {
 		super.onBlockDestroyed();
-		for(Point client : networkClients)
-			removeClient(client, true);
+		for(Point client : networkClients) {
+			TileEntity te = Funcs.getTileEntity(worldObj, client);
+			if(te instanceof TEEMetalForge)
+				((TEEMetalForge)te).disconnectFromAnalyzerNetwork();
+		}
 	}
 
 	@Override

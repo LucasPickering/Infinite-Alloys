@@ -29,20 +29,16 @@ public class PacketTESync implements IPacketIA {
 
 	public PacketTESync(TileEntityMachine tem) {
 		this.machine = tem.coords();
-		switch(FMLCommonHandler.instance().getSide()) {
-			case CLIENT:
-				data = tem.getSyncDataToServer();
-				break;
 
-			case SERVER:
-				data = tem.getSyncDataToClient();
-				break;
-		}
+		if(tem.getWorldObj().isRemote)
+			data = tem.getSyncDataToServer();
+		else
+			data = tem.getSyncDataToClient();
 	}
 
 	@Override
 	public void readBytes(ByteBuf bytes) {
-		Point machine = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+		machine = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
 		this.bytes = bytes;
 	}
 

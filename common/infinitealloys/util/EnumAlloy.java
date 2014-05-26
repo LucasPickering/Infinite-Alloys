@@ -14,7 +14,7 @@ public enum EnumAlloy {
 
 	/** Get the alloy value (which lists its metal composition) of the alloy with the given ID */
 	public static int getAlloyForID(int id) {
-		if(id < 0)
+		if(id < 0 || id >= values().length)
 			return 0;
 		return InfiniteAlloys.instance.getValidAlloys()[id];
 	}

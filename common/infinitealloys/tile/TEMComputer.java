@@ -17,10 +17,10 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	private Point lastSearch;
 
 	/** The max range that machines can be added at with the Internet Wand */
-	public int range = 0;
+	public int range;
 
 	/** The number of machines that this block can host */
-	public int networkCapacity = 0;
+	public int networkCapacity;
 
 	/** A list of clients currently connected to this computer control network */
 	private ArrayList<Point> networkClients = new ArrayList<Point>();

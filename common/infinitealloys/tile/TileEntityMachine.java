@@ -61,15 +61,12 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	@Override
 	public void updateEntity() {
-
 		// Check for upgrades in the upgrade inventory slot. If there is one, remove it from the slot and add it to the machine.
 		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
 			upgrades |= 1 << inventoryStacks[upgradeSlotIndex].getItemDamage();
 			inventoryStacks[upgradeSlotIndex] = null;
 			updateUpgrades();
 		}
-
-		// BlockMachine.updateBlockState(worldObj, xCoord, yCoord, zCoord);
 	}
 
 	/** Called when the TE's block is destroyed. Ends network connections and drops items and upgrades */
@@ -119,13 +116,12 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		super.readFromNBT(tagCompound);
 		front = tagCompound.getByte("orientation");
 		upgrades = tagCompound.getInteger("upgrades");
-		NBTTagList nbttaglist = tagCompound.getTagList("Items", 0);
-		inventoryStacks = new ItemStack[getSizeInventory()];
+		NBTTagList nbttaglist = tagCompound.getTagList("Items", 10);
 		for(int i = 0; i < nbttaglist.tagCount(); i++) {
 			NBTTagCompound nbttag = (NBTTagCompound)nbttaglist.getCompoundTagAt(i);
-			byte var5 = nbttag.getByte("Slot");
-			if(var5 >= 0 && var5 < inventoryStacks.length)
-				inventoryStacks[var5] = ItemStack.loadItemStackFromNBT(nbttag);
+			byte slot = nbttag.getByte("Slot");
+			if(slot >= 0 && slot < inventoryStacks.length)
+				inventoryStacks[slot] = ItemStack.loadItemStackFromNBT(nbttag);
 		}
 	}
 
@@ -237,9 +233,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	@Override
 	public void closeInventory() {}
 
-	public void onInventoryChanged() {
-
-	}
+	public void onInventoryChanged() {}
 
 	@Override
 	public boolean hasCustomInventoryName() {
