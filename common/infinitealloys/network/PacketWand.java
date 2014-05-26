@@ -32,7 +32,7 @@ public class PacketWand implements IPacketIA {
 
 	@Override
 	public void readBytes(ByteBuf bytes) {
-		boolean adding = bytes.readBoolean();
+		adding = bytes.readBoolean();
 
 		if(adding)
 			machine = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());

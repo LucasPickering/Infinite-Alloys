@@ -19,7 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 /** A base, abstract class for Tile Entities that can receive upgrades. TileEntityElectric blocks are a sub-type of this. Often referred to as TEMs or machines.
  * 
  * @see TileEntityElectric */
-public abstract class TileEntityMachine extends TileEntity implements IInventory, IInvBasic {
+public abstract class TileEntityMachine extends TileEntity implements IInventory {
 
 	/** The stacks that make up the inventory of this TE */
 	public ItemStack[] inventoryStacks;
@@ -228,6 +228,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		inventoryStacks[slot] = stack;
 		if(stack != null && stack.stackSize > getInventoryStackLimit())
 			stack.stackSize = getInventoryStackLimit();
+		onInventoryChanged();
 	}
 
 	@Override
@@ -236,8 +237,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	@Override
 	public void closeInventory() {}
 
-	@Override
-	public void onInventoryChanged(InventoryBasic inventory) {}
+	public void onInventoryChanged() {
+
+	}
 
 	@Override
 	public boolean hasCustomInventoryName() {

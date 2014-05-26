@@ -22,6 +22,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.DimensionManager;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import cpw.mods.fml.common.Loader;
 
 public class GuiInternetWand extends GuiScreen {
@@ -69,6 +70,7 @@ public class GuiInternetWand extends GuiScreen {
 		if(heldItem.getItem() instanceof ItemInternetWand && heldItem.hasTagCompound()) {
 			NBTTagCompound tagCompound = heldItem.getTagCompound();
 
+			// Create each button for the machines
 			for(int i = 0; i < Consts.WAND_SIZE; i++) { // For each button in the array
 				machineButtons[i] = null; // Reset the button
 				if(tagCompound.hasKey("Coords" + i)) { // If there is a machine that corresponds to this button
@@ -79,9 +81,7 @@ public class GuiInternetWand extends GuiScreen {
 						i--; // Decrement i so that it repeats this number for the new button
 					}
 					else
-						machineButtons[i] = new MachineButton(i, width / 2 - 82, height / 2 + i * 21 - 80, client[0], client[1], client[2], client[3]); // Create
-																																						// a
-																																						// button
+						machineButtons[i] = new MachineButton(i, width / 2 - 82, height / 2 + i * 21 - 80, client[0], client[1], client[2], client[3]); // Create a button
 				}
 			}
 
@@ -292,12 +292,27 @@ public class GuiInternetWand extends GuiScreen {
 		void drawButton() {
 			Funcs.bindTexture(GuiMachine.extras);
 
-			if((selectedButtons & 1 << buttonID) != 0) { // If this button is selected, draw a box around it
-				drawHorizontalLine(xPos - 1, xPos + width + 1, yPos - 1, 0xff22aa22);
-				drawHorizontalLine(xPos - 1, xPos + width + 1, yPos + height + 1, 0xff22aa22);
-				drawVerticalLine(xPos - 1, yPos + height + 1, yPos - 1, 0xff22aa22);
-				drawVerticalLine(xPos + width + 1, yPos + height + 1, yPos - 1, 0xff22aa22);
-				drawRect(xPos, yPos, xPos + width + 1, yPos + height + 1, 0x6022aa22);
+			if((1 << buttonID & selectedButtons) != 0) { // If this button is selected, draw a box around it
+				int yPosBox = yPos;
+				int heightBox = height;
+
+				// If there is a button before this one and it is selected, extend this box to connect to that one
+				if(buttonID != 0 && (1 << buttonID - 1 & selectedButtons) != 0) {
+					yPosBox -= 3;
+					heightBox += 3;
+				}
+
+				// Only draw the top line if this box isn't connecting to the one above it
+				else
+					drawHorizontalLine(xPos - 1, xPos + width + 1, yPosBox - 1, 0xff22aa22); // Top
+
+				// If this is the last button or if the button below this isn't selected, draw the bottom line
+				if(buttonID == machineButtons.length - 1 || (1 << buttonID + 1 & selectedButtons) == 0)
+					drawHorizontalLine(xPos - 1, xPos + width + 1, yPosBox + heightBox + 1, 0xff22aa22); // Bottom
+
+				drawVerticalLine(xPos - 1, yPosBox + heightBox + 1, yPosBox - 1, 0xff22aa22);// Left
+				drawVerticalLine(xPos + width + 1, yPosBox + heightBox + 1, yPosBox - 1, 0xff22aa22);// Right
+				drawRect(xPos, yPosBox, xPos + width + 1, yPosBox + heightBox + 1, 0x6022aa22); // Shading
 			}
 
 			GL11.glColor3f(1F, 1F, 1F); // Reset the color
@@ -308,7 +323,7 @@ public class GuiInternetWand extends GuiScreen {
 			mc.fontRenderer.drawStringWithShadow(machineY + "", xPos + 82 - (mc.fontRenderer.getStringWidth(machineY + "") / 2), yPos + 5, 0xffffff);
 			mc.fontRenderer.drawStringWithShadow(machineZ + "", xPos + 106 - (mc.fontRenderer.getStringWidth(machineZ + "") / 2), yPos + 5, 0xffffff);
 
-			itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(IABlocks.machine, 1, machineID), xPos, yPos + 1);
+			itemRender.renderItemIntoGUI(fontRendererObj, mc.getTextureManager(), new ItemStack(IABlocks.machine, 1, machineID), xPos, yPos + 1);
 		}
 	}
 }

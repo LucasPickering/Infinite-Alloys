@@ -156,7 +156,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public void onInventoryChanged(InventoryBasic inventory) {
+	public void onInventoryChanged() {
 		// Set baseRKPerTick based on the first fuel in the supply slots
 		for(int i = 0; i < 9; i++) {
 			if(inventoryStacks[i] != null) {

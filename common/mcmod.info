@@ -1,15 +1,14 @@
 [
 {
-  "modid": "InfiniteAlloys",
+  "modid": "infinitealloys",
   "name": "Infinite Alloys",
   "description": "Create alloys and make machines.",
   "version": "@VERSION@",
-  "url": "https://github.com/bob-a-red-dino/infinite-alloys",
+  "url": "https://github.com/Bob-a-Red-Dino/Infinite-Alloys",
   "updateUrl": "",
   "authorList": [
-    "Bob A Red Dino"
+    "BobDaRedDino"
   ],
-  "credits": "Bob A Red Dino",
   "logoFile": "",
   "screenshots": [
   ],

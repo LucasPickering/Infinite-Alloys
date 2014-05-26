@@ -1,6 +1,6 @@
 /**
-!/common
-!/resources
+!/common/**
+!/resources/**
 !build.properties
 !build.xml
 !build_number.properties
