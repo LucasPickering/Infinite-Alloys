@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class TEEAnalyzer extends TileEntityElectric implements IHost {
@@ -60,11 +61,11 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	public boolean addClient(EntityPlayer player, Point client, boolean sync) {
 		if(networkClients.contains(client)) {
 			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Machine is already in this network");
+				player.addChatComponentMessage(new ChatComponentText("Error: Machine is already in this network"));
 		}
 		else if(!isClientValid(client)) {
 			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Machine is not a metal forge");
+				player.addChatComponentMessage(new ChatComponentText("Error: Machine is not a metal forge"));
 		}
 		else {
 			// Add the machine
@@ -74,7 +75,7 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 			// Sync the data to the server/all clients
 			if(worldObj.isRemote) {
 				if(player != null)
-					player.addChatMessage("Adding machine at " + client);
+					player.addChatComponentMessage(new ChatComponentText("Adding machine at " + client));
 				if(sync)
 					Funcs.sendPacketToServer(new PacketClient(true, worldObj.provider.dimensionId, coords(), client));
 			}

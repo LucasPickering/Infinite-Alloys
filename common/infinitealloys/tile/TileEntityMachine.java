@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInvBasic;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -17,7 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 /** A base, abstract class for Tile Entities that can receive upgrades. TileEntityElectric blocks are a sub-type of this. Often referred to as TEMs or machines.
  * 
  * @see TileEntityElectric */
-public abstract class TileEntityMachine extends TileEntity implements IInventory {
+public abstract class TileEntityMachine extends TileEntity implements IInventory, IInvBasic {
 
 	/** The stacks that make up the inventory of this TE */
 	public ItemStack[] inventoryStacks;
@@ -233,6 +235,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	@Override
 	public void closeInventory() {}
+
+	@Override
+	public void onInventoryChanged(InventoryBasic inventory) {}
 
 	@Override
 	public boolean hasCustomInventoryName() {

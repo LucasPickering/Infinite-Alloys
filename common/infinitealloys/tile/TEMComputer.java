@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 
 public class TEMComputer extends TileEntityMachine implements IHost {
 
@@ -57,23 +58,23 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	public boolean addClient(EntityPlayer player, Point client, boolean sync) {
 		if(networkClients.contains(client)) {
 			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Machine is already in this network");
+				player.addChatComponentMessage(new ChatComponentText("Error: Machine is already in this network"));
 		}
 		else if(networkClients.size() >= networkCapacity) {
 			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Network full");
+				player.addChatComponentMessage(new ChatComponentText("Error: Network full"));
 		}
 		else if(client.equals(xCoord, yCoord, zCoord)) {
 			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Cannot add self to network");
+				player.addChatComponentMessage(new ChatComponentText("Error: Cannot add self to network"));
 		}
 		else if(client.distanceTo(xCoord, yCoord, zCoord) > range) {
 			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Block out of range");
+				player.addChatComponentMessage(new ChatComponentText("Error: Block out of range"));
 		}
 		else if(!isClientValid(client)) {
 			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Block is not capable of networking");
+				player.addChatComponentMessage(new ChatComponentText("Error: Block is not capable of networking"));
 		}
 		else {
 			// Add the machine
@@ -82,7 +83,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 			// Sync the data to the server/all clients
 			if(worldObj.isRemote) {
 				if(player != null)
-					player.addChatMessage("Adding machine at " + client);
+					player.addChatComponentMessage(new ChatComponentText("Adding machine at " + client));
 				if(sync)
 					Funcs.sendPacketToServer(new PacketClient(true, worldObj.provider.dimensionId, coords(), client));
 			}
@@ -138,7 +139,6 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	@Deprecated
 	/** Perform a search for machines that can be controlled. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a
 	 * tick, then saves its place and picks up where it left off next tick, which eliminates stutter during searches. */

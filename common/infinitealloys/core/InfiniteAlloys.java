@@ -22,7 +22,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 @Mod(modid = "infinitealloys", name = "Infinite Alloys", version = "@VERSION@")
 public class InfiniteAlloys {
 
-	@Instance("InfiniteAlloys")
+	@Instance("infinitealloys")
 	public static InfiniteAlloys instance;
 	@SidedProxy(clientSide = "infinitealloys.client.ClientProxy", serverSide = "infinitealloys.CommonProxy")
 	public static CommonProxy proxy;

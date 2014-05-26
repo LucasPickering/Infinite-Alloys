@@ -1,14 +1,14 @@
 package infinitealloys.item;
 
-import infinitealloys.block.IABlocks;
 import infinitealloys.util.Consts;
+import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 public class ItemBlockOre extends ItemBlock {
 
-	public ItemBlockOre() {
-		super(IABlocks.ore);
+	public ItemBlockOre(Block block) {
+		super(block);
 		setHasSubtypes(true);
 	}
 

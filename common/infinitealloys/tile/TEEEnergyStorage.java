@@ -1,6 +1,5 @@
 package infinitealloys.tile;
 
-import ibxm.Player;
 import infinitealloys.network.PacketClient;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
@@ -8,9 +7,11 @@ import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.ChatComponentText;
 import org.apache.commons.lang3.ArrayUtils;
 
 public class TEEEnergyStorage extends TileEntityElectric implements IHost {
@@ -80,19 +81,19 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	public boolean addClient(EntityPlayer player, Point client, boolean sync) {
 		if(!energyHost.equals(coords())) {
 			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: This machine is not currently hosting a network because it is connected to another host");
+				player.addChatComponentMessage(new ChatComponentText("Error: This machine is not currently hosting a network because it is connected to another host"));
 		}
 		else if(networkClients.contains(client)) {
 			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Machine is already in network");
+				player.addChatComponentMessage(new ChatComponentText("Error: Machine is already in network"));
 		}
 		else if(client.equals(xCoord, yCoord, zCoord)) {
 			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Cannot add self to network");
+				player.addChatComponentMessage(new ChatComponentText("Error: Cannot add self to network"));
 		}
 		else if(client.distanceTo(xCoord, yCoord, zCoord) > range) {
 			if(player != null && worldObj.isRemote)
-				player.addChatMessage("Error: Block out of range");
+				player.addChatComponentMessage(new ChatComponentText("Error: Block out of range"));
 		}
 		else {
 			// Add the machine
@@ -102,7 +103,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 			// Sync the data to the server/all clients
 			if(worldObj.isRemote) {
 				if(player != null)
-					player.addChatMessage("Adding machine at " + client);
+					player.addChatComponentMessage(new ChatComponentText("Adding machine at " + client));
 				if(sync)
 					Funcs.sendPacketToServer(new PacketClient(true, worldObj.provider.dimensionId, coords(), client));
 			}
@@ -155,8 +156,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public void onInventoryChanged() {
-		super.onInventoryChanged();
+	public void onInventoryChanged(InventoryBasic inventory) {
 		// Set baseRKPerTick based on the first fuel in the supply slots
 		for(int i = 0; i < 9; i++) {
 			if(inventoryStacks[i] != null) {

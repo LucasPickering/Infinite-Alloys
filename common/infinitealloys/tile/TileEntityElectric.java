@@ -52,7 +52,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 			if(++processProgress >= ticksToProcess) {
 				processProgress = 0;
 				onFinishProcess();
-				onInventoryChanged();
+				onInventoryChanged(null);
 			}
 		}
 	}
