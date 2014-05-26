@@ -1,5 +1,6 @@
 package infinitealloys.block;
 
+import ibxm.Player;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.tile.IHost;
@@ -10,33 +11,33 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.List;
+import javax.swing.Icon;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockMachine extends BlockContainer {
 
-	public BlockMachine(int id) {
-		super(id, Material.iron);
+	public BlockMachine() {
+		super(Material.iron);
 		setCreativeTab(InfiniteAlloys.tabIA);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegister) {
+	public void registerBlockIcons(IIconRegister iconRegister) {
 		for(int i = 0; i < Consts.MACHINE_COUNT; i++) {
 			Blocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_top");
 			Blocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_bottom");
@@ -47,14 +48,14 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
+	public IIcon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
 		side = side <= Consts.TOP ? side : side == ((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z)).front ? Consts.SOUTH : Consts.NORTH;
 		return getIcon(side, blockAccess.getBlockMetadata(x, y, z));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIcon(int side, int metadata) {
+	public IIcon getIcon(int side, int metadata) {
 		switch(side) {
 			case Consts.TOP:
 				return Blocks.machineIcons[metadata][0];
@@ -113,7 +114,7 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, int metadata) {
+	public TileEntity createNewTileEntity(World world, int metadata) {
 		try {
 			return (TileEntity)MachineHelper.MACHINE_CLASSES[metadata].newInstance();
 		}catch(Exception e) {

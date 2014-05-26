@@ -1,8 +1,9 @@
 package infinitealloys.block;
 
 import infinitealloys.util.Consts;
+import javax.swing.Icon;
 import net.minecraft.block.Block;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 
 public class Blocks {
 
@@ -12,7 +13,7 @@ public class Blocks {
 	public static Block ore;
 	public static Block machine;
 
-	public static Icon[][] machineIcons = new Icon[Consts.MACHINE_COUNT][4];
-	public static Icon oreForegroundIcon;
-	public static Icon oreBackgroundIcon;
+	public static IIcon[][] machineIcons = new IIcon[Consts.MACHINE_COUNT][4];
+	public static IIcon oreForegroundIcon;
+	public static IIcon oreBackgroundIcon;
 }
