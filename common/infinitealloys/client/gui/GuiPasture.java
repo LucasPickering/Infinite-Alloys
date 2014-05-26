@@ -1,12 +1,11 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.network.PacketTEClientToServer;
+import infinitealloys.network.PacketTESync;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
-import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiPasture extends GuiElectric {
 
@@ -53,6 +52,6 @@ public class GuiPasture extends GuiElectric {
 		}
 
 		// Send a packet to the server to sync the settings
-		PacketDispatcher.sendPacketToServer(PacketTEClientToServer.getPacket(tep));
+		Funcs.sendPacketToServer(new PacketTESync(tep));
 	}
 }

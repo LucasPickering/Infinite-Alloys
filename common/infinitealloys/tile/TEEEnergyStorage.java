@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import ibxm.Player;
 import infinitealloys.network.PacketClient;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
@@ -11,8 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import org.apache.commons.lang3.ArrayUtils;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 
 public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
@@ -69,12 +68,12 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	public void deleteNetwork() {
 		for(Point client : networkClients)
-			((TileEntityElectric)Funcs.getBlockTileEntity(worldObj, client)).disconnectFromEnergyNetwork();
+			((TileEntityElectric)Funcs.getTileEntity(worldObj, client)).disconnectFromEnergyNetwork();
 	}
 
 	@Override
 	public boolean isClientValid(Point client) {
-		return Funcs.getBlockTileEntity(worldObj, client) instanceof TileEntityElectric;
+		return Funcs.getTileEntity(worldObj, client) instanceof TileEntityElectric;
 	}
 
 	@Override
@@ -98,17 +97,17 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 		else {
 			// Add the machine
 			networkClients.add(client);
-			((TileEntityElectric)Funcs.getBlockTileEntity(worldObj, client)).connectToEnergyNetwork(coords());
+			((TileEntityElectric)Funcs.getTileEntity(worldObj, client)).connectToEnergyNetwork(coords());
 
 			// Sync the data to the server/all clients
 			if(worldObj.isRemote) {
 				if(player != null)
 					player.addChatMessage("Adding machine at " + client);
 				if(sync)
-					PacketDispatcher.sendPacketToServer(PacketClient.getPacket(true, worldObj.provider.dimensionId, coords(), client));
+					Funcs.sendPacketToServer(new PacketClient(true, worldObj.provider.dimensionId, coords(), client));
 			}
 			else if(sync)
-				PacketDispatcher.sendPacketToAllInDimension(PacketClient.getPacket(true, worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
+				Funcs.sendPacketToAllPlayers(new PacketClient(true, worldObj.provider.dimensionId, coords(), client));
 
 			return true;
 		}
@@ -117,22 +116,22 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public void removeClient(Point client, boolean sync) {
-		TileEntity te = Funcs.getBlockTileEntity(worldObj, client);
+		TileEntity te = Funcs.getTileEntity(worldObj, client);
 		if(te instanceof TileEntityElectric)
 			((TileEntityElectric)te).disconnectFromEnergyNetwork();
 		networkClients.remove(client);
 		if(sync) {
 			if(worldObj.isRemote)
-				PacketDispatcher.sendPacketToServer(PacketClient.getPacket(false, worldObj.provider.dimensionId, coords(), client));
+				Funcs.sendPacketToServer(new PacketClient(false, worldObj.provider.dimensionId, coords(), client));
 			else
-				PacketDispatcher.sendPacketToAllInDimension(PacketClient.getPacket(false, worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
+				Funcs.sendPacketToAllPlayers(new PacketClient(false, worldObj.provider.dimensionId, coords(), client));
 		}
 	}
 
 	@Override
-	public void syncAllClients(Player player) {
+	public void syncAllClients(EntityPlayer player) {
 		for(Point client : networkClients)
-			PacketDispatcher.sendPacketToPlayer(PacketClient.getPacket(true, worldObj.provider.dimensionId, coords(), client), player);
+			Funcs.sendPacketToPlayer(new PacketClient(true, worldObj.provider.dimensionId, coords(), client), player);
 	}
 
 	@Override

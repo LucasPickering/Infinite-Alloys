@@ -1,6 +1,6 @@
 package infinitealloys.tile;
 
-import infinitealloys.item.Items;
+import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.EnumUpgrade;
@@ -51,7 +51,7 @@ public class TEEMetalForge extends TileEntityElectric {
 	public void onBlockDestroyed() {
 		super.onBlockDestroyed();
 		if(analyzerHost != null)
-			((IHost)Funcs.getBlockTileEntity(worldObj, analyzerHost)).removeClient(coords(), true);
+			((IHost)Funcs.getTileEntity(worldObj, analyzerHost)).removeClient(coords(), true);
 	}
 
 	public void connectToAnalyzerNetwork(Point host) {
@@ -138,7 +138,7 @@ public class TEEMetalForge extends TileEntityElectric {
 	 * 
 	 * @return The resulting ingot. */
 	private ItemStack getIngotResult() {
-		final ItemStack result = new ItemStack(Items.alloyIngot);
+		final ItemStack result = new ItemStack(IAItems.alloyIngot);
 		final NBTTagCompound tagCompound = new NBTTagCompound();
 		tagCompound.setInteger("alloy", EnumAlloy.getAlloyForID(recipeAlloyID));
 		result.setTagCompound(tagCompound);

@@ -1,22 +1,44 @@
 package infinitealloys.network;
 
+import infinitealloys.block.BlockMachine;
 import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.tile.IHost;
+import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
+import infinitealloys.util.Funcs;
+import infinitealloys.util.Point;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.DimensionManager;
 import com.google.common.io.ByteArrayDataInput;
 
-public class PacketValidAlloys implements PacketIA {
+public class PacketValidAlloys implements IPacketIA {
 
-	@Override
-	public void execute(EntityPlayer player, ByteArrayDataInput data) {
-		final int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT];
-		for(int i = 0; i < validAlloys.length; i++)
-			validAlloys[i] = data.readInt();
-		InfiniteAlloys.instance.setValidAlloys(validAlloys);
+	private int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT];
+
+	public PacketValidAlloys() {}
+
+	public PacketValidAlloys(int[] validAlloys) {
+		this.validAlloys = validAlloys;
 	}
 
-	public static Packet250CustomPayload getPacket() {
-		return PacketHandler.getPacket(PacketHandler.WORLD_DATA, InfiniteAlloys.instance.getValidAlloys());
+	@Override
+	public void readBytes(ByteBuf bytes) {
+		for(int i = 0; i < validAlloys.length; i++)
+			validAlloys[i] = bytes.readInt();
+	}
+
+	@Override
+	public void writeBytes(ByteBuf bytes) {
+		ChannelHandler.writeObject(bytes, validAlloys);
+	}
+
+	@Override
+	public void executeServer(EntityPlayer player) {}
+
+	@Override
+	public void executeClient(EntityPlayer player) {
+		InfiniteAlloys.instance.setValidAlloys(validAlloys);
 	}
 }

@@ -1,14 +1,14 @@
 package infinitealloys.core;
 
-import infinitealloys.block.Blocks;
-import infinitealloys.item.Items;
+import infinitealloys.block.IABlocks;
+import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
 import java.util.Random;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.config.Configuration;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -18,10 +18,8 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 
-@Mod(modid = "InfiniteAlloys", name = "Infinite Alloys", version = "@VERSION@")
-@NetworkMod(channels = { "InfiniteAlloys" }, clientSideRequired = true, serverSideRequired = false, packetHandler = infinitealloys.network.PacketHandler.class)
+@Mod(modid = "infinitealloys", name = "Infinite Alloys", version = "@VERSION@")
 public class InfiniteAlloys {
 
 	@Instance("InfiniteAlloys")
@@ -34,15 +32,8 @@ public class InfiniteAlloys {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		final Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
-		Blocks.oreID = config.getBlock("Ore", 3000).getInt();
-		Blocks.machineID = config.getBlock("Machine", 3001).getInt();
-		Items.multiID = config.getItem(Configuration.CATEGORY_ITEM, "MultiItem", 15000).getInt();
-		Items.ingotID = config.getItem(Configuration.CATEGORY_ITEM, "Ingot", 15001).getInt();
-		Items.alloyIngotID = config.getItem(Configuration.CATEGORY_ITEM, "AlloyIngot", 15002).getInt();
-		Items.upgradeID = config.getItem(Configuration.CATEGORY_ITEM, "Upgrade", 15003).getInt();
-		Items.internetWandID = config.getItem(Configuration.CATEGORY_ITEM, "Internet Wand", 15004).getInt();
 
 		final int[] metalColors = { 0x2a2a2a, 0xd2cda3, 0xccc34f, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
 		for(int i = 0; i < Consts.METAL_COUNT; i++)

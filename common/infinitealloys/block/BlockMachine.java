@@ -11,13 +11,14 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.List;
-import javax.swing.Icon;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -39,17 +40,17 @@ public class BlockMachine extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		for(int i = 0; i < Consts.MACHINE_COUNT; i++) {
-			Blocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_top");
-			Blocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_bottom");
-			Blocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_front");
-			Blocks.machineIcons[i][3] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_side");
+			IABlocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_top");
+			IABlocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_bottom");
+			IABlocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_front");
+			IABlocks.machineIcons[i][3] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_side");
 		}
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getBlockTexture(IBlockAccess blockAccess, int x, int y, int z, int side) {
-		side = side <= Consts.TOP ? side : side == ((TileEntityMachine)blockAccess.getBlockTileEntity(x, y, z)).front ? Consts.SOUTH : Consts.NORTH;
+	public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side) {
+		side = side <= Consts.TOP ? side : side == ((TileEntityMachine)blockAccess.getTileEntity(x, y, z)).front ? Consts.SOUTH : Consts.NORTH;
 		return getIcon(side, blockAccess.getBlockMetadata(x, y, z));
 	}
 
@@ -58,30 +59,30 @@ public class BlockMachine extends BlockContainer {
 	public IIcon getIcon(int side, int metadata) {
 		switch(side) {
 			case Consts.TOP:
-				return Blocks.machineIcons[metadata][0];
+				return IABlocks.machineIcons[metadata][0];
 
 			case Consts.BOTTOM:
-				return Blocks.machineIcons[metadata][1];
+				return IABlocks.machineIcons[metadata][1];
 
 			case Consts.SOUTH:
-				return Blocks.machineIcons[metadata][2];
+				return IABlocks.machineIcons[metadata][2];
 
 			default:
-				return Blocks.machineIcons[metadata][3];
+				return IABlocks.machineIcons[metadata][3];
 		}
 	}
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
 		ItemStack heldItem = player.inventory.getCurrentItem();
-		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
+		TileEntityMachine tem = (TileEntityMachine)world.getTileEntity(x, y, z);
 
 		// Sync the network data for each host TE in this world if it has not already been done for this player
-		if(!world.isRemote && MachineHelper.playersToSync.contains(player.username)) {
+		if(!world.isRemote && MachineHelper.playersToSync.contains(player.getDisplayName())) {
 			for(Object te : world.loadedTileEntityList)
 				if(te instanceof IHost)
-					((IHost)te).syncAllClients((Player)player);
-			MachineHelper.playersToSync.remove(player.username);
+					((IHost)te).syncAllClients(player);
+			MachineHelper.playersToSync.remove(player.getDisplayName());
 		}
 
 		// Is the player holding an internet wand?
@@ -103,12 +104,12 @@ public class BlockMachine extends BlockContainer {
 
 	public void openGui(World world, EntityPlayer player, TileEntityMachine tem, boolean fromComputer) {
 		if(!fromComputer && world.isRemote)
-			MachineHelper.controllers.remove(player.username);
+			MachineHelper.controllers.remove(player.getDisplayName());
 		if(tem instanceof TEMComputer)
-			MachineHelper.controllers.put(player.username, new Point(tem.xCoord, tem.yCoord, tem.zCoord));
+			MachineHelper.controllers.put(player.getDisplayName(), new Point(tem.xCoord, tem.yCoord, tem.zCoord));
 		player.openGui(InfiniteAlloys.instance, tem.getID(), world, tem.xCoord, tem.yCoord, tem.zCoord);
 		if(!world.isRemote) {
-			tem.playersUsing.add(player.username);
+			tem.playersUsing.add(player.getDisplayName());
 			world.markBlockForUpdate(tem.xCoord, tem.yCoord, tem.zCoord);
 		}
 	}
@@ -123,28 +124,23 @@ public class BlockMachine extends BlockContainer {
 		}
 	}
 
-	@Override
-	public TileEntity createNewTileEntity(World world) {
-		return null;
-	}
-
 	public static void updateBlockState(World world, int x, int y, int z) {
-		TileEntity te = world.getBlockTileEntity(x, y, z);
+		TileEntity te = world.getTileEntity(x, y, z);
 		if(te != null) {
 			te.validate();
-			world.setBlockTileEntity(x, y, z, te);
+			world.setTileEntity(x, y, z, te);
 		}
 	}
 
 	@Override
-	public void getSubBlocks(int id, CreativeTabs creativetabs, List list) {
+	public void getSubBlocks(Item item, CreativeTabs creativetabs, List list) {
 		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
-			list.add(new ItemStack(id, 1, i));
+			list.add(new ItemStack(item, 1, i));
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemstack) {
-		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
+		TileEntityMachine tem = (TileEntityMachine)world.getTileEntity(x, y, z);
 		if(tem != null) {
 			tem.front = Funcs.yawToNumSide(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
 			world.markBlockForUpdate(x, y, z);
@@ -152,10 +148,10 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, int blockID, int metadata) {
-		TileEntityMachine tem = (TileEntityMachine)world.getBlockTileEntity(x, y, z);
+	public void breakBlock(World world, int x, int y, int z, Block block, int metadata) {
+		TileEntityMachine tem = (TileEntityMachine)world.getTileEntity(x, y, z);
 		if(tem != null)
 			tem.onBlockDestroyed();
-		super.breakBlock(world, x, y, z, blockID, metadata);
+		super.breakBlock(world, x, y, z, block, metadata);
 	}
 }

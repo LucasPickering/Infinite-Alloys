@@ -2,7 +2,6 @@ package infinitealloys.tile;
 
 import infinitealloys.util.Point;
 import net.minecraft.entity.player.EntityPlayer;
-import cpw.mods.fml.common.network.Player;
 
 /** Machines that can host networks between other machines, e.g. the computer */
 public interface IHost {
@@ -23,7 +22,7 @@ public interface IHost {
 	public void removeClient(Point client, boolean sync);
 
 	/** Send the client data to a client */
-	public void syncAllClients(Player player);
+	public void syncAllClients(EntityPlayer player);
 
 	/** Get the amount of clients in the network */
 	public int getNetworkSize();

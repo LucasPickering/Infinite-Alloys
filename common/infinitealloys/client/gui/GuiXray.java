@@ -8,13 +8,14 @@ import infinitealloys.util.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiXray extends GuiElectric {
 
@@ -143,7 +144,7 @@ public class GuiXray extends GuiElectric {
 			}
 			blockButtons = new BlockButton[levels.size()];
 			for(int i = 0; i < blockButtons.length; i++)
-				blockButtons[i] = new BlockButton(i % 4 * 40 + 9, (i / 4 - scrollPos) * 20 + 52, tex.inventoryStacks[0].itemID, blockCounts[levels.get(i)],
+				blockButtons[i] = new BlockButton(i % 4 * 40 + 9, (i / 4 - scrollPos) * 20 + 52, tex.inventoryStacks[0].getItem(), blockCounts[levels.get(i)],
 						tex.inventoryStacks[0].getItemDamage(), levels.get(i));
 			if(tex.selectedButton != -1)
 				blockButtons[tex.selectedButton].selected = true;
@@ -165,7 +166,7 @@ public class GuiXray extends GuiElectric {
 			setButtons();
 			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 			tex.shouldSearch = true;
-			PacketDispatcher.sendPacketToServer(PacketXraySearch.getPacket(tex.coords()));
+			Funcs.sendPacketToServer(new PacketXraySearch(tex.coords()));
 		}
 	}
 
@@ -173,18 +174,19 @@ public class GuiXray extends GuiElectric {
 	private class BlockButton extends GuiScreen {
 
 		/** The position of the button within the GUI */
-		final int xPos, yPos;
+		int xPos, yPos;
 
-		final int blockID, blockAmount, blockMeta;
+		Item block;
+		int blockAmount, blockMeta;
 		/** The yValue of blocks that this button represents */
 		final int yValue;
 		Background background;
 		boolean selected;
 
-		BlockButton(int xPos, int yPos, int blockID, int blockAmount, int blockMeta, int yValue) {
+		BlockButton(int xPos, int yPos, Item block, int blockAmount, int blockMeta, int yValue) {
 			this.xPos = xPos;
 			this.yPos = yPos;
-			this.blockID = blockID;
+			this.block = block;
 			this.blockAmount = blockAmount;
 			this.blockMeta = blockMeta;
 			this.yValue = yValue;
@@ -212,8 +214,8 @@ public class GuiXray extends GuiElectric {
 				final String display = Integer.toString(yValue);
 				mc.fontRenderer.drawStringWithShadow(display, xPos + 9 - (mc.fontRenderer.getStringWidth(display) / 2), yPos + 5, 0xffffff);
 
-				itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(blockID, 1, blockMeta), xPos + 18, yPos);
-				itemRenderer.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(blockID, blockAmount, blockMeta), xPos + 19, yPos + 1);
+				itemRender.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(block, 1, blockMeta), xPos + 18, yPos);
+				itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(block, blockAmount, blockMeta), xPos + 19, yPos + 1);
 			}
 		}
 

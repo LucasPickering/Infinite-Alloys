@@ -1,30 +1,27 @@
 package infinitealloys.core;
 
+import ibxm.Player;
 import infinitealloys.network.PacketValidAlloys;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.DimensionManager;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
-import cpw.mods.fml.common.ICraftingHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class EventHandler implements ICraftingHandler {
+public class EventHandler {
 
 	private final String fileName = "InfiniteAlloys.dat";
 	private String worldDir;
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onWorldLoad(Load event) {
 		if(!event.world.isRemote) {
 			if(event.world.provider.dimensionId == 0) {
@@ -44,7 +41,7 @@ public class EventHandler implements ICraftingHandler {
 			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear(); // Clear the list of blocks to be outlines by the x-ray on unload. This is only run client-side
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onWorldSave(Save event) {
 		if(!event.world.isRemote && event.world.provider.dimensionId == 0) {
 			NBTTagCompound nbtTagCompound = new NBTTagCompound(); // An NBTTagCompound for the info to be stored in
@@ -58,17 +55,11 @@ public class EventHandler implements ICraftingHandler {
 		}
 	}
 
-	@ForgeSubscribe
+	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 		if(!event.world.isRemote && event.entity instanceof EntityPlayer) {
-			PacketDispatcher.sendPacketToPlayer(PacketValidAlloys.getPacket(), (Player)event.entity);
-			MachineHelper.playersToSync.add(((EntityPlayer)event.entity).username);
+			Funcs.sendPacketToPlayer(new PacketValidAlloys(InfiniteAlloys.instance.getValidAlloys()), (EntityPlayer)event.entity);
+			MachineHelper.playersToSync.add(((EntityPlayer)event.entity).getDisplayName());
 		}
 	}
-
-	@Override
-	public void onCrafting(EntityPlayer player, ItemStack item, IInventory craftMatrix) {}
-
-	@Override
-	public void onSmelting(EntityPlayer player, ItemStack item) {}
 }

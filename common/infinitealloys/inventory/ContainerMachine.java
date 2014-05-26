@@ -101,7 +101,7 @@ public class ContainerMachine extends Container {
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
 		if(!player.worldObj.isRemote)
-			inventory.playersUsing.remove(player.username);
+			inventory.playersUsing.remove(player.getDisplayName());
 	}
 
 	@Override
@@ -118,7 +118,7 @@ public class ContainerMachine extends Container {
 				slot = (Slot)inventorySlots.get(currentSlot);
 				maxStackSize = Math.min(itemstack.getMaxStackSize(), slot.getSlotStackLimit());
 				stackInSlot = slot.getStack();
-				if(stackInSlot != null && stackInSlot.itemID == itemstack.itemID && (!itemstack.getHasSubtypes() || itemstack.getItemDamage() == stackInSlot.getItemDamage())
+				if(stackInSlot != null && stackInSlot.isItemEqual(itemstack)
 						&& ItemStack.areItemStackTagsEqual(itemstack, stackInSlot)) {
 					final int var9 = stackInSlot.stackSize + itemstack.stackSize;
 					if(var9 <= maxStackSize) {

@@ -6,14 +6,15 @@ import infinitealloys.util.Funcs;
 import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemAlloyIngot extends ItemIA {
 
-	public ItemAlloyIngot(int id) {
-		super(id, "ingot");
+	public ItemAlloyIngot() {
+		super("ingot");
 		setCreativeTab(null);
 		setHasSubtypes(true);
 	}
@@ -76,7 +77,7 @@ public class ItemAlloyIngot extends ItemIA {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int id, CreativeTabs creativetabs, List list) {}
+	public void getSubItems(Item item, CreativeTabs creativetabs, List list) {}
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {

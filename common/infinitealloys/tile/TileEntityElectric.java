@@ -46,7 +46,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 
 		// If the machine should be processing and enough energy is available, increment the progress by one. If this is the first tick of the process, call
 		// startProcess(). If it has reached or exceeded the limit for completion, then finish the process and reset the counter.
-		if(shouldProcess() && energyHost != null && ((TEEEnergyStorage)Funcs.getBlockTileEntity(worldObj, energyHost)).changeRK(getRKChange())) {
+		if(shouldProcess() && energyHost != null && ((TEEEnergyStorage)Funcs.getTileEntity(worldObj, energyHost)).changeRK(getRKChange())) {
 			if(processProgress == 0)
 				onStartProcess();
 			if(++processProgress >= ticksToProcess) {
@@ -61,7 +61,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	public void onBlockDestroyed() {
 		super.onBlockDestroyed();
 		if(energyHost != null)
-			((IHost)Funcs.getBlockTileEntity(worldObj, energyHost)).removeClient(coords(), true);
+			((IHost)Funcs.getTileEntity(worldObj, energyHost)).removeClient(coords(), true);
 	}
 
 	public void connectToEnergyNetwork(Point host) {

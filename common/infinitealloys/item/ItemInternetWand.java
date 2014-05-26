@@ -10,8 +10,8 @@ import net.minecraft.world.World;
 
 public class ItemInternetWand extends ItemIA {
 
-	public ItemInternetWand(int id) {
-		super(id, "internetwand");
+	public ItemInternetWand() {
+		super("internetwand");
 		setMaxStackSize(1);
 	}
 
@@ -41,7 +41,7 @@ public class ItemInternetWand extends ItemIA {
 			itemstack.setTagCompound(tagCompound = new NBTTagCompound());
 
 		// If the wand is not full and the machine is a valid remote client
-		if(!tagCompound.hasKey("Coords" + (Consts.WAND_SIZE - 1)) && MachineHelper.isClient(world.getBlockTileEntity(x, y, z))) {
+		if(!tagCompound.hasKey("Coords" + (Consts.WAND_SIZE - 1)) && MachineHelper.isClient(world.getTileEntity(x, y, z))) {
 			for(int i = 0; i < Consts.WAND_SIZE; i++) { // Iterate over each coord that the wand contains
 				if(tagCompound.hasKey("Coords" + i)) {
 					// If the wand already contains this machine, return false

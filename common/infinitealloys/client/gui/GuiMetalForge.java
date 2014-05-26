@@ -1,7 +1,7 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.item.Items;
-import infinitealloys.network.PacketTEClientToServer;
+import infinitealloys.item.IAItems;
+import infinitealloys.network.PacketTESync;
 import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.util.Consts;
@@ -11,7 +11,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
-import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiMetalForge extends GuiElectric {
 
@@ -43,16 +42,16 @@ public class GuiMetalForge extends GuiElectric {
 		// If there is an alloy available and selected
 		if(temf.recipeAlloyID >= 0)
 			// Render the item icon for the alloy. The itemstack for a valid alloy is obtained by setting the damage to one more than the alloy's ID.
-			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.alloyIngot, 1, temf.recipeAlloyID + 1), 40, 52);
+			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, new ItemStack(IAItems.alloyIngot, 1, temf.recipeAlloyID + 1), 40, 52);
 
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.ingot, 1, i), i % 4 * 18 + 66, i / 4 * 18 + 43);
+			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, new ItemStack(IAItems.ingot, 1, i), i % 4 * 18 + 66, i / 4 * 18 + 43);
 
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			fontRenderer.drawStringWithShadow((temf.recipeAlloyID < 0 ? 0 : EnumAlloy.getMetalAmt(temf.recipeAlloyID, i)) + "", i % 4 * 18 + 77, i / 4 * 18 + 52, 0xffffff);
+			fontRendererObj.drawStringWithShadow((temf.recipeAlloyID < 0 ? 0 : EnumAlloy.getMetalAmt(temf.recipeAlloyID, i)) + "", i % 4 * 18 + 77, i / 4 * 18 + 52, 0xffffff);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
@@ -66,18 +65,18 @@ public class GuiMetalForge extends GuiElectric {
 			if(mouseButton == 0) { // Left-click
 				// Iterate over each alloy with an index greater than the current one
 				for(int i = temf.recipeAlloyID + 1; i < Consts.VALID_ALLOY_COUNT; i++)
-					if(((TEEAnalyzer)Funcs.getBlockTileEntity(mc.theWorld, temf.analyzerHost)).hasAlloy(i))
+					if(((TEEAnalyzer)Funcs.getTileEntity(mc.theWorld, temf.analyzerHost)).hasAlloy(i))
 						temf.recipeAlloyID = i; // If this alloy has been discovered, select it
 			}
 
 			else if(mouseButton == 1) { // Right-click
 				// Iterate over each alloy with an index less than the current one
 				for(int i = temf.recipeAlloyID - 1; i >= 0; i--)
-					if(((TEEAnalyzer)Funcs.getBlockTileEntity(mc.theWorld, temf.analyzerHost)).hasAlloy(i))
+					if(((TEEAnalyzer)Funcs.getTileEntity(mc.theWorld, temf.analyzerHost)).hasAlloy(i))
 						temf.recipeAlloyID = (byte)i; // If this alloy has been discovered, select it
 			}
 
-			PacketDispatcher.sendPacketToServer(PacketTEClientToServer.getPacket(temf)); // Sync the new recipe to the server
+			Funcs.sendPacketToServer(new PacketTESync(temf)); // Sync the new recipe to the server
 		}
 	}
 

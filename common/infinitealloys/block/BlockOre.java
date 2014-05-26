@@ -27,13 +27,13 @@ public class BlockOre extends BlockIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		Blocks.oreForegroundIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "ore_foreground");
-		Blocks.oreBackgroundIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "ore_background");
+		IABlocks.oreForegroundIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "ore_foreground");
+		IABlocks.oreBackgroundIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "ore_background");
 	}
 
 	@Override
 	public IIcon getIcon(int side, int metadata) {
-		return Blocks.oreBackgroundIcon;
+		return IABlocks.oreBackgroundIcon;
 	}
 
 	@Override

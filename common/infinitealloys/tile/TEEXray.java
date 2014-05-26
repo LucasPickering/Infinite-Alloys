@@ -1,11 +1,11 @@
 package infinitealloys.tile;
 
 import infinitealloys.util.EnumUpgrade;
-import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.relauncher.Side;
@@ -70,8 +70,8 @@ public class TEEXray extends TileEntityElectric {
 	 * its place and picks up where it left off next tick. This eliminates stutter during searches. */
 	private void search() {
 		// Convenience variables for the data pertaining to the target block that is being searched for
-		final int targetID = inventoryStacks[0].itemID;
-		final int targetMetadata = inventoryStacks[0].getItemDamage();
+		Item targetBlock = inventoryStacks[0].getItem();
+		int targetMetadata = inventoryStacks[0].getItemDamage();
 
 		// The amount of blocks that have been iterated over this tick. When this reaches TEHelper.SEARCH_PER_TICK, the loops break
 		int blocksSearched = 0;
@@ -89,7 +89,7 @@ public class TEEXray extends TileEntityElectric {
 
 					// If the block at the given coords (which have been converted to absolute coordinates) is of the target block's type, add it to the
 					// list of blocks that have been found.
-					if(Funcs.blocksEqual(worldObj, targetID, targetMetadata, xCoord + x, y, zCoord + z))
+					if(targetBlock == Item.getItemFromBlock(worldObj.getBlock(xCoord + x, y, zCoord + z)) && targetMetadata == worldObj.getBlockMetadata(xCoord + x, y, zCoord + z))
 						detectedBlocks.add(new Point(x, y, z));
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be

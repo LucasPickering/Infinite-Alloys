@@ -24,7 +24,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.network.PacketDispatcher;
 
 public abstract class GuiMachine extends GuiContainer {
 
@@ -125,14 +124,14 @@ public abstract class GuiMachine extends GuiContainer {
 
 		// Draw the tabs of other machines on the network if this machine is connected to a computer
 		machineTabs.clear();
-		Point controller = MachineHelper.controllers.get(mc.thePlayer.username);
+		Point controller = MachineHelper.controllers.get(mc.thePlayer.getDisplayName());
 		if(controller != null) {
-			TEMComputer tec = ((TEMComputer)Funcs.getBlockTileEntity(mc.theWorld, controller));
-			controllerTab = new GuiMachineTab(mc, itemRenderer, -24, 6, tec, true, tem.coords().equals(controller));
+			TEMComputer tec = ((TEMComputer)Funcs.getTileEntity(mc.theWorld, controller));
+			controllerTab = new GuiMachineTab(mc, itemRender, -24, 6, tec, true, tem.coords().equals(controller));
 			controllerTab.drawButton();
 			Point[] clients = tec.getClients();
 			for(int i = 0; i < clients.length; i++) {
-				machineTabs.add(new GuiMachineTab(mc, itemRenderer, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityElectric)Funcs.getBlockTileEntity(mc.theWorld, clients[i]),
+				machineTabs.add(new GuiMachineTab(mc, itemRender, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityElectric)Funcs.getTileEntity(mc.theWorld, clients[i]),
 						i / 5 == 0, clients[i].equals(tem.coords())));
 				machineTabs.get(i).drawButton();
 			}
@@ -175,7 +174,7 @@ public abstract class GuiMachine extends GuiContainer {
 		// Set the width of the box to the length of the longest line
 		int boxWidth = 0;
 		for(ColoredLine line : lines)
-			boxWidth = Math.max(boxWidth, fontRenderer.getStringWidth(line.text));
+			boxWidth = Math.max(boxWidth, fontRendererObj.getStringWidth(line.text));
 
 		// This is from vanilla, I have no idea what it does, other than make it work
 		mouseX += 12;
@@ -197,9 +196,9 @@ public abstract class GuiMachine extends GuiContainer {
 		drawGradientRect(mouseX - 3, mouseY + var9 + 2, mouseX + boxWidth + 3, mouseY + var9 + 3, var12, var12);
 
 		for(int i = 0; i < lines.length; i++)
-			fontRenderer.drawStringWithShadow(lines[i].text, mouseX, mouseY + i * 10 + (i == 0 ? 0 : 2), lines[i].color);
+			fontRendererObj.drawStringWithShadow(lines[i].text, mouseX, mouseY + i * 10 + (i == 0 ? 0 : 2), lines[i].color);
 		zLevel = 0F;
-		itemRenderer.zLevel = 0F;
+		itemRender.zLevel = 0F;
 	}
 
 	@Override
@@ -223,8 +222,8 @@ public abstract class GuiMachine extends GuiContainer {
 			int y = controllerTab.tem.yCoord;
 			int z = controllerTab.tem.zCoord;
 			if(!tem.coords().equals(x, y, z)) {
-				((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, player, controllerTab.tem, false);
-				PacketDispatcher.sendPacketToServer(PacketOpenGui.getPacket(controllerTab.tem.coords(), false));
+				((BlockMachine)world.getBlock(x, y, z)).openGui(world, player, controllerTab.tem, false);
+				Funcs.sendPacketToServer(new PacketOpenGui(controllerTab.tem.coords(), false));
 			}
 			return;
 		}
@@ -236,8 +235,8 @@ public abstract class GuiMachine extends GuiContainer {
 				int y = tab.tem.yCoord;
 				int z = tab.tem.zCoord;
 				if(!tem.coords().equals(tab.tem.coords())) {
-					((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, player, tab.tem, true);
-					PacketDispatcher.sendPacketToServer(PacketOpenGui.getPacket(tab.tem.coords(), false));
+					((BlockMachine)world.getBlock(x, y, z)).openGui(world, player, tab.tem, true);
+					Funcs.sendPacketToServer(new PacketOpenGui(tab.tem.coords(), false));
 				}
 				return;
 			}

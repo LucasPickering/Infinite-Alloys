@@ -1,6 +1,6 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.block.Blocks;
+import infinitealloys.block.IABlocks;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.client.gui.GuiMachine.ColoredLine;
 import infinitealloys.core.InfiniteAlloys;
@@ -23,7 +23,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.DimensionManager;
 import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiInternetWand extends GuiScreen {
 
@@ -74,9 +73,8 @@ public class GuiInternetWand extends GuiScreen {
 				machineButtons[i] = null; // Reset the button
 				if(tagCompound.hasKey("Coords" + i)) { // If there is a machine that corresponds to this button
 					int[] client = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
-					if(!MachineHelper.isClient(DimensionManager.getWorld(client[0])
-							.getBlockTileEntity(client[1], client[2], client[3]))) { // If the block is no longer valid
-						PacketDispatcher.sendPacketToServer(PacketWand.getPacketRemove((byte)i)); // Remove it
+					if(!MachineHelper.isClient(DimensionManager.getWorld(client[0]).getTileEntity(client[1], client[2], client[3]))) { // If the block is no longer valid
+						Funcs.sendPacketToServer(new PacketWand((byte)i)); // Remove it
 						((ItemInternetWand)heldItem.getItem()).removeMachine(heldItem, i);
 						i--; // Decrement i so that it repeats this number for the new button
 					}
@@ -91,14 +89,14 @@ public class GuiInternetWand extends GuiScreen {
 				int[] a = tagCompound.getIntArray("CoordsCurrent");
 				addToWand.enabled = ((ItemInternetWand)heldItem.getItem()).isMachineValid(DimensionManager.getWorld(a[0]), heldItem, a[1], a[2], a[3]);
 
-				TileEntity te = DimensionManager.getWorld(a[0]).getBlockTileEntity(a[1], a[2], a[3]);
+				TileEntity te = DimensionManager.getWorld(a[0]).getTileEntity(a[1], a[2], a[3]);
 
 				addSelected.enabled = selectedButtons != 0;
 				// Go over each machine button
 				for(MachineButton button : machineButtons)
 					if(button != null && (selectedButtons & 1 << button.buttonID) != 0) // If this button is selected
 						// If the selected machine is not valid for the block that was clicked
-						if(!(te instanceof IHost) || button.dimensionID != te.worldObj.provider.dimensionId ||
+						if(!(te instanceof IHost) || button.dimensionID != te.getWorldObj().provider.dimensionId ||
 								!((IHost)te).isClientValid(new Point(button.machineX, button.machineY, button.machineZ)))
 							addSelected.enabled = false; // Set the button to false
 			}
@@ -198,7 +196,7 @@ public class GuiInternetWand extends GuiScreen {
 			case Consts.WAND_SIZE + 1: // Add the block that was clicked to the wand's list
 				ItemStack heldItem = mc.thePlayer.getHeldItem();
 				int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
-				PacketDispatcher.sendPacketToServer(PacketWand.getPacketAdd(a[1], (short)a[2], a[3]));
+				Funcs.sendPacketToServer(new PacketWand(a[1], a[2], a[3]));
 				((ItemInternetWand)heldItem.getItem()).addMachine(mc.theWorld, heldItem, a[1], a[2], a[3]);
 				break;
 
@@ -206,13 +204,13 @@ public class GuiInternetWand extends GuiScreen {
 				heldItem = mc.thePlayer.getHeldItem();
 				int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 
-				if(mc.theWorld.getBlockTileEntity(host[1], host[2], host[3]) instanceof IHost) { // If this is a host
+				if(mc.theWorld.getTileEntity(host[1], host[2], host[3]) instanceof IHost) { // If this is a host
 					for(MachineButton machineButton : machineButtons) { // Go over each button
 						if(machineButton != null && (selectedButtons & 1 << machineButton.buttonID) != 0) { // If this button is selected
 							// Add the selected machine to the host
 							int[] client = heldItem.getTagCompound().getIntArray("Coords" + machineButton.buttonID);
 							if(host[0] == client[0]) // They're in the same dimension
-								((IHost)mc.theWorld.getBlockTileEntity(host[1], host[2], host[3])).addClient(mc.thePlayer, new Point(client[1], client[2], client[3]), true);
+								((IHost)mc.theWorld.getTileEntity(host[1], host[2], host[3])).addClient(mc.thePlayer, new Point(client[1], client[2], client[3]), true);
 						}
 					}
 				}
@@ -220,7 +218,7 @@ public class GuiInternetWand extends GuiScreen {
 
 			default:
 				heldItem = mc.thePlayer.getHeldItem();
-				PacketDispatcher.sendPacketToServer(PacketWand.getPacketRemove((byte)button.id));
+				Funcs.sendPacketToServer(new PacketWand((byte)button.id));
 				((ItemInternetWand)heldItem.getItem()).removeMachine(heldItem, (byte)button.id);
 				break;
 		}
@@ -235,7 +233,7 @@ public class GuiInternetWand extends GuiScreen {
 		// Set the width of the box to the length of the longest line
 		int boxWidth = 0;
 		for(ColoredLine line : lines)
-			boxWidth = Math.max(boxWidth, fontRenderer.getStringWidth(line.text));
+			boxWidth = Math.max(boxWidth, fontRendererObj.getStringWidth(line.text));
 
 		// This is from vanilla, I have no idea what it does, other than make it work
 		mouseX += 12;
@@ -257,7 +255,7 @@ public class GuiInternetWand extends GuiScreen {
 		drawGradientRect(mouseX - 3, mouseY + var9 + 2, mouseX + boxWidth + 3, mouseY + var9 + 3, var12, var12);
 
 		for(int i = 0; i < lines.length; i++)
-			fontRenderer.drawStringWithShadow(lines[i].text, mouseX, mouseY + i * 10 + (i == 0 ? 0 : 2), lines[i].color);
+			fontRendererObj.drawStringWithShadow(lines[i].text, mouseX, mouseY + i * 10 + (i == 0 ? 0 : 2), lines[i].color);
 		zLevel = 0F;
 		itemRenderer.zLevel = 0F;
 	}
@@ -310,7 +308,7 @@ public class GuiInternetWand extends GuiScreen {
 			mc.fontRenderer.drawStringWithShadow(machineY + "", xPos + 82 - (mc.fontRenderer.getStringWidth(machineY + "") / 2), yPos + 5, 0xffffff);
 			mc.fontRenderer.drawStringWithShadow(machineZ + "", xPos + 106 - (mc.fontRenderer.getStringWidth(machineZ + "") / 2), yPos + 5, 0xffffff);
 
-			itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(Blocks.machineID, 1, machineID), xPos, yPos + 1);
+			itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(IABlocks.machine, 1, machineID), xPos, yPos + 1);
 		}
 	}
 }

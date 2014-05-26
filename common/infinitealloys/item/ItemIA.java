@@ -2,7 +2,7 @@ package infinitealloys.item;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -11,19 +11,19 @@ public class ItemIA extends Item {
 
 	private String textureName;
 
-	public ItemIA(int id) {
-		super(id);
+	public ItemIA() {
+		super();
 		setCreativeTab(InfiniteAlloys.tabIA);
 	}
 
-	public ItemIA(int id, String textureName) {
-		this(id);
+	public ItemIA(String textureName) {
+		this();
 		this.textureName = textureName;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister iconRegister) {
+	public void registerIcons(IIconRegister iconRegister) {
 		itemIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + textureName);
 	}
 }

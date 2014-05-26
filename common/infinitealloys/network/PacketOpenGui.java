@@ -1,27 +1,44 @@
 package infinitealloys.network;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.DimensionManager;
 import infinitealloys.block.BlockMachine;
+import infinitealloys.tile.IHost;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.world.World;
-import com.google.common.io.ByteArrayDataInput;
+import io.netty.buffer.ByteBuf;
 
-public class PacketOpenGui implements PacketIA {
+public class PacketOpenGui implements IPacketIA {
+
+	private Point machine;
+	private boolean fromComputer;
+
+	public PacketOpenGui() {}
+
+	public PacketOpenGui(Point machine, boolean fromComputer) {
+		this.machine = machine;
+		this.fromComputer = fromComputer;
+	}
 
 	@Override
-	public void execute(EntityPlayer player, ByteArrayDataInput data) {
-		World world = player.worldObj;
-		int x = data.readInt();
-		int y = data.readInt();
-		int z = data.readInt();
-		boolean fromComputer = data.readBoolean();
-		((BlockMachine)Funcs.getBlock(world, x, y, z)).openGui(world, player, (TileEntityMachine)world.getBlockTileEntity(x, y, z), fromComputer);
+	public void readBytes(ByteBuf bytes) {
+		machine = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+		fromComputer = bytes.readBoolean();
 	}
 
-	public static Packet250CustomPayload getPacket(Point machine, boolean fromComputer) {
-		return PacketHandler.getPacket(PacketHandler.OPEN_GUI, machine, fromComputer);
+	@Override
+	public void writeBytes(ByteBuf bytes) {
+		ChannelHandler.writeObject(bytes, machine);
+		ChannelHandler.writeObject(bytes, fromComputer);
 	}
+
+	@Override
+	public void executeServer(EntityPlayer player) {
+		((BlockMachine)player.worldObj.getBlock(machine.x, machine.y, machine.z)).openGui(player.worldObj, player, (TileEntityMachine)player.worldObj.getTileEntity(machine.x, machine.y, machine.z), fromComputer);
+	}
+
+	@Override
+	public void executeClient(EntityPlayer player) {}
 }

@@ -1,5 +1,6 @@
 package infinitealloys.item;
 
+import infinitealloys.block.IABlocks;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
 import net.minecraft.item.ItemBlock;
@@ -7,8 +8,8 @@ import net.minecraft.item.ItemStack;
 
 public class ItemBlockMachine extends ItemBlock {
 
-	public ItemBlockMachine(int id) {
-		super(id);
+	public ItemBlockMachine() {
+		super(IABlocks.machine);
 		setHasSubtypes(true);
 	}
 

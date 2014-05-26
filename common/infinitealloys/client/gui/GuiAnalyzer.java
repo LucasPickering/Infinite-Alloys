@@ -1,6 +1,6 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.item.Items;
+import infinitealloys.item.IAItems;
 import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
@@ -32,15 +32,15 @@ public class GuiAnalyzer extends GuiElectric {
 			for(int i = 0; i < Consts.METAL_COUNT; i++) { // For each metal
 				int amt = Funcs.intAtPos(EnumAlloy.getAlloyForID(selectedRecipe), Consts.ALLOY_RADIX, i); // The amount of this metal the the currently
 				if(amt > 0) { // If this metal is in this alloy
-					itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, new ItemStack(Items.ingot, 1, i), i * 18 + 26, 33); // Draw the metal ingot
+					itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, new ItemStack(IAItems.ingot, 1, i), i * 18 + 26, 33); // Draw the metal ingot
 					GL11.glDisable(GL11.GL_LIGHTING);
-					fontRenderer.drawStringWithShadow(Integer.toString(amt), i * 18 + 37, 42, 0xffffff); // Draw the amount of the metal required
+					fontRendererObj.drawStringWithShadow(Integer.toString(amt), i * 18 + 37, 42, 0xffffff); // Draw the amount of the metal required
 				}
 			}
 
-			ItemStack alloy = new ItemStack(Items.alloyIngot, 1, selectedRecipe + 1);
-			itemRenderer.renderItemIntoGUI(fontRenderer, mc.renderEngine, alloy, 6, 33); // Draw the alloy that it creates
-			fontRenderer.drawStringWithShadow(Funcs.getLoc(alloy.getItem().getUnlocalizedName(alloy)), 28, 42, 0xffffff); // Draw the name of the alloy
+			ItemStack alloy = new ItemStack(IAItems.alloyIngot, 1, selectedRecipe + 1);
+			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, alloy, 6, 33); // Draw the alloy that it creates
+			fontRendererObj.drawStringWithShadow(Funcs.getLoc(alloy.getItem().getUnlocalizedName(alloy)), 28, 42, 0xffffff); // Draw the name of the alloy
 		}
 
 		GL11.glEnable(GL11.GL_LIGHTING);

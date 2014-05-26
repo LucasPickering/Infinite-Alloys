@@ -12,7 +12,7 @@ import infinitealloys.inventory.ContainerESU;
 import infinitealloys.inventory.ContainerMachine;
 import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.inventory.ContainerXray;
-import infinitealloys.item.Items;
+import infinitealloys.item.IAItems;
 import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.tile.TEEMetalForge;
@@ -45,64 +45,51 @@ public class MachineHelper {
 
 	public static final String[] MACHINE_NAMES = { "computer", "metalforge", "analyzer", "xray", "pasture", "energystorage" };
 
-	// Network types
-	public static final int NET_ALL = 0;
-	public static final int NET_COMPUTER = 1;
-	public static final int NET_ENERGY = 2;
-	public static final int NET_ANALYZER = 3;
-
 	/** How many blocks are searched per tick. Used to limit lag on the x-ray. */
 	public static final int SEARCH_PER_TICK = 2000;
 
 	/** The controlling computer for each player */
 	public static HashMap<String, Point> controllers = new HashMap<String, Point>();
 
-	/** The blocks that the x-ray can detect and their worths */
-	private static HashMap<String, Integer> detectables = new HashMap<String, Integer>();
+	/** The blocks that the x-ray can detect and their values */
+	private static HashMap<ItemStack, Integer> detectables = new HashMap<ItemStack, Integer>();
 
 	/** A list of the players who still need network information for the machines to be synced. This sync is done when they first activate a machine. */
 	public static ArrayList<String> playersToSync = new ArrayList<String>();
 
 	/** Add a block to the list of blocks that can be detected by the x-ray
 	 * 
-	 * @param block the block to be added to the list with a metadata of 0
-	 * @param worth the amount the block is worth, higher worth requires more energy to detect */
-	public static void addDetectable(Block block, int worth) {
-		addDetectable(block, 0, worth);
+	 * @param value the amount the block is worth, higher value requires more energy to detect */
+	public static void addDetectable(Block block, int value) {
+		addDetectable(new ItemStack(block), value);
 	}
 
-	/** Add a block with metadata to the list of blocks that can be detected by the x-ray
+	/** Add a block to the list of blocks that can be detected by the x-ray
 	 * 
-	 * @param block the block to be added to the list
-	 * @param metadata the metadata of the block to be added to the list
-	 * @param worth the amount the block is worth, higher worth requires more energy to detect */
-	public static void addDetectable(Block block, int metadata, int worth) {
-		detectables.put(block.blockID + "@" + metadata, worth);
+	 * @param value the amount the block is worth, higher value requires more energy to detect */
+	public static void addDetectable(ItemStack itemstack, int value) {
+		detectables.put(itemstack, value);
 	}
 
 	/** Add a block or blocks to the list of blocks that can be detected by the x-ray with an ore dictionary string
 	 * 
 	 * @param dictName the ore dictionary string from which the block(s) is/are retrieved
-	 * @param worth the amount the block(s) is/are worth, higher worth requires more energy to detect */
-	public static void addDictDetectables(String dictName, int worth) {
-		for(final ItemStack block : OreDictionary.getOres(dictName))
-			detectables.put(block.itemID + "@" + block.getItemDamage(), worth);
+	 * @param value the amount the block(s) is/are worth, higher value requires more energy to detect */
+	public static void addDictDetectable(String dictName, int value) {
+		for(ItemStack block : OreDictionary.getOres(dictName))
+			addDetectable(block, value);
 	}
 
 	public static boolean isDetectable(ItemStack stack) {
-		return detectables.containsKey(stack.itemID + "@" + stack.getItemDamage());
-	}
-
-	public static int getDetectableWorth(int id, int metadata) {
-		return detectables.get(id + "@" + metadata);
+		return detectables.containsKey(stack);
 	}
 
 	public static int getDetectableWorth(ItemStack stack) {
-		return detectables.get(stack.itemID + "@" + stack.getItemDamage());
+		return detectables.get(stack);
 	}
 
 	public static int getIngotNum(ItemStack ingot) {
-		if(ingot.itemID == Items.ingot.itemID && ingot.getItemDamage() < Consts.METAL_COUNT)
+		if(ingot.getItem() == IAItems.ingot && ingot.getItemDamage() < Consts.METAL_COUNT)
 			return ingot.getItemDamage();
 		return -1;
 	}
@@ -168,7 +155,7 @@ public class MachineHelper {
 			case ANALYZER:
 				switch(index) {
 					default:
-						return itemstack.itemID == Items.ingot.itemID && itemstack.getItemDamage() == index;
+						return itemstack.getItem() == IAItems.ingot && itemstack.getItemDamage() == index;
 				}
 			case XRAY:
 				return MachineHelper.isDetectable(itemstack);

@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 
 public class TEMComputer extends TileEntityMachine implements IHost {
 
@@ -51,7 +49,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 	@Override
 	public boolean isClientValid(Point client) {
-		TileEntity te = Funcs.getBlockTileEntity(worldObj, client);
+		TileEntity te = Funcs.getTileEntity(worldObj, client);
 		return te instanceof TileEntityMachine && ((TileEntityMachine)te).hasUpgrade(EnumUpgrade.WIRELESS);
 	}
 
@@ -86,10 +84,10 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 				if(player != null)
 					player.addChatMessage("Adding machine at " + client);
 				if(sync)
-					PacketDispatcher.sendPacketToServer(PacketClient.getPacket(true, worldObj.provider.dimensionId, coords(), client));
+					Funcs.sendPacketToServer(new PacketClient(true, worldObj.provider.dimensionId, coords(), client));
 			}
 			else if(sync)
-				PacketDispatcher.sendPacketToAllInDimension(PacketClient.getPacket(true, worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
+				Funcs.sendPacketToAllPlayers(new PacketClient(true, worldObj.provider.dimensionId, coords(), client));
 
 			return true;
 		}
@@ -101,16 +99,16 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 		networkClients.remove(client);
 		if(sync) {
 			if(worldObj.isRemote)
-				PacketDispatcher.sendPacketToServer(PacketClient.getPacket(false, worldObj.provider.dimensionId, coords(), client));
+				Funcs.sendPacketToServer(new PacketClient(false, worldObj.provider.dimensionId, coords(), client));
 			else
-				PacketDispatcher.sendPacketToAllInDimension(PacketClient.getPacket(false, worldObj.provider.dimensionId, coords(), client), worldObj.provider.dimensionId);
+				Funcs.sendPacketToAllPlayers(new PacketClient(false, worldObj.provider.dimensionId, coords(), client));
 		}
 	}
 
 	@Override
-	public void syncAllClients(Player player) {
+	public void syncAllClients(EntityPlayer player) {
 		for(Point client : networkClients)
-			PacketDispatcher.sendPacketToPlayer(PacketClient.getPacket(true, worldObj.provider.dimensionId, coords(), client), player);
+			Funcs.sendPacketToPlayer(new PacketClient(true, worldObj.provider.dimensionId, coords(), client), player);
 	}
 
 	@Override
@@ -156,7 +154,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to an
 					// energy storage unit, add it to the power network.
-					final TileEntity te = worldObj.getBlockTileEntity(xCoord + x, yCoord + y, zCoord + z);
+					final TileEntity te = worldObj.getTileEntity(xCoord + x, yCoord + y, zCoord + z);
 					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(EnumUpgrade.WIRELESS))
 						addClient(null, new Point(xCoord + x, yCoord + y, zCoord + z), true);
 

@@ -1,22 +1,39 @@
 package infinitealloys.network;
 
-import infinitealloys.tile.TEEXray;
-import infinitealloys.util.Point;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.network.packet.Packet250CustomPayload;
-import com.google.common.io.ByteArrayDataInput;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.DimensionManager;
+import infinitealloys.tile.IHost;
+import infinitealloys.tile.TEEXray;
+import infinitealloys.util.Funcs;
+import infinitealloys.util.Point;
+import io.netty.buffer.ByteBuf;
 
-public class PacketXraySearch implements PacketIA {
+public class PacketXraySearch implements IPacketIA {
+
+	private Point xray;
+
+	public PacketXraySearch() {}
+
+	public PacketXraySearch(Point xray) {
+		this.xray = xray;
+	}
 
 	@Override
-	public void execute(EntityPlayer player, ByteArrayDataInput data) {
-		int x = data.readInt();
-		int y = data.readInt();
-		int z = data.readInt();
-		((TEEXray)player.worldObj.getBlockTileEntity(x, y, z)).shouldSearch = true;
+	public void readBytes(ByteBuf bytes) {
+		xray = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
 	}
 
-	public static Packet250CustomPayload getPacket(Point xray) {
-		return PacketHandler.getPacket(PacketHandler.XRAY_SEARCH, xray);
+	@Override
+	public void writeBytes(ByteBuf bytes) {
+		ChannelHandler.writeObject(bytes, xray);
 	}
+
+	@Override
+	public void executeServer(EntityPlayer player) {
+		((TEEXray)player.worldObj.getTileEntity(xray.x, xray.y, xray.z)).shouldSearch = true;
+	}
+
+	@Override
+	public void executeClient(EntityPlayer player) {}
 }

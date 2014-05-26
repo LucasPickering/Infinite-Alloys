@@ -1,7 +1,6 @@
 package infinitealloys.tile;
 
-import infinitealloys.item.Items;
-import infinitealloys.network.PacketTEServerToClient;
+import infinitealloys.item.IAItems;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
@@ -13,7 +12,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.tileentity.TileEntity;
 
 /** A base, abstract class for Tile Entities that can receive upgrades. TileEntityElectric blocks are a sub-type of this. Often referred to as TEMs or machines.
@@ -34,7 +32,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public byte front;
 
 	/** A binary integer used to determine what upgrades have been installed */
-	private short upgrades;
+	private int upgrades;
 
 	/** A binary integer containing upgrades that the machine starts with, e.g. the computer starts with the Wireless upgrade */
 	protected int startingUpgrades;
@@ -87,7 +85,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 					if(j > stack.stackSize)
 						j = stack.stackSize;
 					stack.stackSize -= j;
-					EntityItem item = new EntityItem(worldObj, xCoord + f1, yCoord + f2, zCoord + f3, new ItemStack(stack.itemID, j, stack.getItemDamage()));
+					EntityItem item = new EntityItem(worldObj, xCoord + f1, yCoord + f2, zCoord + f3, new ItemStack(stack.getItem(), j, stack.getItemDamage()));
 					if(stack.hasTagCompound())
 						item.getEntityItem().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
 					item.motionX = random.nextGaussian() * 0.05F;
@@ -104,7 +102,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 				float f = random.nextFloat() * 0.8F + 0.1F;
 				float f1 = random.nextFloat() * 0.8F + 0.1F;
 				float f2 = random.nextFloat() * 0.8F + 0.1F;
-				EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(Items.upgrade, 1, upgrade.ordinal()));
+				EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(IAItems.upgrade, 1, upgrade.ordinal()));
 				item.motionX = random.nextGaussian() * 0.05F;
 				item.motionY = random.nextGaussian() * 0.25F;
 				item.motionZ = random.nextGaussian() * 0.05F;
@@ -117,13 +115,13 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		upgrades = tagCompound.getShort("Upgrades");
-		front = tagCompound.getByte("Orientation");
-		final NBTTagList nbttaglist = tagCompound.getTagList("Items");
+		front = tagCompound.getByte("orientation");
+		upgrades = tagCompound.getInteger("upgrades");
+		NBTTagList nbttaglist = tagCompound.getTagList("Items", 0);
 		inventoryStacks = new ItemStack[getSizeInventory()];
 		for(int i = 0; i < nbttaglist.tagCount(); i++) {
-			final NBTTagCompound nbttag = (NBTTagCompound)nbttaglist.tagAt(i);
-			final byte var5 = nbttag.getByte("Slot");
+			NBTTagCompound nbttag = (NBTTagCompound)nbttaglist.getCompoundTagAt(i);
+			byte var5 = nbttag.getByte("Slot");
 			if(var5 >= 0 && var5 < inventoryStacks.length)
 				inventoryStacks[var5] = ItemStack.loadItemStackFromNBT(nbttag);
 		}
@@ -132,23 +130,18 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		tagCompound.setShort("Upgrades", upgrades);
-		tagCompound.setByte("Orientation", front);
-		final NBTTagList nbttaglist = new NBTTagList();
+		tagCompound.setByte("orientation", front);
+		tagCompound.setInteger("upgrades", upgrades);
+		NBTTagList nbttaglist = new NBTTagList();
 		for(int i = 0; i < inventoryStacks.length; i++) {
 			if(inventoryStacks[i] != null) {
-				final NBTTagCompound nbt = new NBTTagCompound();
+				NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setByte("Slot", (byte)i);
 				inventoryStacks[i].writeToNBT(nbt);
 				nbttaglist.appendTag(nbt);
 			}
 		}
 		tagCompound.setTag("Items", nbttaglist);
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		return PacketTEServerToClient.getPacket(this);
 	}
 
 	/** A list of the data that gets sent from server to client over the network */
@@ -161,7 +154,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		return null;
 	}
 
-	public void handlePacketDataFromServer(byte orientation, short upgrades) {
+	public void handlePacketDataFromServer(byte orientation, int upgrades) {
 		front = orientation;
 		this.upgrades = upgrades;
 	}
@@ -172,18 +165,13 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	}
 
 	@Override
-	public String getInvName() {
+	public String getInventoryName() {
 		return MachineHelper.MACHINE_NAMES[getID()];
 	}
 
 	@Override
 	public final boolean isItemValidForSlot(int slot, ItemStack itemstack) {
 		return slot == upgradeSlotIndex && isUpgradeValid(itemstack) || slot < upgradeSlotIndex && MachineHelper.stackValidForSlot(getID(), slot, itemstack);
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
 	}
 
 	@Override
@@ -241,10 +229,15 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	}
 
 	@Override
-	public void openChest() {}
+	public void openInventory() {}
 
 	@Override
-	public void closeChest() {}
+	public void closeInventory() {}
+
+	@Override
+	public boolean hasCustomInventoryName() {
+		return true;
+	}
 
 	public final int getUpgrades() {
 		return upgrades;
@@ -261,7 +254,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	 * @return true if valid */
 	public final boolean isUpgradeValid(ItemStack upgrade) {
 		EnumUpgrade upg = EnumUpgrade.values()[upgrade.getItemDamage()];
-		return upgrade.itemID == Items.upgrade.itemID && (!upg.needsPrereq() || hasUpgrade(upg)) && !hasUpgrade(upg) && validUpgrades.contains(upg);
+		return upgrade.getItem() == IAItems.upgrade && (!upg.needsPrereq() || hasUpgrade(upg)) && !hasUpgrade(upg) && validUpgrades.contains(upg);
 	}
 
 	/** Does the machine have the upgrade

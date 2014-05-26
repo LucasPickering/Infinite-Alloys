@@ -1,26 +1,20 @@
 package infinitealloys.util;
 
+import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.network.IPacketIA;
 import java.awt.Rectangle;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeDirection;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.FMLOutboundHandler;
 import cpw.mods.fml.common.registry.LanguageRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class Funcs {
-
-	public static Block getBlock(int id) {
-		return Block.blocksList[id];
-	}
-
-	public static Block getBlock(World world, int x, int y, int z) {
-		return getBlock(world.getBlockId(x, y, z));
-	}
 
 	/** Translate a number n into a radix, then get the digit at pos. The right-most position is 0 and the index increases to the left.
 	 * 
@@ -59,46 +53,6 @@ public class Funcs {
 		return finalKey;
 	}
 
-	/** Convert a Vanilla MC block face number to a ForgeDirection */
-	public static ForgeDirection numToFDSide(byte num) {
-		switch(num) {
-			case Consts.TOP:
-				return ForgeDirection.UP;
-			case Consts.BOTTOM:
-				return ForgeDirection.DOWN;
-			case Consts.EAST:
-				return ForgeDirection.EAST;
-			case Consts.WEST:
-				return ForgeDirection.WEST;
-			case Consts.NORTH:
-				return ForgeDirection.NORTH;
-			case Consts.SOUTH:
-				return ForgeDirection.SOUTH;
-			default:
-				return ForgeDirection.UNKNOWN;
-		}
-	}
-
-	/** Convert a ForgeDirection to a Vanilla MC block face number */
-	public static byte fdToNumSide(ForgeDirection fd) {
-		switch(fd) {
-			case UP:
-				return Consts.TOP;
-			case DOWN:
-				return Consts.BOTTOM;
-			case EAST:
-				return Consts.EAST;
-			case WEST:
-				return Consts.WEST;
-			case NORTH:
-				return Consts.NORTH;
-			case SOUTH:
-				return Consts.SOUTH;
-			default:
-				return -1;
-		}
-	}
-
 	/** Convert an entity's yaw to a Vanilla MC block face number */
 	public static byte yawToNumSide(int rotation) {
 		switch(rotation) {
@@ -117,13 +71,6 @@ public class Funcs {
 
 	public static String getSideAsString() {
 		return FMLCommonHandler.instance().getEffectiveSide().isClient() ? "Client" : "Server";
-	}
-
-	/** Check if the block at x, y, z is of a certain type
-	 * 
-	 * @return true if block at x, y, z is equals id and metadata */
-	public static boolean blocksEqual(World world, int id, int metadata, int x, int y, int z) {
-		return world.getBlockId(x, y, z) == id && world.getBlockMetadata(x, y, z) == metadata;
 	}
 
 	/** Get an instance of a player from their name */
@@ -177,7 +124,26 @@ public class Funcs {
 	}
 
 	/** Convenience method for getting a TE in a specific world when the coordinates are stored in a {@link Point} */
-	public static TileEntity getBlockTileEntity(World world, Point p) {
-		return world.getBlockTileEntity(p.x, p.y, p.z);
+	public static TileEntity getTileEntity(World world, Point p) {
+		return world.getTileEntity(p.x, p.y, p.z);
+	}
+
+	/** Send a packet over the network to the server */
+	public static void sendPacketToServer(IPacketIA packet) {
+		InfiniteAlloys.instance.proxy.channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
+		InfiniteAlloys.instance.proxy.channels.get(Side.CLIENT).writeOutbound(packet);
+	}
+
+	/** Send a packet over the network to a specific client */
+	public static void sendPacketToPlayer(IPacketIA packet, EntityPlayer player) {
+		InfiniteAlloys.instance.proxy.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
+		InfiniteAlloys.instance.proxy.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
+		InfiniteAlloys.instance.proxy.channels.get(Side.SERVER).writeOutbound(packet);
+	}
+
+	/** Send a packet over the network to all clients */
+	public static void sendPacketToAllPlayers(IPacketIA packet) {
+		InfiniteAlloys.instance.proxy.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
+		InfiniteAlloys.instance.proxy.channels.get(Side.SERVER).writeOutbound(packet);
 	}
 }
