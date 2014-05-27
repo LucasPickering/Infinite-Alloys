@@ -17,6 +17,7 @@ import infinitealloys.util.MachineHelper;
 import java.util.EnumMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.common.MinecraftForge;
@@ -136,20 +137,20 @@ public class CommonProxy {
 	public void initTileEntities() {
 		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
 			GameRegistry.registerTileEntity(MachineHelper.MACHINE_CLASSES[i], MachineHelper.MACHINE_NAMES[i]);
-		MachineHelper.addDetectable(Blocks.coal_ore, 1);
-		MachineHelper.addDetectable(Blocks.iron_ore, 2);
-		MachineHelper.addDetectable(Blocks.gold_ore, 6);
-		MachineHelper.addDetectable(Blocks.diamond_ore, 8);
+		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.coal_ore), 0, 0x333333, 1);
+		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.iron_ore), 0, 0xffffff, 2);
+		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.gold_ore), 0, 0xffffff, 6);
+		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.diamond_ore), 0, 0xffffff, 8);
 
-		MachineHelper.addDictDetectable("oreZinc", 3);
-		MachineHelper.addDictDetectable("oreMagnesium", 4);
-		MachineHelper.addDictDetectable("oreScandium", 5);
-		MachineHelper.addDictDetectable("oreTantalum", 6);
+		MachineHelper.addDictDetectable("oreZinc", Consts.metalColors[0], 3);
+		MachineHelper.addDictDetectable("oreMagnesium", Consts.metalColors[1], 4);
+		MachineHelper.addDictDetectable("oreScandium", Consts.metalColors[2], 5);
+		MachineHelper.addDictDetectable("oreTantalum", Consts.metalColors[3], 6);
 		for(int i = 4; i < Consts.METAL_COUNT; i++)
-			MachineHelper.addDetectable(new ItemStack(IABlocks.ore, 1, i), i + 3);
+			MachineHelper.addDetectable(Item.getItemFromBlock(IABlocks.ore), i, Consts.metalColors[i], i + 3);
 
-		MachineHelper.addDictDetectable("oreCopper", 2);
-		MachineHelper.addDictDetectable("oreTin", 2);
+		MachineHelper.addDictDetectable("oreCopper", 0xffffff, 2);
+		MachineHelper.addDictDetectable("oreTin", 0xffffff, 2);
 	}
 
 	public void initHandlers() {

@@ -57,6 +57,17 @@ public class PacketTESync implements IPacketIA {
 			((TEEMetalForge)te).handlePacketDataFromClient(recipeAlloyID);
 		}
 
+		else if(te instanceof TEEAnalyzer) {
+			int alloys = bytes.readInt();
+			int targetAlloy = bytes.readInt();
+			((TEEAnalyzer)te).handlePacketDataFromClient(alloys, targetAlloy);
+		}
+
+		else if(te instanceof TEEXray) {
+			boolean shouldSearch = bytes.readBoolean();
+			((TEEXray)te).handlePacketDataFromClient(shouldSearch);
+		}
+
 		else if(te instanceof TEEPasture) {
 			byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 			for(int i = 0; i < mobActions.length; i++)
@@ -96,12 +107,6 @@ public class PacketTESync implements IPacketIA {
 							((TEEMetalForge)te).handlePacketDataFromServer(recipeAlloyID, new Point(analyzerHostX, analyzerHostY, analyzerHostZ));
 						break;
 
-					case MachineHelper.ANALYZER:
-						int alloys = bytes.readInt();
-						int targetAlloy = bytes.readInt();
-						((TEEAnalyzer)te).handlePacketDataFromClient(alloys, targetAlloy);
-						break;
-
 					case MachineHelper.XRAY:
 						((TEEXray)te).detectedBlocks.clear();
 						for(int i = 0; i < bytes.readByte()/* Size */; i++)
@@ -122,6 +127,7 @@ public class PacketTESync implements IPacketIA {
 						break;
 				}
 			}
+			player.worldObj.markBlockForUpdate(machine.x, machine.y, machine.z);
 		}
 	}
 }

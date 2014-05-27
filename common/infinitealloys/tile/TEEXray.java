@@ -1,6 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.util.EnumUpgrade;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -36,8 +37,8 @@ public class TEEXray extends TileEntityElectric {
 	public TEEXray() {
 		super(2);
 		stackLimit = 1;
-		ticksToProcess = 24000;
-		baseRKPerTick = -360;
+		ticksToProcess = 24;// TODO:Change this back to 24000
+		baseRKPerTick = 0; // TODO:Change this back to -360
 	}
 
 	@Override
@@ -48,10 +49,12 @@ public class TEEXray extends TileEntityElectric {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
+
 		if(inventoryStacks[0] == null) {
 			detectedBlocks.clear();
 			shouldSearch = false;
 		}
+
 		else if(shouldSearch && !worldObj.isRemote)
 			search();
 	}
@@ -64,6 +67,12 @@ public class TEEXray extends TileEntityElectric {
 	@Override
 	protected boolean shouldResetProgress() {
 		return inventoryStacks[0] == null;
+	}
+
+	/** Called when processProgress reaches ticksToProgress */
+	protected void onFinishProcess() {
+		if(worldObj.isRemote)
+			shouldSearch = false;
 	}
 
 	/** Perform a search for the target block. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a tick, then saves
@@ -116,14 +125,14 @@ public class TEEXray extends TileEntityElectric {
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		// True if there were blocks before to be restored, false if it was empty
-		shouldSearch = tagCompound.getBoolean("ShouldSearch");
+		shouldSearch = tagCompound.getBoolean("shouldSearch");
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		// True if there are blocks on the GUI, false if there are no blocks
-		tagCompound.setBoolean("ShouldSearch", detectedBlocks.size() > 0);
+		tagCompound.setBoolean("shouldSearch", detectedBlocks.size() > 0);
 	}
 
 	@Override
@@ -135,6 +144,15 @@ public class TEEXray extends TileEntityElectric {
 			coords.add(point.z);
 		}
 		return ArrayUtils.addAll(super.getSyncDataToClient(), (byte)detectedBlocks.size(), coords.toArray());
+	}
+
+	@Override
+	public Object[] getSyncDataToServer() {
+		return new Object[] { shouldSearch };
+	}
+
+	public void handlePacketDataFromClient(boolean shouldSearch) {
+		this.shouldSearch = shouldSearch;
 	}
 
 	@Override

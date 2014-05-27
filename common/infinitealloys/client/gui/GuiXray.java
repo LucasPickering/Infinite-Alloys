@@ -1,14 +1,13 @@
 package infinitealloys.client.gui;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.network.PacketXraySearch;
+import infinitealloys.network.PacketTESync;
 import infinitealloys.tile.TEEXray;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -166,32 +165,33 @@ public class GuiXray extends GuiElectric {
 			setButtons();
 			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 			tex.shouldSearch = true;
-			Funcs.sendPacketToServer(new PacketXraySearch(tex.coords()));
+			Funcs.sendPacketToServer(new PacketTESync(tex));
 		}
 	}
 
 	/** A button that represents a type of a block, its y-level, and the quantity of that block in the y-level */
-	private class BlockButton extends GuiScreen {
+	private class BlockButton {
 
-		/** The position of the button within the GUI */
-		int xPos, yPos;
+		private int xPos, yPos;
+		private int width, height;
+		private Item block;
+		private int blockAmount, blockMeta;
 
-		Item block;
-		int blockAmount, blockMeta;
 		/** The yValue of blocks that this button represents */
-		final int yValue;
-		Background background;
-		boolean selected;
+		private final int yValue;
 
-		BlockButton(int xPos, int yPos, Item block, int blockAmount, int blockMeta, int yValue) {
+		private Background background;
+		private boolean selected;
+
+		private BlockButton(int xPos, int yPos, Item block, int blockAmount, int blockMeta, int yValue) {
 			this.xPos = xPos;
 			this.yPos = yPos;
 			this.block = block;
 			this.blockAmount = blockAmount;
 			this.blockMeta = blockMeta;
 			this.yValue = yValue;
-			width = 36;
-			height = 18;
+			width = 33;
+			height = 15;
 
 			// Set the background of the button based on its y-value
 			for(final Background bg : Background.values()) {
@@ -202,17 +202,21 @@ public class GuiXray extends GuiElectric {
 			}
 		}
 
-		void drawButton() {
+		private void drawButton() {
 			if(blockAmount > 0) {
 				// Draw the background texture for the button
-				Funcs.drawTexturedModalRect(this, xPos, yPos, background.texture);
+				drawTexturedModalRect(xPos, yPos, background.texture.x, background.texture.y, background.texture.width, background.texture.height);
+
 				// If this button is selected, draw an overlay to indicate that
-				if(selected)
-					Funcs.drawTexturedModalRect(this, xPos - 1, yPos - 1, SELECTED_OVERLAY);
+				if(selected) {
+					drawHorizontalLine(xPos - 1, xPos + width + 1, yPos - 1, 0xff000000); // Top
+					drawHorizontalLine(xPos - 1, xPos + width + 1, yPos + height + 1, 0xff000000); // Bottom
+					drawVerticalLine(xPos - 1, yPos + height + 1, yPos - 1, 0xff000000);// Left
+					drawVerticalLine(xPos + width + 1, yPos + height + 1, yPos - 1, 0xff000000);// Right
+				}
 
 				// Draw the yValue string
-				final String display = Integer.toString(yValue);
-				mc.fontRenderer.drawStringWithShadow(display, xPos + 9 - (mc.fontRenderer.getStringWidth(display) / 2), yPos + 5, 0xffffff);
+				fontRendererObj.drawStringWithShadow(yValue + "", xPos + 9 - (fontRendererObj.getStringWidth(yValue + "") / 2), yPos + 5, 0xffffff);
 
 				itemRender.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(block, 1, blockMeta), xPos + 18, yPos);
 				itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(block, blockAmount, blockMeta), xPos + 19, yPos + 1);

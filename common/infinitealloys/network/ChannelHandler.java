@@ -12,7 +12,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 
 public class ChannelHandler extends FMLIndexedMessageToMessageCodec<IPacketIA> {
 
-	private final Class[] packetClasses = { PacketValidAlloys.class, PacketTESync.class, PacketOpenGui.class, PacketXraySearch.class, PacketWand.class, PacketClient.class, };
+	private final Class[] packetClasses = { PacketValidAlloys.class, PacketTESync.class, PacketOpenGui.class, PacketWand.class, PacketClient.class, };
 
 	public ChannelHandler() {
 		for(int i = 0; i < packetClasses.length; i++)

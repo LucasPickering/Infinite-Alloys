@@ -1,6 +1,7 @@
 package infinitealloys.client.gui;
 
 import infinitealloys.item.IAItems;
+import infinitealloys.network.PacketTESync;
 import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
@@ -68,6 +69,7 @@ public class GuiAnalyzer extends GuiElectric {
 						if(tea.hasAlloy(i))
 							selectedRecipe = i; // If this alloy has been discovered, select it
 				}
+				Funcs.sendPacketToServer(new PacketTESync(tea));
 			}
 		}
 	}

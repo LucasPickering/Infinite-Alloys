@@ -39,7 +39,7 @@ public abstract class GuiMachine extends GuiContainer {
 	static final Rectangle DOWN_ARROW = new Rectangle(16, 24, 16, 16);
 	static final Rectangle CHECK = new Rectangle(32, 24, 16, 16);
 	static final Rectangle BLOCK_BG_OFF = new Rectangle(48, 24, 36, 18);
-	static final Rectangle SELECTED_OVERLAY = new Rectangle(68, 24, 36, 18);
+	static final Rectangle SELECTED_OVERLAY = new Rectangle(48, 24, 36, 18);
 	static final Rectangle BLOCK_BG_ON = new Rectangle(84, 24, 36, 18);
 	static final Rectangle NETWORK_ICON = new Rectangle(0, 40, 16, 16);
 	static final Rectangle SCROLL_BAR = new Rectangle(172, 51, 12, 96);

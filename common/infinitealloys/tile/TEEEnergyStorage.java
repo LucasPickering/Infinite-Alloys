@@ -39,7 +39,6 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	public TEEEnergyStorage() {
 		super(10);
 		baseRKPerTick = 1;
-		onInventoryChanged();
 	}
 
 	@Override
@@ -185,6 +184,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		currentRK = tagCompound.getInteger("currentRK");
+		baseRKPerTick = tagCompound.getInteger("baseRKPerTick");
 		for(int i = 0; tagCompound.hasKey("client" + i); i++) {
 			int[] client = tagCompound.getIntArray("client" + i);
 			networkClients.add(new Point(client[0], client[1], client[2]));
@@ -195,6 +195,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tagCompound.setInteger("currentRK", currentRK);
+		tagCompound.setInteger("baseRKPerTick", baseRKPerTick);
 		for(int i = 0; i < networkClients.size(); i++) {
 			Point client = networkClients.get(i);
 			tagCompound.setIntArray("client" + i, new int[] { client.x, client.y, client.z });
@@ -217,7 +218,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	 * @param changeInRK the specified change in RK
 	 * @return true if changeInRK plus currentRK is between 0 and maxRK, False otherwise */
 	public boolean changeRK(int changeInRK) {
-		if(currentRK + changeInRK > 0 && currentRK + changeInRK <= maxRK) {
+		if(currentRK + changeInRK >= 0 && currentRK + changeInRK <= maxRK) {
 			currentRK += changeInRK;
 			return true;
 		}

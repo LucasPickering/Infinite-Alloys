@@ -8,10 +8,12 @@ import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -126,9 +128,9 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		final int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
 		if(block == IABlocks.ore) { // Used to colorize the ores
 			final int color = Consts.metalColors[world.getBlockMetadata(x, y, z)];
-			final float red = (color >> 16 & 255) / 255F;
-			final float green = (color >> 8 & 255) / 255F;
-			final float blue = (color & 255) / 255F;
+			float red = (color >> 16 & 255) / 255F;
+			float green = (color >> 8 & 255) / 255F;
+			float blue = (color & 255) / 255F;
 
 			if(renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y - 1, z, 0)) {
 				tessellator.setBrightness(renderer.renderMinY > 0D ? brightness : block.getMixedBrightnessForBlock(world, x, y - 1, z));
@@ -190,12 +192,14 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glTranslated(-RenderManager.renderPosX, -RenderManager.renderPosY, 1 - RenderManager.renderPosZ);
-		GL11.glColor3f(255, 0, 0);
-		final Tessellator tess = Tessellator.instance;
+		Tessellator tess = Tessellator.instance;
 		Tessellator.renderingWorldRenderer = false;
 
-		final Point last = new Point(0, 0, 0);
-		for(final Point block : xrayBlocks) {
+		Point last = new Point(0, 0, 0);
+		World world = Minecraft.getMinecraft().theWorld;
+		for(Point block : xrayBlocks) {
+			int color = MachineHelper.getDetectableColor(Item.getItemFromBlock(world.getBlock(block.x, block.y, block.z)), world.getBlockMetadata(block.x, block.y, block.z));
+			GL11.glColor3f(color >> 16 & 255, color >> 8 & 255, color & 255);
 			GL11.glTranslatef(block.x - last.x, block.y - last.y, block.z - last.z);
 			renderOutlineBox(tess);
 			last.set(block);

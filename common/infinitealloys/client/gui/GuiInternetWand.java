@@ -304,15 +304,15 @@ public class GuiInternetWand extends GuiScreen {
 
 				// Only draw the top line if this box isn't connecting to the one above it
 				else
-					drawHorizontalLine(xPos - 1, xPos + width + 1, yPosBox - 1, 0xff22aa22); // Top
+					drawHorizontalLine(xPos - 1, xPos + width + 1, yPosBox - 1, 0xff26a0da); // Top
 
 				// If this is the last button or if the button below this isn't selected, draw the bottom line
 				if(buttonID == machineButtons.length - 1 || (1 << buttonID + 1 & selectedButtons) == 0)
-					drawHorizontalLine(xPos - 1, xPos + width + 1, yPosBox + heightBox + 1, 0xff22aa22); // Bottom
+					drawHorizontalLine(xPos - 1, xPos + width + 1, yPosBox + heightBox + 1, 0xff26a0da); // Bottom
 
-				drawVerticalLine(xPos - 1, yPosBox + heightBox + 1, yPosBox - 1, 0xff22aa22);// Left
-				drawVerticalLine(xPos + width + 1, yPosBox + heightBox + 1, yPosBox - 1, 0xff22aa22);// Right
-				drawRect(xPos, yPosBox, xPos + width + 1, yPosBox + heightBox + 1, 0x6022aa22); // Shading
+				drawVerticalLine(xPos - 1, yPosBox + heightBox + 1, yPosBox - 1, 0xff26a0da);// Left
+				drawVerticalLine(xPos + width + 1, yPosBox + heightBox + 1, yPosBox - 1, 0xff26a0da);// Right
+				drawRect(xPos, yPosBox, xPos + width + 1, yPosBox + heightBox + 1, 0xaacbe8f6); // Shading
 			}
 
 			GL11.glColor3f(1F, 1F, 1F); // Reset the color
