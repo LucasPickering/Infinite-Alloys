@@ -99,9 +99,6 @@ public class BlockMachine extends BlockContainer {
 			return true;
 		}
 
-		if(!world.isRemote)
-			Funcs.sendPacketToPlayer(new PacketTESync(tem), player); // Sync the machine's data to the client
-
 		openGui(world, player, tem, false);
 		return true;
 	}
@@ -111,11 +108,11 @@ public class BlockMachine extends BlockContainer {
 			MachineHelper.controllers.remove(player.getDisplayName());
 		if(tem instanceof TEMComputer)
 			MachineHelper.controllers.put(player.getDisplayName(), new Point(tem.xCoord, tem.yCoord, tem.zCoord));
-		player.openGui(InfiniteAlloys.instance, tem.getID(), world, tem.xCoord, tem.yCoord, tem.zCoord);
 		if(!world.isRemote) {
 			tem.playersUsing.add(player.getDisplayName());
-			world.markBlockForUpdate(tem.xCoord, tem.yCoord, tem.zCoord);
+			tem.syncToPlayer(player);
 		}
+		player.openGui(InfiniteAlloys.instance, tem.getID(), world, tem.xCoord, tem.yCoord, tem.zCoord);
 	}
 
 	@Override
@@ -145,10 +142,8 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemstack) {
 		TileEntityMachine tem = (TileEntityMachine)world.getTileEntity(x, y, z);
-		if(tem != null) {
+		if(tem != null)
 			tem.front = Funcs.yawToNumSide(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
-			world.markBlockForUpdate(x, y, z);
-		}
 	}
 
 	@Override

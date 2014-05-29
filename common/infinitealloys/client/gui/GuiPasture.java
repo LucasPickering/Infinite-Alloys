@@ -49,6 +49,6 @@ public class GuiPasture extends GuiElectric {
 			mobButtons[i].displayString = Funcs.getLoc("machine.pasture.mode." + tep.mobActions[i]);
 		}
 
-		Funcs.sendPacketToServer(new PacketTESync(tep)); // Send a packet to the server to sync the settings
+		tep.syncToServer();; // Send a packet to the server to sync the settings
 	}
 }

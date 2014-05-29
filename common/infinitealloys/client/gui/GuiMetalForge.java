@@ -76,7 +76,7 @@ public class GuiMetalForge extends GuiElectric {
 						temf.recipeAlloyID = (byte)i; // If this alloy has been discovered, select it
 			}
 
-			Funcs.sendPacketToServer(new PacketTESync(temf)); // Sync the new recipe to the server
+			temf.syncToAllPlayers(); // Sync the new recipe to the server
 		}
 	}
 

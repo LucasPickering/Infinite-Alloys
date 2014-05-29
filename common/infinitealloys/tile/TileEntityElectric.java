@@ -70,7 +70,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 
 	public void disconnectFromEnergyNetwork() {
 		energyHost = null;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		syncToAllPlayers();
 	}
 
 	/** Should the process tick be increased? Called every tick to determine if energy should be used and if progress should continue. NOTE: This will return

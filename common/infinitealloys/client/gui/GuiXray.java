@@ -66,11 +66,10 @@ public class GuiXray extends GuiElectric {
 		wasSearching = tex.getProcessProgress() > 0;
 
 		Funcs.bindTexture(GuiMachine.extras);
+
 		for(int i = scrollPos * 4; i < blockButtons.length && i < scrollPos * 4 + 20; i++)
 			blockButtons[i].drawButton();
 
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override
@@ -165,7 +164,7 @@ public class GuiXray extends GuiElectric {
 			setButtons();
 			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 			tex.shouldSearch = true;
-			Funcs.sendPacketToServer(new PacketTESync(tex));
+			tex.syncToServer();
 		}
 	}
 
@@ -205,6 +204,7 @@ public class GuiXray extends GuiElectric {
 		private void drawButton() {
 			if(blockAmount > 0) {
 				// Draw the background texture for the button
+				Funcs.bindTexture(GuiMachine.extras);
 				drawTexturedModalRect(xPos, yPos, background.texture.x, background.texture.y, background.texture.width, background.texture.height);
 
 				// If this button is selected, draw an overlay to indicate that
@@ -218,8 +218,12 @@ public class GuiXray extends GuiElectric {
 				// Draw the yValue string
 				fontRendererObj.drawStringWithShadow(yValue + "", xPos + 9 - (fontRendererObj.getStringWidth(yValue + "") / 2), yPos + 5, 0xffffff);
 
+				GL11.glEnable(GL11.GL_LIGHTING);
+				
 				itemRender.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(block, 1, blockMeta), xPos + 18, yPos);
-				itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(block, blockAmount, blockMeta), xPos + 19, yPos + 1);
+				itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(block, blockAmount, blockMeta), xPos + 19, yPos + 1, blockAmount + "");
+				
+				GL11.glDisable(GL11.GL_LIGHTING);
 			}
 		}
 

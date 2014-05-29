@@ -69,7 +69,7 @@ public class GuiAnalyzer extends GuiElectric {
 						if(tea.hasAlloy(i))
 							selectedRecipe = i; // If this alloy has been discovered, select it
 				}
-				Funcs.sendPacketToServer(new PacketTESync(tea));
+				tea.syncToServer();
 			}
 		}
 	}

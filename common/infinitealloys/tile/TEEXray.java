@@ -137,13 +137,7 @@ public class TEEXray extends TileEntityElectric {
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		final List<Object> coords = new ArrayList<Object>();
-		for(final Point point : detectedBlocks) {
-			coords.add(point.x);
-			coords.add((short)point.y);
-			coords.add(point.z);
-		}
-		return ArrayUtils.addAll(super.getSyncDataToClient(), (byte)detectedBlocks.size(), coords.toArray());
+		return ArrayUtils.addAll(super.getSyncDataToClient(), detectedBlocks.size(), detectedBlocks.toArray());
 	}
 
 	@Override

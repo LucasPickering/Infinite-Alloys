@@ -1,7 +1,9 @@
 package infinitealloys.tile;
 
 import infinitealloys.item.IAItems;
+import infinitealloys.network.PacketTESync;
 import infinitealloys.util.EnumUpgrade;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 
 /** A base, abstract class for Tile Entities that can receive upgrades. TileEntityElectric blocks are a sub-type of this. Often referred to as TEMs or machines.
@@ -142,6 +145,18 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		tagCompound.setTag("Items", nbttaglist);
 	}
 
+	public void syncToPlayer(EntityPlayer player) {
+		Funcs.sendPacketToPlayer(new PacketTESync(this), player);
+	}
+
+	public void syncToAllPlayers() {
+		Funcs.sendPacketToAllPlayers(new PacketTESync(this));
+	}
+
+	public void syncToServer() {
+		Funcs.sendPacketToServer(new PacketTESync(this));
+	}
+
 	/** A list of the data that gets sent from server to client over the network */
 	public Object[] getSyncDataToClient() {
 		return new Object[] { front, upgrades };
@@ -155,6 +170,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public void handlePacketDataFromServer(byte orientation, int upgrades) {
 		front = orientation;
 		this.upgrades = upgrades;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	/** Get the current (x, y, z) coordinates of this machine in the form of a {@link infinitealloys.util.Point Point} */

@@ -109,8 +109,9 @@ public class PacketTESync implements IPacketIA {
 
 					case MachineHelper.XRAY:
 						((TEEXray)te).detectedBlocks.clear();
-						for(int i = 0; i < bytes.readByte()/* Size */; i++)
-							((TEEXray)te).detectedBlocks.add(new Point(bytes.readInt()/* X */, bytes.readShort()/* Y */, bytes.readInt()/* Z */));
+						int detectedBlocksSize=bytes.readInt();
+						for(int i = 0; i < detectedBlocksSize; i++)
+							((TEEXray)te).detectedBlocks.add(new Point(bytes.readInt()/* X */, bytes.readInt()/* Y */, bytes.readInt()/* Z */));
 						break;
 
 					case MachineHelper.PASTURE:
@@ -127,7 +128,6 @@ public class PacketTESync implements IPacketIA {
 						break;
 				}
 			}
-			player.worldObj.markBlockForUpdate(machine.x, machine.y, machine.z);
 		}
 	}
 }
