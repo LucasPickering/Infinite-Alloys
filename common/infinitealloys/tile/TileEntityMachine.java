@@ -1,7 +1,9 @@
 package infinitealloys.tile;
 
 import infinitealloys.item.IAItems;
-import infinitealloys.network.PacketTESync;
+import infinitealloys.network.MessageTEToClient;
+import infinitealloys.network.MessageTEToServer;
+import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
@@ -10,9 +12,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInvBasic;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -121,7 +121,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		upgrades = tagCompound.getInteger("upgrades");
 		NBTTagList nbttaglist = tagCompound.getTagList("Items", 10);
 		for(int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttag = (NBTTagCompound)nbttaglist.getCompoundTagAt(i);
+			NBTTagCompound nbttag = nbttaglist.getCompoundTagAt(i);
 			byte slot = nbttag.getByte("Slot");
 			if(slot >= 0 && slot < inventoryStacks.length)
 				inventoryStacks[slot] = ItemStack.loadItemStackFromNBT(nbttag);
@@ -145,16 +145,13 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		tagCompound.setTag("Items", nbttaglist);
 	}
 
-	public void syncToPlayer(EntityPlayer player) {
-		Funcs.sendPacketToPlayer(new PacketTESync(this), player);
-	}
-
-	public void syncToAllPlayers() {
-		Funcs.sendPacketToAllPlayers(new PacketTESync(this));
-	}
-
 	public void syncToServer() {
-		Funcs.sendPacketToServer(new PacketTESync(this));
+		Funcs.sendPacketToServer(new MessageTEToServer(this));
+	}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		return NetworkHandler.simpleNetworkWrapper.getPacketFrom(new MessageTEToClient(this));
 	}
 
 	/** A list of the data that gets sent from server to client over the network */

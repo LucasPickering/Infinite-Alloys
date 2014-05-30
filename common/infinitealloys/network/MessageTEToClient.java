@@ -1,9 +1,5 @@
 package infinitealloys.network;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import infinitealloys.tile.IHost;
-import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
@@ -15,19 +11,21 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.DimensionManager;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketTESync implements IPacketIA {
+public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToClient, IMessage> {
 
 	private Point machine;
 	private Object[] data;
 	private ByteBuf bytes;
 
-	public PacketTESync() {}
+	public MessageTEToClient() {}
 
-	public PacketTESync(TileEntityMachine tem) {
+	public MessageTEToClient(TileEntityMachine tem) {
 		this.machine = tem.coords();
 
 		if(tem.getWorldObj().isRemote)
@@ -37,48 +35,20 @@ public class PacketTESync implements IPacketIA {
 	}
 
 	@Override
-	public void readBytes(ByteBuf bytes) {
+	public void fromBytes(ByteBuf bytes) {
 		machine = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
 		this.bytes = bytes;
 	}
 
 	@Override
-	public void writeBytes(ByteBuf bytes) {
-		ChannelHandler.writeObject(bytes, machine);
-		ChannelHandler.writeObject(bytes, data);
+	public void toBytes(ByteBuf bytes) {
+		NetworkHandler.writeObject(bytes, machine);
+		NetworkHandler.writeObject(bytes, data);
 	}
 
 	@Override
-	public void executeServer(EntityPlayer player) {
-		TileEntity te = Funcs.getTileEntity(player.worldObj, machine);
-
-		if(te instanceof TEEMetalForge) {
-			int recipeAlloyID = bytes.readInt();
-			((TEEMetalForge)te).handlePacketDataFromClient(recipeAlloyID);
-		}
-
-		else if(te instanceof TEEAnalyzer) {
-			int alloys = bytes.readInt();
-			int targetAlloy = bytes.readInt();
-			((TEEAnalyzer)te).handlePacketDataFromClient(alloys, targetAlloy);
-		}
-
-		else if(te instanceof TEEXray) {
-			boolean shouldSearch = bytes.readBoolean();
-			((TEEXray)te).handlePacketDataFromClient(shouldSearch);
-		}
-
-		else if(te instanceof TEEPasture) {
-			byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
-			for(int i = 0; i < mobActions.length; i++)
-				mobActions[i] = bytes.readByte();
-			((TEEPasture)te).handlePacketData(mobActions);
-		}
-	}
-
-	@Override
-	public void executeClient(EntityPlayer player) {
-		TileEntity te = Funcs.getTileEntity(player.worldObj, machine);
+	public IMessage onMessage(MessageTEToClient message, MessageContext context) {
+		TileEntity te = Funcs.getTileEntity(Minecraft.getMinecraft().theWorld, machine);
 
 		if(te instanceof TileEntityMachine) {
 			byte orientation = bytes.readByte();
@@ -109,7 +79,7 @@ public class PacketTESync implements IPacketIA {
 
 					case MachineHelper.XRAY:
 						((TEEXray)te).detectedBlocks.clear();
-						int detectedBlocksSize=bytes.readInt();
+						int detectedBlocksSize = bytes.readInt();
 						for(int i = 0; i < detectedBlocksSize; i++)
 							((TEEXray)te).detectedBlocks.add(new Point(bytes.readInt()/* X */, bytes.readInt()/* Y */, bytes.readInt()/* Z */));
 						break;
@@ -129,5 +99,7 @@ public class PacketTESync implements IPacketIA {
 				}
 			}
 		}
+
+		return null;
 	}
 }

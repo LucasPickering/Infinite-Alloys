@@ -2,8 +2,8 @@ package infinitealloys.util;
 
 public class Consts {
 
-	public static final String TEXTURE_DOMAIN = "infinitealloys";
-	public static final String TEXTURE_PREFIX = TEXTURE_DOMAIN + ":";
+	public static final String MOD_ID = "infinitealloys";
+	public static final String TEXTURE_PREFIX = MOD_ID + ":";
 	public static final String LANG_PATH = "/assets/infinitealloys/lang/";
 	public static final String[] langFiles = { "en_US.lang" };
 

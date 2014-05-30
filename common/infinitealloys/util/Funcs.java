@@ -1,18 +1,17 @@
 package infinitealloys.util;
 
-import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.network.IPacketIA;
+import infinitealloys.network.NetworkHandler;
 import java.awt.Rectangle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.FMLOutboundHandler;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class Funcs {
 
@@ -80,7 +79,7 @@ public class Funcs {
 
 	/** Create a texture resource for an IA GUI based on the given texture name */
 	public static ResourceLocation getGuiTexture(String texture) {
-		return new ResourceLocation(Consts.TEXTURE_DOMAIN, "textures/gui/" + texture + ".png");
+		return new ResourceLocation(Consts.MOD_ID, "textures/gui/" + texture + ".png");
 	}
 
 	/** Bind the texture with the given resource to the render engine so that it can be used.
@@ -129,21 +128,17 @@ public class Funcs {
 	}
 
 	/** Send a packet over the network to the server */
-	public static void sendPacketToServer(IPacketIA packet) {
-		InfiniteAlloys.instance.proxy.channels.get(Side.CLIENT).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TOSERVER);
-		InfiniteAlloys.instance.proxy.channels.get(Side.CLIENT).writeOutbound(packet);
+	public static void sendPacketToServer(IMessage message) {
+		NetworkHandler.simpleNetworkWrapper.sendToServer(message);
 	}
 
 	/** Send a packet over the network to a specific client */
-	public static void sendPacketToPlayer(IPacketIA packet, EntityPlayer player) {
-		InfiniteAlloys.instance.proxy.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.PLAYER);
-		InfiniteAlloys.instance.proxy.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(player);
-		InfiniteAlloys.instance.proxy.channels.get(Side.SERVER).writeOutbound(packet);
+	public static void sendPacketToPlayer(IMessage message, EntityPlayer player) {
+		NetworkHandler.simpleNetworkWrapper.sendTo(message, (EntityPlayerMP)player);
 	}
 
 	/** Send a packet over the network to all clients */
-	public static void sendPacketToAllPlayers(IPacketIA packet) {
-		InfiniteAlloys.instance.proxy.channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
-		InfiniteAlloys.instance.proxy.channels.get(Side.SERVER).writeOutbound(packet);
+	public static void sendPacketToAllPlayers(IMessage message) {
+		NetworkHandler.simpleNetworkWrapper.sendToAll(message);
 	}
 }

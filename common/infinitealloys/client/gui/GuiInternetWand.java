@@ -5,7 +5,7 @@ import infinitealloys.client.EnumHelp;
 import infinitealloys.client.gui.GuiMachine.ColoredLine;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
-import infinitealloys.network.PacketWand;
+import infinitealloys.network.MessageWand;
 import infinitealloys.tile.IHost;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -76,7 +76,7 @@ public class GuiInternetWand extends GuiScreen {
 				if(tagCompound.hasKey("Coords" + i)) { // If there is a machine that corresponds to this button
 					int[] client = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
 					if(!MachineHelper.isClient(DimensionManager.getWorld(client[0]).getTileEntity(client[1], client[2], client[3]))) { // If the block is no longer valid
-						Funcs.sendPacketToServer(new PacketWand((byte)i)); // Remove it
+						Funcs.sendPacketToServer(new MessageWand((byte)i)); // Remove it
 						((ItemInternetWand)heldItem.getItem()).removeMachine(heldItem, i);
 						i--; // Decrement i so that it repeats this number for the new button
 					}
@@ -197,7 +197,7 @@ public class GuiInternetWand extends GuiScreen {
 			case Consts.WAND_SIZE + 1: // Add the block that was clicked to the wand's list
 				ItemStack heldItem = mc.thePlayer.getHeldItem();
 				int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
-				Funcs.sendPacketToServer(new PacketWand(a[1], a[2], a[3]));
+				Funcs.sendPacketToServer(new MessageWand(a[1], a[2], a[3]));
 				((ItemInternetWand)heldItem.getItem()).addMachine(mc.theWorld, heldItem, a[1], a[2], a[3]);
 				break;
 
@@ -219,7 +219,7 @@ public class GuiInternetWand extends GuiScreen {
 
 			default:
 				heldItem = mc.thePlayer.getHeldItem();
-				Funcs.sendPacketToServer(new PacketWand((byte)button.id));
+				Funcs.sendPacketToServer(new MessageWand((byte)button.id));
 				((ItemInternetWand)heldItem.getItem()).removeMachine(heldItem, (byte)button.id);
 				break;
 		}

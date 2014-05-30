@@ -1,7 +1,5 @@
 package infinitealloys.core;
 
-import infinitealloys.block.IABlocks;
-import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.Funcs;
@@ -16,13 +14,12 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = "infinitealloys", name = "Infinite Alloys", version = "@VERSION@")
+@Mod(modid = Consts.MOD_ID, name = "Infinite Alloys", version = "@VERSION@")
 public class InfiniteAlloys {
 
-	@Instance("infinitealloys")
+	@Instance(Consts.MOD_ID)
 	public static InfiniteAlloys instance;
 	@SidedProxy(clientSide = "infinitealloys.client.ClientProxy", serverSide = "infinitealloys.CommonProxy")
 	public static CommonProxy proxy;
@@ -54,9 +51,6 @@ public class InfiniteAlloys {
 		proxy.initHandlers();
 		proxy.initRendering();
 	}
-
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {}
 
 	public void saveAlloyData(NBTTagCompound nbtTagCompound) {
 		nbtTagCompound.setIntArray("validAlloys", validAlloys);

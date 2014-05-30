@@ -1,7 +1,6 @@
 package infinitealloys.client.gui;
 
 import infinitealloys.item.IAItems;
-import infinitealloys.network.PacketTESync;
 import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.util.Consts;
@@ -76,7 +75,7 @@ public class GuiMetalForge extends GuiElectric {
 						temf.recipeAlloyID = (byte)i; // If this alloy has been discovered, select it
 			}
 
-			temf.syncToAllPlayers(); // Sync the new recipe to the server
+			temf.syncToServer(); // Sync the new recipe to the server
 		}
 	}
 

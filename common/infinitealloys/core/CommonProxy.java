@@ -11,10 +11,9 @@ import infinitealloys.item.ItemIngot;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.item.ItemMulti;
 import infinitealloys.item.ItemUpgrade;
-import infinitealloys.network.ChannelHandler;
+import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
-import java.util.EnumMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -23,15 +22,12 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy {
 
 	public GfxHandler gfxHandler;
-	public EnumMap<Side, FMLEmbeddedChannel> channels;
 
 	public void initLocalization() {}
 
@@ -154,7 +150,7 @@ public class CommonProxy {
 	}
 
 	public void initHandlers() {
-		channels = NetworkRegistry.INSTANCE.newChannel("infinitealloys", new ChannelHandler());
+		NetworkHandler.init();
 		gfxHandler = new GfxHandler();
 		EventHandler eventHandler = new EventHandler();
 		MinecraftForge.EVENT_BUS.register(eventHandler);

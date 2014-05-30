@@ -1,7 +1,6 @@
 package infinitealloys.core;
 
-import ibxm.Player;
-import infinitealloys.network.PacketValidAlloys;
+import infinitealloys.network.MessageValidAlloys;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import java.io.FileInputStream;
@@ -58,7 +57,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 		if(!event.world.isRemote && event.entity instanceof EntityPlayer) {
-			Funcs.sendPacketToPlayer(new PacketValidAlloys(InfiniteAlloys.instance.getValidAlloys()), (EntityPlayer)event.entity);
+			Funcs.sendPacketToPlayer(new MessageValidAlloys(InfiniteAlloys.instance.getValidAlloys()), (EntityPlayer)event.entity);
 			MachineHelper.playersToSync.add(((EntityPlayer)event.entity).getDisplayName());
 		}
 	}

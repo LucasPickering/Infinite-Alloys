@@ -3,7 +3,7 @@ package infinitealloys.client.gui;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.network.PacketOpenGui;
+import infinitealloys.network.MessageOpenGui;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
@@ -223,7 +223,7 @@ public abstract class GuiMachine extends GuiContainer {
 			int z = controllerTab.tem.zCoord;
 			if(!tem.coords().equals(x, y, z)) {
 				((BlockMachine)world.getBlock(x, y, z)).openGui(world, player, controllerTab.tem, false);
-				Funcs.sendPacketToServer(new PacketOpenGui(controllerTab.tem.coords(), false));
+				Funcs.sendPacketToServer(new MessageOpenGui(controllerTab.tem.coords(), false));
 			}
 			return;
 		}
@@ -236,7 +236,7 @@ public abstract class GuiMachine extends GuiContainer {
 				int z = tab.tem.zCoord;
 				if(!tem.coords().equals(tab.tem.coords())) {
 					((BlockMachine)world.getBlock(x, y, z)).openGui(world, player, tab.tem, true);
-					Funcs.sendPacketToServer(new PacketOpenGui(tab.tem.coords(), false));
+					Funcs.sendPacketToServer(new MessageOpenGui(tab.tem.coords(), false));
 				}
 				return;
 			}

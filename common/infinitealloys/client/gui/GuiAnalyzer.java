@@ -1,7 +1,7 @@
 package infinitealloys.client.gui;
 
 import infinitealloys.item.IAItems;
-import infinitealloys.network.PacketTESync;
+import infinitealloys.network.MessageTEToClient;
 import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;

@@ -1,7 +1,6 @@
 package infinitealloys.client.gui;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.network.PacketTESync;
 import infinitealloys.tile.TEEXray;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
@@ -9,7 +8,6 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

@@ -1,13 +1,12 @@
 package infinitealloys.tile;
 
-import infinitealloys.network.PacketClient;
+import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -108,10 +107,10 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 				if(player != null)
 					player.addChatComponentMessage(new ChatComponentText("Adding machine at " + client));
 				if(sync)
-					Funcs.sendPacketToServer(new PacketClient(true, worldObj.provider.dimensionId, coords(), client));
+					Funcs.sendPacketToServer(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client));
 			}
 			else if(sync)
-				Funcs.sendPacketToAllPlayers(new PacketClient(true, worldObj.provider.dimensionId, coords(), client));
+				Funcs.sendPacketToAllPlayers(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client));
 
 			return true;
 		}
@@ -126,16 +125,16 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 		networkClients.remove(client);
 		if(sync) {
 			if(worldObj.isRemote)
-				Funcs.sendPacketToServer(new PacketClient(false, worldObj.provider.dimensionId, coords(), client));
+				Funcs.sendPacketToServer(new MessageNetworkEditToServer(false, worldObj.provider.dimensionId, coords(), client));
 			else
-				Funcs.sendPacketToAllPlayers(new PacketClient(false, worldObj.provider.dimensionId, coords(), client));
+				Funcs.sendPacketToAllPlayers(new MessageNetworkEditToServer(false, worldObj.provider.dimensionId, coords(), client));
 		}
 	}
 
 	@Override
 	public void syncAllClients(EntityPlayer player) {
 		for(Point client : networkClients)
-			Funcs.sendPacketToPlayer(new PacketClient(true, worldObj.provider.dimensionId, coords(), client), player);
+			Funcs.sendPacketToPlayer(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client), player);
 	}
 
 	@Override

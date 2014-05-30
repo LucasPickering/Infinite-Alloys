@@ -1,6 +1,6 @@
 package infinitealloys.tile;
 
-import infinitealloys.network.PacketClient;
+import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
@@ -85,10 +85,10 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 				if(player != null)
 					player.addChatComponentMessage(new ChatComponentText("Adding machine at " + client));
 				if(sync)
-					Funcs.sendPacketToServer(new PacketClient(true, worldObj.provider.dimensionId, coords(), client));
+					Funcs.sendPacketToServer(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client));
 			}
 			else if(sync)
-				Funcs.sendPacketToAllPlayers(new PacketClient(true, worldObj.provider.dimensionId, coords(), client));
+				Funcs.sendPacketToAllPlayers(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client));
 
 			return true;
 		}
@@ -100,16 +100,16 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 		networkClients.remove(client);
 		if(sync) {
 			if(worldObj.isRemote)
-				Funcs.sendPacketToServer(new PacketClient(false, worldObj.provider.dimensionId, coords(), client));
+				Funcs.sendPacketToServer(new MessageNetworkEditToServer(false, worldObj.provider.dimensionId, coords(), client));
 			else
-				Funcs.sendPacketToAllPlayers(new PacketClient(false, worldObj.provider.dimensionId, coords(), client));
+				Funcs.sendPacketToAllPlayers(new MessageNetworkEditToServer(false, worldObj.provider.dimensionId, coords(), client));
 		}
 	}
 
 	@Override
 	public void syncAllClients(EntityPlayer player) {
 		for(Point client : networkClients)
-			Funcs.sendPacketToPlayer(new PacketClient(true, worldObj.provider.dimensionId, coords(), client), player);
+			Funcs.sendPacketToPlayer(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client), player);
 	}
 
 	@Override
@@ -139,6 +139,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	@Deprecated
 	/** Perform a search for machines that can be controlled. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a
 	 * tick, then saves its place and picks up where it left off next tick, which eliminates stutter during searches. */
