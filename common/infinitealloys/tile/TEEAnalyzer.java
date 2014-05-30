@@ -26,7 +26,7 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	private int targetAlloy = -1;
 
 	/** A list of clients currently connected to this energy network */
-	private ArrayList<Point> networkClients = new ArrayList<Point>();
+	private final ArrayList<Point> networkClients = new ArrayList<Point>();
 
 	public TEEAnalyzer(byte front) {
 		this();

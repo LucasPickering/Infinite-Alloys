@@ -68,6 +68,7 @@ public class TEEXray extends TileEntityElectric {
 	}
 
 	/** Called when processProgress reaches ticksToProgress */
+	@Override
 	protected void onFinishProcess() {
 		if(worldObj.isRemote)
 			shouldSearch = false;

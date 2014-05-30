@@ -15,7 +15,7 @@ public class MessageWand implements IMessage, IMessageHandler<MessageWand, IMess
 	private byte index;
 
 	public MessageWand() {}
-	
+
 	/** Adding */
 	public MessageWand(int x, int y, int z) {
 		adding = true;

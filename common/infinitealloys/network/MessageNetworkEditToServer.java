@@ -17,7 +17,7 @@ public class MessageNetworkEditToServer implements IMessage, IMessageHandler<Mes
 	private int dimensionID;
 	private Point host;
 	private Point client;
-	
+
 	public MessageNetworkEditToServer() {}
 
 	public MessageNetworkEditToServer(boolean adding, int dimensionID, Point host, Point client) {

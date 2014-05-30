@@ -1,7 +1,6 @@
 package infinitealloys.block;
 
 import infinitealloys.util.Consts;
-import javax.swing.Icon;
 import net.minecraft.block.Block;
 import net.minecraft.util.IIcon;
 

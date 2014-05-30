@@ -24,7 +24,7 @@ public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToS
 	public MessageTEToServer() {}
 
 	public MessageTEToServer(TileEntityMachine tem) {
-		this.machine = tem.coords();
+		machine = tem.coords();
 
 		if(tem.getWorldObj().isRemote)
 			data = tem.getSyncDataToServer();

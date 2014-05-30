@@ -26,7 +26,7 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 	public MessageTEToClient() {}
 
 	public MessageTEToClient(TileEntityMachine tem) {
-		this.machine = tem.coords();
+		machine = tem.coords();
 
 		if(tem.getWorldObj().isRemote)
 			data = tem.getSyncDataToServer();

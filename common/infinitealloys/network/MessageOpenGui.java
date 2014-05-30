@@ -16,7 +16,7 @@ public class MessageOpenGui implements IMessage, IMessageHandler<MessageOpenGui,
 	private boolean fromComputer;
 
 	public MessageOpenGui() {}
-	
+
 	public MessageOpenGui(Point machine, boolean fromComputer) {
 		this.machine = machine;
 		this.fromComputer = fromComputer;
@@ -38,7 +38,7 @@ public class MessageOpenGui implements IMessage, IMessageHandler<MessageOpenGui,
 	public IMessage onMessage(MessageOpenGui message, MessageContext context) {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		((BlockMachine)player.worldObj.getBlock(machine.x, machine.y, machine.z)).openGui(player.worldObj, player, (TileEntityMachine)player.worldObj.getTileEntity(machine.x, machine.y, machine.z), fromComputer);
-		
+
 		return null;
 	}
 }

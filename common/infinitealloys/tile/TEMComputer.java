@@ -23,7 +23,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	public int networkCapacity;
 
 	/** A list of clients currently connected to this computer control network */
-	private ArrayList<Point> networkClients = new ArrayList<Point>();
+	private final ArrayList<Point> networkClients = new ArrayList<Point>();
 
 	public boolean shouldSearch;
 

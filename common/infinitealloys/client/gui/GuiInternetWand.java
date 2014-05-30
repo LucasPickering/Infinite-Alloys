@@ -22,7 +22,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.DimensionManager;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import cpw.mods.fml.common.Loader;
 
 public class GuiInternetWand extends GuiScreen {

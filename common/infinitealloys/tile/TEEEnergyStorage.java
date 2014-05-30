@@ -28,7 +28,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	private final float FURNACE_TO_ESU__RATIO = 0.18F;
 
 	/** A list of clients currently connected to this energy network */
-	private ArrayList<Point> networkClients = new ArrayList<Point>();
+	private final ArrayList<Point> networkClients = new ArrayList<Point>();
 
 	public TEEEnergyStorage(byte front) {
 		this();

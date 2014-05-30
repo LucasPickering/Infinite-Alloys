@@ -1,6 +1,5 @@
 package infinitealloys.item;
 
-import infinitealloys.block.IABlocks;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
 import net.minecraft.block.Block;

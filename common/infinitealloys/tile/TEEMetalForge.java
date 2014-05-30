@@ -121,6 +121,7 @@ public class TEEMetalForge extends TileEntityElectric {
 		return new Object[] { recipeAlloyID };
 	}
 
+	@Override
 	public void handlePacketDataFromServer(int recipeAlloyID, Point analyzerHost) {
 		if(recipeAlloyID != this.recipeAlloyID)
 			recipeChanged = true;

@@ -1,6 +1,5 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.network.MessageTEToClient;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
