@@ -48,6 +48,9 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 
 	@Override
 	public IMessage onMessage(MessageTEToClient message, MessageContext context) {
+		machine = message.machine;
+		bytes = message.bytes;
+
 		TileEntity te = Funcs.getTileEntity(Minecraft.getMinecraft().theWorld, machine);
 
 		if(te instanceof TileEntityMachine) {
@@ -78,10 +81,11 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 						break;
 
 					case MachineHelper.XRAY:
-						((TEEXray)te).detectedBlocks.clear();
 						int detectedBlocksSize = bytes.readInt();
+						Point[] detectedBlocks = new Point[detectedBlocksSize];
 						for(int i = 0; i < detectedBlocksSize; i++)
-							((TEEXray)te).detectedBlocks.add(new Point(bytes.readInt()/* X */, bytes.readInt()/* Y */, bytes.readInt()/* Z */));
+							detectedBlocks[i] = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+						((TEEXray)te).handlePacketDataFromServer(detectedBlocks);
 						break;
 
 					case MachineHelper.PASTURE:

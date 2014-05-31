@@ -30,7 +30,7 @@ public class MessageValidAlloys implements IMessage, IMessageHandler<MessageVali
 
 	@Override
 	public IMessage onMessage(MessageValidAlloys message, MessageContext context) {
-		InfiniteAlloys.instance.setValidAlloys(validAlloys);
+		InfiniteAlloys.instance.setValidAlloys(message.validAlloys);
 		return null;
 	}
 }

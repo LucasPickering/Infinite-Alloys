@@ -45,6 +45,11 @@ public class MessageNetworkEditToServer implements IMessage, IMessageHandler<Mes
 
 	@Override
 	public IMessage onMessage(MessageNetworkEditToServer message, MessageContext context) {
+		adding = message.adding;
+		dimensionID = message.dimensionID;
+		host = message.host;
+		client = message.client;
+
 		TileEntity te = Funcs.getTileEntity(DimensionManager.getWorld(dimensionID), host);
 		if(te instanceof IHost) {
 			if(adding)

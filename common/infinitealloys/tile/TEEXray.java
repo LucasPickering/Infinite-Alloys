@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.lang3.ArrayUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TEEXray extends TileEntityElectric {
 
@@ -17,8 +15,10 @@ public class TEEXray extends TileEntityElectric {
 	public int range;
 
 	/** The selected button for the user, client-side only */
-	@SideOnly(Side.CLIENT)
 	public int selectedButton = -1;
+
+	/** Client-only, set to true when a sync packet comes in to refresh the GUI */
+	public boolean refreshGUI;
 
 	/** The last point that was checked for the target block in the previous iteration of {@link #search}. The x and z coords are relative to the x-ray block;
 	 * the y coord is absolute */
@@ -48,10 +48,8 @@ public class TEEXray extends TileEntityElectric {
 	public void updateEntity() {
 		super.updateEntity();
 
-		if(inventoryStacks[0] == null) {
-			detectedBlocks.clear();
+		if(inventoryStacks[0] == null)
 			shouldSearch = false;
-		}
 
 		else if(shouldSearch && !worldObj.isRemote)
 			search();
@@ -113,11 +111,10 @@ public class TEEXray extends TileEntityElectric {
 			// If we've search all the x values, reset the x position.
 			lastSearch.x = -range;
 		}
-		// If we've search all the y values, reset the y position.
-		lastSearch.y = 0;
 
-		// The search is done. Stop running the function until another search is initiated.
-		shouldSearch = false;
+		lastSearch.y = 0; // If we've search all the y values, reset the y position.
+		shouldSearch = false; // The search is done. Stop running the function until another search is initiated.
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord); // Mark the block so that the search info will be synced to clients
 	}
 
 	@Override
@@ -142,6 +139,13 @@ public class TEEXray extends TileEntityElectric {
 	@Override
 	public Object[] getSyncDataToServer() {
 		return new Object[] { shouldSearch };
+	}
+
+	public void handlePacketDataFromServer(Point[] detectedBlocks) {
+		this.detectedBlocks.clear();
+		for(Point point : detectedBlocks)
+			this.detectedBlocks.add(point);
+		refreshGUI = true;
 	}
 
 	public void handlePacketDataFromClient(boolean shouldSearch) {

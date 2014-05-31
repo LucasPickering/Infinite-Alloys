@@ -49,6 +49,10 @@ public class MessageWand implements IMessage, IMessageHandler<MessageWand, IMess
 
 	@Override
 	public IMessage onMessage(MessageWand message, MessageContext context) {
+		adding = message.adding;
+		machine = message.machine;
+		index = message.index;
+
 		ItemStack heldItem = context.getServerHandler().playerEntity.getHeldItem();
 		if(heldItem.getItem() instanceof ItemInternetWand) {
 			if(adding)

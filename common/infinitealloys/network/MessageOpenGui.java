@@ -36,6 +36,9 @@ public class MessageOpenGui implements IMessage, IMessageHandler<MessageOpenGui,
 
 	@Override
 	public IMessage onMessage(MessageOpenGui message, MessageContext context) {
+		machine = message.machine;
+		fromComputer = message.fromComputer;
+
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		((BlockMachine)player.worldObj.getBlock(machine.x, machine.y, machine.z)).openGui(player.worldObj, player, (TileEntityMachine)player.worldObj.getTileEntity(machine.x, machine.y, machine.z), fromComputer);
 

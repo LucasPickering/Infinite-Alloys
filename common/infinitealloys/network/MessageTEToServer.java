@@ -46,6 +46,9 @@ public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToS
 
 	@Override
 	public IMessage onMessage(MessageTEToServer message, MessageContext context) {
+		machine = message.machine;
+		bytes = message.bytes;
+
 		TileEntity te = Funcs.getTileEntity(context.getServerHandler().playerEntity.worldObj, machine);
 
 		if(te instanceof TileEntityMachine) {

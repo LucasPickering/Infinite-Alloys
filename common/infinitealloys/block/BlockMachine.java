@@ -84,7 +84,7 @@ public class BlockMachine extends BlockContainer {
 			MachineHelper.playersToSync.remove(player.getDisplayName());
 		}
 
-		// Is the player holding an internet wand?
+		// Is the player holding a network wand?
 		if(heldItem != null && heldItem.getItem() instanceof ItemInternetWand && (MachineHelper.isClient(tem) || tem instanceof IHost)) {
 
 			// Put the coords of this block in a temp tag in the wand so the wand's GUI can access it

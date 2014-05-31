@@ -28,7 +28,6 @@ public class GuiXray extends GuiElectric {
 
 	private BlockButton[] blockButtons = new BlockButton[0];
 	private GuiButton searchButton;
-	private boolean initialized;
 
 	public GuiXray(InventoryPlayer inventoryPlayer, TEEXray tileEntity) {
 		super(196, 240, inventoryPlayer, tileEntity);
@@ -41,13 +40,15 @@ public class GuiXray extends GuiElectric {
 	public void initGui() {
 		super.initGui();
 		buttonList.add(searchButton = new GuiButton(1, width / 2 - 30, height / 2 - 90, 80, 20, Funcs.getLoc("machine.xray.search")));
+		setButtons();
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-		if(!initialized) {
-			initialized = true;
+
+		if(tex.refreshGUI) {
+			tex.refreshGUI = false;
 			setButtons();
 		}
 
@@ -55,6 +56,7 @@ public class GuiXray extends GuiElectric {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
 		searchButton.enabled = tex.inventoryStacks[0] != null;
+
 		if(blockButtons.length <= 20)
 			Funcs.drawTexturedModalRect(this, SCROLL_BAR.x, SCROLL_BAR.y, SCROLL_OFF);
 		else
@@ -106,21 +108,21 @@ public class GuiXray extends GuiElectric {
 			}
 
 			setButtons();
+
 			// Was the scroll up button clicked?
 			if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 172, topLeft.y + 40, 14, 8))
-				// Scroll up
-				scroll(-1);
+				scroll(-1); // Scroll up
+
 			// Was the scroll down button clicked?
 			else if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 172, topLeft.y + 147, 14, 8))
-				// Scroll down
-				scroll(1);
+				scroll(1); // Scroll down
 		}
 	}
 
 	@Override
 	public void handleMouseInput() {
 		super.handleMouseInput();
-		final int scrollAmt = Mouse.getEventDWheel();
+		int scrollAmt = Mouse.getEventDWheel();
 		// Scroll one line up or down based on the movement, if the list is long enough to need scrolling
 		if(blockButtons.length > 20)
 			scroll(scrollAmt > 0 ? -1 : scrollAmt < 0 ? 1 : 0);
@@ -130,11 +132,11 @@ public class GuiXray extends GuiElectric {
 		if(tex.inventoryStacks[0] == null || tee.getProcessProgress() > 0)
 			blockButtons = new BlockButton[0];
 		else {
-			final int[] blockCounts = new int[tee.yCoord];
-			final List<Integer> levels = new ArrayList<Integer>();
-			// Go through each detected block
-			for(final Point block : tex.detectedBlocks) {
-				// For each block if there hasn't been a block for that y-level yet, at that y to the list
+			int[] blockCounts = new int[tee.yCoord];
+			List<Integer> levels = new ArrayList<Integer>();
+
+			for(Point block : tex.detectedBlocks) { // For each detected block
+				// If there hasn't been a block for that y-level yet, at that y to the list
 				if(blockCounts[block.y]++ == 0)
 					levels.add(block.y);
 			}
@@ -159,7 +161,6 @@ public class GuiXray extends GuiElectric {
 		super.actionPerformed(button);
 		if(button.id == 1) {
 			tex.selectedButton = -1;
-			setButtons();
 			InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 			tex.shouldSearch = true;
 			tex.syncToServer();
@@ -217,10 +218,10 @@ public class GuiXray extends GuiElectric {
 				fontRendererObj.drawStringWithShadow(yValue + "", xPos + 9 - (fontRendererObj.getStringWidth(yValue + "") / 2), yPos + 5, 0xffffff);
 
 				GL11.glEnable(GL11.GL_LIGHTING);
-				
+
 				itemRender.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(block, 1, blockMeta), xPos + 18, yPos);
 				itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(block, blockAmount, blockMeta), xPos + 19, yPos + 1, blockAmount + "");
-				
+
 				GL11.glDisable(GL11.GL_LIGHTING);
 			}
 		}

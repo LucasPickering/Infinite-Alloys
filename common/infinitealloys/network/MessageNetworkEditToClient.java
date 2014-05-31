@@ -46,6 +46,11 @@ public class MessageNetworkEditToClient implements IMessage, IMessageHandler<Mes
 
 	@Override
 	public IMessage onMessage(MessageNetworkEditToClient message, MessageContext context) {
+		adding = message.adding;
+		dimensionID = message.dimensionID;
+		host = message.host;
+		client = message.client;
+
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		if(dimensionID == player.dimension) {
 			TileEntity te = Funcs.getTileEntity(player.worldObj, host);
