@@ -62,9 +62,9 @@ public enum EnumMachine {
 		}
 	}
 
-	public ContainerMachine getGui(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
+	public GuiMachine getGui(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
 		try {
-			return (ContainerMachine)guiClass.getConstructor(InventoryPlayer.class, TileEntityMachine.class).newInstance(inventoryPlayer, tem);
+			return (GuiMachine)guiClass.getConstructor(InventoryPlayer.class, temClass).newInstance(inventoryPlayer, tem);
 		}catch(Exception e) {
 			e.printStackTrace();
 			return null;

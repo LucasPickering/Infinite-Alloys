@@ -323,12 +323,7 @@ public class GuiInternetWand extends GuiScreen {
 			mc.fontRenderer.drawStringWithShadow(machineY + "", xPos + 82 - (mc.fontRenderer.getStringWidth(machineY + "") / 2), yPos + 5, 0xffffff);
 			mc.fontRenderer.drawStringWithShadow(machineZ + "", xPos + 106 - (mc.fontRenderer.getStringWidth(machineZ + "") / 2), yPos + 5, 0xffffff);
 
-			GL11.glEnable(GL11.GL_LIGHTING);
-			GL11.glEnable(GL11.GL_DEPTH_TEST);
-
 			itemRender.renderItemIntoGUI(fontRendererObj, mc.getTextureManager(), new ItemStack(IABlocks.machine, 1, machineID), xPos, yPos + 1);
-
-			GL11.glDisable(GL11.GL_LIGHTING);
 		}
 	}
 }
