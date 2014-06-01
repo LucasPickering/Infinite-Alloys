@@ -3,6 +3,7 @@ package infinitealloys.tile;
 import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
@@ -34,8 +35,8 @@ public class TEEMetalForge extends TileEntityElectric {
 	}
 
 	@Override
-	public int getID() {
-		return MachineHelper.METAL_FORGE;
+	public EnumMachine getEnumMachine() {
+		return EnumMachine.METAL_FORGE;
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -68,8 +67,8 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 				else
 					((TileEntityElectric)te).handlePacketDataFromServer(processProgress, new Point(energyHostX, energyHostY, energyHostZ));
 
-				switch(((TileEntityElectric)te).getID()) {
-					case MachineHelper.METAL_FORGE:
+				switch(((TileEntityElectric)te).getEnumMachine()) {
+					case METAL_FORGE:
 						int recipeAlloyID = bytes.readInt();
 						int analyzerHostX = bytes.readInt();
 						int analyzerHostY = bytes.readInt();
@@ -80,7 +79,7 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 							((TEEMetalForge)te).handlePacketDataFromServer(recipeAlloyID, new Point(analyzerHostX, analyzerHostY, analyzerHostZ));
 						break;
 
-					case MachineHelper.XRAY:
+					case XRAY:
 						int detectedBlocksSize = bytes.readInt();
 						Point[] detectedBlocks = new Point[detectedBlocksSize];
 						for(int i = 0; i < detectedBlocksSize; i++)
@@ -88,14 +87,14 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 						((TEEXray)te).handlePacketDataFromServer(detectedBlocks);
 						break;
 
-					case MachineHelper.PASTURE:
+					case PASTURE:
 						byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 						for(int i = 0; i < mobActions.length; i++)
 							mobActions[i] = bytes.readByte();
 						((TEEPasture)te).handlePacketData(mobActions);
 						break;
 
-					case MachineHelper.ENERGY_STORAGE:
+					case ENERGY_STORAGE:
 						int currentRK = bytes.readInt();
 						int baseRKPerTick = bytes.readInt();
 						((TEEEnergyStorage)te).handlePacketDataFromServer(currentRK, baseRKPerTick);

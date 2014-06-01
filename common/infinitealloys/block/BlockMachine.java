@@ -6,6 +6,7 @@ import infinitealloys.tile.IHost;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
@@ -39,10 +40,11 @@ public class BlockMachine extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		for(int i = 0; i < Consts.MACHINE_COUNT; i++) {
-			IABlocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_top");
-			IABlocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_bottom");
-			IABlocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_front");
-			IABlocks.machineIcons[i][3] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + MachineHelper.MACHINE_NAMES[i] + "_side");
+			String name = EnumMachine.values()[i].getName();
+			IABlocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + name + "_top");
+			IABlocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + name + "_bottom");
+			IABlocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + name + "_front");
+			IABlocks.machineIcons[i][3] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + name + "_side");
 		}
 	}
 
@@ -93,7 +95,7 @@ public class BlockMachine extends BlockContainer {
 			heldItem.getTagCompound().setIntArray("CoordsCurrent", new int[] { world.provider.dimensionId, x, y, z });
 
 			// Open the GUI for the wand to let the player decide what they want to do with this block
-			player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI, world, (int)player.posX, (int)player.posY, (int)player.posZ);
+			player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI_ID, world, (int)player.posX, (int)player.posY, (int)player.posZ);
 			return true;
 		}
 
@@ -110,13 +112,13 @@ public class BlockMachine extends BlockContainer {
 			tem.playersUsing.add(player.getDisplayName());
 			world.markBlockForUpdate(tem.xCoord, tem.yCoord, tem.zCoord);
 		}
-		player.openGui(InfiniteAlloys.instance, tem.getID(), world, tem.xCoord, tem.yCoord, tem.zCoord);
+		player.openGui(InfiniteAlloys.instance, tem.getEnumMachine().ordinal(), world, tem.xCoord, tem.yCoord, tem.zCoord);
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
 		try {
-			return (TileEntity)MachineHelper.MACHINE_CLASSES[metadata].newInstance();
+			return (TileEntity)EnumMachine.values()[metadata].getTEMClass().newInstance();
 		}catch(Exception e) {
 			e.printStackTrace();
 			return null;

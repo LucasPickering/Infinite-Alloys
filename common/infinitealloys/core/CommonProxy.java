@@ -13,6 +13,7 @@ import infinitealloys.item.ItemMulti;
 import infinitealloys.item.ItemUpgrade;
 import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.MachineHelper;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -131,8 +132,8 @@ public class CommonProxy {
 	}
 
 	public void initTileEntities() {
-		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
-			GameRegistry.registerTileEntity(MachineHelper.MACHINE_CLASSES[i], MachineHelper.MACHINE_NAMES[i]);
+		for(EnumMachine machine : EnumMachine.values())
+			GameRegistry.registerTileEntity(machine.getTEMClass(), machine.getName());
 		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.coal_ore), 0, 0x333333, 1);
 		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.iron_ore), 0, 0xffffff, 2);
 		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.gold_ore), 0, 0xffffff, 6);

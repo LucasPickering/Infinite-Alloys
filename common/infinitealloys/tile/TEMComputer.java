@@ -1,6 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.network.MessageNetworkEditToServer;
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
@@ -37,8 +38,8 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	}
 
 	@Override
-	public int getID() {
-		return MachineHelper.COMPUTER;
+	public EnumMachine getEnumMachine() {
+		return EnumMachine.COMPUTER;
 	}
 
 	@Override

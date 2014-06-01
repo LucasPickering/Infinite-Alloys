@@ -4,9 +4,9 @@ import infinitealloys.item.IAItems;
 import infinitealloys.network.MessageTEToClient;
 import infinitealloys.network.MessageTEToServer;
 import infinitealloys.network.NetworkHandler;
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.Random;
@@ -60,7 +60,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	}
 
 	/** Get the integer from {@link infinitealloys.util.MachineHelper MachineHelper} that corresponds to this machine */
-	public abstract int getID();
+	public abstract EnumMachine getEnumMachine();
 
 	@Override
 	public void updateEntity() {
@@ -177,12 +177,12 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	@Override
 	public String getInventoryName() {
-		return MachineHelper.MACHINE_NAMES[getID()];
+		return getEnumMachine().getName();
 	}
 
 	@Override
 	public final boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return slot == upgradeSlotIndex && isUpgradeValid(itemstack) || slot < upgradeSlotIndex && MachineHelper.stackValidForSlot(getID(), slot, itemstack);
+		return slot == upgradeSlotIndex && isUpgradeValid(itemstack) || slot < upgradeSlotIndex && getEnumMachine().stackValidForSlot(slot, itemstack);
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerMachine extends Container {
+public abstract class ContainerMachine extends Container {
 
 	public TileEntityMachine inventory;
 	/** The index of the first slot in this container for the regular inventory */
@@ -25,13 +25,12 @@ public class ContainerMachine extends Container {
 		initSlots(inventoryPlayer, invX, invY, upgX, upgY);
 	}
 
+	/** Given the coordinates for the player's inventory and the upgrade slot, add these slots to the container */
 	protected void initSlots(InventoryPlayer inventoryPlayer, int invX, int invY, int upgX, int upgY) {
-		// Add the upgrade slot
-		addSlotToContainer(new SlotUpgrade(inventory, inventory.upgradeSlotIndex, upgX, upgY));
+		addSlotToContainer(new SlotUpgrade(inventory, inventory.upgradeSlotIndex, upgX, upgY)); // Add the upgrade slot
 
-		// Add the hotbar
 		for(int x = 0; x < 9; x++)
-			addSlotToContainer(new Slot(inventoryPlayer, x, invX + x * 18, invY + 58));
+			addSlotToContainer(new Slot(inventoryPlayer, x, invX + x * 18, invY + 58)); // Add the hotbar
 
 		// Add the main inventory
 		for(int y = 0; y < 3; y++)

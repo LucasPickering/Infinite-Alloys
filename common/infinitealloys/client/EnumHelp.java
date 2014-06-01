@@ -1,8 +1,5 @@
 package infinitealloys.client;
 
-import infinitealloys.util.Consts;
-import infinitealloys.util.MachineHelper;
-
 public enum EnumHelp {
 
 	/* CP - Computer, MF - Metal Forge, AZ - Analyzer, XR - X-ray, PS - Pasture, ES - Energy Storage, IW - Internet Wand */
@@ -49,23 +46,7 @@ public enum EnumHelp {
 		this.h = h;
 	}
 
-	public static EnumHelp[] getBoxes(int id) {
-		switch(id) {
-			case MachineHelper.COMPUTER:
-				return new EnumHelp[] { CP_UPGRADE, CP_TAB };
-			case MachineHelper.METAL_FORGE:
-				return new EnumHelp[] { MF_UPGRADE, MF_PROGRESS, MF_ENERGY, MF_OUTPUT, MF_SUPPLY, MF_PRESETS, MF_SELECTION };
-			case MachineHelper.ANALYZER:
-				return new EnumHelp[] { AZ_UPGRADE, AZ_PROGRESS, AZ_ENERGY, AZ_SUPPLY, AZ_INGOTS };
-			case MachineHelper.XRAY:
-				return new EnumHelp[] { XR_UPGRADE, XR_PROGRESS, XR_ENERGY, XR_ORE, XR_SEARCH, XR_RESULTS };
-			case MachineHelper.PASTURE:
-				return new EnumHelp[] { PS_UPGRADE, PS_ENERGY, PS_CREATURES };
-			case MachineHelper.ENERGY_STORAGE:
-				return new EnumHelp[] { ES_UPGRADE, ES_PROGRESS, ES_ENERGY, ES_SUPPLY, ES_RK };
-			case Consts.MACHINE_COUNT:
-				return new EnumHelp[] { IW_ADD_SELECTED, IW_ADD_TO_WAND, IW_LIST, IW_REMOVE };
-		}
-		return null;
+	public static EnumHelp[] getNetworkWandBoxes() {
+		return new EnumHelp[] { EnumHelp.IW_ADD_SELECTED, EnumHelp.IW_ADD_TO_WAND, EnumHelp.IW_LIST, EnumHelp.IW_REMOVE };
 	}
 }

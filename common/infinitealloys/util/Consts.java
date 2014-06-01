@@ -9,7 +9,7 @@ public class Consts {
 
 	public static final int MULTI_ITEM_COUNT = 2;
 	public static final int METAL_COUNT = 8;
-	public static final int MACHINE_COUNT = 6;
+	public static final int MACHINE_COUNT = EnumMachine.values().length;
 	public static final int UPGRADE_COUNT = EnumUpgrade.values().length;
 	public static final int VALID_ALLOY_COUNT = EnumAlloy.values().length;
 
@@ -34,7 +34,7 @@ public class Consts {
 	/** The amount of coords that the Internet Wand can hold */
 	public static final int WAND_SIZE = 10;
 	/** The GUI id for the Wand GUI */
-	public static final int WAND_GUI = MACHINE_COUNT;
+	public static final int WAND_GUI_ID = MACHINE_COUNT;
 
 	/** The amount of states that each mob can be in. Off, Attract, or Repel */
 	public static final int PASTURE_MODES = 3;

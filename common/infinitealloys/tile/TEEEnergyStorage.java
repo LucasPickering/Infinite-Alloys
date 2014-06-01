@@ -1,9 +1,9 @@
 package infinitealloys.tile;
 
 import infinitealloys.network.MessageNetworkEditToServer;
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,8 +41,8 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public int getID() {
-		return MachineHelper.ENERGY_STORAGE;
+	public EnumMachine getEnumMachine() {
+		return EnumMachine.ENERGY_STORAGE;
 	}
 
 	@Override

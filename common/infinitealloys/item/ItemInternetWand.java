@@ -24,7 +24,7 @@ public class ItemInternetWand extends ItemIA {
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
 		if(itemstack.hasTagCompound())
 			itemstack.getTagCompound().removeTag("CoordsCurrent");
-		player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI, world, (int)player.posX, (int)player.posY, (int)player.posZ);
+		player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI_ID, world, (int)player.posX, (int)player.posY, (int)player.posZ);
 		return itemstack;
 	}
 

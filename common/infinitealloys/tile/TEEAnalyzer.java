@@ -3,9 +3,9 @@ package infinitealloys.tile;
 import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,8 +41,8 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public int getID() {
-		return MachineHelper.ANALYZER;
+	public EnumMachine getEnumMachine() {
+		return EnumMachine.ANALYZER;
 	}
 
 	@Override

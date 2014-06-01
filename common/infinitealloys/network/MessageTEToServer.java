@@ -7,7 +7,6 @@ import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
@@ -52,24 +51,24 @@ public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToS
 		TileEntity te = Funcs.getTileEntity(context.getServerHandler().playerEntity.worldObj, machine);
 
 		if(te instanceof TileEntityMachine) {
-			switch(((TileEntityMachine)te).getID()) {
-				case MachineHelper.METAL_FORGE:
+			switch(((TileEntityMachine)te).getEnumMachine()) {
+				case METAL_FORGE:
 					int recipeAlloyID = bytes.readInt();
 					((TEEMetalForge)te).handlePacketDataFromClient(recipeAlloyID);
 					break;
 
-				case MachineHelper.ANALYZER:
+				case ANALYZER:
 					int alloys = bytes.readInt();
 					int targetAlloy = bytes.readInt();
 					((TEEAnalyzer)te).handlePacketDataFromClient(alloys, targetAlloy);
 					break;
 
-				case MachineHelper.XRAY:
+				case XRAY:
 					boolean shouldSearch = bytes.readBoolean();
 					((TEEXray)te).handlePacketDataFromClient(shouldSearch);
 					break;
 
-				case MachineHelper.PASTURE:
+				case PASTURE:
 					byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 					for(int i = 0; i < mobActions.length; i++)
 						mobActions[i] = bytes.readByte();

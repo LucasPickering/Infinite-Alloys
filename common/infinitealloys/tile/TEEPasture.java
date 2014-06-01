@@ -1,8 +1,8 @@
 package infinitealloys.tile;
 
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
-import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -45,8 +45,8 @@ public class TEEPasture extends TileEntityElectric {
 	}
 
 	@Override
-	public int getID() {
-		return MachineHelper.PASTURE;
+	public EnumMachine getEnumMachine() {
+		return EnumMachine.PASTURE;
 	}
 
 	@Override

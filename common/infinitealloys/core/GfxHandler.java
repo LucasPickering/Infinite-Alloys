@@ -4,6 +4,7 @@ import infinitealloys.block.IABlocks;
 import infinitealloys.client.gui.GuiInternetWand;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -36,15 +37,17 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		if(id < Consts.MACHINE_COUNT)
-			return MachineHelper.getContainerForMachine(player.inventory, (TileEntityMachine)world.getTileEntity(x, y, z));
+			return EnumMachine.values()[id].getContainer(player.inventory, (TileEntityMachine)world.getTileEntity(x, y, z));
 		return null;
 	}
 
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		if(id == Consts.WAND_GUI)
+		if(id == Consts.WAND_GUI_ID)
 			return new GuiInternetWand();
-		return MachineHelper.getGuiForMachine(player.inventory, (TileEntityMachine)world.getTileEntity(x, y, z));
+		else if(id < Consts.MACHINE_COUNT)
+			return EnumMachine.values()[id].getGui(player.inventory, (TileEntityMachine)world.getTileEntity(x, y, z));
+		return null;
 	}
 
 	@Override

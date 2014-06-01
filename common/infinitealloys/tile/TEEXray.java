@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
@@ -40,8 +41,8 @@ public class TEEXray extends TileEntityElectric {
 	}
 
 	@Override
-	public int getID() {
-		return MachineHelper.XRAY;
+	public EnumMachine getEnumMachine() {
+		return EnumMachine.XRAY;
 	}
 
 	@Override

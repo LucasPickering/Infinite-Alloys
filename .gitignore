@@ -1,6 +1,11 @@
-/**
-!/common/**
-!/resources/**
-!build.properties
-!build.xml
-!build_number.properties
+/.gradle
+/.metadata
+/.settings
+/bin
+/build
+/eclipse
+/gradle
+.classpath
+.project
+build.gradle
+gradlew*
