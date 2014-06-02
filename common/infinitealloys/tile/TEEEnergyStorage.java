@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.network.MessageNetworkEditToClient;
 import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
@@ -30,6 +31,9 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	/** A list of clients currently connected to this energy network */
 	private final ArrayList<Point> networkClients = new ArrayList<Point>();
 
+	/** False until the first call of {@link #updateEntity()} */
+	private boolean initialized;
+
 	public TEEEnergyStorage(byte front) {
 		this();
 		this.front = front;
@@ -49,6 +53,13 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	public void updateEntity() {
 		if(energyHost == null)
 			energyHost = coords();
+
+		if(!initialized) {
+			initialized = true;
+			if(!worldObj.isRemote)
+				for(Point client : networkClients)
+					((TileEntityElectric)Funcs.getTileEntity(worldObj, client)).connectToEnergyNetwork(coords());
+		}
 
 		super.updateEntity();
 	}
@@ -81,7 +92,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public boolean addClient(EntityPlayer player, Point client, boolean sync) {
-		if(!energyHost.equals(coords())) {
+		if(energyHost != null && !energyHost.equals(coords())) {
 			if(player != null && worldObj.isRemote)
 				player.addChatComponentMessage(new ChatComponentText("Error: This machine is not currently hosting a network because it is connected to another host"));
 		}
@@ -98,19 +109,21 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 				player.addChatComponentMessage(new ChatComponentText("Error: Block out of range"));
 		}
 		else {
-			// Add the machine
-			networkClients.add(client);
-			((TileEntityElectric)Funcs.getTileEntity(worldObj, client)).connectToEnergyNetwork(coords());
+			networkClients.add(client); // Add the machine
+
+			if(initialized)
+				((TileEntityElectric)Funcs.getTileEntity(worldObj, client)).connectToEnergyNetwork(coords()); // Tell the client machine to connect
 
 			// Sync the data to the server/all clients
-			if(worldObj.isRemote) {
-				if(player != null)
-					player.addChatComponentMessage(new ChatComponentText("Adding machine at " + client));
-				if(sync)
-					Funcs.sendPacketToServer(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client));
+			if(sync) { // If we should sync
+				if(worldObj.isRemote) { // If this is the client
+					Funcs.sendPacketToServer(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client)); // Sync to server
+					if(player != null)
+						player.addChatComponentMessage(new ChatComponentText("Adding machine at " + client)); // Send a chat message
+				}
+				else
+					Funcs.sendPacketToAllPlayers(new MessageNetworkEditToClient(true, worldObj.provider.dimensionId, coords(), client)); // Sync to clients
 			}
-			else if(sync)
-				Funcs.sendPacketToAllPlayers(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client));
 
 			return true;
 		}
@@ -127,14 +140,14 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 			if(worldObj.isRemote)
 				Funcs.sendPacketToServer(new MessageNetworkEditToServer(false, worldObj.provider.dimensionId, coords(), client));
 			else
-				Funcs.sendPacketToAllPlayers(new MessageNetworkEditToServer(false, worldObj.provider.dimensionId, coords(), client));
+				Funcs.sendPacketToAllPlayers(new MessageNetworkEditToClient(false, worldObj.provider.dimensionId, coords(), client));
 		}
 	}
 
 	@Override
 	public void syncAllClients(EntityPlayer player) {
 		for(Point client : networkClients)
-			Funcs.sendPacketToPlayer(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client), player);
+			Funcs.sendPacketToPlayer(new MessageNetworkEditToClient(true, worldObj.provider.dimensionId, coords(), client), player);
 	}
 
 	@Override
@@ -186,7 +199,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 		baseRKPerTick = tagCompound.getInteger("baseRKPerTick");
 		for(int i = 0; tagCompound.hasKey("client" + i); i++) {
 			int[] client = tagCompound.getIntArray("client" + i);
-			networkClients.add(new Point(client[0], client[1], client[2]));
+			addClient(null, new Point(client[0], client[1], client[2]), false);
 		}
 	}
 

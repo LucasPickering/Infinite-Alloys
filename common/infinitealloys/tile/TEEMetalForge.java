@@ -16,7 +16,7 @@ import org.apache.commons.lang3.ArrayUtils;
 public class TEEMetalForge extends TileEntityElectric {
 
 	/** The ID of the alloy that is currently set as the recipe. This is drawn from the connected analyzer. */
-	public int recipeAlloyID = -1;
+	public byte recipeAlloyID = -1;
 
 	/** True if the alloy recipe has been changed by the client, used to reset progress */
 	private boolean recipeChanged;
@@ -107,14 +107,12 @@ public class TEEMetalForge extends TileEntityElectric {
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		tagCompound.setByte("recipeAlloyID", (byte)recipeAlloyID);
+		tagCompound.setByte("recipeAlloyID", recipeAlloyID);
 	}
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		if(analyzerHost == null)
-			return ArrayUtils.addAll(super.getSyncDataToClient(), recipeAlloyID, new Point());
-		return ArrayUtils.addAll(super.getSyncDataToClient(), recipeAlloyID, analyzerHost);
+		return ArrayUtils.addAll(super.getSyncDataToClient(), recipeAlloyID);
 	}
 
 	@Override
@@ -122,15 +120,13 @@ public class TEEMetalForge extends TileEntityElectric {
 		return new Object[] { recipeAlloyID };
 	}
 
-	@Override
-	public void handlePacketDataFromServer(int recipeAlloyID, Point analyzerHost) {
+	public void handlePacketDataFromServer(byte recipeAlloyID) {
 		if(recipeAlloyID != this.recipeAlloyID)
 			recipeChanged = true;
 		this.recipeAlloyID = recipeAlloyID;
-		this.analyzerHost = analyzerHost;
 	}
 
-	public void handlePacketDataFromClient(int recipeAlloyID) {
+	public void handlePacketDataFromClient(byte recipeAlloyID) {
 		if(recipeAlloyID != this.recipeAlloyID)
 			recipeChanged = true;
 		this.recipeAlloyID = recipeAlloyID;

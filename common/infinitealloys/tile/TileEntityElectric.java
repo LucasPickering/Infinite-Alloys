@@ -116,13 +116,10 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 
 	@Override
 	public Object[] getSyncDataToClient() {
-		if(energyHost == null)
-			return ArrayUtils.addAll(super.getSyncDataToClient(), processProgress, new Point());
-		return ArrayUtils.addAll(super.getSyncDataToClient(), processProgress, energyHost);
+		return ArrayUtils.addAll(super.getSyncDataToClient(), processProgress);
 	}
 
-	public void handlePacketDataFromServer(int processProgress, Point energyHost) {
+	public void handlePacketDataFromServer(int processProgress) {
 		this.processProgress = processProgress;
-		this.energyHost = energyHost;
 	}
 }

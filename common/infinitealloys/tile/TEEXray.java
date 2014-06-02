@@ -2,6 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -48,7 +49,8 @@ public class TEEXray extends TileEntityElectric {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-
+		System.out.println(Funcs.getSideAsString() + "X: " + energyHost);
+		
 		if(inventoryStacks[0] == null)
 			shouldSearch = false;
 

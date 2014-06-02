@@ -53,7 +53,7 @@ public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToS
 		if(te instanceof TileEntityMachine) {
 			switch(((TileEntityMachine)te).getEnumMachine()) {
 				case METAL_FORGE:
-					int recipeAlloyID = bytes.readInt();
+					byte recipeAlloyID = bytes.readByte();
 					((TEEMetalForge)te).handlePacketDataFromClient(recipeAlloyID);
 					break;
 

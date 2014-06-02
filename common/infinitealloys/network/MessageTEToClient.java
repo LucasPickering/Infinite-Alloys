@@ -59,24 +59,12 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 
 			if(te instanceof TileEntityElectric) {
 				int processProgress = bytes.readInt();
-				int energyHostX = bytes.readInt();
-				int energyHostY = bytes.readInt();
-				int energyHostZ = bytes.readInt();
-				if(energyHostY < 0)
-					((TileEntityElectric)te).handlePacketDataFromServer(processProgress, null);
-				else
-					((TileEntityElectric)te).handlePacketDataFromServer(processProgress, new Point(energyHostX, energyHostY, energyHostZ));
+				((TileEntityElectric)te).handlePacketDataFromServer(processProgress);
 
 				switch(((TileEntityElectric)te).getEnumMachine()) {
 					case METAL_FORGE:
-						int recipeAlloyID = bytes.readInt();
-						int analyzerHostX = bytes.readInt();
-						int analyzerHostY = bytes.readInt();
-						int analyzerHostZ = bytes.readInt();
-						if(analyzerHostY < 0)
-							((TEEMetalForge)te).handlePacketDataFromServer(recipeAlloyID, null);
-						else
-							((TEEMetalForge)te).handlePacketDataFromServer(recipeAlloyID, new Point(analyzerHostX, analyzerHostY, analyzerHostZ));
+						byte recipeAlloyID = bytes.readByte();
+						((TEEMetalForge)te).handlePacketDataFromServer(recipeAlloyID);
 						break;
 
 					case XRAY:

@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.network.MessageNetworkEditToClient;
 import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
@@ -78,20 +79,18 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 				player.addChatComponentMessage(new ChatComponentText("Error: Block is not capable of networking"));
 		}
 		else {
-			// Add the machine
-			networkClients.add(client);
+			networkClients.add(client); // Add the machine
 
 			// Sync the data to the server/all clients
-			if(worldObj.isRemote) {
-				if(player != null)
-					player.addChatComponentMessage(new ChatComponentText("Adding machine at " + client));
-				if(sync)
-					Funcs.sendPacketToServer(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client));
+			if(sync) { // If we should sync
+				if(worldObj.isRemote) { // If this is the client
+					Funcs.sendPacketToServer(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client)); // Sync to server
+					if(player != null)
+						player.addChatComponentMessage(new ChatComponentText("Adding machine at " + client)); // Send a chat message
+				}
+				else
+					Funcs.sendPacketToAllPlayers(new MessageNetworkEditToClient(true, worldObj.provider.dimensionId, coords(), client)); // Sync to clients
 			}
-			else if(sync)
-				Funcs.sendPacketToAllPlayers(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client));
-
-			return true;
 		}
 		return false;
 	}

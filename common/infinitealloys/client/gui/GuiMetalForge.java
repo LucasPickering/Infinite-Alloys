@@ -65,7 +65,7 @@ public class GuiMetalForge extends GuiElectric {
 				// Iterate over each alloy with an index greater than the current one
 				for(int i = temf.recipeAlloyID + 1; i < Consts.VALID_ALLOY_COUNT; i++)
 					if(((TEEAnalyzer)Funcs.getTileEntity(mc.theWorld, temf.analyzerHost)).hasAlloy(i))
-						temf.recipeAlloyID = i; // If this alloy has been discovered, select it
+						temf.recipeAlloyID = (byte)i; // If this alloy has been discovered, select it
 			}
 
 			else if(mouseButton == 1) { // Right-click
