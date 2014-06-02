@@ -31,10 +31,10 @@ public class GuiEnergyStorage extends GuiElectric {
 	@Override
 	protected ColoredLine[] getNetworkStatuses() {
 		String status;
-		int color=0x00ff00;
+		int color = 0x00ff00;
 
 		if(tees.isHostingNetwork()) {
-			color=0x0060ff;
+			color = 0x0060ff;
 			int clients = tees.getNetworkSize();
 
 			// A string that says this TE is hosting a network and how many clients are connected

@@ -170,10 +170,10 @@ public class GuiXray extends GuiElectric {
 	/** A button that represents a type of a block, its y-level, and the quantity of that block in the y-level */
 	private class BlockButton {
 
-		private int xPos, yPos;
-		private int width, height;
-		private Item block;
-		private int blockAmount, blockMeta;
+		private final int xPos, yPos;
+		private final int width, height;
+		private final Item block;
+		private final int blockAmount, blockMeta;
 
 		/** The yValue of blocks that this button represents */
 		private final int yValue;
@@ -215,7 +215,7 @@ public class GuiXray extends GuiElectric {
 				}
 
 				// Draw the yValue string
-				fontRendererObj.drawStringWithShadow(yValue + "", xPos + 9 - (fontRendererObj.getStringWidth(yValue + "") / 2), yPos + 5, 0xffffff);
+				fontRendererObj.drawStringWithShadow(yValue + "", xPos + 9 - fontRendererObj.getStringWidth(yValue + "") / 2, yPos + 5, 0xffffff);
 
 				GL11.glEnable(GL11.GL_LIGHTING);
 

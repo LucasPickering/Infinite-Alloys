@@ -50,7 +50,7 @@ public class TEEXray extends TileEntityElectric {
 	public void updateEntity() {
 		super.updateEntity();
 		System.out.println(Funcs.getSideAsString() + "X: " + energyHost);
-		
+
 		if(inventoryStacks[0] == null)
 			shouldSearch = false;
 

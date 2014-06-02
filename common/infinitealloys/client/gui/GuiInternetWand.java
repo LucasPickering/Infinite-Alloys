@@ -318,10 +318,10 @@ public class GuiInternetWand extends GuiScreen {
 			GL11.glColor3f(1F, 1F, 1F); // Reset the color
 
 			// Draw the string for the coordinates
-			mc.fontRenderer.drawStringWithShadow(dimensionID + "", xPos + 26 - (mc.fontRenderer.getStringWidth(dimensionID + "") / 2), yPos + 5, 0xffffff);
-			mc.fontRenderer.drawStringWithShadow(machineX + "", xPos + 58 - (mc.fontRenderer.getStringWidth(machineX + "") / 2), yPos + 5, 0xffffff);
-			mc.fontRenderer.drawStringWithShadow(machineY + "", xPos + 82 - (mc.fontRenderer.getStringWidth(machineY + "") / 2), yPos + 5, 0xffffff);
-			mc.fontRenderer.drawStringWithShadow(machineZ + "", xPos + 106 - (mc.fontRenderer.getStringWidth(machineZ + "") / 2), yPos + 5, 0xffffff);
+			mc.fontRenderer.drawStringWithShadow(dimensionID + "", xPos + 26 - mc.fontRenderer.getStringWidth(dimensionID + "") / 2, yPos + 5, 0xffffff);
+			mc.fontRenderer.drawStringWithShadow(machineX + "", xPos + 58 - mc.fontRenderer.getStringWidth(machineX + "") / 2, yPos + 5, 0xffffff);
+			mc.fontRenderer.drawStringWithShadow(machineY + "", xPos + 82 - mc.fontRenderer.getStringWidth(machineY + "") / 2, yPos + 5, 0xffffff);
+			mc.fontRenderer.drawStringWithShadow(machineZ + "", xPos + 106 - mc.fontRenderer.getStringWidth(machineZ + "") / 2, yPos + 5, 0xffffff);
 
 			itemRender.renderItemIntoGUI(fontRendererObj, mc.getTextureManager(), new ItemStack(IABlocks.machine, 1, machineID), xPos, yPos + 1);
 		}

@@ -126,7 +126,7 @@ public abstract class GuiMachine extends GuiContainer {
 		machineTabs.clear();
 		Point controller = MachineHelper.controllers.get(mc.thePlayer.getDisplayName());
 		if(controller != null) {
-			TEMComputer tec = ((TEMComputer)Funcs.getTileEntity(mc.theWorld, controller));
+			TEMComputer tec = (TEMComputer)Funcs.getTileEntity(mc.theWorld, controller);
 			controllerTab = new GuiMachineTab(mc, itemRender, -24, 6, tec, true, tem.coords().equals(controller));
 			controllerTab.drawButton();
 			Point[] clients = tec.getClients();
