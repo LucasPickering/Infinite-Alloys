@@ -102,14 +102,14 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 			if(worldObj.isRemote)
 				Funcs.sendPacketToServer(new MessageNetworkEditToServer(false, worldObj.provider.dimensionId, coords(), client));
 			else
-				Funcs.sendPacketToAllPlayers(new MessageNetworkEditToServer(false, worldObj.provider.dimensionId, coords(), client));
+				Funcs.sendPacketToAllPlayers(new MessageNetworkEditToClient(false, worldObj.provider.dimensionId, coords(), client));
 		}
 	}
 
 	@Override
 	public void syncAllClients(EntityPlayer player) {
 		for(Point client : networkClients)
-			Funcs.sendPacketToPlayer(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client), player);
+			Funcs.sendPacketToPlayer(new MessageNetworkEditToClient(true, worldObj.provider.dimensionId, coords(), client), player);
 	}
 
 	@Override

@@ -58,7 +58,8 @@ public class EventHandler {
 	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
 		if(!event.world.isRemote && event.entity instanceof EntityPlayer) {
 			Funcs.sendPacketToPlayer(new MessageValidAlloys(InfiniteAlloys.instance.getValidAlloys()), (EntityPlayer)event.entity);
-			MachineHelper.playersToSync.add(((EntityPlayer)event.entity).getDisplayName());
+			if(!MachineHelper.playersToSync.contains(((EntityPlayer)event.entity).getDisplayName()))
+				MachineHelper.playersToSync.add(((EntityPlayer)event.entity).getDisplayName());
 		}
 	}
 }

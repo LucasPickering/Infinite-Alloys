@@ -53,6 +53,8 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	public void updateEntity() {
 		super.updateEntity();
 
+		System.out.println(Funcs.getSideAsString() + "A: " + networkClients.size());
+
 		if(!initialized) {
 			initialized = true;
 			if(!worldObj.isRemote)
@@ -82,7 +84,7 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 			if(player != null && worldObj.isRemote)
 				player.addChatComponentMessage(new ChatComponentText("Error: Machine is already in this network"));
 		}
-		else if(!isClientValid(client)) {
+		else if(initialized && !isClientValid(client)) {
 			if(player != null && worldObj.isRemote)
 				player.addChatComponentMessage(new ChatComponentText("Error: Machine is not a metal forge"));
 		}
@@ -118,14 +120,14 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 			if(worldObj.isRemote)
 				Funcs.sendPacketToServer(new MessageNetworkEditToServer(false, worldObj.provider.dimensionId, coords(), client));
 			else
-				Funcs.sendPacketToAllPlayers(new MessageNetworkEditToServer(false, worldObj.provider.dimensionId, coords(), client));
+				Funcs.sendPacketToAllPlayers(new MessageNetworkEditToClient(false, worldObj.provider.dimensionId, coords(), client));
 		}
 	}
 
 	@Override
 	public void syncAllClients(EntityPlayer player) {
 		for(Point client : networkClients)
-			Funcs.sendPacketToPlayer(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client), player);
+			Funcs.sendPacketToPlayer(new MessageNetworkEditToClient(true, worldObj.provider.dimensionId, coords(), client), player);
 	}
 
 	@Override
@@ -212,7 +214,7 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		targetAlloy = tagCompound.getInteger("targetAlloy");
 		for(int i = 0; tagCompound.hasKey("client" + i); i++) {
 			int[] client = tagCompound.getIntArray("client" + i);
-			networkClients.add(new Point(client[0], client[1], client[2]));
+			addClient(null, new Point(client[0], client[1], client[2]), false);
 		}
 	}
 

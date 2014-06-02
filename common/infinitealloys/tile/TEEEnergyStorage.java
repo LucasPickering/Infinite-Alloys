@@ -96,6 +96,10 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 			if(player != null && worldObj.isRemote)
 				player.addChatComponentMessage(new ChatComponentText("Error: This machine is not currently hosting a network because it is connected to another host"));
 		}
+		else if(initialized && !isClientValid(client)) {
+			if(player != null && worldObj.isRemote)
+				player.addChatComponentMessage(new ChatComponentText("Error: Machine is not electric"));
+		}
 		else if(networkClients.contains(client)) {
 			if(player != null && worldObj.isRemote)
 				player.addChatComponentMessage(new ChatComponentText("Error: Machine is already in network"));
