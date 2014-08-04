@@ -53,8 +53,6 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 	public void updateEntity() {
 		super.updateEntity();
 
-		System.out.println(Funcs.getSideAsString() + "A: " + networkClients.size());
-
 		if(!initialized) {
 			initialized = true;
 			if(!worldObj.isRemote)
@@ -146,13 +144,10 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 
 	@Override
 	protected void onStartProcess() {
-		targetAlloy = getAlloyForMetals(); // Set the alloy that we are looking for
-		for(int i = 0; i < Consts.METAL_COUNT; i++) { // Remove the ingots that are in the inventory
-			if(inventoryStacks[i] != null) {
-				usedMetals |= 1 << i;
+		// Remove the ingots that are in the inventory
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
+			if(inventoryStacks[i] != null)
 				decrStackSize(i, 1);
-			}
-		}
 	}
 
 	@Override
@@ -161,6 +156,15 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		targetAlloy = -1; // Reset the alloy that we are discovering
 		if(!worldObj.isRemote)
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	public void onInventoryChanged() {
+		targetAlloy = getAlloyForMetals(); // Set the alloy that we are looking for
+		// Set the metals that are currently in the machine
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
+			if(inventoryStacks[i] != null)
+				usedMetals |= 1 << i;
 	}
 
 	public int getAlloys() {
@@ -203,7 +207,7 @@ public class TEEAnalyzer extends TileEntityElectric implements IHost {
 		int metalModifier = 0;
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			if((usedMetals >> i & 1) == 1)
-				metalModifier += Math.pow(4, i); // Each alloy contributes to the required RK based on its value
+				metalModifier += Math.pow(4, i); // Each metal contributes to the required RK based on its value
 		return (int)(baseRKPerTick * rkPerTickMult / processTimeMult) * metalModifier;
 	}
 

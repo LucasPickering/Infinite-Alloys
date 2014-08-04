@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.block.IABlocks;
 import infinitealloys.item.IAItems;
 import infinitealloys.network.MessageTEToClient;
 import infinitealloys.network.MessageTEToServer;
@@ -48,6 +49,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	/** The size limit for one stack in this machine */
 	protected int stackLimit = 64;
 
+	/** @param inventoryLength The amount of total slots in the inventory */
 	public TileEntityMachine(int inventoryLength) {
 		this();
 		inventoryStacks = new ItemStack[inventoryLength];
@@ -62,6 +64,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	/** Get the integer from {@link infinitealloys.util.MachineHelper MachineHelper} that corresponds to this machine */
 	public abstract EnumMachine getEnumMachine();
 
+	/** Called when the block is first placed to restore persistent data from before it was destroyed, such as the stored RK in the ESU */
+	public void loadNBTData(NBTTagCompound tagCompound) {}
+
 	@Override
 	public void updateEntity() {
 		// Check for upgrades in the upgrade inventory slot. If there is one, remove it from the slot and add it to the machine.
@@ -72,46 +77,41 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		}
 	}
 
+	/** The machine block that is dropped. This only needs to be overridden to add metadata to the item, such as RK storage. */
+	protected ItemStack getItemDrop() {
+		return new ItemStack(IABlocks.machine, 1, getEnumMachine().ordinal());
+	}
+
 	/** Called when the TE's block is destroyed. Ends network connections and drops items and upgrades */
 	public void onBlockDestroyed() {
-		// Drop items
-		Random random = new Random();
+		// Drop block
+		spawnItem(getItemDrop());
+
+		// Drop items in inventory
 		for(int i = 0; i < getSizeInventory(); i++) {
 			ItemStack stack = getStackInSlot(i);
-			if(stack != null) {
-				float f1 = random.nextFloat() * 0.8F + 0.1F;
-				float f2 = random.nextFloat() * 0.8F + 0.1F;
-				float f3 = random.nextFloat() * 0.8F + 0.1F;
-				while(stack.stackSize > 0) {
-					int j = random.nextInt(21) + 10;
-					if(j > stack.stackSize)
-						j = stack.stackSize;
-					stack.stackSize -= j;
-					EntityItem item = new EntityItem(worldObj, xCoord + f1, yCoord + f2, zCoord + f3, new ItemStack(stack.getItem(), j, stack.getItemDamage()));
-					if(stack.hasTagCompound())
-						item.getEntityItem().setTagCompound((NBTTagCompound)stack.getTagCompound().copy());
-					item.motionX = random.nextGaussian() * 0.05F;
-					item.motionY = random.nextGaussian() * 0.25F;
-					item.motionZ = random.nextGaussian() * 0.05F;
-					worldObj.spawnEntityInWorld(item);
-				}
-			}
+			if(stack != null)
+				spawnItem(stack);
 		}
 
 		// Drop upgrades
-		for(EnumUpgrade upgrade : EnumUpgrade.values()) {
-			if(hasUpgrade(upgrade)) {
-				float f = random.nextFloat() * 0.8F + 0.1F;
-				float f1 = random.nextFloat() * 0.8F + 0.1F;
-				float f2 = random.nextFloat() * 0.8F + 0.1F;
-				EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, new ItemStack(IAItems.upgrade, 1, upgrade.ordinal()));
-				item.motionX = random.nextGaussian() * 0.05F;
-				item.motionY = random.nextGaussian() * 0.25F;
-				item.motionZ = random.nextGaussian() * 0.05F;
-				worldObj.spawnEntityInWorld(item);
-			}
-		}
+		for(EnumUpgrade upgrade : EnumUpgrade.values())
+			if(hasUpgrade(upgrade))
+				spawnItem(new ItemStack(IAItems.upgrade, 1, upgrade.ordinal()));
 		upgrades = 0;
+	}
+
+	/** Spawn an EntityItem for an ItemStack */
+	private void spawnItem(ItemStack itemstack) {
+		Random random = new Random();
+		float f = random.nextFloat() * 0.8F + 0.1F;
+		float f1 = random.nextFloat() * 0.8F + 0.1F;
+		float f2 = random.nextFloat() * 0.8F + 0.1F;
+		EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, itemstack);
+		item.motionX = random.nextGaussian() * 0.05F;
+		item.motionY = random.nextGaussian() * 0.25F;
+		item.motionZ = random.nextGaussian() * 0.05F;
+		worldObj.spawnEntityInWorld(item);
 	}
 
 	@Override

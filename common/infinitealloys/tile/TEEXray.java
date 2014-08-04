@@ -36,8 +36,8 @@ public class TEEXray extends TileEntityElectric {
 	public TEEXray() {
 		super(2);
 		stackLimit = 1;
-		ticksToProcess = 24;// TODO:Change this back to 24000
-		baseRKPerTick = 0; // TODO:Change this back to -360
+		ticksToProcess = 24000;
+		baseRKPerTick = -360;
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
+import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -134,6 +135,11 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+		return new ArrayList<ItemStack>();
+	}
+
+	@Override
 	public void getSubBlocks(Item item, CreativeTabs creativetabs, List list) {
 		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
 			list.add(new ItemStack(item, 1, i));
@@ -142,8 +148,11 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemstack) {
 		TileEntityMachine tem = (TileEntityMachine)world.getTileEntity(x, y, z);
-		if(tem != null)
+		if(tem != null) {
 			tem.front = Funcs.yawToNumSide(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
+			if(itemstack.hasTagCompound())
+				tem.loadNBTData(itemstack.getTagCompound());
+		}
 	}
 
 	@Override

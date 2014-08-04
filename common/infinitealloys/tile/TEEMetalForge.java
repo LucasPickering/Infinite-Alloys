@@ -42,7 +42,6 @@ public class TEEMetalForge extends TileEntityElectric {
 	@Override
 	public void updateEntity() {
 		super.updateEntity();
-		System.out.println(Funcs.getSideAsString() + "M: " + analyzerHost);
 		recipeChanged = false;
 
 		if(analyzerHost == null)

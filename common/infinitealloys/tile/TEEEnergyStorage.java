@@ -8,6 +8,7 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -47,6 +48,11 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	@Override
 	public EnumMachine getEnumMachine() {
 		return EnumMachine.ENERGY_STORAGE;
+	}
+
+	@Override
+	public void loadNBTData(NBTTagCompound tagCompound) {
+		currentRK = tagCompound.getInteger("currentRK");
 	}
 
 	@Override
@@ -194,6 +200,15 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 				break;
 			}
 		}
+	}
+
+	@Override
+	protected ItemStack getItemDrop() {
+		ItemStack itemstack = super.getItemDrop();
+		NBTTagCompound tagCompound = new NBTTagCompound();
+		tagCompound.setInteger("currentRK", currentRK);
+		itemstack.setTagCompound(tagCompound);
+		return itemstack;
 	}
 
 	@Override
