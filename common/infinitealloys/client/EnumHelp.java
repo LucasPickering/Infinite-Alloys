@@ -2,7 +2,7 @@ package infinitealloys.client;
 
 public enum EnumHelp {
 
-	/* CP - Computer, MF - Metal Forge, AZ - Analyzer, XR - X-ray, PS - Pasture, ES - Energy Storage, IW - Internet Wand */
+	/* CP - Computer, MF - Metal Forge, XR - X-ray, PS - Pasture, ES - Energy Storage, IW - Internet Wand */
 
 	CP_UPGRADE("upgrade", 0x9c00ff, 139, 42, 18, 18), CP_TAB("cpTab", 0xff8900, -24, 6, 27, 24),
 

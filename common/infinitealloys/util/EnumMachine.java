@@ -1,20 +1,16 @@
 package infinitealloys.util;
 
 import infinitealloys.client.EnumHelp;
-import infinitealloys.client.gui.GuiAnalyzer;
 import infinitealloys.client.gui.GuiComputer;
 import infinitealloys.client.gui.GuiEnergyStorage;
 import infinitealloys.client.gui.GuiMachine;
 import infinitealloys.client.gui.GuiMetalForge;
 import infinitealloys.client.gui.GuiPasture;
 import infinitealloys.client.gui.GuiXray;
-import infinitealloys.inventory.ContainerAnalyzer;
 import infinitealloys.inventory.ContainerEnergyStorage;
 import infinitealloys.inventory.ContainerMachine;
 import infinitealloys.inventory.ContainerMetalForge;
 import infinitealloys.inventory.ContainerXray;
-import infinitealloys.item.IAItems;
-import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
@@ -30,8 +26,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 public enum EnumMachine {
 
 	COMPUTER("computer", TEMComputer.class, ContainerMachine.class, GuiComputer.class), METAL_FORGE("metalforge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class),
-	ANALYZER("analyzer", TEEAnalyzer.class, ContainerAnalyzer.class, GuiAnalyzer.class), XRAY("xray", TEEXray.class, ContainerXray.class, GuiXray.class),
-	PASTURE("pasture", TEEPasture.class, ContainerMachine.class, GuiPasture.class), ENERGY_STORAGE("energystorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class);
+	XRAY("xray", TEEXray.class, ContainerXray.class, GuiXray.class), PASTURE("pasture", TEEPasture.class, ContainerMachine.class, GuiPasture.class),
+	ENERGY_STORAGE("energystorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class);
 
 	private String name;
 	private Class temClass;
@@ -80,8 +76,6 @@ public enum EnumMachine {
 					default:
 						return MachineHelper.getIngotNum(itemstack) != -1;
 				}
-			case ANALYZER:
-				return itemstack.getItem() == IAItems.ingot && itemstack.getItemDamage() == index;
 			case XRAY:
 				return MachineHelper.isDetectable(itemstack);
 			case ENERGY_STORAGE:
@@ -98,8 +92,6 @@ public enum EnumMachine {
 				return new EnumHelp[] { EnumHelp.CP_UPGRADE, EnumHelp.CP_TAB };
 			case METAL_FORGE:
 				return new EnumHelp[] { EnumHelp.MF_UPGRADE, EnumHelp.MF_PROGRESS, EnumHelp.MF_ENERGY, EnumHelp.MF_OUTPUT, EnumHelp.MF_SUPPLY, EnumHelp.MF_PRESETS, EnumHelp.MF_SELECTION };
-			case ANALYZER:
-				return new EnumHelp[] { EnumHelp.AZ_UPGRADE, EnumHelp.AZ_PROGRESS, EnumHelp.AZ_ENERGY, EnumHelp.AZ_SUPPLY, EnumHelp.AZ_INGOTS };
 			case XRAY:
 				return new EnumHelp[] { EnumHelp.XR_UPGRADE, EnumHelp.XR_PROGRESS, EnumHelp.XR_ENERGY, EnumHelp.XR_ORE, EnumHelp.XR_SEARCH, EnumHelp.XR_RESULTS };
 			case PASTURE:

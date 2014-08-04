@@ -89,8 +89,6 @@ public class CommonProxy {
 
 		/* Metal Forge */addRecipe(new ItemStack(IABlocks.machine, 1, 1), "BBB", "BCB", "BBB", 'B', Items.brick, 'C', IAItems.multi);
 
-		/* Analyzer */addRecipe(new ItemStack(IABlocks.machine, 1, 2), "QIQ", "ICI", "QIQ", 'C', IAItems.multi, 'I', Items.iron_ingot); // TODO: Replace Qs with real items
-
 		/* X-ray */addRecipe(new ItemStack(IABlocks.machine, 1, 4),
 				"E5E", "4C4", "D5G", '4', alloys[4], '5', alloys[5], 'C', IAItems.multi, 'D', Items.diamond, 'E', Items.ender_pearl, 'G', Blocks.glass_pane);
 

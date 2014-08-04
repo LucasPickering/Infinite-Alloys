@@ -5,9 +5,7 @@ import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
-import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,14 +13,11 @@ import org.apache.commons.lang3.ArrayUtils;
 
 public class TEEMetalForge extends TileEntityElectric {
 
-	/** The ID of the alloy that is currently set as the recipe. This is drawn from the connected analyzer. */
+	/** The ID of the alloy that is currently set as the recipe */
 	public byte recipeAlloyID = -1;
 
 	/** True if the alloy recipe has been changed by the client, used to reset progress */
 	private boolean recipeChanged;
-
-	/** The coordinates of the analyzer that is providing alloy data to this machine */
-	public Point analyzerHost;
 
 	public TEEMetalForge(byte front) {
 		this();
@@ -43,24 +38,6 @@ public class TEEMetalForge extends TileEntityElectric {
 	public void updateEntity() {
 		super.updateEntity();
 		recipeChanged = false;
-
-		if(analyzerHost == null)
-			recipeAlloyID = -1;
-	}
-
-	@Override
-	public void onBlockDestroyed() {
-		super.onBlockDestroyed();
-		if(analyzerHost != null)
-			((IHost)Funcs.getTileEntity(worldObj, analyzerHost)).removeClient(coords(), true);
-	}
-
-	public void connectToAnalyzerNetwork(Point host) {
-		analyzerHost = host;
-	}
-
-	public void disconnectFromAnalyzerNetwork() {
-		analyzerHost = null;
 	}
 
 	@Override

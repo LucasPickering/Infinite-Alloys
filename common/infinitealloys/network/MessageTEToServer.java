@@ -1,6 +1,5 @@
 package infinitealloys.network;
 
-import infinitealloys.tile.TEEAnalyzer;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEXray;
@@ -55,12 +54,6 @@ public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToS
 				case METAL_FORGE:
 					byte recipeAlloyID = bytes.readByte();
 					((TEEMetalForge)te).handlePacketDataFromClient(recipeAlloyID);
-					break;
-
-				case ANALYZER:
-					int alloys = bytes.readInt();
-					int targetAlloy = bytes.readInt();
-					((TEEAnalyzer)te).handlePacketDataFromClient(alloys, targetAlloy);
 					break;
 
 				case XRAY:
