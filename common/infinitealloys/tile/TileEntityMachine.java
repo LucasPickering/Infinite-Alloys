@@ -268,7 +268,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	 * @return true if valid */
 	public final boolean isUpgradeValid(ItemStack upgrade) {
 		EnumUpgrade upg = EnumUpgrade.values()[upgrade.getItemDamage()];
-		return upgrade.getItem() == IAItems.upgrade && (!upg.needsPrereq() || hasUpgrade(upg)) && !hasUpgrade(upg) && validUpgrades.contains(upg);
+		return upgrade.getItem() == IAItems.upgrade && (!upg.hasPreceding() || hasUpgrade(upg.getPrecedingUpgrade())) && !hasUpgrade(upg) && validUpgrades.contains(upg);
 	}
 
 	/** Does the machine have the upgrade
@@ -278,6 +278,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public boolean hasUpgrade(EnumUpgrade upgrade) {
 		if(upgrade == null)
 			return false;
-		return (upgrades & upgrade.getID()) == upgrade.getID();
+		return (upgrades >> upgrade.ordinal() & 1) == 1; // Upgrades is a binary number, e.g. 110101 has 4 upgrades. If the ID of the upgrade is 4, then upgrades >> ID is 000011.
+															// 000011 & 1 == 1, therefore that upgrade is present.
 	}
 }

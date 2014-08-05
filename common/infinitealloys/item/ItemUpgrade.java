@@ -27,8 +27,8 @@ public class ItemUpgrade extends ItemIA {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister iconRegister) {
 		IAItems.upgradeBackground = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "upgradecomponent");
-		for(int i = 0; i < Consts.UPGRADE_COUNT; i++)
-			IAItems.upgradeIcons[i] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + EnumUpgrade.values()[i].getName());
+		for(EnumUpgrade upgrade : EnumUpgrade.values())
+			IAItems.upgradeIcons[upgrade.ordinal()] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + upgrade.getName());
 	}
 
 	@Override

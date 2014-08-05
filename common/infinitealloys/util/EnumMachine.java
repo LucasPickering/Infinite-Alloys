@@ -27,18 +27,22 @@ public enum EnumMachine {
 
 	COMPUTER("computer", TEMComputer.class, ContainerMachine.class, GuiComputer.class), METAL_FORGE("metalforge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class),
 	XRAY("xray", TEEXray.class, ContainerXray.class, GuiXray.class), PASTURE("pasture", TEEPasture.class, ContainerMachine.class, GuiPasture.class),
-	ENERGY_STORAGE("energystorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class);
+	ENERGY_STORAGE("energystorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class, "currentRK");
 
 	private String name;
 	private Class temClass;
 	private Class containerClass;
 	private Class guiClass;
 
-	private EnumMachine(String name, Class<? extends TileEntityMachine> temClass, Class<? extends ContainerMachine> containerClass, Class<? extends GuiMachine> guiClass) {
+	/** An array of the names of fields in the TE that should be saved when the block is destroyed and restored when it is placed back down, e.g. currentRK for the ESU. */
+	private String[] persistentFields;
+
+	private EnumMachine(String name, Class<? extends TileEntityMachine> temClass, Class<? extends ContainerMachine> containerClass, Class<? extends GuiMachine> guiClass, String... persistentFields) {
 		this.name = name;
 		this.temClass = temClass;
 		this.containerClass = containerClass;
 		this.guiClass = guiClass;
+		this.persistentFields = persistentFields;
 	}
 
 	public String getName() {
@@ -65,6 +69,10 @@ public enum EnumMachine {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public String[] getPersistentFields() {
+		return persistentFields;
 	}
 
 	public boolean stackValidForSlot(int index, ItemStack itemstack) {

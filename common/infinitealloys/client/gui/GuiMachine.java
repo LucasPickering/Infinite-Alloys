@@ -88,7 +88,7 @@ public abstract class GuiMachine extends GuiContainer {
 			List<ColoredLine> lines = new ArrayList<ColoredLine>();
 			lines.add(new ColoredLine(Funcs.getLoc("upgrade.name"), 0xffffff));
 			for(EnumUpgrade upgrade : EnumUpgrade.values()) {
-				if(upgrade.isPrereq() && tem.hasUpgrade(upgrade.getPrereqUpgrade()) || !tem.hasUpgrade(upgrade))
+				if(upgrade.hasFollowing() && tem.hasUpgrade(upgrade.getFollowingUpgrade()) || !tem.hasUpgrade(upgrade))
 					continue;
 				lines.add(new ColoredLine(Funcs.getLoc("upgrade." + upgrade.getName() + ".name"), 0xaaaaaa));
 			}

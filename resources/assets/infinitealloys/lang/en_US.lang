@@ -75,6 +75,8 @@ machine.pasture.mode.0=Off
 machine.pasture.mode.1=Att.
 machine.pasture.mode.2=Rep.
 
+machine.fields.currentRK=Current RK
+
 wand.addToWand=Add to Wand
 wand.addSelected=Add to Mach.
 

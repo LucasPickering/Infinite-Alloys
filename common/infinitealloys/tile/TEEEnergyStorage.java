@@ -204,11 +204,15 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	protected ItemStack getItemDrop() {
-		ItemStack itemstack = super.getItemDrop();
-		NBTTagCompound tagCompound = new NBTTagCompound();
-		tagCompound.setInteger("currentRK", currentRK);
-		itemstack.setTagCompound(tagCompound);
-		return itemstack;
+		if(currentRK != 0) {
+			ItemStack itemstack = super.getItemDrop();
+			NBTTagCompound tagCompound = new NBTTagCompound();
+			tagCompound.setInteger("currentRK", currentRK);
+			itemstack.setTagCompound(tagCompound);
+			return itemstack;
+		}
+
+		return super.getItemDrop();
 	}
 
 	@Override
