@@ -38,7 +38,8 @@ public class Funcs {
 	/** Get a localization or series of localization with keys. Add '/' to the start of a key to have it added to the final string without being localized. e.g.
 	 * getLoc("general.off", "/is not", "general.on") would return "Off is not On"
 	 * 
-	 * @param keys the list of keys to be localized and spliced together into a final string */
+	 * @param keys the list of keys to be localized and spliced together into a final string
+	 * @return the final string of one or more concatenated literal and/or localized strings */
 	public static String getLoc(String... keys) {
 		String finalKey = "";
 		for(final String key : keys) {

@@ -100,23 +100,23 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	public boolean addClient(EntityPlayer player, Point client, boolean sync) {
 		if(energyHost != null && !energyHost.equals(coords())) {
 			if(player != null && worldObj.isRemote)
-				player.addChatComponentMessage(new ChatComponentText("Error: This machine is not currently hosting a network because it is connected to another host"));
+				player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc("machine.textOutput.error", "/: ", "machine.textOutput.error.notHosting")));
 		}
 		else if(initialized && !isClientValid(client)) {
 			if(player != null && worldObj.isRemote)
-				player.addChatComponentMessage(new ChatComponentText("Error: Machine is not electric"));
+				player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc("machine.textOutput.error", "/: ", "machine.textOutput.error.notElectric")));
 		}
 		else if(networkClients.contains(client)) {
 			if(player != null && worldObj.isRemote)
-				player.addChatComponentMessage(new ChatComponentText("Error: Machine is already in network"));
+				player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc("machine.textOutput.error", "/: ", "machine.textOutput.error.alreadyInNetwork")));
 		}
 		else if(client.equals(xCoord, yCoord, zCoord)) {
 			if(player != null && worldObj.isRemote)
-				player.addChatComponentMessage(new ChatComponentText("Error: Cannot add self to network"));
+				player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc("machine.textOutput.error", "/: ", "machine.textOutput.error.cannotAddSelf")));
 		}
 		else if(client.distanceTo(xCoord, yCoord, zCoord) > range) {
 			if(player != null && worldObj.isRemote)
-				player.addChatComponentMessage(new ChatComponentText("Error: Block out of range"));
+				player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc("machine.textOutput.error", "/: ", "machine.textOutput.error.outOfRange")));
 		}
 		else {
 			networkClients.add(client); // Add the machine
@@ -129,7 +129,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 				if(worldObj.isRemote) { // If this is the client
 					Funcs.sendPacketToServer(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client)); // Sync to server
 					if(player != null)
-						player.addChatComponentMessage(new ChatComponentText("Adding machine at " + client)); // Send a chat message
+						player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc("machine.textOutput.addingMachine") + client)); // Send a chat message
 				}
 				else
 					Funcs.sendPacketToAllPlayers(new MessageNetworkEditToClient(true, worldObj.provider.dimensionId, coords(), client)); // Sync to clients

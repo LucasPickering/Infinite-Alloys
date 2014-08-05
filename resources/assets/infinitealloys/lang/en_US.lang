@@ -74,8 +74,17 @@ machine.xray.search=Search
 machine.pasture.mode.0=Off
 machine.pasture.mode.1=Att.
 machine.pasture.mode.2=Rep.
-
 machine.fields.currentRK=Current RK
+machine.textOutput.addingMachine=Adding machine at 
+machine.textOutput.error=Error
+machine.textOutput.error.notHosting=This machine is not currently hosting a network because it is connected to another host
+machine.textOutput.error.notElectric=Machine is not electric
+machine.textOutput.error.notWireless=Machine is not capable of wireless networking
+machine.textOutput.error.alreadyInNetwork=Machine is already in network
+machine.textOutput.error.cannotAddSelf=Cannot add self to network
+machine.textOutput.error.outOfRange=Machine out of range
+machine.textOutput.error.networkFull=Network is already full
+
 
 wand.addToWand=Add to Wand
 wand.addSelected=Add to Mach.

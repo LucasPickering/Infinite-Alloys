@@ -60,23 +60,23 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	public boolean addClient(EntityPlayer player, Point client, boolean sync) {
 		if(networkClients.contains(client)) {
 			if(player != null && worldObj.isRemote)
-				player.addChatComponentMessage(new ChatComponentText("Error: Machine is already in this network"));
+				player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc("machine.textOutput.error", "/: ", "machine.textOutput.error.alreadyInNetwork")));
 		}
 		else if(networkClients.size() >= networkCapacity) {
 			if(player != null && worldObj.isRemote)
-				player.addChatComponentMessage(new ChatComponentText("Error: Network full"));
+				player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc("machine.textOutput.error", "/: ", "machine.textOutput.error.networkFull")));
 		}
 		else if(client.equals(xCoord, yCoord, zCoord)) {
 			if(player != null && worldObj.isRemote)
-				player.addChatComponentMessage(new ChatComponentText("Error: Cannot add self to network"));
+				player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc("machine.textOutput.error", "/: ", "machine.textOutput.error.cannotAddSelf")));
 		}
 		else if(client.distanceTo(xCoord, yCoord, zCoord) > range) {
 			if(player != null && worldObj.isRemote)
-				player.addChatComponentMessage(new ChatComponentText("Error: Block out of range"));
+				player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc("machine.textOutput.error", "/: ", "machine.textOutput.error.outOfRange")));
 		}
 		else if(!isClientValid(client)) {
 			if(player != null && worldObj.isRemote)
-				player.addChatComponentMessage(new ChatComponentText("Error: Block is not capable of networking"));
+				player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc("machine.textOutput.error", "/: ", "machine.textOutput.error.notWireless")));
 		}
 		else {
 			networkClients.add(client); // Add the machine
@@ -86,7 +86,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 				if(worldObj.isRemote) { // If this is the client
 					Funcs.sendPacketToServer(new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(), client)); // Sync to server
 					if(player != null)
-						player.addChatComponentMessage(new ChatComponentText("Adding machine at " + client)); // Send a chat message
+						player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc("machine.textOutput.addingMachine") + client)); // Send a chat message
 				}
 				else
 					Funcs.sendPacketToAllPlayers(new MessageNetworkEditToClient(true, worldObj.provider.dimensionId, coords(), client)); // Sync to clients
