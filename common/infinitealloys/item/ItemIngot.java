@@ -33,7 +33,7 @@ public class ItemIngot extends ItemIA {
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
 		if(itemstack.getItemDamage() < Consts.METAL_COUNT)
-			return "item.IA" + Consts.METAL_NAMES[itemstack.getItemDamage()] + "ingot";
+			return "item.ia" + Consts.METAL_NAMES[itemstack.getItemDamage()] + "Ingot";
 		return super.getUnlocalizedName(itemstack);
 	}
 }

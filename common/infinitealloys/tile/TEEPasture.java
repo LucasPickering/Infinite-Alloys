@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgradeType;
@@ -138,10 +139,10 @@ public class TEEPasture extends TileEntityElectric {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgradeTypes.add(EnumUpgradeType.EFFICIENCY);
-		validUpgradeTypes.add(EnumUpgradeType.CAPACITY);
-		validUpgradeTypes.add(EnumUpgradeType.RANGE);
-		validUpgradeTypes.add(EnumUpgradeType.WIRELESS);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.EFFICIENCY]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.CAPACITY]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.RANGE]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.WIRELESS]);
 	}
 
 	/** Does the pasture have enough space to enable another animal or monster

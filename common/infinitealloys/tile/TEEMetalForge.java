@@ -170,10 +170,10 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgradeTypes.add(EnumUpgradeType.SPEED);
-		validUpgradeTypes.add(EnumUpgradeType.EFFICIENCY);
-		validUpgradeTypes.add(EnumUpgradeType.CAPACITY);
-		validUpgradeTypes.add(EnumUpgradeType.WIRELESS);
-		validUpgradeTypes.add(EnumUpgradeType.ALLOY);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.SPEED]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.EFFICIENCY]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.CAPACITY]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.WIRELESS]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.ALLOY]);
 	}
 }

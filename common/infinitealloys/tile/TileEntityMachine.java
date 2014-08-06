@@ -2,6 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.block.IABlocks;
 import infinitealloys.item.IAItems;
+import infinitealloys.item.ItemUpgrade;
 import infinitealloys.network.MessageTEToClient;
 import infinitealloys.network.MessageTEToServer;
 import infinitealloys.network.NetworkHandler;
@@ -33,7 +34,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public final ArrayList<String> playersUsing = new ArrayList<String>();
 
 	/** A list of the upgrades that can be used on this machine */
-	protected final ArrayList<EnumUpgradeType> validUpgradeTypes = new ArrayList<EnumUpgradeType>();
+	protected final ArrayList<ItemUpgrade> validUpgradeTypes = new ArrayList<ItemUpgrade>();
 
 	/** A number from 0-5 to represent which side of this block gets the front texture */
 	public byte front;
@@ -93,9 +94,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		}
 
 		// Drop upgrades
-		for(EnumUpgradeType upgradeType : EnumUpgradeType.values())
-			for(int i = 0; i < upgrades[upgradeType.ordinal()]; i++)
-				spawnItem(new ItemStack(IAItems.upgrade, 1, upgradeType.getItemDamage(i)));
+		for(int i = 0; i < upgrades.length; i++)
+			for(int j = 0; j < upgrades[i]; j++)
+				spawnItem(new ItemStack(IAItems.upgrades[i], 1, j));
 		Arrays.fill(upgrades, 0);
 	}
 
@@ -265,18 +266,18 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	 * @param ItemStack for upgrade item with a binary upgrade damage value (see {@link infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
 	 * @return true if valid */
 	public final boolean isUpgradeValid(ItemStack itemstack) {
-		EnumUpgradeType upgradeType = EnumUpgradeType.getType(itemstack.getItemDamage());
-		int tier = EnumUpgradeType.getTier(itemstack.getItemDamage());
-		return itemstack.getItem() == IAItems.upgrade && (tier == upgrades[upgradeType.ordinal()] + 1) && validUpgradeTypes.contains(upgradeType) && !hasUpgrade(upgradeType, tier);
+		int upgradeType = ((ItemUpgrade)itemstack.getItem()).upgradeType;
+		int upgradeTier = itemstack.getItemDamage();
+		return validUpgradeTypes.contains(itemstack.getItem()) && upgrades[upgradeType] + 1 == upgradeTier && !hasUpgrade(upgradeType, upgradeTier);
 	}
 
 	/** Does the machine have the specified type and tier of upgrade
 	 * 
-	 * @param upgrade Type of upgrade, e.g. Speed or Capacity
+	 * @param upgradeType Int representing type of upgrade, see {@link infinitealloys.util.Consts}
 	 * @param tier Tier of the upgrade, e.g. 2 for Speed II or 3 for Capacity III
 	 * @return true if the machine has the upgrade */
-	public boolean hasUpgrade(EnumUpgradeType upgradeType, int tier) {
-		return upgrades[upgradeType.ordinal()] >= tier;
+	public boolean hasUpgrade(int upgradeType, int tier) {
+		return upgrades[upgradeType] >= tier;
 	}
 
 	/** Get the highest tier of the specified upgrade type that has been applied to this machine */

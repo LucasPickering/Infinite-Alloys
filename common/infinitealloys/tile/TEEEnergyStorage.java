@@ -1,7 +1,9 @@
 package infinitealloys.tile;
 
+import infinitealloys.item.IAItems;
 import infinitealloys.network.MessageNetworkEditToClient;
 import infinitealloys.network.MessageNetworkEditToServer;
+import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgradeType;
 import infinitealloys.util.Funcs;
@@ -285,10 +287,10 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgradeTypes.add(EnumUpgradeType.SPEED);
-		validUpgradeTypes.add(EnumUpgradeType.EFFICIENCY);
-		validUpgradeTypes.add(EnumUpgradeType.CAPACITY);
-		validUpgradeTypes.add(EnumUpgradeType.RANGE);
-		validUpgradeTypes.add(EnumUpgradeType.WIRELESS);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.SPEED]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.EFFICIENCY]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.CAPACITY]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.RANGE]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.WIRELESS]);
 	}
 }

@@ -12,6 +12,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMulti extends ItemIA {
 
+	private static final IIcon[] icons = new IIcon[Consts.MULTI_ITEM_COUNT];
+
 	public ItemMulti() {
 		super();
 		setHasSubtypes(true);
@@ -21,13 +23,13 @@ public class ItemMulti extends ItemIA {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister iconRegister) {
 		for(int i = 0; i < Consts.MULTI_ITEM_COUNT; i++)
-			IAItems.multiIcons[i] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.MULTI_ITEM_NAMES[i]);
+			icons[i] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.MULTI_ITEM_NAMES[i]);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamage(int damage) {
-		return IAItems.multiIcons[damage];
+		return icons[damage];
 	}
 
 	@Override
@@ -40,7 +42,7 @@ public class ItemMulti extends ItemIA {
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
 		if(itemstack.getItemDamage() < Consts.MULTI_ITEM_COUNT)
-			return "item.IA" + Consts.MULTI_ITEM_NAMES[itemstack.getItemDamage()];
+			return "item.ia" + Consts.MULTI_ITEM_NAMES[itemstack.getItemDamage()];
 		return super.getUnlocalizedName(itemstack);
 	}
 }

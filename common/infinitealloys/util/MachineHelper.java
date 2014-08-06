@@ -75,7 +75,7 @@ public class MachineHelper {
 
 	/** Is the machine at x, y, z capable of connecting to an ESU or computer? */
 	public static boolean isClient(TileEntity te) {
-		return te instanceof TileEntityMachine && ((TileEntityMachine)te).hasUpgrade(EnumUpgradeType.WIRELESS, 1) || te instanceof TileEntityElectric;
+		return te instanceof TileEntityMachine && ((TileEntityMachine)te).hasUpgrade(Consts.WIRELESS, 1) || te instanceof TileEntityElectric;
 	}
 
 	/** A block that the x-ray can detect and identify */

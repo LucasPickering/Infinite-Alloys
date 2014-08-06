@@ -1,7 +1,9 @@
 package infinitealloys.tile;
 
+import infinitealloys.item.IAItems;
 import infinitealloys.network.MessageNetworkEditToClient;
 import infinitealloys.network.MessageNetworkEditToServer;
+import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgradeType;
 import infinitealloys.util.Funcs;
@@ -53,7 +55,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	@Override
 	public boolean isClientValid(Point client) {
 		TileEntity te = Funcs.getTileEntity(worldObj, client);
-		return te instanceof TileEntityMachine && ((TileEntityMachine)te).hasUpgrade(EnumUpgradeType.WIRELESS, 1);
+		return te instanceof TileEntityMachine && ((TileEntityMachine)te).hasUpgrade(Consts.WIRELESS, 1);
 	}
 
 	@Override
@@ -156,7 +158,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to an
 					// energy storage unit, add it to the power network.
 					final TileEntity te = worldObj.getTileEntity(xCoord + x, yCoord + y, zCoord + z);
-					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(EnumUpgradeType.WIRELESS, 1))
+					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(Consts.WIRELESS, 1))
 						addClient(null, new Point(xCoord + x, yCoord + y, zCoord + z), true);
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
@@ -186,7 +188,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgradeTypes.add(EnumUpgradeType.CAPACITY);
-		validUpgradeTypes.add(EnumUpgradeType.RANGE);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.CAPACITY]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.RANGE]);
 	}
 }

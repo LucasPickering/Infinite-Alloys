@@ -14,6 +14,13 @@ public class Consts {
 	public static final int UPGRADE_COUNT = EnumUpgradeType.getTotalTiers();
 	public static final int VALID_ALLOY_COUNT = EnumAlloy.values().length;
 
+	public static final int SPEED = 0;
+	public static final int EFFICIENCY = 1;
+	public static final int CAPACITY = 2;
+	public static final int RANGE = 3;
+	public static final int WIRELESS = 4;
+	public static final int ALLOY = 5;
+
 	public static final int BOTTOM = 0;
 	public static final int TOP = 1;
 	public static final int NORTH = 2;
@@ -28,9 +35,9 @@ public class Consts {
 	public static int[] metalColors = new int[METAL_COUNT];
 
 	/** The names of each metal that can be used to make alloys */
-	public static final String[] METAL_NAMES = { "zinc", "magnesium", "scandium", "tantalum", "roguite", "verdite", "hydronium", "swagtanium" };
+	public static final String[] METAL_NAMES = { "Zinc", "Magnesium", "Scandium", "Tantalum", "Roguite", "Verdite", "Hydronium", "Swagtanium" };
 	/** The names of each item that has damage values */
-	public static final String[] MULTI_ITEM_NAMES = { "machinecomponent", "upgradecomponent" };
+	public static final String[] MULTI_ITEM_NAMES = { "MachineComponent", "UpgradeComponent" };
 
 	/** The amount of coords that the Internet Wand can hold */
 	public static final int WAND_SIZE = 10;

@@ -20,7 +20,7 @@ public class ItemBlockOre extends ItemBlock {
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
 		if(itemstack.getItemDamage() < Consts.METAL_COUNT)
-			return "tile.IA" + Consts.METAL_NAMES[itemstack.getItemDamage()] + "ore";
+			return "tile.ia" + Consts.METAL_NAMES[itemstack.getItemDamage()] + "Ore";
 		return super.getUnlocalizedName(itemstack);
 	}
 }

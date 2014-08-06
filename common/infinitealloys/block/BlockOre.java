@@ -3,6 +3,7 @@ package infinitealloys.block;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 import java.util.List;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -12,10 +13,11 @@ import net.minecraft.util.IIcon;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockOre extends BlockIA {
+public class BlockOre extends Block {
 
 	public BlockOre() {
 		super(Material.rock);
+		setCreativeTab(InfiniteAlloys.tabIA);
 	}
 
 	@Override
@@ -39,5 +41,10 @@ public class BlockOre extends BlockIA {
 	@Override
 	public int getRenderType() {
 		return InfiniteAlloys.proxy.gfxHandler.renderID;
+	}
+
+	@Override
+	public int damageDropped(int damage) {
+		return damage;
 	}
 }

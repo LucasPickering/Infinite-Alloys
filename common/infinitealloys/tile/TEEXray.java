@@ -1,5 +1,7 @@
 package infinitealloys.tile;
 
+import infinitealloys.item.IAItems;
+import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgradeType;
 import infinitealloys.util.MachineHelper;
@@ -171,9 +173,9 @@ public class TEEXray extends TileEntityElectric {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgradeTypes.add(EnumUpgradeType.SPEED);
-		validUpgradeTypes.add(EnumUpgradeType.EFFICIENCY);
-		validUpgradeTypes.add(EnumUpgradeType.RANGE);
-		validUpgradeTypes.add(EnumUpgradeType.WIRELESS);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.SPEED]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.EFFICIENCY]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.RANGE]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.WIRELESS]);
 	}
 }

@@ -25,9 +25,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public enum EnumMachine {
 
-	COMPUTER("computer", TEMComputer.class, ContainerMachine.class, GuiComputer.class), METAL_FORGE("metalforge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class),
-	XRAY("xray", TEEXray.class, ContainerXray.class, GuiXray.class), PASTURE("pasture", TEEPasture.class, ContainerMachine.class, GuiPasture.class),
-	ENERGY_STORAGE("energystorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class, "currentRK");
+	COMPUTER("Computer", TEMComputer.class, ContainerMachine.class, GuiComputer.class), METAL_FORGE("MetalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class),
+	XRAY("Xray", TEEXray.class, ContainerXray.class, GuiXray.class), PASTURE("Pasture", TEEPasture.class, ContainerMachine.class, GuiPasture.class),
+	ENERGY_STORAGE("EnergyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class, "currentRK");
 
 	private String name;
 	private Class temClass;

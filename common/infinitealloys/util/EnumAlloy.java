@@ -5,12 +5,12 @@ import infinitealloys.core.InfiniteAlloys;
 public enum EnumAlloy {
 
 	// KEEP IN MIND: RIGHTMOST DIGITS ARE THE LESSER METALS WHILE LEFTMOST DIGITS ARE THE FANTASTICAL METALS
-	ALLOY0("alloy0", 11, 55),
-	ALLOY1("alloy1", 1111, 4477),
-	ALLOY2("alloy2", 11111, 556688),
-	ALLOY3("alloy3", 111111, 557799),
-	ALLOY4("alloy4", 11110000, 55550000),
-	ALLOY5("alloy5", 44444444, 99999999);
+	ALLOY0("Alloy0", 11, 55),
+	ALLOY1("Alloy1", 1111, 4477),
+	ALLOY2("Alloy2", 11111, 556688),
+	ALLOY3("Alloy3", 111111, 557799),
+	ALLOY4("Alloy4", 11110000, 55550000),
+	ALLOY5("Alloy5", 44444444, 99999999);
 
 	/** Get the alloy value (which lists its metal composition) of the alloy with the given ID */
 	public static int getAlloyForID(int id) {
