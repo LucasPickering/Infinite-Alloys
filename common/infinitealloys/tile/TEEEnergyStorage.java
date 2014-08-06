@@ -3,7 +3,7 @@ package infinitealloys.tile;
 import infinitealloys.network.MessageNetworkEditToClient;
 import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.EnumUpgrade;
+import infinitealloys.util.EnumUpgradeType;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -270,52 +270,25 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(EnumUpgrade.CAPACITY2))
-			maxRK = 400000000; // 400 million
-		else if(hasUpgrade(EnumUpgrade.CAPACITY1))
-			maxRK = 200000000; // 200 million
-		else
-			maxRK = 100000000; // 100 million
+		float[] speedUpgradeValues = { 1F, 0.83F, 0.67F, 0.5F };
+		processTimeMult = speedUpgradeValues[getUpgradeTier(EnumUpgradeType.SPEED)];
 
-		if(hasUpgrade(EnumUpgrade.RANGE2))
-			range = 60;
-		else if(hasUpgrade(EnumUpgrade.RANGE1))
-			range = 45;
-		else
-			range = 30;
+		float[] efficiencyUpgradeValues = { 1F, 1.33F, 1.67F, 2F };
+		rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(EnumUpgradeType.EFFICIENCY)];
 
-		if(hasUpgrade(EnumUpgrade.SPEED2))
-			processTimeMult = 0.5F;
-		else if(hasUpgrade(EnumUpgrade.SPEED1))
-			processTimeMult = 0.75F;
-		else
-			processTimeMult = 1.0F;
+		int[] capacityUpgradeValues = { 100000000, 200000000, 300000000, 400000000 };
+		maxRK = capacityUpgradeValues[getUpgradeTier(EnumUpgradeType.CAPACITY)];
 
-		if(hasUpgrade(EnumUpgrade.EFFICIENCY2))
-			rkPerTickMult = 2.0F;
-		else if(hasUpgrade(EnumUpgrade.EFFICIENCY1))
-			rkPerTickMult = 1.5F;
-		else
-			rkPerTickMult = 1.0F;
-
-		if(hasUpgrade(EnumUpgrade.CAPACITY2))
-			stackLimit = 64;
-		else if(hasUpgrade(EnumUpgrade.CAPACITY1))
-			stackLimit = 48;
-		else
-			stackLimit = 32;
+		int[] rangeUpgradeValues = { 30, 40, 50, 60 };
+		range = rangeUpgradeValues[getUpgradeTier(EnumUpgradeType.RANGE)];
 	}
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(EnumUpgrade.SPEED1);
-		validUpgrades.add(EnumUpgrade.SPEED2);
-		validUpgrades.add(EnumUpgrade.EFFICIENCY1);
-		validUpgrades.add(EnumUpgrade.EFFICIENCY2);
-		validUpgrades.add(EnumUpgrade.CAPACITY1);
-		validUpgrades.add(EnumUpgrade.CAPACITY2);
-		validUpgrades.add(EnumUpgrade.RANGE1);
-		validUpgrades.add(EnumUpgrade.RANGE2);
-		validUpgrades.add(EnumUpgrade.WIRELESS);
+		validUpgradeTypes.add(EnumUpgradeType.SPEED);
+		validUpgradeTypes.add(EnumUpgradeType.EFFICIENCY);
+		validUpgradeTypes.add(EnumUpgradeType.CAPACITY);
+		validUpgradeTypes.add(EnumUpgradeType.RANGE);
+		validUpgradeTypes.add(EnumUpgradeType.WIRELESS);
 	}
 }

@@ -7,7 +7,7 @@ import infinitealloys.network.MessageOpenGui;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.util.EnumUpgrade;
+import infinitealloys.util.EnumUpgradeType;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
@@ -87,10 +87,9 @@ public abstract class GuiMachine extends GuiContainer {
 		if(Funcs.mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x, slot.yDisplayPosition + topLeft.y, 16, 16)) {
 			List<ColoredLine> lines = new ArrayList<ColoredLine>();
 			lines.add(new ColoredLine(Funcs.getLoc("upgrade.name"), 0xffffff));
-			for(EnumUpgrade upgrade : EnumUpgrade.values()) {
-				if(upgrade.hasFollowing() && tem.hasUpgrade(upgrade.getFollowingUpgrade()) || !tem.hasUpgrade(upgrade))
-					continue;
-				lines.add(new ColoredLine(Funcs.getLoc("upgrade." + upgrade.getName() + ".name"), 0xaaaaaa));
+			for(EnumUpgradeType upgradeType : EnumUpgradeType.values()) {
+				if(tem.getUpgradeTier(upgradeType) > 0)
+					lines.add(new ColoredLine(Funcs.getLoc("upgrade." + upgradeType.getName() + ".name", "upgrade." + tem.getUpgradeTier(upgradeType)), 0xaaaaaa));
 			}
 			drawTextBox(mouseX, mouseY, lines.toArray(new ColoredLine[lines.size()]));
 		}

@@ -4,7 +4,7 @@ import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.EnumUpgrade;
+import infinitealloys.util.EnumUpgradeType;
 import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
@@ -158,36 +158,22 @@ public class TEEMetalForge extends TileEntityElectric {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(EnumUpgrade.SPEED2))
-			processTimeMult = 0.5F;
-		else if(hasUpgrade(EnumUpgrade.SPEED1))
-			processTimeMult = 0.75F;
-		else
-			processTimeMult = 1.0F;
+		float[] speedUpgradeValues = { 1F, 0.83F, 0.67F, 0.5F };
+		processTimeMult = speedUpgradeValues[getUpgradeTier(EnumUpgradeType.SPEED)];
 
-		if(hasUpgrade(EnumUpgrade.EFFICIENCY2))
-			rkPerTickMult = 0.5F;
-		else if(hasUpgrade(EnumUpgrade.EFFICIENCY1))
-			rkPerTickMult = 0.75F;
-		else
-			rkPerTickMult = 1.0F;
+		float[] efficiencyUpgradeValues = { 1F, 0.83F, 0.67F, 0.5F };
+		rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(EnumUpgradeType.EFFICIENCY)];
 
-		if(hasUpgrade(EnumUpgrade.CAPACITY2))
-			stackLimit = 64;
-		else if(hasUpgrade(EnumUpgrade.CAPACITY1))
-			stackLimit = 48;
-		else
-			stackLimit = 32;
+		int[] capacityUpgradeValues = { 32, 42, 52, 64 };
+		stackLimit = capacityUpgradeValues[getUpgradeTier(EnumUpgradeType.CAPACITY)];
 	}
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(EnumUpgrade.SPEED1);
-		validUpgrades.add(EnumUpgrade.SPEED2);
-		validUpgrades.add(EnumUpgrade.EFFICIENCY1);
-		validUpgrades.add(EnumUpgrade.EFFICIENCY2);
-		validUpgrades.add(EnumUpgrade.CAPACITY1);
-		validUpgrades.add(EnumUpgrade.CAPACITY2);
-		validUpgrades.add(EnumUpgrade.WIRELESS);
+		validUpgradeTypes.add(EnumUpgradeType.SPEED);
+		validUpgradeTypes.add(EnumUpgradeType.EFFICIENCY);
+		validUpgradeTypes.add(EnumUpgradeType.CAPACITY);
+		validUpgradeTypes.add(EnumUpgradeType.WIRELESS);
+		validUpgradeTypes.add(EnumUpgradeType.ALLOY);
 	}
 }

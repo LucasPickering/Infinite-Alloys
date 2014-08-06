@@ -54,7 +54,9 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 
 		if(te instanceof TileEntityMachine) {
 			byte orientation = bytes.readByte();
-			int upgrades = bytes.readInt();
+			int[] upgrades = new int[Consts.UPGRADE_TYPE_COUNT];
+			for(int i = 0; i < upgrades.length; i++)
+				upgrades[i] = bytes.readInt();
 			((TileEntityMachine)te).handlePacketDataFromServer(orientation, upgrades);
 
 			if(te instanceof TileEntityElectric) {

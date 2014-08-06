@@ -2,7 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.EnumUpgrade;
+import infinitealloys.util.EnumUpgradeType;
 import java.util.ArrayList;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -29,9 +29,9 @@ public class TEEPasture extends TileEntityElectric {
 	/** The entity classes for each mob to be used in the {@link #updateEntity() updateEntity} function */
 	private final Class[] mobClasses = { EntityChicken.class, EntityCow.class, EntityCow.class, EntitySheep.class,
 		EntityCreeper.class, EntitySkeleton.class, EntitySpider.class, EntityZombie.class };
-	private byte maxSpots;
-	private byte trapRange;
-	private byte repelRange;
+	private int maxSpots;
+	private int trapRange;
+	private int repelRange;
 
 	public TEEPasture(byte front) {
 		this();
@@ -124,43 +124,24 @@ public class TEEPasture extends TileEntityElectric {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(EnumUpgrade.EFFICIENCY2))
-			rkPerTickMult = 0.5F;
-		else if(hasUpgrade(EnumUpgrade.EFFICIENCY1))
-			rkPerTickMult = 0.75F;
-		else
-			rkPerTickMult = 1.0F;
+		float[] efficiencyUpgradeValues = { 1F, 0.83F, 0.67F, 0.5F };
+		rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(EnumUpgradeType.EFFICIENCY)];
 
-		if(hasUpgrade(EnumUpgrade.CAPACITY2))
-			maxSpots = 8;
-		else if(hasUpgrade(EnumUpgrade.CAPACITY1))
-			maxSpots = 4;
-		else
-			maxSpots = 2;
+		int[] capacityUpgradeValues = { 2, 4, 6, 8 };
+		stackLimit = capacityUpgradeValues[getUpgradeTier(EnumUpgradeType.CAPACITY)];
 
-		if(hasUpgrade(EnumUpgrade.RANGE2)) {
-			trapRange = 15;
-			repelRange = 24;
-		}
-		else if(hasUpgrade(EnumUpgrade.RANGE1)) {
-			trapRange = 10;
-			repelRange = 16;
-		}
-		else {
-			trapRange = 5;
-			repelRange = 8;
-		}
+		int[] trapRangeUpgradeValues = { 5, 10, 15, 20 };
+		trapRange = trapRangeUpgradeValues[getUpgradeTier(EnumUpgradeType.RANGE)];
+		int[] repelRangeUpgradeValues = { 8, 16, 24, 32 };
+		repelRange = repelRangeUpgradeValues[getUpgradeTier(EnumUpgradeType.RANGE)];
 	}
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(EnumUpgrade.EFFICIENCY1);
-		validUpgrades.add(EnumUpgrade.EFFICIENCY2);
-		validUpgrades.add(EnumUpgrade.CAPACITY1);
-		validUpgrades.add(EnumUpgrade.CAPACITY2);
-		validUpgrades.add(EnumUpgrade.RANGE1);
-		validUpgrades.add(EnumUpgrade.RANGE2);
-		validUpgrades.add(EnumUpgrade.WIRELESS);
+		validUpgradeTypes.add(EnumUpgradeType.EFFICIENCY);
+		validUpgradeTypes.add(EnumUpgradeType.CAPACITY);
+		validUpgradeTypes.add(EnumUpgradeType.RANGE);
+		validUpgradeTypes.add(EnumUpgradeType.WIRELESS);
 	}
 
 	/** Does the pasture have enough space to enable another animal or monster

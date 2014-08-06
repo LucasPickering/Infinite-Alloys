@@ -3,7 +3,7 @@ package infinitealloys.tile;
 import infinitealloys.network.MessageNetworkEditToClient;
 import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.EnumUpgrade;
+import infinitealloys.util.EnumUpgradeType;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
@@ -53,7 +53,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	@Override
 	public boolean isClientValid(Point client) {
 		TileEntity te = Funcs.getTileEntity(worldObj, client);
-		return te instanceof TileEntityMachine && ((TileEntityMachine)te).hasUpgrade(EnumUpgrade.WIRELESS);
+		return te instanceof TileEntityMachine && ((TileEntityMachine)te).hasUpgrade(EnumUpgradeType.WIRELESS, 1);
 	}
 
 	@Override
@@ -156,7 +156,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to an
 					// energy storage unit, add it to the power network.
 					final TileEntity te = worldObj.getTileEntity(xCoord + x, yCoord + y, zCoord + z);
-					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(EnumUpgrade.WIRELESS))
+					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(EnumUpgradeType.WIRELESS, 1))
 						addClient(null, new Point(xCoord + x, yCoord + y, zCoord + z), true);
 
 					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
@@ -177,26 +177,16 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(EnumUpgrade.CAPACITY2))
-			networkCapacity = 10;
-		else if(hasUpgrade(EnumUpgrade.CAPACITY1))
-			networkCapacity = 6;
-		else
-			networkCapacity = 3;
+		int[] capacityUpgradeValues = { 3, 5, 7, 10 };
+		networkCapacity = capacityUpgradeValues[getUpgradeTier(EnumUpgradeType.CAPACITY)];
 
-		if(hasUpgrade(EnumUpgrade.RANGE2))
-			range = 60;
-		else if(hasUpgrade(EnumUpgrade.RANGE1))
-			range = 45;
-		else
-			range = 30;
+		int[] rangeUpgradeValues = { 30, 40, 50, 60 };
+		range = rangeUpgradeValues[getUpgradeTier(EnumUpgradeType.RANGE)];
 	}
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(EnumUpgrade.CAPACITY1);
-		validUpgrades.add(EnumUpgrade.CAPACITY2);
-		validUpgrades.add(EnumUpgrade.RANGE1);
-		validUpgrades.add(EnumUpgrade.RANGE2);
+		validUpgradeTypes.add(EnumUpgradeType.CAPACITY);
+		validUpgradeTypes.add(EnumUpgradeType.RANGE);
 	}
 }

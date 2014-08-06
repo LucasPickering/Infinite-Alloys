@@ -1,7 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.EnumUpgrade;
+import infinitealloys.util.EnumUpgradeType;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -154,26 +154,15 @@ public class TEEXray extends TileEntityElectric {
 
 	@Override
 	protected void updateUpgrades() {
-		if(hasUpgrade(EnumUpgrade.SPEED2))
-			processTimeMult = 0.5F;
-		else if(hasUpgrade(EnumUpgrade.SPEED1))
-			processTimeMult = 0.75F;
-		else
-			processTimeMult = 1.0F;
+		float[] speedUpgradeValues = { 1F, 0.83F, 0.67F, 0.5F };
+		processTimeMult = speedUpgradeValues[getUpgradeTier(EnumUpgradeType.SPEED)];
 
-		if(hasUpgrade(EnumUpgrade.EFFICIENCY2))
-			rkPerTickMult = 0.5F;
-		else if(hasUpgrade(EnumUpgrade.EFFICIENCY1))
-			rkPerTickMult = 0.75F;
-		else
-			rkPerTickMult = 1.0F;
+		float[] efficiencyUpgradeValues = { 1F, 1.33F, 1.67F, 2F };
+		rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(EnumUpgradeType.EFFICIENCY)];
 
-		if(hasUpgrade(EnumUpgrade.RANGE2))
-			range = 10;
-		else if(hasUpgrade(EnumUpgrade.RANGE1))
-			range = 8;
-		else
-			range = 5;
+		int[] rangeUpgradeValues = { 4, 6, 8, 10 };
+		range = rangeUpgradeValues[getUpgradeTier(EnumUpgradeType.RANGE)];
+
 		if(lastSearch == null)
 			lastSearch = new Point(-range, 0, -range);
 		else
@@ -182,12 +171,9 @@ public class TEEXray extends TileEntityElectric {
 
 	@Override
 	protected void populateValidUpgrades() {
-		validUpgrades.add(EnumUpgrade.SPEED1);
-		validUpgrades.add(EnumUpgrade.SPEED2);
-		validUpgrades.add(EnumUpgrade.EFFICIENCY1);
-		validUpgrades.add(EnumUpgrade.EFFICIENCY2);
-		validUpgrades.add(EnumUpgrade.RANGE1);
-		validUpgrades.add(EnumUpgrade.RANGE2);
-		validUpgrades.add(EnumUpgrade.WIRELESS);
+		validUpgradeTypes.add(EnumUpgradeType.SPEED);
+		validUpgradeTypes.add(EnumUpgradeType.EFFICIENCY);
+		validUpgradeTypes.add(EnumUpgradeType.RANGE);
+		validUpgradeTypes.add(EnumUpgradeType.WIRELESS);
 	}
 }
