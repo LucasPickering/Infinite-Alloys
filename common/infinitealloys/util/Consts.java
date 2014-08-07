@@ -10,8 +10,7 @@ public class Consts {
 	public static final int MULTI_ITEM_COUNT = 2;
 	public static final int METAL_COUNT = 8;
 	public static final int MACHINE_COUNT = EnumMachine.values().length;
-	public static final int UPGRADE_TYPE_COUNT = EnumUpgradeType.values().length;
-	public static final int UPGRADE_COUNT = EnumUpgradeType.getTotalTiers();
+	public static final int UPGRADE_TYPE_COUNT = 6;
 	public static final int VALID_ALLOY_COUNT = EnumAlloy.values().length;
 
 	public static final int SPEED = 0;

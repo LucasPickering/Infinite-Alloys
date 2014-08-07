@@ -2,6 +2,7 @@ itemGroup.main=Infinite Alloys
 
 general.on=On
 general.off=Off
+general.upgrades=Upgrades
 
 item.iaMachineComponent.name=Machine Component
 item.iaUpgradeComponent.name=Upgrade Component

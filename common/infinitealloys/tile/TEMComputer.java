@@ -5,7 +5,6 @@ import infinitealloys.network.MessageNetworkEditToClient;
 import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.EnumUpgradeType;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
@@ -180,10 +179,10 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	@Override
 	protected void updateUpgrades() {
 		int[] capacityUpgradeValues = { 3, 5, 7, 10 };
-		networkCapacity = capacityUpgradeValues[getUpgradeTier(EnumUpgradeType.CAPACITY)];
+		networkCapacity = capacityUpgradeValues[getUpgradeTier(Consts.CAPACITY)];
 
 		int[] rangeUpgradeValues = { 30, 40, 50, 60 };
-		range = rangeUpgradeValues[getUpgradeTier(EnumUpgradeType.RANGE)];
+		range = rangeUpgradeValues[getUpgradeTier(Consts.RANGE)];
 	}
 
 	@Override

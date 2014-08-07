@@ -3,11 +3,12 @@ package infinitealloys.client.gui;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.item.IAItems;
 import infinitealloys.network.MessageOpenGui;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.util.EnumUpgradeType;
+import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
@@ -86,11 +87,12 @@ public abstract class GuiMachine extends GuiContainer {
 		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
 		if(Funcs.mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x, slot.yDisplayPosition + topLeft.y, 16, 16)) {
 			List<ColoredLine> lines = new ArrayList<ColoredLine>();
-			lines.add(new ColoredLine(Funcs.getLoc("upgrade.name"), 0xffffff));
-			for(EnumUpgradeType upgradeType : EnumUpgradeType.values()) {
-				if(tem.getUpgradeTier(upgradeType) > 0)
-					lines.add(new ColoredLine(Funcs.getLoc("upgrade." + upgradeType.getName() + ".name", "upgrade." + tem.getUpgradeTier(upgradeType)), 0xaaaaaa));
-			}
+			lines.add(new ColoredLine(Funcs.getLoc("general.upgrades"), 0xffffff));
+
+			for(int i = 0; i < Consts.UPGRADE_TYPE_COUNT; i++)
+				if(tem.getUpgradeTier(i) > 0)
+					lines.add(new ColoredLine(Funcs.getLoc("upgrade." + IAItems.upgrades[i].name + tem.getUpgradeTier(i) + ".name"), 0xaaaaaa));
+
 			drawTextBox(mouseX, mouseY, lines.toArray(new ColoredLine[lines.size()]));
 		}
 

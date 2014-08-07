@@ -3,7 +3,6 @@ package infinitealloys.tile;
 import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.EnumUpgradeType;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -157,13 +156,13 @@ public class TEEXray extends TileEntityElectric {
 	@Override
 	protected void updateUpgrades() {
 		float[] speedUpgradeValues = { 1F, 0.83F, 0.67F, 0.5F };
-		processTimeMult = speedUpgradeValues[getUpgradeTier(EnumUpgradeType.SPEED)];
+		processTimeMult = speedUpgradeValues[getUpgradeTier(Consts.SPEED)];
 
 		float[] efficiencyUpgradeValues = { 1F, 1.33F, 1.67F, 2F };
-		rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(EnumUpgradeType.EFFICIENCY)];
+		rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(Consts.EFFICIENCY)];
 
 		int[] rangeUpgradeValues = { 4, 6, 8, 10 };
-		range = rangeUpgradeValues[getUpgradeTier(EnumUpgradeType.RANGE)];
+		range = rangeUpgradeValues[getUpgradeTier(Consts.RANGE)];
 
 		if(lastSearch == null)
 			lastSearch = new Point(-range, 0, -range);

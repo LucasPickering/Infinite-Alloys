@@ -52,7 +52,12 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side) {
-		side = side <= Consts.TOP ? side : side == ((TileEntityMachine)blockAccess.getTileEntity(x, y, z)).front ? Consts.SOUTH : Consts.NORTH;
+		int front = ((TileEntityMachine)blockAccess.getTileEntity(x, y, z)).front;
+		if(side == front)
+			side = Consts.SOUTH; // South is used as the front of the block (it isn't necessarily south on the compass)
+		else if(side != Consts.TOP && side != Consts.BOTTOM)
+			side = Consts.NORTH; // North is used as the left, right, and back of the block (it isn't necessarily north on the compass)
+
 		return getIcon(side, blockAccess.getBlockMetadata(x, y, z));
 	}
 
@@ -66,10 +71,10 @@ public class BlockMachine extends BlockContainer {
 			case Consts.BOTTOM:
 				return IABlocks.machineIcons[metadata][1];
 
-			case Consts.SOUTH:
+			case Consts.SOUTH: // South is used as the front of the machine
 				return IABlocks.machineIcons[metadata][2];
 
-			default:
+			default: // Left, right, or back
 				return IABlocks.machineIcons[metadata][3];
 		}
 	}

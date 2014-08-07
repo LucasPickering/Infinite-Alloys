@@ -12,17 +12,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class ItemUpgrade extends ItemIA {
 
-	/* 0 - Speed
-	 * 1 - Efficiency
-	 * 2 - Capacity
-	 * 3 - Range
-	 * 4 - Wireless
-	 * 5 - Alloy */
-
 	private IIcon background;
 	private final IIcon[] upgradeIcons;
 
-	protected final String name;
+	public final String name;
 	public final int upgradeType;
 	public final int tiers;
 

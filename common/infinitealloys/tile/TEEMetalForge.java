@@ -4,7 +4,6 @@ import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.EnumUpgradeType;
 import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
@@ -159,13 +158,13 @@ public class TEEMetalForge extends TileEntityElectric {
 	@Override
 	protected void updateUpgrades() {
 		float[] speedUpgradeValues = { 1F, 0.83F, 0.67F, 0.5F };
-		processTimeMult = speedUpgradeValues[getUpgradeTier(EnumUpgradeType.SPEED)];
+		processTimeMult = speedUpgradeValues[getUpgradeTier(Consts.SPEED)];
 
 		float[] efficiencyUpgradeValues = { 1F, 0.83F, 0.67F, 0.5F };
-		rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(EnumUpgradeType.EFFICIENCY)];
+		rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(Consts.EFFICIENCY)];
 
 		int[] capacityUpgradeValues = { 32, 42, 52, 64 };
-		stackLimit = capacityUpgradeValues[getUpgradeTier(EnumUpgradeType.CAPACITY)];
+		stackLimit = capacityUpgradeValues[getUpgradeTier(Consts.CAPACITY)];
 	}
 
 	@Override

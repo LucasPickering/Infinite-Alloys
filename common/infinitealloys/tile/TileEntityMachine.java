@@ -6,8 +6,8 @@ import infinitealloys.item.ItemUpgrade;
 import infinitealloys.network.MessageTEToClient;
 import infinitealloys.network.MessageTEToServer;
 import infinitealloys.network.NetworkHandler;
+import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.EnumUpgradeType;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public byte front;
 
 	/** Each element in the array corresponds to an upgrade type, and represents how many tiers in the type have been unlocked */
-	private int[] upgrades;
+	private int[] upgrades = new int[Consts.UPGRADE_TYPE_COUNT];
 
 	/** The index of the slot that upgrades are placed in */
 	public int upgradeSlotIndex = 0;
@@ -70,7 +70,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	public void updateEntity() {
 		// Check for upgrades in the upgrade inventory slot. If there is one, remove it from the slot and add it to the machine.
 		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
-			upgrades[EnumUpgradeType.getType(inventoryStacks[upgradeSlotIndex].getItemDamage()).ordinal()]++; // Increment the element in the upgrades array that corresponds to
+			upgrades[((ItemUpgrade)inventoryStacks[upgradeSlotIndex].getItem()).upgradeType]++; // Increment the element in the upgrades array that corresponds to
 			inventoryStacks[upgradeSlotIndex] = null;
 			updateUpgrades();
 		}
@@ -252,10 +252,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		return true;
 	}
 
-	public final int[] getUpgrades() {
-		return upgrades;
-	}
-
 	protected abstract void updateUpgrades();
 
 	protected abstract void populateValidUpgrades();
@@ -267,7 +263,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	 * @return true if valid */
 	public final boolean isUpgradeValid(ItemStack itemstack) {
 		int upgradeType = ((ItemUpgrade)itemstack.getItem()).upgradeType;
-		int upgradeTier = itemstack.getItemDamage();
+		int upgradeTier = itemstack.getItemDamage() + 1;
 		return validUpgradeTypes.contains(itemstack.getItem()) && upgrades[upgradeType] + 1 == upgradeTier && !hasUpgrade(upgradeType, upgradeTier);
 	}
 
@@ -280,8 +276,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		return upgrades[upgradeType] >= tier;
 	}
 
-	/** Get the highest tier of the specified upgrade type that has been applied to this machine */
-	public int getUpgradeTier(EnumUpgradeType upgradeType) {
-		return upgrades[upgradeType.ordinal()];
+	/** Get the tier of the specified upgrade type for this machine, e.g. if this machine has received Speed I and II and the upgrade type is speed, this will return 2 */
+	public int getUpgradeTier(int upgradeType) {
+		return upgrades[upgradeType];
 	}
 }

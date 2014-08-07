@@ -3,7 +3,6 @@ package infinitealloys.tile;
 import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.EnumUpgradeType;
 import java.util.ArrayList;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -126,15 +125,15 @@ public class TEEPasture extends TileEntityElectric {
 	@Override
 	protected void updateUpgrades() {
 		float[] efficiencyUpgradeValues = { 1F, 0.83F, 0.67F, 0.5F };
-		rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(EnumUpgradeType.EFFICIENCY)];
+		rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(Consts.EFFICIENCY)];
 
 		int[] capacityUpgradeValues = { 2, 4, 6, 8 };
-		stackLimit = capacityUpgradeValues[getUpgradeTier(EnumUpgradeType.CAPACITY)];
+		stackLimit = capacityUpgradeValues[getUpgradeTier(Consts.CAPACITY)];
 
 		int[] trapRangeUpgradeValues = { 5, 10, 15, 20 };
-		trapRange = trapRangeUpgradeValues[getUpgradeTier(EnumUpgradeType.RANGE)];
+		trapRange = trapRangeUpgradeValues[getUpgradeTier(Consts.RANGE)];
 		int[] repelRangeUpgradeValues = { 8, 16, 24, 32 };
-		repelRange = repelRangeUpgradeValues[getUpgradeTier(EnumUpgradeType.RANGE)];
+		repelRange = repelRangeUpgradeValues[getUpgradeTier(Consts.RANGE)];
 	}
 
 	@Override

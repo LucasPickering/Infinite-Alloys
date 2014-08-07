@@ -5,7 +5,6 @@ import infinitealloys.network.MessageNetworkEditToClient;
 import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.EnumUpgradeType;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
@@ -273,16 +272,16 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	@Override
 	protected void updateUpgrades() {
 		float[] speedUpgradeValues = { 1F, 0.83F, 0.67F, 0.5F };
-		processTimeMult = speedUpgradeValues[getUpgradeTier(EnumUpgradeType.SPEED)];
+		processTimeMult = speedUpgradeValues[getUpgradeTier(Consts.SPEED)];
 
 		float[] efficiencyUpgradeValues = { 1F, 1.33F, 1.67F, 2F };
-		rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(EnumUpgradeType.EFFICIENCY)];
+		rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(Consts.EFFICIENCY)];
 
 		int[] capacityUpgradeValues = { 100000000, 200000000, 300000000, 400000000 };
-		maxRK = capacityUpgradeValues[getUpgradeTier(EnumUpgradeType.CAPACITY)];
+		maxRK = capacityUpgradeValues[getUpgradeTier(Consts.CAPACITY)];
 
 		int[] rangeUpgradeValues = { 30, 40, 50, 60 };
-		range = rangeUpgradeValues[getUpgradeTier(EnumUpgradeType.RANGE)];
+		range = rangeUpgradeValues[getUpgradeTier(Consts.RANGE)];
 	}
 
 	@Override
