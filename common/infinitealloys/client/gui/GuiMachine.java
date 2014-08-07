@@ -91,7 +91,7 @@ public abstract class GuiMachine extends GuiContainer {
 
 			for(int i = 0; i < Consts.UPGRADE_TYPE_COUNT; i++)
 				if(tem.getUpgradeTier(i) > 0)
-					lines.add(new ColoredLine(Funcs.getLoc("upgrade." + IAItems.upgrades[i].name + tem.getUpgradeTier(i) + ".name"), 0xaaaaaa));
+					lines.add(new ColoredLine(Funcs.getLoc("item.ia" + IAItems.upgrades[i].name + tem.getUpgradeTier(i) + ".name"), 0xaaaaaa));
 
 			drawTextBox(mouseX, mouseY, lines.toArray(new ColoredLine[lines.size()]));
 		}
