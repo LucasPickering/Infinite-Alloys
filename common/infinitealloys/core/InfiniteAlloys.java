@@ -32,7 +32,7 @@ public class InfiniteAlloys {
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 
-		final int[] metalColors = { 0x2a2a2a, 0xd2cda3, 0xccc34f, 0xcde0ef, 0xae2305, 0x177c19, 0x141dce, 0x7800be };
+		final int[] metalColors = { 0xce7136, 0xcbcec7, 0x787d76, 0xd2cda3, 0xccc34f, 0x141dce, 0xae2305, 0x177c19 };
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			Consts.metalColors[i] = config.get("Metal Colors", Consts.METAL_NAMES[i], metalColors[i]).getInt();
 		for(int i = 0; i < Consts.METAL_COUNT; i++)

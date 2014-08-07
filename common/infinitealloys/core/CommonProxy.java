@@ -45,10 +45,8 @@ public class CommonProxy {
 		GameRegistry.registerBlock(IABlocks.ore, ItemBlockOre.class, IABlocks.ore.getUnlocalizedName());
 		GameRegistry.registerBlock(IABlocks.machine, ItemBlockMachine.class, IABlocks.machine.getUnlocalizedName());
 
-		OreDictionary.registerOre("oreZinc", new ItemStack(IABlocks.ore, 1, 0));
-		OreDictionary.registerOre("oreMagnesium", new ItemStack(IABlocks.ore, 1, 1));
-		OreDictionary.registerOre("oreScandium", new ItemStack(IABlocks.ore, 1, 2));
-		OreDictionary.registerOre("oreTantalum", new ItemStack(IABlocks.ore, 1, 3));
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
+			OreDictionary.registerOre("ore" + Consts.METAL_NAMES[i], new ItemStack(IABlocks.ore, 1, 0));
 
 		IABlocks.ore.setHarvestLevel("pickaxe", 1, 0);
 		IABlocks.ore.setHarvestLevel("pickaxe", 1, 1);
@@ -80,11 +78,8 @@ public class CommonProxy {
 		for(Item upgrade : IAItems.upgrades)
 			GameRegistry.registerItem(upgrade, upgrade.getUnlocalizedName());
 
-		OreDictionary.registerOre("ingotZinc", new ItemStack(IAItems.ingot));
-		OreDictionary.registerOre("ingotMagnesium", new ItemStack(IAItems.ingot, 1, 1));
-		OreDictionary.registerOre("ingotScandium", new ItemStack(IAItems.ingot, 1, 2));
-		OreDictionary.registerOre("ingotTantalum", new ItemStack(IAItems.ingot, 1, 3));
-
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
+			OreDictionary.registerOre("ingot" + Consts.METAL_NAMES[i], new ItemStack(IAItems.ingot, 1, i));
 	}
 
 	public void initRecipes() {
@@ -160,14 +155,9 @@ public class CommonProxy {
 		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.gold_ore), 0, 0xffffff, 6);
 		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.diamond_ore), 0, 0xffffff, 8);
 
-		MachineHelper.addDictDetectable("oreZinc", Consts.metalColors[0], 3);
-		MachineHelper.addDictDetectable("oreMagnesium", Consts.metalColors[1], 4);
-		MachineHelper.addDictDetectable("oreScandium", Consts.metalColors[2], 5);
-		MachineHelper.addDictDetectable("oreTantalum", Consts.metalColors[3], 6);
-		for(int i = 4; i < Consts.METAL_COUNT; i++)
-			MachineHelper.addDetectable(Item.getItemFromBlock(IABlocks.ore), i, Consts.metalColors[i], i + 3);
+		for(int i = 0; i < Consts.METAL_COUNT; i++)
+			MachineHelper.addDictDetectable("ore" + Consts.METAL_NAMES[i], Consts.metalColors[i], i + 3);
 
-		MachineHelper.addDictDetectable("oreCopper", 0xffffff, 2);
 		MachineHelper.addDictDetectable("oreTin", 0xffffff, 2);
 	}
 

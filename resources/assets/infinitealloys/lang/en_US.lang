@@ -8,14 +8,14 @@ item.iaMachineComponent.name=Machine Component
 item.iaUpgradeComponent.name=Upgrade Component
 item.iaInternetWand.name=Network Wand
 
+item.iaCopperIngot.name=Copper Ingot
+item.iaAluminiumIngot.name=Aluminum Ingot
 item.iaZincIngot.name=Zinc Ingot
 item.iaMagnesiumIngot.name=Magnesium Ingot
 item.iaScandiumIngot.name=Scandium Ingot
-item.iaTantalumIngot.name=Tantalum Ingot
+item.iaHydroniumIngot.name=Hydronium Ingot
 item.iaRoguiteIngot.name=Roguite Ingot
 item.iaVerditeIngot.name=Verdite Ingot
-item.iaHydroniumIngot.name=Hydronium Ingot
-item.iaSwagtaniumIngot.name=Swagtanium Ingot
 
 item.iaSpeed1.name=Speed I
 item.iaSpeed2.name=Speed II
@@ -45,23 +45,23 @@ item.iaAlloy3.name=Alloy IV
 item.iaAlloy4.name=Alloy V
 item.iaAlloy5.name=Alloy VI
 
+metal.Copper.name=Copper
+metal.Aluminium.name=Aluminum
 metal.Zinc.name=Zinc
 metal.Magnesium.name=Magnesium
 metal.Scandium.name=Scandium
-metal.Tantalum.name=Tantalum
+metal.Hydronium.name=Hydronium
 metal.Roguite.name=Roguite
 metal.Verdite.name=Verdite
-metal.Hydronium.name=Hydronium
-metal.Swagtanium.name=Swagtanium
 
+tile.iaCopperOre.name=Copper Ore
+tile.iaAluminiumOre.name=Aluminum Ore
 tile.iaZincOre.name=Zinc Ore
 tile.iaMagnesiumOre.name=Magnesium Ore
 tile.iaScandiumOre.name=Scandium Ore
-tile.iaTantalumOre.name=Tantalum Ore
+tile.iaHydroniumOre.name=Hydronium Ore
 tile.iaRoguiteOre.name=Roguite Ore
 tile.iaVerditeOre.name=Verdite Ore
-tile.iaHydroniumOre.name=Hydronium Ore
-tile.iaSwagtaniumOre.name=Swagtanium Ore
 
 tile.iaComputer.name=Computer
 tile.iaMetalForge.name=Metal Forge
