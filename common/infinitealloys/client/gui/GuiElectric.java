@@ -24,8 +24,8 @@ public abstract class GuiElectric extends GuiMachine {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-		// Draw the progress and energy info if the mouse is over the progress bar
-		if(tee.ticksToProcess > 0 && Funcs.mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height)) {
+		// Draw the progress and energy info if the mouse is over the progress bar and help is disabled
+		if(!helpEnabled && tee.ticksToProcess > 0 && Funcs.mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y, PROGRESS_BAR.width, PROGRESS_BAR.height)) {
 			int rkChange = tee.shouldProcess() ? tee.getRKChange() : 0;
 
 			// The current process progress displayed as a percent

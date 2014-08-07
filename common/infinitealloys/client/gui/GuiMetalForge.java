@@ -25,30 +25,33 @@ public class GuiMetalForge extends GuiElectric {
 		super.drawScreen(mouseX, mouseY, f);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18))
-				drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("metal." + Consts.METAL_NAMES[i] + ".name"), 0xffffff));
+
+		// For each metal, if helpis disabled and the mouse is over it, draw the metal's name
+		if(!helpEnabled)
+			for(int i = 0; i < Consts.METAL_COUNT; i++)
+				if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18))
+					drawTextBox(mouseX, mouseY, new ColoredLine(Funcs.getLoc("metal." + Consts.METAL_NAMES[i] + ".name"), 0xffffff));
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+	protected void drawGuiContainerBackgroundLayer(float partialTick, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTick, mouseX, mouseY);
 
 		// If there is an alloy available and selected
 		if(temf.recipeAlloyID >= 0)
 			// Render the item icon for the alloy. The itemstack for a valid alloy is obtained by setting the damage to one more than the alloy's ID.
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, new ItemStack(IAItems.alloyIngot, 1, temf.recipeAlloyID + 1), 40, 52);
+			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, new ItemStack(IAItems.alloyIngot, 1, temf.recipeAlloyID + 1), topLeft.x + 40, topLeft.y + 52);
 
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, new ItemStack(IAItems.ingot, 1, i), i % 4 * 18 + 66, i / 4 * 18 + 43);
+			itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine, new ItemStack(IAItems.ingot, 1, i), topLeft.x + i % 4 * 18 + 66, topLeft.y + i / 4 * 18 + 43);
 
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1F, 1F, 1F, 1F);
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			fontRendererObj.drawStringWithShadow((temf.recipeAlloyID < 0 ? 0 : EnumAlloy.getMetalAmt(temf.recipeAlloyID, i)) + "", i % 4 * 18 + 77, i / 4 * 18 + 52, 0xffffff);
+			fontRendererObj.drawStringWithShadow((temf.recipeAlloyID < 0 ? 0 : EnumAlloy.getMetalAmt(temf.recipeAlloyID, i)) + "", topLeft.x + i % 4 * 18 + 77, topLeft.y + i / 4 * 18 + 52, 0xffffff);
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}

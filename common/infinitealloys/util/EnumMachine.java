@@ -7,9 +7,11 @@ import infinitealloys.client.gui.GuiMachine;
 import infinitealloys.client.gui.GuiMetalForge;
 import infinitealloys.client.gui.GuiPasture;
 import infinitealloys.client.gui.GuiXray;
+import infinitealloys.inventory.ContainerComputer;
 import infinitealloys.inventory.ContainerEnergyStorage;
 import infinitealloys.inventory.ContainerMachine;
 import infinitealloys.inventory.ContainerMetalForge;
+import infinitealloys.inventory.ContainerPasture;
 import infinitealloys.inventory.ContainerXray;
 import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.tile.TEEMetalForge;
@@ -25,8 +27,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public enum EnumMachine {
 
-	COMPUTER("Computer", TEMComputer.class, ContainerMachine.class, GuiComputer.class), METAL_FORGE("MetalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class),
-	XRAY("Xray", TEEXray.class, ContainerXray.class, GuiXray.class), PASTURE("Pasture", TEEPasture.class, ContainerMachine.class, GuiPasture.class),
+	COMPUTER("Computer", TEMComputer.class, ContainerComputer.class, GuiComputer.class), METAL_FORGE("MetalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class),
+	XRAY("Xray", TEEXray.class, ContainerXray.class, GuiXray.class), PASTURE("Pasture", TEEPasture.class, ContainerPasture.class, GuiPasture.class),
 	ENERGY_STORAGE("EnergyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class, "currentRK");
 
 	private String name;

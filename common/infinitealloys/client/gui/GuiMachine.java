@@ -60,7 +60,7 @@ public abstract class GuiMachine extends GuiContainer {
 	/** Coordinates of the network icon, which shows network statuses when hovered over */
 	protected java.awt.Point networkIcon;
 	/** When help is enabled, slots get a colored outline and a mouse-over description */
-	private boolean helpEnabled;
+	protected boolean helpEnabled;
 
 	public GuiMachine(int xSize, int ySize, InventoryPlayer inventoryPlayer, TileEntityMachine tileEntity) {
 		super(tileEntity.getEnumMachine().getContainer(inventoryPlayer, tileEntity));
@@ -83,9 +83,9 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-		// Draw the upgrade list if the mouse is over the upgrade slot
+		// Draw the upgrade list if the mouse is over the upgrade slot and help is disabled
 		Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
-		if(Funcs.mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x, slot.yDisplayPosition + topLeft.y, 16, 16)) {
+		if(!helpEnabled && Funcs.mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x, slot.yDisplayPosition + topLeft.y, 16, 16)) {
 			List<ColoredLine> lines = new ArrayList<ColoredLine>();
 			lines.add(new ColoredLine(Funcs.getLoc("general.upgrades"), 0xffffff));
 
@@ -96,8 +96,8 @@ public abstract class GuiMachine extends GuiContainer {
 			drawTextBox(mouseX, mouseY, lines.toArray(new ColoredLine[lines.size()]));
 		}
 
-		// Draw the network info if the mouse is over the network icon
-		if(networkIcon != null && Funcs.mouseInZone(mouseX, mouseY, topLeft.x + networkIcon.x, topLeft.y + networkIcon.y, NETWORK_ICON.width, NETWORK_ICON.height))
+		// Draw the network info if the mouse is over the network icon and help is disabled
+		if(!helpEnabled && networkIcon != null && Funcs.mouseInZone(mouseX, mouseY, topLeft.x + networkIcon.x, topLeft.y + networkIcon.y, NETWORK_ICON.width, NETWORK_ICON.height))
 			// Draw a text box with a line for each network show its status and information
 			drawTextBox(mouseX, mouseY, getNetworkStatuses());
 
@@ -162,7 +162,7 @@ public abstract class GuiMachine extends GuiContainer {
 				lines.add(new ColoredLine(Funcs.getLoc("machineHelp." + hoveredZone.name + ".title"), 0xffffff));
 				for(String s : Funcs.getLoc("machineHelp." + hoveredZone.name + ".info").split("/n"))
 					lines.add(new ColoredLine(s, 0xaaaaaa));
-				drawTextBox(-topLeft.x - 8, -topLeft.y + 17, lines.toArray(new ColoredLine[lines.size()]));
+				drawTextBox(mouseX - topLeft.x, mouseY - topLeft.y, lines.toArray(new ColoredLine[lines.size()]));
 			}
 		}
 		GL11.glPopMatrix();
