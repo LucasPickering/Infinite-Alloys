@@ -44,6 +44,17 @@ public class GuiXray extends GuiElectric {
 	}
 
 	@Override
+	protected void drawGuiContainerBackgroundLayer(float partialTick, int mouseX, int mouseY) {
+		super.drawGuiContainerBackgroundLayer(partialTick, mouseX, mouseY);
+		// If the list of blocks is short enough to fit on one page, disable the scroll bar
+		if(blockButtons.length <= 20)
+			Funcs.drawTexturedModalRect(this, topLeft.x + SCROLL_BAR.x, topLeft.y + SCROLL_BAR.y, SCROLL_OFF);
+		// Otherwise, enable it
+		else
+			Funcs.drawTexturedModalRect(this, topLeft.x + SCROLL_BAR.x, topLeft.y + SCROLL_BAR.y + (int)((float)(SCROLL_BAR.height - 15) / (float)(blockButtons.length / 4 - 4) * scrollPos), SCROLL_ON);
+	}
+
+	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 
@@ -55,21 +66,17 @@ public class GuiXray extends GuiElectric {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-		searchButton.enabled = tex.inventoryStacks[0] != null;
+		searchButton.enabled = tex.inventoryStacks[0] != null; // Disable the search button if there are no ores in the machine
 
-		if(blockButtons.length <= 20)
-			Funcs.drawTexturedModalRect(this, SCROLL_BAR.x, SCROLL_BAR.y, SCROLL_OFF);
-		else
-			Funcs.drawTexturedModalRect(this, SCROLL_BAR.x, SCROLL_BAR.y + (int)((float)(SCROLL_BAR.height - 15) / (float)(blockButtons.length / 4 - 4) * scrollPos), SCROLL_ON);
+		// If it was searching last tick and it's now done, refresh the buttons
 		if(wasSearching && tex.getProcessProgress() == 0)
 			setButtons();
-		wasSearching = tex.getProcessProgress() > 0;
+		wasSearching = tex.getProcessProgress() > 0; // Set the searching status for this tick (used next tick)
 
 		Funcs.bindTexture(GuiMachine.extras);
 
 		for(int i = scrollPos * 4; i < blockButtons.length && i < scrollPos * 4 + 20; i++)
 			blockButtons[i].drawButton();
-
 	}
 
 	@Override
