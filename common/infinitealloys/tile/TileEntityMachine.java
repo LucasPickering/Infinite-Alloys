@@ -76,15 +76,19 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		}
 	}
 
-	/** The machine block that is dropped. This only needs to be overridden to add metadata to the item, such as RK storage. */
-	protected ItemStack getItemDrop() {
-		return new ItemStack(IABlocks.machine, 1, getEnumMachine().ordinal());
+	/** An NBTTagCompound to be attached to the ItemStack that is dropped when the machine is destroyed. This can have data such as energy stored in the ESU. */
+	protected NBTTagCompound getDropTagCompound() {
+		return null;
 	}
 
 	/** Called when the TE's block is destroyed. Ends network connections and drops items and upgrades */
 	public void onBlockDestroyed() {
 		// Drop block
-		spawnItem(getItemDrop());
+		ItemStack block = new ItemStack(IABlocks.machine, 1, getEnumMachine().ordinal());
+		NBTTagCompound tagCompound = getDropTagCompound();
+		if(tagCompound != null)
+			block.setTagCompound(tagCompound);
+		spawnItem(block);
 
 		// Drop items in inventory
 		for(int i = 0; i < getSizeInventory(); i++) {
@@ -262,9 +266,12 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	 * @param ItemStack for upgrade item with a binary upgrade damage value (see {@link infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
 	 * @return true if valid */
 	public final boolean isUpgradeValid(ItemStack itemstack) {
-		int upgradeType = ((ItemUpgrade)itemstack.getItem()).upgradeType;
-		int upgradeTier = itemstack.getItemDamage() + 1;
-		return validUpgradeTypes.contains(itemstack.getItem()) && upgrades[upgradeType] + 1 == upgradeTier && !hasUpgrade(upgradeType, upgradeTier);
+		if(validUpgradeTypes.contains(itemstack.getItem())) {
+			int upgradeType = ((ItemUpgrade)itemstack.getItem()).upgradeType;
+			int upgradeTier = itemstack.getItemDamage() + 1;
+			return upgrades[upgradeType] + 1 == upgradeTier && !hasUpgrade(upgradeType, upgradeTier);
+		}
+		return false;
 	}
 
 	/** Does the machine have the specified type and tier of upgrade

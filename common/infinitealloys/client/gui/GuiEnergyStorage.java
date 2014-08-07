@@ -23,7 +23,7 @@ public class GuiEnergyStorage extends GuiElectric {
 		Funcs.bindTexture(extras);
 
 		// Draw the energy amount
-		drawString(fontRendererObj, abbreviateNum(tees.getCurrentRK()) + "/" + abbreviateNum(tees.getMaxRK()) + " RK", topLeft.x + 70, topLeft.y + 26, 0xffffff);
+		drawString(fontRendererObj, Funcs.abbreviateNum(tees.getCurrentRK()) + "/" + Funcs.abbreviateNum(tees.getMaxRK()) + " RK", topLeft.x + 70, topLeft.y + 26, 0xffffff);
 
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
@@ -45,16 +45,5 @@ public class GuiEnergyStorage extends GuiElectric {
 			status = Funcs.getLoc("machine.network.hostedby") + " " + tees.energyHost;
 
 		return new ColoredLine[] { new ColoredLine(Funcs.getLoc("machine.network.energy") + ": " + status, color) };
-	}
-
-	/** Shorten a full number to 3 digits with K, M, and B suffixes, e.g. 1411 become 1.41K and 67,000,000 becomes 67.0M */
-	private String abbreviateNum(int n) {
-		if(n >= 1000000000) // Billions
-			return String.format("%.3G", n / 1000000000F) + "B";
-		else if(n >= 1000000) // Millions
-			return String.format("%.3G", n / 1000000F) + "M";
-		else if(n >= 1000) // Thousands
-			return String.format("%.3G", n / 1000F) + "K";
-		return n + "";
 	}
 }

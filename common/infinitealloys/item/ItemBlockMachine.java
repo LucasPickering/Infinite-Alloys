@@ -36,6 +36,6 @@ public class ItemBlockMachine extends ItemBlock {
 		// If the item has stored data, display it
 		if(itemstack.hasTagCompound())
 			for(String field : EnumMachine.values()[itemstack.getItemDamage()].getPersistentFields())
-				list.add(Funcs.getLoc("machine.fields." + field) + ": " + itemstack.getTagCompound().getInteger(field));
+				list.add(Funcs.getLoc("machine.fields." + field) + ": " + Funcs.abbreviateNum(itemstack.getTagCompound().getInteger(field)));
 	}
 }
