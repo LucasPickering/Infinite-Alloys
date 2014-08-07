@@ -63,15 +63,15 @@ public class GuiMetalForge extends GuiElectric {
 		// If the preset selection slot was clicked, adjust its value accordingly
 		if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 39, topLeft.y + 51, 18, 18)) {
 			if(mouseButton == 0) { // Left-click
-				// Iterate over each alloy with an index greater than the current one
-				for(int i = temf.recipeAlloyID + 1; i < Consts.VALID_ALLOY_COUNT; i++)
-					temf.recipeAlloyID = (byte)i; // If this alloy has been discovered, select it
+				// If there is an unlocked alloy above this one, select it
+				if(temf.recipeAlloyID + 1 < tem.getUpgradeTier(Consts.ALLOY_UPG))
+					temf.recipeAlloyID++;
 			}
 
 			else if(mouseButton == 1) { // Right-click
-				// Iterate over each alloy with an index less than the current one
-				for(int i = temf.recipeAlloyID - 1; i >= 0; i--)
-					temf.recipeAlloyID = (byte)i; // If this alloy has been discovered, select it
+				// If there is an alloy below this one (it's not the first), select it
+				if(temf.recipeAlloyID > 0)
+					temf.recipeAlloyID--;
 			}
 
 			temf.syncToServer(); // Sync the new recipe to the server

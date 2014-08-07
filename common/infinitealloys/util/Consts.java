@@ -18,7 +18,7 @@ public class Consts {
 	public static final int CAPACITY = 2;
 	public static final int RANGE = 3;
 	public static final int WIRELESS = 4;
-	public static final int ALLOY = 5;
+	public static final int ALLOY_UPG = 5;
 
 	public static final int BOTTOM = 0;
 	public static final int TOP = 1;

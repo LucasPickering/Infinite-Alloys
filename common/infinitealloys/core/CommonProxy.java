@@ -71,7 +71,7 @@ public class CommonProxy {
 		IAItems.upgrades[Consts.CAPACITY] = (ItemUpgrade)new ItemUpgradeCapacity().setUnlocalizedName("iaUpgradeCapacity");
 		IAItems.upgrades[Consts.RANGE] = (ItemUpgrade)new ItemUpgradeRange().setUnlocalizedName("iaUpgradeRange");
 		IAItems.upgrades[Consts.WIRELESS] = (ItemUpgrade)new ItemUpgradeWireless().setUnlocalizedName("iaUpgradeWireless");
-		IAItems.upgrades[Consts.ALLOY] = (ItemUpgrade)new ItemUpgradeAlloy().setUnlocalizedName("iaUpgradeAlloy");
+		IAItems.upgrades[Consts.ALLOY_UPG] = (ItemUpgrade)new ItemUpgradeAlloy().setUnlocalizedName("iaUpgradeAlloy");
 
 		GameRegistry.registerItem(IAItems.multi, IAItems.multi.getUnlocalizedName());
 		GameRegistry.registerItem(IAItems.ingot, IAItems.ingot.getUnlocalizedName());

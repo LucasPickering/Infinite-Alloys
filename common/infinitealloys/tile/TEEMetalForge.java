@@ -173,6 +173,6 @@ public class TEEMetalForge extends TileEntityElectric {
 		validUpgradeTypes.add(IAItems.upgrades[Consts.EFFICIENCY]);
 		validUpgradeTypes.add(IAItems.upgrades[Consts.CAPACITY]);
 		validUpgradeTypes.add(IAItems.upgrades[Consts.WIRELESS]);
-		validUpgradeTypes.add(IAItems.upgrades[Consts.ALLOY]);
+		validUpgradeTypes.add(IAItems.upgrades[Consts.ALLOY_UPG]);
 	}
 }
