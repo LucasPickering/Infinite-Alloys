@@ -88,6 +88,8 @@ public class CommonProxy {
 	}
 
 	public void initRecipes() {
+		ItemStack machineComponent = new ItemStack(IAItems.multi, 1, 0);
+		ItemStack upgradeComponent = new ItemStack(IAItems.multi, 1, 1);
 		ItemStack[] alloys = new ItemStack[Consts.VALID_ALLOY_COUNT];
 		ItemStack[][] upgrades = new ItemStack[Consts.UPGRADE_TYPE_COUNT][6];
 		for(int i = 0; i < alloys.length; i++)
@@ -97,36 +99,44 @@ public class CommonProxy {
 				upgrades[i][j] = new ItemStack(IAItems.upgrades[i], 1, j);
 
 		/*---MACHINES---*/
-		/* Computer */addRecipe(new ItemStack(IABlocks.machine),
-				"W3G", "2C2", "R3R", '2', alloys[2], '3', alloys[3], 'C', IAItems.multi, 'G', Blocks.glass_pane, 'R', Items.redstone, 'W', upgrades[Consts.WIRELESS][0]);
+		/* Computer */addRecipe(new ItemStack(IABlocks.machine), "W3G", "2C2", "R3R",
+				'2', alloys[2], '3', alloys[3], 'C', machineComponent, 'G', Blocks.glass_pane, 'R', Items.redstone, 'W', upgrades[Consts.WIRELESS][0]);
 
-		/* Metal Forge */addRecipe(new ItemStack(IABlocks.machine, 1, 1), "BBB", "BCB", "BBB", 'B', Items.brick, 'C', IAItems.multi);
+		/* Metal Forge */addRecipe(new ItemStack(IABlocks.machine, 1, 1), "BBB", "BCB", "BBB", 'B', Items.brick, 'C', machineComponent);
 
-		/* X-ray */addRecipe(new ItemStack(IABlocks.machine, 1, 4),
-				"E5E", "4C4", "D5G", '4', alloys[4], '5', alloys[5], 'C', IAItems.multi, 'D', Items.diamond, 'E', Items.ender_pearl, 'G', Blocks.glass_pane);
+		/* X-ray */addRecipe(new ItemStack(IABlocks.machine, 1, 4), "E5E", "4C4", "D5G",
+				'4', alloys[4], '5', alloys[5], 'C', machineComponent, 'D', Items.diamond, 'E', Items.ender_pearl, 'G', Blocks.glass_pane);
 
-		/* Pasture */addRecipe(new ItemStack(IABlocks.machine, 1, 4), "F4F", "3C3", "F4F", '3', alloys[3], '4', alloys[4], 'C', IAItems.multi, 'F', Blocks.fence);
+		/* Pasture */addRecipe(new ItemStack(IABlocks.machine, 1, 4), "F4F", "3C3", "F4F", '3', alloys[3], '4', alloys[4], 'C', machineComponent, 'F', Blocks.fence);
 
-		/* ESU */addRecipe(new ItemStack(IABlocks.machine, 1, 4), "QIQ", "ICI", "QIQ", 'C', IAItems.multi, 'I', Items.iron_ingot); // TODO: Replace Qs with real items
+		/* ESU */addRecipe(new ItemStack(IABlocks.machine, 1, 4), "QIQ", "ICI", "QIQ", 'C', machineComponent, 'I', Items.iron_ingot); // TODO: Replace Qs with real items
 
 		/*---UPGRADES---*/
-		/* Speed I */addRecipeDict(upgrades[Consts.SPEED][0], "AGA", "AUA", 'A', alloys[2], 'G', Items.gold_ingot, 'U', new ItemStack(IAItems.multi, 1, 1));
+		/* Speed I */addRecipeDict(upgrades[Consts.SPEED][0], "AGA", "AUA", 'A', alloys[0], 'G', Items.gold_ingot, 'U', upgradeComponent);
 
-		/* Speed II */addRecipeDict(upgrades[Consts.SPEED][1], "ADA", "AUA", 'A', alloys[5], 'D', Items.diamond, 'U', upgrades[Consts.SPEED][0]);
+		/* Speed II */addRecipeDict(upgrades[Consts.SPEED][1], "ADA", "AUA", 'A', alloys[2], 'D', Items.diamond, 'U', upgrades[Consts.SPEED][0]);
 
-		/* Efficiency I */addRecipeDict(upgrades[Consts.EFFICIENCY][0], "AIA", "AUA", 'A', alloys[1], 'I', Items.iron_shovel, 'U', new ItemStack(IAItems.multi, 1, 1));
+		/* Speed III */addRecipeDict(upgrades[Consts.SPEED][1], "ADA", "AUA", 'A', alloys[4], 'D', Items.diamond, 'U', upgrades[Consts.SPEED][0]);
 
-		/* Efficiency II */addRecipeDict(upgrades[Consts.EFFICIENCY][1], "AGA", "AUA", 'A', alloys[4], 'G', Items.golden_shovel, 'U', upgrades[Consts.EFFICIENCY][0]);
+		/* Efficiency I */addRecipeDict(upgrades[Consts.EFFICIENCY][0], "ASA", "AUA", 'A', alloys[1], 'S', Items.iron_shovel, 'U', upgradeComponent);
 
-		/* Capacity I */addRecipeDict(upgrades[Consts.CAPACITY][0], "ASA", "AUA", 'A', alloys[0], 'S', Blocks.chest, 'U', new ItemStack(IAItems.multi, 1, 1));
+		/* Efficiency II */addRecipeDict(upgrades[Consts.EFFICIENCY][1], "ASA", "AUA", 'A', alloys[3], 'S', Items.golden_shovel, 'U', upgrades[Consts.EFFICIENCY][0]);
 
-		/* Capacity II */addRecipeDict(upgrades[Consts.CAPACITY][1], "ASA", "AUA", 'A', alloys[3], 'S', Blocks.chest, 'U', upgrades[Consts.CAPACITY][0]);
+		/* Efficiency III */addRecipeDict(upgrades[Consts.EFFICIENCY][2], "ASA", "AUA", 'A', alloys[5], 'S', Items.diamond_shovel, 'U', upgrades[Consts.EFFICIENCY][1]);
 
-		/* Range I */addRecipeDict(upgrades[Consts.RANGE][0], "AIA", "AUA", 'A', alloys[3], 'I', Items.iron_sword, 'U', new ItemStack(IAItems.multi, 1, 1));
+		/* Capacity I */addRecipeDict(upgrades[Consts.CAPACITY][0], "ACA", "AUA", 'A', alloys[0], 'C', Blocks.chest, 'U', upgradeComponent);
 
-		/* Range II */addRecipeDict(upgrades[Consts.RANGE][1], "AGA", "AUA", 'A', alloys[5], 'G', Items.golden_sword, 'U', upgrades[Consts.RANGE][0]);
+		/* Capacity II */addRecipeDict(upgrades[Consts.CAPACITY][1], "ACA", "AUA", 'A', alloys[2], 'C', Blocks.chest, 'U', upgrades[Consts.CAPACITY][0]);
 
-		/* Wireless */addRecipeDict(upgrades[Consts.WIRELESS][0], "AEA", "AUA", 'A', alloys[1], 'E', Items.ender_pearl, 'U', new ItemStack(IAItems.multi, 1, 1));
+		/* Capacity III */addRecipeDict(upgrades[Consts.CAPACITY][2], "ACA", "AUA", 'A', alloys[4], 'C', Blocks.chest, 'U', upgrades[Consts.CAPACITY][1]);
+
+		/* Range I */addRecipeDict(upgrades[Consts.RANGE][0], "ASA", "AUA", 'A', alloys[1], 'S', Items.iron_sword, 'U', upgradeComponent);
+
+		/* Range II */addRecipeDict(upgrades[Consts.RANGE][1], "ASA", "AUA", 'A', alloys[3], 'S', Items.golden_sword, 'U', upgrades[Consts.RANGE][0]);
+
+		/* Range III */addRecipeDict(upgrades[Consts.RANGE][2], "ASA", "AUA", 'A', alloys[5], 'S', Items.golden_sword, 'U', upgrades[Consts.RANGE][1]);
+
+		/* Wireless */addRecipeDict(upgrades[Consts.WIRELESS][0], "AEA", "AUA", 'A', alloys[1], 'E', Items.ender_pearl, 'U', upgradeComponent);
 
 		/*---OTHER ITEMS---*/
 		/* Internet Wand */addRecipeDict(new ItemStack(IAItems.internetWand), " W ", "RSR", 'R', Items.redstone, 'S', Items.stick, 'W', upgrades[Consts.WIRELESS][0]);
