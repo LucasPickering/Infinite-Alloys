@@ -34,7 +34,7 @@ public class Consts {
 	public static int[] metalColors = new int[METAL_COUNT];
 
 	/** The names of each metal that can be used to make alloys */
-	public static final String[] METAL_NAMES = { "Copper", "Aluminium", "Zinc", "Magnesium", "Scandium", "Hydronium", "Roguite", "Verdite" };
+	public static final String[] METAL_NAMES = { "Copper", "Aluminium", "Zinc", "Magnesium", "Tantalum", "Hydronium", "Roguite", "Verdite" };
 	/** The names of each item that has damage values */
 	public static final String[] MULTI_ITEM_NAMES = { "MachineComponent", "UpgradeComponent" };
 
