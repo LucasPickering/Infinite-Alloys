@@ -36,8 +36,6 @@ public class CommonProxy {
 
 	public GfxHandler gfxHandler;
 
-	public void initLocalization() {}
-
 	public void initBlocks() {
 		IABlocks.ore = new BlockOre().setHardness(3F).setBlockName("iaOre");
 		IABlocks.machine = new BlockMachine().setHardness(3F).setBlockName("iaMachine");

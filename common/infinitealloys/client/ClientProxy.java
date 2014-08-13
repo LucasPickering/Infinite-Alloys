@@ -1,18 +1,10 @@
 package infinitealloys.client;
 
 import infinitealloys.core.CommonProxy;
-import infinitealloys.util.Consts;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class ClientProxy extends CommonProxy {
-
-	@Override
-	public void initLocalization() {
-		for(String file : Consts.langFiles)
-			LanguageRegistry.instance().loadLocalization(Consts.LANG_PATH + file, file.substring(file.lastIndexOf('/') + 1, file.lastIndexOf('.')), false);
-	}
 
 	@Override
 	public void initHandlers() {

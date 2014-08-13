@@ -2,7 +2,6 @@ package infinitealloys.client.gui;
 
 import infinitealloys.block.BlockMachine;
 import infinitealloys.client.EnumHelp;
-import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.IAItems;
 import infinitealloys.network.MessageOpenGui;
 import infinitealloys.tile.TEMComputer;
@@ -24,7 +23,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
-import cpw.mods.fml.common.Loader;
 
 public abstract class GuiMachine extends GuiContainer {
 
@@ -204,11 +202,8 @@ public abstract class GuiMachine extends GuiContainer {
 
 	@Override
 	public void actionPerformed(GuiButton button) {
-		if(button.id == 0) {
+		if(button.id == 0)
 			helpEnabled = !helpEnabled;
-			if(Loader.isModLoaded("mcp"))
-				InfiniteAlloys.instance.proxy.initLocalization(); // Debug line, reloads localization to update edits
-		}
 	}
 
 	@Override

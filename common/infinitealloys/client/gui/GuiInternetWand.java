@@ -3,7 +3,6 @@ package infinitealloys.client.gui;
 import infinitealloys.block.IABlocks;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.client.gui.GuiMachine.ColoredLine;
-import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.network.MessageWand;
 import infinitealloys.tile.IHost;
@@ -24,7 +23,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.DimensionManager;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-import cpw.mods.fml.common.Loader;
 
 public class GuiInternetWand extends GuiScreen {
 
@@ -170,7 +168,7 @@ public class GuiInternetWand extends GuiScreen {
 				lines.add(new ColoredLine(Funcs.getLoc("machineHelp." + hoveredZone.name + ".title"), 0xffffff));
 				for(String s : Funcs.getLoc("machineHelp." + hoveredZone.name + ".info").split("/n"))
 					lines.add(new ColoredLine(s, 0xaaaaaa));
-				drawTextBox(-8 - topLeft.x, 17 - topLeft.y, lines.toArray(new ColoredLine[lines.size()]));
+				drawTextBox(mouseX - topLeft.x, mouseY - topLeft.y, lines.toArray(new ColoredLine[lines.size()]));
 			}
 		}
 		GL11.glPopMatrix();
@@ -223,8 +221,6 @@ public class GuiInternetWand extends GuiScreen {
 		switch(button.id) {
 			case 0: // Help button
 				helpEnabled = !helpEnabled;
-				if(Loader.isModLoaded("mcp"))
-					InfiniteAlloys.instance.proxy.initLocalization(); // Debug line, reloads localization to update edits
 				break;
 
 			case 1: // Add the block that was clicked to the wand's list

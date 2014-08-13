@@ -43,7 +43,6 @@ public class InfiniteAlloys {
 	@EventHandler
 	public void load(FMLInitializationEvent event) {
 		tabIA = new CreativeTabIA(CreativeTabs.getNextID(), "main");
-		proxy.initLocalization();
 		proxy.initBlocks();
 		proxy.initItems();
 		proxy.initRecipes();
