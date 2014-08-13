@@ -65,6 +65,8 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 	}
 
 	public void connectToEnergyNetwork(Point host) {
+		if(energyHost != null)
+			((TEEEnergyStorage)worldObj.getTileEntity(energyHost.x, energyHost.y, energyHost.z)).removeClient(coords(), false);
 		energyHost = host;
 	}
 

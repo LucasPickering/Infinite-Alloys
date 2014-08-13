@@ -56,7 +56,6 @@ public class CommonProxy {
 		IABlocks.ore.setHarvestLevel("pickaxe", 2, 5);
 		IABlocks.ore.setHarvestLevel("pickaxe", 2, 6);
 		IABlocks.ore.setHarvestLevel("pickaxe", 3, 7);
-		IABlocks.machine.setHarvestLevel("pickaxe", 0);
 	}
 
 	public void initItems() {

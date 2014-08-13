@@ -24,7 +24,7 @@ public class GuiXray extends GuiElectric {
 	private boolean wasSearching;
 
 	/** The number of the first displayed line of blocks. Min is 0, max is num of rows - number on screen (5) */
-	private int scrollPos = 0;
+	private int scrollPos;
 
 	private BlockButton[] blockButtons = new BlockButton[0];
 	private GuiButton searchButton;

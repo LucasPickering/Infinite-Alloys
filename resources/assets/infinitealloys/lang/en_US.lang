@@ -94,7 +94,7 @@ machine.textOutput.error.networkFull=Network is already full
 
 
 wand.addToWand=Add to Wand
-wand.addSelected=Add to Mach.
+wand.addSelected=Add to Machine
 
 machineHelp.upgrade.title=Upgrades
 machineHelp.upgrade.info=Place an upgrade item here/nto add it to the machine

@@ -11,6 +11,7 @@ import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.gui.GuiButton;
@@ -21,6 +22,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.DimensionManager;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.Loader;
 
@@ -29,7 +31,10 @@ public class GuiInternetWand extends GuiScreen {
 	private final RenderItem itemRenderer = new RenderItem();
 	private final ResourceLocation background;
 	private final int xSize = 178;
-	private final int ySize = 245;
+	private final int ySize = 160;
+	/** The amount of machines that can appear on the GUI at once */
+	private final int MAX_ROWS = 5;
+	private final Rectangle SCROLL_BAR = new Rectangle(156, 42, 12, 102);
 
 	/** Coordinates of the top-left corner of the GUI */
 	protected java.awt.Point topLeft = new java.awt.Point();
@@ -40,8 +45,8 @@ public class GuiInternetWand extends GuiScreen {
 	/** If the GUI was opened by clicking on a machine, this button adds the selected machine to the machine that was clicked */
 	private GuiButton addSelected;
 
-	/** The array of buttons that applies to each machine. It is a fixed length and buttons that do not exist are null */
-	private final MachineButton[] machineButtons = new MachineButton[Consts.WAND_SIZE];
+	/** The list of buttons that apply to each machine */
+	private final ArrayList<MachineButton> machineButtons = new ArrayList<MachineButton>();
 
 	/** When help is enabled, slots get a colored outline and a mouse-over description */
 	private boolean helpEnabled;
@@ -50,16 +55,21 @@ public class GuiInternetWand extends GuiScreen {
 	 * There is one bit for each button. 0 is not-selected. 1 is selected. */
 	private int selectedButtons;
 
+	/** The number of the first displayed line of blocks. Min is 0, max is num of rows minus {@link #MAX_ROWS} */
+	private int scrollPos;
+
 	public GuiInternetWand() {
 		background = Funcs.getGuiTexture("wand");
 	}
 
 	@Override
 	public void initGui() {
+		topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
+
 		buttonList.clear();
-		buttonList.add(new GuiButton(Consts.WAND_SIZE, width - 20, 0, 20, 20, "?")); // Help button
-		buttonList.add(addToWand = new GuiButton(Consts.WAND_SIZE + 1, width / 2 - 83, height / 2 - 116, 70, 20, Funcs.getLoc("wand.addToWand")));
-		buttonList.add(addSelected = new GuiButton(Consts.WAND_SIZE + 2, width / 2 - 10, height / 2 - 116, 70, 20, Funcs.getLoc("wand.addSelected")));
+		buttonList.add(new GuiButton(0, width - 20, 0, 20, 20, "?")); // Help button
+		buttonList.add(addToWand = new GuiButton(1, topLeft.x + 6, topLeft.y + 6, 82, 20, Funcs.getLoc("wand.addToWand")));
+		buttonList.add(addSelected = new GuiButton(2, topLeft.x + 90, topLeft.y + 6, 82, 20, Funcs.getLoc("wand.addSelected")));
 
 		// Reset button states
 		addToWand.enabled = false;
@@ -70,8 +80,8 @@ public class GuiInternetWand extends GuiScreen {
 			NBTTagCompound tagCompound = heldItem.getTagCompound();
 
 			// Create each button for the machines
+			machineButtons.clear(); // Get rid of all the old buttons
 			for(int i = 0; i < Consts.WAND_SIZE; i++) { // For each button in the array
-				machineButtons[i] = null; // Reset the button
 				if(tagCompound.hasKey("Coords" + i)) { // If there is a machine that corresponds to this button
 					int[] client = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
 					if(!MachineHelper.isClient(DimensionManager.getWorld(client[0]).getTileEntity(client[1], client[2], client[3]))) { // If the block is no longer valid
@@ -80,7 +90,7 @@ public class GuiInternetWand extends GuiScreen {
 						i--; // Decrement i so that it repeats this number for the new button
 					}
 					else
-						machineButtons[i] = new MachineButton(i, width / 2 - 82, height / 2 + i * 21 - 80, client[0], client[1], client[2], client[3]); // Create a button
+						machineButtons.add(new MachineButton(i, topLeft.x + 7, topLeft.y + 42 + (i - scrollPos) * 21, client[0], client[1], client[2], client[3])); // Create a button
 				}
 			}
 
@@ -99,15 +109,30 @@ public class GuiInternetWand extends GuiScreen {
 								!((IHost)te).isClientValid(new Point(button.machineX, button.machineY, button.machineZ)))
 							addSelected.enabled = false; // Set the button to false
 			}
+
+			if(0 <= machineButtons.size() - MAX_ROWS && machineButtons.size() - MAX_ROWS < scrollPos)
+				scrollPos--;
 		}
 	}
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTick) {
-		topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
 		Funcs.bindTexture(background);
 		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
 		super.drawScreen(mouseX, mouseY, partialTick);
+
+		GL11.glPushMatrix();
+		Funcs.bindTexture(GuiMachine.extras);
+		GL11.glColor4f(1, 1, 1, 1);
+		// If the list of machines is short enough to fit on one page, disable the scroll bar
+		if(machineButtons.size() <= MAX_ROWS)
+			Funcs.drawTexturedModalRect(this, topLeft.x + SCROLL_BAR.x, topLeft.y + SCROLL_BAR.y, GuiMachine.SCROLL_OFF);
+		// Otherwise, enable it
+		else {
+			Funcs.drawTexturedModalRect(this, topLeft.x + SCROLL_BAR.x, topLeft.y + SCROLL_BAR.y
+					+ (int)((float)(SCROLL_BAR.height - GuiMachine.SCROLL_ON.height) / (float)(machineButtons.size() - 5) * scrollPos), GuiMachine.SCROLL_ON);
+		}
+		GL11.glPopMatrix();
 
 		for(MachineButton button : machineButtons)
 			if(button != null)
@@ -116,10 +141,10 @@ public class GuiInternetWand extends GuiScreen {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(topLeft.x, topLeft.y, 0);
 
-		mc.fontRenderer.drawStringWithShadow("D", 30, 32, 0xffffff);
-		mc.fontRenderer.drawStringWithShadow("X", 62, 32, 0xffffff);
-		mc.fontRenderer.drawStringWithShadow("Y", 86, 32, 0xffffff);
-		mc.fontRenderer.drawStringWithShadow("Z", 110, 32, 0xffffff);
+		mc.fontRenderer.drawStringWithShadow("D", 30, 30, 0xffffff);
+		mc.fontRenderer.drawStringWithShadow("X", 62, 30, 0xffffff);
+		mc.fontRenderer.drawStringWithShadow("Y", 86, 30, 0xffffff);
+		mc.fontRenderer.drawStringWithShadow("Z", 110, 30, 0xffffff);
 
 		// Draw the help dialogue and shade the help zone if help is enabled and the mouse is over a help zone
 		if(helpEnabled) {
@@ -154,9 +179,9 @@ public class GuiInternetWand extends GuiScreen {
 	@Override
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
-		if(mouseButton == 0) { // If it was a left-click
-			for(int i = 0; i < Consts.WAND_SIZE; i++) {
-				MachineButton button = machineButtons[i];
+		if(mouseButton == 0) { // If it was a left-click and there are stored machines
+			for(int i = scrollPos; i < machineButtons.size() && i < scrollPos + MAX_ROWS; i++) {
+				MachineButton button = machineButtons.get(i);
 				if(button != null && Funcs.mouseInZone(mouseX, mouseY, button.xPos, button.yPos, button.width, button.height)) { // If this button was clicked
 					if(!isCtrlKeyDown() && !isShiftKeyDown()) // If the CTRL or Shift key wasn't held, set all buttons to 0
 						selectedButtons = 0;
@@ -180,6 +205,15 @@ public class GuiInternetWand extends GuiScreen {
 					break;
 				}
 			}
+
+			// Was the scroll up button clicked?
+			if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 155, topLeft.y + 40, 14, 8))
+				scroll(true); // Scroll up
+
+			// Was the scroll down button clicked?
+			else if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 155, topLeft.y + 147, 14, 8))
+				scroll(false); // Scroll down
+
 			initGui();
 		}
 	}
@@ -187,20 +221,20 @@ public class GuiInternetWand extends GuiScreen {
 	@Override
 	public void actionPerformed(GuiButton button) {
 		switch(button.id) {
-			case Consts.WAND_SIZE: // Help button
+			case 0: // Help button
 				helpEnabled = !helpEnabled;
 				if(Loader.isModLoaded("mcp"))
 					InfiniteAlloys.instance.proxy.initLocalization(); // Debug line, reloads localization to update edits
 				break;
 
-			case Consts.WAND_SIZE + 1: // Add the block that was clicked to the wand's list
+			case 1: // Add the block that was clicked to the wand's list
 				ItemStack heldItem = mc.thePlayer.getHeldItem();
 				int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 				Funcs.sendPacketToServer(new MessageWand(a[1], a[2], a[3]));
 				((ItemInternetWand)heldItem.getItem()).addMachine(mc.theWorld, heldItem, a[1], a[2], a[3]);
 				break;
 
-			case Consts.WAND_SIZE + 2: // Add selected machines to a host
+			case 2: // Add selected machines to a host
 				heldItem = mc.thePlayer.getHeldItem();
 				int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 
@@ -208,7 +242,7 @@ public class GuiInternetWand extends GuiScreen {
 					for(MachineButton machineButton : machineButtons) { // Go over each button
 						if(machineButton != null && (selectedButtons & 1 << machineButton.buttonID) != 0) { // If this button is selected
 							// Add the selected machine to the host
-							int[] client = heldItem.getTagCompound().getIntArray("Coords" + machineButton.buttonID);
+							int[] client = heldItem.getTagCompound().getIntArray("Coords" + (machineButton.buttonID));
 							if(host[0] == client[0]) // They're in the same dimension
 								((IHost)mc.theWorld.getTileEntity(host[1], host[2], host[3])).addClient(mc.thePlayer, new Point(client[1], client[2], client[3]), true);
 						}
@@ -218,10 +252,28 @@ public class GuiInternetWand extends GuiScreen {
 
 			default:
 				heldItem = mc.thePlayer.getHeldItem();
-				Funcs.sendPacketToServer(new MessageWand((byte)button.id));
-				((ItemInternetWand)heldItem.getItem()).removeMachine(heldItem, (byte)button.id);
+				Funcs.sendPacketToServer(new MessageWand((byte)(button.id - 3)));
+				((ItemInternetWand)heldItem.getItem()).removeMachine(heldItem, (byte)button.id - 3);
 				break;
 		}
+	}
+
+	@Override
+	public void handleMouseInput() {
+		super.handleMouseInput();
+		int scrollAmt = Mouse.getEventDWheel();
+		if(scrollAmt != 0)
+			scroll(scrollAmt > 0); // Scroll one line up or down based on wheel movement
+		initGui();
+	}
+
+	/** Scroll the machine list one line, with direction given by the parameter */
+	private void scroll(boolean up) {
+		if(up && scrollPos > 0)
+			scrollPos--;
+
+		if(!up && scrollPos + MAX_ROWS <= machineButtons.size() - 1)
+			scrollPos++;
 	}
 
 	@Override
@@ -266,6 +318,8 @@ public class GuiInternetWand extends GuiScreen {
 		final int width = 118;
 		final int height = 17;
 
+		boolean visible;
+
 		int buttonID;
 		int xPos;
 		int yPos;
@@ -275,6 +329,8 @@ public class GuiInternetWand extends GuiScreen {
 		int machineX;
 		int machineY;
 		int machineZ;
+
+		GuiButton removeButton;
 
 		MachineButton(int buttonID, int xPos, int yPos, int dimensionID, int machineX, int machineY, int machineZ) {
 			super();
@@ -286,11 +342,20 @@ public class GuiInternetWand extends GuiScreen {
 			this.machineX = machineX;
 			this.machineY = machineY;
 			this.machineZ = machineZ;
-			buttonList.add(new GuiButton(buttonID, xPos + 122, yPos - 1, 20, 20, "X"));
+
+			visible = scrollPos <= buttonID && buttonID < scrollPos + MAX_ROWS;
+
+			removeButton = new GuiButton(buttonID + 3, xPos + 122, yPos - 1, 20, 20, "X");
+			removeButton.visible = visible;
+			buttonList.add(removeButton);
 		}
 
 		void drawButton() {
 			Funcs.bindTexture(GuiMachine.extras);
+
+			// If the button isn't currently in the scroll window, don't draw it
+			if(!visible)
+				return;
 
 			if((1 << buttonID & selectedButtons) != 0) { // If this button is selected, draw a box around it
 				int yPosBox = yPos;
@@ -307,7 +372,7 @@ public class GuiInternetWand extends GuiScreen {
 					drawHorizontalLine(xPos - 1, xPos + width + 1, yPosBox - 1, 0xff26a0da); // Top
 
 				// If this is the last button or if the button below this isn't selected, draw the bottom line
-				if(buttonID == machineButtons.length - 1 || (1 << buttonID + 1 & selectedButtons) == 0)
+				if(buttonID == machineButtons.size() - 1 || (1 << buttonID + 1 & selectedButtons) == 0)
 					drawHorizontalLine(xPos - 1, xPos + width + 1, yPosBox + heightBox + 1, 0xff26a0da); // Bottom
 
 				drawVerticalLine(xPos - 1, yPosBox + heightBox + 1, yPosBox - 1, 0xff26a0da);// Left

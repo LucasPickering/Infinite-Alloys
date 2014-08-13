@@ -73,12 +73,12 @@ public abstract class GuiMachine extends GuiContainer {
 	@Override
 	public void initGui() {
 		super.initGui();
+		topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
 		buttonList.add(new GuiButton(0, width - 20, 0, 20, 20, "?")); // The button to enable/disable help
 	}
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTick) {
-		topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
 		super.drawScreen(mouseX, mouseY, partialTick);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
