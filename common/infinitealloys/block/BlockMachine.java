@@ -3,13 +3,11 @@ package infinitealloys.block;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.tile.IHost;
-import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.block.Block;
@@ -105,19 +103,13 @@ public class BlockMachine extends BlockContainer {
 			return true;
 		}
 
-		openGui(world, player, tem, false);
+		openGui(world, player, tem);
 		return true;
 	}
 
-	public void openGui(World world, EntityPlayer player, TileEntityMachine tem, boolean fromComputer) {
-		if(!fromComputer && world.isRemote)
-			MachineHelper.controllers.remove(player.getDisplayName());
-		if(tem instanceof TEMComputer)
-			MachineHelper.controllers.put(player.getDisplayName(), new Point(tem.xCoord, tem.yCoord, tem.zCoord));
-		if(!world.isRemote) {
-			tem.playersUsing.add(player.getDisplayName());
+	public void openGui(World world, EntityPlayer player, TileEntityMachine tem) {
+		if(!world.isRemote)
 			world.markBlockForUpdate(tem.xCoord, tem.yCoord, tem.zCoord);
-		}
 		player.openGui(InfiniteAlloys.instance, tem.getEnumMachine().ordinal(), world, tem.xCoord, tem.yCoord, tem.zCoord);
 	}
 

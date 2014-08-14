@@ -19,6 +19,7 @@ public class NetworkHandler {
 		simpleNetworkWrapper.registerMessage(MessageTEToServer.class, MessageTEToServer.class, 4, Side.SERVER);
 		simpleNetworkWrapper.registerMessage(MessageWand.class, MessageWand.class, 5, Side.SERVER);
 		simpleNetworkWrapper.registerMessage(MessageValidAlloys.class, MessageValidAlloys.class, 6, Side.CLIENT);
+		simpleNetworkWrapper.registerMessage(MessageOpenGui.class, MessageOpenGui.class, 7, Side.SERVER);
 	}
 
 	public static void writeObject(ByteBuf bytes, Object o) {

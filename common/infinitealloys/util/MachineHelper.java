@@ -4,7 +4,6 @@ import infinitealloys.item.IAItems;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import java.util.ArrayList;
-import java.util.HashMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -14,9 +13,6 @@ public class MachineHelper {
 
 	/** How many blocks are searched per tick. Used to limit lag on the x-ray. */
 	public static final int SEARCH_PER_TICK = 2000;
-
-	/** The controlling computer for each player */
-	public static HashMap<String, Point> controllers = new HashMap<String, Point>();
 
 	/** The blocks that the x-ray can detect and their values */
 	private static ArrayList<DetectableBlock> detectables = new ArrayList<DetectableBlock>();
@@ -29,8 +25,8 @@ public class MachineHelper {
 	 * @param block the item that corresponds to the block that will be detected
 	 * @param color the color of the outline that will be used for this block
 	 * @param value the amount the block is worth, higher value requires more energy to detect */
-	public static void addDetectable(Item block, int metadata, int color, int value) {
-		detectables.add(new DetectableBlock(block, metadata, color, value));
+	public static void addDetectable(Item block, int metadata, int value) {
+		detectables.add(new DetectableBlock(block, metadata, value));
 	}
 
 	/** Add a block or blocks to the list of blocks that can be detected by the x-ray with an ore dictionary string
@@ -38,9 +34,9 @@ public class MachineHelper {
 	 * @param dictName the ore dictionary string from which the block(s) is/are retrieved
 	 * @param color the color of the outline that will be used for this block
 	 * @param value the amount the block(s) is/are worth, higher value requires more energy to detect */
-	public static void addDictDetectable(String dictName, int color, int value) {
+	public static void addDictDetectable(String dictName, int value) {
 		for(ItemStack itemstack : OreDictionary.getOres(dictName))
-			addDetectable(itemstack.getItem(), itemstack.getItemDamage(), color, value);
+			addDetectable(itemstack.getItem(), itemstack.getItemDamage(), value);
 	}
 
 	public static boolean isDetectable(ItemStack stack) {
@@ -54,16 +50,6 @@ public class MachineHelper {
 		for(DetectableBlock detectable : detectables)
 			if(detectable.block == block && detectable.metadata == metadata)
 				return detectable.value;
-		return 0;
-	}
-
-	/** Get the detectable color of the given ItemStack
-	 * 
-	 * @return color of the block's outline if it is detectable, otherwise 0 */
-	public static int getDetectableColor(Item block, int metadata) {
-		for(DetectableBlock detectable : detectables)
-			if(detectable.block == block && detectable.metadata == metadata)
-				return detectable.color;
 		return 0;
 	}
 
@@ -83,13 +69,11 @@ public class MachineHelper {
 
 		private final Item block;
 		private final int metadata;
-		private final int color;
 		private final int value;
 
-		private DetectableBlock(Item block, int metadata, int color, int value) {
+		private DetectableBlock(Item block, int metadata, int value) {
 			this.block = block;
 			this.metadata = metadata;
-			this.color = color;
 			this.value = value;
 		}
 	}

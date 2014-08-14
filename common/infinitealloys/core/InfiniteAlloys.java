@@ -37,6 +37,7 @@ public class InfiniteAlloys {
 			Consts.metalColors[i] = config.get("Metal Colors", Consts.METAL_NAMES[i], metalColors[i]).getInt();
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			spawnOres[i] = config.get("World Gen", Consts.METAL_NAMES[i], true).getBoolean(true);
+		
 		config.save();
 	}
 

@@ -30,6 +30,9 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 	public boolean shouldSearch;
 
+	/** False until the first call of {@link #updateEntity()} */
+	private boolean initialized;
+
 	public TEMComputer(byte front) {
 		this();
 		this.front = front;
@@ -45,10 +48,40 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	}
 
 	@Override
+	public void updateEntity() {
+		if(computerHost == null)
+			computerHost = coords();
+
+		if(!initialized) {
+			initialized = true;
+			if(!worldObj.isRemote)
+				for(Point client : networkClients)
+					((TileEntityMachine)Funcs.getTileEntity(worldObj, client)).connectToComputerNetwork(coords());
+		}
+
+		super.updateEntity();
+	}
+
+	@Override
 	public void onBlockDestroyed() {
+		if(computerHost.equals(coords()))
+			deleteNetwork();
 		super.onBlockDestroyed();
-		for(Point client : networkClients)
-			removeClient(client, true);
+	}
+
+	@Override
+	public void connectToComputerNetwork(Point host) {
+		deleteNetwork();
+		super.connectToComputerNetwork(host);
+	}
+
+	@Override
+	public void deleteNetwork() {
+		for(Point client : networkClients) {
+			TileEntity te = Funcs.getTileEntity(worldObj, client);
+			if(te instanceof TileEntityMachine)
+				((TileEntityMachine)te).disconnectFromComputerNetwork();
+		}
 	}
 
 	@Override
@@ -82,6 +115,9 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 		else {
 			networkClients.add(client); // Add the machine
 
+			if(initialized)
+				((TileEntityMachine)Funcs.getTileEntity(worldObj, client)).connectToComputerNetwork(coords()); // Tell the client machine to connect
+
 			// Sync the data to the server/all clients
 			if(sync) { // If we should sync
 				if(worldObj.isRemote) { // If this is the client
@@ -92,6 +128,8 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 				else
 					Funcs.sendPacketToAllPlayers(new MessageNetworkEditToClient(true, worldObj.provider.dimensionId, coords(), client)); // Sync to clients
 			}
+
+			return true;
 		}
 		return false;
 	}

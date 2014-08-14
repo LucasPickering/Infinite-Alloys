@@ -9,7 +9,6 @@ import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -53,7 +52,7 @@ public abstract class GuiMachine extends GuiContainer {
 
 	protected TileEntityMachine tem;
 	protected infinitealloys.util.Point controllingComputer = new infinitealloys.util.Point();
-	protected GuiMachineTab controllerTab;
+	protected GuiMachineTab computerTab;
 	protected final List<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
 	/** Coordinates of the network icon, which shows network statuses when hovered over */
 	protected java.awt.Point networkIcon;
@@ -123,11 +122,10 @@ public abstract class GuiMachine extends GuiContainer {
 
 		// Draw the tabs of other machines on the network if this machine is connected to a computer
 		machineTabs.clear();
-		Point controller = MachineHelper.controllers.get(mc.thePlayer.getDisplayName());
-		if(controller != null) {
-			TEMComputer tec = (TEMComputer)Funcs.getTileEntity(mc.theWorld, controller);
-			controllerTab = new GuiMachineTab(mc, itemRender, -24, 6, tec, true, tem.coords().equals(controller));
-			controllerTab.drawButton();
+		if(tem.computerHost != null) {
+			TEMComputer tec = (TEMComputer)Funcs.getTileEntity(mc.theWorld, tem.computerHost);
+			computerTab = new GuiMachineTab(mc, itemRender, -24, 6, tec, true, tem.coords().equals(tem.computerHost));
+			computerTab.drawButton();
 			Point[] clients = tec.getClients();
 			for(int i = 0; i < clients.length; i++) {
 				machineTabs.add(new GuiMachineTab(mc, itemRender, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityElectric)Funcs.getTileEntity(mc.theWorld, clients[i]),
@@ -213,13 +211,10 @@ public abstract class GuiMachine extends GuiContainer {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
 		// Was the network tab of the controlling computer clicked? Go to that computer
-		if(controllerTab != null && controllerTab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
-			int x = controllerTab.tem.xCoord;
-			int y = controllerTab.tem.yCoord;
-			int z = controllerTab.tem.zCoord;
-			if(!tem.coords().equals(x, y, z)) {
-				((BlockMachine)world.getBlock(x, y, z)).openGui(world, player, controllerTab.tem, false);
-				Funcs.sendPacketToServer(new MessageOpenGui(controllerTab.tem.coords(), false));
+		if(computerTab != null && computerTab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
+			if(!tem.coords().equals(computerTab.tem.coords())) {
+				((BlockMachine)world.getBlock(computerTab.tem.xCoord, computerTab.tem.yCoord, computerTab.tem.zCoord)).openGui(world, player, computerTab.tem);
+				Funcs.sendPacketToServer(new MessageOpenGui(computerTab.tem.coords()));
 			}
 			return;
 		}
@@ -227,12 +222,9 @@ public abstract class GuiMachine extends GuiContainer {
 		// Was the network tab of another machine clicked? Go to that machine
 		for(GuiMachineTab tab : machineTabs) {
 			if(tab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
-				int x = tab.tem.xCoord;
-				int y = tab.tem.yCoord;
-				int z = tab.tem.zCoord;
 				if(!tem.coords().equals(tab.tem.coords())) {
-					((BlockMachine)world.getBlock(x, y, z)).openGui(world, player, tab.tem, true);
-					Funcs.sendPacketToServer(new MessageOpenGui(tab.tem.coords(), false));
+					((BlockMachine)world.getBlock(tab.tem.xCoord, tab.tem.yCoord, tab.tem.zCoord)).openGui(world, player, tab.tem);
+					Funcs.sendPacketToServer(new MessageOpenGui(tab.tem.coords()));
 				}
 				return;
 			}

@@ -144,15 +144,17 @@ public class CommonProxy {
 	public void initTileEntities() {
 		for(EnumMachine machine : EnumMachine.values())
 			GameRegistry.registerTileEntity(machine.getTEMClass(), machine.getName());
-		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.coal_ore), 0, 0x333333, 1);
-		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.iron_ore), 0, 0xffffff, 2);
-		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.gold_ore), 0, 0xffffff, 6);
-		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.diamond_ore), 0, 0xffffff, 8);
+		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.coal_ore), 0, 1);
+		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.iron_ore), 0, 2);
+		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.gold_ore), 0, 6);
+		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.diamond_ore), 0, 8);
 
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
-			MachineHelper.addDictDetectable("ore" + Consts.METAL_NAMES[i], Consts.metalColors[i], i + 3);
+			MachineHelper.addDictDetectable("ore" + Consts.METAL_NAMES[i], i + 3);
 
-		MachineHelper.addDictDetectable("oreTin", 0xffffff, 2);
+		MachineHelper.addDictDetectable("oreTin", 2);
+		MachineHelper.addDictDetectable("oreAluminum", 3);
+		MachineHelper.addDictDetectable("oreUranium", 8);
 	}
 
 	public void initHandlers() {

@@ -30,9 +30,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	/** The stacks that make up the inventory of this TE */
 	public ItemStack[] inventoryStacks;
 
-	/** A list of names of the players who are currently using this machine */
-	public final ArrayList<String> playersUsing = new ArrayList<String>();
-
 	/** A list of the upgrades that can be used on this machine */
 	protected final ArrayList<ItemUpgrade> validUpgradeTypes = new ArrayList<ItemUpgrade>();
 
@@ -47,6 +44,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	/** The size limit for one stack in this machine */
 	protected int stackLimit = 64;
+
+	/** The coordinates of the computer that is controlling this machine */
+	public Point computerHost;
 
 	/** @param inventoryLength The amount of total slots in the inventory */
 	public TileEntityMachine(int inventoryLength) {
@@ -76,6 +76,17 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		}
 	}
 
+	public void connectToComputerNetwork(Point host) {
+		if(computerHost != null)
+			((TEMComputer)worldObj.getTileEntity(computerHost.x, computerHost.y, computerHost.z)).removeClient(coords(), false);
+		computerHost = host;
+	}
+
+	public void disconnectFromComputerNetwork() {
+		computerHost = null;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
 	/** An NBTTagCompound to be attached to the ItemStack that is dropped when the machine is destroyed. This can have data such as energy stored in the ESU. */
 	protected NBTTagCompound getDropTagCompound() {
 		return null;
@@ -102,6 +113,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 			for(int j = 0; j < upgrades[i]; j++)
 				spawnItem(new ItemStack(IAItems.upgrades[i], 1, j));
 		Arrays.fill(upgrades, 0);
+
+		if(computerHost != null)
+			((IHost)Funcs.getTileEntity(worldObj, computerHost)).removeClient(coords(), true);
 	}
 
 	/** Spawn an EntityItem for an ItemStack */

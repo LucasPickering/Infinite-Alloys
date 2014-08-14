@@ -97,13 +97,6 @@ public abstract class ContainerMachine extends Container {
 	}
 
 	@Override
-	public void onContainerClosed(EntityPlayer player) {
-		super.onContainerClosed(player);
-		if(!player.worldObj.isRemote)
-			inventory.playersUsing.remove(player.getDisplayName());
-	}
-
-	@Override
 	protected boolean mergeItemStack(ItemStack itemstack, int slotStart, int slotEnd, boolean backwards) {
 		boolean var5 = false;
 		int currentSlot = slotStart;

@@ -57,6 +57,8 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public void updateEntity() {
+		System.out.println(Funcs.getSideAsString() + ": " + currentRK);
+		
 		if(energyHost == null)
 			energyHost = coords();
 
@@ -83,6 +85,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 		super.connectToEnergyNetwork(host);
 	}
 
+	@Override
 	public void deleteNetwork() {
 		for(Point client : networkClients) {
 			TileEntity te = Funcs.getTileEntity(worldObj, client);

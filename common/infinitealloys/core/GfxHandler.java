@@ -5,16 +5,13 @@ import infinitealloys.client.gui.GuiInternetWand;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -199,10 +196,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		Tessellator.renderingWorldRenderer = false;
 
 		Point last = new Point(0, 0, 0);
-		World world = Minecraft.getMinecraft().theWorld;
 		for(Point block : xrayBlocks) {
-			int color = MachineHelper.getDetectableColor(Item.getItemFromBlock(world.getBlock(block.x, block.y, block.z)), world.getBlockMetadata(block.x, block.y, block.z));
-			GL11.glColor3f(color >> 16 & 255, color >> 8 & 255, color & 255);
 			GL11.glTranslatef(block.x - last.x, block.y - last.y, block.z - last.z);
 			renderOutlineBox(tess);
 			last.set(block);

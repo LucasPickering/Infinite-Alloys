@@ -26,4 +26,7 @@ public interface IHost {
 
 	/** Get the amount of clients in the network */
 	public int getNetworkSize();
+
+	/** Remove all clients from the network */
+	public void deleteNetwork();
 }
