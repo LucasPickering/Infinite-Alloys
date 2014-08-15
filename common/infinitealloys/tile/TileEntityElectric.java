@@ -44,15 +44,21 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 		if(shouldResetProgress())
 			processProgress = 0;
 
-		// If the machine should be processing and enough energy is available, increment the progress by one. If this is the first tick of the process, call
-		// startProcess(). If it has reached or exceeded the limit for completion, then finish the process and reset the counter.
-		if(shouldProcess() && energyHost != null && ((TEEEnergyStorage)Funcs.getTileEntity(worldObj, energyHost)).changeRK(getRKChange())) {
-			if(processProgress == 0)
-				onStartProcess();
-			if(++processProgress >= ticksToProcess) {
-				processProgress = 0;
-				onFinishProcess();
-				onInventoryChanged();
+		if(energyHost != null) {
+			// If the host has been destroyed, reset it
+			if(!(Funcs.getTileEntity(worldObj, energyHost) instanceof TEEEnergyStorage))
+				energyHost = null;
+
+			// If the machine should be processing and enough energy is available, increment the progress by one. If this is the first tick of the process, call
+			// startProcess(). If it has reached or exceeded the limit for completion, then finish the process and reset the counter.
+			else if(shouldProcess() && ((TEEEnergyStorage)Funcs.getTileEntity(worldObj, energyHost)).changeRK(getRKChange())) {
+				if(processProgress == 0)
+					onStartProcess();
+				if(++processProgress >= ticksToProcess) {
+					processProgress = 0;
+					onFinishProcess();
+					onInventoryChanged();
+				}
 			}
 		}
 	}

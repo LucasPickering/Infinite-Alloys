@@ -57,8 +57,6 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	@Override
 	public void updateEntity() {
-		System.out.println(Funcs.getSideAsString() + ": " + currentRK);
-		
 		if(energyHost == null)
 			energyHost = coords();
 
@@ -73,15 +71,9 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	}
 
 	@Override
-	public void onBlockDestroyed() {
-		if(energyHost.equals(coords()))
-			deleteNetwork();
-		super.onBlockDestroyed();
-	}
-
-	@Override
 	public void connectToEnergyNetwork(Point host) {
-		deleteNetwork();
+		if(!worldObj.isRemote)
+			deleteNetwork();
 		super.connectToEnergyNetwork(host);
 	}
 
@@ -89,8 +81,9 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	public void deleteNetwork() {
 		for(Point client : networkClients) {
 			TileEntity te = Funcs.getTileEntity(worldObj, client);
-			if(te instanceof TileEntityElectric)
+			if(te instanceof TileEntityElectric) {
 				((TileEntityElectric)te).disconnectFromEnergyNetwork();
+			}
 		}
 	}
 
@@ -245,6 +238,13 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	public void handlePacketDataFromServer(int currentRK, int baseRKPerTick) {
 		this.currentRK = currentRK;
 		this.baseRKPerTick = baseRKPerTick;
+	}
+
+	@Override
+	public void onNeighborChange(int x, int y, int z) {
+		TileEntity te = worldObj.getTileEntity(x, y, z);
+		if(initialized && te instanceof TileEntityElectric && ((TileEntityElectric)te).energyHost == null)
+			addClient(null, new Point(x, y, z), false);
 	}
 
 	/** Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK, will the result be between zero and the machine's capacity? If

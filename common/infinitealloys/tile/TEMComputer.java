@@ -178,6 +178,13 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 		}
 	}
 
+	@Override
+	public void onNeighborChange(int x, int y, int z) {
+		TileEntity te = worldObj.getTileEntity(x, y, z);
+		if(initialized && te instanceof TileEntityMachine && ((TileEntityMachine)te).computerHost == null)
+			addClient(null, new Point(x, y, z), false);
+	}
+
 	@SuppressWarnings("unused")
 	@Deprecated
 	/** Perform a search for machines that can be controlled. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a

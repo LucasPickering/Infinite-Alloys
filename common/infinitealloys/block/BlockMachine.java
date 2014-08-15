@@ -123,12 +123,9 @@ public class BlockMachine extends BlockContainer {
 		}
 	}
 
-	public static void updateBlockState(World world, int x, int y, int z) {
-		TileEntity te = world.getTileEntity(x, y, z);
-		if(te != null) {
-			te.validate();
-			world.setTileEntity(x, y, z, te);
-		}
+	@Override
+	public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ) {
+		((TileEntityMachine)world.getTileEntity(x, y, z)).onNeighborChange(tileX, tileY, tileZ);
 	}
 
 	@Override

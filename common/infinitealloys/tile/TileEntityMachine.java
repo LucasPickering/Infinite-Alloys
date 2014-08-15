@@ -270,6 +270,13 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		return true;
 	}
 
+	/** Called from {@link infinitealloys.block.BlockMachine#onNeighborChange} when an adjacent TileEntity changes
+	 * 
+	 * @param x the x-coord of the block the changed (not this block)
+	 * @param y the y-coord of the block the changed (not this block)
+	 * @param z the z-coord of the block the changed (not this block) */
+	public void onNeighborChange(int x, int y, int z) {}
+
 	protected abstract void updateUpgrades();
 
 	protected abstract void populateValidUpgrades();
