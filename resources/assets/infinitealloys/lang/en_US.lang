@@ -4,7 +4,7 @@ general.on=On
 general.off=Off
 general.upgrades=Upgrades
 
-item.iaMachineComponent.name=Machine Frame
+item.iaMachineComponent.name=Machine Control Chip
 item.iaUpgradeComponent.name=Upgrade Component
 item.iaInternetWand.name=Network Wand
 
