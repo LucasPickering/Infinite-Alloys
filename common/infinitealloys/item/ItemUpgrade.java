@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public abstract class ItemUpgrade extends ItemIA {
 
-	private IIcon background;
+	protected IIcon background;
 	private final IIcon[] upgradeIcons;
 
 	public final String name;
@@ -31,7 +31,7 @@ public abstract class ItemUpgrade extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister iconRegister) {
-		background = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "upgradecomponent");
+		background = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "upgradebackground");
 		for(int i = 0; i < tiers; i++)
 			upgradeIcons[i] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + name + (i + 1));
 	}

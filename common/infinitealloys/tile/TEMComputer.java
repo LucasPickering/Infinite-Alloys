@@ -6,7 +6,6 @@ import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,9 +15,6 @@ import net.minecraft.util.ChatComponentText;
 
 public class TEMComputer extends TileEntityMachine implements IHost {
 
-	/** The last point that was checked for a machine in the previous iteration of {@link #search}. The coords are relative to this TE block. */
-	private Point lastSearch;
-
 	/** The max range that machines can be added at with the Internet Wand */
 	public int range;
 
@@ -27,8 +23,6 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
 	/** A list of clients currently connected to this computer control network */
 	private final ArrayList<Point> networkClients = new ArrayList<Point>();
-
-	public boolean shouldSearch;
 
 	/** False until the first call of {@link #updateEntity()} */
 	private boolean initialized;
@@ -183,42 +177,6 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 		TileEntity te = worldObj.getTileEntity(x, y, z);
 		if(initialized && te instanceof TileEntityMachine && ((TileEntityMachine)te).computerHost == null)
 			addClient(null, new Point(x, y, z), false);
-	}
-
-	@SuppressWarnings("unused")
-	@Deprecated
-	/** Perform a search for machines that can be controlled. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK a set amount of} blocks in a
-	 * tick, then saves its place and picks up where it left off next tick, which eliminates stutter during searches. */
-	private void search() {
-		// The amount of blocks that have been iterated over this tick. When this reaches TEHelper.SEARCH_PER_TICK, the loops break
-		int blocksSearched = 0;
-
-		// Iterate over each block that is within the given range in all three dimensions. The searched area will be a cube with each side being (2 * range + 1)
-		// blocks long.
-		for(int x = lastSearch.x; x <= range; x++) {
-			for(int y = lastSearch.y; y <= range; y++) {
-				for(int z = lastSearch.z; z <= range; z++) {
-
-					// If the block at the given coords (which have been converted to absolute coordinates) is a machine and it is not already connected to an
-					// energy storage unit, add it to the power network.
-					final TileEntity te = worldObj.getTileEntity(xCoord + x, yCoord + y, zCoord + z);
-					if(te instanceof TileEntityMachine && !(te instanceof TEMComputer) && hasUpgrade(Consts.WIRELESS, 1))
-						addClient(null, new Point(xCoord + x, yCoord + y, zCoord + z), true);
-
-					// If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
-					// continued next tick.
-					if(++blocksSearched >= MachineHelper.SEARCH_PER_TICK) {
-						lastSearch.set(x, y, z);
-						return;
-					}
-				}
-				lastSearch.z = -range; // If we've search all the z values, reset the z position.
-			}
-			lastSearch.y = -range; // If we've search all the y values, reset the y position.
-		}
-		lastSearch.x = -range; // If we've search all the x values, reset the x position.
-
-		shouldSearch = false; // The search is done. Stop running the function until another search is initiated.
 	}
 
 	@Override

@@ -118,11 +118,11 @@ public class CommonProxy {
 
 		/* Efficiency III */addRecipeDict(upgrades[Consts.EFFICIENCY][2], "5S5", "5U5", '5', alloys[5], 'S', Items.diamond_shovel, 'U', upgrades[Consts.EFFICIENCY][1]);
 
-		/* Capacity I */addRecipeDict(upgrades[Consts.CAPACITY][0], "0C0", "0U0", '0', alloys[0], 'C', Blocks.chest, 'U', upgradeComponent);
+		/* Capacity I */addRecipeDict(upgrades[Consts.CAPACITY][0], "0C0", "0U0", "III", '0', alloys[0], 'C', Blocks.chest, 'I', Items.iron_ingot, 'U', upgradeComponent);
 
-		/* Capacity II */addRecipeDict(upgrades[Consts.CAPACITY][1], "2C2", "2U2", '2', alloys[2], 'C', Blocks.chest, 'U', upgrades[Consts.CAPACITY][0]);
+		/* Capacity II */addRecipeDict(upgrades[Consts.CAPACITY][1], "2C2", "2U2", "GGG", '2', alloys[2], 'C', Blocks.chest, 'G', Items.gold_ingot, 'U', upgrades[Consts.CAPACITY][0]);
 
-		/* Capacity III */addRecipeDict(upgrades[Consts.CAPACITY][2], "4C4", "4U4", '4', alloys[4], 'C', Blocks.chest, 'U', upgrades[Consts.CAPACITY][1]);
+		/* Capacity III */addRecipeDict(upgrades[Consts.CAPACITY][2], "4C4", "4U4", "DDD", '4', alloys[4], 'C', Blocks.chest, 'D', Items.diamond, 'U', upgrades[Consts.CAPACITY][1]);
 
 		/* Range I */addRecipeDict(upgrades[Consts.RANGE][0], "1S1", "1U1", '1', alloys[1], 'S', Items.snowball, 'U', upgradeComponent);
 
@@ -144,6 +144,7 @@ public class CommonProxy {
 	public void initTileEntities() {
 		for(EnumMachine machine : EnumMachine.values())
 			GameRegistry.registerTileEntity(machine.getTEMClass(), machine.getName());
+
 		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.coal_ore), 0, 1);
 		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.iron_ore), 0, 2);
 		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.gold_ore), 0, 6);
