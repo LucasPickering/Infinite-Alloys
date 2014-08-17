@@ -2,8 +2,11 @@ package infinitealloys.util;
 
 import infinitealloys.client.EnumHelp;
 import infinitealloys.client.block.TileEntityComputerRenderer;
+import infinitealloys.client.block.TileEntityEnergyStorageRenderer;
 import infinitealloys.client.block.TileEntityMachineRenderer;
+import infinitealloys.client.block.TileEntityMetalForgeRenderer;
 import infinitealloys.client.block.TileEntityPastureRenderer;
+import infinitealloys.client.block.TileEntityXrayRenderer;
 import infinitealloys.client.gui.GuiComputer;
 import infinitealloys.client.gui.GuiEnergyStorage;
 import infinitealloys.client.gui.GuiMachine;
@@ -31,10 +34,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 public enum EnumMachine {
 
 	COMPUTER("Computer", TEMComputer.class, ContainerComputer.class, GuiComputer.class, TileEntityComputerRenderer.class),
-	METAL_FORGE("MetalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class, TileEntityPastureRenderer.class),
-	XRAY("Xray", TEEXray.class, ContainerXray.class, GuiXray.class, TileEntityPastureRenderer.class),
+	METAL_FORGE("MetalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class, TileEntityMetalForgeRenderer.class),
+	XRAY("Xray", TEEXray.class, ContainerXray.class, GuiXray.class, TileEntityXrayRenderer.class),
 	PASTURE("Pasture", TEEPasture.class, ContainerPasture.class, GuiPasture.class, TileEntityPastureRenderer.class),
-	ENERGY_STORAGE("EnergyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class, TileEntityPastureRenderer.class, "currentRK");
+	ENERGY_STORAGE("EnergyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class, TileEntityEnergyStorageRenderer.class, "currentRK");
 
 	private String name;
 	private Class temClass;
