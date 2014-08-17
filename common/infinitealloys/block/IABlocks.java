@@ -9,7 +9,7 @@ public class IABlocks {
 	public static Block ore;
 	public static Block machine;
 
-	public static IIcon[][] machineIcons = new IIcon[Consts.MACHINE_COUNT][4];
+	public static IIcon[] machineIcons = new IIcon[Consts.MACHINE_COUNT];
 	public static IIcon oreForegroundIcon;
 	public static IIcon oreBackgroundIcon;
 }

@@ -1,6 +1,9 @@
 package infinitealloys.util;
 
 import infinitealloys.client.EnumHelp;
+import infinitealloys.client.block.TileEntityComputerRenderer;
+import infinitealloys.client.block.TileEntityMachineRenderer;
+import infinitealloys.client.block.TileEntityPastureRenderer;
 import infinitealloys.client.gui.GuiComputer;
 import infinitealloys.client.gui.GuiEnergyStorage;
 import infinitealloys.client.gui.GuiMachine;
@@ -27,23 +30,28 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public enum EnumMachine {
 
-	COMPUTER("Computer", TEMComputer.class, ContainerComputer.class, GuiComputer.class), METAL_FORGE("MetalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class),
-	XRAY("Xray", TEEXray.class, ContainerXray.class, GuiXray.class), PASTURE("Pasture", TEEPasture.class, ContainerPasture.class, GuiPasture.class),
-	ENERGY_STORAGE("EnergyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class, "currentRK");
+	COMPUTER("Computer", TEMComputer.class, ContainerComputer.class, GuiComputer.class, TileEntityComputerRenderer.class),
+	METAL_FORGE("MetalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class, TileEntityPastureRenderer.class),
+	XRAY("Xray", TEEXray.class, ContainerXray.class, GuiXray.class, TileEntityPastureRenderer.class),
+	PASTURE("Pasture", TEEPasture.class, ContainerPasture.class, GuiPasture.class, TileEntityPastureRenderer.class),
+	ENERGY_STORAGE("EnergyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class, TileEntityPastureRenderer.class, "currentRK");
 
 	private String name;
 	private Class temClass;
 	private Class containerClass;
 	private Class guiClass;
+	private Class temrClass;
 
 	/** An array of the names of fields in the TE that should be saved when the block is destroyed and restored when it is placed back down, e.g. currentRK for the ESU. */
 	private String[] persistentFields;
 
-	private EnumMachine(String name, Class<? extends TileEntityMachine> temClass, Class<? extends ContainerMachine> containerClass, Class<? extends GuiMachine> guiClass, String... persistentFields) {
+	private EnumMachine(String name, Class<? extends TileEntityMachine> temClass, Class<? extends ContainerMachine> containerClass, Class<? extends GuiMachine> guiClass,
+			Class<? extends TileEntityMachineRenderer> temrClass, String... persistentFields) {
 		this.name = name;
 		this.temClass = temClass;
 		this.containerClass = containerClass;
 		this.guiClass = guiClass;
+		this.temrClass = temrClass;
 		this.persistentFields = persistentFields;
 	}
 
@@ -67,6 +75,15 @@ public enum EnumMachine {
 	public GuiMachine getGui(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
 		try {
 			return (GuiMachine)guiClass.getConstructor(InventoryPlayer.class, temClass).newInstance(inventoryPlayer, tem);
+		}catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public TileEntityMachineRenderer getTEMR() {
+		try {
+			return (TileEntityMachineRenderer)temrClass.getConstructor().newInstance();
 		}catch(Exception e) {
 			e.printStackTrace();
 			return null;

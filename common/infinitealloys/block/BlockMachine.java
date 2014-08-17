@@ -21,7 +21,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -36,45 +35,25 @@ public class BlockMachine extends BlockContainer {
 	}
 
 	@Override
+	public int getRenderType() {
+		return -1;
+	}
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		for(int i = 0; i < Consts.MACHINE_COUNT; i++) {
-			String name = EnumMachine.values()[i].getName();
-			IABlocks.machineIcons[i][0] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + name + "_top");
-			IABlocks.machineIcons[i][1] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + name + "_bottom");
-			IABlocks.machineIcons[i][2] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + name + "_front");
-			IABlocks.machineIcons[i][3] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + name + "_side");
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(IBlockAccess blockAccess, int x, int y, int z, int side) {
-		int front = ((TileEntityMachine)blockAccess.getTileEntity(x, y, z)).front;
-		if(side == front)
-			side = Consts.SOUTH; // South is used as the front of the block (it isn't necessarily south on the compass)
-		else if(side != Consts.TOP && side != Consts.BOTTOM)
-			side = Consts.NORTH; // North is used as the left, right, and back of the block (it isn't necessarily north on the compass)
-
-		return getIcon(side, blockAccess.getBlockMetadata(x, y, z));
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int metadata) {
-		switch(side) {
-			case Consts.TOP:
-				return IABlocks.machineIcons[metadata][0];
-
-			case Consts.BOTTOM:
-				return IABlocks.machineIcons[metadata][1];
-
-			case Consts.SOUTH: // South is used as the front of the machine
-				return IABlocks.machineIcons[metadata][2];
-
-			default: // Left, right, or back
-				return IABlocks.machineIcons[metadata][3];
-		}
+		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
+			IABlocks.machineIcons[i] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + EnumMachine.values()[i].getName() + "_item");
 	}
 
 	@Override
