@@ -8,6 +8,7 @@ import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.awt.Rectangle;
@@ -126,11 +127,17 @@ public abstract class GuiMachine extends GuiContainer {
 			TEMComputer tec = (TEMComputer)Funcs.getTileEntity(mc.theWorld, tem.computerHost);
 			computerTab = new GuiMachineTab(mc, itemRender, -24, 6, tec, true, tem.coords().equals(tem.computerHost));
 			computerTab.drawButton();
+			if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + computerTab.xPos, topLeft.y + computerTab.yPos, computerTab.width, computerTab.height))
+				drawTextBox(mouseX - topLeft.x, mouseY - topLeft.y, new ColoredLine(Funcs.getLoc("tile.ia" + computerTab.tem.getEnumMachine().getName() + ".name"), 0xffffff),
+						new ColoredLine(computerTab.tem.coords().toString(), 0xffffff));
 			Point[] clients = tec.getClients();
 			for(int i = 0; i < clients.length; i++) {
 				machineTabs.add(new GuiMachineTab(mc, itemRender, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityElectric)Funcs.getTileEntity(mc.theWorld, clients[i]),
 						i / 5 == 0, clients[i].equals(tem.coords())));
 				machineTabs.get(i).drawButton();
+				if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + machineTabs.get(i).xPos, topLeft.y + machineTabs.get(i).yPos, machineTabs.get(i).width, machineTabs.get(i).height))
+					drawTextBox(mouseX - topLeft.x, mouseY - topLeft.y, new ColoredLine(Funcs.getLoc("tile.ia" + machineTabs.get(i).tem.getEnumMachine().getName() + ".name"), 0xffffff),
+							new ColoredLine(machineTabs.get(i).tem.coords().toString(), 0xffffff));
 			}
 		}
 
@@ -167,33 +174,33 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glEnable(GL11.GL_LIGHTING);
 	}
 
-	protected void drawTextBox(int mouseX, int mouseY, ColoredLine... lines) {
+	protected void drawTextBox(int x, int y, ColoredLine... lines) {
 		// Set the width of the box to the length of the longest line
 		int boxWidth = 0;
 		for(ColoredLine line : lines)
 			boxWidth = Math.max(boxWidth, fontRendererObj.getStringWidth(line.text));
 
 		// This is from vanilla, I have no idea what it does, other than make it work
-		mouseX += 12;
-		mouseY -= 12;
+		x += 12;
+		y -= 12;
 		int var9 = 8;
 		if(lines.length > 1)
 			var9 += 2 + (lines.length - 1) * 10;
 		int var10 = -267386864;
-		drawGradientRect(mouseX - 3, mouseY - 4, mouseX + boxWidth + 3, mouseY - 3, var10, var10);
-		drawGradientRect(mouseX - 3, mouseY + var9 + 3, mouseX + boxWidth + 3, mouseY + var9 + 4, var10, var10);
-		drawGradientRect(mouseX - 3, mouseY - 3, mouseX + boxWidth + 3, mouseY + var9 + 3, var10, var10);
-		drawGradientRect(mouseX - 4, mouseY - 3, mouseX - 3, mouseY + var9 + 3, var10, var10);
-		drawGradientRect(mouseX + boxWidth + 3, mouseY - 3, mouseX + boxWidth + 4, mouseY + var9 + 3, var10, var10);
+		drawGradientRect(x - 3, y - 4, x + boxWidth + 3, y - 3, var10, var10);
+		drawGradientRect(x - 3, y + var9 + 3, x + boxWidth + 3, y + var9 + 4, var10, var10);
+		drawGradientRect(x - 3, y - 3, x + boxWidth + 3, y + var9 + 3, var10, var10);
+		drawGradientRect(x - 4, y - 3, x - 3, y + var9 + 3, var10, var10);
+		drawGradientRect(x + boxWidth + 3, y - 3, x + boxWidth + 4, y + var9 + 3, var10, var10);
 		int var11 = 1347420415;
 		int var12 = (var11 & 16711422) >> 1 | var11 & -16777216;
-		drawGradientRect(mouseX - 3, mouseY - 3 + 1, mouseX - 3 + 1, mouseY + var9 + 3 - 1, var11, var12);
-		drawGradientRect(mouseX + boxWidth + 2, mouseY - 3 + 1, mouseX + boxWidth + 3, mouseY + var9 + 3 - 1, var11, var12);
-		drawGradientRect(mouseX - 3, mouseY - 3, mouseX + boxWidth + 3, mouseY - 3 + 1, var11, var11);
-		drawGradientRect(mouseX - 3, mouseY + var9 + 2, mouseX + boxWidth + 3, mouseY + var9 + 3, var12, var12);
+		drawGradientRect(x - 3, y - 3 + 1, x - 3 + 1, y + var9 + 3 - 1, var11, var12);
+		drawGradientRect(x + boxWidth + 2, y - 3 + 1, x + boxWidth + 3, y + var9 + 3 - 1, var11, var12);
+		drawGradientRect(x - 3, y - 3, x + boxWidth + 3, y - 3 + 1, var11, var11);
+		drawGradientRect(x - 3, y + var9 + 2, x + boxWidth + 3, y + var9 + 3, var12, var12);
 
 		for(int i = 0; i < lines.length; i++)
-			fontRendererObj.drawStringWithShadow(lines[i].text, mouseX, mouseY + i * 10 + (i == 0 ? 0 : 2), lines[i].color);
+			fontRendererObj.drawStringWithShadow(lines[i].text, x, y + i * 10 + (i == 0 ? 0 : 2), lines[i].color);
 		zLevel = 0F;
 		itemRender.zLevel = 0F;
 	}

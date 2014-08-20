@@ -39,7 +39,7 @@ public class GuiEnergyStorage extends GuiElectric {
 
 			// A string that says this TE is hosting a network and how many clients are connected
 			status = Funcs.getLoc("machine.network.hosting") + " " + clients + " " +
-					(clients == 1 ? Funcs.getLoc("machine.network.client") : Funcs.getLoc("machine.network.clients")); // A switch between "Client" and
+					(clients == 1 ? Funcs.getLoc("machine.network.client") : Funcs.getLoc("machine.network.clients")); // A switch between "Client" and "Clients"
 		}
 		else
 			status = Funcs.getLoc("machine.network.hostedby") + " " + tees.energyHost;
