@@ -36,7 +36,7 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	public int getRenderType() {
-		return -1;
+		return InfiniteAlloys.proxy.gfxHandler.renderID;
 	}
 
 	@Override
@@ -51,10 +51,7 @@ public class BlockMachine extends BlockContainer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
-			IABlocks.machineIcons[i] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + EnumMachine.values()[i].getName() + "_item");
-	}
+	public void registerBlockIcons(IIconRegister iconRegister) {}
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {

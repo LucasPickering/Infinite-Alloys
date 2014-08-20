@@ -1,5 +1,6 @@
 package infinitealloys.core;
 
+import infinitealloys.block.BlockMachine;
 import infinitealloys.block.IABlocks;
 import infinitealloys.client.gui.GuiInternetWand;
 import infinitealloys.tile.TileEntityMachine;
@@ -11,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -26,6 +28,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 	public int renderID;
+	private final TileEntityMachine[] temInstances = new TileEntityMachine[Consts.MACHINE_COUNT];
+
+	public GfxHandler() {
+		try {
+			for(int i = 0; i < temInstances.length; i++)
+				temInstances[i] = (TileEntityMachine)EnumMachine.values()[i].getTEMClass().getConstructor().newInstance();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	/** The list of blocks identified by an x-ray machine to be highlighted */
 	@SideOnly(Side.CLIENT)
@@ -49,81 +61,91 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
-		final Tessellator tessellator = Tessellator.instance;
-		block.setBlockBoundsForItemRender();
-		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0F, -1F, 0F);
-		renderer.renderFaceYNeg(block, 0D, 0D, 0D, block.getIcon(0, 0));
-		tessellator.draw();
-
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0F, 1F, 0F);
-		renderer.renderFaceYPos(block, 0D, 0D, 0D, block.getIcon(1, 0));
-		tessellator.draw();
-
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(1F, 0F, 0F);
-		renderer.renderFaceXPos(block, 0D, 0D, 0D, block.getIcon(2, 0));
-		tessellator.draw();
-
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(-1F, 0F, 0F);
-		renderer.renderFaceXNeg(block, 0D, 0D, 0D, block.getIcon(3, 0));
-		tessellator.draw();
-
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0F, 0F, -1F);
-		renderer.renderFaceZNeg(block, 0D, 0D, 0D, block.getIcon(4, 0));
-		tessellator.draw();
-
-		tessellator.startDrawingQuads();
-		tessellator.setNormal(0F, 0F, 1F);
-		renderer.renderFaceZPos(block, 0D, 0D, 0D, block.getIcon(5, 0));
-		tessellator.draw();
-
-		// Draw ore pieces on top of stone background
-		if(metadata < Consts.METAL_COUNT) {
-			final int mult = Consts.metalColors[metadata];
-			GL11.glColor4f((mult >> 16 & 255) / 255F, (mult >> 8 & 255) / 255F, (mult & 255) / 255F, 1F);
+		if(block instanceof BlockMachine && metadata < temInstances.length) {
+			GL11.glRotatef(-90F, 0F, 1F, 0F);
+			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+			TileEntityRendererDispatcher.instance.renderTileEntityAt(temInstances[metadata], 0, 0, 0, 0);
+			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		}
+		else {
+			Tessellator tessellator = Tessellator.instance;
+			block.setBlockBoundsForItemRender();
+			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, -1F, 0F);
-			renderer.renderFaceYNeg(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+			renderer.renderFaceYNeg(block, 0D, 0D, 0D, block.getIcon(0, 0));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, 1F, 0F);
-			renderer.renderFaceYPos(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+			renderer.renderFaceYPos(block, 0D, 0D, 0D, block.getIcon(1, 0));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(1F, 0F, 0F);
-			renderer.renderFaceXPos(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+			renderer.renderFaceXPos(block, 0D, 0D, 0D, block.getIcon(2, 0));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(-1F, 0F, 0F);
-			renderer.renderFaceXNeg(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+			renderer.renderFaceXNeg(block, 0D, 0D, 0D, block.getIcon(3, 0));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, 0F, -1F);
-			renderer.renderFaceZNeg(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+			renderer.renderFaceZNeg(block, 0D, 0D, 0D, block.getIcon(4, 0));
 			tessellator.draw();
 
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0F, 0F, 1F);
-			renderer.renderFaceZPos(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+			renderer.renderFaceZPos(block, 0D, 0D, 0D, block.getIcon(5, 0));
 			tessellator.draw();
+
+			// Draw ore pieces on top of stone background
+			if(metadata < Consts.METAL_COUNT) {
+				final int mult = Consts.metalColors[metadata];
+				GL11.glColor4f((mult >> 16 & 255) / 255F, (mult >> 8 & 255) / 255F, (mult & 255) / 255F, 1F);
+
+				tessellator.startDrawingQuads();
+				tessellator.setNormal(0F, -1F, 0F);
+				renderer.renderFaceYNeg(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+				tessellator.draw();
+
+				tessellator.startDrawingQuads();
+				tessellator.setNormal(0F, 1F, 0F);
+				renderer.renderFaceYPos(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+				tessellator.draw();
+
+				tessellator.startDrawingQuads();
+				tessellator.setNormal(1F, 0F, 0F);
+				renderer.renderFaceXPos(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+				tessellator.draw();
+
+				tessellator.startDrawingQuads();
+				tessellator.setNormal(-1F, 0F, 0F);
+				renderer.renderFaceXNeg(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+				tessellator.draw();
+
+				tessellator.startDrawingQuads();
+				tessellator.setNormal(0F, 0F, -1F);
+				renderer.renderFaceZNeg(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+				tessellator.draw();
+
+				tessellator.startDrawingQuads();
+				tessellator.setNormal(0F, 0F, 1F);
+				renderer.renderFaceZPos(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+				tessellator.draw();
+			}
+			GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 		}
-		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 	}
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-		final Tessellator tessellator = Tessellator.instance;
+		if(block instanceof BlockMachine)
+			return true;
+		Tessellator tessellator = Tessellator.instance;
 		boolean rendered = renderer.renderStandardBlock(block, x, y, z);
 		final int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
 		if(block == IABlocks.ore) { // Used to colorize the ores
