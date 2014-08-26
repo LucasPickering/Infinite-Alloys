@@ -46,6 +46,7 @@ public class InfiniteAlloys {
 		tabIA = new CreativeTabIA(CreativeTabs.getNextID(), "main");
 		proxy.initBlocks();
 		proxy.initItems();
+		proxy.initEntities();
 		proxy.initRecipes();
 		proxy.initTileEntities();
 		proxy.initHandlers();

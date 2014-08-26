@@ -1,4 +1,4 @@
-package infinitealloys.client.block;
+package infinitealloys.client.model.block;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;

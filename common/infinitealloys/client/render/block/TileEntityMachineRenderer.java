@@ -1,4 +1,4 @@
-package infinitealloys.client.block;
+package infinitealloys.client.render.block;
 
 import infinitealloys.util.Consts;
 import net.minecraft.client.Minecraft;

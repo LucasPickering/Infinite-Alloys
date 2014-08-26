@@ -1,18 +1,18 @@
 package infinitealloys.util;
 
 import infinitealloys.client.EnumHelp;
-import infinitealloys.client.block.TileEntityComputerRenderer;
-import infinitealloys.client.block.TileEntityEnergyStorageRenderer;
-import infinitealloys.client.block.TileEntityMachineRenderer;
-import infinitealloys.client.block.TileEntityMetalForgeRenderer;
-import infinitealloys.client.block.TileEntityPastureRenderer;
-import infinitealloys.client.block.TileEntityXrayRenderer;
 import infinitealloys.client.gui.GuiComputer;
 import infinitealloys.client.gui.GuiEnergyStorage;
 import infinitealloys.client.gui.GuiMachine;
 import infinitealloys.client.gui.GuiMetalForge;
 import infinitealloys.client.gui.GuiPasture;
 import infinitealloys.client.gui.GuiXray;
+import infinitealloys.client.render.block.TileEntityComputerRenderer;
+import infinitealloys.client.render.block.TileEntityEnergyStorageRenderer;
+import infinitealloys.client.render.block.TileEntityMachineRenderer;
+import infinitealloys.client.render.block.TileEntityMetalForgeRenderer;
+import infinitealloys.client.render.block.TileEntityPastureRenderer;
+import infinitealloys.client.render.block.TileEntityXrayRenderer;
 import infinitealloys.inventory.ContainerComputer;
 import infinitealloys.inventory.ContainerEnergyStorage;
 import infinitealloys.inventory.ContainerMachine;

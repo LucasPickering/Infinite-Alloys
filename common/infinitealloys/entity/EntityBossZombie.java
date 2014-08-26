@@ -2,9 +2,9 @@ package infinitealloys.entity;
 
 import net.minecraft.world.World;
 
-public class EntityBoss1 extends EntityIABoss {
+public class EntityBossZombie extends EntityIABoss {
 
-	public EntityBoss1(World par1World) {
+	public EntityBossZombie(World par1World) {
 		super(par1World, 0);
 	}
 

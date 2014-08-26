@@ -1,6 +1,7 @@
 package infinitealloys.client;
 
 import infinitealloys.core.CommonProxy;
+import infinitealloys.util.EnumBoss;
 import infinitealloys.util.EnumMachine;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -20,5 +21,11 @@ public class ClientProxy extends CommonProxy {
 		for(EnumMachine machine : EnumMachine.values())
 			ClientRegistry.bindTileEntitySpecialRenderer(machine.getTEMClass(), machine.getTEMR());
 		RenderingRegistry.registerBlockHandler(gfxHandler);
+		try {
+			for(EnumBoss boss : EnumBoss.values())
+				RenderingRegistry.registerEntityRenderingHandler(boss.getEntityClass(), boss.getRenderClass().getConstructor().newInstance());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

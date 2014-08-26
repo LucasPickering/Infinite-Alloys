@@ -1,5 +1,6 @@
-package infinitealloys.client.block;
+package infinitealloys.client.render.block;
 
+import infinitealloys.client.model.block.ModelXray;
 import infinitealloys.util.EnumMachine;
 
 public class TileEntityXrayRenderer extends TileEntityMachineRenderer {

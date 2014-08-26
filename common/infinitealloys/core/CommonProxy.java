@@ -19,8 +19,11 @@ import infinitealloys.item.ItemUpgradeSpeed;
 import infinitealloys.item.ItemUpgradeWireless;
 import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumBoss;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.MachineHelper;
+import java.util.Random;
+import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -30,6 +33,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class CommonProxy {
@@ -77,6 +81,11 @@ public class CommonProxy {
 
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			OreDictionary.registerOre("ingot" + Consts.METAL_NAMES[i], new ItemStack(IAItems.ingot, 1, i));
+	}
+
+	public void initEntities() {
+		for(int i = 0; i < EnumBoss.values().length; i++)
+			registerEntity(EnumBoss.values()[i].getEntityClass(), EnumBoss.values()[i].getName());
 	}
 
 	public void initRecipes() {
@@ -171,5 +180,17 @@ public class CommonProxy {
 
 	private static void addRecipeDict(ItemStack result, Object... params) {
 		GameRegistry.addRecipe(new ShapedOreRecipe(result, params));
+	}
+
+	private static void registerEntity(Class entityClass, String name)
+	{
+		int entityID = EntityRegistry.findGlobalUniqueEntityId();
+		Random rand = new Random(name.hashCode());
+		int primaryColor = rand.nextInt() * 16777215;
+		int secondaryColor = rand.nextInt() * 16777215;
+
+		EntityRegistry.registerGlobalEntityID(entityClass, name, entityID);
+		EntityRegistry.registerModEntity(entityClass, name, entityID, InfiniteAlloys.instance, 64, 1, true);
+		EntityList.entityEggs.put(Integer.valueOf(entityID), new EntityList.EntityEggInfo(entityID, primaryColor, secondaryColor));
 	}
 }
