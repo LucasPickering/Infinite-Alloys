@@ -9,12 +9,14 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderBossSkeleton extends RenderBiped {
 
+	private final ResourceLocation textureLocation = new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/entity/" + EnumBoss.SKELETON.getName() + ".png");
+
 	public RenderBossSkeleton() {
 		super(new ModelBossSkeleton(), 2F);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/entity/" + EnumBoss.BAT.getName()+ ".png");
+		return textureLocation;
 	}
 }

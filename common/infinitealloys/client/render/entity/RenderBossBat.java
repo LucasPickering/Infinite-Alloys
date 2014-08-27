@@ -9,12 +9,14 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderBossBat extends RenderLiving {
 
+	private final ResourceLocation textureLocation = new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/entity/" + EnumBoss.BAT.getName() + ".png");
+
 	public RenderBossBat() {
 		super(new ModelBossBat(), 2F);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/entity/" + EnumBoss.BAT.getName()+ ".png");
+		return textureLocation;
 	}
 }

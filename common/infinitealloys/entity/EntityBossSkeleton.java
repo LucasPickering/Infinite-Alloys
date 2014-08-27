@@ -4,7 +4,8 @@ import net.minecraft.world.World;
 
 public class EntityBossSkeleton extends EntityIABoss {
 
-	public EntityBossSkeleton(World par1World) {
-		super(par1World, 1);
+	public EntityBossSkeleton(World world) {
+		super(world, 1);
+		setSize(2F, 8F);
 	}
 }

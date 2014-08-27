@@ -9,12 +9,14 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderBossBlaze extends RenderLiving {
 
+	private final ResourceLocation textureLocation = new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/entity/" + EnumBoss.BLAZE.getName() + ".png");
+
 	public RenderBossBlaze() {
 		super(new ModelBossBlaze(), 2F);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/entity/" + EnumBoss.BLAZE.getName() + ".png");
+		return textureLocation;
 	}
 }

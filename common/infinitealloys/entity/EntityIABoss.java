@@ -12,8 +12,8 @@ public abstract class EntityIABoss extends EntityMob {
 	private final int alloyID;
 
 	/** @param alloyID the ID of the alloy that is unlocked by the upgrade that this boss drops */
-	public EntityIABoss(World par1World, int alloyID) {
-		super(par1World);
+	public EntityIABoss(World world, int alloyID) {
+		super(world);
 		this.alloyID = alloyID;
         this.isImmuneToFire = true;
         this.experienceValue = 50;

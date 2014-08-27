@@ -9,12 +9,14 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderBossSteve extends RenderBiped {
 
+	private final ResourceLocation textureLocation = new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/entity/" + EnumBoss.STEVE.getName() + ".png");
+
 	public RenderBossSteve() {
 		super(new ModelBossSteve(), 2F);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/entity/" + EnumBoss.STEVE.getName()+ ".png");
+		return textureLocation;
 	}
 }

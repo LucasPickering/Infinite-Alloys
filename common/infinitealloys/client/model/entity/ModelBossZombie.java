@@ -1,10 +1,10 @@
 package infinitealloys.client.model.entity;
 
-import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.ModelZombie;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 
-public class ModelBossZombie extends ModelBiped {
+public class ModelBossZombie extends ModelZombie {
 
 	@Override
 	public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6, float par7) {

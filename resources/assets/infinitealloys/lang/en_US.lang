@@ -69,6 +69,13 @@ tile.iaAnalyzer.name=Analyzer
 tile.iaXray.name=X-Ray
 tile.iaPasture.name=Pasture
 tile.iaEnergyStorage.name=Energy Storage Unit
+
+entity.zombie.name=Giant Zombie
+entity.skeleton.name=Giant Skeleton
+entity.creeper.name=Giant Creeper
+entity.blaze.name=Giant Blaze
+entity.bat.name=Giant Bat
+entity.steve.name=Giant Steve
 	
 machine.network.energy=Energy
 machine.network.analyzer=Analyzer

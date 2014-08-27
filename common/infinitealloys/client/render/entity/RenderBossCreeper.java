@@ -9,12 +9,14 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderBossCreeper extends RenderLiving {
 
+	private final ResourceLocation textureLocation = new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/entity/" + EnumBoss.CREEPER.getName() + ".png");
+
 	public RenderBossCreeper() {
 		super(new ModelBossCreeper(), 2F);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		return new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/entity/" + EnumBoss.CREEPER.getName() + ".png");
+		return textureLocation;
 	}
 }
