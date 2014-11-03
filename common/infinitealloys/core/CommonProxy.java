@@ -3,6 +3,7 @@ package infinitealloys.core;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.block.BlockOre;
 import infinitealloys.block.IABlocks;
+import infinitealloys.entity.EntityZombieTest;
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemAlloyIngot;
 import infinitealloys.item.ItemBlockMachine;
@@ -84,8 +85,9 @@ public class CommonProxy {
 	}
 
 	public void initEntities() {
-		for(int i = 0; i < EnumBoss.values().length; i++)
-			registerEntity(EnumBoss.values()[i].getEntityClass(), EnumBoss.values()[i].getName());
+		for(EnumBoss bossType : EnumBoss.values())
+			registerEntity(bossType.entityClass, bossType.name);
+		registerEntity(EntityZombieTest.class,"zombietest"); // TODO: Remove this line after testing
 	}
 
 	public void initRecipes() {
@@ -186,8 +188,8 @@ public class CommonProxy {
 	{
 		int entityID = EntityRegistry.findGlobalUniqueEntityId();
 		Random rand = new Random(name.hashCode());
-		int primaryColor = rand.nextInt() * 16777215;
-		int secondaryColor = rand.nextInt() * 16777215;
+		int primaryColor = rand.nextInt() * 0xffffff;
+		int secondaryColor = rand.nextInt() * 0xffffff;
 
 		EntityRegistry.registerGlobalEntityID(entityClass, name, entityID);
 		EntityRegistry.registerModEntity(entityClass, name, entityID, InfiniteAlloys.instance, 64, 1, true);

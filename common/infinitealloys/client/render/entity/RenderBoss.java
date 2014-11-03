@@ -1,18 +1,18 @@
 package infinitealloys.client.render.entity;
 
-import infinitealloys.client.model.entity.ModelBossBat;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderBossBat extends RenderLiving {
+public class RenderBoss extends RenderLiving {
 
-	private final ResourceLocation textureLocation = new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/entity/" + EnumBoss.BAT.getName() + ".png");
+	private final ResourceLocation textureLocation;
 
-	public RenderBossBat() {
-		super(new ModelBossBat(), 2F);
+	public RenderBoss(EnumBoss bossType) throws InstantiationException, IllegalAccessException {
+		super(bossType.modelClass.newInstance(), 2F);
+		textureLocation = new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/entity/" + bossType.name + ".png");
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package infinitealloys.entity;
 
+import infinitealloys.util.EnumAlloy;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
@@ -8,7 +9,7 @@ import net.minecraft.world.World;
 public class EntityBossBat extends EntityIABoss {
 
 	public EntityBossBat(World world) {
-		super(world, 4);
+		super(world, EnumAlloy.ALLOY4);
 		setSize(2F, 3.6F);
 	}
 

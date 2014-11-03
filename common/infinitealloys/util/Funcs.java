@@ -51,7 +51,9 @@ public class Funcs {
 		return finalKey;
 	}
 
-	/** Convert an entity's yaw to a Vanilla MC block face number */
+	/** Convert an entity's yaw to a Vanilla MC block face number
+	 * 
+	 * @param int a number of {0, 1, 2, 3} that represents a compass direction */
 	public static byte yawToNumSide(int rotation) {
 		switch(rotation) {
 			case 0:
@@ -67,6 +69,7 @@ public class Funcs {
 		}
 	}
 
+	/** Get the current side (Client/Server) as a String. Used solely for debug printing. */
 	public static String getSideAsString() {
 		return FMLCommonHandler.instance().getEffectiveSide().isClient() ? "Client" : "Server";
 	}
@@ -149,6 +152,6 @@ public class Funcs {
 			return String.format("%.3G", n / 1000000F) + "M";
 		else if(n >= 1000) // Thousands
 			return String.format("%.3G", n / 1000F) + "K";
-		return n + "";
+		return String.valueOf(n);
 	}
 }

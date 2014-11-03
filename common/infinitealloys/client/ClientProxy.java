@@ -1,5 +1,6 @@
 package infinitealloys.client;
 
+import infinitealloys.client.render.entity.RenderBoss;
 import infinitealloys.core.CommonProxy;
 import infinitealloys.util.EnumBoss;
 import infinitealloys.util.EnumMachine;
@@ -23,7 +24,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerBlockHandler(gfxHandler);
 		try {
 			for(EnumBoss boss : EnumBoss.values())
-				RenderingRegistry.registerEntityRenderingHandler(boss.getEntityClass(), boss.getRenderClass().getConstructor().newInstance());
+				RenderingRegistry.registerEntityRenderingHandler(boss.entityClass, new RenderBoss(boss));
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
