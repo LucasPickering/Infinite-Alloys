@@ -37,7 +37,7 @@ public class InfiniteAlloys {
 			Consts.metalColors[i] = config.get("Metal Colors", Consts.METAL_NAMES[i], metalColors[i]).getInt();
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			spawnOres[i] = config.get("World Gen", Consts.METAL_NAMES[i], true).getBoolean(true);
-		
+
 		config.save();
 	}
 
@@ -71,8 +71,12 @@ public class InfiniteAlloys {
 				for(int j = 0; j < Consts.METAL_COUNT; j++) { // For each metal, i.e. for each digit in the alloy
 					int min = Funcs.intAtPos(EnumAlloy.values()[i].min, Consts.ALLOY_RADIX, j); // Metal's min value in the alloy
 					int max = Funcs.intAtPos(EnumAlloy.values()[i].max, Consts.ALLOY_RADIX, j); // Metal's max value in the alloy
-					// Randomly gen a value in [min, max] and add it to the alloy
-					alloy += (min + (max == min ? 0 : random.nextInt(max - min + 1))) * Math.pow(Consts.ALLOY_RADIX, j);
+					System.out.println("-----------------");
+					System.out.println("Alloy ID: " + i);
+					System.out.println("Metal ID: " + j);
+					System.out.println("Min: " + min);
+					System.out.println("Max: " + max);
+					alloy += (min + random.nextInt(max - min + 1)) * Math.pow(Consts.ALLOY_RADIX, j); // Randomly gen a value in [min, max] and add it to the alloy
 				}
 
 				validAlloys[i] = Funcs.reduceAlloy(alloy); // Add the new alloy to the array

@@ -31,7 +31,7 @@ public class EventHandler {
 				}catch(FileNotFoundException e) {
 					InfiniteAlloys.instance.generateAlloyData(); // There is no saved data, probably because this is a new world. Generate new alloy data.
 				}catch(Exception e) {
-					InfiniteAlloys.instance.generateAlloyData();
+					InfiniteAlloys.instance.generateAlloyData(); // There was another error. Generate new alloy data, and print stack trace.
 					e.printStackTrace();
 				}
 			}

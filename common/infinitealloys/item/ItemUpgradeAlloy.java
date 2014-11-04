@@ -38,11 +38,8 @@ public class ItemUpgradeAlloy extends ItemUpgrade {
 		if(renderPass == 1) {
 			int colorCount = 0;
 			int redTot = 0, greenTot = 0, blueTot = 0;
-			int alloy = 0;
-			if(itemstack.hasTagCompound())
-				alloy = itemstack.getTagCompound().getInteger("alloy");
-			else if(itemstack.getItemDamage() >= 0 && itemstack.getItemDamage() <= Consts.VALID_ALLOY_COUNT)
-				alloy = EnumAlloy.getAlloyForID(itemstack.getItemDamage());
+			int alloy = EnumAlloy.getAlloyForID(itemstack.getItemDamage());
+
 			for(int i = 0; i < Consts.METAL_COUNT; i++) {
 				int ingotColor = Consts.metalColors[i];
 				int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
@@ -51,6 +48,7 @@ public class ItemUpgradeAlloy extends ItemUpgrade {
 				greenTot += (ingotColor >> 8 & 255) * alloyAmt; // Get the green byte from the ingot's hex color code
 				blueTot += (ingotColor & 255) * alloyAmt; // Get the blue byte from the ingot's hex color code
 			}
+
 			int redAvg = 0, greenAvg = 0, blueAvg = 0;
 			if(colorCount != 0) {
 				redAvg = redTot / colorCount;

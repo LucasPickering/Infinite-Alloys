@@ -4,7 +4,7 @@ import infinitealloys.core.InfiniteAlloys;
 
 public enum EnumAlloy {
 
-	// KEEP IN MIND: RIGHTMOST DIGITS ARE THE LESSER METALS WHILE LEFTMOST DIGITS ARE THE FANTASTICAL METALS
+	// KEEP IN MIND: RIGHTMOST DIGITS ARE THE LESSER METALS
 	ALLOY0("Alloy0", 11, 55),
 	ALLOY1("Alloy1", 1111, 4477),
 	ALLOY2("Alloy2", 11111, 556688),
@@ -12,7 +12,8 @@ public enum EnumAlloy {
 	ALLOY4("Alloy4", 11110000, 55550000),
 	ALLOY5("Alloy5", 44444444, 99999999);
 
-	/** Get the alloy value (which lists its metal composition) of the alloy with the given ID */
+	/** Get the alloy value (which lists its metal composition) of the alloy with the given ID.
+	 * This function is safe in that if you give it a bad alloy ID (outside the range [0, Amount of alloys)), it will just return 0 */
 	public static int getAlloyForID(int id) {
 		if(id < 0 || id >= values().length)
 			return 0;

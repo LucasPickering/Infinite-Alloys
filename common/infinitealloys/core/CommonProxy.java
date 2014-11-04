@@ -3,7 +3,6 @@ package infinitealloys.core;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.block.BlockOre;
 import infinitealloys.block.IABlocks;
-import infinitealloys.entity.EntityZombieTest;
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemAlloyIngot;
 import infinitealloys.item.ItemBlockMachine;
@@ -87,7 +86,6 @@ public class CommonProxy {
 	public void initEntities() {
 		for(EnumBoss bossType : EnumBoss.values())
 			registerEntity(bossType.entityClass, bossType.name);
-		registerEntity(EntityZombieTest.class,"zombietest"); // TODO: Remove this line after testing
 	}
 
 	public void initRecipes() {

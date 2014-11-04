@@ -76,7 +76,7 @@ public class Funcs {
 
 	/** Get an instance of a player from their name */
 	public static EntityPlayer getPlayerForUsername(String name) {
-		return FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152612_a(name);
 	}
 
 	/** Create a texture resource for an IA GUI based on the given texture name */
