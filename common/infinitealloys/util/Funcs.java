@@ -15,17 +15,17 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class Funcs {
 
-	/** Translate a number n into a radix, then get the digit at pos. The right-most position is 0 and the index increases to the left.
+	/** Translate a number n into a radix, then get the digit at pos. The right-most position is 0 and it increases to the left.
 	 * 
 	 * @param n the number that is being used
 	 * @param radix the radix of the number being given, e.g. 10 (decimal) or 2 (binary)
 	 * @param pos the position of the digit to be found
 	 * @return the digit at pos */
 	public static int intAtPos(int n, int radix, int pos) {
-		return (int)(n / Math.pow(radix, pos) + 0.5F) % radix; // The 0.5F insures that when casted, it's rounded to the nearest number
+		return n / (int)(Math.pow(radix, pos) + 0.5F) % radix; // Adding 0.5F makes the cast round to the nearest int
 	}
 
-	/** Take the log-base-b of x, using the change of base formula: log-base-b(x) = ln(x)/ln(b)
+	/** Take the log-base-b of x using <b>log-base-b(x) = ln(x)/ln(b)</b>
 	 * 
 	 * @param b the base of the logarithm
 	 * @param x the number to be used */
