@@ -21,7 +21,7 @@ public class MachineHelper {
 	public static ArrayList<String> playersToSync = new ArrayList<String>();
 
 	/** Add a block to the list of blocks that can be detected by the x-ray
-	 * 
+	 *
 	 * @param block the item that corresponds to the block that will be detected
 	 * @param color the color of the outline that will be used for this block
 	 * @param value the amount the block is worth, higher value requires more energy to detect */
@@ -30,7 +30,7 @@ public class MachineHelper {
 	}
 
 	/** Add a block or blocks to the list of blocks that can be detected by the x-ray with an ore dictionary string
-	 * 
+	 *
 	 * @param dictName the ore dictionary string from which the block(s) is/are retrieved
 	 * @param color the color of the outline that will be used for this block
 	 * @param value the amount the block(s) is/are worth, higher value requires more energy to detect */
@@ -44,7 +44,7 @@ public class MachineHelper {
 	}
 
 	/** Get the detectable value of the given ItemStack
-	 * 
+	 *
 	 * @return value of the block if it is detectable, otherwise 0 */
 	public static int getDetectableValue(Item block, int metadata) {
 		for(DetectableBlock detectable : detectables)

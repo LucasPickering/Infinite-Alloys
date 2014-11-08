@@ -71,11 +71,6 @@ public class InfiniteAlloys {
 				for(int j = 0; j < Consts.METAL_COUNT; j++) { // For each metal, i.e. for each digit in the alloy
 					int min = Funcs.intAtPos(EnumAlloy.values()[i].min, Consts.ALLOY_RADIX, j); // Metal's min value in the alloy
 					int max = Funcs.intAtPos(EnumAlloy.values()[i].max, Consts.ALLOY_RADIX, j); // Metal's max value in the alloy
-					System.out.println("-----------------");
-					System.out.println("Alloy ID: " + i);
-					System.out.println("Metal ID: " + j);
-					System.out.println("Min: " + min);
-					System.out.println("Max: " + max);
 					alloy += (min + random.nextInt(max - min + 1)) * Math.pow(Consts.ALLOY_RADIX, j); // Randomly gen a value in [min, max] and add it to the alloy
 				}
 

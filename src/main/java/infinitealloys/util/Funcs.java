@@ -16,7 +16,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class Funcs {
 
 	/** Translate a number n into a radix, then get the digit at pos. The right-most position is 0 and it increases to the left.
-	 * 
+	 *
 	 * @param n the number that is being used
 	 * @param radix the radix of the number being given, e.g. 10 (decimal) or 2 (binary)
 	 * @param pos the position of the digit to be found
@@ -26,7 +26,7 @@ public class Funcs {
 	}
 
 	/** Take the log-base-b of x using <b>log-base-b(x) = ln(x)/ln(b)</b>
-	 * 
+	 *
 	 * @param b the base of the logarithm
 	 * @param x the number to be used */
 	public static double logn(int b, double x) {
@@ -35,7 +35,7 @@ public class Funcs {
 
 	/** Get a localization or series of localization with keys. Add '/' to the start of a key to have it added to the final string without being localized. e.g.
 	 * getLoc("general.off", "/is not", "general.on") would return "Off is not On"
-	 * 
+	 *
 	 * @param keys the list of keys to be localized and spliced together into a final string
 	 * @return the final string of one or more concatenated literal and/or localized strings */
 	public static String getLoc(String... keys) {
@@ -52,7 +52,7 @@ public class Funcs {
 	}
 
 	/** Convert an entity's yaw to a Vanilla MC block face number
-	 * 
+	 *
 	 * @param int a number of {0, 1, 2, 3} that represents a compass direction */
 	public static byte yawToNumSide(int rotation) {
 		switch(rotation) {
@@ -103,24 +103,24 @@ public class Funcs {
 
 	/** Reduce the values within an alloy, i.e. 44442222 becomes 22221111
 	 * Rightmost digits are the lesser metals
-	 * 
+	 *
 	 * @param alloy the raw alloy data, before reduction
 	 * @return an alloy with reduced digits */
 	public static int reduceAlloy(int alloy) {
 		int gcf = 1;
 		factors:
-		for(int i = 2; i < Consts.ALLOY_RADIX; i++) { // Iterate over every integer in [2, Consts.ALLOY_RADIX)
-			for(int j = 0; j < Consts.METAL_COUNT; j++) { // Iterate over every digit in the number
-				final int metalAmt = intAtPos(alloy, Consts.ALLOY_RADIX, j);
-				if(metalAmt == 0)
-					continue; // Go to the next metal if this one is 0
-				else if(i > metalAmt)
-					break factors; // Break the whole loop if the factors have exceeded one of the digits
-				else if(metalAmt % i != 0)
-					continue factors; // If i is not a factor of the digit of alloy at j, skip to the next factor
+			for(int i = 2; i < Consts.ALLOY_RADIX; i++) { // Iterate over every integer in [2, Consts.ALLOY_RADIX)
+				for(int j = 0; j < Consts.METAL_COUNT; j++) { // Iterate over every digit in the number
+					final int metalAmt = intAtPos(alloy, Consts.ALLOY_RADIX, j);
+					if(metalAmt == 0)
+						continue; // Go to the next metal if this one is 0
+					else if(i > metalAmt)
+						break factors; // Break the whole loop if the factors have exceeded one of the digits
+					else if(metalAmt % i != 0)
+						continue factors; // If i is not a factor of the digit of alloy at j, skip to the next factor
+				}
+				gcf = i;
 			}
-			gcf = i;
-		}
 		return alloy / gcf;
 	}
 

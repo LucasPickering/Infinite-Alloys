@@ -29,7 +29,7 @@ public class ItemInternetWand extends ItemIA {
 	}
 
 	/** Is the machine that is at (x, y, z) OK to be added to this wand?
-	 * 
+	 *
 	 * @param x the machine's x coord
 	 * @param y the machine's y coord
 	 * @param z the machine's z coord

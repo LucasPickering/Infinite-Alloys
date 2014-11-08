@@ -9,7 +9,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /** A base, abstract class for Tile Entities that can receive upgrades, use power, and have processes to run. A sub-type of TileEntityMachine. Often referred to
  * as TEEs.
- * 
+ *
  * @see TileEntityMachine */
 public abstract class TileEntityElectric extends TileEntityMachine {
 

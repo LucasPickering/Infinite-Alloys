@@ -23,7 +23,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 
 /** A base, abstract class for Tile Entities that can receive upgrades. TileEntityElectric blocks are a sub-type of this. Often referred to as TEMs or machines.
- * 
+ *
  * @see TileEntityElectric */
 public abstract class TileEntityMachine extends TileEntity implements IInventory {
 
@@ -271,7 +271,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	}
 
 	/** Called from {@link infinitealloys.block.BlockMachine#onNeighborChange} when an adjacent TileEntity changes
-	 * 
+	 *
 	 * @param x the x-coord of the block the changed (not this block)
 	 * @param y the y-coord of the block the changed (not this block)
 	 * @param z the z-coord of the block the changed (not this block) */
@@ -283,7 +283,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
 	/** Determines if the given itemstack is a valid upgrade for the machine. Criteria: Does this machine take this type of upgrade? Does this machine already
 	 * have this upgrade? Does this upgrade have a prerequisite upgrade and if so, does this machine already have that upgrade?
-	 * 
+	 *
 	 * @param ItemStack for upgrade item with a binary upgrade damage value (see {@link infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
 	 * @return true if valid */
 	public final boolean isUpgradeValid(ItemStack itemstack) {
@@ -296,7 +296,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	}
 
 	/** Does the machine have the specified type and tier of upgrade
-	 * 
+	 *
 	 * @param upgradeType Int representing type of upgrade, see {@link infinitealloys.util.Consts}
 	 * @param tier Tier of the upgrade, e.g. 2 for Speed II or 3 for Capacity III
 	 * @return true if the machine has the upgrade */

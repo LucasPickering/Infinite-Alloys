@@ -28,7 +28,7 @@ public class TEEPasture extends TileEntityElectric {
 	public byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
 	/** The entity classes for each mob to be used in the {@link #updateEntity() updateEntity} function */
 	private final Class[] mobClasses = { EntityChicken.class, EntityCow.class, EntityCow.class, EntitySheep.class,
-		EntityCreeper.class, EntitySkeleton.class, EntitySpider.class, EntityZombie.class };
+			EntityCreeper.class, EntitySkeleton.class, EntitySpider.class, EntityZombie.class };
 	private int maxSpots;
 	private int trapRange;
 	private int repelRange;
@@ -78,19 +78,19 @@ public class TEEPasture extends TileEntityElectric {
 		for(final EntityCreature creature : trapList) {
 			if(Math.abs(xCoord - creature.posX) > trapRange + 1) // Is the creature too far away in the x direction
 				creature.moveEntity(xCoord + Math.signum(creature.posX - xCoord) * trapRange - creature.posX, 0, 0); // Move it back to the edge of the radius
-																														// in the x direction
+			// in the x direction
 			if(Math.abs(zCoord - creature.posZ) > trapRange + 1) // Is the creature too far away in the z direction
 				creature.moveEntity(0, 0, zCoord + Math.signum(creature.posZ - zCoord) * trapRange - creature.posZ); // Move is back to the edge of the radius
-																														// in the z direction
+			// in the z direction
 		}
 
 		for(final EntityCreature creature : repelList) {
 			if(Math.abs(xCoord - creature.posX) > repelRange) // Is the creature too close in the x direction
 				creature.moveEntity(creature.posX - xCoord - Math.signum(creature.posX - xCoord) * repelRange, 0, 0); // Move it back to the edge of the radius
-																														// in the x direction
+			// in the x direction
 			if(Math.abs(zCoord - creature.posZ) > repelRange) // Is the creature too close in the z direction
 				creature.moveEntity(0, 0, creature.posZ - zCoord - Math.signum(creature.posZ - zCoord) * repelRange); // Move is back to the edge of the radius
-																														// in the z direction
+			// in the z direction
 		}
 	}
 
@@ -145,7 +145,7 @@ public class TEEPasture extends TileEntityElectric {
 	}
 
 	/** Does the pasture have enough space to enable another animal or monster
-	 * 
+	 *
 	 * @return true if there is enough space to enable another animal or monster */
 	public boolean hasFreeSpots() {
 		int usedSpots = 0;

@@ -109,7 +109,7 @@ public class TEEMetalForge extends TileEntityElectric {
 	}
 
 	/** Return the resulting ingot for the smelted ingots
-	 * 
+	 *
 	 * @return The resulting ingot. */
 	private ItemStack getIngotResult() {
 		final ItemStack result = new ItemStack(IAItems.alloyIngot);

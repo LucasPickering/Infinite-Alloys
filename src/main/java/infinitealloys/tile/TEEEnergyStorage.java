@@ -249,7 +249,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
 	/** Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK, will the result be between zero and the machine's capacity? If
 	 * this condition is true, make the change, i.e. add changeInRK to currentRK
-	 * 
+	 *
 	 * @param changeInRK the specified change in RK
 	 * @return true if changeInRK plus currentRK is between 0 and maxRK, False otherwise */
 	public boolean changeRK(int changeInRK) {
