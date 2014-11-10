@@ -2,6 +2,7 @@ package infinitealloys.core;
 
 import infinitealloys.block.BlockMachine;
 import infinitealloys.block.BlockOre;
+import infinitealloys.block.BlockSummoner;
 import infinitealloys.block.IABlocks;
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemAlloyIngot;
@@ -41,11 +42,13 @@ public class CommonProxy {
 	public GfxHandler gfxHandler;
 
 	public void initBlocks() {
-		IABlocks.ore = new BlockOre().setHardness(3F).setBlockName("iaOre");
-		IABlocks.machine = new BlockMachine().setHardness(3F).setBlockName("iaMachine");
+		IABlocks.ore = new BlockOre().setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName("iaOre");
+		IABlocks.machine = new BlockMachine().setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName("iaMachine");
+		IABlocks.summoner = new BlockSummoner().setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName("iaSummoner");
 
 		GameRegistry.registerBlock(IABlocks.ore, ItemBlockOre.class, IABlocks.ore.getUnlocalizedName());
 		GameRegistry.registerBlock(IABlocks.machine, ItemBlockMachine.class, IABlocks.machine.getUnlocalizedName());
+		GameRegistry.registerBlock(IABlocks.summoner, IABlocks.summoner.getUnlocalizedName());
 
 		for(int i = 0; i < Consts.METAL_COUNT; i++)
 			OreDictionary.registerOre("ore" + Consts.METAL_NAMES[i], new ItemStack(IABlocks.ore, 1, 0));
@@ -96,7 +99,7 @@ public class CommonProxy {
 		for(int i = 0; i < alloys.length; i++)
 			alloys[i] = new ItemStack(IAItems.alloyIngot, 1, i + 1);
 
-		ItemStack[][] upgrades = new ItemStack[Consts.UPGRADE_TYPE_COUNT][6];
+		ItemStack[][] upgrades = new ItemStack[Consts.UPGRADE_TYPE_COUNT][6]; // The second index is the current max value for tiers of an upgrade
 		for(int i = 0; i < upgrades.length; i++)
 			for(int j = 0; j < upgrades[i].length; j++)
 				upgrades[i][j] = new ItemStack(IAItems.upgrades[i], 1, j);
@@ -178,12 +181,11 @@ public class CommonProxy {
 
 	public void initRendering() {}
 
-	private static void addRecipeDict(ItemStack result, Object... params) {
+	private void addRecipeDict(ItemStack result, Object... params) {
 		GameRegistry.addRecipe(new ShapedOreRecipe(result, params));
 	}
 
-	private static void registerEntity(Class entityClass, String name)
-	{
+	private void registerEntity(Class entityClass, String name) {
 		int entityID = EntityRegistry.findGlobalUniqueEntityId();
 		Random rand = new Random(name.hashCode());
 		int primaryColor = rand.nextInt() * 0xffffff;

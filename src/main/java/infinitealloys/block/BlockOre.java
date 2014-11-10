@@ -17,7 +17,6 @@ public class BlockOre extends Block {
 
 	public BlockOre() {
 		super(Material.rock);
-		setCreativeTab(InfiniteAlloys.tabIA);
 	}
 
 	@Override

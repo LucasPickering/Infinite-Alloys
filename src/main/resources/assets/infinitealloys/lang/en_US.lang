@@ -37,7 +37,6 @@ item.iaAlloyUpgrade4.name=Alloy Recipe IV
 item.iaAlloyUpgrade5.name=Alloy Recipe V
 item.iaAlloyUpgrade6.name=Alloy Recipe VI
 
-	
 item.iaAlloy0.name=Alloy I
 item.iaAlloy1.name=Alloy II
 item.iaAlloy2.name=Alloy III
@@ -69,6 +68,8 @@ tile.iaAnalyzer.name=Analyzer
 tile.iaXray.name=X-Ray
 tile.iaPasture.name=Pasture
 tile.iaEnergyStorage.name=Energy Storage Unit
+
+tile.iaSummoner.name=Boss Summoner
 
 entity.zombie.name=Giant Zombie
 entity.skeleton.name=Giant Skeleton

@@ -24,11 +24,12 @@ public class TEEPasture extends TileEntityElectric {
 	public static final int MODE_ATTRACT = 1;
 	/** The mode value for only repelling monsters */
 	public static final int MODE_REPEL = 2;
-	/** 0 is do nothing to the mob, 1 is attract the mob, 2 is repel the mob. The order can be seen in {@link #mobClasses mobClasses} */
-	public byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
-	/** The entity classes for each mob to be used in the {@link #updateEntity() updateEntity} function */
-	private final Class[] mobClasses = { EntityChicken.class, EntityCow.class, EntityCow.class, EntitySheep.class,
+	/** Classes for each animal/monster that is compatible with this machine */
+	public static final Class[] mobClasses = { EntityChicken.class, EntityCow.class, EntityCow.class, EntitySheep.class,
 			EntityCreeper.class, EntitySkeleton.class, EntitySpider.class, EntityZombie.class };
+
+	/** 0 is do nothing to the mob, 1 is attract the mob, 2 is repel the mob. The order can be seen in {@link #mobClasses mobClasses} */
+	public byte[] mobActions = new byte[mobClasses.length];
 	private int maxSpots;
 	private int trapRange;
 	private int repelRange;
@@ -97,14 +98,14 @@ public class TEEPasture extends TileEntityElectric {
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		for(int i = 0; i < Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS; i++)
+		for(int i = 0; i < mobActions.length; i++)
 			mobActions[i] = tagCompound.getByte("Mob" + i);
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		for(int i = 0; i < Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS; i++)
+		for(int i = 0; i < mobActions.length; i++)
 			tagCompound.setByte("Mob" + i, mobActions[i]);
 	}
 

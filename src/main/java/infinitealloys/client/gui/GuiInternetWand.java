@@ -27,9 +27,9 @@ import org.lwjgl.opengl.GL11;
 public class GuiInternetWand extends GuiScreen {
 
 	private final RenderItem itemRenderer = new RenderItem();
-	private final ResourceLocation background;
-	private final int xSize = 178;
-	private final int ySize = 160;
+	private final ResourceLocation background = Funcs.getGuiTexture("wand");
+	private final int WIDTH = 178;
+	private final int HEIGHT = 160;
 	/** The amount of machines that can appear on the GUI at once */
 	private final int MAX_ROWS = 5;
 	private final Rectangle SCROLL_BAR = new Rectangle(156, 42, 12, 102);
@@ -56,13 +56,9 @@ public class GuiInternetWand extends GuiScreen {
 	/** The number of the first displayed line of blocks. Min is 0, max is num of rows minus {@link #MAX_ROWS} */
 	private int scrollPos;
 
-	public GuiInternetWand() {
-		background = Funcs.getGuiTexture("wand");
-	}
-
 	@Override
 	public void initGui() {
-		topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
+		topLeft.setLocation((width - WIDTH) / 2, (height - HEIGHT) / 2);
 
 		buttonList.clear();
 		buttonList.add(new GuiButton(0, width - 20, 0, 20, 20, "?")); // Help button
@@ -116,11 +112,11 @@ public class GuiInternetWand extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTick) {
 		Funcs.bindTexture(background);
-		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
+		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, WIDTH, HEIGHT);
 		super.drawScreen(mouseX, mouseY, partialTick);
 
+		Funcs.bindTexture(GuiMachine.extraIcons);
 		GL11.glPushMatrix();
-		Funcs.bindTexture(GuiMachine.extras);
 		GL11.glColor4f(1, 1, 1, 1);
 		// If the list of machines is short enough to fit on one page, disable the scroll bar
 		if(machineButtons.size() <= MAX_ROWS)
@@ -347,7 +343,7 @@ public class GuiInternetWand extends GuiScreen {
 		}
 
 		void drawButton() {
-			Funcs.bindTexture(GuiMachine.extras);
+			Funcs.bindTexture(GuiMachine.extraIcons);
 
 			// If the button isn't currently in the scroll window, don't draw it
 			if(!visible)

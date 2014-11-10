@@ -73,7 +73,7 @@ public class GuiXray extends GuiElectric {
 			setButtons();
 		wasSearching = tex.getProcessProgress() > 0; // Set the searching status for this tick (used next tick)
 
-		Funcs.bindTexture(GuiMachine.extras);
+		Funcs.bindTexture(GuiMachine.extraIcons);
 
 		for(int i = scrollPos * 4; i < blockButtons.length && i < scrollPos * 4 + 20; i++)
 			blockButtons[i].drawButton();
@@ -210,7 +210,7 @@ public class GuiXray extends GuiElectric {
 		private void drawButton() {
 			if(blockAmount > 0) {
 				// Draw the background texture for the button
-				Funcs.bindTexture(GuiMachine.extras);
+				Funcs.bindTexture(GuiMachine.extraIcons);
 				drawTexturedModalRect(xPos, yPos, background.texture.x, background.texture.y, background.texture.width, background.texture.height);
 
 				// If this button is selected, draw an overlay to indicate that

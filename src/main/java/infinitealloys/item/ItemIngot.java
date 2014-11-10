@@ -28,7 +28,7 @@ public class ItemIngot extends ItemIA {
 		if(itemstack.getItemDamage() == 1)
 			return 0xcbcec7;
 		if(itemstack.getItemDamage() < Consts.METAL_COUNT)
-			return Consts.metalColors[itemstack.getItemDamage()];
+			return Consts.METAL_COLORS[itemstack.getItemDamage()];
 		return 0xffffff;
 	}
 

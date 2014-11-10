@@ -78,7 +78,7 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 						break;
 
 					case PASTURE:
-						byte[] mobActions = new byte[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
+						byte[] mobActions = new byte[TEEPasture.mobClasses.length];
 						for(int i = 0; i < mobActions.length; i++)
 							mobActions[i] = bytes.readByte();
 						((TEEPasture)te).handlePacketData(mobActions);

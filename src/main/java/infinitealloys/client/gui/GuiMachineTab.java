@@ -31,7 +31,7 @@ public class GuiMachineTab extends GuiScreen {
 	/** Draws this button to the screen. */
 	public void drawButton() {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		Funcs.bindTexture(GuiMachine.extras);
+		Funcs.bindTexture(GuiMachine.extraIcons);
 		if(leftSide) {
 			if(activated)
 				drawTexturedModalRect(xPos, yPos, GuiElectric.TAB_LEFT_ON.x, GuiElectric.TAB_LEFT_ON.y, GuiElectric.TAB_LEFT_ON.width, GuiElectric.TAB_LEFT_ON.height);

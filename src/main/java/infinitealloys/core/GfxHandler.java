@@ -3,6 +3,7 @@ package infinitealloys.core;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.block.IABlocks;
 import infinitealloys.client.gui.GuiInternetWand;
+import infinitealloys.client.gui.GuiSummoner;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
@@ -52,10 +53,12 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-		if(id == Consts.WAND_GUI_ID)
-			return new GuiInternetWand();
-		else if(id < Consts.MACHINE_COUNT)
+		if(id < Consts.MACHINE_COUNT)
 			return EnumMachine.values()[id].getGui(player.inventory, (TileEntityMachine)world.getTileEntity(x, y, z));
+		else if(id == Consts.WAND_GUI_ID)
+			return new GuiInternetWand();
+		else if(id == Consts.SUMMONER_GUI_ID)
+			return new GuiSummoner();
 		return null;
 	}
 
@@ -104,7 +107,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 			// Draw ore pieces on top of stone background
 			if(metadata < Consts.METAL_COUNT) {
-				final int mult = Consts.metalColors[metadata];
+				final int mult = Consts.METAL_COLORS[metadata];
 				GL11.glColor4f((mult >> 16 & 255) / 255F, (mult >> 8 & 255) / 255F, (mult & 255) / 255F, 1F);
 
 				tessellator.startDrawingQuads();
@@ -149,7 +152,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		boolean rendered = renderer.renderStandardBlock(block, x, y, z);
 		final int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
 		if(block == IABlocks.ore) { // Used to colorize the ores
-			final int color = Consts.metalColors[world.getBlockMetadata(x, y, z)];
+			final int color = Consts.METAL_COLORS[world.getBlockMetadata(x, y, z)];
 			float red = (color >> 16 & 255) / 255F;
 			float green = (color >> 8 & 255) / 255F;
 			float blue = (color & 255) / 255F;

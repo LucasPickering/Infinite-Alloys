@@ -8,8 +8,11 @@ public class IABlocks {
 
 	public static Block ore;
 	public static Block machine;
+	public static Block summoner;
 
-	public static IIcon[] machineIcons = new IIcon[Consts.MACHINE_COUNT];
 	public static IIcon oreForegroundIcon;
 	public static IIcon oreBackgroundIcon;
+	public static IIcon summonerTopIcon;
+	public static IIcon summonerSideIcon;
+	public static IIcon summonerBottomIcon;
 }

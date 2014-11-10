@@ -10,8 +10,8 @@ public class GuiPasture extends GuiElectric {
 
 	public TEEPasture tep;
 
-	/** The buttons to enable/disable the mob trapping/repulsion in the order of chicken, cow, pig, sheep, creeper, skeleton, spider, zombie */
-	private final GuiButton[] mobButtons = new GuiButton[Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS];
+	/** The buttons to enable/disable the mob trapping/repulsion in the order they're defined in {@link infinitealloys.tile.TEEPasture#mobClasses} */
+	private final GuiButton[] mobButtons = new GuiButton[TEEPasture.mobClasses.length];
 
 	public GuiPasture(InventoryPlayer inventoryPlayer, TEEPasture tileEntity) {
 		super(210, 186, inventoryPlayer, tileEntity);
@@ -23,9 +23,9 @@ public class GuiPasture extends GuiElectric {
 	public void initGui() {
 		super.initGui();
 		// Initialize each mob button with the text "<off/trap/repel>"
-		for(int i = 0; i < Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS; i++) {
-			buttonList.add(mobButtons[i] = new GuiButton(i + 1, width / 2 - (i < Consts.PASTURE_ANIMALS ? 53 : 23),
-					height / 2 - 88 + i % Consts.PASTURE_ANIMALS * 22, 24, 20, Funcs.getLoc("machine.pasture.mode." + tep.mobActions[i])));
+		for(int i = 0; i < mobButtons.length; i++) {
+			buttonList.add(mobButtons[i] = new GuiButton(i + 1, width / 2 - (i < mobButtons.length / 2 ? 53 : 23),
+					height / 2 - 88 + i % (mobButtons.length / 2) * 22, 24, 20, Funcs.getLoc("machine.pasture.mode." + tep.mobActions[i])));
 			mobButtons[i].enabled = tep.mobActions[i] > 0 || tep.hasFreeSpots();
 		}
 	}
@@ -43,7 +43,7 @@ public class GuiPasture extends GuiElectric {
 	/** Called when buttons are initialized or when any button is clicked, updates text, TE values, etc. */
 	private void updateButtons() {
 		// Enable each animal button if it is set to on or if there is space to turn it on, and if the mode is Animals or the mode is Both
-		for(int i = 0; i < Consts.PASTURE_ANIMALS + Consts.PASTURE_MONSTERS; i++) {
+		for(int i = 0; i < mobButtons.length; i++) {
 			mobButtons[i].enabled = tep.mobActions[i] > 0 || tep.hasFreeSpots();
 			mobButtons[i].displayString = Funcs.getLoc("machine.pasture.mode." + tep.mobActions[i]);
 		}

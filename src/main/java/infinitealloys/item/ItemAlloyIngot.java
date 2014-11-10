@@ -58,7 +58,7 @@ public class ItemAlloyIngot extends ItemIA {
 			alloy = itemstack.getTagCompound().getInteger("alloy");
 
 		for(int i = 0; i < Consts.METAL_COUNT; i++) {
-			int ingotColor = Consts.metalColors[i];
+			int ingotColor = Consts.METAL_COLORS[i];
 			int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
 			colorCount += alloyAmt;
 			redTot += (ingotColor >> 16 & 255) * alloyAmt; // Get the red byte from the ingot's hex color code

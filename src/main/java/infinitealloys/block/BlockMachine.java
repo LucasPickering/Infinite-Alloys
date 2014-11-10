@@ -31,7 +31,6 @@ public class BlockMachine extends BlockContainer {
 
 	public BlockMachine() {
 		super(Material.iron);
-		setCreativeTab(InfiniteAlloys.tabIA);
 	}
 
 	@Override

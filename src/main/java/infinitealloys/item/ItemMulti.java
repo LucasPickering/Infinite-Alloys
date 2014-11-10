@@ -12,7 +12,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemMulti extends ItemIA {
 
-	private static final IIcon[] icons = new IIcon[Consts.MULTI_ITEM_COUNT];
+	private final IIcon[] icons = new IIcon[Consts.MULTI_ITEM_NAMES.length];
 
 	public ItemMulti() {
 		super();
@@ -22,7 +22,7 @@ public class ItemMulti extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister iconRegister) {
-		for(int i = 0; i < Consts.MULTI_ITEM_COUNT; i++)
+		for(int i = 0; i < Consts.MULTI_ITEM_NAMES.length; i++)
 			icons[i] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + Consts.MULTI_ITEM_NAMES[i]);
 	}
 
@@ -35,13 +35,13 @@ public class ItemMulti extends ItemIA {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < Consts.MULTI_ITEM_COUNT; i++)
+		for(int i = 0; i < Consts.MULTI_ITEM_NAMES.length; i++)
 			list.add(new ItemStack(item, 1, i));
 	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
-		if(itemstack.getItemDamage() < Consts.MULTI_ITEM_COUNT)
+		if(itemstack.getItemDamage() < Consts.MULTI_ITEM_NAMES.length)
 			return "item.ia" + Consts.MULTI_ITEM_NAMES[itemstack.getItemDamage()];
 		return super.getUnlocalizedName(itemstack);
 	}

@@ -43,7 +43,7 @@ public abstract class GuiMachine extends GuiContainer {
 	static final Rectangle SCROLL_BAR = new Rectangle(172, 51, 12, 96);
 
 	/** The texture resource for the texture item */
-	static final ResourceLocation extras = Funcs.getGuiTexture("extras");
+	static final ResourceLocation extraIcons = Funcs.getGuiTexture("extras");
 	/** The background texture */
 	protected ResourceLocation background;
 
@@ -113,7 +113,7 @@ public abstract class GuiMachine extends GuiContainer {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		Funcs.bindTexture(extras);
+		Funcs.bindTexture(extraIcons);
 		GL11.glPushMatrix();
 
 		// Draw the network icon if this GUI has one
