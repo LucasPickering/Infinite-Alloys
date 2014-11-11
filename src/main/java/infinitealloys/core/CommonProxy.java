@@ -19,7 +19,7 @@ import infinitealloys.item.ItemUpgradeRange;
 import infinitealloys.item.ItemUpgradeSpeed;
 import infinitealloys.item.ItemUpgradeWireless;
 import infinitealloys.network.NetworkHandler;
-import infinitealloys.tile.TileEntitySummoner;
+import infinitealloys.tile.TEIASummoner;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;
 import infinitealloys.util.EnumMachine;
@@ -157,7 +157,7 @@ public class CommonProxy {
 	public void initTileEntities() {
 		for(EnumMachine machine : EnumMachine.values())
 			GameRegistry.registerTileEntity(machine.getTEMClass(), machine.getName());
-		GameRegistry.registerTileEntity(TileEntitySummoner.class, "Summoner");
+		GameRegistry.registerTileEntity(TEIASummoner.class, "Summoner");
 
 		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.coal_ore), 0, 1);
 		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.iron_ore), 0, 2);

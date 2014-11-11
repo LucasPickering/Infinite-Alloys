@@ -1,6 +1,8 @@
 package infinitealloys.tile;
 
+import org.apache.commons.lang3.ArrayUtils;
 import infinitealloys.util.EnumBoss;
+import infinitealloys.util.Funcs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -9,12 +11,13 @@ import scala.actors.threadpool.Arrays;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntitySummoner extends TileEntity {
+public class TEIASummoner extends TileEntityIA {
 
 	private int storedXP;
 
-	public TileEntitySummoner() {
-		super();
+	@Override
+	public void updateEntity() {
+		System.out.println(Funcs.getSideAsString() + ": " + storedXP);
 	}
 
 	/** Take a level of XP away from the given player and add it to this machine. This DOES NOT assume that the player has enough XP already.
@@ -78,6 +81,16 @@ public class TileEntitySummoner extends TileEntity {
 	 * @return e.g. if the last boss needed 60 XP total and the next on needs 80 XP total, return 20 */
 	public int getXPIntervalForNextLevel() {
 		return getXPTowardsNextLevel() + getXPNeededForNextLevel();
+	}
+
+	@Override
+	public Object[] getSyncDataToClient() {
+		return ArrayUtils.addAll(super.getSyncDataToClient(), new Object[] { storedXP });
+	}
+
+	@Override
+	public Object[] getSyncDataToServer() {
+		return new Object[] { storedXP };
 	}
 
 	/** Sync packet data from client or server */

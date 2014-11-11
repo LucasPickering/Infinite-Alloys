@@ -1,7 +1,7 @@
 package infinitealloys.block;
 
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.tile.TileEntitySummoner;
+import infinitealloys.tile.TEIASummoner;
 import infinitealloys.util.Consts;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -52,6 +52,6 @@ public class BlockSummoner extends Block {
 
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
-		return new TileEntitySummoner();
+		return new TEIASummoner();
 	}
 }

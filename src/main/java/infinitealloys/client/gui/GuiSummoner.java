@@ -3,7 +3,7 @@ package infinitealloys.client.gui;
 import java.text.DecimalFormat;
 import org.lwjgl.opengl.GL11;
 import infinitealloys.client.gui.GuiMachine.ColoredLine;
-import infinitealloys.tile.TileEntitySummoner;
+import infinitealloys.tile.TEIASummoner;
 import infinitealloys.util.Funcs;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -22,12 +22,12 @@ public class GuiSummoner extends GuiScreen {
 	/** Coordinates of the top-left corner of the GUI */
 	private java.awt.Point topLeft = new java.awt.Point();
 
-	private TileEntitySummoner tes;
+	private TEIASummoner tes;
 
 	/** When help is enabled, slots get a colored outline and a mouse-over description */
 	private boolean helpEnabled;
 
-	public GuiSummoner(TileEntitySummoner tes) {
+	public GuiSummoner(TEIASummoner tes) {
 		this.tes = tes;
 	}
 
@@ -44,6 +44,7 @@ public class GuiSummoner extends GuiScreen {
 		Funcs.bindTexture(background);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glColor4f(1F, 1F, 1F, 1F);
 		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, WIDTH, HEIGHT);
 		super.drawScreen(mouseX, mouseY, partialTick);
 
@@ -101,6 +102,7 @@ public class GuiSummoner extends GuiScreen {
 				break;
 			case 1:
 				tes.addLevel(mc.thePlayer);
+				tes.syncToServer();
 				break;
 		}
 	}

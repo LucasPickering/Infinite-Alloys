@@ -7,7 +7,7 @@ import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityIA;
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.tile.TileEntitySummoner;
+import infinitealloys.tile.TEIASummoner;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
@@ -20,39 +20,35 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
 public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToClient, IMessage> {
 
-	private Point machine;
+	private Point tePoint;
 	private Object[] data;
 	private ByteBuf bytes;
 
 	public MessageTEToClient() {}
 
 	public MessageTEToClient(TileEntityIA teia) {
-		machine = teia.coords();
-
-		if(teia.getWorldObj().isRemote)
-			data = teia.getSyncDataToServer();
-		else
-			data = teia.getSyncDataToClient();
+		tePoint = teia.coords();
+		data = teia.getSyncDataToClient();
 	}
 
 	@Override
 	public void fromBytes(ByteBuf bytes) {
-		machine = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+		tePoint = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
 		this.bytes = bytes;
 	}
 
 	@Override
 	public void toBytes(ByteBuf bytes) {
-		NetworkHandler.writeObject(bytes, machine);
+		NetworkHandler.writeObject(bytes, tePoint);
 		NetworkHandler.writeObject(bytes, data);
 	}
 
 	@Override
 	public IMessage onMessage(MessageTEToClient message, MessageContext context) {
-		machine = message.machine;
+		tePoint = message.tePoint;
 		bytes = message.bytes;
 
-		TileEntity te = Funcs.getTileEntity(Minecraft.getMinecraft().theWorld, machine);
+		TileEntity te = Funcs.getTileEntity(Minecraft.getMinecraft().theWorld, tePoint);
 
 		if(te instanceof TileEntityIA) {
 			byte orientation = bytes.readByte();
@@ -97,9 +93,9 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 					}
 				}
 			}
-			else if(te instanceof TileEntitySummoner) {
+			else if(te instanceof TEIASummoner) {
 				int storedXP = bytes.readInt();
-				((TileEntitySummoner)te).handlePacketData(storedXP);
+				((TEIASummoner)te).handlePacketData(storedXP);
 			}
 		}
 
