@@ -5,6 +5,7 @@ import infinitealloys.block.IABlocks;
 import infinitealloys.client.gui.GuiInternetWand;
 import infinitealloys.client.gui.GuiSummoner;
 import infinitealloys.tile.TileEntityMachine;
+import infinitealloys.tile.TileEntitySummoner;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Point;
@@ -58,7 +59,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 		else if(id == Consts.WAND_GUI_ID)
 			return new GuiInternetWand();
 		else if(id == Consts.SUMMONER_GUI_ID)
-			return new GuiSummoner();
+			return new GuiSummoner((TileEntitySummoner)world.getTileEntity(x, y, z));
 		return null;
 	}
 

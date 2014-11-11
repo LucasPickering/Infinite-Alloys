@@ -1,38 +1,33 @@
 package infinitealloys.client.gui;
 
-import infinitealloys.client.EnumHelp;
 import infinitealloys.client.gui.GuiMachine.ColoredLine;
-import infinitealloys.item.IAItems;
-import infinitealloys.item.ItemInternetWand;
-import infinitealloys.network.MessageWand;
-import infinitealloys.tile.IHost;
-import infinitealloys.tile.TEMComputer;
-import infinitealloys.tile.TileEntityElectric;
-import infinitealloys.util.Consts;
+import infinitealloys.tile.TileEntitySummoner;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 public class GuiSummoner extends GuiScreen {
 
+	private final int WIDTH = 122;
+	private final int HEIGHT = 49;
+	private final int XP_BAR_X = 6;
+	private final int XP_BAR_Y = 6;
+
 	/** The background texture */
-	protected ResourceLocation background = Funcs.getGuiTexture("summoner");
+	private ResourceLocation background = Funcs.getGuiTexture("summoner");
 
 	/** Coordinates of the top-left corner of the GUI */
-	protected java.awt.Point topLeft = new java.awt.Point();
+	private java.awt.Point topLeft = new java.awt.Point();
+
+	private TileEntitySummoner tes;
 
 	/** When help is enabled, slots get a colored outline and a mouse-over description */
 	private boolean helpEnabled;
 
-	private final int WIDTH = 100;
-	private final int HEIGHT = 100;
+	public GuiSummoner(TileEntitySummoner tes) {
+		this.tes = tes;
+	}
 
 	@Override
 	public void initGui() {
@@ -48,6 +43,7 @@ public class GuiSummoner extends GuiScreen {
 		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, WIDTH, HEIGHT);
 		super.drawScreen(mouseX, mouseY, partialTick);
 
+		drawTexturedModalRect(XP_BAR_X, XP_BAR_Y, GuiMachine.PROGRESS_BAR.x, GuiMachine.PROGRESS_BAR.y, (int)tes.getStoredXPScaled(GuiMachine.PROGRESS_BAR.width), GuiMachine.PROGRESS_BAR.height);
 		Funcs.bindTexture(GuiMachine.extraIcons);
 	}
 
