@@ -18,11 +18,6 @@ public class TEEMetalForge extends TileEntityElectric {
 	/** True if the alloy recipe has been changed by the client, used to reset progress */
 	private boolean recipeChanged;
 
-	public TEEMetalForge(byte front) {
-		this();
-		this.front = front;
-	}
-
 	public TEEMetalForge() {
 		super(20);
 		baseRKPerTick = -18;

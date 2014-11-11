@@ -3,6 +3,7 @@ itemGroup.main=Infinite Alloys
 general.on=On
 general.off=Off
 general.upgrades=Upgrades
+general.need=Need
 
 item.iaMachineComponent.name=Machine Control Chip
 item.iaUpgradeComponent.name=Upgrade Component

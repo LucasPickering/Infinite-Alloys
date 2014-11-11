@@ -1,6 +1,5 @@
 package infinitealloys.tile;
 
-import infinitealloys.block.IABlocks;
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemUpgrade;
 import infinitealloys.network.MessageTEToClient;
@@ -12,29 +11,25 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
-import net.minecraft.tileentity.TileEntity;
+import org.apache.commons.lang3.ArrayUtils;
 
-/** A base, abstract class for Tile Entities that can receive upgrades. TileEntityElectric blocks are a sub-type of this. Often referred to as TEMs or machines.
+/** A base, abstract class for Tile Entities that can receive upgrades.
+ * TileEntityElectric blocks are a sub-type of this. Often referred to as TEMs or machines.
  *
  * @see TileEntityElectric */
-public abstract class TileEntityMachine extends TileEntity implements IInventory {
+public abstract class TileEntityMachine extends TileEntityIA implements IInventory {
 
 	/** The stacks that make up the inventory of this TE */
 	public ItemStack[] inventoryStacks;
 
 	/** A list of the upgrades that can be used on this machine */
 	protected final ArrayList<ItemUpgrade> validUpgradeTypes = new ArrayList<ItemUpgrade>();
-
-	/** A number from 0-5 to represent which side of this block gets the front texture */
-	public byte front;
 
 	/** Each element in the array corresponds to an upgrade type, and represents how many tiers in the type have been unlocked */
 	private int[] upgrades = new int[Consts.UPGRADE_TYPE_COUNT];
@@ -56,15 +51,13 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	}
 
 	public TileEntityMachine() {
+		super();
 		populateValidUpgrades();
 		updateUpgrades();
 	}
 
-	/** Get the integer from {@link infinitealloys.util.MachineHelper MachineHelper} that corresponds to this machine */
+	/** Get the {@link infinitealloys.util.EnumMachine EnumMachine} that corresponds to this machine */
 	public abstract EnumMachine getEnumMachine();
-
-	/** Called when the block is first placed to restore persistent data from before it was destroyed, such as the stored RK in the ESU */
-	public void loadNBTData(NBTTagCompound tagCompound) {}
 
 	@Override
 	public void updateEntity() {
@@ -87,19 +80,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
-	/** An NBTTagCompound to be attached to the ItemStack that is dropped when the machine is destroyed. This can have data such as energy stored in the ESU. */
-	protected NBTTagCompound getDropTagCompound() {
-		return null;
-	}
-
 	/** Called when the TE's block is destroyed. Ends network connections and drops items and upgrades */
 	public void onBlockDestroyed() {
-		// Drop block
-		ItemStack block = new ItemStack(IABlocks.machine, 1, getEnumMachine().ordinal());
-		NBTTagCompound tagCompound = getDropTagCompound();
-		if(tagCompound != null)
-			block.setTagCompound(tagCompound);
-		spawnItem(block);
+		super.onBlockDestroyed();
 
 		// Drop items in inventory
 		for(int i = 0; i < getSizeInventory(); i++) {
@@ -118,23 +101,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 			((IHost)Funcs.getTileEntity(worldObj, computerHost)).removeClient(coords(), true);
 	}
 
-	/** Spawn an EntityItem for an ItemStack */
-	private void spawnItem(ItemStack itemstack) {
-		Random random = new Random();
-		float f = random.nextFloat() * 0.8F + 0.1F;
-		float f1 = random.nextFloat() * 0.8F + 0.1F;
-		float f2 = random.nextFloat() * 0.8F + 0.1F;
-		EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, itemstack);
-		item.motionX = random.nextGaussian() * 0.05F;
-		item.motionY = random.nextGaussian() * 0.25F;
-		item.motionZ = random.nextGaussian() * 0.05F;
-		worldObj.spawnEntityInWorld(item);
-	}
-
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
-		front = tagCompound.getByte("orientation");
 		upgrades = tagCompound.getIntArray("upgrades");
 		NBTTagList nbttaglist = tagCompound.getTagList("Items", 10);
 		for(int i = 0; i < nbttaglist.tagCount(); i++) {
@@ -148,7 +117,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 	@Override
 	public void writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
-		tagCompound.setByte("orientation", front);
 		tagCompound.setIntArray("upgrades", upgrades);
 		NBTTagList nbttaglist = new NBTTagList();
 		for(int i = 0; i < inventoryStacks.length; i++) {
@@ -162,34 +130,13 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 		tagCompound.setTag("Items", nbttaglist);
 	}
 
-	public void syncToServer() {
-		Funcs.sendPacketToServer(new MessageTEToServer(this));
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		return NetworkHandler.simpleNetworkWrapper.getPacketFrom(new MessageTEToClient(this));
-	}
-
 	/** A list of the data that gets sent from server to client over the network */
 	public Object[] getSyncDataToClient() {
-		return new Object[] { front, upgrades };
+		return ArrayUtils.addAll(super.getSyncDataToClient(), new Object[] { upgrades });
 	}
 
-	/** A list of the data that gets sent from client to server over the network */
-	public Object[] getSyncDataToServer() {
-		return null;
-	}
-
-	public void handlePacketDataFromServer(byte orientation, int[] upgrades) {
-		front = orientation;
+	public void handlePacketDataFromServer(int[] upgrades) {
 		this.upgrades = upgrades;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-	}
-
-	/** Get the current (x, y, z) coordinates of this machine in the form of a {@link infinitealloys.util.Point Point} */
-	public Point coords() {
-		return new Point(xCoord, yCoord, zCoord);
 	}
 
 	@Override

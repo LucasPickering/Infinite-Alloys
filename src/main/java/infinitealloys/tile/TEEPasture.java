@@ -34,17 +34,12 @@ public class TEEPasture extends TileEntityElectric {
 	private int trapRange;
 	private int repelRange;
 
-	public TEEPasture(byte front) {
-		this();
-		this.front = front;
-	}
-
 	public TEEPasture() {
 		super(1);
 		baseRKPerTick = -4;
 		ticksToProcess = 0;
 	}
-
+	
 	@Override
 	public EnumMachine getEnumMachine() {
 		return EnumMachine.PASTURE;

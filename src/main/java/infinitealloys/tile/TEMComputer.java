@@ -27,11 +27,6 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 	/** False until the first call of {@link #updateEntity()} */
 	private boolean initialized;
 
-	public TEMComputer(byte front) {
-		this();
-		this.front = front;
-	}
-
 	public TEMComputer() {
 		super(1);
 	}

@@ -1,5 +1,7 @@
 package infinitealloys.client.gui;
 
+import java.text.DecimalFormat;
+import org.lwjgl.opengl.GL11;
 import infinitealloys.client.gui.GuiMachine.ColoredLine;
 import infinitealloys.tile.TileEntitySummoner;
 import infinitealloys.util.Funcs;
@@ -10,9 +12,9 @@ import net.minecraft.util.ResourceLocation;
 public class GuiSummoner extends GuiScreen {
 
 	private final int WIDTH = 122;
-	private final int HEIGHT = 49;
-	private final int XP_BAR_X = 6;
-	private final int XP_BAR_Y = 6;
+	private final int HEIGHT = 73;
+	private final int XP_BAR_X = 7;
+	private final int XP_BAR_Y = 31;
 
 	/** The background texture */
 	private ResourceLocation background = Funcs.getGuiTexture("summoner");
@@ -34,17 +36,30 @@ public class GuiSummoner extends GuiScreen {
 		super.initGui();
 		topLeft.setLocation((width - WIDTH) / 2, (height - HEIGHT) / 2);
 		buttonList.add(new GuiButton(0, width - 20, 0, 20, 20, "?")); // The button to enable/disable help
-		buttonList.add(new GuiButton(1, topLeft.x, topLeft.y, 60, 20, "Add XP")); // The button to add XP to the machine
+		buttonList.add(new GuiButton(1, topLeft.x + 31, topLeft.y + 7, 60, 20, "Add XP")); // The button to add XP to the machine
 	}
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTick) {
 		Funcs.bindTexture(background);
+		GL11.glDisable(GL11.GL_LIGHTING);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
 		drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, WIDTH, HEIGHT);
 		super.drawScreen(mouseX, mouseY, partialTick);
 
-		drawTexturedModalRect(XP_BAR_X, XP_BAR_Y, GuiMachine.PROGRESS_BAR.x, GuiMachine.PROGRESS_BAR.y, (int)tes.getStoredXPScaled(GuiMachine.PROGRESS_BAR.width), GuiMachine.PROGRESS_BAR.height);
 		Funcs.bindTexture(GuiMachine.extraIcons);
+		// Draw the XP bar
+		drawTexturedModalRect(topLeft.x + XP_BAR_X, topLeft.y + XP_BAR_Y, GuiMachine.PROGRESS_BAR.x, GuiMachine.PROGRESS_BAR.y,
+				(int)((float)tes.getXPTowardsNextLevel() / (float)tes.getXPIntervalForNextLevel() * GuiMachine.PROGRESS_BAR.width), GuiMachine.PROGRESS_BAR.height);
+
+		// Draw the stored XP info if help is not enabled and the mouse is over the XP bar
+		if(!helpEnabled && Funcs.mouseInZone(mouseX, mouseY, topLeft.x + XP_BAR_X, topLeft.y + XP_BAR_Y, GuiMachine.PROGRESS_BAR.width, GuiMachine.PROGRESS_BAR.height)) {
+			// Draw all the information
+			drawTextBox(mouseX, mouseY, new ColoredLine(tes.getXPTowardsNextLevel() + "/" + tes.getXPIntervalForNextLevel() + " XP", 0xffffff),
+					new ColoredLine(Funcs.getLoc("general.need", "/ ") + tes.getXPNeededForNextLevel() + " XP", 0xffffff));
+		}
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
 	}
 
 	protected void drawTextBox(int x, int y, ColoredLine... lines) {
@@ -83,6 +98,9 @@ public class GuiSummoner extends GuiScreen {
 		switch(button.id) {
 			case 0: // Help button
 				helpEnabled = !helpEnabled;
+				break;
+			case 1:
+				tes.addLevel(mc.thePlayer);
 				break;
 		}
 	}

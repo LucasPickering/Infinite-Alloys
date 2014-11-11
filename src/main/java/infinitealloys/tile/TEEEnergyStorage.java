@@ -35,11 +35,6 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 	/** False until the first call of {@link #updateEntity()} */
 	private boolean initialized;
 
-	public TEEEnergyStorage(byte front) {
-		this();
-		this.front = front;
-	}
-
 	public TEEEnergyStorage() {
 		super(10);
 		baseRKPerTick = 1;

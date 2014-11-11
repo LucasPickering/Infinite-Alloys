@@ -128,7 +128,7 @@ public class Funcs {
 	public static TileEntity getTileEntity(World world, Point p) {
 		return world.getTileEntity(p.x, p.y, p.z);
 	}
-
+	
 	/** Send a packet over the network to the server */
 	public static void sendPacketToServer(IMessage message) {
 		NetworkHandler.simpleNetworkWrapper.sendToServer(message);

@@ -3,8 +3,9 @@ package infinitealloys.network;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEXray;
+import infinitealloys.tile.TileEntityIA;
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.util.Consts;
+import infinitealloys.tile.TileEntitySummoner;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import io.netty.buffer.ByteBuf;
@@ -21,13 +22,13 @@ public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToS
 
 	public MessageTEToServer() {}
 
-	public MessageTEToServer(TileEntityMachine tem) {
-		machine = tem.coords();
+	public MessageTEToServer(TileEntityIA teia) {
+		machine = teia.coords();
 
-		if(tem.getWorldObj().isRemote)
-			data = tem.getSyncDataToServer();
+		if(teia.getWorldObj().isRemote)
+			data = teia.getSyncDataToServer();
 		else
-			data = tem.getSyncDataToClient();
+			data = teia.getSyncDataToClient();
 	}
 
 	@Override
@@ -68,6 +69,10 @@ public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToS
 					((TEEPasture)te).handlePacketData(mobActions);
 					break;
 			}
+		}
+		else if(te instanceof TileEntitySummoner) {
+			int storedXP = bytes.readInt();
+			((TileEntitySummoner)te).handlePacketData(storedXP);
 		}
 
 		return null;

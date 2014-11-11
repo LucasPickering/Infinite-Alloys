@@ -118,7 +118,7 @@ public class BlockMachine extends BlockContainer {
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemstack) {
 		TileEntityMachine tem = (TileEntityMachine)world.getTileEntity(x, y, z);
 		if(tem != null) {
-			tem.front = Funcs.yawToNumSide(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
+			tem.orientation = Funcs.yawToNumSide(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
 			if(itemstack.hasTagCompound())
 				tem.loadNBTData(itemstack.getTagCompound());
 		}

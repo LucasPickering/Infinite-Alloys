@@ -29,11 +29,6 @@ public class TEEXray extends TileEntityElectric {
 	/** Should searching continue, or is it complete. Set this to true to begin a search. */
 	public boolean shouldSearch;
 
-	public TEEXray(byte front) {
-		this();
-		this.front = front;
-	}
-
 	public TEEXray() {
 		super(2);
 		stackLimit = 1;

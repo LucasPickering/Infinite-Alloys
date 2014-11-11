@@ -5,7 +5,9 @@ import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TileEntityElectric;
+import infinitealloys.tile.TileEntityIA;
 import infinitealloys.tile.TileEntityMachine;
+import infinitealloys.tile.TileEntitySummoner;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
@@ -24,13 +26,13 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 
 	public MessageTEToClient() {}
 
-	public MessageTEToClient(TileEntityMachine tem) {
-		machine = tem.coords();
+	public MessageTEToClient(TileEntityIA teia) {
+		machine = teia.coords();
 
-		if(tem.getWorldObj().isRemote)
-			data = tem.getSyncDataToServer();
+		if(teia.getWorldObj().isRemote)
+			data = teia.getSyncDataToServer();
 		else
-			data = tem.getSyncDataToClient();
+			data = teia.getSyncDataToClient();
 	}
 
 	@Override
@@ -52,44 +54,52 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 
 		TileEntity te = Funcs.getTileEntity(Minecraft.getMinecraft().theWorld, machine);
 
-		if(te instanceof TileEntityMachine) {
+		if(te instanceof TileEntityIA) {
 			byte orientation = bytes.readByte();
-			int[] upgrades = new int[Consts.UPGRADE_TYPE_COUNT];
-			for(int i = 0; i < upgrades.length; i++)
-				upgrades[i] = bytes.readInt();
-			((TileEntityMachine)te).handlePacketDataFromServer(orientation, upgrades);
+			((TileEntityIA)te).handlePacketDataFromServer(orientation);
 
-			if(te instanceof TileEntityElectric) {
-				int processProgress = bytes.readInt();
-				((TileEntityElectric)te).handlePacketDataFromServer(processProgress);
+			if(te instanceof TileEntityMachine) {
+				int[] upgrades = new int[Consts.UPGRADE_TYPE_COUNT];
+				for(int i = 0; i < upgrades.length; i++)
+					upgrades[i] = bytes.readInt();
+				((TileEntityMachine)te).handlePacketDataFromServer(upgrades);
 
-				switch(((TileEntityElectric)te).getEnumMachine()) {
-					case METAL_FORGE:
-						byte recipeAlloyID = bytes.readByte();
-						((TEEMetalForge)te).handlePacketDataFromServer(recipeAlloyID);
-						break;
+				if(te instanceof TileEntityElectric) {
+					int processProgress = bytes.readInt();
+					((TileEntityElectric)te).handlePacketDataFromServer(processProgress);
 
-					case XRAY:
-						int detectedBlocksSize = bytes.readInt();
-						Point[] detectedBlocks = new Point[detectedBlocksSize];
-						for(int i = 0; i < detectedBlocksSize; i++)
-							detectedBlocks[i] = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
-						((TEEXray)te).handlePacketDataFromServer(detectedBlocks);
-						break;
+					switch(((TileEntityElectric)te).getEnumMachine()) {
+						case METAL_FORGE:
+							byte recipeAlloyID = bytes.readByte();
+							((TEEMetalForge)te).handlePacketDataFromServer(recipeAlloyID);
+							break;
 
-					case PASTURE:
-						byte[] mobActions = new byte[TEEPasture.mobClasses.length];
-						for(int i = 0; i < mobActions.length; i++)
-							mobActions[i] = bytes.readByte();
-						((TEEPasture)te).handlePacketData(mobActions);
-						break;
+						case XRAY:
+							int detectedBlocksSize = bytes.readInt();
+							Point[] detectedBlocks = new Point[detectedBlocksSize];
+							for(int i = 0; i < detectedBlocksSize; i++)
+								detectedBlocks[i] = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+							((TEEXray)te).handlePacketDataFromServer(detectedBlocks);
+							break;
 
-					case ENERGY_STORAGE:
-						int currentRK = bytes.readInt();
-						int baseRKPerTick = bytes.readInt();
-						((TEEEnergyStorage)te).handlePacketDataFromServer(currentRK, baseRKPerTick);
-						break;
+						case PASTURE:
+							byte[] mobActions = new byte[TEEPasture.mobClasses.length];
+							for(int i = 0; i < mobActions.length; i++)
+								mobActions[i] = bytes.readByte();
+							((TEEPasture)te).handlePacketData(mobActions);
+							break;
+
+						case ENERGY_STORAGE:
+							int currentRK = bytes.readInt();
+							int baseRKPerTick = bytes.readInt();
+							((TEEEnergyStorage)te).handlePacketDataFromServer(currentRK, baseRKPerTick);
+							break;
+					}
 				}
+			}
+			else if(te instanceof TileEntitySummoner) {
+				int storedXP = bytes.readInt();
+				((TileEntitySummoner)te).handlePacketData(storedXP);
 			}
 		}
 
