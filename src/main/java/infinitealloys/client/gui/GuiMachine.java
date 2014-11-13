@@ -148,14 +148,14 @@ public abstract class GuiMachine extends GuiContainer {
 			Point[] clients = tec.getClients();
 			// For each client
 			for(int i = 0; i < clients.length; i++) {
-				machineTabs.add(new GuiMachineTab(mc, itemRender, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityElectric)Funcs.getTileEntity(mc.theWorld, clients[i]),
-						i / 5 == 0, clients[i].equals(tem.coords())));
+				machineTabs.add(new GuiMachineTab(mc, itemRender, i / 5 * 197 - 24, i % 5 * 25 + 36, (TileEntityMachine)Funcs.getTileEntity(mc.theWorld, clients[i]),
+						i < 5, clients[i].equals(tem.coords())));
 				machineTabs.get(i).drawButton();
 
 				// If the mouse is over this client's tab, draw a text box with its name and coords
 				if(Funcs.mouseInZone(mouseX, mouseY, topLeft.x + machineTabs.get(i).xPos, topLeft.y + machineTabs.get(i).yPos, machineTabs.get(i).width, machineTabs.get(i).height)) {
 					// @formatter:off
-					new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y, 	Funcs.getLoc("tile.ia" + machineTabs.get(i).tem.getEnumMachine().name + ".name"), 
+					new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y, Funcs.getLoc("tile.ia" + machineTabs.get(i).tem.getEnumMachine().name + ".name"), 
 																							machineTabs.get(i).tem.coords().toString());
 					// @formatter:on
 				}

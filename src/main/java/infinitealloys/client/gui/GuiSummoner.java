@@ -110,4 +110,9 @@ public class GuiSummoner extends GuiScreen {
 				break;
 		}
 	}
+
+	@Override
+	public boolean doesGuiPauseGame() {
+		return false;
+	}
 }
