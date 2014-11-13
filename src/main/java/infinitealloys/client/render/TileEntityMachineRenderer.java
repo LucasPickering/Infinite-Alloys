@@ -1,4 +1,4 @@
-package infinitealloys.client.render.block;
+package infinitealloys.client.render;
 
 import infinitealloys.util.Consts;
 import net.minecraft.client.Minecraft;
@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-public abstract class TileEntityMachineRenderer extends TileEntitySpecialRenderer {
+public class TileEntityMachineRenderer extends TileEntitySpecialRenderer {
 
 	private final String name;
 	private final ModelBase model;

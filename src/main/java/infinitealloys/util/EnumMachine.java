@@ -1,5 +1,6 @@
 package infinitealloys.util;
 
+import java.lang.reflect.InvocationTargetException;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.client.gui.GuiComputer;
 import infinitealloys.client.gui.GuiEnergyStorage;
@@ -7,12 +8,12 @@ import infinitealloys.client.gui.GuiMachine;
 import infinitealloys.client.gui.GuiMetalForge;
 import infinitealloys.client.gui.GuiPasture;
 import infinitealloys.client.gui.GuiXray;
-import infinitealloys.client.render.block.TileEntityComputerRenderer;
-import infinitealloys.client.render.block.TileEntityEnergyStorageRenderer;
-import infinitealloys.client.render.block.TileEntityMachineRenderer;
-import infinitealloys.client.render.block.TileEntityMetalForgeRenderer;
-import infinitealloys.client.render.block.TileEntityPastureRenderer;
-import infinitealloys.client.render.block.TileEntityXrayRenderer;
+import infinitealloys.client.model.block.ModelComputer;
+import infinitealloys.client.model.block.ModelEnergyStorage;
+import infinitealloys.client.model.block.ModelMetalForge;
+import infinitealloys.client.model.block.ModelPasture;
+import infinitealloys.client.model.block.ModelXray;
+import infinitealloys.client.render.TileEntityMachineRenderer;
 import infinitealloys.inventory.ContainerComputer;
 import infinitealloys.inventory.ContainerEnergyStorage;
 import infinitealloys.inventory.ContainerMachine;
@@ -25,6 +26,7 @@ import infinitealloys.tile.TEEPasture;
 import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityMachine;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -33,28 +35,28 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public enum EnumMachine {
 
-	COMPUTER("Computer", TEMComputer.class, ContainerComputer.class, GuiComputer.class, TileEntityComputerRenderer.class),
-	METAL_FORGE("MetalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class, TileEntityMetalForgeRenderer.class),
-	XRAY("Xray", TEEXray.class, ContainerXray.class, GuiXray.class, TileEntityXrayRenderer.class),
-	PASTURE("Pasture", TEEPasture.class, ContainerPasture.class, GuiPasture.class, TileEntityPastureRenderer.class),
-	ENERGY_STORAGE("EnergyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class, TileEntityEnergyStorageRenderer.class, "currentRK");
+	COMPUTER("Computer", TEMComputer.class, ContainerComputer.class, GuiComputer.class, ModelComputer.class),
+	METAL_FORGE("MetalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class, ModelMetalForge.class),
+	XRAY("Xray", TEEXray.class, ContainerXray.class, GuiXray.class, ModelXray.class),
+	PASTURE("Pasture", TEEPasture.class, ContainerPasture.class, GuiPasture.class, ModelPasture.class),
+	ENERGY_STORAGE("EnergyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class, ModelEnergyStorage.class, "currentRK");
 
 	public final String name;
 	public final Class temClass;
-	private final Class containerClass;
-	private final Class guiClass;
-	private final Class temrClass;
+	public final Class containerClass;
+	public final Class guiClass;
+	public final Class modelClass;
 
 	/** An array of the names of fields in the TE that should be saved when the block is destroyed and restored when it is placed back down, e.g. currentRK for the ESU. */
 	public final String[] persistentFields;
 
 	private EnumMachine(String name, Class<? extends TileEntityMachine> temClass, Class<? extends ContainerMachine> containerClass, Class<? extends GuiMachine> guiClass,
-			Class<? extends TileEntityMachineRenderer> temrClass, String... persistentFields) {
+			Class<? extends ModelBase> modelClass, String... persistentFields) {
 		this.name = name;
 		this.temClass = temClass;
 		this.containerClass = containerClass;
 		this.guiClass = guiClass;
-		this.temrClass = temrClass;
+		this.modelClass = modelClass;
 		this.persistentFields = persistentFields;
 	}
 
@@ -78,7 +80,7 @@ public enum EnumMachine {
 
 	public TileEntityMachineRenderer getTEMR() {
 		try {
-			return (TileEntityMachineRenderer)temrClass.getConstructor().newInstance();
+			return new TileEntityMachineRenderer(name, (ModelBase)modelClass.newInstance());
 		}catch(Exception e) {
 			e.printStackTrace();
 			return null;

@@ -1,4 +1,4 @@
-package infinitealloys.client.render.entity;
+package infinitealloys.client.render;
 
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;

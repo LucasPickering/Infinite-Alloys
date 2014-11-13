@@ -30,7 +30,7 @@ public class TEIASummoner extends TileEntityIA {
 	public void spawnBoss(EnumBoss boss) {
 		if(!worldObj.isRemote && boss != null) {
 			try {
-				EntityLiving entityliving = (EntityLiving)boss.entityClass.getConstructor().newInstance();
+				EntityLiving entityliving = (EntityLiving)boss.entityClass.newInstance();
 				entityliving.setLocationAndAngles(xCoord, yCoord + 1, zCoord, 0F, 0F);
 				entityliving.rotationYawHead = entityliving.rotationYaw;
 				entityliving.renderYawOffset = entityliving.rotationYaw;
