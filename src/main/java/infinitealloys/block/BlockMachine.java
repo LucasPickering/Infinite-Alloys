@@ -91,7 +91,7 @@ public class BlockMachine extends BlockContainer {
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
 		try {
-			return (TileEntity)EnumMachine.values()[metadata].getTEMClass().newInstance();
+			return (TileEntity)EnumMachine.values()[metadata].temClass.newInstance();
 		}catch(Exception e) {
 			e.printStackTrace();
 			return null;

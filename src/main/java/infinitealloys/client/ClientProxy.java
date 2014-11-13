@@ -20,7 +20,7 @@ public class ClientProxy extends CommonProxy {
 	public void initRendering() {
 		gfxHandler.renderID = RenderingRegistry.getNextAvailableRenderId();
 		for(EnumMachine machine : EnumMachine.values())
-			ClientRegistry.bindTileEntitySpecialRenderer(machine.getTEMClass(), machine.getTEMR());
+			ClientRegistry.bindTileEntitySpecialRenderer(machine.temClass, machine.getTEMR());
 		RenderingRegistry.registerBlockHandler(gfxHandler);
 		try {
 			for(EnumBoss boss : EnumBoss.values())

@@ -141,7 +141,7 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
 
 	@Override
 	public String getInventoryName() {
-		return getEnumMachine().getName();
+		return getEnumMachine().name;
 	}
 
 	@Override

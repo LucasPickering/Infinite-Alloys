@@ -39,14 +39,14 @@ public enum EnumMachine {
 	PASTURE("Pasture", TEEPasture.class, ContainerPasture.class, GuiPasture.class, TileEntityPastureRenderer.class),
 	ENERGY_STORAGE("EnergyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class, GuiEnergyStorage.class, TileEntityEnergyStorageRenderer.class, "currentRK");
 
-	private String name;
-	private Class temClass;
-	private Class containerClass;
-	private Class guiClass;
-	private Class temrClass;
+	public final String name;
+	public final Class temClass;
+	private final Class containerClass;
+	private final Class guiClass;
+	private final Class temrClass;
 
 	/** An array of the names of fields in the TE that should be saved when the block is destroyed and restored when it is placed back down, e.g. currentRK for the ESU. */
-	private String[] persistentFields;
+	public final String[] persistentFields;
 
 	private EnumMachine(String name, Class<? extends TileEntityMachine> temClass, Class<? extends ContainerMachine> containerClass, Class<? extends GuiMachine> guiClass,
 			Class<? extends TileEntityMachineRenderer> temrClass, String... persistentFields) {
@@ -56,14 +56,6 @@ public enum EnumMachine {
 		this.guiClass = guiClass;
 		this.temrClass = temrClass;
 		this.persistentFields = persistentFields;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public Class getTEMClass() {
-		return temClass;
 	}
 
 	public ContainerMachine getContainer(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
@@ -91,10 +83,6 @@ public enum EnumMachine {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	public String[] getPersistentFields() {
-		return persistentFields;
 	}
 
 	public boolean stackValidForSlot(int index, ItemStack itemstack) {

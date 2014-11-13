@@ -10,7 +10,7 @@ public class GuiComputer extends GuiMachine {
 	}
 
 	@Override
-	protected ColoredLine[] getNetworkStatuses() {
+	protected ColoredText[] getNetworkStatuses() {
 		return null;
 	}
 }

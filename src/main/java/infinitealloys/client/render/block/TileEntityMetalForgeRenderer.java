@@ -6,6 +6,6 @@ import infinitealloys.util.EnumMachine;
 public class TileEntityMetalForgeRenderer extends TileEntityMachineRenderer {
 
 	public TileEntityMetalForgeRenderer() {
-		super(EnumMachine.METAL_FORGE.getName(), new ModelMetalForge());
+		super(EnumMachine.METAL_FORGE.name, new ModelMetalForge());
 	}
 }

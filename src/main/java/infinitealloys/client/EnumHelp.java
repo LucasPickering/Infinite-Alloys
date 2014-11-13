@@ -49,4 +49,8 @@ public enum EnumHelp {
 	public static EnumHelp[] getNetworkWandBoxes() {
 		return new EnumHelp[] { EnumHelp.IW_ADD_SELECTED, EnumHelp.IW_ADD_TO_WAND, EnumHelp.IW_LIST, EnumHelp.IW_REMOVE };
 	}
+
+	public static EnumHelp[] getSummonerBoxes() {
+		return new EnumHelp[] {};
+	}
 }

@@ -156,7 +156,7 @@ public class CommonProxy {
 
 	public void initTileEntities() {
 		for(EnumMachine machine : EnumMachine.values())
-			GameRegistry.registerTileEntity(machine.getTEMClass(), machine.getName());
+			GameRegistry.registerTileEntity(machine.temClass, machine.name);
 		GameRegistry.registerTileEntity(TEIASummoner.class, "Summoner");
 
 		MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.coal_ore), 0, 1);

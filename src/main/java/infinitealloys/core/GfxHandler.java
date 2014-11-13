@@ -35,7 +35,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 	public GfxHandler() {
 		try {
 			for(int i = 0; i < temInstances.length; i++)
-				temInstances[i] = (TileEntityMachine)EnumMachine.values()[i].getTEMClass().getConstructor().newInstance();
+				temInstances[i] = (TileEntityMachine)EnumMachine.values()[i].temClass.getConstructor().newInstance();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

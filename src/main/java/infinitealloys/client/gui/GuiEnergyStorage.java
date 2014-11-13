@@ -29,7 +29,7 @@ public class GuiEnergyStorage extends GuiElectric {
 	}
 
 	@Override
-	protected ColoredLine[] getNetworkStatuses() {
+	protected ColoredText[] getNetworkStatuses() {
 		String status;
 		int color = 0x00ff00;
 
@@ -44,6 +44,6 @@ public class GuiEnergyStorage extends GuiElectric {
 		else
 			status = Funcs.getLoc("machine.network.hostedby") + " " + tees.energyHost;
 
-		return new ColoredLine[] { new ColoredLine(Funcs.getLoc("machine.network.energy") + ": " + status, color) };
+		return new ColoredText[] { new ColoredText(Funcs.getLoc("machine.network.energy") + ": " + status, color) };
 	}
 }

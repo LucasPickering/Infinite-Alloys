@@ -15,11 +15,6 @@ public class TEIASummoner extends TileEntityIA {
 
 	private int storedXP;
 
-	@Override
-	public void updateEntity() {
-		System.out.println(Funcs.getSideAsString() + ": " + storedXP);
-	}
-
 	/** Take a level of XP away from the given player and add it to this machine. This DOES NOT assume that the player has enough XP already.
 	 * Exactly one level is always taken from the player, but the amount of experience added varies by how many levels the player has because the higher levels require more experience. */
 	public void addLevel(EntityPlayer player) {

@@ -26,7 +26,7 @@ public class ItemBlockMachine extends ItemBlock {
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack) {
 		if(itemstack.getItemDamage() < Consts.MACHINE_COUNT)
-			return "tile.ia" + EnumMachine.values()[itemstack.getItemDamage()].getName();
+			return "tile.ia" + EnumMachine.values()[itemstack.getItemDamage()].name;
 		return super.getUnlocalizedName(itemstack);
 	}
 
@@ -35,7 +35,7 @@ public class ItemBlockMachine extends ItemBlock {
 	public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
 		// If the item has stored data, display it
 		if(itemstack.hasTagCompound())
-			for(String field : EnumMachine.values()[itemstack.getItemDamage()].getPersistentFields())
+			for(String field : EnumMachine.values()[itemstack.getItemDamage()].persistentFields)
 				list.add(Funcs.getLoc("machine.fields." + field) + ": " + Funcs.abbreviateNum(itemstack.getTagCompound().getInteger(field)));
 	}
 }

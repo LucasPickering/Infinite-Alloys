@@ -6,6 +6,6 @@ import infinitealloys.util.EnumMachine;
 public class TileEntityPastureRenderer extends TileEntityMachineRenderer {
 
 	public TileEntityPastureRenderer() {
-		super(EnumMachine.PASTURE.getName(), new ModelPasture());
+		super(EnumMachine.PASTURE.name, new ModelPasture());
 	}
 }
