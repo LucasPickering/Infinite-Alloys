@@ -61,6 +61,7 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
 
 	@Override
 	public void updateEntity() {
+		System.out.println(Funcs.getSideAsString() + ": " + worldObj.getTileEntity(xCoord, yCoord - 1, zCoord).blockMetadata);
 		// Check for upgrades in the upgrade inventory slot. If there is one, remove it from the slot and add it to the machine.
 		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
 			upgrades[((ItemUpgrade)inventoryStacks[upgradeSlotIndex].getItem()).upgradeType]++; // Increment the element in the upgrades array that corresponds to

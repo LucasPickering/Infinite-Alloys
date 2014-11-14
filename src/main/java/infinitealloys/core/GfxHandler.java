@@ -34,8 +34,10 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
 	public GfxHandler() {
 		try {
-			for(int i = 0; i < temInstances.length; i++)
+			for(int i = 0; i < temInstances.length; i++) {
 				temInstances[i] = (TileEntityMachine)EnumMachine.values()[i].temClass.newInstance();
+				temInstances[i].orientation = 3;
+			}
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -66,10 +68,8 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
 		if(block instanceof BlockMachine && metadata < temInstances.length) {
-			GL11.glRotatef(-90F, 0F, 1F, 0F);
 			GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 			TileEntityRendererDispatcher.instance.renderTileEntityAt(temInstances[metadata], 0, 0, 0, 0);
-			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		}
 		else {
 			Tessellator tessellator = Tessellator.instance;

@@ -51,24 +51,6 @@ public class Funcs {
 		return finalKey;
 	}
 
-	/** Convert an entity's yaw to a Vanilla MC block face number
-	 *
-	 * @param int a number of {0, 1, 2, 3} that represents a compass direction */
-	public static byte yawToNumSide(int rotation) {
-		switch(rotation) {
-			case 0:
-				return Consts.SOUTH;
-			case 1:
-				return Consts.WEST;
-			case 2:
-				return Consts.NORTH;
-			case 3:
-				return Consts.EAST;
-			default:
-				return -1;
-		}
-	}
-
 	/** Get the current side (Client/Server) as a String. Used solely for debug printing.
 	 * 
 	 * @return "Client" or "Server" */
