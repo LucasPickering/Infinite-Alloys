@@ -93,8 +93,8 @@ public class CommonProxy {
 	}
 
 	public void initRecipes() {
-		ItemStack machineComponent = new ItemStack(IAItems.multi, 1, 0);
-		ItemStack upgradeComponent = new ItemStack(IAItems.multi, 1, 1);
+		final ItemStack machineComponent = new ItemStack(IAItems.multi, 1, 0);
+		final ItemStack upgradeComponent = new ItemStack(IAItems.multi, 1, 1);
 
 		ItemStack[] alloys = new ItemStack[Consts.VALID_ALLOY_COUNT];
 		for(int i = 0; i < alloys.length; i++)

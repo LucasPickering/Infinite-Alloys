@@ -19,9 +19,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import org.apache.commons.lang3.ArrayUtils;
 
-/** A base, abstract class for Tile Entities that can receive upgrades.
+/** A base class for Tile Entities that have an inventory and can receive upgrades.
  * TileEntityElectric blocks are a sub-type of this. Often referred to as TEMs or machines.
  *
+ * @see TileEntityIA
  * @see TileEntityElectric */
 public abstract class TileEntityMachine extends TileEntityIA implements IInventory {
 
@@ -61,7 +62,6 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
 
 	@Override
 	public void updateEntity() {
-		System.out.println(Funcs.getSideAsString() + ": " + worldObj.getTileEntity(xCoord, yCoord - 1, zCoord).blockMetadata);
 		// Check for upgrades in the upgrade inventory slot. If there is one, remove it from the slot and add it to the machine.
 		if(inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
 			upgrades[((ItemUpgrade)inventoryStacks[upgradeSlotIndex].getItem()).upgradeType]++; // Increment the element in the upgrades array that corresponds to

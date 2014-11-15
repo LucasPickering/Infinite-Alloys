@@ -22,7 +22,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 
-/** A base, abstract class for Tile Entities, with methods for networking and NBT-data saving */
+/** A base class for Tile Entities with methods for networking and NBT-data saving */
 public abstract class TileEntityIA extends TileEntity {
 
 	/** A number from 0-3 to represent which side of this block gets the front texture. This should be set in the Block class, when the block is placed.
@@ -34,7 +34,7 @@ public abstract class TileEntityIA extends TileEntity {
 
 	@Override
 	public void updateEntity() {
-//		System.out.println(Funcs.getSideAsString() + ": " + worldObj.getTileEntity(xCoord, yCoord - 1, zCoord).blockMetadata);
+		System.out.println(Funcs.getSideAsString() + ": " + worldObj.getTileEntity(xCoord, yCoord - 1, zCoord).blockMetadata);
 	}
 
 	/** Called when the block is first placed to restore persistent data from before it was destroyed. This can be data such as the stored RK in an ESU */

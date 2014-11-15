@@ -3,7 +3,7 @@ package infinitealloys.block;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.tile.TEIASummoner;
 import infinitealloys.util.Consts;
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockSummoner extends Block {
+public class BlockSummoner extends BlockContainer {
 
 	public BlockSummoner() {
 		super(Material.rock);
@@ -46,12 +46,7 @@ public class BlockSummoner extends Block {
 	}
 
 	@Override
-	public boolean hasTileEntity(int metadata) {
-		return true;
-	}
-
-	@Override
-	public TileEntity createTileEntity(World world, int metadata) {
+	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
 		return new TEIASummoner();
 	}
 }
