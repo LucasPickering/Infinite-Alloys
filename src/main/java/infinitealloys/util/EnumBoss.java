@@ -1,18 +1,7 @@
 package infinitealloys.util;
 
-import infinitealloys.client.model.entity.ModelBossBat;
-import infinitealloys.client.model.entity.ModelBossBlaze;
-import infinitealloys.client.model.entity.ModelBossCreeper;
-import infinitealloys.client.model.entity.ModelBossSkeleton;
-import infinitealloys.client.model.entity.ModelBossSteve;
-import infinitealloys.client.model.entity.ModelBossZombie;
-import infinitealloys.entity.EntityBossBat;
-import infinitealloys.entity.EntityBossBlaze;
-import infinitealloys.entity.EntityBossCreeper;
-import infinitealloys.entity.EntityBossSkeleton;
-import infinitealloys.entity.EntityBossSteve;
-import infinitealloys.entity.EntityBossZombie;
-import infinitealloys.entity.EntityIABoss;
+import infinitealloys.client.model.entity.*;
+import infinitealloys.entity.*;
 import net.minecraft.client.model.ModelBase;
 
 public enum EnumBoss {

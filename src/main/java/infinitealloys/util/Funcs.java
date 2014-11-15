@@ -52,7 +52,7 @@ public class Funcs {
 	}
 
 	/** Get the current side (Client/Server) as a String. Used solely for debug printing.
-	 * 
+	 *
 	 * @return "Client" or "Server" */
 	public static String getSideAsString() {
 		return FMLCommonHandler.instance().getEffectiveSide().isClient() ? "Client" : "Server";
@@ -93,18 +93,18 @@ public class Funcs {
 	public static int reduceAlloy(int alloy) {
 		int gcf = 1;
 		factors:
-		for(int i = 2; i < Consts.ALLOY_RADIX; i++) { // Iterate over every integer in [2, Consts.ALLOY_RADIX)
-			for(int j = 0; j < Consts.METAL_COUNT; j++) { // Iterate over every digit in the number
-				final int metalAmt = intAtPos(alloy, Consts.ALLOY_RADIX, j);
-				if(metalAmt == 0)
-					continue; // Go to the next metal if this one is 0
-				else if(i > metalAmt)
-					break factors; // Break the whole loop if the factors have exceeded one of the digits
-				else if(metalAmt % i != 0)
-					continue factors; // If i is not a factor of the digit of alloy at j, skip to the next factor
+			for(int i = 2; i < Consts.ALLOY_RADIX; i++) { // Iterate over every integer in [2, Consts.ALLOY_RADIX)
+				for(int j = 0; j < Consts.METAL_COUNT; j++) { // Iterate over every digit in the number
+					final int metalAmt = intAtPos(alloy, Consts.ALLOY_RADIX, j);
+					if(metalAmt == 0)
+						continue; // Go to the next metal if this one is 0
+					else if(i > metalAmt)
+						break factors; // Break the whole loop if the factors have exceeded one of the digits
+					else if(metalAmt % i != 0)
+						continue factors; // If i is not a factor of the digit of alloy at j, skip to the next factor
+				}
+				gcf = i;
 			}
-			gcf = i;
-		}
 		return alloy / gcf;
 	}
 

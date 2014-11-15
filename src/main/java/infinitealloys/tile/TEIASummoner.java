@@ -1,15 +1,11 @@
 package infinitealloys.tile;
 
-import org.apache.commons.lang3.ArrayUtils;
 import infinitealloys.util.EnumBoss;
-import infinitealloys.util.Funcs;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
+import org.apache.commons.lang3.ArrayUtils;
 import scala.actors.threadpool.Arrays;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class TEIASummoner extends TileEntityIA {
 
@@ -30,7 +26,7 @@ public class TEIASummoner extends TileEntityIA {
 	public void spawnBoss(EnumBoss boss) {
 		if(!worldObj.isRemote && boss != null) {
 			try {
-				EntityLiving entityliving = (EntityLiving)boss.entityClass.newInstance();
+				EntityLiving entityliving = boss.entityClass.newInstance();
 				entityliving.setLocationAndAngles(xCoord, yCoord + 1, zCoord, 0F, 0F);
 				entityliving.rotationYawHead = entityliving.rotationYaw;
 				entityliving.renderYawOffset = entityliving.rotationYaw;
@@ -52,7 +48,7 @@ public class TEIASummoner extends TileEntityIA {
 	}
 
 	/** Get the amount of XP accumulated since the last level was reached.
-	 * 
+	 *
 	 * @return e.g. if the last boss needed 60 XP total and storedXP is currently 75, return 25 */
 	public int getXPTowardsNextLevel() {
 		EnumBoss[] bosses = getUnlockedBosses();
@@ -62,7 +58,7 @@ public class TEIASummoner extends TileEntityIA {
 	}
 
 	/** Get the amount of XP needed to unlock the next boss, from how much XP is stored now.
-	 * 
+	 *
 	 * @return e.g. if the next boss needs 80 XP total, and storedXP is currently 75, return 5 */
 	public int getXPNeededForNextLevel() {
 		EnumBoss[] bosses = getUnlockedBosses();
@@ -72,7 +68,7 @@ public class TEIASummoner extends TileEntityIA {
 	}
 
 	/** Get the difference between the total XP required for the last level and the total XP required for this level.
-	 * 
+	 *
 	 * @return e.g. if the last boss needed 60 XP total and the next on needs 80 XP total, return 20 */
 	public int getXPIntervalForNextLevel() {
 		return getXPTowardsNextLevel() + getXPNeededForNextLevel();

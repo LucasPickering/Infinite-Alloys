@@ -1,10 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.item.IAItems;
-import infinitealloys.util.Consts;
-import infinitealloys.util.EnumMachine;
-import infinitealloys.util.MachineHelper;
-import infinitealloys.util.Point;
+import infinitealloys.util.*;
 import java.util.ArrayList;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;

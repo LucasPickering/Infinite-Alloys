@@ -1,10 +1,7 @@
 package infinitealloys.tile;
 
 import infinitealloys.item.IAItems;
-import infinitealloys.util.Consts;
-import infinitealloys.util.EnumAlloy;
-import infinitealloys.util.EnumMachine;
-import infinitealloys.util.MachineHelper;
+import infinitealloys.util.*;
 import java.util.ArrayList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -91,6 +88,7 @@ public class TEEMetalForge extends TileEntityElectric {
 		return new Object[] { recipeAlloyID };
 	}
 
+	@Override
 	public void handlePacketDataFromServer(byte recipeAlloyID) {
 		if(recipeAlloyID != this.recipeAlloyID)
 			recipeChanged = true;

@@ -1,11 +1,6 @@
 package infinitealloys.network;
 
-import infinitealloys.tile.TEEMetalForge;
-import infinitealloys.tile.TEEPasture;
-import infinitealloys.tile.TEEXray;
-import infinitealloys.tile.TileEntityIA;
-import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.tile.TEIASummoner;
+import infinitealloys.tile.*;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import io.netty.buffer.ByteBuf;

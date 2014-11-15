@@ -5,10 +5,7 @@ import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import java.util.ArrayList;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntitySheep;
@@ -26,7 +23,7 @@ public class TEEPasture extends TileEntityElectric {
 	public static final int MODE_REPEL = 2;
 	/** Classes for each animal/monster that is compatible with this machine */
 	public static final Class[] mobClasses = { EntityChicken.class, EntityCow.class, EntityCow.class, EntitySheep.class,
-			EntityCreeper.class, EntitySkeleton.class, EntitySpider.class, EntityZombie.class };
+		EntityCreeper.class, EntitySkeleton.class, EntitySpider.class, EntityZombie.class };
 
 	/** 0 is do nothing to the mob, 1 is attract the mob, 2 is repel the mob. The order can be seen in {@link #mobClasses mobClasses} */
 	public byte[] mobActions = new byte[mobClasses.length];
@@ -39,7 +36,7 @@ public class TEEPasture extends TileEntityElectric {
 		baseRKPerTick = -4;
 		ticksToProcess = 0;
 	}
-	
+
 	@Override
 	public EnumMachine getEnumMachine() {
 		return EnumMachine.PASTURE;

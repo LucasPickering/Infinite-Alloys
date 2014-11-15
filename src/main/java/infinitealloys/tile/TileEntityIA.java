@@ -1,24 +1,15 @@
 package infinitealloys.tile;
 
 import infinitealloys.block.IABlocks;
-import infinitealloys.item.IAItems;
-import infinitealloys.item.ItemUpgrade;
 import infinitealloys.network.MessageTEToClient;
 import infinitealloys.network.MessageTEToServer;
 import infinitealloys.network.NetworkHandler;
-import infinitealloys.util.Consts;
-import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 

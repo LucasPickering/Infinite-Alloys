@@ -6,7 +6,6 @@ import infinitealloys.tile.IHost;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import java.util.ArrayList;
 import java.util.List;

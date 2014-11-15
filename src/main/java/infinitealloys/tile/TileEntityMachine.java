@@ -2,13 +2,7 @@ package infinitealloys.tile;
 
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemUpgrade;
-import infinitealloys.network.MessageTEToClient;
-import infinitealloys.network.MessageTEToServer;
-import infinitealloys.network.NetworkHandler;
-import infinitealloys.util.Consts;
-import infinitealloys.util.EnumMachine;
-import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
+import infinitealloys.util.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +10,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.Packet;
 import org.apache.commons.lang3.ArrayUtils;
 
 /** A base class for Tile Entities that have an inventory and can receive upgrades.
@@ -82,6 +75,7 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
 	}
 
 	/** Called when the TE's block is destroyed. Ends network connections and drops items and upgrades */
+	@Override
 	public void onBlockDestroyed() {
 		super.onBlockDestroyed();
 
@@ -132,6 +126,7 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
 	}
 
 	/** A list of the data that gets sent from server to client over the network */
+	@Override
 	public Object[] getSyncDataToClient() {
 		return ArrayUtils.addAll(super.getSyncDataToClient(), new Object[] { upgrades });
 	}
