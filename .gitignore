@@ -9,4 +9,5 @@
 .project
 build.gradle
 gradlew*
+forge*
 *.txt
