@@ -92,11 +92,11 @@ public abstract class GuiMachine extends GuiContainer {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public void initGui() {
     super.initGui();
     topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
-    buttonList
-        .add(new GuiButton(0, width - 20, 0, 20, 20, "?")); // The button to enable/disable help
+    buttonList.add(new GuiButton(0, width - 20, 0, 20, 20, "?")); // The button to enable/disable help
   }
 
   @Override
@@ -107,8 +107,10 @@ public abstract class GuiMachine extends GuiContainer {
 
     // Draw the upgrade list if the mouse is over the upgrade slot and help is disabled
     Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
-    if (!helpEnabled && Funcs.mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x,
-                                          slot.yDisplayPosition + topLeft.y, 16, 16)) {
+    if (!helpEnabled && Funcs.mouseInZone(mouseX, mouseY,
+                                          slot.xDisplayPosition + topLeft.x,
+                                          slot.yDisplayPosition + topLeft.y,
+                                          16, 16)) {
       ArrayList<ColoredText> lines = new ArrayList<ColoredText>();
       lines.add(new ColoredText(Funcs.getLoc("general.upgrades"), 0xffffff));
 
@@ -169,11 +171,9 @@ public abstract class GuiMachine extends GuiContainer {
       if (Funcs
           .mouseInZone(mouseX, mouseY, topLeft.x + computerTab.xPos, topLeft.y + computerTab.yPos,
                        computerTab.width, computerTab.height)) {
-        // @formatter:off
         new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y,
-                       Funcs.getLoc("tile.ia" + computerTab.tem.getEnumMachine().name + ".name"),
+                       Funcs.getLoc("tile." + computerTab.tem.getEnumMachine().name + ".name"),
                        computerTab.tem.coords().toString()).draw();
-        // @formatter:on
       }
 
       Point[] clients = tec.getClients();
@@ -189,20 +189,17 @@ public abstract class GuiMachine extends GuiContainer {
         if (Funcs.mouseInZone(mouseX, mouseY, topLeft.x + machineTabs.get(i).xPos,
                               topLeft.y + machineTabs.get(i).yPos, machineTabs.get(i).width,
                               machineTabs.get(i).height)) {
-          // @formatter:off
           new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y, Funcs
-              .getLoc("tile.ia" + machineTabs.get(i).tem.getEnumMachine().name + ".name"),
+              .getLoc("tile" + machineTabs.get(i).tem.getEnumMachine().name + ".name"),
                          machineTabs.get(i).tem.coords().toString());
-          // @formatter:on
         }
       }
     }
 
     // Draw the help dialogue and shade the help zone if help is enabled and the mouse is over a help zone
     if (helpEnabled) {
-      EnumHelp
-          hoveredZone =
-          null; // The help zone that the mouse is over to render to dialogue later, null if mouse is not over a zone\
+      // The help zone that the mouse is over to render a dialog, null if mouse is not over a zone
+      EnumHelp hoveredZone = null;
       for (EnumHelp help : tem.getEnumMachine().getHelpBoxes()) {
         // Draw zone outline, add alpha to make the rectangles opaque
         drawRect(help.x, help.y, help.x + help.w, help.y + 1,
@@ -215,16 +212,18 @@ public abstract class GuiMachine extends GuiContainer {
                  0xff000000 + help.color); // Right side of outline box
 
         // Set hoveredZone to this zone if it hasn't been set already and the mouse is over this zone
-        if (hoveredZone == null && Funcs
-            .mouseInZone(mouseX, mouseY, topLeft.x + help.x, topLeft.y + help.y, help.w, help.h)) {
+        if (hoveredZone == null && Funcs.mouseInZone(mouseX, mouseY,
+                                                     topLeft.x + help.x, topLeft.y + help.y,
+                                                     help.w, help.h)) {
           hoveredZone = help;
         }
       }
 
       if (hoveredZone != null) {
         // Fill in the zone with an smaller 4th hex pair for less alpha
-        drawRect(hoveredZone.x, hoveredZone.y, hoveredZone.x + hoveredZone.w,
-                 hoveredZone.y + hoveredZone.h, 0x60000000 + hoveredZone.color);
+        drawRect(hoveredZone.x, hoveredZone.y,
+                 hoveredZone.x + hoveredZone.w, hoveredZone.y + hoveredZone.h,
+                 0x60000000 + hoveredZone.color);
         new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y,
                        helpText.get(hoveredZone.name)).draw(); // Draw text box with help info
       }
@@ -251,9 +250,10 @@ public abstract class GuiMachine extends GuiContainer {
     // Was the network tab of the controlling computer clicked? Go to that computer
     if (computerTab != null && computerTab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
       if (!tem.coords().equals(computerTab.tem.coords())) {
-        ((BlockMachine) world
-            .getBlock(computerTab.tem.xCoord, computerTab.tem.yCoord, computerTab.tem.zCoord))
-            .openGui(world, player, computerTab.tem);
+        ((BlockMachine) world.getBlock(computerTab.tem.xCoord,
+                                       computerTab.tem.yCoord,
+                                       computerTab.tem.zCoord)).openGui(world, player,
+                                                                        computerTab.tem);
         Funcs.sendPacketToServer(new MessageOpenGui(computerTab.tem.coords()));
       }
       return;
@@ -263,8 +263,9 @@ public abstract class GuiMachine extends GuiContainer {
     for (GuiMachineTab tab : machineTabs) {
       if (tab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
         if (!tem.coords().equals(tab.tem.coords())) {
-          ((BlockMachine) world.getBlock(tab.tem.xCoord, tab.tem.yCoord, tab.tem.zCoord))
-              .openGui(world, player, tab.tem);
+          ((BlockMachine) world.getBlock(tab.tem.xCoord,
+                                         tab.tem.yCoord,
+                                         tab.tem.zCoord)).openGui(world, player, tab.tem);
           Funcs.sendPacketToServer(new MessageOpenGui(tab.tem.coords()));
         }
         return;

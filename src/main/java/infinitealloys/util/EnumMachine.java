@@ -35,14 +35,15 @@ import infinitealloys.tile.TileEntityMachine;
 
 public enum EnumMachine {
 
-  COMPUTER("Computer", TEMComputer.class, ContainerComputer.class, GuiComputer.class,
-           ModelComputer.class),
-  METAL_FORGE("MetalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class,
-              ModelMetalForge.class),
-  XRAY("Xray", TEEXray.class, ContainerXray.class, GuiXray.class, ModelXray.class),
-  PASTURE("Pasture", TEEPasture.class, ContainerPasture.class, GuiPasture.class,
-          ModelPasture.class),
-  ENERGY_STORAGE("EnergyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class,
+  COMPUTER("computer", TEMComputer.class, ContainerComputer.class,
+           GuiComputer.class, ModelComputer.class),
+  METAL_FORGE("metalForge", TEEMetalForge.class, ContainerMetalForge.class,
+              GuiMetalForge.class, ModelMetalForge.class),
+  XRAY("xray", TEEXray.class, ContainerXray.class,
+       GuiXray.class, ModelXray.class),
+  PASTURE("pasture", TEEPasture.class, ContainerPasture.class,
+          GuiPasture.class, ModelPasture.class),
+  ENERGY_STORAGE("energyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class,
                  GuiEnergyStorage.class, ModelEnergyStorage.class, "currentRK");
 
   public final String name;
@@ -69,6 +70,7 @@ public enum EnumMachine {
     this.persistentFields = persistentFields;
   }
 
+  @SuppressWarnings("unchecked")
   public ContainerMachine getContainer(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
     try {
       return (ContainerMachine) containerClass
@@ -80,6 +82,7 @@ public enum EnumMachine {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public GuiMachine getGui(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
     try {
       return (GuiMachine) guiClass.getConstructor(InventoryPlayer.class, temClass)

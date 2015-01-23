@@ -15,7 +15,7 @@ public class ItemUpgradeAlloy extends ItemUpgrade {
   private IIcon upgradeIcon;
 
   public ItemUpgradeAlloy() {
-    super("AlloyUpgrade", Consts.ALLOY_UPG, Consts.VALID_ALLOY_COUNT);
+    super("alloyUpgrade", Consts.ALLOY_UPG, Consts.VALID_ALLOY_COUNT);
   }
 
   @Override

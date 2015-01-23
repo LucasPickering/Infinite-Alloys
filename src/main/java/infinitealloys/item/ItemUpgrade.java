@@ -65,7 +65,7 @@ public abstract class ItemUpgrade extends ItemIA {
   @Override
   public String getUnlocalizedName(ItemStack itemstack) {
     if (itemstack.getItemDamage() < tiers) {
-      return "item.ia" + name + (itemstack.getItemDamage() + 1);
+      return "item." + name + (itemstack.getItemDamage() + 1);
     }
     return super.getUnlocalizedName(itemstack);
   }

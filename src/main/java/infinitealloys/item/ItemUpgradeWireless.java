@@ -5,6 +5,6 @@ import infinitealloys.util.Consts;
 public class ItemUpgradeWireless extends ItemUpgrade {
 
   public ItemUpgradeWireless() {
-    super("Wireless", Consts.WIRELESS, 1);
+    super("wireless", Consts.WIRELESS, 1);
   }
 }

@@ -8,7 +8,7 @@ public class Consts {
   /**
    * The names of each item that has damage values
    */
-  public static final String[] MULTI_ITEM_NAMES = {"MachineComponent", "UpgradeComponent"};
+  public static final String[] MULTI_ITEM_NAMES = {"machineComponent", "upgradeComponent"};
 
   public static final int METAL_COUNT = EnumMetal.values().length;
   public static final int MACHINE_COUNT = EnumMachine.values().length;
