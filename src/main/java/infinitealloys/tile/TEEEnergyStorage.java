@@ -10,13 +10,13 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 
-import infinitealloys.item.IAItems;
+import infinitealloys.item.ItemIA;
 import infinitealloys.network.MessageNetworkEditToClient;
 import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
@@ -44,7 +44,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
   /**
    * A list of clients currently connected to this energy network
    */
-  private final ArrayList<Point> networkClients = new ArrayList<Point>();
+  private final ArrayList<Point3> networkClients = new ArrayList<Point3>();
 
   /**
    * False until the first call of {@link #updateEntity()}
@@ -75,7 +75,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
     if (!initialized) {
       initialized = true;
       if (!worldObj.isRemote) {
-        for (Point client : networkClients) {
+        for (Point3 client : networkClients) {
           ((TileEntityElectric) Funcs.getTileEntity(worldObj, client))
               .connectToEnergyNetwork(coords());
         }
@@ -86,7 +86,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
   }
 
   @Override
-  public void connectToEnergyNetwork(Point host) {
+  public void connectToEnergyNetwork(Point3 host) {
     if (!worldObj.isRemote) {
       deleteNetwork();
     }
@@ -95,7 +95,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
   @Override
   public void deleteNetwork() {
-    for (Point client : networkClients) {
+    for (Point3 client : networkClients) {
       TileEntity te = Funcs.getTileEntity(worldObj, client);
       if (te instanceof TileEntityElectric) {
         ((TileEntityElectric) te).disconnectFromEnergyNetwork();
@@ -104,12 +104,12 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
   }
 
   @Override
-  public boolean isClientValid(Point client) {
+  public boolean isClientValid(Point3 client) {
     return Funcs.getTileEntity(worldObj, client) instanceof TileEntityElectric;
   }
 
   @Override
-  public boolean addClient(EntityPlayer player, Point client, boolean sync) {
+  public boolean addClient(EntityPlayer player, Point3 client, boolean sync) {
     if (energyHost != null && !energyHost.equals(coords())) {
       if (player != null && worldObj.isRemote) {
         player.addChatComponentMessage(new ChatComponentText(Funcs
@@ -176,7 +176,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
   }
 
   @Override
-  public void removeClient(Point client, boolean sync) {
+  public void removeClient(Point3 client, boolean sync) {
     TileEntity te = Funcs.getTileEntity(worldObj, client);
     if (te instanceof TileEntityElectric) {
       ((TileEntityElectric) te).disconnectFromEnergyNetwork();
@@ -195,7 +195,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
   @Override
   public void syncAllClients(EntityPlayer player) {
-    for (Point client : networkClients) {
+    for (Point3 client : networkClients) {
       Funcs.sendPacketToPlayer(
           new MessageNetworkEditToClient(true, worldObj.provider.dimensionId, coords(), client),
           player);
@@ -268,7 +268,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
     baseRKPerTick = tagCompound.getInteger("baseRKPerTick");
     for (int i = 0; tagCompound.hasKey("client" + i); i++) {
       int[] client = tagCompound.getIntArray("client" + i);
-      addClient(null, new Point(client[0], client[1], client[2]), false);
+      addClient(null, new Point3(client[0], client[1], client[2]), false);
     }
   }
 
@@ -278,7 +278,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
     tagCompound.setInteger("currentRK", currentRK);
     tagCompound.setInteger("baseRKPerTick", baseRKPerTick);
     for (int i = 0; i < networkClients.size(); i++) {
-      Point client = networkClients.get(i);
+      Point3 client = networkClients.get(i);
       tagCompound.setIntArray("client" + i, new int[]{client.x, client.y, client.z});
     }
   }
@@ -298,7 +298,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
     TileEntity te = worldObj.getTileEntity(x, y, z);
     if (initialized && te instanceof TileEntityElectric
         && ((TileEntityElectric) te).energyHost == null) {
-      addClient(null, new Point(x, y, z), false);
+      addClient(null, new Point3(x, y, z), false);
     }
   }
 
@@ -343,10 +343,10 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
   @Override
   protected void populateValidUpgrades() {
-    validUpgradeTypes.add(IAItems.upgrades[Consts.SPEED]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.EFFICIENCY]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.CAPACITY]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.RANGE]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.WIRELESS]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.SPEED]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.EFFICIENCY]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.CAPACITY]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.RANGE]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.WIRELESS]);
   }
 }

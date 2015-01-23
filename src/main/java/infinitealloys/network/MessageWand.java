@@ -6,13 +6,13 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import infinitealloys.item.ItemInternetWand;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 public class MessageWand implements IMessage, IMessageHandler<MessageWand, IMessage> {
 
   private boolean adding;
-  private Point machine;
+  private Point3 machine;
   private byte index;
 
   public MessageWand() {
@@ -23,7 +23,7 @@ public class MessageWand implements IMessage, IMessageHandler<MessageWand, IMess
    */
   public MessageWand(int x, int y, int z) {
     adding = true;
-    machine = new Point(x, y, z);
+    machine = new Point3(x, y, z);
   }
 
   /**
@@ -39,7 +39,7 @@ public class MessageWand implements IMessage, IMessageHandler<MessageWand, IMess
     adding = bytes.readBoolean();
 
     if (adding) {
-      machine = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+      machine = new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt());
     } else {
       index = bytes.readByte();
     }

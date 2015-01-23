@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import infinitealloys.block.IABlocks;
+import infinitealloys.block.BlockIA;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.network.MessageWand;
@@ -25,7 +25,7 @@ import infinitealloys.tile.IHost;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 public class GuiInternetWand extends GuiScreen {
 
@@ -152,7 +152,7 @@ public class GuiInternetWand extends GuiScreen {
             if (!(te instanceof IHost) || button.dimensionID != te
                 .getWorldObj().provider.dimensionId ||
                 !((IHost) te)
-                    .isClientValid(new Point(button.machineX, button.machineY, button.machineZ))) {
+                    .isClientValid(new Point3(button.machineX, button.machineY, button.machineZ))) {
               addSelected.enabled = false; // Set the button to false
             }
           }
@@ -322,7 +322,7 @@ public class GuiInternetWand extends GuiScreen {
               if (host[0] == client[0]) // They're in the same dimension
               {
                 ((IHost) mc.theWorld.getTileEntity(host[1], host[2], host[3]))
-                    .addClient(mc.thePlayer, new Point(client[1], client[2], client[3]), true);
+                    .addClient(mc.thePlayer, new Point3(client[1], client[2], client[3]), true);
               }
             }
           }
@@ -464,7 +464,7 @@ public class GuiInternetWand extends GuiScreen {
                                            yPos + 5, 0xffffff);
 
       itemRender.renderItemIntoGUI(fontRendererObj, mc.getTextureManager(),
-                                   new ItemStack(IABlocks.machine, 1, machineID), xPos, yPos + 1);
+                                   new ItemStack(BlockIA.machine, 1, machineID), xPos, yPos + 1);
     }
   }
 }

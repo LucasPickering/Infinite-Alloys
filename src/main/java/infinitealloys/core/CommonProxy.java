@@ -16,13 +16,13 @@ import java.util.Random;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import infinitealloys.block.BlockIA;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.block.BlockOre;
-import infinitealloys.block.IABlocks;
-import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemAlloyIngot;
 import infinitealloys.item.ItemBlockMachine;
 import infinitealloys.item.ItemBlockOre;
+import infinitealloys.item.ItemIA;
 import infinitealloys.item.ItemIngot;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.item.ItemMulti;
@@ -45,59 +45,56 @@ public class CommonProxy {
   public GfxHandler gfxHandler;
 
   public void initBlocks() {
-    IABlocks.ore =
-        new BlockOre().setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName("ore");
-    IABlocks.machine =
-        new BlockMachine().setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName(
-            "machine");
+    BlockIA.ore = new BlockOre().setHardness(3F).setBlockName("ore");
+    BlockIA.machine = new BlockMachine().setHardness(3F).setBlockName("machine");
 
-    GameRegistry.registerBlock(IABlocks.ore, ItemBlockOre.class, IABlocks.ore.getUnlocalizedName());
-    GameRegistry.registerBlock(IABlocks.machine, ItemBlockMachine.class,
-                               IABlocks.machine.getUnlocalizedName());
+    GameRegistry.registerBlock(BlockIA.ore, ItemBlockOre.class, BlockIA.ore.getUnlocalizedName());
+    GameRegistry.registerBlock(BlockIA.machine, ItemBlockMachine.class,
+                               BlockIA.machine.getUnlocalizedName());
 
     for (EnumMetal metal : EnumMetal.values()) {
-      OreDictionary.registerOre("ore" + metal.name, new ItemStack(IABlocks.ore, 1, 0));
+      OreDictionary.registerOre("ore" + metal.name, new ItemStack(BlockIA.ore, 1, 0));
     }
 
-    IABlocks.ore.setHarvestLevel("pickaxe", 1, 0);
-    IABlocks.ore.setHarvestLevel("pickaxe", 1, 1);
-    IABlocks.ore.setHarvestLevel("pickaxe", 1, 2);
-    IABlocks.ore.setHarvestLevel("pickaxe", 1, 3);
-    IABlocks.ore.setHarvestLevel("pickaxe", 2, 4);
-    IABlocks.ore.setHarvestLevel("pickaxe", 2, 5);
-    IABlocks.ore.setHarvestLevel("pickaxe", 2, 6);
-    IABlocks.ore.setHarvestLevel("pickaxe", 3, 7);
+    BlockIA.ore.setHarvestLevel("pickaxe", 1, 0);
+    BlockIA.ore.setHarvestLevel("pickaxe", 1, 1);
+    BlockIA.ore.setHarvestLevel("pickaxe", 1, 2);
+    BlockIA.ore.setHarvestLevel("pickaxe", 1, 3);
+    BlockIA.ore.setHarvestLevel("pickaxe", 2, 4);
+    BlockIA.ore.setHarvestLevel("pickaxe", 2, 5);
+    BlockIA.ore.setHarvestLevel("pickaxe", 2, 6);
+    BlockIA.ore.setHarvestLevel("pickaxe", 3, 7);
   }
 
   public void initItems() {
-    IAItems.multi = new ItemMulti().setUnlocalizedName("multi");
-    IAItems.ingot = new ItemIngot().setUnlocalizedName("ingot");
-    IAItems.alloyIngot = new ItemAlloyIngot().setUnlocalizedName("alloyIngot");
-    IAItems.internetWand = new ItemInternetWand().setUnlocalizedName("internetWand");
-    IAItems.upgrades[Consts.SPEED] =
+    ItemIA.multi = new ItemMulti().setUnlocalizedName("multi");
+    ItemIA.ingot = new ItemIngot().setUnlocalizedName("ingot");
+    ItemIA.alloyIngot = new ItemAlloyIngot().setUnlocalizedName("alloyIngot");
+    ItemIA.internetWand = new ItemInternetWand().setUnlocalizedName("internetWand");
+    ItemIA.upgrades[Consts.SPEED] =
         (ItemUpgrade) new ItemUpgradeSpeed().setUnlocalizedName("upgradeSpeed");
-    IAItems.upgrades[Consts.EFFICIENCY] =
+    ItemIA.upgrades[Consts.EFFICIENCY] =
         (ItemUpgrade) new ItemUpgradeEfficiency().setUnlocalizedName("upgradeEfficiency");
-    IAItems.upgrades[Consts.CAPACITY] =
+    ItemIA.upgrades[Consts.CAPACITY] =
         (ItemUpgrade) new ItemUpgradeCapacity().setUnlocalizedName("upgradeCapacity");
-    IAItems.upgrades[Consts.RANGE] =
+    ItemIA.upgrades[Consts.RANGE] =
         (ItemUpgrade) new ItemUpgradeRange().setUnlocalizedName("upgradeRange");
-    IAItems.upgrades[Consts.WIRELESS] =
+    ItemIA.upgrades[Consts.WIRELESS] =
         (ItemUpgrade) new ItemUpgradeWireless().setUnlocalizedName("upgradeWireless");
-    IAItems.upgrades[Consts.ALLOY_UPG] =
+    ItemIA.upgrades[Consts.ALLOY_UPG] =
         (ItemUpgrade) new ItemUpgradeAlloy().setUnlocalizedName("upgradeAlloy");
 
-    GameRegistry.registerItem(IAItems.multi, IAItems.multi.getUnlocalizedName());
-    GameRegistry.registerItem(IAItems.ingot, IAItems.ingot.getUnlocalizedName());
-    GameRegistry.registerItem(IAItems.alloyIngot, IAItems.alloyIngot.getUnlocalizedName());
-    GameRegistry.registerItem(IAItems.internetWand, IAItems.internetWand.getUnlocalizedName());
-    for (Item upgrade : IAItems.upgrades) {
+    GameRegistry.registerItem(ItemIA.multi, ItemIA.multi.getUnlocalizedName());
+    GameRegistry.registerItem(ItemIA.ingot, ItemIA.ingot.getUnlocalizedName());
+    GameRegistry.registerItem(ItemIA.alloyIngot, ItemIA.alloyIngot.getUnlocalizedName());
+    GameRegistry.registerItem(ItemIA.internetWand, ItemIA.internetWand.getUnlocalizedName());
+    for (Item upgrade : ItemIA.upgrades) {
       GameRegistry.registerItem(upgrade, upgrade.getUnlocalizedName());
     }
 
     for (EnumMetal metal : EnumMetal.values()) {
       OreDictionary.registerOre("ingot" + metal.name,
-                                new ItemStack(IAItems.ingot, 1, metal.ordinal()));
+                                new ItemStack(ItemIA.ingot, 1, metal.ordinal()));
     }
   }
 
@@ -108,12 +105,12 @@ public class CommonProxy {
   }
 
   public void initRecipes() {
-    final ItemStack machineComponent = new ItemStack(IAItems.multi, 1, 0);
-    final ItemStack upgradeComponent = new ItemStack(IAItems.multi, 1, 1);
+    final ItemStack machineComponent = new ItemStack(ItemIA.multi, 1, 0);
+    final ItemStack upgradeComponent = new ItemStack(ItemIA.multi, 1, 1);
 
     ItemStack[] alloys = new ItemStack[Consts.VALID_ALLOY_COUNT];
     for (int i = 0; i < alloys.length; i++) {
-      alloys[i] = new ItemStack(IAItems.alloyIngot, 1, i + 1);
+      alloys[i] = new ItemStack(ItemIA.alloyIngot, 1, i + 1);
     }
 
     ItemStack[][]
@@ -121,31 +118,31 @@ public class CommonProxy {
         new ItemStack[Consts.UPGRADE_TYPE_COUNT][6]; // The second index is the current max value for tiers of an upgrade
     for (int i = 0; i < upgrades.length; i++) {
       for (int j = 0; j < upgrades[i].length; j++) {
-        upgrades[i][j] = new ItemStack(IAItems.upgrades[i], 1, j);
+        upgrades[i][j] = new ItemStack(ItemIA.upgrades[i], 1, j);
       }
     }
 
 		/*---MACHINES---*/
                 /* Computer */
-    addRecipeDict(new ItemStack(IABlocks.machine), "W3G", "2M2", "R3R",
+    addRecipeDict(new ItemStack(BlockIA.machine), "W3G", "2M2", "R3R",
                   '2', alloys[2], '3', alloys[3], 'M', machineComponent, 'G', Blocks.glass_pane,
                   'R', Items.redstone, 'W', upgrades[Consts.WIRELESS][0]);
 
 		/* Metal Forge */
-    addRecipeDict(new ItemStack(IABlocks.machine, 1, 1), "BBB", "BMB", "BBB",
+    addRecipeDict(new ItemStack(BlockIA.machine, 1, 1), "BBB", "BMB", "BBB",
                   'B', Items.brick, 'M', machineComponent);
 
 		/* X-ray */
-    addRecipeDict(new ItemStack(IABlocks.machine, 1, 2), "E5E", "4M4", "D5G",
+    addRecipeDict(new ItemStack(BlockIA.machine, 1, 2), "E5E", "4M4", "D5G",
                   '4', alloys[4], '5', alloys[5], 'M', machineComponent, 'D', Items.diamond,
                   'E', Items.ender_pearl, 'G', Blocks.glass_pane);
 
 		/* Pasture */
-    addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
+    addRecipeDict(new ItemStack(BlockIA.machine, 1, 3), "F4F", "3M3", "F4F",
                   '3', alloys[3], '4', alloys[4], 'M', machineComponent, 'F', Blocks.fence);
 
 		/* ESU */
-    addRecipeDict(new ItemStack(IABlocks.machine, 1, 4), "IAI", "CMC", "IAI",
+    addRecipeDict(new ItemStack(BlockIA.machine, 1, 4), "IAI", "CMC", "IAI",
                   'M', machineComponent, 'I', Items.iron_ingot,
                   'C', "ingotCopper", 'A', "ingotAluminium");
 
@@ -211,20 +208,20 @@ public class CommonProxy {
 
 		/*---OTHER ITEMS---*/
                 /* Internet Wand */
-    addRecipeDict(new ItemStack(IAItems.internetWand), " W ", "RSR",
+    addRecipeDict(new ItemStack(ItemIA.internetWand), " W ", "RSR",
                   'R', Items.redstone, 'S', Items.stick, 'W', upgrades[Consts.WIRELESS][0]);
 
 		/* Machine Frame */
-    addRecipeDict(new ItemStack(IAItems.multi, 1, 0), "CCC", "AAA", "MMM",
+    addRecipeDict(new ItemStack(ItemIA.multi, 1, 0), "CCC", "AAA", "MMM",
                   'C', "ingotCopper", 'A', "ingotAluminium", 'M', "ingotMagnesium");
 
 		/* Upgrade Component */
-    addRecipeDict(new ItemStack(IAItems.multi, 1, 1), "CTC", "ATA", "A A",
+    addRecipeDict(new ItemStack(ItemIA.multi, 1, 1), "CTC", "ATA", "A A",
                   'C', "ingotCopper", 'A', "ingotAluminium", 'T', "ingotTantalum");
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
-      FurnaceRecipes.smelting().func_151394_a(new ItemStack(IABlocks.ore, 1, i),
-                                              new ItemStack(IAItems.ingot, 1, i),
+      FurnaceRecipes.smelting().func_151394_a(new ItemStack(BlockIA.ore, 1, i),
+                                              new ItemStack(ItemIA.ingot, 1, i),
                                               0.6F);
     }
   }

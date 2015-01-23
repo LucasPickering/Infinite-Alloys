@@ -15,12 +15,12 @@ import infinitealloys.tile.TileEntityIA;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToClient, IMessage> {
 
-  private Point tePoint;
+  private Point3 tePoint;
   private Object[] data;
   private ByteBuf bytes;
 
@@ -34,7 +34,7 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 
   @Override
   public void fromBytes(ByteBuf bytes) {
-    tePoint = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+    tePoint = new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt());
     this.bytes = bytes;
   }
 
@@ -74,9 +74,9 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 
             case XRAY:
               int detectedBlocksSize = bytes.readInt();
-              Point[] detectedBlocks = new Point[detectedBlocksSize];
+              Point3[] detectedBlocks = new Point3[detectedBlocksSize];
               for (int i = 0; i < detectedBlocksSize; i++) {
-                detectedBlocks[i] = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+                detectedBlocks[i] = new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt());
               }
               ((TEEXray) te).handlePacketDataFromServer(detectedBlocks);
               break;

@@ -7,7 +7,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 
-import infinitealloys.item.IAItems;
+import infinitealloys.item.ItemIA;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 
@@ -72,7 +72,7 @@ public class MachineHelper {
   }
 
   public static int getIngotNum(ItemStack ingot) {
-    if (ingot.getItem() == IAItems.ingot && ingot.getItemDamage() < Consts.METAL_COUNT) {
+    if (ingot.getItem() == ItemIA.ingot && ingot.getItemDamage() < Consts.METAL_COUNT) {
       return ingot.getItemDamage();
     }
     return -1;

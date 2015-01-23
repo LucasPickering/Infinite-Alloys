@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-import infinitealloys.item.IAItems;
+import infinitealloys.item.ItemIA;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
@@ -53,13 +53,13 @@ public class GuiMetalForge extends GuiElectric {
     // Render the item icon for the alloy. The itemstack for a valid alloy is obtained by setting the damage to one more than the alloy's ID.
     {
       itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine,
-                                   new ItemStack(IAItems.alloyIngot, 1, temf.recipeAlloyID + 1),
+                                   new ItemStack(ItemIA.alloyIngot, 1, temf.recipeAlloyID + 1),
                                    topLeft.x + 40, topLeft.y + 52);
     }
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
       itemRender
-          .renderItemIntoGUI(fontRendererObj, mc.renderEngine, new ItemStack(IAItems.ingot, 1, i),
+          .renderItemIntoGUI(fontRendererObj, mc.renderEngine, new ItemStack(ItemIA.ingot, 1, i),
                              topLeft.x + i % 4 * 18 + 66, topLeft.y + i / 4 * 18 + 43);
     }
 

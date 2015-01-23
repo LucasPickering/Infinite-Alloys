@@ -7,7 +7,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 
-import infinitealloys.item.IAItems;
+import infinitealloys.item.ItemIA;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.EnumMachine;
@@ -123,7 +123,7 @@ public class TEEMetalForge extends TileEntityElectric {
    * @return The resulting ingot.
    */
   private ItemStack getIngotResult() {
-    final ItemStack result = new ItemStack(IAItems.alloyIngot);
+    final ItemStack result = new ItemStack(ItemIA.alloyIngot);
     final NBTTagCompound tagCompound = new NBTTagCompound();
     tagCompound.setInteger("alloy", EnumAlloy.getAlloyForID(recipeAlloyID));
     result.setTagCompound(tagCompound);
@@ -195,10 +195,10 @@ public class TEEMetalForge extends TileEntityElectric {
 
   @Override
   protected void populateValidUpgrades() {
-    validUpgradeTypes.add(IAItems.upgrades[Consts.SPEED]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.EFFICIENCY]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.CAPACITY]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.WIRELESS]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.ALLOY_UPG]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.SPEED]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.EFFICIENCY]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.CAPACITY]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.WIRELESS]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.ALLOY_UPG]);
   }
 }

@@ -1,7 +1,7 @@
 package infinitealloys.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,7 +28,7 @@ import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.MachineHelper;
 
-public class BlockMachine extends BlockContainer {
+public class BlockMachine extends BlockIA implements ITileEntityProvider {
 
   public BlockMachine() {
     super(Material.iron);
@@ -47,11 +47,6 @@ public class BlockMachine extends BlockContainer {
   @Override
   public boolean renderAsNormalBlock() {
     return false;
-  }
-
-  @Override
-  @SideOnly(Side.CLIENT)
-  public void registerBlockIcons(IIconRegister iconRegister) {
   }
 
   @Override
@@ -110,22 +105,26 @@ public class BlockMachine extends BlockContainer {
   }
 
   @Override
+  public boolean onBlockEventReceived(World world, int x, int y, int z, int i, int j) {
+    super.onBlockEventReceived(world, x, y, z, i, j);
+    TileEntity tileentity = world.getTileEntity(x, y, z);
+    return tileentity != null ? tileentity.receiveClientEvent(i, j) : false;
+  }
+
+  @Override
+  public void breakBlock(World world, int x, int y, int z, Block block, int metadata) {
+    TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(x, y, z);
+    if (tem != null) {
+      tem.onBlockDestroyed();
+    }
+    super.breakBlock(world, x, y, z, block, metadata);
+    world.removeTileEntity(x, y, z);
+  }
+
+  @Override
   public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY,
                                int tileZ) {
     ((TileEntityMachine) world.getTileEntity(x, y, z)).onNeighborChange(tileX, tileY, tileZ);
-  }
-
-  @Override
-  public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata,
-                                       int fortune) {
-    return new ArrayList<ItemStack>();
-  }
-
-  @Override
-  public void getSubBlocks(Item item, CreativeTabs creativetabs, List list) {
-    for (int i = 0; i < Consts.MACHINE_COUNT; i++) {
-      list.add(new ItemStack(item, 1, i));
-    }
   }
 
   @Override
@@ -141,11 +140,15 @@ public class BlockMachine extends BlockContainer {
   }
 
   @Override
-  public void breakBlock(World world, int x, int y, int z, Block block, int metadata) {
-    TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(x, y, z);
-    if (tem != null) {
-      tem.onBlockDestroyed();
+  public ArrayList<ItemStack> getDrops(World world, int x, int y, int z,
+                                       int metadata, int fortune) {
+    return new ArrayList<ItemStack>();
+  }
+
+  @Override
+  public void getSubBlocks(Item item, CreativeTabs creativetabs, List list) {
+    for (int i = 0; i < Consts.MACHINE_COUNT; i++) {
+      list.add(new ItemStack(item, 1, i));
     }
-    super.breakBlock(world, x, y, z, block, metadata);
   }
 }

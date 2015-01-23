@@ -11,12 +11,12 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import infinitealloys.item.IAItems;
+import infinitealloys.item.ItemIA;
 import infinitealloys.item.ItemUpgrade;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 /**
  * A base class for Tile Entities that have an inventory and can receive upgrades.
@@ -56,7 +56,7 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
   /**
    * The coordinates of the computer that is controlling this machine
    */
-  public Point computerHost;
+  public Point3 computerHost;
 
   /**
    * @param inventoryLength The amount of total slots in the inventory
@@ -90,7 +90,7 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
     }
   }
 
-  public void connectToComputerNetwork(Point host) {
+  public void connectToComputerNetwork(Point3 host) {
     if (computerHost != null) {
       ((TEMComputer) worldObj.getTileEntity(computerHost.x, computerHost.y, computerHost.z))
           .removeClient(coords(), false);
@@ -121,7 +121,7 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
     // Drop upgrades
     for (int i = 0; i < upgrades.length; i++) {
       for (int j = 0; j < upgrades[i]; j++) {
-        spawnItem(new ItemStack(IAItems.upgrades[i], 1, j));
+        spawnItem(new ItemStack(ItemIA.upgrades[i], 1, j));
       }
     }
     Arrays.fill(upgrades, 0);
@@ -277,7 +277,7 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
    * machine take this type of upgrade? Does this machine already have this upgrade? Does this
    * upgrade have a prerequisite upgrade and if so, does this machine already have that upgrade?
    *
-   * @param ItemStack for upgrade item with a binary upgrade damage value (see {@link
+   * @param itemstack for upgrade item with a binary upgrade damage value (see {@link
    *                  infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
    * @return true if valid
    */

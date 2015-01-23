@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import infinitealloys.block.IABlocks;
+import infinitealloys.block.BlockIA;
 import infinitealloys.util.Funcs;
 
 public class CreativeTabIA extends CreativeTabs {
@@ -18,7 +18,7 @@ public class CreativeTabIA extends CreativeTabs {
   @Override
   @SideOnly(Side.CLIENT)
   public ItemStack getIconItemStack() {
-    return new ItemStack(IABlocks.machine, 1, 1);
+    return new ItemStack(BlockIA.machine, 1, 1);
   }
 
   @Override

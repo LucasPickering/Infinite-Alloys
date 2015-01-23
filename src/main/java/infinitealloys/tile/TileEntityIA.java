@@ -8,12 +8,12 @@ import net.minecraft.tileentity.TileEntity;
 
 import java.util.Random;
 
-import infinitealloys.block.IABlocks;
+import infinitealloys.block.BlockIA;
 import infinitealloys.network.MessageTEToClient;
 import infinitealloys.network.MessageTEToServer;
 import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 /**
  * A base class for Tile Entities with methods for networking and NBT-data saving
@@ -25,14 +25,6 @@ public abstract class TileEntityIA extends TileEntity {
    * set in the Block class, when the block is placed. 0 - South 1 - West 2 - North 3 - East
    */
   public byte orientation;
-
-  @Override
-  public void updateEntity() {
-    System.out.println(Funcs.getSideAsString() + ": " + worldObj.getTileEntity(xCoord,
-                                                                               yCoord
-                                                                               - 1,
-                                                                               zCoord).blockMetadata);
-  }
 
   /**
    * Called when the block is first placed to restore persistent data from before it was destroyed.
@@ -54,7 +46,7 @@ public abstract class TileEntityIA extends TileEntity {
    */
   public void onBlockDestroyed() {
     // Drop block with stored NBT data
-    ItemStack block = new ItemStack(IABlocks.machine, 1, blockMetadata);
+    ItemStack block = new ItemStack(BlockIA.machine, 1, blockMetadata);
     NBTTagCompound tagCompound = getDropTagCompound();
     if (tagCompound != null) {
       block.setTagCompound(tagCompound);
@@ -119,9 +111,9 @@ public abstract class TileEntityIA extends TileEntity {
 
   /**
    * Get the current (x, y, z) coordinates of this machine in the form of a {@link
-   * infinitealloys.util.Point Point}
+   * infinitealloys.util.Point3 Point3}
    */
-  public Point coords() {
-    return new Point(xCoord, yCoord, zCoord);
+  public Point3 coords() {
+    return new Point3(xCoord, yCoord, zCoord);
   }
 }

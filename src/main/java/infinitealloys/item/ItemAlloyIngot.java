@@ -74,7 +74,7 @@ public class ItemAlloyIngot extends ItemIA {
   @Override
   public String getUnlocalizedName(ItemStack itemstack) {
     if (itemstack.getItemDamage() > 0 && itemstack.getItemDamage() <= Consts.VALID_ALLOY_COUNT) {
-      return "item.ia" + EnumAlloy.values()[itemstack.getItemDamage()].name;
+      return "item." + EnumAlloy.values()[itemstack.getItemDamage()].name;
     }
     return super.getUnlocalizedName(itemstack);
   }

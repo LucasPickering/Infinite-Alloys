@@ -7,7 +7,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 /**
  * A base, abstract class for Tile Entities that can receive upgrades, use power, and have processes
@@ -49,7 +49,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
   /**
    * The coordinates of the ESU that is providing energy to this machine
    */
-  public Point energyHost;
+  public Point3 energyHost;
 
   public TileEntityElectric(int inventoryLength) {
     super(inventoryLength);
@@ -94,7 +94,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
     }
   }
 
-  public void connectToEnergyNetwork(Point host) {
+  public void connectToEnergyNetwork(Point3 host) {
     if (energyHost != null) {
       ((TEEEnergyStorage) worldObj.getTileEntity(energyHost.x, energyHost.y, energyHost.z))
           .removeClient(coords(), false);

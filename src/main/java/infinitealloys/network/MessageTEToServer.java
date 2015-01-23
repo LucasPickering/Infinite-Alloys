@@ -11,12 +11,12 @@ import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TileEntityIA;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToServer, IMessage> {
 
-  private Point tePoint;
+  private Point3 tePoint;
   private Object[] data;
   private ByteBuf bytes;
 
@@ -30,7 +30,7 @@ public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToS
 
   @Override
   public void fromBytes(ByteBuf bytes) {
-    tePoint = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+    tePoint = new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt());
     this.bytes = bytes;
   }
 

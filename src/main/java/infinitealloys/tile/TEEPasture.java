@@ -15,7 +15,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 
-import infinitealloys.item.IAItems;
+import infinitealloys.item.ItemIA;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 
@@ -69,7 +69,7 @@ public class TEEPasture extends TileEntityElectric {
   @Override
   protected void onFinishProcess() {
                 /* NOTE: For this specific machine, ticksToProcess = 0, meaning this function is called every tick. It is essentially an updateEntity() function with
-		 * conditions applied in TileEntityMachine.updateEntity() */
+                 * conditions applied in TileEntityMachine.updateEntity() */
 
     final ArrayList<EntityCreature> trapList = new ArrayList<EntityCreature>();
     final ArrayList<EntityCreature> repelList = new ArrayList<EntityCreature>();
@@ -181,10 +181,10 @@ public class TEEPasture extends TileEntityElectric {
 
   @Override
   protected void populateValidUpgrades() {
-    validUpgradeTypes.add(IAItems.upgrades[Consts.EFFICIENCY]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.CAPACITY]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.RANGE]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.WIRELESS]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.EFFICIENCY]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.CAPACITY]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.RANGE]);
+    validUpgradeTypes.add(ItemIA.upgrades[Consts.WIRELESS]);
   }
 
   /**

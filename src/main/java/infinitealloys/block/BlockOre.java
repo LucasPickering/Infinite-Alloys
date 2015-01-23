@@ -1,6 +1,5 @@
 package infinitealloys.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -15,7 +14,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 
-public class BlockOre extends Block {
+public class BlockOre extends BlockIA {
 
   public BlockOre() {
     super(Material.rock);
@@ -31,15 +30,13 @@ public class BlockOre extends Block {
   @Override
   @SideOnly(Side.CLIENT)
   public void registerBlockIcons(IIconRegister iconRegister) {
-    IABlocks.oreForegroundIcon =
-        iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "ore_foreground");
-    IABlocks.oreBackgroundIcon =
-        iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "ore_background");
+    oreForegroundIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "ore_foreground");
+    oreBackgroundIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "ore_background");
   }
 
   @Override
   public IIcon getIcon(int side, int metadata) {
-    return IABlocks.oreBackgroundIcon;
+    return oreBackgroundIcon;
   }
 
   @Override

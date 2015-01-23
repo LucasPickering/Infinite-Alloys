@@ -20,14 +20,14 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import infinitealloys.block.BlockIA;
 import infinitealloys.block.BlockMachine;
-import infinitealloys.block.IABlocks;
 import infinitealloys.client.gui.GuiInternetWand;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumMetal;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
@@ -49,7 +49,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
    * The list of blocks identified by an x-ray machine to be highlighted
    */
   @SideOnly(Side.CLIENT)
-  public ArrayList<Point> xrayBlocks = new ArrayList<Point>();
+  public ArrayList<Point3> xrayBlocks = new ArrayList<Point3>();
 
   @Override
   public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -119,32 +119,32 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(0F, -1F, 0F);
-        renderer.renderFaceYNeg(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+        renderer.renderFaceYNeg(block, 0D, 0D, 0D, BlockIA.oreForegroundIcon);
         tessellator.draw();
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(0F, 1F, 0F);
-        renderer.renderFaceYPos(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+        renderer.renderFaceYPos(block, 0D, 0D, 0D, BlockIA.oreForegroundIcon);
         tessellator.draw();
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(1F, 0F, 0F);
-        renderer.renderFaceXPos(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+        renderer.renderFaceXPos(block, 0D, 0D, 0D, BlockIA.oreForegroundIcon);
         tessellator.draw();
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(-1F, 0F, 0F);
-        renderer.renderFaceXNeg(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+        renderer.renderFaceXNeg(block, 0D, 0D, 0D, BlockIA.oreForegroundIcon);
         tessellator.draw();
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(0F, 0F, -1F);
-        renderer.renderFaceZNeg(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+        renderer.renderFaceZNeg(block, 0D, 0D, 0D, BlockIA.oreForegroundIcon);
         tessellator.draw();
 
         tessellator.startDrawingQuads();
         tessellator.setNormal(0F, 0F, 1F);
-        renderer.renderFaceZPos(block, 0D, 0D, 0D, IABlocks.oreForegroundIcon);
+        renderer.renderFaceZPos(block, 0D, 0D, 0D, BlockIA.oreForegroundIcon);
         tessellator.draw();
       }
       GL11.glTranslatef(0.5F, 0.5F, 0.5F);
@@ -160,7 +160,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
     Tessellator tessellator = Tessellator.instance;
     boolean rendered = renderer.renderStandardBlock(block, x, y, z);
     final int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
-    if (block == IABlocks.ore) { // Used to colorize the ores
+    if (block == BlockIA.ore) { // Used to colorize the ores
       int color = EnumMetal.values()[world.getBlockMetadata(x, y, z)].color;
       float red = (color >> 16 & 255) / 255F;
       float green = (color >> 8 & 255) / 255F;
@@ -170,42 +170,42 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
         tessellator.setBrightness(renderer.renderMinY > 0D ? brightness : block
             .getMixedBrightnessForBlock(world, x, y - 1, z));
         tessellator.setColorOpaque_F(red * 0.5F, green * 0.5F, blue * 0.5F);
-        renderer.renderFaceYNeg(block, x, y, z, IABlocks.oreForegroundIcon);
+        renderer.renderFaceYNeg(block, x, y, z, BlockIA.oreForegroundIcon);
         rendered = true;
       }
       if (renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y + 1, z, 1)) {
         tessellator.setBrightness(renderer.renderMaxY < 1D ? brightness : block
             .getMixedBrightnessForBlock(world, x, y + 1, z));
         tessellator.setColorOpaque_F(red, green, blue);
-        renderer.renderFaceYPos(block, x, y, z, IABlocks.oreForegroundIcon);
+        renderer.renderFaceYPos(block, x, y, z, BlockIA.oreForegroundIcon);
         rendered = true;
       }
       if (renderer.renderAllFaces || block.shouldSideBeRendered(world, x + 1, y, z, 2)) {
         tessellator.setBrightness(renderer.renderMinZ > 0D ? brightness : block
             .getMixedBrightnessForBlock(world, x + 1, y, z));
         tessellator.setColorOpaque_F(red * 0.6F, green * 0.6F, blue * 0.6F);
-        renderer.renderFaceXPos(block, x, y, z, IABlocks.oreForegroundIcon);
+        renderer.renderFaceXPos(block, x, y, z, BlockIA.oreForegroundIcon);
         rendered = true;
       }
       if (renderer.renderAllFaces || block.shouldSideBeRendered(world, x - 1, y, z, 3)) {
         tessellator.setBrightness(renderer.renderMaxZ < 1D ? brightness : block
             .getMixedBrightnessForBlock(world, x - 1, y, z));
         tessellator.setColorOpaque_F(red * 0.6F, green * 0.6F, blue * 0.6F);
-        renderer.renderFaceXNeg(block, x, y, z, IABlocks.oreForegroundIcon);
+        renderer.renderFaceXNeg(block, x, y, z, BlockIA.oreForegroundIcon);
         rendered = true;
       }
       if (renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z - 1, 4)) {
         tessellator.setBrightness(renderer.renderMinX > 0D ? brightness : block
             .getMixedBrightnessForBlock(world, x, y, z - 1));
         tessellator.setColorOpaque_F(red * 0.8F, green * 0.8F, blue * 0.8F);
-        renderer.renderFaceZNeg(block, x, y, z, IABlocks.oreForegroundIcon);
+        renderer.renderFaceZNeg(block, x, y, z, BlockIA.oreForegroundIcon);
         rendered = true;
       }
       if (renderer.renderAllFaces || block.shouldSideBeRendered(world, x, y, z + 1, 5)) {
         tessellator.setBrightness(renderer.renderMaxX < 1D ? brightness : block
             .getMixedBrightnessForBlock(world, x, y, z + 1));
         tessellator.setColorOpaque_F(red * 0.8F, green * 0.8F, blue * 0.8F);
-        renderer.renderFaceZPos(block, x, y, z, IABlocks.oreForegroundIcon);
+        renderer.renderFaceZPos(block, x, y, z, BlockIA.oreForegroundIcon);
         rendered = true;
       }
     }
@@ -237,8 +237,8 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
     Tessellator tess = Tessellator.instance;
     Tessellator.renderingWorldRenderer = false;
 
-    Point last = new Point(0, 0, 0);
-    for (Point block : xrayBlocks) {
+    Point3 last = new Point3(0, 0, 0);
+    for (Point3 block : xrayBlocks) {
       GL11.glTranslatef(block.x - last.x, block.y - last.y, block.z - last.z);
       renderOutlineBox(tess);
       last.set(block);

@@ -8,7 +8,7 @@ import net.minecraft.world.gen.feature.WorldGenMinable;
 import java.util.Random;
 
 import cpw.mods.fml.common.IWorldGenerator;
-import infinitealloys.block.IABlocks;
+import infinitealloys.block.BlockIA;
 import infinitealloys.util.Consts;
 
 public class WorldGenHandler implements IWorldGenerator {
@@ -29,7 +29,7 @@ public class WorldGenHandler implements IWorldGenerator {
         final int x = chunkX * 16 + random.nextInt(16);
         final int y = random.nextInt(heights[i]);
         final int z = chunkZ * 16 + random.nextInt(16);
-        new WorldGenMinable(IABlocks.ore, i, groupSizes[i], Blocks.stone)
+        new WorldGenMinable(BlockIA.ore, i, groupSizes[i], Blocks.stone)
             .generate(world, random, x, y, z);
       }
     }

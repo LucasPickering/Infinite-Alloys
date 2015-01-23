@@ -18,13 +18,13 @@ import java.util.List;
 
 import infinitealloys.block.BlockMachine;
 import infinitealloys.client.EnumHelp;
-import infinitealloys.item.IAItems;
+import infinitealloys.item.ItemIA;
 import infinitealloys.network.MessageOpenGui;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 public abstract class GuiMachine extends GuiContainer {
 
@@ -60,7 +60,7 @@ public abstract class GuiMachine extends GuiContainer {
   protected java.awt.Point topLeft = new java.awt.Point();
 
   protected TileEntityMachine tem;
-  protected infinitealloys.util.Point controllingComputer = new infinitealloys.util.Point();
+  protected Point3 controllingComputer = new Point3();
   protected GuiMachineTab computerTab;
   protected final List<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
   /**
@@ -96,7 +96,8 @@ public abstract class GuiMachine extends GuiContainer {
   public void initGui() {
     super.initGui();
     topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
-    buttonList.add(new GuiButton(0, width - 20, 0, 20, 20, "?")); // The button to enable/disable help
+    buttonList
+        .add(new GuiButton(0, width - 20, 0, 20, 20, "?")); // The button to enable/disable help
   }
 
   @Override
@@ -117,7 +118,7 @@ public abstract class GuiMachine extends GuiContainer {
       for (int i = 0; i < Consts.UPGRADE_TYPE_COUNT; i++) {
         if (tem.getUpgradeTier(i) > 0) {
           lines.add(new ColoredText(
-              Funcs.getLoc("item.ia" + IAItems.upgrades[i].name + tem.getUpgradeTier(i) + ".name"),
+              Funcs.getLoc("item." + ItemIA.upgrades[i].name + tem.getUpgradeTier(i) + ".name"),
               0xaaaaaa));
         }
       }
@@ -176,7 +177,7 @@ public abstract class GuiMachine extends GuiContainer {
                        computerTab.tem.coords().toString()).draw();
       }
 
-      Point[] clients = tec.getClients();
+      Point3[] clients = tec.getClients();
       // For each client
       for (int i = 0; i < clients.length; i++) {
         machineTabs.add(new GuiMachineTab(mc, itemRender, i / 5 * 197 - 24, i % 5 * 25 + 36,
