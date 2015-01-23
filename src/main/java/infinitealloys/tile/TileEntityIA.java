@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.Random;
 
@@ -16,15 +17,14 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.Point3;
 
 /**
- * A base class for Tile Entities with methods for networking and NBT-data saving
+ * A base class for Tile Entities that need networking, NBT-data saving, and a specific orientation
  */
 public abstract class TileEntityIA extends TileEntity {
 
   /**
-   * A number from 0-3 to represent which side of this block gets the front texture. This should be
-   * set in the Block class, when the block is placed. 0 - South 1 - West 2 - North 3 - East
+   * A direction representing which way this block is facing.
    */
-  public byte orientation;
+  public ForgeDirection orientation = ForgeDirection.NORTH;
 
   /**
    * Called when the block is first placed to restore persistent data from before it was destroyed.
@@ -72,13 +72,13 @@ public abstract class TileEntityIA extends TileEntity {
   @Override
   public void readFromNBT(NBTTagCompound tagCompound) {
     super.readFromNBT(tagCompound);
-    orientation = tagCompound.getByte("orientation");
+    orientation = ForgeDirection.getOrientation(tagCompound.getInteger("orientation"));
   }
 
   @Override
   public void writeToNBT(NBTTagCompound tagCompound) {
     super.writeToNBT(tagCompound);
-    tagCompound.setByte("orientation", orientation);
+    tagCompound.setInteger("orientation", orientation.ordinal());
   }
 
   public void syncToServer() {
@@ -94,7 +94,7 @@ public abstract class TileEntityIA extends TileEntity {
    * A list of the data that gets sent from server to client over the network
    */
   public Object[] getSyncDataToClient() {
-    return new Object[]{orientation};
+    return new Object[]{(byte) orientation.ordinal()};
   }
 
   /**
@@ -104,8 +104,8 @@ public abstract class TileEntityIA extends TileEntity {
     return null;
   }
 
-  public void handlePacketDataFromServer(byte orientation) {
-    this.orientation = orientation;
+  public void handlePacketDataFromServer(byte facingDir) {
+    this.orientation = ForgeDirection.getOrientation(facingDir);
     worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
   }
 

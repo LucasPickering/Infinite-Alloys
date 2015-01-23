@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +106,7 @@ public class BlockMachine extends BlockIA implements ITileEntityProvider {
   public boolean onBlockEventReceived(World world, int x, int y, int z, int i, int j) {
     super.onBlockEventReceived(world, x, y, z, i, j);
     TileEntity tileentity = world.getTileEntity(x, y, z);
-    return tileentity != null ? tileentity.receiveClientEvent(i, j) : false;
+    return tileentity != null && tileentity.receiveClientEvent(i, j);
   }
 
   @Override
@@ -129,7 +130,7 @@ public class BlockMachine extends BlockIA implements ITileEntityProvider {
                               ItemStack itemstack) {
     TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(x, y, z);
     if (tem != null) {
-      tem.orientation = (byte) (MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
+      tem.orientation = ForgeDirection.getOrientation(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
       if (itemstack.hasTagCompound()) {
         tem.loadNBTData(itemstack.getTagCompound());
       }

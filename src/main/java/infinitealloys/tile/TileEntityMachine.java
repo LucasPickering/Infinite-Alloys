@@ -88,8 +88,16 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
       inventoryStacks[upgradeSlotIndex] = null;
       updateUpgrades();
     }
+
+    System.out.println(
+        "Orientation on " + (worldObj.isRemote ? "client" : "server") + " is " + orientation);
   }
 
+  /**
+   * Attempt to make this block a client on the network of the given computer.
+   *
+   * @param host the location of the computer that is hosting the network
+   */
   public void connectToComputerNetwork(Point3 host) {
     if (computerHost != null) {
       ((TEMComputer) worldObj.getTileEntity(computerHost.x, computerHost.y, computerHost.z))
@@ -98,6 +106,10 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
     computerHost = host;
   }
 
+  /**
+   * Remove this machine from the computer network to which it is currently connected. If this
+   * machine is not currently connected to a computer, nothing happens.
+   */
   public void disconnectFromComputerNetwork() {
     computerHost = null;
     worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
