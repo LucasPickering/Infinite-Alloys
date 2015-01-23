@@ -43,9 +43,9 @@ public class TEEMetalForge extends TileEntityElectric {
 
   @Override
   public boolean shouldProcess() {
-    return (inventoryStacks[0] == null || inventoryStacks[0].isItemEqual(getIngotResult())
-                                          && inventoryStacks[0].stackSize
-                                             < getInventoryStackLimit()) && hasSufficientIngots();
+    return (inventoryStacks[0] == null
+            || inventoryStacks[0].isItemEqual(getIngotResult())
+               && inventoryStacks[0].stackSize < getInventoryStackLimit()) && hasSufficientIngots();
   }
 
   @Override
@@ -55,18 +55,18 @@ public class TEEMetalForge extends TileEntityElectric {
 
   @Override
   protected void onFinishProcess() {
-    final int[] ingotsToRemove = new int[Consts.METAL_COUNT];
+    int[] ingotsToRemove = new int[Consts.METAL_COUNT];
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
       ingotsToRemove[i] = EnumAlloy.getMetalAmt(recipeAlloyID, i);
     }
-    for (final int slot : getSlotsWithIngot()) {
-      final int ingotNum = MachineHelper.getIngotNum(inventoryStacks[slot]);
-      final int ingots = ingotsToRemove[ingotNum];
-      ingotsToRemove[ingotNum] -=
-          Math.min(ingotsToRemove[ingotNum], inventoryStacks[slot].stackSize);
-      decrStackSize(slot, Math.min(ingots, inventoryStacks[slot].stackSize));
+    for (int slot : getSlotsWithIngot()) {
+      int ingotNum = MachineHelper.getIngotNum(inventoryStacks[slot]);
+      int ingotsToTakeFromSlot = Math.min(ingotsToRemove[ingotNum],
+                                          inventoryStacks[slot].stackSize);
+      ingotsToRemove[ingotNum] -= ingotsToTakeFromSlot;
+      decrStackSize(slot, ingotsToTakeFromSlot);
     }
-    final ItemStack result = getIngotResult();
+    ItemStack result = getIngotResult();
 
     if (inventoryStacks[0] == null) {
       inventoryStacks[0] = result; // If there are no alloys in the output slot, add this one

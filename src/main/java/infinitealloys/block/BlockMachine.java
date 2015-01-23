@@ -3,7 +3,6 @@ package infinitealloys.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,8 +17,6 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.tile.IHost;
