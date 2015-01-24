@@ -72,15 +72,12 @@ public abstract class TileEntityIA extends TileEntity {
   @Override
   public void readFromNBT(NBTTagCompound tagCompound) {
     super.readFromNBT(tagCompound);
-    System.out.println("Before reading, orientation is " + orientation);
     orientation = EnumFacing.values()[tagCompound.getInteger("orientation")];
-    System.out.println("After reading, orientation is " + orientation);
   }
 
   @Override
   public void writeToNBT(NBTTagCompound tagCompound) {
     super.writeToNBT(tagCompound);
-    System.out.println("Writing orientation as " + orientation);
     tagCompound.setInteger("orientation", orientation.ordinal());
   }
 
@@ -107,7 +104,7 @@ public abstract class TileEntityIA extends TileEntity {
     return null;
   }
 
-  public void handlePacketDataFromServer(byte facingDir) {
+  public void handleTEIADataFromServer(byte facingDir) {
     this.orientation = EnumFacing.values()[facingDir];
     worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
   }

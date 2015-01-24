@@ -178,7 +178,7 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
     return ArrayUtils.addAll(super.getSyncDataToClient(), new Object[]{upgrades});
   }
 
-  public void handlePacketDataFromServer(int[] upgrades) {
+  public void handleTEMDataFromServer(int[] upgrades) {
     this.upgrades = upgrades;
   }
 

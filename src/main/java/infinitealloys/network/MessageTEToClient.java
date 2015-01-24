@@ -52,24 +52,24 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
     TileEntity te = Funcs.getTileEntity(Minecraft.getMinecraft().theWorld, tePoint);
 
     if (te instanceof TileEntityIA) {
-      byte orientation = bytes.readByte();
-      ((TileEntityIA) te).handlePacketDataFromServer(orientation);
+      byte facingDir = bytes.readByte();
+      ((TileEntityIA) te).handleTEIADataFromServer(facingDir);
 
       if (te instanceof TileEntityMachine) {
         int[] upgrades = new int[Consts.UPGRADE_TYPE_COUNT];
         for (int i = 0; i < upgrades.length; i++) {
           upgrades[i] = bytes.readInt();
         }
-        ((TileEntityMachine) te).handlePacketDataFromServer(upgrades);
+        ((TileEntityMachine) te).handleTEMDataFromServer(upgrades);
 
         if (te instanceof TileEntityElectric) {
           int processProgress = bytes.readInt();
-          ((TileEntityElectric) te).handlePacketDataFromServer(processProgress);
+          ((TileEntityElectric) te).handleTEEDataFromServer(processProgress);
 
           switch (((TileEntityElectric) te).getEnumMachine()) {
             case METAL_FORGE:
               byte recipeAlloyID = bytes.readByte();
-              ((TEEMetalForge) te).handlePacketDataFromServer(recipeAlloyID);
+              ((TEEMetalForge) te).handleTEMFDataFromServer(recipeAlloyID);
               break;
 
             case XRAY:
@@ -78,7 +78,7 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
               for (int i = 0; i < detectedBlocksSize; i++) {
                 detectedBlocks[i] = new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt());
               }
-              ((TEEXray) te).handlePacketDataFromServer(detectedBlocks);
+              ((TEEXray) te).handleTEXDataFromServer(detectedBlocks);
               break;
 
             case PASTURE:
@@ -86,13 +86,13 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
               for (int i = 0; i < mobActions.length; i++) {
                 mobActions[i] = bytes.readByte();
               }
-              ((TEEPasture) te).handlePacketData(mobActions);
+              ((TEEPasture) te).handleTEPPacketData(mobActions);
               break;
 
             case ENERGY_STORAGE:
               int currentRK = bytes.readInt();
               int baseRKPerTick = bytes.readInt();
-              ((TEEEnergyStorage) te).handlePacketDataFromServer(currentRK, baseRKPerTick);
+              ((TEEEnergyStorage) te).handleTEESDataFromServer(currentRK, baseRKPerTick);
               break;
           }
         }

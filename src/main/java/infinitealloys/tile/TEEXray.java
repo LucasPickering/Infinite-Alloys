@@ -163,7 +163,7 @@ public class TEEXray extends TileEntityElectric {
     return new Object[]{shouldSearch};
   }
 
-  public void handlePacketDataFromServer(Point3[] detectedBlocks) {
+  public void handleTEXDataFromServer(Point3[] detectedBlocks) {
     this.detectedBlocks.clear();
     for (Point3 point : detectedBlocks) {
       this.detectedBlocks.add(point);
@@ -171,7 +171,7 @@ public class TEEXray extends TileEntityElectric {
     refreshGUI = true;
   }
 
-  public void handlePacketDataFromClient(boolean shouldSearch) {
+  public void handleTEXDataFromClient(boolean shouldSearch) {
     this.shouldSearch = shouldSearch;
   }
 

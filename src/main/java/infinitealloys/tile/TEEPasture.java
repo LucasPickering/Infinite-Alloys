@@ -71,12 +71,12 @@ public class TEEPasture extends TileEntityElectric {
                 /* NOTE: For this specific machine, ticksToProcess = 0, meaning this function is called every tick. It is essentially an updateEntity() function with
                  * conditions applied in TileEntityMachine.updateEntity() */
 
-    final ArrayList<EntityCreature> trapList = new ArrayList<EntityCreature>();
-    final ArrayList<EntityCreature> repelList = new ArrayList<EntityCreature>();
+    ArrayList<EntityCreature> trapList = new ArrayList<EntityCreature>();
+    ArrayList<EntityCreature> repelList = new ArrayList<EntityCreature>();
 
     for (int i = 0; i < mobActions.length; i++) {
       if (mobActions[i] == 1) {
-        for (EntityCreature creature : (ArrayList<EntityChicken>) worldObj
+        for (EntityCreature creature : (ArrayList<EntityCreature>) worldObj
             .getEntitiesWithinAABB(mobClasses[i],
                                    AxisAlignedBB.getBoundingBox(xCoord - trapRange - 1, 0,
                                                                 zCoord - trapRange - 1,
@@ -86,7 +86,7 @@ public class TEEPasture extends TileEntityElectric {
           trapList.add(creature);
         }
       } else if (mobActions[i] == 2) {
-        for (EntityCreature creature : (ArrayList<EntityChicken>) worldObj
+        for (EntityCreature creature : (ArrayList<EntityCreature>) worldObj
             .getEntitiesWithinAABB(mobClasses[i],
                                    AxisAlignedBB
                                        .getBoundingBox(xCoord - repelRange, 0, zCoord - repelRange,
@@ -161,7 +161,7 @@ public class TEEPasture extends TileEntityElectric {
     return new Object[]{mobActions};
   }
 
-  public void handlePacketData(byte[] mobActions) {
+  public void handleTEPPacketData(byte[] mobActions) {
     this.mobActions = mobActions;
   }
 

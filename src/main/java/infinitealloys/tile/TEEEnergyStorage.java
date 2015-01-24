@@ -288,7 +288,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
     return ArrayUtils.addAll(super.getSyncDataToClient(), currentRK, baseRKPerTick);
   }
 
-  public void handlePacketDataFromServer(int currentRK, int baseRKPerTick) {
+  public void handleTEESDataFromServer(int currentRK, int baseRKPerTick) {
     this.currentRK = currentRK;
     this.baseRKPerTick = baseRKPerTick;
   }
