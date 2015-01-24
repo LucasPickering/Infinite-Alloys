@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import java.util.Random;
 
@@ -24,7 +24,7 @@ public abstract class TileEntityIA extends TileEntity {
   /**
    * A direction representing which way this block is facing.
    */
-  public ForgeDirection orientation = ForgeDirection.NORTH;
+  public EnumFacing orientation = EnumFacing.EAST;
 
   /**
    * Called when the block is first placed to restore persistent data from before it was destroyed.
@@ -72,12 +72,15 @@ public abstract class TileEntityIA extends TileEntity {
   @Override
   public void readFromNBT(NBTTagCompound tagCompound) {
     super.readFromNBT(tagCompound);
-    orientation = ForgeDirection.getOrientation(tagCompound.getInteger("orientation"));
+    System.out.println("Before reading, orientation is " + orientation);
+    orientation = EnumFacing.values()[tagCompound.getInteger("orientation")];
+    System.out.println("After reading, orientation is " + orientation);
   }
 
   @Override
   public void writeToNBT(NBTTagCompound tagCompound) {
     super.writeToNBT(tagCompound);
+    System.out.println("Writing orientation as " + orientation);
     tagCompound.setInteger("orientation", orientation.ordinal());
   }
 
@@ -105,7 +108,7 @@ public abstract class TileEntityIA extends TileEntity {
   }
 
   public void handlePacketDataFromServer(byte facingDir) {
-    this.orientation = ForgeDirection.getOrientation(facingDir);
+    this.orientation = EnumFacing.values()[facingDir];
     worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
   }
 

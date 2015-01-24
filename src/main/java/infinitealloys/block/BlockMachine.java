@@ -10,10 +10,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +22,7 @@ import infinitealloys.tile.IHost;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 
 public class BlockMachine extends BlockIA implements ITileEntityProvider {
@@ -130,7 +129,7 @@ public class BlockMachine extends BlockIA implements ITileEntityProvider {
                               ItemStack itemstack) {
     TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(x, y, z);
     if (tem != null) {
-      tem.orientation = ForgeDirection.getOrientation(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
+      tem.orientation = Funcs.yawToFacing(entityLiving.rotationYaw - 180F);
       if (itemstack.hasTagCompound()) {
         tem.loadNBTData(itemstack.getTagCompound());
       }

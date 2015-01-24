@@ -83,14 +83,11 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
     // Check for upgrades in the upgrade inventory slot. If there is one, remove it from the slot and add it to the machine.
     if (inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(
         inventoryStacks[upgradeSlotIndex])) {
-      upgrades[((ItemUpgrade) inventoryStacks[upgradeSlotIndex]
-          .getItem()).upgradeType]++; // Increment the element in the upgrades array that corresponds to
+      // Increment the element in the upgrades array that corresponds to
+      upgrades[((ItemUpgrade) inventoryStacks[upgradeSlotIndex].getItem()).upgradeType]++;
       inventoryStacks[upgradeSlotIndex] = null;
       updateUpgrades();
     }
-
-    System.out.println(
-        "Orientation on " + (worldObj.isRemote ? "client" : "server") + " is " + orientation);
   }
 
   /**

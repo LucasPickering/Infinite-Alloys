@@ -6,10 +6,10 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -39,7 +39,6 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
     try {
       for (int i = 0; i < temInstances.length; i++) {
         temInstances[i] = (TileEntityMachine) EnumMachine.values()[i].temClass.newInstance();
-        temInstances[i].orientation = ForgeDirection.SOUTH;
       }
     } catch (Exception e) {
       e.printStackTrace();
