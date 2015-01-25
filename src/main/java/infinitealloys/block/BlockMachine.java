@@ -29,6 +29,7 @@ public class BlockMachine extends BlockIA implements ITileEntityProvider {
 
   public BlockMachine() {
     super(Material.iron);
+    isBlockContainer = true;
   }
 
   @Override

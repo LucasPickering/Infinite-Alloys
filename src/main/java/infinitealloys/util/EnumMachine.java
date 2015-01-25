@@ -19,7 +19,6 @@ import infinitealloys.client.model.block.ModelEnergyStorage;
 import infinitealloys.client.model.block.ModelMetalForge;
 import infinitealloys.client.model.block.ModelPasture;
 import infinitealloys.client.model.block.ModelXray;
-import infinitealloys.client.render.TileEntityMachineRenderer;
 import infinitealloys.inventory.ContainerComputer;
 import infinitealloys.inventory.ContainerEnergyStorage;
 import infinitealloys.inventory.ContainerMachine;
@@ -36,21 +35,21 @@ import infinitealloys.tile.TileEntityMachine;
 public enum EnumMachine {
 
   COMPUTER("computer", TEMComputer.class, ContainerComputer.class,
-           GuiComputer.class, ModelComputer.class),
+           GuiComputer.class, new ModelComputer()),
   METAL_FORGE("metalForge", TEEMetalForge.class, ContainerMetalForge.class,
-              GuiMetalForge.class, ModelMetalForge.class),
+              GuiMetalForge.class, new ModelMetalForge()),
   XRAY("xray", TEEXray.class, ContainerXray.class,
-       GuiXray.class, ModelXray.class),
+       GuiXray.class, new ModelXray()),
   PASTURE("pasture", TEEPasture.class, ContainerPasture.class,
-          GuiPasture.class, ModelPasture.class),
+          GuiPasture.class, new ModelPasture()),
   ENERGY_STORAGE("energyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class,
-                 GuiEnergyStorage.class, ModelEnergyStorage.class, "currentRK");
+                 GuiEnergyStorage.class, new ModelEnergyStorage(), "currentRK");
 
   public final String name;
   public final Class<? extends TileEntityMachine> temClass;
   public final Class<? extends ContainerMachine> containerClass;
   public final Class<? extends GuiMachine> guiClass;
-  public final Class<? extends ModelBase> modelClass;
+  public final ModelBase model;
 
   /**
    * An array of the names of fields in the TE that should be saved when the block is destroyed and
@@ -61,27 +60,15 @@ public enum EnumMachine {
   private EnumMachine(String name, Class<? extends TileEntityMachine> temClass,
                       Class<? extends ContainerMachine> containerClass,
                       Class<? extends GuiMachine> guiClass,
-                      Class<? extends ModelBase> modelClass, String... persistentFields) {
+                      ModelBase model, String... persistentFields) {
     this.name = name;
     this.temClass = temClass;
     this.containerClass = containerClass;
     this.guiClass = guiClass;
-    this.modelClass = modelClass;
+    this.model = model;
     this.persistentFields = persistentFields;
   }
 
-  @SuppressWarnings("unchecked")
-  public ContainerMachine getContainer(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
-    try {
-      return containerClass.getConstructor(InventoryPlayer.class, TileEntityMachine.class)
-          .newInstance(inventoryPlayer, tem);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
-  }
-
-  @SuppressWarnings("unchecked")
   public GuiMachine getGui(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
     try {
       return guiClass.getConstructor(InventoryPlayer.class, temClass)
@@ -92,9 +79,10 @@ public enum EnumMachine {
     }
   }
 
-  public TileEntityMachineRenderer getTEMR() {
+  public ContainerMachine getContainer(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
     try {
-      return new TileEntityMachineRenderer(name, modelClass.newInstance());
+      return containerClass.getConstructor(InventoryPlayer.class, TileEntityMachine.class)
+          .newInstance(inventoryPlayer, tem);
     } catch (Exception e) {
       e.printStackTrace();
       return null;

@@ -33,7 +33,7 @@ public abstract class TileEntityIA extends TileEntity {
 
   public void updateEntity() {
     if (!initialized) {
-      markDirty();
+      //markDirty();
       initialized = true;
     }
   }
