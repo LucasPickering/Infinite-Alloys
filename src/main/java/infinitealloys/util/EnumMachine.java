@@ -47,10 +47,10 @@ public enum EnumMachine {
                  GuiEnergyStorage.class, ModelEnergyStorage.class, "currentRK");
 
   public final String name;
-  public final Class temClass;
-  public final Class containerClass;
-  public final Class guiClass;
-  public final Class modelClass;
+  public final Class<? extends TileEntityMachine> temClass;
+  public final Class<? extends ContainerMachine> containerClass;
+  public final Class<? extends GuiMachine> guiClass;
+  public final Class<? extends ModelBase> modelClass;
 
   /**
    * An array of the names of fields in the TE that should be saved when the block is destroyed and
@@ -73,8 +73,7 @@ public enum EnumMachine {
   @SuppressWarnings("unchecked")
   public ContainerMachine getContainer(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
     try {
-      return (ContainerMachine) containerClass
-          .getConstructor(InventoryPlayer.class, TileEntityMachine.class)
+      return containerClass.getConstructor(InventoryPlayer.class, TileEntityMachine.class)
           .newInstance(inventoryPlayer, tem);
     } catch (Exception e) {
       e.printStackTrace();
@@ -85,7 +84,7 @@ public enum EnumMachine {
   @SuppressWarnings("unchecked")
   public GuiMachine getGui(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
     try {
-      return (GuiMachine) guiClass.getConstructor(InventoryPlayer.class, temClass)
+      return guiClass.getConstructor(InventoryPlayer.class, temClass)
           .newInstance(inventoryPlayer, tem);
     } catch (Exception e) {
       e.printStackTrace();
@@ -95,7 +94,7 @@ public enum EnumMachine {
 
   public TileEntityMachineRenderer getTEMR() {
     try {
-      return new TileEntityMachineRenderer(name, (ModelBase) modelClass.newInstance());
+      return new TileEntityMachineRenderer(name, modelClass.newInstance());
     } catch (Exception e) {
       e.printStackTrace();
       return null;

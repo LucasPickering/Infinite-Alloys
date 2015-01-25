@@ -27,6 +27,18 @@ public abstract class TileEntityIA extends TileEntity {
   public EnumFacing orientation = EnumFacing.EAST;
 
   /**
+   * False until the first call of {@link #updateEntity()}
+   */
+  private boolean initialized;
+
+  public void updateEntity() {
+    if (!initialized) {
+      markDirty();
+      initialized = true;
+    }
+  }
+
+  /**
    * Called when the block is first placed to restore persistent data from before it was destroyed.
    * This can be data such as the stored RK in an ESU
    */
@@ -106,7 +118,6 @@ public abstract class TileEntityIA extends TileEntity {
 
   public void handleTEIADataFromServer(byte facingDir) {
     this.orientation = EnumFacing.values()[facingDir];
-    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
   }
 
   /**

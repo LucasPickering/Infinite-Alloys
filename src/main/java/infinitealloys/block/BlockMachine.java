@@ -70,12 +70,12 @@ public class BlockMachine extends BlockIA implements ITileEntityProvider {
       if (!heldItem.hasTagCompound()) {
         heldItem.setTagCompound(new NBTTagCompound());
       }
-      heldItem.getTagCompound()
-          .setIntArray("CoordsCurrent", new int[]{world.provider.dimensionId, x, y, z});
+      heldItem.getTagCompound().setIntArray("CoordsCurrent",
+                                            new int[]{world.provider.dimensionId, x, y, z});
 
       // Open the GUI for the wand to let the player decide what they want to do with this block
-      player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI_ID, world, (int) player.posX,
-                     (int) player.posY, (int) player.posZ);
+      player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI_ID, world,
+                     (int) player.posX, (int) player.posY, (int) player.posZ);
       return true;
     }
 
@@ -87,14 +87,14 @@ public class BlockMachine extends BlockIA implements ITileEntityProvider {
     if (!world.isRemote) {
       world.markBlockForUpdate(tem.xCoord, tem.yCoord, tem.zCoord);
     }
-    player.openGui(InfiniteAlloys.instance, tem.getEnumMachine().ordinal(), world, tem.xCoord,
-                   tem.yCoord, tem.zCoord);
+    player.openGui(InfiniteAlloys.instance, tem.getEnumMachine().ordinal(), world,
+                   tem.xCoord, tem.yCoord, tem.zCoord);
   }
 
   @Override
   public TileEntity createNewTileEntity(World world, int metadata) {
     try {
-      return (TileEntity) EnumMachine.values()[metadata].temClass.newInstance();
+      return EnumMachine.values()[metadata].temClass.newInstance();
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -119,9 +119,11 @@ public class BlockMachine extends BlockIA implements ITileEntityProvider {
   }
 
   @Override
-  public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY,
-                               int tileZ) {
-    ((TileEntityMachine) world.getTileEntity(x, y, z)).onNeighborChange(tileX, tileY, tileZ);
+  public void onNeighborChange(IBlockAccess world, int x, int y, int z,
+                               int neighborX, int neighborY, int neighborZ) {
+    super.onNeighborChange(world, x, y, z, neighborX, neighborY, neighborZ);
+    ((TileEntityMachine) world.getTileEntity(x, y, z))
+        .onNeighborChange(neighborX, neighborY, neighborZ);
   }
 
   @Override

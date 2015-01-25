@@ -68,7 +68,6 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
   }
 
   public TileEntityMachine() {
-    super();
     populateValidUpgrades();
     updateUpgrades();
   }
@@ -80,6 +79,7 @@ public abstract class TileEntityMachine extends TileEntityIA implements IInvento
 
   @Override
   public void updateEntity() {
+    super.updateEntity();
     // Check for upgrades in the upgrade inventory slot. If there is one, remove it from the slot and add it to the machine.
     if (inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(
         inventoryStacks[upgradeSlotIndex])) {

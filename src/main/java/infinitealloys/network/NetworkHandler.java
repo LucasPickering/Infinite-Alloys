@@ -67,8 +67,8 @@ public class NetworkHandler {
         writeObject(bytes, i);
       }
     } else {
-      System.out
-          .println("Infinite Alloys: Unknown type " + o.getClass().getName() + " for object " + o);
+      throw new RuntimeException(
+          "Infinite Alloys: Unknown type " + o.getClass().getName() + " for object " + o);
     }
   }
 }
