@@ -42,11 +42,6 @@ public class TEEXray extends TileEntityElectric {
    */
   public boolean shouldSearch;
 
-  public TEEXray(byte front) {
-    this();
-    this.front = front;
-  }
-
   public TEEXray() {
     super(2);
     stackLimit = 1;

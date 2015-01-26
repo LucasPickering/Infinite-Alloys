@@ -50,11 +50,6 @@ public class TEEPasture extends TileEntityElectric {
   private int trapRange;
   private int repelRange;
 
-  public TEEPasture(byte front) {
-    this();
-    this.front = front;
-  }
-
   public TEEPasture() {
     super(1);
     baseRKPerTick = -4;
@@ -176,7 +171,7 @@ public class TEEPasture extends TileEntityElectric {
     rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(Consts.EFFICIENCY)];
 
     int[] capacityUpgradeValues = {2, 4, 6, 8};
-    stackLimit = capacityUpgradeValues[getUpgradeTier(Consts.CAPACITY)];
+    maxSpots = capacityUpgradeValues[getUpgradeTier(Consts.CAPACITY)];
 
     int[] trapRangeUpgradeValues = {5, 10, 15, 20};
     trapRange = trapRangeUpgradeValues[getUpgradeTier(Consts.RANGE)];

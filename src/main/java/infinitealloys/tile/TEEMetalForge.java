@@ -25,11 +25,6 @@ public class TEEMetalForge extends TileEntityElectric {
    */
   private boolean recipeChanged;
 
-  public TEEMetalForge(byte front) {
-    this();
-    this.front = front;
-  }
-
   public TEEMetalForge() {
     super(20);
     baseRKPerTick = -18;
