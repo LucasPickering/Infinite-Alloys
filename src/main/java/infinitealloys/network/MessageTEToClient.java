@@ -19,7 +19,7 @@ import io.netty.buffer.ByteBuf;
 
 public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToClient, IMessage> {
 
-  private Point machine;
+  private Point tePoint;
   private Object[] data;
   private ByteBuf bytes;
 
@@ -27,33 +27,28 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
   }
 
   public MessageTEToClient(TileEntityMachine tem) {
-    machine = tem.coords();
-
-    if (tem.getWorldObj().isRemote) {
-      data = tem.getSyncDataToServer();
-    } else {
-      data = tem.getSyncDataToClient();
-    }
+    tePoint = tem.coords();
+    data = tem.getSyncDataToClient();
   }
 
   @Override
   public void fromBytes(ByteBuf bytes) {
-    machine = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+    tePoint = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
     this.bytes = bytes;
   }
 
   @Override
   public void toBytes(ByteBuf bytes) {
-    NetworkHandler.writeObject(bytes, machine);
+    NetworkHandler.writeObject(bytes, tePoint);
     NetworkHandler.writeObject(bytes, data);
   }
 
   @Override
   public IMessage onMessage(MessageTEToClient message, MessageContext context) {
-    machine = message.machine;
+    tePoint = message.tePoint;
     bytes = message.bytes;
 
-    TileEntity te = Funcs.getTileEntity(Minecraft.getMinecraft().theWorld, machine);
+    TileEntity te = Funcs.getTileEntity(Minecraft.getMinecraft().theWorld, tePoint);
 
     if (te instanceof TileEntityMachine) {
       byte orientation = bytes.readByte();

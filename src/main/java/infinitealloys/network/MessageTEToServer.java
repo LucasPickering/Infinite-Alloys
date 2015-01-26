@@ -15,7 +15,7 @@ import io.netty.buffer.ByteBuf;
 
 public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToServer, IMessage> {
 
-  private Point machine;
+  private Point tePoint;
   private Object[] data;
   private ByteBuf bytes;
 
@@ -23,33 +23,28 @@ public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToS
   }
 
   public MessageTEToServer(TileEntityMachine tem) {
-    machine = tem.coords();
-
-    if (tem.getWorldObj().isRemote) {
-      data = tem.getSyncDataToServer();
-    } else {
-      data = tem.getSyncDataToClient();
-    }
+    tePoint = tem.coords();
+    data = tem.getSyncDataToServer();
   }
 
   @Override
   public void fromBytes(ByteBuf bytes) {
-    machine = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+    tePoint = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
     this.bytes = bytes;
   }
 
   @Override
   public void toBytes(ByteBuf bytes) {
-    NetworkHandler.writeObject(bytes, machine);
+    NetworkHandler.writeObject(bytes, tePoint);
     NetworkHandler.writeObject(bytes, data);
   }
 
   @Override
   public IMessage onMessage(MessageTEToServer message, MessageContext context) {
-    machine = message.machine;
+    tePoint = message.tePoint;
     bytes = message.bytes;
 
-    TileEntity te = Funcs.getTileEntity(context.getServerHandler().playerEntity.worldObj, machine);
+    TileEntity te = Funcs.getTileEntity(context.getServerHandler().playerEntity.worldObj, tePoint);
 
     if (te instanceof TileEntityMachine) {
       switch (((TileEntityMachine) te).getEnumMachine()) {
