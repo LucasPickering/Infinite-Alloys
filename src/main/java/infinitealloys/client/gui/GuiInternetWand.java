@@ -14,11 +14,11 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import infinitealloys.block.IABlocks;
 import infinitealloys.client.EnumHelp;
-import infinitealloys.client.gui.GuiMachine.ColoredLine;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.network.MessageWand;
 import infinitealloys.tile.IHost;
@@ -78,6 +78,20 @@ public class GuiInternetWand extends GuiScreen {
    */
   private int scrollPos;
 
+  private HashMap<String, ColoredText[]> helpText = new HashMap<String, ColoredText[]>();
+
+  public GuiInternetWand() {
+    // Make an array with the help title and the lines of help text
+    for (EnumHelp help : EnumHelp.getNetworkWandBoxes()) {
+      List<ColoredText> lines = new ArrayList<ColoredText>();
+      lines.add(new ColoredText(Funcs.getLoc("machineHelp." + help.name + ".title"), 0xffffff));
+      for (String s : Funcs.getLoc("machineHelp." + help.name + ".info").split("/n")) {
+        lines.add(new ColoredText(s, 0xaaaaaa));
+      }
+      helpText.put(help.name, lines.toArray(new ColoredText[lines.size()]));
+    }
+  }
+
   @Override
   public void initGui() {
     topLeft.setLocation((width - WIDTH) / 2, (height - HEIGHT) / 2);
@@ -102,20 +116,22 @@ public class GuiInternetWand extends GuiScreen {
 
       // Create each button for the machines
       machineButtons.clear(); // Get rid of all the old buttons
-      for (int i = 0; i < Consts.WAND_SIZE; i++) { // For each button in the array
-        if (tagCompound
-            .hasKey("Coords" + i)) { // If there is a machine that corresponds to this button
+      // For each button in the array
+      for (int i = 0; i < Consts.WAND_SIZE; i++) {
+        // If there is a machine that corresponds to this button
+        if (tagCompound.hasKey("Coords" + i)) {
           int[] client = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
-          if (!MachineHelper.isClient(DimensionManager.getWorld(client[0])
-                                          .getTileEntity(client[1], client[2],
-                                                         client[3]))) { // If the block is no longer valid
+          // If the block is no longer valid
+          if (!MachineHelper.isClient(DimensionManager.getWorld(client[0]).getTileEntity(
+              client[1], client[2], client[3]))) {
             Funcs.sendPacketToServer(new MessageWand((byte) i)); // Remove it
             ((ItemInternetWand) heldItem.getItem()).removeMachine(heldItem, i);
             i--; // Decrement i so that it repeats this number for the new button
           } else {
-            machineButtons.add(
-                new MachineButton(i, topLeft.x + 7, topLeft.y + 42 + (i - scrollPos) * 21,
-                                  client[0], client[1], client[2], client[3])); // Create a button
+            // Create a button
+            machineButtons.add(new MachineButton(i, topLeft.x + 7,
+                                                 topLeft.y + 42 + (i - scrollPos) * 21,
+                                                 client[0], client[1], client[2], client[3]));
           }
         }
       }
@@ -135,10 +151,11 @@ public class GuiInternetWand extends GuiScreen {
               && (selectedButtons & 1 << button.buttonID) != 0) // If this button is selected
           // If the selected machine is not valid for the block that was clicked
           {
-            if (!(te instanceof IHost) || button.dimensionID != te
-                .getWorldObj().provider.dimensionId ||
-                !((IHost) te)
-                    .isClientValid(new Point(button.machineX, button.machineY, button.machineZ))) {
+            if (!(te instanceof IHost)
+                || button.dimensionID != te.getWorldObj().provider.dimensionId
+                || !((IHost) te).isClientValid(new Point(button.machineX,
+                                                         button.machineY,
+                                                         button.machineZ))) {
               addSelected.enabled = false; // Set the button to false
             }
           }
@@ -167,11 +184,10 @@ public class GuiInternetWand extends GuiScreen {
     }
     // Otherwise, enable it
     else {
-      Funcs.drawTexturedModalRect(this, topLeft.x + SCROLL_BAR.x, topLeft.y + SCROLL_BAR.y
-                                                                  + (int) (
-                                      (float) (SCROLL_BAR.height - GuiMachine.SCROLL_ON.height)
-                                      / (float) (machineButtons.size()
-                                                 - 5) * scrollPos),
+      Funcs.drawTexturedModalRect(this, topLeft.x + SCROLL_BAR.x,
+                                  topLeft.y + SCROLL_BAR.y + (int)
+                                      ((float) (SCROLL_BAR.height - GuiMachine.SCROLL_ON.height)
+                                       / (float) (machineButtons.size() - 5) * scrollPos),
                                   GuiMachine.SCROLL_ON);
     }
     GL11.glPopMatrix();
@@ -217,16 +233,8 @@ public class GuiInternetWand extends GuiScreen {
         // Fill in the zone with an smaller 4th hex pair for less alpha
         drawRect(hoveredZone.x, hoveredZone.y, hoveredZone.x + hoveredZone.w,
                  hoveredZone.y + hoveredZone.h, 0x60000000 + hoveredZone.color);
-
-        // Draw text box with help info
-        List<ColoredLine> lines = new ArrayList<ColoredLine>();
-        lines.add(
-            new ColoredLine(Funcs.getLoc("machineHelp." + hoveredZone.name + ".title"), 0xffffff));
-        for (String s : Funcs.getLoc("machineHelp." + hoveredZone.name + ".info").split("/n")) {
-          lines.add(new ColoredLine(s, 0xaaaaaa));
-        }
-        drawTextBox(mouseX - topLeft.x, mouseY - topLeft.y,
-                    lines.toArray(new ColoredLine[lines.size()]));
+        new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y,
+                       helpText.get(hoveredZone.name)).draw(); // Draw text box with help info
       }
     }
     GL11.glPopMatrix();
@@ -357,48 +365,6 @@ public class GuiInternetWand extends GuiScreen {
   @Override
   public boolean doesGuiPauseGame() {
     return false;
-  }
-
-  protected void drawTextBox(int mouseX, int mouseY, ColoredLine... lines) {
-    // Set the width of the box to the length of the longest line
-    int boxWidth = 0;
-    for (ColoredLine line : lines) {
-      boxWidth = Math.max(boxWidth, fontRendererObj.getStringWidth(line.text));
-    }
-
-    // This is from vanilla, I have no idea what it does, other than make it work
-    mouseX += 12;
-    mouseY -= 12;
-    int var9 = 8;
-    if (lines.length > 1) {
-      var9 += 2 + (lines.length - 1) * 10;
-    }
-    int var10 = -267386864;
-    drawGradientRect(mouseX - 3, mouseY - 4, mouseX + boxWidth + 3, mouseY - 3, var10, var10);
-    drawGradientRect(mouseX - 3, mouseY + var9 + 3, mouseX + boxWidth + 3, mouseY + var9 + 4, var10,
-                     var10);
-    drawGradientRect(mouseX - 3, mouseY - 3, mouseX + boxWidth + 3, mouseY + var9 + 3, var10,
-                     var10);
-    drawGradientRect(mouseX - 4, mouseY - 3, mouseX - 3, mouseY + var9 + 3, var10, var10);
-    drawGradientRect(mouseX + boxWidth + 3, mouseY - 3, mouseX + boxWidth + 4, mouseY + var9 + 3,
-                     var10, var10);
-    int var11 = 1347420415;
-    int var12 = (var11 & 16711422) >> 1 | var11 & -16777216;
-    drawGradientRect(mouseX - 3, mouseY - 3 + 1, mouseX - 3 + 1, mouseY + var9 + 3 - 1, var11,
-                     var12);
-    drawGradientRect(mouseX + boxWidth + 2, mouseY - 3 + 1, mouseX + boxWidth + 3,
-                     mouseY + var9 + 3 - 1, var11, var12);
-    drawGradientRect(mouseX - 3, mouseY - 3, mouseX + boxWidth + 3, mouseY - 3 + 1, var11, var11);
-    drawGradientRect(mouseX - 3, mouseY + var9 + 2, mouseX + boxWidth + 3, mouseY + var9 + 3, var12,
-                     var12);
-
-    for (int i = 0; i < lines.length; i++) {
-      fontRendererObj
-          .drawStringWithShadow(lines[i].text, mouseX, mouseY + i * 10 + (i == 0 ? 0 : 2),
-                                lines[i].color);
-    }
-    zLevel = 0F;
-    itemRenderer.zLevel = 0F;
   }
 
   /**

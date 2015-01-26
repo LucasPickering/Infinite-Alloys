@@ -13,6 +13,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import infinitealloys.block.BlockMachine;
@@ -71,6 +72,7 @@ public abstract class GuiMachine extends GuiContainer {
    * When help is enabled, slots get a colored outline and a mouse-over description
    */
   protected boolean helpEnabled;
+  private HashMap<String, ColoredText[]> helpText = new HashMap<String, ColoredText[]>();
 
   public GuiMachine(int xSize, int ySize, InventoryPlayer inventoryPlayer,
                     TileEntityMachine tileEntity) {
@@ -79,6 +81,15 @@ public abstract class GuiMachine extends GuiContainer {
     this.ySize = ySize;
     tem = tileEntity;
     background = Funcs.getGuiTexture(tem.getEnumMachine().name);
+    // Make an array with the help title and the lines of help text
+    for (EnumHelp help : tem.getEnumMachine().getHelpBoxes()) {
+      List<ColoredText> lines = new ArrayList<ColoredText>();
+      lines.add(new ColoredText(Funcs.getLoc("machineHelp." + help.name + ".title"), 0xffffff));
+      for (String s : Funcs.getLoc("machineHelp." + help.name + ".info").split("/n")) {
+        lines.add(new ColoredText(s, 0xaaaaaa));
+      }
+      helpText.put(help.name, lines.toArray(new ColoredText[lines.size()]));
+    }
   }
 
   @Override
@@ -99,18 +110,19 @@ public abstract class GuiMachine extends GuiContainer {
     Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
     if (!helpEnabled && Funcs.mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x,
                                           slot.yDisplayPosition + topLeft.y, 16, 16)) {
-      List<ColoredLine> lines = new ArrayList<ColoredLine>();
-      lines.add(new ColoredLine(Funcs.getLoc("general.upgrades"), 0xffffff));
+      ArrayList<ColoredText> lines = new ArrayList<ColoredText>();
+      lines.add(new ColoredText(Funcs.getLoc("general.upgrades"), 0xffffff));
 
       for (int i = 0; i < Consts.UPGRADE_TYPE_COUNT; i++) {
         if (tem.getUpgradeTier(i) > 0) {
-          lines.add(new ColoredLine(
+          lines.add(new ColoredText(
               Funcs.getLoc("item.ia" + IAItems.upgrades[i].name + tem.getUpgradeTier(i) + ".name"),
               0xaaaaaa));
         }
       }
 
-      drawTextBox(mouseX, mouseY, lines.toArray(new ColoredLine[lines.size()]));
+      new GuiTextBox(fontRendererObj, mouseX, mouseY, lines.toArray(new ColoredText[lines.size()]))
+          .draw();
     }
 
     // Draw the network info if the mouse is over the network icon and help is disabled
@@ -119,7 +131,7 @@ public abstract class GuiMachine extends GuiContainer {
                      NETWORK_ICON.width, NETWORK_ICON.height))
     // Draw a text box with a line for each network show its status and information
     {
-      drawTextBox(mouseX, mouseY, getNetworkStatuses());
+      new GuiTextBox(fontRendererObj, mouseX, mouseY, getNetworkStatuses()).draw();
     }
 
     GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -154,30 +166,36 @@ public abstract class GuiMachine extends GuiContainer {
           new GuiMachineTab(mc, itemRender, -24, 6, tec, true,
                             tem.coords().equals(tem.computerHost));
       computerTab.drawButton();
+      // Draw a text box with the machine's name and coordinates
       if (Funcs
           .mouseInZone(mouseX, mouseY, topLeft.x + computerTab.xPos, topLeft.y + computerTab.yPos,
                        computerTab.width, computerTab.height)) {
-        drawTextBox(mouseX - topLeft.x, mouseY - topLeft.y, new ColoredLine(
-                        Funcs.getLoc(
-                            "tile.ia" + computerTab.tem.getEnumMachine().name + ".name"),
-                        0xffffff),
-                    new ColoredLine(computerTab.tem.coords().toString(), 0xffffff));
+
+        new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y,
+                       Funcs.getLoc("tile.ia" + computerTab.tem.getEnumMachine().name + ".name"),
+                       computerTab.tem.coords().toString()).draw();
+
       }
+
       Point[] clients = tec.getClients();
+      // For each client
       for (int i = 0; i < clients.length; i++) {
         machineTabs.add(new GuiMachineTab(mc, itemRender, i / 5 * 197 - 24, i % 5 * 25 + 36,
                                           (TileEntityElectric) Funcs
                                               .getTileEntity(mc.theWorld, clients[i]),
                                           i / 5 == 0, clients[i].equals(tem.coords())));
         machineTabs.get(i).drawButton();
+
+        // If the mouse is over this client's tab, draw a text box with its name and coords
         if (Funcs.mouseInZone(mouseX, mouseY, topLeft.x + machineTabs.get(i).xPos,
                               topLeft.y + machineTabs.get(i).yPos, machineTabs.get(i).width,
                               machineTabs.get(i).height)) {
-          drawTextBox(mouseX - topLeft.x, mouseY - topLeft.y, new ColoredLine(
-                          Funcs.getLoc("tile.ia" + machineTabs.get(i).tem.getEnumMachine().name
-                                       + ".name"),
-                          0xffffff),
-                      new ColoredLine(machineTabs.get(i).tem.coords().toString(), 0xffffff));
+
+          new GuiTextBox(fontRendererObj,
+                         mouseX - topLeft.x, mouseY - topLeft.y,
+                         Funcs.getLoc("tile.ia" + machineTabs.get(i).tem.getEnumMachine().name
+                                      + ".name"), machineTabs.get(i).tem.coords().toString());
+
         }
       }
     }
@@ -209,57 +227,14 @@ public abstract class GuiMachine extends GuiContainer {
         // Fill in the zone with an smaller 4th hex pair for less alpha
         drawRect(hoveredZone.x, hoveredZone.y, hoveredZone.x + hoveredZone.w,
                  hoveredZone.y + hoveredZone.h, 0x60000000 + hoveredZone.color);
-
-        // Draw text box with help info
-        List<ColoredLine> lines = new ArrayList<ColoredLine>();
-        lines.add(
-            new ColoredLine(Funcs.getLoc("machineHelp." + hoveredZone.name + ".title"), 0xffffff));
-        for (String s : Funcs.getLoc("machineHelp." + hoveredZone.name + ".info").split("/n")) {
-          lines.add(new ColoredLine(s, 0xaaaaaa));
-        }
-        drawTextBox(mouseX - topLeft.x, mouseY - topLeft.y,
-                    lines.toArray(new ColoredLine[lines.size()]));
+        new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y,
+                       helpText.get(hoveredZone.name)).draw(); // Draw text box with help info
       }
     }
     GL11.glPopMatrix();
 
     GL11.glEnable(GL11.GL_DEPTH_TEST);
     GL11.glEnable(GL11.GL_LIGHTING);
-  }
-
-  protected void drawTextBox(int x, int y, ColoredLine... lines) {
-    // Set the width of the box to the length of the longest line
-    int boxWidth = 0;
-    for (ColoredLine line : lines) {
-      boxWidth = Math.max(boxWidth, fontRendererObj.getStringWidth(line.text));
-    }
-
-    // This is from vanilla, I have no idea what it does, other than make it work
-    x += 12;
-    y -= 12;
-    int var9 = 8;
-    if (lines.length > 1) {
-      var9 += 2 + (lines.length - 1) * 10;
-    }
-    int var10 = -267386864;
-    drawGradientRect(x - 3, y - 4, x + boxWidth + 3, y - 3, var10, var10);
-    drawGradientRect(x - 3, y + var9 + 3, x + boxWidth + 3, y + var9 + 4, var10, var10);
-    drawGradientRect(x - 3, y - 3, x + boxWidth + 3, y + var9 + 3, var10, var10);
-    drawGradientRect(x - 4, y - 3, x - 3, y + var9 + 3, var10, var10);
-    drawGradientRect(x + boxWidth + 3, y - 3, x + boxWidth + 4, y + var9 + 3, var10, var10);
-    int var11 = 1347420415;
-    int var12 = (var11 & 16711422) >> 1 | var11 & -16777216;
-    drawGradientRect(x - 3, y - 3 + 1, x - 3 + 1, y + var9 + 3 - 1, var11, var12);
-    drawGradientRect(x + boxWidth + 2, y - 3 + 1, x + boxWidth + 3, y + var9 + 3 - 1, var11, var12);
-    drawGradientRect(x - 3, y - 3, x + boxWidth + 3, y - 3 + 1, var11, var11);
-    drawGradientRect(x - 3, y + var9 + 2, x + boxWidth + 3, y + var9 + 3, var12, var12);
-
-    for (int i = 0; i < lines.length; i++) {
-      fontRendererObj
-          .drawStringWithShadow(lines[i].text, x, y + i * 10 + (i == 0 ? 0 : 2), lines[i].color);
-    }
-    zLevel = 0F;
-    itemRender.zLevel = 0F;
   }
 
   @Override
@@ -299,22 +274,5 @@ public abstract class GuiMachine extends GuiContainer {
     }
   }
 
-  protected abstract ColoredLine[] getNetworkStatuses();
-
-  public static class ColoredLine {
-
-    /**
-     * The line's text
-     */
-    String text;
-    /**
-     * The line's hexadecimal color
-     */
-    int color;
-
-    protected ColoredLine(String text, int color) {
-      this.text = text;
-      this.color = color;
-    }
-  }
+  protected abstract ColoredText[] getNetworkStatuses();
 }

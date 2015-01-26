@@ -34,12 +34,8 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
   private final TileEntityMachine[] temInstances = new TileEntityMachine[Consts.MACHINE_COUNT];
 
   public GfxHandler() {
-    try {
-      for (int i = 0; i < temInstances.length; i++) {
-        temInstances[i] = EnumMachine.values()[i].getNewTEM();
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
+    for (int i = 0; i < temInstances.length; i++) {
+      temInstances[i] = EnumMachine.values()[i].getNewTEM();
     }
   }
 

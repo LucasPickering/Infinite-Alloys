@@ -42,20 +42,19 @@ public class Funcs {
   }
 
   /**
-   * Get a localization or series of localization with keys. Add '/' to the start of a key to have
-   * it added to the final string without being localized. e.g. getLoc("general.off", "/is not",
-   * "general.on") would return "Off is not On"
+   * Get a localization or series of localization via keys. Add '/' to the start of a key to have it
+   * added to the final string without being localized. e.g. getLoc("general.off", "/is not",
+   * "general.on") would return "Off is not On" (If the language is English)
    *
    * @param keys the list of keys to be localized and spliced together into a final string
    * @return the final string of one or more concatenated literal and/or localized strings
    */
   public static String getLoc(String... keys) {
     String finalKey = "";
-    for (final String key : keys) {
+    for (String key : keys) {
       if (key.length() == 0) {
         continue;
-      }
-      if (key.charAt(0) == '/') {
+      } else if (key.charAt(0) == '/') {
         finalKey += key.substring(1);
       } else {
         finalKey += LanguageRegistry.instance().getStringLocalization(key);
@@ -67,7 +66,7 @@ public class Funcs {
   /**
    * Convert an entity's yaw to a Vanilla MC block face number
    *
-   * @param int a number of {0, 1, 2, 3} that represents a compass direction
+   * @param rotation a number of {0, 1, 2, 3} that represents a compass direction
    */
   public static byte yawToNumSide(int rotation) {
     switch (rotation) {

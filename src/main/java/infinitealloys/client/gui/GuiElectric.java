@@ -31,9 +31,10 @@ public abstract class GuiElectric extends GuiMachine {
     GL11.glDisable(GL11.GL_DEPTH_TEST);
 
     // Draw the progress and energy info if the mouse is over the progress bar and help is disabled
-    if (!helpEnabled && tee.ticksToProcess > 0 && Funcs
-        .mouseInZone(mouseX, mouseY, topLeft.x + progressBar.x, topLeft.y + progressBar.y,
-                     PROGRESS_BAR.width, PROGRESS_BAR.height)) {
+    if (!helpEnabled && tee.ticksToProcess > 0
+        && Funcs.mouseInZone(mouseX, mouseY,
+                             topLeft.x + progressBar.x, topLeft.y + progressBar.y,
+                             PROGRESS_BAR.width, PROGRESS_BAR.height)) {
       int rkChange = tee.shouldProcess() ? tee.getRKChange() : 0;
 
       // The current process progress displayed as a percent
@@ -43,12 +44,10 @@ public abstract class GuiElectric extends GuiMachine {
       String line2 = (rkChange > 0 ? "+" : "") + rkChange + " RK/t";
 
       // Draw all the information, with colors for the change based on pos/neg
-      drawTextBox(mouseX, mouseY, new ColoredLine(line1, 0xffffff), new ColoredLine(line2,
-                                                                                    rkChange < 0
-                                                                                    ? 0xff0000
-                                                                                    : rkChange > 0
-                                                                                      ? 0x00ff00
-                                                                                      : 0xffffff));
+      new GuiTextBox(fontRendererObj, mouseX, mouseY, new ColoredText(line1, 0xffffff),
+                     new ColoredText(line2,
+                                     rkChange < 0 ? 0xff0000 : rkChange > 0 ? 0x00ff00 : 0xffffff))
+          .draw();
     }
 
     GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -73,7 +72,7 @@ public abstract class GuiElectric extends GuiMachine {
   }
 
   @Override
-  protected ColoredLine[] getNetworkStatuses() {
+  protected ColoredText[] getNetworkStatuses() {
     int color;
     String status;
 
@@ -85,7 +84,7 @@ public abstract class GuiElectric extends GuiMachine {
       status = Funcs.getLoc("machine.network.hostedby") + " " + tee.energyHost;
     }
 
-    return new ColoredLine[]{
-        new ColoredLine(Funcs.getLoc("machine.network.energy") + ": " + status, color)};
+    return new ColoredText[]{
+        new ColoredText(Funcs.getLoc("machine.network.energy") + ": " + status, color)};
   }
 }

@@ -34,9 +34,9 @@ public class GuiMetalForge extends GuiElectric {
         if (Funcs
             .mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42,
                          18, 18)) {
-          drawTextBox(mouseX, mouseY,
-                      new ColoredLine(Funcs.getLoc("metal." + Consts.METAL_NAMES[i] + ".name"),
-                                      0xffffff));
+          new GuiTextBox(fontRendererObj, mouseX, mouseY,
+                         new ColoredText(Funcs.getLoc("metal." + Consts.METAL_NAMES[i] + ".name"),
+                                         0xffffff)).draw();
         }
       }
     }

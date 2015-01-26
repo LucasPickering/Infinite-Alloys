@@ -55,7 +55,7 @@ public enum EnumMachine {
    * An array of the names of fields in the TE that should be saved when the block is destroyed and
    * restored when it is placed back down, e.g. currentRK for the ESU.
    */
-  private String[] persistentFields;
+  public final String[] persistentFields;
 
   private EnumMachine(String name, Class<? extends TileEntityMachine> temClass,
                       Class<? extends ContainerMachine> containerClass,
@@ -101,10 +101,6 @@ public enum EnumMachine {
 
   public TileEntityMachineRenderer getNewTEMR() {
     return new TileEntityMachineRenderer(name, model);
-  }
-
-  public String[] getPersistentFields() {
-    return persistentFields;
   }
 
   public boolean stackValidForSlot(int index, ItemStack itemstack) {
