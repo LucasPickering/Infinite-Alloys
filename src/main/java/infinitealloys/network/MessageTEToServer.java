@@ -50,12 +50,12 @@ public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToS
       switch (((TileEntityMachine) te).getEnumMachine()) {
         case METAL_FORGE:
           byte recipeAlloyID = bytes.readByte();
-          ((TEEMetalForge) te).handlePacketDataFromClient(recipeAlloyID);
+          ((TEEMetalForge) te).handleTEMFDataFromClient(recipeAlloyID);
           break;
 
         case XRAY:
           boolean shouldSearch = bytes.readBoolean();
-          ((TEEXray) te).handlePacketDataFromClient(shouldSearch);
+          ((TEEXray) te).handleTEXDataFromClient(shouldSearch);
           break;
 
         case PASTURE:
@@ -63,7 +63,7 @@ public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToS
           for (int i = 0; i < mobActions.length; i++) {
             mobActions[i] = bytes.readByte();
           }
-          ((TEEPasture) te).handlePacketData(mobActions);
+          ((TEEPasture) te).handleTEPPacketData(mobActions);
           break;
       }
     }

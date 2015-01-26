@@ -232,7 +232,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
     return null;
   }
 
-  public void handlePacketDataFromServer(byte facing, int[] upgrades) {
+  public void handleTEMDataFromServer(byte facing, int[] upgrades) {
     orientation = EnumFacing.values()[facing];
     this.upgrades = upgrades;
     worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);

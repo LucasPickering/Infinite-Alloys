@@ -161,7 +161,7 @@ public class TEEPasture extends TileEntityElectric {
     return new Object[]{mobActions};
   }
 
-  public void handlePacketData(byte[] mobActions) {
+  public void handleTEPPacketData(byte[] mobActions) {
     this.mobActions = mobActions;
   }
 
