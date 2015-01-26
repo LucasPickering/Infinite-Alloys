@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,9 +44,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   protected final ArrayList<ItemUpgrade> validUpgradeTypes = new ArrayList<ItemUpgrade>();
 
   /**
-   * A number from 0-5 to represent which side of this block gets the front texture
+   * The direction that the machine is facing.
    */
-  public byte front;
+  public EnumFacing orientation = EnumFacing.EAST;
 
   /**
    * Each element in the array corresponds to an upgrade type, and represents how many tiers in the
@@ -105,6 +106,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
       inventoryStacks[upgradeSlotIndex] = null;
       updateUpgrades();
     }
+    System.out.println(orientation);
   }
 
   public void connectToComputerNetwork(Point host) {
@@ -179,7 +181,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   @Override
   public void readFromNBT(NBTTagCompound tagCompound) {
     super.readFromNBT(tagCompound);
-    front = tagCompound.getByte("orientation");
+    orientation = EnumFacing.values()[tagCompound.getByte("orientation")];
     upgrades = tagCompound.getIntArray("upgrades");
     NBTTagList nbttaglist = tagCompound.getTagList("Items", 10);
     for (int i = 0; i < nbttaglist.tagCount(); i++) {
@@ -194,7 +196,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   @Override
   public void writeToNBT(NBTTagCompound tagCompound) {
     super.writeToNBT(tagCompound);
-    tagCompound.setByte("orientation", front);
+    tagCompound.setByte("orientation", (byte) orientation.ordinal());
     tagCompound.setIntArray("upgrades", upgrades);
     NBTTagList nbttaglist = new NBTTagList();
     for (int i = 0; i < inventoryStacks.length; i++) {
@@ -221,7 +223,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
    * A list of the data that gets sent from server to client over the network
    */
   public Object[] getSyncDataToClient() {
-    return new Object[]{front, upgrades};
+    return new Object[]{(byte) orientation.ordinal(), upgrades};
   }
 
   /**
@@ -231,8 +233,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
     return null;
   }
 
-  public void handlePacketDataFromServer(byte orientation, int[] upgrades) {
-    front = orientation;
+  public void handlePacketDataFromServer(byte facing, int[] upgrades) {
+    orientation = EnumFacing.values()[facing];
     this.upgrades = upgrades;
     worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
   }
@@ -349,7 +351,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
    * machine take this type of upgrade? Does this machine already have this upgrade? Does this
    * upgrade have a prerequisite upgrade and if so, does this machine already have that upgrade?
    *
-   * @param ItemStack for upgrade item with a binary upgrade damage value (see {@link
+   * @param itemstack for upgrade item with a binary upgrade damage value (see {@link
    *                  infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
    * @return true if valid
    */

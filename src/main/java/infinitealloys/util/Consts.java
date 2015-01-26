@@ -34,17 +34,9 @@ public class Consts {
   public static final int WIRELESS = 4;
   public static final int ALLOY_UPG = 5;
 
-  // Block face values
-  public static final int BOTTOM = 0;
-  public static final int TOP = 1;
-  public static final int NORTH = 2;
-  public static final int SOUTH = 3;
-  public static final int WEST = 4;
-  public static final int EAST = 5;
-
   /**
    * The radix of the number system used for the alloys. The maximum value for a single metal in an
-   * alloy is {@link ALLOY_RADIX} - 1.
+   * alloy is {@code ALLOY_RADIX} - 1.
    */
   public static final int ALLOY_RADIX = 10;
 

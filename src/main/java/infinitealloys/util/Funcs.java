@@ -5,12 +5,12 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import java.awt.Rectangle;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import infinitealloys.network.NetworkHandler;
@@ -51,26 +51,6 @@ public class Funcs {
       }
     }
     return finalKey;
-  }
-
-  /**
-   * Convert an entity's yaw to a Vanilla MC block face number
-   *
-   * @param rotation a number of {0, 1, 2, 3} that represents a compass direction
-   */
-  public static byte yawToNumSide(int rotation) {
-    switch (rotation) {
-      case 0:
-        return Consts.SOUTH;
-      case 1:
-        return Consts.WEST;
-      case 2:
-        return Consts.NORTH;
-      case 3:
-        return Consts.EAST;
-      default:
-        return -1;
-    }
   }
 
   /**
@@ -178,5 +158,58 @@ public class Funcs {
       return String.format("%.3G", n / 1000F) + "K";
     }
     return String.valueOf(n);
+  }
+
+  // @formatter:off
+  /**
+   * Convert an entity's yaw, on the range [-180, 180] to an EnumFacing value.
+   * The mapping works as follows:
+   * [-45, 45)   -> {@link net.minecraft.util.EnumFacing#SOUTH SOUTH}
+   * [45, 135)   -> {@link net.minecraft.util.EnumFacing#WEST  WEST}
+   * [135, -135) -> {@link net.minecraft.util.EnumFacing#NORTH NORTH}
+   * [-135, -45) -> {@link net.minecraft.util.EnumFacing#EAST  EAST}
+   *
+   * @param yaw entity's yaw
+   * @return the yaw as a compass direction
+   * */
+  //@formatter:on
+  public static EnumFacing yawToFacing(float yaw) {
+    int i = (int) Math.floor(yaw / 90F + 0.5F) & 3;
+    switch (i) {
+      case 0:
+        return EnumFacing.SOUTH;
+      case 1:
+        return EnumFacing.WEST;
+      case 2:
+        return EnumFacing.NORTH;
+      default:
+        return EnumFacing.EAST;
+    }
+  }
+
+  // @formatter:off
+  /**
+   * Convert an EnumFacing value to a yaw value.
+   * The mapping works as follows:
+   * {@link net.minecraft.util.EnumFacing#SOUTH SOUTH} -> 0
+   * {@link net.minecraft.util.EnumFacing#WEST  WEST}  -> 90
+   * {@link net.minecraft.util.EnumFacing#NORTH NORTH} -> 180
+   * {@link net.minecraft.util.EnumFacing#EAST  EAST}  -> -90
+   *
+   * @param facing given compass direction
+   * @return -90, 0, 90, or 180
+   * */
+  //@formatter:on
+  public static float facingToYaw(EnumFacing facing) {
+    switch (facing) {
+      case WEST:
+        return 90;
+      case NORTH:
+        return 180;
+      case EAST:
+        return -90;
+      default:
+        return 0;
+    }
   }
 }

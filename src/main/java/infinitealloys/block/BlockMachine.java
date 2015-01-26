@@ -11,7 +11,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -134,8 +133,7 @@ public class BlockMachine extends BlockContainer {
                               ItemStack itemstack) {
     TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(x, y, z);
     if (tem != null) {
-      tem.front =
-          Funcs.yawToNumSide(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
+      tem.orientation = Funcs.yawToFacing(entityLiving.rotationYaw + 180F);
       if (itemstack.hasTagCompound()) {
         tem.loadNBTData(itemstack.getTagCompound());
       }
