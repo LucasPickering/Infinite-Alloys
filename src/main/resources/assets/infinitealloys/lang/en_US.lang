@@ -69,7 +69,6 @@ tile.iaXray.name=X-Ray
 tile.iaPasture.name=Pasture
 tile.iaEnergyStorage.name=Energy Storage Unit
 
-tile.iaSummoner.name=Boss Summoner
 
 entity.zombie.name=Giant Zombie
 entity.skeleton.name=Giant Skeleton
