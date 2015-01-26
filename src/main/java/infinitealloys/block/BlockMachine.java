@@ -1,15 +1,5 @@
 package infinitealloys.block;
 
-import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.item.ItemInternetWand;
-import infinitealloys.tile.IHost;
-import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.util.Consts;
-import infinitealloys.util.EnumMachine;
-import infinitealloys.util.Funcs;
-import infinitealloys.util.MachineHelper;
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -24,111 +14,140 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import infinitealloys.core.InfiniteAlloys;
+import infinitealloys.item.ItemInternetWand;
+import infinitealloys.tile.IHost;
+import infinitealloys.tile.TileEntityMachine;
+import infinitealloys.util.Consts;
+import infinitealloys.util.EnumMachine;
+import infinitealloys.util.Funcs;
+import infinitealloys.util.MachineHelper;
 
 public class BlockMachine extends BlockContainer {
 
-	public BlockMachine() {
-		super(Material.iron);
-	}
+  public BlockMachine() {
+    super(Material.iron);
+  }
 
-	@Override
-	public int getRenderType() {
-		return InfiniteAlloys.proxy.gfxHandler.renderID;
-	}
+  @Override
+  public int getRenderType() {
+    return InfiniteAlloys.proxy.gfxHandler.renderID;
+  }
 
-	@Override
-	public boolean isOpaqueCube() {
-		return false;
-	}
+  @Override
+  public boolean isOpaqueCube() {
+    return false;
+  }
 
-	@Override
-	public boolean renderAsNormalBlock() {
-		return false;
-	}
+  @Override
+  public boolean renderAsNormalBlock() {
+    return false;
+  }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {}
+  @Override
+  @SideOnly(Side.CLIENT)
+  public void registerBlockIcons(IIconRegister iconRegister) {
+  }
 
-	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing, float f, float f1, float f2) {
-		ItemStack heldItem = player.inventory.getCurrentItem();
-		TileEntityMachine tem = (TileEntityMachine)world.getTileEntity(x, y, z);
+  @Override
+  public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing,
+                                  float f, float f1, float f2) {
+    ItemStack heldItem = player.inventory.getCurrentItem();
+    TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(x, y, z);
 
-		// Sync the network data for each host TE in this world if it has not already been done for this player
-		if(!world.isRemote && MachineHelper.playersToSync.contains(player.getDisplayName())) {
-			for(Object te : world.loadedTileEntityList)
-				if(te instanceof IHost)
-					((IHost)te).syncAllClients(player);
-			MachineHelper.playersToSync.remove(player.getDisplayName());
-		}
+    // Sync the network data for each host TE in this world if it has not already been done for this player
+    if (!world.isRemote && MachineHelper.playersToSync.contains(player.getDisplayName())) {
+      for (Object te : world.loadedTileEntityList) {
+        if (te instanceof IHost) {
+          ((IHost) te).syncAllClients(player);
+        }
+      }
+      MachineHelper.playersToSync.remove(player.getDisplayName());
+    }
 
-		// Is the player holding a network wand?
-		if(heldItem != null && heldItem.getItem() instanceof ItemInternetWand && (MachineHelper.isClient(tem) || tem instanceof IHost)) {
+    // Is the player holding a network wand?
+    if (heldItem != null && heldItem.getItem() instanceof ItemInternetWand && (
+        MachineHelper.isClient(tem) || tem instanceof IHost)) {
 
-			// Put the coords of this block in a temp tag in the wand so the wand's GUI can access it
-			if(!heldItem.hasTagCompound())
-				heldItem.setTagCompound(new NBTTagCompound());
-			heldItem.getTagCompound().setIntArray("CoordsCurrent", new int[] { world.provider.dimensionId, x, y, z });
+      // Put the coords of this block in a temp tag in the wand so the wand's GUI can access it
+      if (!heldItem.hasTagCompound()) {
+        heldItem.setTagCompound(new NBTTagCompound());
+      }
+      heldItem.getTagCompound()
+          .setIntArray("CoordsCurrent", new int[]{world.provider.dimensionId, x, y, z});
 
-			// Open the GUI for the wand to let the player decide what they want to do with this block
-			player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI_ID, world, (int)player.posX, (int)player.posY, (int)player.posZ);
-			return true;
-		}
+      // Open the GUI for the wand to let the player decide what they want to do with this block
+      player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI_ID, world, (int) player.posX,
+                     (int) player.posY, (int) player.posZ);
+      return true;
+    }
 
-		openGui(world, player, tem);
-		return true;
-	}
+    openGui(world, player, tem);
+    return true;
+  }
 
-	public void openGui(World world, EntityPlayer player, TileEntityMachine tem) {
-		if(!world.isRemote)
-			world.markBlockForUpdate(tem.xCoord, tem.yCoord, tem.zCoord);
-		player.openGui(InfiniteAlloys.instance, tem.getEnumMachine().ordinal(), world, tem.xCoord, tem.yCoord, tem.zCoord);
-	}
+  public void openGui(World world, EntityPlayer player, TileEntityMachine tem) {
+    if (!world.isRemote) {
+      world.markBlockForUpdate(tem.xCoord, tem.yCoord, tem.zCoord);
+    }
+    player.openGui(InfiniteAlloys.instance, tem.getEnumMachine().ordinal(), world, tem.xCoord,
+                   tem.yCoord, tem.zCoord);
+  }
 
-	@Override
-	public TileEntity createNewTileEntity(World world, int metadata) {
-		try {
-			return (TileEntity)EnumMachine.values()[metadata].getTEMClass().newInstance();
-		}catch(Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+  @Override
+  public TileEntity createNewTileEntity(World world, int metadata) {
+    try {
+      return (TileEntity) EnumMachine.values()[metadata].getTEMClass().newInstance();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
 
-	@Override
-	public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ) {
-		((TileEntityMachine)world.getTileEntity(x, y, z)).onNeighborChange(tileX, tileY, tileZ);
-	}
+  @Override
+  public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY,
+                               int tileZ) {
+    ((TileEntityMachine) world.getTileEntity(x, y, z)).onNeighborChange(tileX, tileY, tileZ);
+  }
 
-	@Override
-	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-		return new ArrayList<ItemStack>();
-	}
+  @Override
+  public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata,
+                                       int fortune) {
+    return new ArrayList<ItemStack>();
+  }
 
-	@Override
-	public void getSubBlocks(Item item, CreativeTabs creativetabs, List list) {
-		for(int i = 0; i < Consts.MACHINE_COUNT; i++)
-			list.add(new ItemStack(item, 1, i));
-	}
+  @Override
+  public void getSubBlocks(Item item, CreativeTabs creativetabs, List list) {
+    for (int i = 0; i < Consts.MACHINE_COUNT; i++) {
+      list.add(new ItemStack(item, 1, i));
+    }
+  }
 
-	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemstack) {
-		TileEntityMachine tem = (TileEntityMachine)world.getTileEntity(x, y, z);
-		if(tem != null) {
-			tem.front = Funcs.yawToNumSide(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
-			if(itemstack.hasTagCompound())
-				tem.loadNBTData(itemstack.getTagCompound());
-		}
-	}
+  @Override
+  public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving,
+                              ItemStack itemstack) {
+    TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(x, y, z);
+    if (tem != null) {
+      tem.front =
+          Funcs.yawToNumSide(MathHelper.floor_float(entityLiving.rotationYaw / 90F - 1.5F) & 3);
+      if (itemstack.hasTagCompound()) {
+        tem.loadNBTData(itemstack.getTagCompound());
+      }
+    }
+  }
 
-	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int metadata) {
-		TileEntityMachine tem = (TileEntityMachine)world.getTileEntity(x, y, z);
-		if(tem != null)
-			tem.onBlockDestroyed();
-		super.breakBlock(world, x, y, z, block, metadata);
-	}
+  @Override
+  public void breakBlock(World world, int x, int y, int z, Block block, int metadata) {
+    TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(x, y, z);
+    if (tem != null) {
+      tem.onBlockDestroyed();
+    }
+    super.breakBlock(world, x, y, z, block, metadata);
+  }
 }

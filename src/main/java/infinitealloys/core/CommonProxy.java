@@ -147,7 +147,7 @@ public class CommonProxy {
                   'I', Items.iron_ingot, 'C', "ingotCopper", 'A', "ingotAluminium");
 
 		/*---UPGRADES---*/
-		/* Speed I */
+                /* Speed I */
     addRecipeDict(upgrades[Consts.SPEED][0], "0C0", "0U0", '0', alloys[0], 'C', Items.cookie, 'U',
                   upgradeComponent);
 

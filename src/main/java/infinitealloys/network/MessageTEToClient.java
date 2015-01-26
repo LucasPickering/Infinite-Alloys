@@ -1,5 +1,11 @@
 package infinitealloys.network;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.tileentity.TileEntity;
+
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.tile.TEEPasture;
@@ -10,89 +16,89 @@ import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
-import net.minecraft.tileentity.TileEntity;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
 public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToClient, IMessage> {
 
-	private Point machine;
-	private Object[] data;
-	private ByteBuf bytes;
+  private Point machine;
+  private Object[] data;
+  private ByteBuf bytes;
 
-	public MessageTEToClient() {}
+  public MessageTEToClient() {
+  }
 
-	public MessageTEToClient(TileEntityMachine tem) {
-		machine = tem.coords();
+  public MessageTEToClient(TileEntityMachine tem) {
+    machine = tem.coords();
 
-		if(tem.getWorldObj().isRemote)
-			data = tem.getSyncDataToServer();
-		else
-			data = tem.getSyncDataToClient();
-	}
+    if (tem.getWorldObj().isRemote) {
+      data = tem.getSyncDataToServer();
+    } else {
+      data = tem.getSyncDataToClient();
+    }
+  }
 
-	@Override
-	public void fromBytes(ByteBuf bytes) {
-		machine = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
-		this.bytes = bytes;
-	}
+  @Override
+  public void fromBytes(ByteBuf bytes) {
+    machine = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+    this.bytes = bytes;
+  }
 
-	@Override
-	public void toBytes(ByteBuf bytes) {
-		NetworkHandler.writeObject(bytes, machine);
-		NetworkHandler.writeObject(bytes, data);
-	}
+  @Override
+  public void toBytes(ByteBuf bytes) {
+    NetworkHandler.writeObject(bytes, machine);
+    NetworkHandler.writeObject(bytes, data);
+  }
 
-	@Override
-	public IMessage onMessage(MessageTEToClient message, MessageContext context) {
-		machine = message.machine;
-		bytes = message.bytes;
+  @Override
+  public IMessage onMessage(MessageTEToClient message, MessageContext context) {
+    machine = message.machine;
+    bytes = message.bytes;
 
-		TileEntity te = Funcs.getTileEntity(Minecraft.getMinecraft().theWorld, machine);
+    TileEntity te = Funcs.getTileEntity(Minecraft.getMinecraft().theWorld, machine);
 
-		if(te instanceof TileEntityMachine) {
-			byte orientation = bytes.readByte();
-			int[] upgrades = new int[Consts.UPGRADE_TYPE_COUNT];
-			for(int i = 0; i < upgrades.length; i++)
-				upgrades[i] = bytes.readInt();
-			((TileEntityMachine)te).handlePacketDataFromServer(orientation, upgrades);
+    if (te instanceof TileEntityMachine) {
+      byte orientation = bytes.readByte();
+      int[] upgrades = new int[Consts.UPGRADE_TYPE_COUNT];
+      for (int i = 0; i < upgrades.length; i++) {
+        upgrades[i] = bytes.readInt();
+      }
+      ((TileEntityMachine) te).handlePacketDataFromServer(orientation, upgrades);
 
-			if(te instanceof TileEntityElectric) {
-				int processProgress = bytes.readInt();
-				((TileEntityElectric)te).handlePacketDataFromServer(processProgress);
+      if (te instanceof TileEntityElectric) {
+        int processProgress = bytes.readInt();
+        ((TileEntityElectric) te).handlePacketDataFromServer(processProgress);
 
-				switch(((TileEntityElectric)te).getEnumMachine()) {
-					case METAL_FORGE:
-						byte recipeAlloyID = bytes.readByte();
-						((TEEMetalForge)te).handlePacketDataFromServer(recipeAlloyID);
-						break;
+        switch (((TileEntityElectric) te).getEnumMachine()) {
+          case METAL_FORGE:
+            byte recipeAlloyID = bytes.readByte();
+            ((TEEMetalForge) te).handlePacketDataFromServer(recipeAlloyID);
+            break;
 
-					case XRAY:
-						int detectedBlocksSize = bytes.readInt();
-						Point[] detectedBlocks = new Point[detectedBlocksSize];
-						for(int i = 0; i < detectedBlocksSize; i++)
-							detectedBlocks[i] = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
-						((TEEXray)te).handlePacketDataFromServer(detectedBlocks);
-						break;
+          case XRAY:
+            int detectedBlocksSize = bytes.readInt();
+            Point[] detectedBlocks = new Point[detectedBlocksSize];
+            for (int i = 0; i < detectedBlocksSize; i++) {
+              detectedBlocks[i] = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+            }
+            ((TEEXray) te).handlePacketDataFromServer(detectedBlocks);
+            break;
 
-					case PASTURE:
-						byte[] mobActions = new byte[TEEPasture.mobClasses.length];
-						for(int i = 0; i < mobActions.length; i++)
-							mobActions[i] = bytes.readByte();
-						((TEEPasture)te).handlePacketData(mobActions);
-						break;
+          case PASTURE:
+            byte[] mobActions = new byte[TEEPasture.mobClasses.length];
+            for (int i = 0; i < mobActions.length; i++) {
+              mobActions[i] = bytes.readByte();
+            }
+            ((TEEPasture) te).handlePacketData(mobActions);
+            break;
 
-					case ENERGY_STORAGE:
-						int currentRK = bytes.readInt();
-						int baseRKPerTick = bytes.readInt();
-						((TEEEnergyStorage)te).handlePacketDataFromServer(currentRK, baseRKPerTick);
-						break;
-				}
-			}
-		}
+          case ENERGY_STORAGE:
+            int currentRK = bytes.readInt();
+            int baseRKPerTick = bytes.readInt();
+            ((TEEEnergyStorage) te).handlePacketDataFromServer(currentRK, baseRKPerTick);
+            break;
+        }
+      }
+    }
 
-		return null;
-	}
+    return null;
+  }
 }
