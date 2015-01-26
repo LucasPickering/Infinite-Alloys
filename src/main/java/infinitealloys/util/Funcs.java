@@ -32,16 +32,6 @@ public class Funcs {
   }
 
   /**
-   * Take the log-base-b of x using <b>log-base-b(x) = ln(x)/ln(b)</b>
-   *
-   * @param b the base of the logarithm
-   * @param x the number to be used
-   */
-  public static double logn(int b, double x) {
-    return Math.log(x) / Math.log(b);
-  }
-
-  /**
    * Get a localization or series of localization via keys. Add '/' to the start of a key to have it
    * added to the final string without being localized. e.g. getLoc("general.off", "/is not",
    * "general.on") would return "Off is not On" (If the language is English)
@@ -81,21 +71,6 @@ public class Funcs {
       default:
         return -1;
     }
-  }
-
-  /**
-   * Get the current side (Client/Server) as a String. Used solely for debug printing.
-   */
-  public static String getSideAsString() {
-    return FMLCommonHandler.instance().getEffectiveSide().isClient() ? "Client" : "Server";
-  }
-
-  /**
-   * Get an instance of a player from their name
-   */
-  public static EntityPlayer getPlayerForUsername(String name) {
-    return FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager()
-        .func_152612_a(name);
   }
 
   /**
