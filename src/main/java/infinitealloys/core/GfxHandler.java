@@ -36,9 +36,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
   public GfxHandler() {
     try {
       for (int i = 0; i < temInstances.length; i++) {
-        temInstances[i] =
-            (TileEntityMachine) EnumMachine.values()[i].getTEMClass().getConstructor()
-                .newInstance();
+        temInstances[i] = EnumMachine.values()[i].getNewTEM();
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -55,7 +53,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
   public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
     if (id < Consts.MACHINE_COUNT) {
       return EnumMachine.values()[id]
-          .getContainer(player.inventory, (TileEntityMachine) world.getTileEntity(x, y, z));
+          .getNewContainer(player.inventory, (TileEntityMachine) world.getTileEntity(x, y, z));
     }
     return null;
   }
@@ -64,7 +62,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
   public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
     if (id < Consts.MACHINE_COUNT) {
       return EnumMachine.values()[id]
-          .getGui(player.inventory, (TileEntityMachine) world.getTileEntity(x, y, z));
+          .getNewGui(player.inventory, (TileEntityMachine) world.getTileEntity(x, y, z));
     } else if (id == Consts.WAND_GUI_ID) {
       return new GuiInternetWand();
     }

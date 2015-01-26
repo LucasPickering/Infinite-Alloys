@@ -1,5 +1,6 @@
 package infinitealloys.util;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -13,12 +14,12 @@ import infinitealloys.client.gui.GuiMachine;
 import infinitealloys.client.gui.GuiMetalForge;
 import infinitealloys.client.gui.GuiPasture;
 import infinitealloys.client.gui.GuiXray;
-import infinitealloys.client.render.block.TileEntityComputerRenderer;
-import infinitealloys.client.render.block.TileEntityEnergyStorageRenderer;
-import infinitealloys.client.render.block.TileEntityMachineRenderer;
-import infinitealloys.client.render.block.TileEntityMetalForgeRenderer;
-import infinitealloys.client.render.block.TileEntityPastureRenderer;
-import infinitealloys.client.render.block.TileEntityXrayRenderer;
+import infinitealloys.client.model.block.ModelComputer;
+import infinitealloys.client.model.block.ModelEnergyStorage;
+import infinitealloys.client.model.block.ModelMetalForge;
+import infinitealloys.client.model.block.ModelPasture;
+import infinitealloys.client.model.block.ModelXray;
+import infinitealloys.client.render.TileEntityMachineRenderer;
 import infinitealloys.inventory.ContainerComputer;
 import infinitealloys.inventory.ContainerEnergyStorage;
 import infinitealloys.inventory.ContainerMachine;
@@ -35,20 +36,20 @@ import infinitealloys.tile.TileEntityMachine;
 public enum EnumMachine {
 
   COMPUTER("Computer", TEMComputer.class, ContainerComputer.class, GuiComputer.class,
-           TileEntityComputerRenderer.class),
+           new ModelComputer()),
   METAL_FORGE("MetalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class,
-              TileEntityMetalForgeRenderer.class),
-  XRAY("Xray", TEEXray.class, ContainerXray.class, GuiXray.class, TileEntityXrayRenderer.class),
+              new ModelMetalForge()),
+  XRAY("Xray", TEEXray.class, ContainerXray.class, GuiXray.class, new ModelXray()),
   PASTURE("Pasture", TEEPasture.class, ContainerPasture.class, GuiPasture.class,
-          TileEntityPastureRenderer.class),
+          new ModelPasture()),
   ENERGY_STORAGE("EnergyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class,
-                 GuiEnergyStorage.class, TileEntityEnergyStorageRenderer.class, "currentRK");
+                 GuiEnergyStorage.class, new ModelEnergyStorage(), "currentRK");
 
-  private String name;
-  private Class temClass;
-  private Class containerClass;
-  private Class guiClass;
-  private Class temrClass;
+  public final String name;
+  public final Class<? extends TileEntityMachine> temClass;
+  public final Class<? extends ContainerMachine> containerClass;
+  public final Class<? extends GuiMachine> guiClass;
+  public final ModelBase model;
 
   /**
    * An array of the names of fields in the TE that should be saved when the block is destroyed and
@@ -59,28 +60,28 @@ public enum EnumMachine {
   private EnumMachine(String name, Class<? extends TileEntityMachine> temClass,
                       Class<? extends ContainerMachine> containerClass,
                       Class<? extends GuiMachine> guiClass,
-                      Class<? extends TileEntityMachineRenderer> temrClass,
+                      ModelBase model,
                       String... persistentFields) {
     this.name = name;
     this.temClass = temClass;
     this.containerClass = containerClass;
     this.guiClass = guiClass;
-    this.temrClass = temrClass;
+    this.model = model;
     this.persistentFields = persistentFields;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public Class getTEMClass() {
-    return temClass;
-  }
-
-  public ContainerMachine getContainer(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
+  public TileEntityMachine getNewTEM() {
     try {
-      return (ContainerMachine) containerClass
-          .getConstructor(InventoryPlayer.class, TileEntityMachine.class)
+      return temClass.newInstance();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  public ContainerMachine getNewContainer(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
+    try {
+      return containerClass.getConstructor(InventoryPlayer.class, TileEntityMachine.class)
           .newInstance(inventoryPlayer, tem);
     } catch (Exception e) {
       e.printStackTrace();
@@ -88,9 +89,9 @@ public enum EnumMachine {
     }
   }
 
-  public GuiMachine getGui(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
+  public GuiMachine getNewGui(InventoryPlayer inventoryPlayer, TileEntityMachine tem) {
     try {
-      return (GuiMachine) guiClass.getConstructor(InventoryPlayer.class, temClass)
+      return guiClass.getConstructor(InventoryPlayer.class, temClass)
           .newInstance(inventoryPlayer, tem);
     } catch (Exception e) {
       e.printStackTrace();
@@ -98,13 +99,8 @@ public enum EnumMachine {
     }
   }
 
-  public TileEntityMachineRenderer getTEMR() {
-    try {
-      return (TileEntityMachineRenderer) temrClass.getConstructor().newInstance();
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
+  public TileEntityMachineRenderer getNewTEMR() {
+    return new TileEntityMachineRenderer(name, model);
   }
 
   public String[] getPersistentFields() {

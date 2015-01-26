@@ -74,11 +74,11 @@ public abstract class GuiMachine extends GuiContainer {
 
   public GuiMachine(int xSize, int ySize, InventoryPlayer inventoryPlayer,
                     TileEntityMachine tileEntity) {
-    super(tileEntity.getEnumMachine().getContainer(inventoryPlayer, tileEntity));
+    super(tileEntity.getEnumMachine().getNewContainer(inventoryPlayer, tileEntity));
     this.xSize = xSize;
     this.ySize = ySize;
     tem = tileEntity;
-    background = Funcs.getGuiTexture(tem.getEnumMachine().getName());
+    background = Funcs.getGuiTexture(tem.getEnumMachine().name);
   }
 
   @Override
@@ -159,7 +159,7 @@ public abstract class GuiMachine extends GuiContainer {
                        computerTab.width, computerTab.height)) {
         drawTextBox(mouseX - topLeft.x, mouseY - topLeft.y, new ColoredLine(
                         Funcs.getLoc(
-                            "tile.ia" + computerTab.tem.getEnumMachine().getName() + ".name"),
+                            "tile.ia" + computerTab.tem.getEnumMachine().name + ".name"),
                         0xffffff),
                     new ColoredLine(computerTab.tem.coords().toString(), 0xffffff));
       }
@@ -174,7 +174,7 @@ public abstract class GuiMachine extends GuiContainer {
                               topLeft.y + machineTabs.get(i).yPos, machineTabs.get(i).width,
                               machineTabs.get(i).height)) {
           drawTextBox(mouseX - topLeft.x, mouseY - topLeft.y, new ColoredLine(
-                          Funcs.getLoc("tile.ia" + machineTabs.get(i).tem.getEnumMachine().getName()
+                          Funcs.getLoc("tile.ia" + machineTabs.get(i).tem.getEnumMachine().name
                                        + ".name"),
                           0xffffff),
                       new ColoredLine(machineTabs.get(i).tem.coords().toString(), 0xffffff));

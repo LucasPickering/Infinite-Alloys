@@ -200,7 +200,7 @@ public class CommonProxy {
                   Items.ender_pearl, 'U', upgradeComponent);
 
 		/*---OTHER ITEMS---*/
-		/* Internet Wand */
+                /* Internet Wand */
     addRecipeDict(new ItemStack(IAItems.internetWand), " W ", "RSR", 'R', Items.redstone, 'S',
                   Items.stick, 'W', upgrades[Consts.WIRELESS][0]);
 		/* Machine Frame */
@@ -219,7 +219,7 @@ public class CommonProxy {
 
   public void initTileEntities() {
     for (EnumMachine machine : EnumMachine.values()) {
-      GameRegistry.registerTileEntity(machine.getTEMClass(), machine.getName());
+      GameRegistry.registerTileEntity(machine.temClass, machine.name);
     }
 
     MachineHelper.addDetectable(Item.getItemFromBlock(Blocks.coal_ore), 0, 1);

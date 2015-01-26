@@ -1,4 +1,4 @@
-package infinitealloys.client.render.entity;
+package infinitealloys.client.render;
 
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
