@@ -106,7 +106,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
       inventoryStacks[upgradeSlotIndex] = null;
       updateUpgrades();
     }
-    System.out.println(orientation);
   }
 
   public void connectToComputerNetwork(Point host) {
