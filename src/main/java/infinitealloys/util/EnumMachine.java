@@ -99,10 +99,6 @@ public enum EnumMachine {
     }
   }
 
-  public TileEntityMachineRenderer getNewTEMR() {
-    return new TileEntityMachineRenderer(name, model);
-  }
-
   public boolean stackValidForSlot(int index, ItemStack itemstack) {
     switch (this) { // Switch first based on the type of machine, then based on the index of the slot
       case METAL_FORGE:

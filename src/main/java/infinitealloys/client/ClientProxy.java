@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import infinitealloys.client.render.RenderBoss;
+import infinitealloys.client.render.TileEntityMachineRenderer;
 import infinitealloys.core.CommonProxy;
 import infinitealloys.util.EnumBoss;
 import infinitealloys.util.EnumMachine;
@@ -21,7 +22,8 @@ public class ClientProxy extends CommonProxy {
   public void initRendering() {
     gfxHandler.renderID = RenderingRegistry.getNextAvailableRenderId();
     for (EnumMachine machine : EnumMachine.values()) {
-      ClientRegistry.bindTileEntitySpecialRenderer(machine.temClass, machine.getNewTEMR());
+      ClientRegistry.bindTileEntitySpecialRenderer(machine.temClass,
+                                                   new TileEntityMachineRenderer(machine));
     }
     RenderingRegistry.registerBlockHandler(gfxHandler);
     try {
