@@ -3,7 +3,7 @@ package infinitealloys.util;
 /**
  * A 3D coordinate
  */
-public class Point {
+public class Point3 {
 
   public int x, y, z;
 
@@ -11,11 +11,11 @@ public class Point {
    * Create an "invalid" point. The negative y, which is impossible in the world, will indicate that
    * this point is essentially null
    */
-  public Point() {
+  public Point3() {
     y = -1;
   }
 
-  public Point(int x, int y, int z) {
+  public Point3(int x, int y, int z) {
     set(x, y, z);
   }
 
@@ -25,7 +25,7 @@ public class Point {
     this.z = z;
   }
 
-  public void set(Point p2) {
+  public void set(Point3 p2) {
     x = p2.x;
     y = p2.y;
     z = p2.z;
@@ -37,8 +37,8 @@ public class Point {
 
   @Override
   public boolean equals(Object o) {
-    if (o instanceof Point) {
-      return equals(((Point) o).x, ((Point) o).y, ((Point) o).z);
+    if (o instanceof Point3) {
+      return equals(((Point3) o).x, ((Point3) o).y, ((Point3) o).z);
     }
     return false;
   }

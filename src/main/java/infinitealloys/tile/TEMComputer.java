@@ -13,7 +13,7 @@ import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 public class TEMComputer extends TileEntityMachine implements IHost {
 
@@ -30,7 +30,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
   /**
    * A list of clients currently connected to this computer control network
    */
-  private final ArrayList<Point> networkClients = new ArrayList<Point>();
+  private final ArrayList<Point3> networkClients = new ArrayList<Point3>();
 
   /**
    * False until the first call of {@link #updateEntity()}
@@ -55,7 +55,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
     if (!initialized) {
       initialized = true;
       if (!worldObj.isRemote) {
-        for (Point client : networkClients) {
+        for (Point3 client : networkClients) {
           ((TileEntityMachine) Funcs.getTileEntity(worldObj, client))
               .connectToComputerNetwork(coords());
         }
@@ -74,14 +74,14 @@ public class TEMComputer extends TileEntityMachine implements IHost {
   }
 
   @Override
-  public void connectToComputerNetwork(Point host) {
+  public void connectToComputerNetwork(Point3 host) {
     deleteNetwork();
     super.connectToComputerNetwork(host);
   }
 
   @Override
   public void deleteNetwork() {
-    for (Point client : networkClients) {
+    for (Point3 client : networkClients) {
       TileEntity te = Funcs.getTileEntity(worldObj, client);
       if (te instanceof TileEntityMachine) {
         ((TileEntityMachine) te).disconnectFromComputerNetwork();
@@ -90,14 +90,14 @@ public class TEMComputer extends TileEntityMachine implements IHost {
   }
 
   @Override
-  public boolean isClientValid(Point client) {
+  public boolean isClientValid(Point3 client) {
     TileEntity te = Funcs.getTileEntity(worldObj, client);
     return te instanceof TileEntityMachine && ((TileEntityMachine) te)
         .hasUpgrade(Consts.WIRELESS, 1);
   }
 
   @Override
-  public boolean addClient(EntityPlayer player, Point client, boolean sync) {
+  public boolean addClient(EntityPlayer player, Point3 client, boolean sync) {
     if (networkClients.contains(client)) {
       if (player != null && worldObj.isRemote) {
         player.addChatComponentMessage(new ChatComponentText(Funcs
@@ -164,7 +164,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
   }
 
   @Override
-  public void removeClient(Point client, boolean sync) {
+  public void removeClient(Point3 client, boolean sync) {
     networkClients.remove(client);
     if (sync) {
       if (worldObj.isRemote) {
@@ -179,7 +179,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
   @Override
   public void syncAllClients(EntityPlayer player) {
-    for (Point client : networkClients) {
+    for (Point3 client : networkClients) {
       Funcs.sendPacketToPlayer(
           new MessageNetworkEditToClient(true, worldObj.provider.dimensionId, coords(), client),
           player);
@@ -191,8 +191,8 @@ public class TEMComputer extends TileEntityMachine implements IHost {
     return networkClients.size();
   }
 
-  public Point[] getClients() {
-    return networkClients.toArray(new Point[]{});
+  public Point3[] getClients() {
+    return networkClients.toArray(new Point3[]{});
   }
 
   @Override
@@ -200,7 +200,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
     super.readFromNBT(tagCompound);
     for (int i = 0; tagCompound.hasKey("client" + i); i++) {
       int[] client = tagCompound.getIntArray("client" + i);
-      networkClients.add(new Point(client[0], client[1], client[2]));
+      networkClients.add(new Point3(client[0], client[1], client[2]));
     }
   }
 
@@ -208,7 +208,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
   public void writeToNBT(NBTTagCompound tagCompound) {
     super.writeToNBT(tagCompound);
     for (int i = 0; i < networkClients.size(); i++) {
-      Point client = networkClients.get(i);
+      Point3 client = networkClients.get(i);
       tagCompound.setIntArray("client" + i, new int[]{client.x, client.y, client.z});
     }
   }
@@ -218,7 +218,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
     TileEntity te = worldObj.getTileEntity(x, y, z);
     if (initialized && te instanceof TileEntityMachine
         && ((TileEntityMachine) te).computerHost == null) {
-      addClient(null, new Point(x, y, z), false);
+      addClient(null, new Point3(x, y, z), false);
     }
   }
 

@@ -15,7 +15,7 @@ import java.util.List;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.tile.TEEXray;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 public class GuiXray extends GuiElectric {
 
@@ -130,14 +130,14 @@ public class GuiXray extends GuiElectric {
             blockButtons[i].selected = true;
 
             // The blocks that are represented by the newly selected button get highlighted
-            for (final Point block : tex.detectedBlocks)
+            for (final Point3 block : tex.detectedBlocks)
             // Is this block represented by the newly selected button?
             {
               if (block.y == blockButtons[i].getYValue())
               // If so, add this block to the list of blocks to be highlighted. Convert the x and z coords from relative to absolute
               {
                 InfiniteAlloys.proxy.gfxHandler.xrayBlocks
-                    .add(new Point(tex.xCoord + block.x, block.y, tex.zCoord + block.z));
+                    .add(new Point3(tex.xCoord + block.x, block.y, tex.zCoord + block.z));
               }
             }
           }
@@ -175,7 +175,7 @@ public class GuiXray extends GuiElectric {
       int[] blockCounts = new int[tee.yCoord];
       List<Integer> levels = new ArrayList<Integer>();
 
-      for (Point block : tex.detectedBlocks) { // For each detected block
+      for (Point3 block : tex.detectedBlocks) { // For each detected block
         // If there hasn't been a block for that y-level yet, at that y to the list
         if (blockCounts[block.y]++ == 0) {
           levels.add(block.y);

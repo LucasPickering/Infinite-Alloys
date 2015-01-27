@@ -25,7 +25,7 @@ import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 public abstract class GuiMachine extends GuiContainer {
 
@@ -61,7 +61,7 @@ public abstract class GuiMachine extends GuiContainer {
   protected java.awt.Point topLeft = new java.awt.Point();
 
   protected TileEntityMachine tem;
-  protected infinitealloys.util.Point controllingComputer = new infinitealloys.util.Point();
+  protected Point3 controllingComputer = new Point3();
   protected GuiMachineTab computerTab;
   protected final List<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
   /**
@@ -177,7 +177,7 @@ public abstract class GuiMachine extends GuiContainer {
 
       }
 
-      Point[] clients = tec.getClients();
+      Point3[] clients = tec.getClients();
       // For each client
       for (int i = 0; i < clients.length; i++) {
         machineTabs.add(new GuiMachineTab(mc, itemRender, i / 5 * 197 - 24, i % 5 * 25 + 36,

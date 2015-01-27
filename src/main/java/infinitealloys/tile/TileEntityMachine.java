@@ -23,7 +23,7 @@ import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 /**
  * A base, abstract class for Tile Entities that can receive upgrades. TileEntityElectric blocks are
@@ -67,7 +67,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   /**
    * The coordinates of the computer that is controlling this machine
    */
-  public Point computerHost;
+  public Point3 computerHost;
 
   /**
    * @param inventoryLength The amount of total slots in the inventory
@@ -108,7 +108,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
     }
   }
 
-  public void connectToComputerNetwork(Point host) {
+  public void connectToComputerNetwork(Point3 host) {
     if (computerHost != null) {
       ((TEMComputer) worldObj.getTileEntity(computerHost.x, computerHost.y, computerHost.z))
           .removeClient(coords(), false);
@@ -240,10 +240,10 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
   /**
    * Get the current (x, y, z) coordinates of this machine in the form of a {@link
-   * infinitealloys.util.Point Point}
+   * infinitealloys.util.Point3 Point}
    */
-  public Point coords() {
-    return new Point(xCoord, yCoord, zCoord);
+  public Point3 coords() {
+    return new Point3(xCoord, yCoord, zCoord);
   }
 
   @Override

@@ -2,7 +2,7 @@ package infinitealloys.tile;
 
 import net.minecraft.entity.player.EntityPlayer;
 
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 /**
  * Machines that can host networks between other machines, e.g. the computer
@@ -14,7 +14,7 @@ public interface IHost {
    * criterion, e.g. for the ESU it just checks that it's an electrical block. More extensive
    * checks, such as if the client is already in the network, are done in {@link #addClient}
    */
-  public boolean isClientValid(Point client);
+  public boolean isClientValid(Point3 client);
 
   /**
    * Add a client to the network
@@ -22,14 +22,14 @@ public interface IHost {
    * @param player the player that is adding the client, this is used to send chat messages to them
    * @param sync   if true, a packet will be sent to the other side to add the client
    */
-  public boolean addClient(EntityPlayer player, Point client, boolean sync);
+  public boolean addClient(EntityPlayer player, Point3 client, boolean sync);
 
   /**
    * Remove a client from the network
    *
    * @param sync if true, a packet will be sent to the other side to remove the client
    */
-  public void removeClient(Point client, boolean sync);
+  public void removeClient(Point3 client, boolean sync);
 
   /**
    * Send the client data to a client

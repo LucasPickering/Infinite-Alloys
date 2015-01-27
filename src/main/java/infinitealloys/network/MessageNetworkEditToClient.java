@@ -9,7 +9,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import infinitealloys.tile.IHost;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 /**
@@ -21,13 +21,13 @@ public class MessageNetworkEditToClient
 
   private boolean adding;
   private int dimensionID;
-  private Point host;
-  private Point client;
+  private Point3 host;
+  private Point3 client;
 
   public MessageNetworkEditToClient() {
   }
 
-  public MessageNetworkEditToClient(boolean adding, int dimensionID, Point host, Point client) {
+  public MessageNetworkEditToClient(boolean adding, int dimensionID, Point3 host, Point3 client) {
     this.adding = adding;
     this.dimensionID = dimensionID;
     this.host = host;
@@ -38,8 +38,8 @@ public class MessageNetworkEditToClient
   public void fromBytes(ByteBuf bytes) {
     adding = bytes.readBoolean();
     dimensionID = bytes.readInt();
-    host = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
-    client = new Point(bytes.readInt(), bytes.readInt(), bytes.readInt());
+    host = new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt());
+    client = new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt());
   }
 
   @Override

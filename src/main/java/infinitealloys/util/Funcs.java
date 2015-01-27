@@ -115,9 +115,9 @@ public class Funcs {
 
   /**
    * Convenience method for getting a TE in a specific world when the coordinates are stored in a
-   * {@link Point}
+   * {@link Point3}
    */
-  public static TileEntity getTileEntity(World world, Point p) {
+  public static TileEntity getTileEntity(World world, Point3 p) {
     return world.getTileEntity(p.x, p.y, p.z);
   }
 

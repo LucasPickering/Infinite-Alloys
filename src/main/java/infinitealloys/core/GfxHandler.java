@@ -26,7 +26,7 @@ import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumMetal;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
@@ -43,7 +43,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
    * The list of blocks identified by an x-ray machine to be highlighted
    */
   @SideOnly(Side.CLIENT)
-  public ArrayList<Point> xrayBlocks = new ArrayList<Point>();
+  public ArrayList<Point3> xrayBlocks = new ArrayList<Point3>();
 
   @Override
   public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -231,8 +231,8 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
     Tessellator tess = Tessellator.instance;
     Tessellator.renderingWorldRenderer = false;
 
-    Point last = new Point(0, 0, 0);
-    for (Point block : xrayBlocks) {
+    Point3 last = new Point3(0, 0, 0);
+    for (Point3 block : xrayBlocks) {
       GL11.glTranslatef(block.x - last.x, block.y - last.y, block.z - last.z);
       renderOutlineBox(tess);
       last.set(block);

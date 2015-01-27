@@ -11,14 +11,14 @@ import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 
 public class TEEXray extends TileEntityElectric {
 
   /**
    * A list of the detected blocks, x and z are relative to the machine, y is absolute
    */
-  public final ArrayList<Point> detectedBlocks = new ArrayList<Point>();
+  public final ArrayList<Point3> detectedBlocks = new ArrayList<Point3>();
   public int range;
 
   /**
@@ -35,7 +35,7 @@ public class TEEXray extends TileEntityElectric {
    * The last point that was checked for the target block in the previous iteration of {@link
    * #search}. The x and z coords are relative to the x-ray block; the y coord is absolute
    */
-  private Point lastSearch;
+  private Point3 lastSearch;
 
   /**
    * Should searching continue, or is it complete. Set this to true to begin a search.
@@ -114,7 +114,7 @@ public class TEEXray extends TileEntityElectric {
           // list of blocks that have been found.
           if (targetBlock == Item.getItemFromBlock(worldObj.getBlock(xCoord + x, y, zCoord + z))
               && targetMetadata == worldObj.getBlockMetadata(xCoord + x, y, zCoord + z)) {
-            detectedBlocks.add(new Point(x, y, z));
+            detectedBlocks.add(new Point3(x, y, z));
           }
 
           // If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
@@ -163,9 +163,9 @@ public class TEEXray extends TileEntityElectric {
     return new Object[]{shouldSearch};
   }
 
-  public void handleTEXDataFromServer(Point[] detectedBlocks) {
+  public void handleTEXDataFromServer(Point3[] detectedBlocks) {
     this.detectedBlocks.clear();
-    for (Point point : detectedBlocks) {
+    for (Point3 point : detectedBlocks) {
       this.detectedBlocks.add(point);
     }
     refreshGUI = true;
@@ -187,7 +187,7 @@ public class TEEXray extends TileEntityElectric {
     range = rangeUpgradeValues[getUpgradeTier(Consts.RANGE)];
 
     if (lastSearch == null) {
-      lastSearch = new Point(-range, 0, -range);
+      lastSearch = new Point3(-range, 0, -range);
     } else {
       lastSearch.set(-range, 0, -range);
     }

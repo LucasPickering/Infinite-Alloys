@@ -4,7 +4,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import infinitealloys.util.Consts;
-import infinitealloys.util.Point;
+import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 public class NetworkHandler {
@@ -36,10 +36,10 @@ public class NetworkHandler {
   public static void writeObject(ByteBuf bytes, Object o) {
     if (o == null) {
       return;
-    } else if (o instanceof Point) {
-      writeObject(bytes, ((Point) o).x);
-      writeObject(bytes, ((Point) o).y);
-      writeObject(bytes, ((Point) o).z);
+    } else if (o instanceof Point3) {
+      writeObject(bytes, ((Point3) o).x);
+      writeObject(bytes, ((Point3) o).y);
+      writeObject(bytes, ((Point3) o).z);
     } else if (o instanceof Byte) {
       bytes.writeByte((Byte) o);
     } else if (o instanceof Short) {
