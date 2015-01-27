@@ -11,6 +11,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
+import infinitealloys.util.EnumMetal;
 import infinitealloys.util.Funcs;
 
 public class ItemAlloyIngot extends ItemIA {
@@ -50,7 +51,7 @@ public class ItemAlloyIngot extends ItemIA {
           percentage =
           Math.round((float) metalContent[i] / (float) totalMass * 1000F) / 10F;
       if (percentage != 0) {
-        list.add(percentage + "% " + Funcs.getLoc("metal." + Consts.METAL_NAMES[i] + ".name"));
+        list.add(percentage + "% " + Funcs.getLoc("metal." + EnumMetal.values()[i].name + ".name"));
       }
     }
   }
@@ -66,7 +67,7 @@ public class ItemAlloyIngot extends ItemIA {
     }
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
-      int ingotColor = Consts.METAL_COLORS[i];
+      int ingotColor = EnumMetal.values()[i].color;
       int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
       colorCount += alloyAmt;
       redTot +=
@@ -93,7 +94,7 @@ public class ItemAlloyIngot extends ItemIA {
   @Override
   public String getUnlocalizedName(ItemStack itemstack) {
     if (itemstack.getItemDamage() > 0 && itemstack.getItemDamage() <= Consts.VALID_ALLOY_COUNT) {
-      return "item.ia" + EnumAlloy.values()[itemstack.getItemDamage()].name;
+      return "item." + EnumAlloy.values()[itemstack.getItemDamage()].name;
     }
     return super.getUnlocalizedName(itemstack);
   }

@@ -35,14 +35,14 @@ import infinitealloys.tile.TileEntityMachine;
 
 public enum EnumMachine {
 
-  COMPUTER("Computer", TEMComputer.class, ContainerComputer.class, GuiComputer.class,
+  COMPUTER("computer", TEMComputer.class, ContainerComputer.class, GuiComputer.class,
            new ModelComputer()),
-  METAL_FORGE("MetalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class,
+  METAL_FORGE("metalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class,
               new ModelMetalForge()),
-  XRAY("Xray", TEEXray.class, ContainerXray.class, GuiXray.class, new ModelXray()),
-  PASTURE("Pasture", TEEPasture.class, ContainerPasture.class, GuiPasture.class,
+  XRAY("xray", TEEXray.class, ContainerXray.class, GuiXray.class, new ModelXray()),
+  PASTURE("pasture", TEEPasture.class, ContainerPasture.class, GuiPasture.class,
           new ModelPasture()),
-  ENERGY_STORAGE("EnergyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class,
+  ENERGY_STORAGE("energyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class,
                  GuiEnergyStorage.class, new ModelEnergyStorage(), "currentRK");
 
   public final String name;

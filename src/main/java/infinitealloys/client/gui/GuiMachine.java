@@ -116,7 +116,7 @@ public abstract class GuiMachine extends GuiContainer {
       for (int i = 0; i < Consts.UPGRADE_TYPE_COUNT; i++) {
         if (tem.getUpgradeTier(i) > 0) {
           lines.add(new ColoredText(
-              Funcs.getLoc("item.ia" + IAItems.upgrades[i].name + tem.getUpgradeTier(i) + ".name"),
+              Funcs.getLoc("item." + IAItems.upgrades[i].name + tem.getUpgradeTier(i) + ".name"),
               0xaaaaaa));
         }
       }
@@ -172,7 +172,7 @@ public abstract class GuiMachine extends GuiContainer {
                        computerTab.width, computerTab.height)) {
 
         new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y,
-                       Funcs.getLoc("tile.ia" + computerTab.tem.getEnumMachine().name + ".name"),
+                       Funcs.getLoc("tile." + computerTab.tem.getEnumMachine().name + ".name"),
                        computerTab.tem.coords().toString()).draw();
 
       }
@@ -193,7 +193,7 @@ public abstract class GuiMachine extends GuiContainer {
 
           new GuiTextBox(fontRendererObj,
                          mouseX - topLeft.x, mouseY - topLeft.y,
-                         Funcs.getLoc("tile.ia" + machineTabs.get(i).tem.getEnumMachine().name
+                         Funcs.getLoc("tile." + machineTabs.get(i).tem.getEnumMachine().name
                                       + ".name"), machineTabs.get(i).tem.coords().toString());
 
         }

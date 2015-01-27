@@ -46,7 +46,7 @@ public class ItemMulti extends ItemIA {
   @Override
   public String getUnlocalizedName(ItemStack itemstack) {
     if (itemstack.getItemDamage() < Consts.MULTI_ITEM_NAMES.length) {
-      return "item.ia" + Consts.MULTI_ITEM_NAMES[itemstack.getItemDamage()];
+      return "item." + Consts.MULTI_ITEM_NAMES[itemstack.getItemDamage()];
     }
     return super.getUnlocalizedName(itemstack);
   }

@@ -16,6 +16,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
+import infinitealloys.util.EnumMetal;
 import infinitealloys.util.Funcs;
 
 @Mod(modid = Consts.MOD_ID, name = "Infinite Alloys", version = "@VERSION@")
@@ -34,15 +35,8 @@ public class InfiniteAlloys {
     Configuration config = new Configuration(event.getSuggestedConfigurationFile());
     config.load();
 
-    final int[]
-        metalColors =
-        {0xce7136, 0xcbcec7, 0x787d76, 0xd2cda3, 0xccc34f, 0x141dce, 0xae2305, 0x177c19};
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
-      Consts.METAL_COLORS[i] =
-          config.get("Metal Colors", Consts.METAL_NAMES[i], metalColors[i]).getInt();
-    }
-    for (int i = 0; i < Consts.METAL_COUNT; i++) {
-      spawnOres[i] = config.get("World Gen", Consts.METAL_NAMES[i], true).getBoolean(true);
+      spawnOres[i] = config.get("World Gen", EnumMetal.values()[i].name, true).getBoolean(true);
     }
 
     config.save();

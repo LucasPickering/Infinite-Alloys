@@ -6,25 +6,14 @@ public class Consts {
   public static final String TEXTURE_PREFIX = MOD_ID + ":";
 
   /**
-   * The names of each metal that can be used to make alloys
-   */
-  public static final String[]
-      METAL_NAMES =
-      {"Copper", "Aluminium", "Zinc", "Magnesium", "Tantalum", "Hydronium", "Roguite", "Verdite"};
-  /**
    * The names of each item that has damage values
    */
-  public static final String[] MULTI_ITEM_NAMES = {"MachineComponent", "UpgradeComponent"};
+  public static final String[] MULTI_ITEM_NAMES = {"machineComponent", "upgradeComponent"};
 
-  public static final int METAL_COUNT = METAL_NAMES.length;
+  public static final int METAL_COUNT = EnumMetal.values().length;
   public static final int MACHINE_COUNT = EnumMachine.values().length;
   public static final int UPGRADE_TYPE_COUNT = 6;
   public static final int VALID_ALLOY_COUNT = EnumAlloy.values().length;
-
-  /**
-   * The colors used to colorize the ingots
-   */
-  public static final int[] METAL_COLORS = new int[METAL_COUNT];
 
   // Upgrade IDs
   public static final int SPEED = 0;

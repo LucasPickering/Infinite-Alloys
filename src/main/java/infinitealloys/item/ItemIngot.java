@@ -9,6 +9,7 @@ import java.util.List;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumMetal;
 
 public class ItemIngot extends ItemIA {
 
@@ -32,7 +33,7 @@ public class ItemIngot extends ItemIA {
       return 0xcbcec7;
     }
     if (itemstack.getItemDamage() < Consts.METAL_COUNT) {
-      return Consts.METAL_COLORS[itemstack.getItemDamage()];
+      return EnumMetal.values()[itemstack.getItemDamage()].color;
     }
     return 0xffffff;
   }
@@ -40,7 +41,7 @@ public class ItemIngot extends ItemIA {
   @Override
   public String getUnlocalizedName(ItemStack itemstack) {
     if (itemstack.getItemDamage() < Consts.METAL_COUNT) {
-      return "item.ia" + Consts.METAL_NAMES[itemstack.getItemDamage()] + "Ingot";
+      return "item." + EnumMetal.values()[itemstack.getItemDamage()].name + "Ingot";
     }
     return super.getUnlocalizedName(itemstack);
   }

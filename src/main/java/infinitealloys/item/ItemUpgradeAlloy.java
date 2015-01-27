@@ -8,6 +8,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
+import infinitealloys.util.EnumMetal;
 import infinitealloys.util.Funcs;
 
 public class ItemUpgradeAlloy extends ItemUpgrade {
@@ -43,7 +44,7 @@ public class ItemUpgradeAlloy extends ItemUpgrade {
       int alloy = EnumAlloy.getAlloyForID(itemstack.getItemDamage());
 
       for (int i = 0; i < Consts.METAL_COUNT; i++) {
-        int ingotColor = Consts.METAL_COLORS[i];
+        int ingotColor = EnumMetal.values()[i].color;
         int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
         colorCount += alloyAmt;
         redTot +=

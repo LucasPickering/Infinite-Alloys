@@ -26,6 +26,7 @@ import infinitealloys.client.gui.GuiInternetWand;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
+import infinitealloys.util.EnumMetal;
 import infinitealloys.util.Point;
 
 public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
@@ -68,10 +69,8 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
   @Override
   public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
     if (block instanceof BlockMachine && metadata < temInstances.length) {
-      GL11.glRotatef(-90F, 0F, 1F, 0F);
-      GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-      TileEntityRendererDispatcher.instance.renderTileEntityAt(temInstances[metadata], 0, 0, 0, 0);
-      GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+      TileEntityRendererDispatcher.instance.renderTileEntityAt(temInstances[metadata],
+                                                               -0.5D, -0.5D, -0.5D, 0);
     } else {
       Tessellator tessellator = Tessellator.instance;
       block.setBlockBoundsForItemRender();
@@ -109,7 +108,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
       // Draw ore pieces on top of stone background
       if (metadata < Consts.METAL_COUNT) {
-        final int mult = Consts.METAL_COLORS[metadata];
+        int mult = EnumMetal.values()[metadata].color;
         GL11.glColor4f((mult >> 16 & 255) / 255F, (mult >> 8 & 255) / 255F, (mult & 255) / 255F,
                        1F);
 
@@ -157,7 +156,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
     boolean rendered = renderer.renderStandardBlock(block, x, y, z);
     final int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
     if (block == IABlocks.ore) { // Used to colorize the ores
-      final int color = Consts.METAL_COLORS[world.getBlockMetadata(x, y, z)];
+      int color = EnumMetal.values()[world.getBlockMetadata(x, y, z)].color;
       float red = (color >> 16 & 255) / 255F;
       float green = (color >> 8 & 255) / 255F;
       float blue = (color & 255) / 255F;

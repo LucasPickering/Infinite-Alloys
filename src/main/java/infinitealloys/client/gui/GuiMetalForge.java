@@ -9,6 +9,7 @@ import infinitealloys.item.IAItems;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
+import infinitealloys.util.EnumMetal;
 import infinitealloys.util.Funcs;
 
 public class GuiMetalForge extends GuiElectric {
@@ -35,8 +36,9 @@ public class GuiMetalForge extends GuiElectric {
             .mouseInZone(mouseX, mouseY, topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42,
                          18, 18)) {
           new GuiTextBox(fontRendererObj, mouseX, mouseY,
-                         new ColoredText(Funcs.getLoc("metal." + Consts.METAL_NAMES[i] + ".name"),
-                                         0xffffff)).draw();
+                         new ColoredText(
+                             Funcs.getLoc("metal." + EnumMetal.values()[i].name + ".name"),
+                             0xffffff)).draw();
         }
       }
     }
