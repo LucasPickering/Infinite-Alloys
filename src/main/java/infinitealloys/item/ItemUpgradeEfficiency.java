@@ -5,6 +5,6 @@ import infinitealloys.util.Consts;
 public class ItemUpgradeEfficiency extends ItemUpgrade {
 
   public ItemUpgradeEfficiency() {
-    super("Efficiency", Consts.EFFICIENCY, 3);
+    super("efficiency", Consts.EFFICIENCY, 3);
   }
 }
