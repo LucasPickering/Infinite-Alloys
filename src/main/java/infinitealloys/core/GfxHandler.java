@@ -20,7 +20,6 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import infinitealloys.block.BlockMachine;
 import infinitealloys.block.IABlocks;
 import infinitealloys.client.gui.GuiInternetWand;
 import infinitealloys.tile.TileEntityMachine;
@@ -68,10 +67,12 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
   @Override
   public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
-    if (block instanceof BlockMachine && metadata < temInstances.length) {
-      TileEntityRendererDispatcher.instance.renderTileEntityAt(temInstances[metadata],
-                                                               -0.5D, -0.5D, -0.5D, 0);
-    } else {
+    if (block == IABlocks.machine) {
+      if (metadata < temInstances.length) {
+        TileEntityRendererDispatcher.instance.renderTileEntityAt(temInstances[metadata],
+                                                                 -0.5D, -0.5D, -0.5D, 0);
+      }
+    } else if (block == IABlocks.ore) {
       Tessellator tessellator = Tessellator.instance;
       block.setBlockBoundsForItemRender();
       GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
@@ -149,13 +150,11 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
   @Override
   public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId,
                                   RenderBlocks renderer) {
-    if (block instanceof BlockMachine) {
-      return true;
-    }
-    Tessellator tessellator = Tessellator.instance;
-    boolean rendered = renderer.renderStandardBlock(block, x, y, z);
-    final int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
+    boolean rendered = true;
     if (block == IABlocks.ore) { // Used to colorize the ores
+      rendered = renderer.renderStandardBlock(block, x, y, z);
+      Tessellator tessellator = Tessellator.instance;
+      int brightness = block.getMixedBrightnessForBlock(world, x, y, z);
       int color = EnumMetal.values()[world.getBlockMetadata(x, y, z)].color;
       float red = (color >> 16 & 255) / 255F;
       float green = (color >> 8 & 255) / 255F;
