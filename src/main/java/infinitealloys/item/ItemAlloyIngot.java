@@ -13,6 +13,7 @@ import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.EnumMetal;
 import infinitealloys.util.Funcs;
+import infinitealloys.util.MachineHelper;
 
 public class ItemAlloyIngot extends ItemIA {
 
@@ -59,31 +60,9 @@ public class ItemAlloyIngot extends ItemIA {
   @Override
   @SideOnly(Side.CLIENT)
   public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
-    int colorCount = 0;
-    int redTot = 0, greenTot = 0, blueTot = 0;
-    int alloy = EnumAlloy.getAlloyForID(itemstack.getItemDamage() - 1);
-    if (itemstack.hasTagCompound()) {
-      alloy = itemstack.getTagCompound().getInteger("alloy");
-    }
-
-    for (int i = 0; i < Consts.METAL_COUNT; i++) {
-      int ingotColor = EnumMetal.values()[i].color;
-      int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
-      colorCount += alloyAmt;
-      redTot +=
-          (ingotColor >> 16 & 255) * alloyAmt; // Get the red byte from the ingot's hex color code
-      greenTot +=
-          (ingotColor >> 8 & 255) * alloyAmt; // Get the green byte from the ingot's hex color code
-      blueTot += (ingotColor & 255) * alloyAmt; // Get the blue byte from the ingot's hex color code
-    }
-
-    int redAvg = 0, greenAvg = 0, blueAvg = 0;
-    if (colorCount != 0) {
-      redAvg = redTot / colorCount;
-      greenAvg = greenTot / colorCount;
-      blueAvg = blueTot / colorCount;
-    }
-    return (redAvg << 16) + (greenAvg << 8) + blueAvg;
+    return MachineHelper.getColorForAlloy(
+        itemstack.hasTagCompound() ? itemstack.getTagCompound().getInteger("alloy")
+                                   : EnumAlloy.getAlloyForID((itemstack.getItemDamage() - 1)));
   }
 
   @Override

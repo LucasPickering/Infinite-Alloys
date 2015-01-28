@@ -90,6 +90,38 @@ public class MachineHelper {
   }
 
   /**
+   * Get the color of an alloy based on its composition
+   *
+   * @param alloy the alloy
+   * @return a color for the alloy
+   */
+  public static int getColorForAlloy(int alloy) {
+    int colorCount = 0;
+    int redTot = 0, greenTot = 0, blueTot = 0;
+
+    for (int i = 0; i < Consts.METAL_COUNT; i++) {
+      int ingotColor = EnumMetal.values()[i].color;
+      int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
+      colorCount += alloyAmt;
+      redTot +=
+          (ingotColor >> 16 & 255) * alloyAmt; // Get the red byte from the ingot's hex color code
+      greenTot +=
+          (ingotColor >> 8 & 255)
+          * alloyAmt; // Get the green byte from the ingot's hex color code
+      blueTot +=
+          (ingotColor & 255) * alloyAmt; // Get the blue byte from the ingot's hex color code
+    }
+
+    int redAvg = 0, greenAvg = 0, blueAvg = 0;
+    if (colorCount != 0) {
+      redAvg = redTot / colorCount;
+      greenAvg = greenTot / colorCount;
+      blueAvg = blueTot / colorCount;
+    }
+    return (redAvg << 16) + (greenAvg << 8) + blueAvg;
+  }
+
+  /**
    * A block that the x-ray can detect and identify
    */
   private static class DetectableBlock {
