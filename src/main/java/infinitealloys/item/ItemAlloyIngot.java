@@ -32,11 +32,11 @@ public class ItemAlloyIngot extends ItemIA {
   @SideOnly(Side.CLIENT)
   public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
     // The each metal's content in the alloy. Each metal gets a number from 0 to Consts.ALLOY_RADIX to represent its content.
-    final int[] metalContent = new int[Consts.METAL_COUNT];
+    int[] metalContent = new int[Consts.METAL_COUNT];
     // The total amount of metal "pieces" in this
     int totalMass = 0;
     int alloy;
-    final int alloyID = itemstack.getItemDamage() - 1;
+    int alloyID = itemstack.getItemDamage() - 1;
     if (itemstack.hasTagCompound()) {
       alloy = itemstack.getTagCompound().getInteger("alloy");
     } else if (alloyID >= 0 && alloyID < Consts.VALID_ALLOY_COUNT) {
@@ -73,7 +73,7 @@ public class ItemAlloyIngot extends ItemIA {
   @Override
   public String getUnlocalizedName(ItemStack itemstack) {
     if (itemstack.getItemDamage() > 0 && itemstack.getItemDamage() <= Consts.VALID_ALLOY_COUNT) {
-      return "item." + EnumAlloy.values()[itemstack.getItemDamage()].name;
+      return "item." + EnumAlloy.values()[itemstack.getItemDamage() - 1].name;
     }
     return super.getUnlocalizedName(itemstack);
   }
