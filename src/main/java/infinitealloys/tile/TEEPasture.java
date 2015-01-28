@@ -37,8 +37,7 @@ public class TEEPasture extends TileEntityElectric {
   /**
    * Classes for each animal/monster that is compatible with this machine
    */
-  public static final Class[]
-      mobClasses =
+  public static final Class[] mobClasses =
       {EntityChicken.class, EntityCow.class, EntityCow.class, EntitySheep.class,
        EntityCreeper.class, EntitySkeleton.class, EntitySpider.class, EntityZombie.class};
 

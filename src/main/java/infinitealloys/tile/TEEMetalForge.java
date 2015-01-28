@@ -40,6 +40,9 @@ public class TEEMetalForge extends TileEntityElectric {
   @Override
   public void updateEntity() {
     super.updateEntity();
+    if (recipeAlloyID < 0 && hasUpgrade(EnumUpgrade.ALLOY, 1)) {
+      recipeAlloyID = 0;
+    }
     recipeChanged = false;
   }
 
@@ -124,24 +127,16 @@ public class TEEMetalForge extends TileEntityElectric {
     this.recipeAlloyID = recipeAlloyID;
   }
 
-  public void handleTEMFDataFromClient(byte recipeAlloyID) {
-    if (recipeAlloyID != this.recipeAlloyID) {
-      recipeChanged = true;
-    }
-    this.recipeAlloyID = recipeAlloyID;
-  }
-
   /**
-   * Return the resulting ingot for the smelted ingots
+   * Get the alloy ingot that will result from the current recipe
    *
    * @return The resulting ingot.
    */
   private ItemStack getIngotResult() {
-    final ItemStack result = new ItemStack(IAItems.alloyIngot);
-    final NBTTagCompound tagCompound = new NBTTagCompound();
+    NBTTagCompound tagCompound = new NBTTagCompound();
     tagCompound.setInteger("alloy", EnumAlloy.getAlloyForID(recipeAlloyID));
+    ItemStack result = new ItemStack(IAItems.alloyIngot, 1, recipeAlloyID + 1);
     result.setTagCompound(tagCompound);
-    result.setItemDamage(recipeAlloyID + 1);
     return result;
   }
 
