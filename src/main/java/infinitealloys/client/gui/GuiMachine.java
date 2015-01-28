@@ -18,12 +18,11 @@ import java.util.List;
 
 import infinitealloys.block.BlockMachine;
 import infinitealloys.client.EnumHelp;
-import infinitealloys.item.IAItems;
 import infinitealloys.network.MessageOpenGui;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.util.Consts;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point3;
 
@@ -113,11 +112,11 @@ public abstract class GuiMachine extends GuiContainer {
       ArrayList<ColoredText> lines = new ArrayList<ColoredText>();
       lines.add(new ColoredText(Funcs.getLoc("general.upgrades"), 0xffffff));
 
-      for (int i = 0; i < Consts.UPGRADE_TYPE_COUNT; i++) {
-        if (tem.getUpgradeTier(i) > 0) {
-          lines.add(new ColoredText(
-              Funcs.getLoc("item." + IAItems.upgrades[i].name + tem.getUpgradeTier(i) + ".name"),
-              0xaaaaaa));
+      for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
+        int tier = tem.getUpgradeTier(upgradeType);
+        if (tier > 0) {
+          lines.add(new ColoredText(upgradeType.getItemStackForTier(tier).getDisplayName(),
+                                    0xaaaaaa));
         }
       }
 

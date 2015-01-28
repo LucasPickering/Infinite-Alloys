@@ -7,9 +7,8 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 
-import infinitealloys.item.IAItems;
-import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point3;
 
@@ -178,13 +177,13 @@ public class TEEXray extends TileEntityElectric {
   @Override
   protected void updateUpgrades() {
     float[] speedUpgradeValues = {1F, 0.83F, 0.67F, 0.5F};
-    processTimeMult = speedUpgradeValues[getUpgradeTier(Consts.SPEED)];
+    processTimeMult = speedUpgradeValues[getUpgradeTier(EnumUpgrade.SPEED)];
 
     float[] efficiencyUpgradeValues = {1F, 1.33F, 1.67F, 2F};
-    rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(Consts.EFFICIENCY)];
+    rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(EnumUpgrade.EFFICIENCY)];
 
     int[] rangeUpgradeValues = {4, 6, 8, 10};
-    range = rangeUpgradeValues[getUpgradeTier(Consts.RANGE)];
+    range = rangeUpgradeValues[getUpgradeTier(EnumUpgrade.RANGE)];
 
     if (lastSearch == null) {
       lastSearch = new Point3(-range, 0, -range);
@@ -195,9 +194,9 @@ public class TEEXray extends TileEntityElectric {
 
   @Override
   protected void populateValidUpgrades() {
-    validUpgradeTypes.add(IAItems.upgrades[Consts.SPEED]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.EFFICIENCY]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.RANGE]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.WIRELESS]);
+    addValidUpgradeType(EnumUpgrade.SPEED);
+    addValidUpgradeType(EnumUpgrade.EFFICIENCY);
+    addValidUpgradeType(EnumUpgrade.RANGE);
+    addValidUpgradeType(EnumUpgrade.WIRELESS);
   }
 }

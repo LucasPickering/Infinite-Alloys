@@ -15,9 +15,8 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 
-import infinitealloys.item.IAItems;
-import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
+import infinitealloys.util.EnumUpgrade;
 
 public class TEEPasture extends TileEntityElectric {
 
@@ -69,7 +68,7 @@ public class TEEPasture extends TileEntityElectric {
   @Override
   protected void onFinishProcess() {
                 /* NOTE: For this specific machine, ticksToProcess = 0, meaning this function is called every tick. It is essentially an updateEntity() function with
-		 * conditions applied in TileEntityMachine.updateEntity() */
+                 * conditions applied in TileEntityMachine.updateEntity() */
 
     final ArrayList<EntityCreature> trapList = new ArrayList<EntityCreature>();
     final ArrayList<EntityCreature> repelList = new ArrayList<EntityCreature>();
@@ -168,23 +167,23 @@ public class TEEPasture extends TileEntityElectric {
   @Override
   protected void updateUpgrades() {
     float[] efficiencyUpgradeValues = {1F, 0.83F, 0.67F, 0.5F};
-    rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(Consts.EFFICIENCY)];
+    rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(EnumUpgrade.EFFICIENCY)];
 
     int[] capacityUpgradeValues = {2, 4, 6, 8};
-    maxSpots = capacityUpgradeValues[getUpgradeTier(Consts.CAPACITY)];
+    maxSpots = capacityUpgradeValues[getUpgradeTier(EnumUpgrade.CAPACITY)];
 
     int[] trapRangeUpgradeValues = {5, 10, 15, 20};
-    trapRange = trapRangeUpgradeValues[getUpgradeTier(Consts.RANGE)];
+    trapRange = trapRangeUpgradeValues[getUpgradeTier(EnumUpgrade.RANGE)];
     int[] repelRangeUpgradeValues = {8, 16, 24, 32};
-    repelRange = repelRangeUpgradeValues[getUpgradeTier(Consts.RANGE)];
+    repelRange = repelRangeUpgradeValues[getUpgradeTier(EnumUpgrade.RANGE)];
   }
 
   @Override
   protected void populateValidUpgrades() {
-    validUpgradeTypes.add(IAItems.upgrades[Consts.EFFICIENCY]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.CAPACITY]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.RANGE]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.WIRELESS]);
+    addValidUpgradeType(EnumUpgrade.EFFICIENCY);
+    addValidUpgradeType(EnumUpgrade.CAPACITY);
+    addValidUpgradeType(EnumUpgrade.RANGE);
+    addValidUpgradeType(EnumUpgrade.WIRELESS);
   }
 
   /**

@@ -26,17 +26,12 @@ import infinitealloys.item.ItemIngot;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.item.ItemMulti;
 import infinitealloys.item.ItemUpgrade;
-import infinitealloys.item.ItemUpgradeAlloy;
-import infinitealloys.item.ItemUpgradeCapacity;
-import infinitealloys.item.ItemUpgradeEfficiency;
-import infinitealloys.item.ItemUpgradeRange;
-import infinitealloys.item.ItemUpgradeSpeed;
-import infinitealloys.item.ItemUpgradeWireless;
 import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumMetal;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
 
 public class CommonProxy {
@@ -45,17 +40,17 @@ public class CommonProxy {
 
   public void initBlocks() {
     IABlocks.ore =
-        new BlockOre().setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName("iaOre");
-    IABlocks.machine =
-        new BlockMachine().setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName(
-            "iaMachine");
+        new BlockOre().setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName("ore");
+    IABlocks.machine = new BlockMachine().setHardness(3F)
+        .setCreativeTab(InfiniteAlloys.tabIA).setBlockName("machine");
 
     GameRegistry.registerBlock(IABlocks.ore, ItemBlockOre.class, IABlocks.ore.getUnlocalizedName());
     GameRegistry.registerBlock(IABlocks.machine, ItemBlockMachine.class,
                                IABlocks.machine.getUnlocalizedName());
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
-      OreDictionary.registerOre("ore" + EnumMetal.values()[i].name, new ItemStack(IABlocks.ore, 1, 0));
+      OreDictionary
+          .registerOre("ore" + EnumMetal.values()[i].name, new ItemStack(IABlocks.ore, 1, i));
     }
 
     IABlocks.ore.setHarvestLevel("pickaxe", 1, 0);
@@ -73,18 +68,9 @@ public class CommonProxy {
     IAItems.ingot = new ItemIngot().setUnlocalizedName("ingot");
     IAItems.alloyIngot = new ItemAlloyIngot().setUnlocalizedName("alloyIngot");
     IAItems.internetWand = new ItemInternetWand().setUnlocalizedName("internetWand");
-    IAItems.upgrades[Consts.SPEED] =
-        (ItemUpgrade) new ItemUpgradeSpeed().setUnlocalizedName("upgradeSpeed");
-    IAItems.upgrades[Consts.EFFICIENCY] =
-        (ItemUpgrade) new ItemUpgradeEfficiency().setUnlocalizedName("upgradeEfficiency");
-    IAItems.upgrades[Consts.CAPACITY] =
-        (ItemUpgrade) new ItemUpgradeCapacity().setUnlocalizedName("upgradeCapacity");
-    IAItems.upgrades[Consts.RANGE] =
-        (ItemUpgrade) new ItemUpgradeRange().setUnlocalizedName("upgradeRange");
-    IAItems.upgrades[Consts.WIRELESS] =
-        (ItemUpgrade) new ItemUpgradeWireless().setUnlocalizedName("upgradeWireless");
-    IAItems.upgrades[Consts.ALLOY_UPG] =
-        (ItemUpgrade) new ItemUpgradeAlloy().setUnlocalizedName("upgradeAlloy");
+    for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
+      IAItems.upgrades[upgradeType.ordinal()] = new ItemUpgrade(upgradeType);
+    }
 
     GameRegistry.registerItem(IAItems.multi, IAItems.multi.getUnlocalizedName());
     GameRegistry.registerItem(IAItems.ingot, IAItems.ingot.getUnlocalizedName());
@@ -115,20 +101,11 @@ public class CommonProxy {
       alloys[i] = new ItemStack(IAItems.alloyIngot, 1, i + 1);
     }
 
-    ItemStack[][]
-        upgrades =
-        new ItemStack[Consts.UPGRADE_TYPE_COUNT][6]; // The second index is the current max value for tiers of an upgrade
-    for (int i = 0; i < upgrades.length; i++) {
-      for (int j = 0; j < upgrades[i].length; j++) {
-        upgrades[i][j] = new ItemStack(IAItems.upgrades[i], 1, j);
-      }
-    }
-
 		/*---MACHINES---*/
                 /* Computer */
     addRecipeDict(new ItemStack(IABlocks.machine), "W3G", "2M2", "R3R",
                   '2', alloys[2], '3', alloys[3], 'M', machineComponent, 'G', Blocks.glass_pane,
-                  'R', Items.redstone, 'W', upgrades[Consts.WIRELESS][0]);
+                  'R', Items.redstone, 'W', EnumUpgrade.WIRELESS.getItemStackForTier(1));
 
 		/* Metal Forge */
     addRecipeDict(new ItemStack(IABlocks.machine, 1, 1), "BBB", "BMB", "BBB",
@@ -150,67 +127,73 @@ public class CommonProxy {
 
 		/*---UPGRADES---*/
                 /* Speed I */
-    addRecipeDict(upgrades[Consts.SPEED][0], "0C0", "0U0",
+    addRecipeDict(EnumUpgrade.SPEED.getItemStackForTier(1), "0C0", "0U0",
                   '0', alloys[0], 'C', Items.cookie, 'U', upgradeComponent);
 
 		/* Speed II */
-    addRecipeDict(upgrades[Consts.SPEED][1], "2C2", "2U2",
-                  '2', alloys[2], 'D', Items.cake, 'U', upgrades[Consts.SPEED][0]);
+    addRecipeDict(EnumUpgrade.SPEED.getItemStackForTier(2), "2C2", "2U2",
+                  '2', alloys[2], 'D', Items.cake, 'U', EnumUpgrade.SPEED.getItemStackForTier(1));
 
 		/* Speed III */
-    addRecipeDict(upgrades[Consts.SPEED][2], "4C4", "4U4",
-                  '4', alloys[4], 'D', Items.golden_carrot, 'U', upgrades[Consts.SPEED][1]);
+    addRecipeDict(EnumUpgrade.SPEED.getItemStackForTier(3), "4C4", "4U4",
+                  '4', alloys[4], 'D', Items.golden_carrot,
+                  'U', EnumUpgrade.SPEED.getItemStackForTier(2));
 
 		/* Efficiency I */
-    addRecipeDict(upgrades[Consts.EFFICIENCY][0], "1S1", "1U1",
+    addRecipeDict(EnumUpgrade.EFFICIENCY.getItemStackForTier(1), "1S1", "1U1",
                   '1', alloys[1], 'S', Items.iron_shovel, 'U', upgradeComponent);
 
 		/* Efficiency II */
-    addRecipeDict(upgrades[Consts.EFFICIENCY][1], "3S3", "3U3",
-                  '3', alloys[3], 'S', Items.golden_shovel, 'U', upgrades[Consts.EFFICIENCY][0]);
+    addRecipeDict(EnumUpgrade.EFFICIENCY.getItemStackForTier(2), "3S3", "3U3",
+                  '3', alloys[3], 'S', Items.golden_shovel,
+                  'U', EnumUpgrade.EFFICIENCY.getItemStackForTier(1));
 
 		/* Efficiency III */
-    addRecipeDict(upgrades[Consts.EFFICIENCY][2], "5S5", "5U5",
-                  '5', alloys[5], 'S', Items.diamond_shovel, 'U', upgrades[Consts.EFFICIENCY][1]);
+    addRecipeDict(EnumUpgrade.EFFICIENCY.getItemStackForTier(3), "5S5", "5U5",
+                  '5', alloys[5], 'S', Items.diamond_shovel,
+                  'U', EnumUpgrade.EFFICIENCY.getItemStackForTier(2));
 
 		/* Capacity I */
-    addRecipeDict(upgrades[Consts.CAPACITY][0], "0C0", "0U0", "III",
+    addRecipeDict(EnumUpgrade.CAPACITY.getItemStackForTier(1), "0C0", "0U0", "III",
                   '0', alloys[0], 'C', Blocks.chest, 'I', Items.iron_ingot, 'U', upgradeComponent);
 
 		/* Capacity II */
-    addRecipeDict(upgrades[Consts.CAPACITY][1], "2C2", "2U2", "GGG",
+    addRecipeDict(EnumUpgrade.CAPACITY.getItemStackForTier(2), "2C2", "2U2", "GGG",
                   '2', alloys[2], 'C', Blocks.chest, 'G', Items.gold_ingot,
-                  'U', upgrades[Consts.CAPACITY][0]);
+                  'U', EnumUpgrade.CAPACITY.getItemStackForTier(1));
 
 		/* Capacity III */
-    addRecipeDict(upgrades[Consts.CAPACITY][2], "4C4", "4U4", "DDD",
+    addRecipeDict(EnumUpgrade.CAPACITY.getItemStackForTier(3), "4C4", "4U4", "DDD",
                   '4', alloys[4], 'C', Blocks.chest, 'D', Items.diamond,
-                  'U', upgrades[Consts.CAPACITY][1]);
+                  'U', EnumUpgrade.CAPACITY.getItemStackForTier(2));
 
 		/* Range I */
-    addRecipeDict(upgrades[Consts.RANGE][0], "1S1", "1U1",
+    addRecipeDict(EnumUpgrade.RANGE.getItemStackForTier(1), "1S1", "1U1",
                   '1', alloys[1], 'S', Items.snowball, 'U', upgradeComponent);
 
 		/* Range II */
-    addRecipeDict(upgrades[Consts.RANGE][1], "3B3", "3U3",
-                  '3', alloys[3], 'B', Items.blaze_rod, 'U', upgrades[Consts.RANGE][0]);
+    addRecipeDict(EnumUpgrade.RANGE.getItemStackForTier(2), "3B3", "3U3",
+                  '3', alloys[3], 'B', Items.blaze_rod,
+                  'U', EnumUpgrade.RANGE.getItemStackForTier(1));
 
 		/* Range III */
-    addRecipeDict(upgrades[Consts.RANGE][2], "5E5", "5U5",
-                  '5', alloys[5], 'E', Items.ender_eye, 'U', upgrades[Consts.RANGE][1]);
+    addRecipeDict(EnumUpgrade.RANGE.getItemStackForTier(3), "5E5", "5U5",
+                  '5', alloys[5], 'E', Items.ender_eye,
+                  'U', EnumUpgrade.RANGE.getItemStackForTier(2));
 
 		/* Wireless */
-    addRecipeDict(upgrades[Consts.WIRELESS][0], "1E1", "1U1",
+    addRecipeDict(EnumUpgrade.WIRELESS.getItemStackForTier(1), "1E1", "1U1",
                   '1', alloys[1], 'E', Items.ender_pearl, 'U', upgradeComponent);
 
 		/*---OTHER ITEMS---*/
                 /* Internet Wand */
     addRecipeDict(new ItemStack(IAItems.internetWand), " W ", "RSR",
-                  'R', Items.redstone, 'S', Items.stick, 'W', upgrades[Consts.WIRELESS][0]);
-		/* Machine Frame */
+                  'R', Items.redstone, 'S', Items.stick,
+                  'W', EnumUpgrade.WIRELESS.getItemStackForTier(1));
+                /* Machine Frame */
     addRecipeDict(new ItemStack(IAItems.multi, 1, 0), "CCC", "AAA", "MMM",
                   'C', "ingotCopper", 'A', "ingotAluminium", 'M', "ingotMagnesium");
-		/* Upgrade Component */
+                /* Upgrade Component */
     addRecipeDict(new ItemStack(IAItems.multi, 1, 1), "CTC", "ATA", "A A",
                   'C', "ingotCopper", 'A', "ingotAluminium", 'T', "ingotTantalum");
 
@@ -265,7 +248,7 @@ public class CommonProxy {
     EntityRegistry.registerGlobalEntityID(entityClass, name, entityID);
     EntityRegistry
         .registerModEntity(entityClass, name, entityID, InfiniteAlloys.instance, 64, 1, true);
-    EntityList.entityEggs.put(Integer.valueOf(entityID),
+    EntityList.entityEggs.put(entityID,
                               new EntityList.EntityEggInfo(entityID, primaryColor, secondaryColor));
   }
 }

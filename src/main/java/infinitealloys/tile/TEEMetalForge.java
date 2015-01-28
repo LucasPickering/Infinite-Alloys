@@ -11,6 +11,7 @@ import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.EnumMachine;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
 
 public class TEEMetalForge extends TileEntityElectric {
@@ -183,21 +184,21 @@ public class TEEMetalForge extends TileEntityElectric {
   @Override
   protected void updateUpgrades() {
     float[] speedUpgradeValues = {1F, 0.83F, 0.67F, 0.5F};
-    processTimeMult = speedUpgradeValues[getUpgradeTier(Consts.SPEED)];
+    processTimeMult = speedUpgradeValues[getUpgradeTier(EnumUpgrade.SPEED)];
 
     float[] efficiencyUpgradeValues = {1F, 0.83F, 0.67F, 0.5F};
-    rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(Consts.EFFICIENCY)];
+    rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(EnumUpgrade.EFFICIENCY)];
 
     int[] capacityUpgradeValues = {32, 42, 52, 64};
-    stackLimit = capacityUpgradeValues[getUpgradeTier(Consts.CAPACITY)];
+    stackLimit = capacityUpgradeValues[getUpgradeTier(EnumUpgrade.CAPACITY)];
   }
 
   @Override
   protected void populateValidUpgrades() {
-    validUpgradeTypes.add(IAItems.upgrades[Consts.SPEED]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.EFFICIENCY]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.CAPACITY]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.WIRELESS]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.ALLOY_UPG]);
+    addValidUpgradeType(EnumUpgrade.SPEED);
+    addValidUpgradeType(EnumUpgrade.EFFICIENCY);
+    addValidUpgradeType(EnumUpgrade.CAPACITY);
+    addValidUpgradeType(EnumUpgrade.WIRELESS);
+    addValidUpgradeType(EnumUpgrade.ALLOY);
   }
 }

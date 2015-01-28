@@ -10,6 +10,7 @@ import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.EnumMetal;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 
 public class GuiMetalForge extends GuiElectric {
@@ -85,7 +86,7 @@ public class GuiMetalForge extends GuiElectric {
     if (Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 39, topLeft.y + 51, 18, 18)) {
       if (mouseButton == 0) { // Left-click
         // If there is an unlocked alloy above this one, select it
-        if (temf.recipeAlloyID + 1 < tem.getUpgradeTier(Consts.ALLOY_UPG)) {
+        if (temf.recipeAlloyID + 1 < tem.getUpgradeTier(EnumUpgrade.ALLOY)) {
           temf.recipeAlloyID++;
         }
       } else if (mouseButton == 1) { // Right-click

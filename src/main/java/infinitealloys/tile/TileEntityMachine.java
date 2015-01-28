@@ -22,6 +22,7 @@ import infinitealloys.network.MessageTEToServer;
 import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point3;
 
@@ -41,7 +42,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   /**
    * A list of the upgrades that can be used on this machine
    */
-  protected final ArrayList<ItemUpgrade> validUpgradeTypes = new ArrayList<ItemUpgrade>();
+  private final ArrayList<ItemUpgrade> validUpgradeItems = new ArrayList<ItemUpgrade>();
 
   /**
    * The direction that the machine is facing.
@@ -101,8 +102,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
     // Check for upgrades in the upgrade inventory slot. If there is one, remove it from the slot and add it to the machine.
     if (inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(
         inventoryStacks[upgradeSlotIndex])) {
-      upgrades[((ItemUpgrade) inventoryStacks[upgradeSlotIndex]
-          .getItem()).upgradeType]++; // Increment the element in the upgrades array that corresponds to
+      // Increment the element in the upgrades array that corresponds to
+      upgrades[((ItemUpgrade) inventoryStacks[upgradeSlotIndex].getItem()).upgradeType.ordinal()]++;
       inventoryStacks[upgradeSlotIndex] = null;
       updateUpgrades();
     }
@@ -355,10 +356,11 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
    * @return true if valid
    */
   public final boolean isUpgradeValid(ItemStack itemstack) {
-    if (validUpgradeTypes.contains(itemstack.getItem())) {
-      int upgradeType = ((ItemUpgrade) itemstack.getItem()).upgradeType;
+    if (validUpgradeItems.contains(itemstack.getItem())) {
+      EnumUpgrade upgradeType = ((ItemUpgrade) itemstack.getItem()).upgradeType;
       int upgradeTier = itemstack.getItemDamage() + 1;
-      return upgrades[upgradeType] + 1 == upgradeTier && !hasUpgrade(upgradeType, upgradeTier);
+      return upgrades[upgradeType.ordinal()] + 1 == upgradeTier
+             && !hasUpgrade(upgradeType, upgradeTier);
     }
     return false;
   }
@@ -370,15 +372,24 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
    * @param tier        Tier of the upgrade, e.g. 2 for Speed II or 3 for Capacity III
    * @return true if the machine has the upgrade
    */
-  public boolean hasUpgrade(int upgradeType, int tier) {
-    return upgrades[upgradeType] >= tier;
+  public boolean hasUpgrade(EnumUpgrade upgradeType, int tier) {
+    return upgrades[upgradeType.ordinal()] >= tier;
   }
 
   /**
    * Get the tier of the specified upgrade type for this machine, e.g. if this machine has received
    * Speed I and II and the upgrade type is speed, this will return 2
    */
-  public int getUpgradeTier(int upgradeType) {
-    return upgrades[upgradeType];
+  public int getUpgradeTier(EnumUpgrade upgradeType) {
+    return upgrades[upgradeType.ordinal()];
+  }
+
+  /**
+   * Add an upgrade type to this machine's list of valid upgrade types.
+   *
+   * @param upgradeType the upgrade type
+   */
+  protected void addValidUpgradeType(EnumUpgrade upgradeType) {
+    validUpgradeItems.add(IAItems.upgrades[upgradeType.ordinal()]);
   }
 }

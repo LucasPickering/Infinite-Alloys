@@ -7,11 +7,10 @@ import net.minecraft.util.ChatComponentText;
 
 import java.util.ArrayList;
 
-import infinitealloys.item.IAItems;
 import infinitealloys.network.MessageNetworkEditToClient;
 import infinitealloys.network.MessageNetworkEditToServer;
-import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point3;
 
@@ -92,8 +91,8 @@ public class TEMComputer extends TileEntityMachine implements IHost {
   @Override
   public boolean isClientValid(Point3 client) {
     TileEntity te = Funcs.getTileEntity(worldObj, client);
-    return te instanceof TileEntityMachine && ((TileEntityMachine) te)
-        .hasUpgrade(Consts.WIRELESS, 1);
+    return te instanceof TileEntityMachine
+           && ((TileEntityMachine) te).hasUpgrade(EnumUpgrade.WIRELESS, 1);
   }
 
   @Override
@@ -225,15 +224,15 @@ public class TEMComputer extends TileEntityMachine implements IHost {
   @Override
   protected void updateUpgrades() {
     int[] capacityUpgradeValues = {3, 5, 7, 10};
-    networkCapacity = capacityUpgradeValues[getUpgradeTier(Consts.CAPACITY)];
+    networkCapacity = capacityUpgradeValues[getUpgradeTier(EnumUpgrade.CAPACITY)];
 
     int[] rangeUpgradeValues = {30, 40, 50, 60};
-    range = rangeUpgradeValues[getUpgradeTier(Consts.RANGE)];
+    range = rangeUpgradeValues[getUpgradeTier(EnumUpgrade.RANGE)];
   }
 
   @Override
   protected void populateValidUpgrades() {
-    validUpgradeTypes.add(IAItems.upgrades[Consts.CAPACITY]);
-    validUpgradeTypes.add(IAItems.upgrades[Consts.RANGE]);
+    addValidUpgradeType(EnumUpgrade.CAPACITY);
+    addValidUpgradeType(EnumUpgrade.RANGE);
   }
 }

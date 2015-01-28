@@ -12,16 +12,8 @@ public class Consts {
 
   public static final int METAL_COUNT = EnumMetal.values().length;
   public static final int MACHINE_COUNT = EnumMachine.values().length;
-  public static final int UPGRADE_TYPE_COUNT = 6;
+  public static final int UPGRADE_TYPE_COUNT = EnumUpgrade.values().length;
   public static final int VALID_ALLOY_COUNT = EnumAlloy.values().length;
-
-  // Upgrade IDs
-  public static final int SPEED = 0;
-  public static final int EFFICIENCY = 1;
-  public static final int CAPACITY = 2;
-  public static final int RANGE = 3;
-  public static final int WIRELESS = 4;
-  public static final int ALLOY_UPG = 5;
 
   /**
    * The radix of the number system used for the alloys. The maximum value for a single metal in an

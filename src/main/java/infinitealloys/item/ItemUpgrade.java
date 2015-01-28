@@ -11,31 +11,33 @@ import java.util.List;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumAlloy;
+import infinitealloys.util.EnumMetal;
+import infinitealloys.util.EnumUpgrade;
+import infinitealloys.util.Funcs;
 
-public abstract class ItemUpgrade extends ItemIA {
+public class ItemUpgrade extends ItemIA {
 
   protected IIcon background;
   private final IIcon[] upgradeIcons;
 
-  public final String name;
-  public final int upgradeType;
-  public final int tiers;
+  public final EnumUpgrade upgradeType;
 
-  public ItemUpgrade(String name, int upgradeType, int tiers) {
+  public ItemUpgrade(EnumUpgrade upgradeType) {
     super();
-    this.name = name;
     this.upgradeType = upgradeType;
-    this.tiers = tiers;
-    upgradeIcons = new IIcon[tiers];
+    setUnlocalizedName(upgradeType.name);
+    upgradeIcons = new IIcon[upgradeType.tiers];
     setHasSubtypes(true);
   }
 
   @Override
   @SideOnly(Side.CLIENT)
   public void registerIcons(IIconRegister iconRegister) {
-    background = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "upgradebackground");
-    for (int i = 0; i < tiers; i++) {
-      upgradeIcons[i] = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + name + (i + 1));
+    background = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "upgradeBackground");
+    for (int i = 0; i < upgradeType.tiers; i++) {
+      upgradeIcons[i] =
+          iconRegister.registerIcon(Consts.TEXTURE_PREFIX + upgradeType.name + (i + 1));
     }
   }
 
@@ -57,16 +59,48 @@ public abstract class ItemUpgrade extends ItemIA {
   @Override
   @SideOnly(Side.CLIENT)
   public void getSubItems(Item item, CreativeTabs creativetabs, List list) {
-    for (int i = 0; i < tiers; i++) {
+    for (int i = 0; i < upgradeType.tiers; i++) {
       list.add(new ItemStack(item, 1, i));
     }
   }
 
   @Override
   public String getUnlocalizedName(ItemStack itemstack) {
-    if (itemstack.getItemDamage() < tiers) {
-      return "item." + name + (itemstack.getItemDamage() + 1);
+    if (itemstack.getItemDamage() < upgradeType.tiers) {
+      return "item." + upgradeType.name + (itemstack.getItemDamage() + 1);
     }
-    return super.getUnlocalizedName(itemstack);
+    return getUnlocalizedName();
+  }
+
+  @Override
+  @SideOnly(Side.CLIENT)
+  public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
+    if (upgradeType == EnumUpgrade.ALLOY && renderPass == 1) {
+      int colorCount = 0;
+      int redTot = 0, greenTot = 0, blueTot = 0;
+      int alloy = EnumAlloy.getAlloyForID(itemstack.getItemDamage());
+
+      for (int i = 0; i < Consts.METAL_COUNT; i++) {
+        int ingotColor = EnumMetal.values()[i].color;
+        int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
+        colorCount += alloyAmt;
+        redTot +=
+            (ingotColor >> 16 & 255) * alloyAmt; // Get the red byte from the ingot's hex color code
+        greenTot +=
+            (ingotColor >> 8 & 255)
+            * alloyAmt; // Get the green byte from the ingot's hex color code
+        blueTot +=
+            (ingotColor & 255) * alloyAmt; // Get the blue byte from the ingot's hex color code
+      }
+
+      int redAvg = 0, greenAvg = 0, blueAvg = 0;
+      if (colorCount != 0) {
+        redAvg = redTot / colorCount;
+        greenAvg = greenTot / colorCount;
+        blueAvg = blueTot / colorCount;
+      }
+      return (redAvg << 16) + (greenAvg << 8) + blueAvg;
+    }
+    return 0xffffff;
   }
 }
