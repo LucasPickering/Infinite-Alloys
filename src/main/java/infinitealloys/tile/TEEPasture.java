@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
+import io.netty.buffer.ByteBuf;
 
 public class TEEPasture extends TileEntityElectric {
 
@@ -160,8 +161,20 @@ public class TEEPasture extends TileEntityElectric {
     return new Object[]{mobActions};
   }
 
-  public void handleTEPPacketData(byte[] mobActions) {
-    this.mobActions = mobActions;
+  @Override
+  public void readServerToClientData(ByteBuf bytes) {
+    super.readServerToClientData(bytes);
+    for (int i = 0; i < mobActions.length; i++) {
+      mobActions[i] = bytes.readByte();
+    }
+  }
+
+  @Override
+  public void readClientToServerData(ByteBuf bytes) {
+    super.readClientToServerData(bytes);
+    for (int i = 0; i < mobActions.length; i++) {
+      mobActions[i] = bytes.readByte();
+    }
   }
 
   @Override

@@ -13,6 +13,7 @@ import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
+import io.netty.buffer.ByteBuf;
 
 public class TEEMetalForge extends TileEntityElectric {
 
@@ -103,7 +104,20 @@ public class TEEMetalForge extends TileEntityElectric {
     return new Object[]{recipeAlloyID};
   }
 
-  public void handleTEMFDataFromServer(byte recipeAlloyID) {
+  @Override
+  public void readServerToClientData(ByteBuf bytes) {
+    super.readServerToClientData(bytes);
+    byte recipeAlloyID = bytes.readByte();
+    if (recipeAlloyID != this.recipeAlloyID) {
+      recipeChanged = true;
+    }
+    this.recipeAlloyID = recipeAlloyID;
+  }
+
+  @Override
+  public void readClientToServerData(ByteBuf bytes) {
+    super.readClientToServerData(bytes);
+    byte recipeAlloyID = bytes.readByte();
     if (recipeAlloyID != this.recipeAlloyID) {
       recipeChanged = true;
     }

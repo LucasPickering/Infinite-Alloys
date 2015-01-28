@@ -25,6 +25,7 @@ import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point3;
+import io.netty.buffer.ByteBuf;
 
 /**
  * A base, abstract class for Tile Entities that can receive upgrades. TileEntityElectric blocks are
@@ -100,8 +101,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   @Override
   public void updateEntity() {
     // Check for upgrades in the upgrade inventory slot. If there is one, remove it from the slot and add it to the machine.
-    if (inventoryStacks[upgradeSlotIndex] != null && isUpgradeValid(
-        inventoryStacks[upgradeSlotIndex])) {
+    if (inventoryStacks[upgradeSlotIndex] != null
+        && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
       // Increment the element in the upgrades array that corresponds to
       upgrades[((ItemUpgrade) inventoryStacks[upgradeSlotIndex].getItem()).upgradeType.ordinal()]++;
       inventoryStacks[upgradeSlotIndex] = null;
@@ -233,10 +234,24 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
     return null;
   }
 
-  public void handleTEMDataFromServer(byte facing, int[] upgrades) {
-    orientation = EnumFacing.values()[facing];
-    this.upgrades = upgrades;
-    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+  /**
+   * Read data from a server->client packet and sync certain values
+   *
+   * @param bytes the data from the server->client packet
+   */
+  public void readServerToClientData(ByteBuf bytes) {
+    orientation = EnumFacing.values()[bytes.readByte()];
+    for (int i = 0; i < upgrades.length; i++) {
+      upgrades[i] = bytes.readInt();
+    }
+  }
+
+  /**
+   * Read data from a client->server packet and sync certain values
+   *
+   * @param bytes the data from the client->server packet
+   */
+  public void readClientToServerData(ByteBuf bytes) {
   }
 
   /**

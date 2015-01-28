@@ -6,13 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import infinitealloys.tile.TEEEnergyStorage;
-import infinitealloys.tile.TEEMetalForge;
-import infinitealloys.tile.TEEPasture;
-import infinitealloys.tile.TEEXray;
-import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
@@ -45,53 +39,10 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 
   @Override
   public IMessage onMessage(MessageTEToClient message, MessageContext context) {
-    tePoint = message.tePoint;
-    bytes = message.bytes;
-
-    TileEntity te = Funcs.getTileEntity(Minecraft.getMinecraft().theWorld, tePoint);
+    TileEntity te = Funcs.getTileEntity(Minecraft.getMinecraft().theWorld, message.tePoint);
 
     if (te instanceof TileEntityMachine) {
-      byte orientation = bytes.readByte();
-      int[] upgrades = new int[Consts.UPGRADE_TYPE_COUNT];
-      for (int i = 0; i < upgrades.length; i++) {
-        upgrades[i] = bytes.readInt();
-      }
-      ((TileEntityMachine) te).handleTEMDataFromServer(orientation, upgrades);
-
-      if (te instanceof TileEntityElectric) {
-        int processProgress = bytes.readInt();
-        ((TileEntityElectric) te).handleTEEDataFromServer(processProgress);
-
-        switch (((TileEntityElectric) te).getEnumMachine()) {
-          case METAL_FORGE:
-            byte recipeAlloyID = bytes.readByte();
-            ((TEEMetalForge) te).handleTEMFDataFromServer(recipeAlloyID);
-            break;
-
-          case XRAY:
-            int detectedBlocksSize = bytes.readInt();
-            Point3[] detectedBlocks = new Point3[detectedBlocksSize];
-            for (int i = 0; i < detectedBlocksSize; i++) {
-              detectedBlocks[i] = new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt());
-            }
-            ((TEEXray) te).handleTEXDataFromServer(detectedBlocks);
-            break;
-
-          case PASTURE:
-            byte[] mobActions = new byte[TEEPasture.mobClasses.length];
-            for (int i = 0; i < mobActions.length; i++) {
-              mobActions[i] = bytes.readByte();
-            }
-            ((TEEPasture) te).handleTEPPacketData(mobActions);
-            break;
-
-          case ENERGY_STORAGE:
-            int currentRK = bytes.readInt();
-            int baseRKPerTick = bytes.readInt();
-            ((TEEEnergyStorage) te).handleTEESDataFromServer(currentRK, baseRKPerTick);
-            break;
-        }
-      }
+      ((TileEntityMachine) te).readServerToClientData(message.bytes);
     }
 
     return null;

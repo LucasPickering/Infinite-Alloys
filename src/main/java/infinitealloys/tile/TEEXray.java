@@ -11,6 +11,7 @@ import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point3;
+import io.netty.buffer.ByteBuf;
 
 public class TEEXray extends TileEntityElectric {
 
@@ -162,16 +163,20 @@ public class TEEXray extends TileEntityElectric {
     return new Object[]{shouldSearch};
   }
 
-  public void handleTEXDataFromServer(Point3[] detectedBlocks) {
-    this.detectedBlocks.clear();
-    for (Point3 point : detectedBlocks) {
-      this.detectedBlocks.add(point);
+  @Override
+  public void readServerToClientData(ByteBuf bytes) {
+    super.readServerToClientData(bytes);
+    int detectedBlocksSize = bytes.readInt();
+    for (int i = 0; i < detectedBlocksSize; i++) {
+      detectedBlocks.add(new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt()));
     }
     refreshGUI = true;
   }
 
-  public void handleTEXDataFromClient(boolean shouldSearch) {
-    this.shouldSearch = shouldSearch;
+  @Override
+  public void readClientToServerData(ByteBuf bytes) {
+    super.readClientToServerData(bytes);
+    shouldSearch = bytes.readBoolean();
   }
 
   @Override

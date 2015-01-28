@@ -8,6 +8,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point3;
+import io.netty.buffer.ByteBuf;
 
 /**
  * A base, abstract class for Tile Entities that can receive upgrades, use power, and have processes
@@ -167,7 +168,9 @@ public abstract class TileEntityElectric extends TileEntityMachine {
     return ArrayUtils.addAll(super.getSyncDataToClient(), processProgress);
   }
 
-  public void handleTEEDataFromServer(int processProgress) {
-    this.processProgress = processProgress;
+  @Override
+  public void readServerToClientData(ByteBuf bytes) {
+    super.readServerToClientData(bytes);
+    processProgress = bytes.readInt();
   }
 }

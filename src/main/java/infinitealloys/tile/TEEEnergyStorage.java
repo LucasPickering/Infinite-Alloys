@@ -16,6 +16,7 @@ import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point3;
+import io.netty.buffer.ByteBuf;
 
 public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
@@ -287,9 +288,11 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
     return ArrayUtils.addAll(super.getSyncDataToClient(), currentRK, baseRKPerTick);
   }
 
-  public void handleTEESDataFromServer(int currentRK, int baseRKPerTick) {
-    this.currentRK = currentRK;
-    this.baseRKPerTick = baseRKPerTick;
+  @Override
+  public void readServerToClientData(ByteBuf bytes) {
+    super.readServerToClientData(bytes);
+    currentRK = bytes.readInt();
+    baseRKPerTick = bytes.readInt();
   }
 
   @Override
