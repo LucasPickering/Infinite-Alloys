@@ -28,7 +28,7 @@ import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 /**
- * A base, abstract class for Tile Entities that can receive upgrades. TileEntityElectric blocks are
+ * A base class for Tile Entities that can receive upgrades. TileEntityElectric blocks are
  * a sub-type of this. Often referred to as TEMs or machines.
  *
  * @see TileEntityElectric

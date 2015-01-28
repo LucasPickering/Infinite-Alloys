@@ -11,10 +11,10 @@ import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 /**
- * A base, abstract class for Tile Entities that can receive upgrades, use power, and have processes
- * to run. A sub-type of TileEntityMachine. Often referred to as TEEs.
+ * A base class for Tile Entities that can receive upgrades, use power, and run processes. A
+ * sub-type of TileEntityMachine. Often referred to as TEEs.
  *
- * @see TileEntityMachine
+ * @see {@link TileEntityMachine}
  */
 public abstract class TileEntityElectric extends TileEntityMachine {
 
@@ -48,7 +48,8 @@ public abstract class TileEntityElectric extends TileEntityMachine {
   protected float rkPerTickMult = 1.0F;
 
   /**
-   * The coordinates of the ESU that is providing energy to this machine
+   * The coordinates of the {@link infinitealloys.tile.TEEEnergyStorage ESU} that is providing
+   * energy to this machine.
    */
   public Point3 energyHost;
 
@@ -71,8 +72,9 @@ public abstract class TileEntityElectric extends TileEntityMachine {
         energyHost = null;
       }
 
-      // If the machine should be processing and enough energy is available, increment the progress by one. If this is the first tick of the process, call
-      // startProcess(). If it has reached or exceeded the limit for completion, then finish the process and reset the counter.
+      // If the machine should be processing and enough energy is available, increment the progress
+      // by one. If this is the first tick of the process, call startProcess(). If it has reached
+      // or exceeded the limit for completion, then finish the process and reset the counter.
       else if (shouldProcess() && ((TEEEnergyStorage) Funcs.getTileEntity(worldObj, energyHost))
           .changeRK(getRKChange())) {
         if (processProgress == 0) {
