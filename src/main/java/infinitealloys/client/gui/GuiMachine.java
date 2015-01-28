@@ -28,7 +28,7 @@ import infinitealloys.util.Point3;
 
 public abstract class GuiMachine extends GuiContainer {
 
-  // The position for each item in the texture sheet extras.png
+  // The position for each item in the texture sheet "extras.png"
   static final Rectangle TAB_LEFT_OFF = new Rectangle(0, 0, 24, 24);
   static final Rectangle TAB_LEFT_ON = new Rectangle(24, 0, 28, 24);
   static final Rectangle TAB_RIGHT_OFF = new Rectangle(52, 0, 29, 24);
@@ -36,8 +36,8 @@ public abstract class GuiMachine extends GuiContainer {
   static final Rectangle PROGRESS_BAR = new Rectangle(109, 0, 108, 18);
   static final Rectangle SCROLL_ON = new Rectangle(217, 0, 12, 15);
   static final Rectangle SCROLL_OFF = new Rectangle(229, 0, 12, 15);
-  static final Rectangle NETWORK_ICON = new Rectangle(0, 40, 16, 16);
   static final Rectangle SCROLL_BAR = new Rectangle(172, 51, 12, 96);
+  static final Rectangle NETWORK_ICON = new Rectangle(0, 40, 16, 16);
 
   /**
    * The texture resource for the texture item
@@ -54,7 +54,6 @@ public abstract class GuiMachine extends GuiContainer {
   protected java.awt.Point topLeft = new java.awt.Point();
 
   protected TileEntityMachine tem;
-  protected Point3 controllingComputer = new Point3();
   protected GuiMachineTab computerTab;
   protected final List<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
   /**
