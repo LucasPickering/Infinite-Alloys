@@ -47,10 +47,8 @@ public class GuiXray extends GuiElectric {
   @Override
   public void initGui() {
     super.initGui();
-    buttonList.add(
-        searchButton =
-            new GuiButton(1, width / 2 - 30, height / 2 - 90, 80, 20,
-                          Funcs.getLoc("machine.xray.search")));
+    buttonList.add(searchButton = new GuiButton(1, width / 2 - 30, height / 2 - 90, 80, 20,
+                                                Funcs.getLoc("machine.xray.search")));
     setButtons();
   }
 
@@ -83,16 +81,15 @@ public class GuiXray extends GuiElectric {
     GL11.glDisable(GL11.GL_LIGHTING);
     GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-    searchButton.enabled =
-        tex.inventoryStacks[0]
-        != null; // Disable the search button if there are no ores in the machine
+    // Disable the search button if there are no ores in the machine
+    searchButton.enabled = tex.inventoryStacks[0] != null;
 
     // If it was searching last tick and it's now done, refresh the buttons
     if (wasSearching && tex.getProcessProgress() == 0) {
       setButtons();
     }
-    wasSearching =
-        tex.getProcessProgress() > 0; // Set the searching status for this tick (used next tick)
+    // Set the searching status for this tick (used next tick)
+    wasSearching = tex.getProcessProgress() > 0;
 
     Funcs.bindTexture(GuiMachine.extraIcons);
 

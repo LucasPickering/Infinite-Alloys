@@ -225,8 +225,7 @@ public class CommonProxy {
   public void initHandlers() {
     NetworkHandler.init();
     gfxHandler = new GfxHandler();
-    EventHandler eventHandler = new EventHandler();
-    MinecraftForge.EVENT_BUS.register(eventHandler);
+    MinecraftForge.EVENT_BUS.register(new EventHandler());
     GameRegistry.registerWorldGenerator(new WorldGenHandler(), 100);
     NetworkRegistry.INSTANCE.registerGuiHandler(InfiniteAlloys.instance, gfxHandler);
   }

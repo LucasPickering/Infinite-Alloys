@@ -70,29 +70,20 @@ public class InfiniteAlloys {
     if (validAlloys == null) {
       validAlloys = new int[Consts.VALID_ALLOY_COUNT];
       Random random = new Random();
-      for (int i = 0; i < Consts.VALID_ALLOY_COUNT;
-           i++) { // For each alloy that needs to be generated
+      // For each alloy that needs to be generated
+      for (int i = 0; i < Consts.VALID_ALLOY_COUNT; i++) {
         int alloy = 0; // An int to hold each digit that is generated
-        for (int j = 0; j < Consts.METAL_COUNT;
-             j++) { // For each metal, i.e. for each digit in the alloy
-          int
-              min =
-              Funcs.intAtPos(EnumAlloy.values()[i].min, Consts.ALLOY_RADIX,
-                             j); // Metal's min value in the alloy
-          int
-              max =
-              Funcs.intAtPos(EnumAlloy.values()[i].max, Consts.ALLOY_RADIX,
-                             j); // Metal's max value in the alloy
-          alloy +=
-              (min + random.nextInt(max - min + 1)) * Math.pow(Consts.ALLOY_RADIX,
-                                                               j); // Randomly gen a value in [min, max] and add it to the alloy
+        // For each metal, i.e. for each digit in the alloy
+        for (int j = 0; j < Consts.METAL_COUNT; j++) {
+          // Metal's min value in the alloy
+          int min = Funcs.intAtPos(EnumAlloy.values()[i].min, Consts.ALLOY_RADIX, j);
+          // Metal's max value in the alloy
+          int max = Funcs.intAtPos(EnumAlloy.values()[i].max, Consts.ALLOY_RADIX, j);
+          // Randomly gen a value in [min, max] and add it to the alloy
+          alloy += (min + random.nextInt(max - min + 1)) * Math.pow(Consts.ALLOY_RADIX, j);
         }
 
         validAlloys[i] = Funcs.reduceAlloy(alloy); // Add the new alloy to the array
-        if (Loader.isModLoaded("mcp")) {
-          System.out.println(
-              "SPOILER ALERT! Alloy " + i + ": " + validAlloys[i]); // Debug line, only runs in MCP
-        }
       }
       System.out.println("Successfully generated IA alloys");
     }
