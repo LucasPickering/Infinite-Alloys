@@ -245,7 +245,7 @@ public class GuiXray extends GuiElectric {
       width = 33;
       height = 15;
 
-      // Set the background of the button based on its y-value
+      // Set the backgroundIcon of the button based on its y-value
       for (final Background bg : Background.values()) {
         if (bg.start <= yValue && yValue <= bg.end) {
           background = bg;
@@ -256,7 +256,7 @@ public class GuiXray extends GuiElectric {
 
     private void drawButton() {
       if (blockAmount > 0) {
-        // Draw the background texture for the button
+        // Draw the backgroundIcon texture for the button
         Funcs.bindTexture(GuiMachine.extraIcons);
         drawTexturedModalRect(xPos, yPos, background.texture.x, background.texture.y,
                               background.texture.width, background.texture.height);

@@ -3,12 +3,17 @@ package infinitealloys.util;
 import net.minecraft.item.ItemStack;
 
 import infinitealloys.item.IAItems;
+import infinitealloys.item.ItemUpgrade;
+import infinitealloys.item.ItemUpgradeAlloy;
 
 public enum EnumUpgrade {
 
-  SPEED("upgradeSpeed", 3), EFFICIENCY("upgradeEfficiency", 3),
-  CAPACITY("upgradeCapacity", 3), RANGE("upgradeRange", 3),
-  WIRELESS("upgradeWireless", 1), ALLOY("upgradeAlloy", 6);
+  SPEED("upgradeSpeed", 3, ItemUpgrade.class),
+  EFFICIENCY("upgradeEfficiency", 3, ItemUpgrade.class),
+  CAPACITY("upgradeCapacity", 3, ItemUpgrade.class),
+  RANGE("upgradeRange", 3, ItemUpgrade.class),
+  WIRELESS("upgradeWireless", 1, ItemUpgrade.class),
+  ALLOY("upgradeAlloy", 6, ItemUpgradeAlloy.class);
 
   public final String name;
 
@@ -18,9 +23,21 @@ public enum EnumUpgrade {
    */
   public final int tiers;
 
-  private EnumUpgrade(String name, int tiers) {
+  private final Class<? extends ItemUpgrade> itemClass;
+
+  private EnumUpgrade(String name, int tiers, Class<? extends ItemUpgrade> itemClass) {
     this.name = name;
     this.tiers = tiers;
+    this.itemClass = itemClass;
+  }
+
+  public ItemUpgrade getItem() {
+    try {
+      return itemClass.getConstructor(EnumUpgrade.class).newInstance(this);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
   /**

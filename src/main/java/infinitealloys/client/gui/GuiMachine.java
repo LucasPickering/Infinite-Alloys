@@ -50,7 +50,7 @@ public abstract class GuiMachine extends GuiContainer {
    */
   static final ResourceLocation extraIcons = Funcs.getGuiTexture("extras");
   /**
-   * The background texture
+   * The backgroundIcon texture
    */
   protected ResourceLocation background;
 

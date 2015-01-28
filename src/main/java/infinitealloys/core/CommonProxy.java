@@ -25,7 +25,6 @@ import infinitealloys.item.ItemBlockOre;
 import infinitealloys.item.ItemIngot;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.item.ItemMulti;
-import infinitealloys.item.ItemUpgrade;
 import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;
@@ -69,7 +68,7 @@ public class CommonProxy {
     IAItems.alloyIngot = new ItemAlloyIngot().setUnlocalizedName("alloyIngot");
     IAItems.internetWand = new ItemInternetWand().setUnlocalizedName("internetWand");
     for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
-      IAItems.upgrades[upgradeType.ordinal()] = new ItemUpgrade(upgradeType);
+      IAItems.upgrades[upgradeType.ordinal()] = upgradeType.getItem();
     }
 
     GameRegistry.registerItem(IAItems.multi, IAItems.multi.getUnlocalizedName());

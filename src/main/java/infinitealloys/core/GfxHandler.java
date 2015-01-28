@@ -107,7 +107,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
       renderer.renderFaceZPos(block, 0D, 0D, 0D, block.getIcon(5, 0));
       tessellator.draw();
 
-      // Draw ore pieces on top of stone background
+      // Draw ore pieces on top of stone backgroundIcon
       if (metadata < Consts.METAL_COUNT) {
         int mult = EnumMetal.values()[metadata].color;
         GL11.glColor4f((mult >> 16 & 255) / 255F, (mult >> 8 & 255) / 255F, (mult & 255) / 255F,
