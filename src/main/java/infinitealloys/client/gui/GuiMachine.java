@@ -39,6 +39,8 @@ public abstract class GuiMachine extends GuiContainer {
   static final Rectangle SCROLL_OFF = new Rectangle(229, 0, 12, 15);
   static final Rectangle SCROLL_BAR = new Rectangle(172, 51, 12, 96);
   static final Rectangle NETWORK_ICON = new Rectangle(0, 40, 16, 16);
+  static final Rectangle HEALTH_BAR_BG = new Rectangle(16, 40, 182, 5);
+  static final Rectangle HEALTH_BAR_FG = new Rectangle(16, 45, 182, 5);
 
   /**
    * The texture resource for the texture item

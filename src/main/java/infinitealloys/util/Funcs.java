@@ -71,7 +71,7 @@ public class Funcs {
 
   /**
    * Convenience method for {@link net.minecraft.client.gui.Gui#drawTexturedModalRect
-   * Gui.drawTecturedModalRect} with a Rectangle for the last four args
+   * Gui.drawTecturedModalRect} with a Rectangle for texture's location and size.
    */
   public static void drawTexturedModalRect(Gui gui, int x, int y, Rectangle rect) {
     gui.drawTexturedModalRect(x, y, rect.x, rect.y, rect.width, rect.height);

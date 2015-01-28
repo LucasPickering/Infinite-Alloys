@@ -1,5 +1,6 @@
 package infinitealloys.core;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -237,7 +238,7 @@ public class CommonProxy {
     GameRegistry.addRecipe(new ShapedOreRecipe(result, params));
   }
 
-  private void registerEntity(Class entityClass, String name) {
+  private void registerEntity(Class<? extends Entity> entityClass, String name) {
     int entityID = EntityRegistry.findGlobalUniqueEntityId();
     Random rand = new Random(name.hashCode());
     int primaryColor = rand.nextInt() * 0xffffff;

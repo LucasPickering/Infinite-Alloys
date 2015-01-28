@@ -31,34 +31,29 @@ public class EventHandler {
       if (event.world.provider.dimensionId == 0) {
         worldDir = DimensionManager.getWorld(0).getChunkSaveLocation().getPath();
         try {
-          NBTTagCompound
-              nbtTagCompound =
+          NBTTagCompound nbtTagCompound =
               CompressedStreamTools.readCompressed(new FileInputStream(worldDir + "/" + fileName));
           InfiniteAlloys.instance.loadAlloyData(nbtTagCompound); // Load the valid alloys
         } catch (FileNotFoundException e) {
-          InfiniteAlloys.instance
-              .generateAlloyData(); // There is no saved data, probably because this is a new world. Generate new alloy data.
+          // There is no saved data, probably because this is a new world. Generate new alloy data.
+          InfiniteAlloys.instance.generateAlloyData();
         } catch (Exception e) {
-          InfiniteAlloys.instance
-              .generateAlloyData(); // There was another error. Generate new alloy data, and print stack trace.
+          // There was another error. Generate new alloy data, and print stack trace.
+          InfiniteAlloys.instance.generateAlloyData();
           e.printStackTrace();
         }
       }
     } else {
-      InfiniteAlloys.proxy.gfxHandler.xrayBlocks
-          .clear(); // Clear the list of blocks to be outlines by the x-ray on unload. This is only run client-side
+      // Clear the list of blocks to be outlines by the x-ray on unload. This is only run client-side
+      InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
     }
   }
 
   @SubscribeEvent
   public void onWorldSave(Save event) {
     if (!event.world.isRemote && event.world.provider.dimensionId == 0) {
-      NBTTagCompound
-          nbtTagCompound =
-          new NBTTagCompound(); // An NBTTagCompound for the info to be stored in
-      InfiniteAlloys.instance
-          .saveAlloyData(nbtTagCompound); // Add the alloy data to the NBTTagCompound
-
+      NBTTagCompound nbtTagCompound = new NBTTagCompound();
+      InfiniteAlloys.instance.saveAlloyData(nbtTagCompound); // Add the alloy data
       try {
         CompressedStreamTools.writeCompressed(nbtTagCompound, new FileOutputStream(
             worldDir + "/" + fileName)); // Write the NBT data to a file

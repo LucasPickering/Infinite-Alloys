@@ -5,14 +5,14 @@ import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
-import infinitealloys.util.EnumAlloy;
+import infinitealloys.util.EnumBoss;
 
 public class EntityBossBat extends EntityIABoss {
 
   private ChunkCoordinates spawnPosition;
 
   public EntityBossBat(World world) {
-    super(world, EnumAlloy.ALLOY4);
+    super(world, EnumBoss.BAT);
     setSize(2F, 4F);
   }
 

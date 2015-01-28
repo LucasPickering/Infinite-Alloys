@@ -43,9 +43,9 @@ public class GuiPasture extends GuiElectric {
     super.actionPerformed(button);
 
     if (button.id > 0) { // If a mob button is clicked
+      // Cycle the value of the field associated with the button
       tep.mobActions[button.id - 1] =
-          (byte) (++tep.mobActions[button.id - 1]
-                  % Consts.PASTURE_MODES); // Cycle the value of the field associated with the button
+          (byte) (++tep.mobActions[button.id - 1] % Consts.PASTURE_MODES);
       updateButtons(); // Update all buttons when any is clicked (other than the help button
     }
   }

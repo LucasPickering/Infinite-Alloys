@@ -18,12 +18,12 @@ import infinitealloys.entity.EntityIABoss;
 
 public enum EnumBoss {
 
-  ZOMBIE("zombie", EntityBossZombie.class, ModelBossZombie.class, 20),
-  SKELETON("skeleton", EntityBossSkeleton.class, ModelBossSkeleton.class, 40),
-  CREEPER("creeper", EntityBossCreeper.class, ModelBossCreeper.class, 60),
-  BLAZE("blaze", EntityBossBlaze.class, ModelBossBlaze.class, 80),
-  BAT("bat", EntityBossBat.class, ModelBossBat.class, 100),
-  STEVE("steve", EntityBossSteve.class, ModelBossSteve.class, 120);
+  ZOMBIE("zombie", EntityBossZombie.class, ModelBossZombie.class, 20, EnumAlloy.ALLOY0),
+  SKELETON("skeleton", EntityBossSkeleton.class, ModelBossSkeleton.class, 40, EnumAlloy.ALLOY1),
+  CREEPER("creeper", EntityBossCreeper.class, ModelBossCreeper.class, 60, EnumAlloy.ALLOY2),
+  BLAZE("blaze", EntityBossBlaze.class, ModelBossBlaze.class, 80, EnumAlloy.ALLOY3),
+  BAT("bat", EntityBossBat.class, ModelBossBat.class, 100, EnumAlloy.ALLOY4),
+  STEVE("steve", EntityBossSteve.class, ModelBossSteve.class, 120, EnumAlloy.ALLOY5);
 
   public final String name;
   public final Class<? extends EntityIABoss> entityClass;
@@ -34,11 +34,17 @@ public enum EnumBoss {
    */
   public final int unlockXP;
 
+  /**
+   * The alloy that this boss drops.
+   */
+  public final EnumAlloy alloy;
+
   private EnumBoss(String name, Class<? extends EntityIABoss> entityClass,
-                   Class<? extends ModelBase> modelClass, int unlockXP) {
+                   Class<? extends ModelBase> modelClass, int unlockXP, EnumAlloy alloy) {
     this.name = name;
     this.entityClass = entityClass;
     this.modelClass = modelClass;
     this.unlockXP = unlockXP;
+    this.alloy = alloy;
   }
 }

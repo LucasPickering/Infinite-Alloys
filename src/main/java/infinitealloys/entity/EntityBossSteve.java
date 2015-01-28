@@ -3,12 +3,12 @@ package infinitealloys.entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.world.World;
 
-import infinitealloys.util.EnumAlloy;
+import infinitealloys.util.EnumBoss;
 
 public class EntityBossSteve extends EntityIABoss {
 
   public EntityBossSteve(World world) {
-    super(world, EnumAlloy.ALLOY5);
+    super(world, EnumBoss.STEVE);
   }
 
   @Override

@@ -17,20 +17,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import infinitealloys.item.IAItems;
-import infinitealloys.util.EnumAlloy;
+import infinitealloys.util.EnumBoss;
 import infinitealloys.util.EnumUpgrade;
 
 public abstract class EntityIABoss extends EntityMob {
 
-  private final EnumAlloy alloy;
+  public final EnumBoss bossType;
 
   /**
-   * @param alloy the alloy that is unlocked by the upgrade that this boss drops
+   * @param bossType the bossType that this entity pertains to
    */
-  public EntityIABoss(World world, EnumAlloy alloy) {
+  public EntityIABoss(World world, EnumBoss bossType) {
     super(world);
     setSize(2F, 8F);
-    this.alloy = alloy;
+    this.bossType = bossType;
     isImmuneToFire = true;
     experienceValue = 50;
     setHomeArea((int) posX, (int) posY, (int) posZ, 15); // Fix the entity to a certain area
@@ -55,7 +55,7 @@ public abstract class EntityIABoss extends EntityMob {
   @Override
   protected void dropFewItems(boolean hitByPlayer, int lootingLevel) {
     if (hitByPlayer) {
-      entityDropItem(new ItemStack(getDropItem(), 1, alloy.ordinal()), 0F);
+      entityDropItem(new ItemStack(getDropItem(), 1, bossType.alloy.ordinal()), 0F);
     }
   }
 
