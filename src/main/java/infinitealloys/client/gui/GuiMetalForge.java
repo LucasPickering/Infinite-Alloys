@@ -5,6 +5,8 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
+import java.awt.Point;
+
 import infinitealloys.item.IAItems;
 import infinitealloys.tile.TEEMetalForge;
 import infinitealloys.util.Consts;
@@ -21,7 +23,7 @@ public class GuiMetalForge extends GuiElectric {
     super(176, 216, inventoryPlayer, tileEntity);
     temf = tileEntity;
     progressBar.setLocation(31, 14);
-    networkIcon = new java.awt.Point(9, 15);
+    networkIcon = new Point(9, 15);
   }
 
   @Override

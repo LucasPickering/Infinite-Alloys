@@ -3,6 +3,8 @@ package infinitealloys.client.gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 
+import java.awt.Point;
+
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
@@ -20,7 +22,7 @@ public class GuiPasture extends GuiElectric {
   public GuiPasture(InventoryPlayer inventoryPlayer, TEEPasture tileEntity) {
     super(210, 186, inventoryPlayer, tileEntity);
     tep = tileEntity;
-    networkIcon = new java.awt.Point(18, 40);
+    networkIcon = new Point(18, 40);
   }
 
   @Override

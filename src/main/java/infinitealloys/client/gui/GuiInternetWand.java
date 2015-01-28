@@ -12,6 +12,7 @@ import net.minecraftforge.common.DimensionManager;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +44,7 @@ public class GuiInternetWand extends GuiScreen {
   /**
    * Coordinates of the top-left corner of the GUI
    */
-  protected java.awt.Point topLeft = new java.awt.Point();
+  protected Point topLeft = new Point();
 
   /**
    * If the GUI was opened by clicking on a machine, this button adds the machine that was clicked

@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class GuiXray extends GuiElectric {
     super(196, 240, inventoryPlayer, tileEntity);
     tex = tileEntity;
     progressBar.setLocation(54, 5);
-    networkIcon = new java.awt.Point(9, 6);
+    networkIcon = new Point(9, 6);
   }
 
   @Override

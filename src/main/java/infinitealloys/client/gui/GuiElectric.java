@@ -4,6 +4,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import org.lwjgl.opengl.GL11;
 
+import java.awt.Point;
 import java.text.DecimalFormat;
 
 import infinitealloys.tile.TileEntityElectric;
@@ -14,7 +15,7 @@ public abstract class GuiElectric extends GuiMachine {
   /**
    * Coordinates of the progress bar texture, changes by machine but still otherwise
    */
-  protected java.awt.Point progressBar = new java.awt.Point();
+  protected Point progressBar = new Point();
 
   protected TileEntityElectric tee;
 

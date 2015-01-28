@@ -4,6 +4,8 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import org.lwjgl.opengl.GL11;
 
+import java.awt.Point;
+
 import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.util.Funcs;
 
@@ -15,7 +17,7 @@ public class GuiEnergyStorage extends GuiElectric {
     super(214, 176, inventoryPlayer, tileEntity);
     tees = tileEntity;
     progressBar.setLocation(70, 57);
-    networkIcon = new java.awt.Point(31, 4);
+    networkIcon = new Point(31, 4);
   }
 
   @Override

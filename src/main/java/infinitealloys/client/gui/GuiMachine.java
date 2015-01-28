@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,7 +52,7 @@ public abstract class GuiMachine extends GuiContainer {
   /**
    * Coordinates of the top-left corner of the GUI
    */
-  protected java.awt.Point topLeft = new java.awt.Point();
+  protected Point topLeft = new Point();
 
   protected TileEntityMachine tem;
   protected GuiMachineTab computerTab;
@@ -59,7 +60,7 @@ public abstract class GuiMachine extends GuiContainer {
   /**
    * Coordinates of the network icon, which shows network statuses when hovered over
    */
-  protected java.awt.Point networkIcon;
+  protected Point networkIcon;
   /**
    * When help is enabled, slots get a colored outline and a mouse-over description
    */
