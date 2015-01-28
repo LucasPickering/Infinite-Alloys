@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
@@ -62,7 +63,7 @@ public class MessageWand implements IMessage, IMessageHandler<MessageWand, IMess
     index = message.index;
 
     ItemStack heldItem = context.getServerHandler().playerEntity.getHeldItem();
-    if (heldItem.getItem() instanceof ItemInternetWand) {
+    if (heldItem.getItem() == IAItems.internetWand) {
       if (adding) {
         ((ItemInternetWand) heldItem.getItem())
             .addMachine(context.getServerHandler().playerEntity.worldObj, heldItem, machine.x,

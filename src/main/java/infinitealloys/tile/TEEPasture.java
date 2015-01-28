@@ -14,6 +14,7 @@ import net.minecraft.util.AxisAlignedBB;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
@@ -66,6 +67,7 @@ public class TEEPasture extends TileEntityElectric {
     return true;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   protected void onFinishProcess() {
                 /* NOTE: For this specific machine, ticksToProcess = 0, meaning this function is called every tick. It is essentially an updateEntity() function with
@@ -76,23 +78,19 @@ public class TEEPasture extends TileEntityElectric {
 
     for (int i = 0; i < mobActions.length; i++) {
       if (mobActions[i] == 1) {
-        for (EntityCreature creature : (ArrayList<EntityChicken>) worldObj
-            .getEntitiesWithinAABB(mobClasses[i],
-                                   AxisAlignedBB.getBoundingBox(xCoord - trapRange - 1, 0,
-                                                                zCoord - trapRange - 1,
-                                                                xCoord + trapRange + 2,
-                                                                worldObj.getHeight(),
-                                                                zCoord + trapRange + 2))) {
+        for (EntityCreature creature : (List<EntityCreature>) worldObj.getEntitiesWithinAABB(
+            mobClasses[i], AxisAlignedBB
+                .getBoundingBox(xCoord - trapRange - 1, 0, zCoord - trapRange - 1,
+                                xCoord + trapRange + 2, worldObj.getHeight(),
+                                zCoord + trapRange + 2))) {
           trapList.add(creature);
         }
       } else if (mobActions[i] == 2) {
-        for (EntityCreature creature : (ArrayList<EntityChicken>) worldObj
-            .getEntitiesWithinAABB(mobClasses[i],
-                                   AxisAlignedBB
-                                       .getBoundingBox(xCoord - repelRange, 0, zCoord - repelRange,
-                                                       xCoord + repelRange + 1,
-                                                       worldObj.getHeight(),
-                                                       zCoord + repelRange + 1))) {
+        for (EntityCreature creature : (List<EntityCreature>) worldObj.getEntitiesWithinAABB(
+            mobClasses[i], AxisAlignedBB
+                .getBoundingBox(xCoord - repelRange, 0, zCoord - repelRange,
+                                xCoord + repelRange + 1,
+                                worldObj.getHeight(), zCoord + repelRange + 1))) {
           repelList.add(creature);
         }
       }

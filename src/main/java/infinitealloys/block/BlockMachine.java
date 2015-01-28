@@ -20,7 +20,7 @@ import java.util.List;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.core.InfiniteAlloys;
-import infinitealloys.item.ItemInternetWand;
+import infinitealloys.item.IAItems;
 import infinitealloys.tile.IHost;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
@@ -71,8 +71,8 @@ public class BlockMachine extends BlockContainer {
     }
 
     // Is the player holding a network wand?
-    if (heldItem != null && heldItem.getItem() instanceof ItemInternetWand && (
-        MachineHelper.isClient(tem) || tem instanceof IHost)) {
+    if (heldItem != null && heldItem.getItem() == IAItems.internetWand
+        && (MachineHelper.isClient(tem) || tem instanceof IHost)) {
 
       // Put the coords of this block in a temp tag in the wand so the wand's GUI can access it
       if (!heldItem.hasTagCompound()) {

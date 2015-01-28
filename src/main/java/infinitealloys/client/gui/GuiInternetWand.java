@@ -19,6 +19,7 @@ import java.util.List;
 
 import infinitealloys.block.IABlocks;
 import infinitealloys.client.EnumHelp;
+import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.network.MessageWand;
 import infinitealloys.tile.IHost;
@@ -111,7 +112,7 @@ public class GuiInternetWand extends GuiScreen {
     addSelected.enabled = false;
 
     ItemStack heldItem = mc.thePlayer.getHeldItem();
-    if (heldItem.getItem() instanceof ItemInternetWand && heldItem.hasTagCompound()) {
+    if (heldItem.getItem() == IAItems.internetWand && heldItem.hasTagCompound()) {
       NBTTagCompound tagCompound = heldItem.getTagCompound();
 
       // Create each button for the machines
@@ -154,8 +155,8 @@ public class GuiInternetWand extends GuiScreen {
             if (!(te instanceof IHost)
                 || button.dimensionID != te.getWorldObj().provider.dimensionId
                 || !((IHost) te).isClientValid(new Point3(button.machineX,
-                                                         button.machineY,
-                                                         button.machineZ))) {
+                                                          button.machineY,
+                                                          button.machineZ))) {
               addSelected.enabled = false; // Set the button to false
             }
           }

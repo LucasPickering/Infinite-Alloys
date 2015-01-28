@@ -70,8 +70,8 @@ public class ItemInternetWand extends ItemIA {
    * can
    */
   public void addMachine(World world, ItemStack itemstack, int x, int y, int z) {
-    if (itemstack.getItem() instanceof ItemInternetWand && isMachineValid(world, itemstack, x, y,
-                                                                          z)) {
+    if (itemstack.getItem() == IAItems.internetWand && isMachineValid(world, itemstack,
+                                                                      x, y, z)) {
       final NBTTagCompound tagCompound = itemstack.getTagCompound();
       for (int i = 0; i < Consts.WAND_SIZE; i++) {
         if (!tagCompound.hasKey("Coords" + i)) {
@@ -86,7 +86,7 @@ public class ItemInternetWand extends ItemIA {
    * Removes the machine with the given index from the wand
    */
   public void removeMachine(ItemStack itemstack, int index) {
-    if (itemstack.getItem() instanceof ItemInternetWand && itemstack
+    if (itemstack.getItem() == IAItems.internetWand && itemstack
         .hasTagCompound()) { // If this is a wand and has stored data
       final NBTTagCompound tagCompound = itemstack.getTagCompound();
       tagCompound.removeTag("Coords" + index); // Remove the tag at index

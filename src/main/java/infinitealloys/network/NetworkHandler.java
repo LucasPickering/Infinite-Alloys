@@ -33,6 +33,30 @@ public class NetworkHandler {
         .registerMessage(MessageOpenGui.class, MessageOpenGui.class, 7, Side.SERVER);
   }
 
+  /**
+   * Write the given {@link java.lang.Object} to the given {@link io.netty.buffer.ByteBuf}.
+   * Valid object types are:
+   * <ul>
+   *   <li>{@link infinitealloys.util.Point3 Point3}</li>
+   *   <li>byte</li>
+   *   <li>short</li>
+   *   <li>int</li>
+   *   <li>double</li>
+   *   <li>boolean</li>
+   *   <li>byte</li>
+   *   <li>short</li>
+   *   <li>int</li>
+   *   <li>double</li>
+   *   <li>boolean</li>
+   *   <li>{@link java.lang.Object Object}[]</li>
+   *   <li>byte[]</li>
+   *   <li>short[]</li>
+   *   <li>int[]</li>
+   * </ul>
+   *
+   * @param bytes the {@link io.netty.buffer.ByteBuf} that will be written to
+   * @param o     the {@link java.lang.Object} to be written
+   */
   public static void writeObject(ByteBuf bytes, Object o) {
     if (o == null) {
       return;
