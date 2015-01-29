@@ -18,20 +18,18 @@ import infinitealloys.entity.EntityIABoss;
 
 public enum EnumBoss {
 
-  ZOMBIE("zombie", EntityBossZombie.class, new ModelBossZombie(), EnumAlloy.ALLOY0, 20, 100),
-  SKELETON("skeleton", EntityBossSkeleton.class, new ModelBossSkeleton(), EnumAlloy.ALLOY1, 40,
-           150),
-  CREEPER("creeper", EntityBossCreeper.class, new ModelBossCreeper(), EnumAlloy.ALLOY2, 60, 200),
-  BLAZE("blaze", EntityBossBlaze.class, new ModelBossBlaze(), EnumAlloy.ALLOY3, 80, 250),
-  BAT("bat", EntityBossBat.class, new ModelBossBat(), EnumAlloy.ALLOY4, 100, 300),
-  STEVE("steve", EntityBossSteve.class, new ModelBossSteve(), EnumAlloy.ALLOY5, 120, 350);
+  ZOMBIE("zombie", EntityBossZombie.class, new ModelBossZombie(), EnumAlloy.ALLOY0, 20),
+  SKELETON("skeleton", EntityBossSkeleton.class, new ModelBossSkeleton(), EnumAlloy.ALLOY1, 40),
+  CREEPER("creeper", EntityBossCreeper.class, new ModelBossCreeper(), EnumAlloy.ALLOY2, 60),
+  BLAZE("blaze", EntityBossBlaze.class, new ModelBossBlaze(), EnumAlloy.ALLOY3, 80),
+  BAT("bat", EntityBossBat.class, new ModelBossBat(), EnumAlloy.ALLOY4, 100),
+  STEVE("steve", EntityBossSteve.class, new ModelBossSteve(), EnumAlloy.ALLOY5, 120);
 
   public final String name;
   public final Class<? extends EntityIABoss> entityClass;
   public final ModelBase model;
   public final EnumAlloy alloy;
   public final int unlockXP;
-  public final int health;
 
   /**
    * Constructs a new EnumBoss object
@@ -42,16 +40,13 @@ public enum EnumBoss {
    * @param alloy       the alloy type that this boss drops
    * @param unlockXP    the total XP needed to unlock this boss. This is XP from 0, NOT from the
    *                    last boss
-   * @param health      the amount of health that this boss has
    */
   private EnumBoss(String name, Class<? extends EntityIABoss> entityClass,
-                   ModelBase model, EnumAlloy alloy, int unlockXP,
-                   int health) {
+                   ModelBase model, EnumAlloy alloy, int unlockXP) {
     this.name = name;
     this.entityClass = entityClass;
     this.model = model;
     this.unlockXP = unlockXP;
     this.alloy = alloy;
-    this.health = health;
   }
 }

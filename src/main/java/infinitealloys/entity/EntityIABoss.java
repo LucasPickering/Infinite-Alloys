@@ -13,24 +13,23 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import infinitealloys.item.IAItems;
-import infinitealloys.util.EnumBoss;
+import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.EnumUpgrade;
 
 public abstract class EntityIABoss extends EntityMob {
 
-  public final EnumBoss bossType;
+  public final EnumAlloy alloy;
 
   /**
-   * @param bossType the bossType that this entity pertains to
+   * @param alloy the alloy that is unlocked by the upgrade that this boss drops
    */
-  public EntityIABoss(World world, EnumBoss bossType) {
+  public EntityIABoss(World world, EnumAlloy alloy) {
     super(world);
-    this.bossType = bossType;
-    setSize(2F, 8F);
+    this.alloy = alloy;
+    setSize(2F, 10F);
     isImmuneToFire = true;
     experienceValue = 50;
     setHomeArea((int) posX, (int) posY, (int) posZ, 15); // Fix the entity to a certain area
@@ -55,7 +54,7 @@ public abstract class EntityIABoss extends EntityMob {
   @Override
   protected void dropFewItems(boolean hitByPlayer, int lootingLevel) {
     if (hitByPlayer) {
-      entityDropItem(new ItemStack(getDropItem(), 1, bossType.alloy.ordinal()), 0F);
+      entityDropItem(EnumUpgrade.ALLOY.getItemStackForTier(alloy.ordinal() + 1), 0F);
     }
   }
 
@@ -67,11 +66,9 @@ public abstract class EntityIABoss extends EntityMob {
   @Override
   protected void applyEntityAttributes() {
     super.applyEntityAttributes();
-
     getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(40.0D);
     getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.23000000417232513D);
     getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(3.0D);
-    getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(bossType.health);
   }
 
   @Override
