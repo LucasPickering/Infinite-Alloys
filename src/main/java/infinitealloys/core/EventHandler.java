@@ -14,7 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import infinitealloys.client.gui.GuiBossHealth;
+import infinitealloys.client.gui.GuiOverlay;
 import infinitealloys.network.MessageValidAlloys;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
@@ -23,7 +23,7 @@ public class EventHandler {
 
   private final String fileName = "InfiniteAlloys.dat";
   private String worldDir;
-  private final GuiBossHealth guiBossHealth = new GuiBossHealth();
+  private final GuiOverlay guiOverlay = new GuiOverlay();
 
   @SubscribeEvent
   public void onWorldLoad(Load event) {
@@ -77,7 +77,7 @@ public class EventHandler {
   @SubscribeEvent
   public void onRenderGameOverlay(RenderGameOverlayEvent event) {
     if (!event.isCancelable() && event.type == RenderGameOverlayEvent.ElementType.EXPERIENCE) {
-      guiBossHealth.drawHealthBar();
+      guiOverlay.drawHealthBar();
     }
   }
 }
