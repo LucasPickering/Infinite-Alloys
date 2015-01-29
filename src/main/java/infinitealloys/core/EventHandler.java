@@ -3,6 +3,7 @@ package infinitealloys.core;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -79,5 +80,10 @@ public class EventHandler {
     if (!event.isCancelable() && event.type == RenderGameOverlayEvent.ElementType.EXPERIENCE) {
       guiOverlay.drawHealthBar();
     }
+  }
+
+  @SubscribeEvent
+  public void onInitGui(GuiScreenEvent.InitGuiEvent event) {
+    guiOverlay.resizeGui();
   }
 }

@@ -2,6 +2,7 @@ package infinitealloys.client.gui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.AxisAlignedBB;
 
 import infinitealloys.entity.EntityIABoss;
@@ -35,5 +36,11 @@ public class GuiOverlay extends GuiScreen {
       drawTexturedModalRect(barX, barY, GuiMachine.HEALTH_BAR_FG.x, GuiMachine.HEALTH_BAR_FG.y,
                             foregroundWidth, GuiMachine.HEALTH_BAR_FG.height);
     }
+  }
+
+  public void resizeGui() {
+    ScaledResolution scaledResolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+    width = scaledResolution.getScaledWidth();
+    height = scaledResolution.getScaledHeight();
   }
 }
