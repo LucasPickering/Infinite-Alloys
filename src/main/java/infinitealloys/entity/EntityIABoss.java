@@ -29,8 +29,8 @@ public abstract class EntityIABoss extends EntityMob {
    */
   public EntityIABoss(World world, EnumBoss bossType) {
     super(world);
-    setSize(2F, 8F);
     this.bossType = bossType;
+    setSize(2F, 8F);
     isImmuneToFire = true;
     experienceValue = 50;
     setHomeArea((int) posX, (int) posY, (int) posZ, 15); // Fix the entity to a certain area
@@ -67,9 +67,11 @@ public abstract class EntityIABoss extends EntityMob {
   @Override
   protected void applyEntityAttributes() {
     super.applyEntityAttributes();
+
     getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(40.0D);
     getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.23000000417232513D);
     getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(3.0D);
+    getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(bossType.health);
   }
 
   @Override

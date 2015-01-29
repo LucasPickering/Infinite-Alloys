@@ -245,9 +245,9 @@ public class CommonProxy {
     int secondaryColor = rand.nextInt() * 0xffffff;
 
     EntityRegistry.registerGlobalEntityID(entityClass, name, entityID);
-    EntityRegistry
-        .registerModEntity(entityClass, name, entityID, InfiniteAlloys.instance, 64, 1, true);
-    EntityList.entityEggs.put(entityID,
-                              new EntityList.EntityEggInfo(entityID, primaryColor, secondaryColor));
+    EntityRegistry.registerModEntity(entityClass, name, entityID,
+                                     InfiniteAlloys.instance, 64, 1, true);
+    EntityList.entityEggs.put(entityID, new EntityList.EntityEggInfo(entityID,
+                                                                     primaryColor, secondaryColor));
   }
 }

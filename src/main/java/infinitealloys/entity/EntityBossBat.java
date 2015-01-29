@@ -1,6 +1,5 @@
 package infinitealloys.entity;
 
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -23,12 +22,6 @@ public class EntityBossBat extends EntityIABoss {
   }
 
   @Override
-  public void applyEntityAttributes() {
-    super.applyEntityAttributes();
-    getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(300);
-  }
-
-  @Override
   protected void updateAITasks() {
     super.updateAITasks();
     if (spawnPosition != null && (
@@ -39,10 +32,9 @@ public class EntityBossBat extends EntityIABoss {
 
     if (spawnPosition == null || rand.nextInt(30) == 0
         || spawnPosition.getDistanceSquared((int) posX, (int) posY, (int) posZ) < 4.0F) {
-      spawnPosition =
-          new ChunkCoordinates((int) posX + rand.nextInt(7) - rand.nextInt(7),
-                               (int) posY + rand.nextInt(6) - 2,
-                               (int) posZ + rand.nextInt(7) - rand.nextInt(7));
+      spawnPosition = new ChunkCoordinates((int) posX + rand.nextInt(7) - rand.nextInt(7),
+                                           (int) posY + rand.nextInt(6) - 2,
+                                           (int) posZ + rand.nextInt(7) - rand.nextInt(7));
     }
 
     double d0 = spawnPosition.posX + 0.5D - posX;

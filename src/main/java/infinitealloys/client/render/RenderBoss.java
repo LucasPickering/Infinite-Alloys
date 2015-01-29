@@ -12,7 +12,7 @@ public class RenderBoss extends RenderLiving {
   private final ResourceLocation textureLocation;
 
   public RenderBoss(EnumBoss bossType) throws InstantiationException, IllegalAccessException {
-    super(bossType.modelClass.newInstance(), 2F);
+    super(bossType.model, 2F);
     textureLocation =
         new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/entity/" + bossType.name + ".png");
   }
