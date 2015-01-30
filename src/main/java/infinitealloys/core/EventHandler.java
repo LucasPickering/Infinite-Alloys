@@ -3,8 +3,6 @@ package infinitealloys.core;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
@@ -15,7 +13,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import infinitealloys.client.gui.GuiOverlay;
 import infinitealloys.network.MessageValidAlloys;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
@@ -24,7 +21,6 @@ public class EventHandler {
 
   private final String fileName = "InfiniteAlloys.dat";
   private String worldDir;
-  private final GuiOverlay guiOverlay = new GuiOverlay();
 
   @SubscribeEvent
   public void onWorldLoad(Load event) {
@@ -73,17 +69,5 @@ public class EventHandler {
         MachineHelper.playersToSync.add(((EntityPlayer) event.entity).getDisplayName());
       }
     }
-  }
-
-  @SubscribeEvent
-  public void onRenderGameOverlay(RenderGameOverlayEvent event) {
-    if (!event.isCancelable() && event.type == RenderGameOverlayEvent.ElementType.EXPERIENCE) {
-      guiOverlay.drawHealthBar();
-    }
-  }
-
-  @SubscribeEvent
-  public void onInitGui(GuiScreenEvent.InitGuiEvent event) {
-    guiOverlay.resizeGui();
   }
 }

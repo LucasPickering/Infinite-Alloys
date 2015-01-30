@@ -1,27 +1,34 @@
 package infinitealloys.core;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.block.IABlocks;
 import infinitealloys.client.gui.GuiInternetWand;
+import infinitealloys.client.gui.GuiOverlay;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
@@ -31,6 +38,8 @@ import infinitealloys.util.Point3;
 public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
   public int renderID;
+  private final Minecraft mc = Minecraft.getMinecraft();
+  private final GuiOverlay guiOverlay = new GuiOverlay();
   private final TileEntityMachine[] temInstances = new TileEntityMachine[Consts.MACHINE_COUNT];
 
   public GfxHandler() {
@@ -216,77 +225,114 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
     return renderID;
   }
 
-  @SideOnly(Side.CLIENT)
   @SubscribeEvent
-  public void renderOutlines(RenderWorldLastEvent event) {
-    if (xrayBlocks.isEmpty()) {
-      return;
+  public void onRenderGameOverlay(RenderGameOverlayEvent event) {
+    if (!event.isCancelable() && event.type == RenderGameOverlayEvent.ElementType.EXPERIENCE) {
+      guiOverlay.drawHealthBar();
     }
-    GL11.glPushMatrix();
-    GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-    GL11.glDisable(GL11.GL_DEPTH_TEST);
-    GL11.glDisable(GL11.GL_TEXTURE_2D);
-    GL11.glTranslated(-RenderManager.renderPosX, -RenderManager.renderPosY,
-                      1 - RenderManager.renderPosZ);
-    Tessellator tess = Tessellator.instance;
-    Tessellator.renderingWorldRenderer = false;
+  }
 
-    Point3 last = new Point3(0, 0, 0);
-    for (Point3 block : xrayBlocks) {
-      GL11.glTranslatef(block.x - last.x, block.y - last.y, block.z - last.z);
-      renderOutlineBox(tess);
-      last.set(block);
-    }
-
-    GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-    GL11.glEnable(GL11.GL_DEPTH_TEST);
-    GL11.glEnable(GL11.GL_TEXTURE_2D);
-    GL11.glPopMatrix();
+  @SubscribeEvent
+  public void onInitGui(GuiScreenEvent.InitGuiEvent event) {
+    guiOverlay.resizeGui();
   }
 
   @SideOnly(Side.CLIENT)
-  private static void renderOutlineBox(Tessellator tess) {
+  @SuppressWarnings("unchecked")
+  @SubscribeEvent
+  public void onRenderWorldLast(RenderWorldLastEvent event) {
+    for (Point3 block : xrayBlocks) {
+      renderBlockOutline(block.x, block.y, block.z);
+    }
+
+    // If MCP is loaded, this is a dev workspace. Draw the bounding boxes for bosses.
+    if (Loader.isModLoaded("mcp")) {
+      final int searchSize = 20;
+      List<EntityMob> nearbyBosses = mc.theWorld.getEntitiesWithinAABB(
+          EntityMob.class, AxisAlignedBB.getBoundingBox(
+              mc.thePlayer.posX - searchSize, mc.thePlayer.posY - searchSize,
+              mc.thePlayer.posZ - searchSize,
+              mc.thePlayer.posX + searchSize, mc.thePlayer.posY + searchSize,
+              mc.thePlayer.posZ + searchSize));
+      if (!nearbyBosses.isEmpty()) {
+
+        for (EntityMob entityBoss : nearbyBosses) {
+          renderOutlineBox(entityBoss.boundingBox.minX, entityBoss.boundingBox.minY,
+                           entityBoss.boundingBox.minZ, entityBoss.boundingBox.maxX,
+                           entityBoss.boundingBox.maxY, entityBoss.boundingBox.maxZ);
+        }
+      }
+    }
+  }
+
+  /**
+   * Draw a red outline around the block at the specific coordinates. To be specific, the
+   * coordinates of a block are the ones given in the debug menu while standing ON TOP OF that
+   * block.
+   */
+  @SideOnly(Side.CLIENT)
+  private void renderBlockOutline(int blockX, int blockY, int blockZ) {
+    renderOutlineBox(blockX, blockY - 1, blockZ, blockX + 1, blockY, blockZ + 1);
+  }
+
+  @SideOnly(Side.CLIENT)
+  private void renderOutlineBox(double minX, double minY, double minZ,
+                                double maxX, double maxY, double maxZ) {
+    Tessellator tess = Tessellator.instance;
+    Tessellator.renderingWorldRenderer = false;
+
+    GL11.glPushMatrix();
+    GL11.glDisable(GL11.GL_DEPTH_TEST);
+    GL11.glDisable(GL11.GL_TEXTURE_2D);
+    GL11.glTranslated(-RenderManager.renderPosX, -RenderManager.renderPosY,
+                      -RenderManager.renderPosZ);
+
     tess.startDrawing(GL11.GL_LINES);
+    tess.setColorOpaque(255, 0, 0);
 
     // Front
-    tess.addVertex(0, 0, 0);
-    tess.addVertex(0, 1, 0);
+    tess.addVertex(minX, minY, minZ);
+    tess.addVertex(minX, maxY, minZ);
 
-    tess.addVertex(0, 1, 0);
-    tess.addVertex(1, 1, 0);
+    tess.addVertex(minX, maxY, minZ);
+    tess.addVertex(maxX, maxY, minZ);
 
-    tess.addVertex(1, 1, 0);
-    tess.addVertex(1, 0, 0);
+    tess.addVertex(maxX, maxY, minZ);
+    tess.addVertex(maxX, minY, minZ);
 
-    tess.addVertex(1, 0, 0);
-    tess.addVertex(0, 0, 0);
+    tess.addVertex(maxX, minY, minZ);
+    tess.addVertex(minX, minY, minZ);
 
     // Back
-    tess.addVertex(0, 0, -1);
-    tess.addVertex(0, 1, -1);
+    tess.addVertex(minX, minY, maxZ);
+    tess.addVertex(minX, maxY, maxZ);
 
-    tess.addVertex(0, 0, -1);
-    tess.addVertex(1, 0, -1);
+    tess.addVertex(minX, minY, maxZ);
+    tess.addVertex(maxX, minY, maxZ);
 
-    tess.addVertex(1, 0, -1);
-    tess.addVertex(1, 1, -1);
+    tess.addVertex(maxX, minY, maxZ);
+    tess.addVertex(maxX, maxY, maxZ);
 
-    tess.addVertex(0, 1, -1);
-    tess.addVertex(1, 1, -1);
+    tess.addVertex(minX, maxY, maxZ);
+    tess.addVertex(maxX, maxY, maxZ);
 
     // Betweens
-    tess.addVertex(0, 0, 0);
-    tess.addVertex(0, 0, -1);
+    tess.addVertex(minX, minY, minZ);
+    tess.addVertex(minX, minY, maxZ);
 
-    tess.addVertex(0, 1, 0);
-    tess.addVertex(0, 1, -1);
+    tess.addVertex(minX, maxY, minZ);
+    tess.addVertex(minX, maxY, maxZ);
 
-    tess.addVertex(1, 0, 0);
-    tess.addVertex(1, 0, -1);
+    tess.addVertex(maxX, minY, minZ);
+    tess.addVertex(maxX, minY, maxZ);
 
-    tess.addVertex(1, 1, 0);
-    tess.addVertex(1, 1, -1);
+    tess.addVertex(maxX, maxY, minZ);
+    tess.addVertex(maxX, maxY, maxZ);
 
     tess.draw();
+
+    GL11.glEnable(GL11.GL_DEPTH_TEST);
+    GL11.glEnable(GL11.GL_TEXTURE_2D);
+    GL11.glPopMatrix();
   }
 }

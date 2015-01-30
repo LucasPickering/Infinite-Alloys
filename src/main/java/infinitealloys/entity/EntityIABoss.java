@@ -29,7 +29,6 @@ public abstract class EntityIABoss extends EntityMob {
   public EntityIABoss(World world, EnumAlloy alloy) {
     super(world);
     this.alloy = alloy;
-    setSize(2F, 10F);
     isImmuneToFire = true;
     experienceValue = 50;
 
@@ -38,7 +37,7 @@ public abstract class EntityIABoss extends EntityMob {
     tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1D, false));
     tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityVillager.class,.0D, true));
     tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1D));
-    tasks.addTask(7, new EntityAIWander(this, 2D));
+    tasks.addTask(7, new EntityAIWander(this, 1.2D));
     tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8F));
     tasks.addTask(8, new EntityAILookIdle(this));
     targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));

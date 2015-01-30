@@ -16,11 +16,11 @@ public class GuiOverlay extends GuiScreen {
 
   @SuppressWarnings("unchecked")
   public void drawHealthBar() {
-    final int boxSize = 20;
+    final int searchSize = 20;
     EntityIABoss nearestBoss = (EntityIABoss) mc.theWorld.findNearestEntityWithinAABB(
         EntityIABoss.class, AxisAlignedBB.getBoundingBox(
-            mc.thePlayer.posX - boxSize, mc.thePlayer.posY - boxSize, mc.thePlayer.posZ - boxSize,
-            mc.thePlayer.posX + boxSize, mc.thePlayer.posY + boxSize, mc.thePlayer.posZ + boxSize),
+            mc.thePlayer.posX - searchSize, mc.thePlayer.posY - searchSize, mc.thePlayer.posZ - searchSize,
+            mc.thePlayer.posX + searchSize, mc.thePlayer.posY + searchSize, mc.thePlayer.posZ + searchSize),
         mc.thePlayer);
 
     if (nearestBoss != null) {
