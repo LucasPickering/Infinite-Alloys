@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
@@ -29,6 +29,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.block.IABlocks;
 import infinitealloys.client.gui.GuiInternetWand;
 import infinitealloys.client.gui.GuiOverlay;
+import infinitealloys.entity.EntityIABoss;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
@@ -247,19 +248,18 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
     // If MCP is loaded, this is a dev workspace. Draw the bounding boxes for bosses.
     if (Loader.isModLoaded("mcp")) {
-      final int searchSize = 20;
-      List<EntityMob> nearbyBosses = mc.theWorld.getEntitiesWithinAABB(
-          EntityMob.class, AxisAlignedBB.getBoundingBox(
-              mc.thePlayer.posX - searchSize, mc.thePlayer.posY - searchSize,
-              mc.thePlayer.posZ - searchSize,
-              mc.thePlayer.posX + searchSize, mc.thePlayer.posY + searchSize,
-              mc.thePlayer.posZ + searchSize));
-      if (!nearbyBosses.isEmpty()) {
+      final int searchBox = 20;
+      List<EntityIABoss> nearbyEntities = mc.theWorld.getEntitiesWithinAABB(
+          EntityIABoss.class, AxisAlignedBB.getBoundingBox(
+              mc.thePlayer.posX - searchBox, mc.thePlayer.posY - searchBox,
+              mc.thePlayer.posZ - searchBox, mc.thePlayer.posX + searchBox,
+              mc.thePlayer.posY + searchBox, mc.thePlayer.posZ + searchBox));
+      if (!nearbyEntities.isEmpty()) {
 
-        for (EntityMob entityBoss : nearbyBosses) {
-          renderOutlineBox(entityBoss.boundingBox.minX, entityBoss.boundingBox.minY,
-                           entityBoss.boundingBox.minZ, entityBoss.boundingBox.maxX,
-                           entityBoss.boundingBox.maxY, entityBoss.boundingBox.maxZ);
+        for (EntityIABoss entity : nearbyEntities) {
+          renderOutlineBox(entity.boundingBox.minX, entity.boundingBox.minY,
+                           entity.boundingBox.minZ, entity.boundingBox.maxX,
+                           entity.boundingBox.maxY, entity.boundingBox.maxZ);
         }
       }
     }
@@ -268,13 +268,23 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
   /**
    * Draw a red outline around the block at the specific coordinates. To be specific, the
    * coordinates of a block are the ones given in the debug menu while standing ON TOP OF that
-   * block.
+   * block. Convenience method for {@link #renderOutlineBox}.
    */
   @SideOnly(Side.CLIENT)
   private void renderBlockOutline(int blockX, int blockY, int blockZ) {
     renderOutlineBox(blockX, blockY - 1, blockZ, blockX + 1, blockY, blockZ + 1);
   }
 
+  /**
+   * Draw a red outline
+   *
+   * @param minX the x value for the first corner
+   * @param minY the y value for the first corner
+   * @param minZ the z value for the first corner
+   * @param maxX the x value for the second corner
+   * @param maxY the y value for the second corner
+   * @param maxZ the z value for the second corner
+   */
   @SideOnly(Side.CLIENT)
   private void renderOutlineBox(double minX, double minY, double minZ,
                                 double maxX, double maxY, double maxZ) {

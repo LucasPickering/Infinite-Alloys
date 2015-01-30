@@ -9,6 +9,7 @@ public class EntityBossZombie extends EntityIABoss {
 
   public EntityBossZombie(World world) {
     super(world, EnumBoss.ZOMBIE.alloy);
+    setSize(2F, 8F);
   }
 
   @Override

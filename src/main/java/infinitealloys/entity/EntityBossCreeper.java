@@ -9,6 +9,7 @@ public class EntityBossCreeper extends EntityIABoss {
 
   public EntityBossCreeper(World world) {
     super(world, EnumBoss.CREEPER.alloy);
+    setSize(2F, 7F);
   }
 
   @Override

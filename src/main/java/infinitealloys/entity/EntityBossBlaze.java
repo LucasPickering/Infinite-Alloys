@@ -9,6 +9,7 @@ public class EntityBossBlaze extends EntityIABoss {
 
   public EntityBossBlaze(World world) {
     super(world, EnumBoss.BLAZE.alloy);
+    setSize(2F, 7F);
   }
 
   @Override

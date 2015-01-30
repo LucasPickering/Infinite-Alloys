@@ -69,7 +69,7 @@ public class ModelBossBat extends ModelBase {
                      float par7) {
     GL11.glPushMatrix();
     GL11.glScalef(4F, 4F, 4F);
-    GL11.glTranslatef(0F, -1.13F, 0F);
+    GL11.glTranslatef(0F, -0.35F, -0.2F);
 
     batHead.rotateAngleX = par6 / (180F / (float) Math.PI);
     batHead.rotateAngleY = par5 / (180F / (float) Math.PI);

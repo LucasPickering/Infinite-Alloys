@@ -9,6 +9,7 @@ public class EntityBossSkeleton extends EntityIABoss {
 
   public EntityBossSkeleton(World world) {
     super(world, EnumBoss.SKELETON.alloy);
+    setSize(2F, 8F);
   }
 
   @Override

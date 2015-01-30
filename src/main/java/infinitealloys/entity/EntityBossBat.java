@@ -13,7 +13,7 @@ public class EntityBossBat extends EntityIABoss {
 
   public EntityBossBat(World world) {
     super(world, EnumBoss.BAT.alloy);
-    setSize(2F, 6F);
+    setSize(2.5F, 3.6F);
   }
 
   @Override
