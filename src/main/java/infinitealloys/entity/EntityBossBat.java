@@ -9,7 +9,7 @@ import infinitealloys.util.EnumBoss;
 
 public class EntityBossBat extends EntityIABoss {
 
-  private ChunkCoordinates spawnPosition;
+  private ChunkCoordinates targetPosition;
 
   public EntityBossBat(World world) {
     super(world, EnumBoss.BAT.alloy);
@@ -23,37 +23,98 @@ public class EntityBossBat extends EntityIABoss {
   }
 
   @Override
-  public void onUpdate() {
-    super.onUpdate();
-    motionY *= 0.6000000238418579D;
+  public void moveEntityWithHeading(float strafe, float forward) {
+    double d0;
+
+    if (isInWater()) {
+      d0 = posY;
+      moveFlying(strafe, forward, isAIEnabled() ? 0.04F : 0.02F);
+      moveEntity(motionX, motionY, motionZ);
+      motionX *= 0.800000011920929D;
+      motionY *= 0.800000011920929D;
+      motionZ *= 0.800000011920929D;
+      motionY -= 0.02D;
+
+      if (isCollidedHorizontally && isOffsetPositionInLiquid(motionX, motionY
+                                                                      + 0.6000000238418579D
+                                                                      - posY
+                                                                      + d0,
+                                                             motionZ)) {
+        motionY = 0.30000001192092896D;
+      }
+    } else if (handleLavaMovement()) {
+      d0 = posY;
+      moveFlying(strafe, forward, 0.02F);
+      moveEntity(motionX, motionY, motionZ);
+      motionX *= 0.5D;
+      motionY *= 0.5D;
+      motionZ *= 0.5D;
+      motionY -= 0.02D;
+
+      if (isCollidedHorizontally
+          && isOffsetPositionInLiquid(motionX, motionY + 0.6000000238418579D - posY + d0,
+                                      motionZ)) {
+        motionY = 0.30000001192092896D;
+      }
+    } else {
+      float f2 = 0.91F;
+
+      if (onGround) {
+        f2 = worldObj.getBlock(MathHelper.floor_double(posX),
+                               MathHelper.floor_double(boundingBox.minY) - 1,
+                               MathHelper.floor_double(posZ)).slipperiness * 0.91F;
+      }
+
+      float f3 = 0.16277136F / (f2 * f2 * f2);
+      float f4;
+
+      if (onGround) {
+        f4 = getAIMoveSpeed() * f3;
+      } else {
+        f4 = jumpMovementFactor;
+      }
+
+      moveFlying(strafe, forward, f4);
+      f2 = 0.91F;
+
+      if (onGround) {
+        f2 = worldObj.getBlock(MathHelper.floor_double(posX),
+                               MathHelper.floor_double(boundingBox.minY) - 1,
+                               MathHelper.floor_double(posZ)).slipperiness * 0.91F;
+      }
+
+      moveEntity(motionX, motionY, motionZ);
+
+      motionY *= 0.9800000190734863D;
+      motionX *= (double) f2;
+      motionZ *= (double) f2;
+    }
   }
 
   @Override
   protected void updateAITasks() {
     super.updateAITasks();
-    if (spawnPosition != null && (
-        !worldObj.isAirBlock(spawnPosition.posX, spawnPosition.posY, spawnPosition.posZ)
-        || spawnPosition.posY < 1)) {
-      spawnPosition = null;
+
+    double xFactor;
+    double yFactor;
+    double zFactor;
+    if (isWithinHomeDistanceCurrentPosition()) {
+      xFactor = (rand.nextDouble() - 0.2D) * Math.signum(motionX);
+      yFactor = (rand.nextDouble() - 0.5D) * Math.signum(motionY);
+      zFactor = (rand.nextDouble() - 0.2D) * Math.signum(motionZ);
+    } else {
+      xFactor = (getHomePosition().posX - posX);
+      yFactor = (getHomePosition().posY - posY);
+      zFactor = (getHomePosition().posZ - posZ);
     }
 
-    if (spawnPosition == null || rand.nextInt(30) == 0
-        || spawnPosition.getDistanceSquared((int) posX, (int) posY, (int) posZ) < 4.0F) {
-      spawnPosition = new ChunkCoordinates((int) posX + rand.nextInt(7) - rand.nextInt(7),
-                                           (int) posY + rand.nextInt(6) - 2,
-                                           (int) posZ + rand.nextInt(7) - rand.nextInt(7));
-    }
+    motionX += Math.signum(xFactor) * 0.05D;
+    motionY += Math.signum(yFactor) * 0.05D + 0.01D;
+    motionZ += Math.signum(zFactor) * 0.05D;
 
-    double d0 = spawnPosition.posX + 0.5D - posX;
-    double d1 = spawnPosition.posY + 1D - posY;
-    double d2 = spawnPosition.posZ + 0.5D - posZ;
-    motionX += (Math.signum(d0) * 0.5D - motionX) * 0.10000000149011612D;
-    motionY += (Math.signum(d1) * 0.699999988079071D - motionY) * 0.10000000149011612D;
-    motionZ += (Math.signum(d2) * 0.5D - motionZ) * 0.10000000149011612D;
-    float f = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
-    float f1 = MathHelper.wrapAngleTo180_float(f - rotationYaw);
+    float header = (float) (Math.atan2(motionZ, motionX) * 180D / Math.PI) - rotationYaw - 90F;
+    rotationYaw += MathHelper.wrapAngleTo180_float(header);
     moveForward = 0.5F;
-    rotationYaw += f1;
   }
 
   @Override
