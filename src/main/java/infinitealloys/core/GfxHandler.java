@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
@@ -243,25 +242,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
   @SubscribeEvent
   public void onRenderWorldLast(RenderWorldLastEvent event) {
     for (Point3 block : xrayBlocks) {
-      renderBlockOutline(block.x, block.y, block.z);
-    }
-
-    // If MCP is loaded, this is a dev workspace. Draw the bounding boxes for bosses.
-    if (Loader.isModLoaded("mcp")) {
-      final int searchBox = 20;
-      List<EntityIABoss> nearbyEntities = mc.theWorld.getEntitiesWithinAABB(
-          EntityIABoss.class, AxisAlignedBB.getBoundingBox(
-              mc.thePlayer.posX - searchBox, mc.thePlayer.posY - searchBox,
-              mc.thePlayer.posZ - searchBox, mc.thePlayer.posX + searchBox,
-              mc.thePlayer.posY + searchBox, mc.thePlayer.posZ + searchBox));
-      if (!nearbyEntities.isEmpty()) {
-
-        for (EntityIABoss entity : nearbyEntities) {
-          renderOutlineBox(entity.boundingBox.minX, entity.boundingBox.minY,
-                           entity.boundingBox.minZ, entity.boundingBox.maxX,
-                           entity.boundingBox.maxY, entity.boundingBox.maxZ);
-        }
-      }
+      renderBlockOutline(block.x, block.y, block.z, 0xff0000);
     }
   }
 
@@ -269,25 +250,31 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
    * Draw a red outline around the block at the specific coordinates. To be specific, the
    * coordinates of a block are the ones given in the debug menu while standing ON TOP OF that
    * block. Convenience method for {@link #renderOutlineBox}.
+   *
+   * @param blockX the x-coordinate of the block to be outlined
+   * @param blockY the y-coordinate of the block to be outlined
+   * @param blockZ the z-coordinate of the block to be outlined
+   * @param color  a hexcode for the color of the outline
    */
   @SideOnly(Side.CLIENT)
-  private void renderBlockOutline(int blockX, int blockY, int blockZ) {
-    renderOutlineBox(blockX, blockY - 1, blockZ, blockX + 1, blockY, blockZ + 1);
+  private void renderBlockOutline(int blockX, int blockY, int blockZ, int color) {
+    renderOutlineBox(blockX, blockY - 1, blockZ, blockX + 1, blockY, blockZ + 1, color);
   }
 
   /**
    * Draw a red outline
    *
-   * @param minX the x value for the first corner
-   * @param minY the y value for the first corner
-   * @param minZ the z value for the first corner
-   * @param maxX the x value for the second corner
-   * @param maxY the y value for the second corner
-   * @param maxZ the z value for the second corner
+   * @param minX  the x value for the first corner
+   * @param minY  the y value for the first corner
+   * @param minZ  the z value for the first corner
+   * @param maxX  the x value for the second corner
+   * @param maxY  the y value for the second corner
+   * @param maxZ  the z value for the second corner
+   * @param color a hexcode for the color to be drawn
    */
   @SideOnly(Side.CLIENT)
   private void renderOutlineBox(double minX, double minY, double minZ,
-                                double maxX, double maxY, double maxZ) {
+                                double maxX, double maxY, double maxZ, int color) {
     Tessellator tess = Tessellator.instance;
     Tessellator.renderingWorldRenderer = false;
 
@@ -298,7 +285,7 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
                       -RenderManager.renderPosZ);
 
     tess.startDrawing(GL11.GL_LINES);
-    tess.setColorOpaque(255, 0, 0);
+    tess.setColorOpaque_I(color);
 
     // Front
     tess.addVertex(minX, minY, minZ);
