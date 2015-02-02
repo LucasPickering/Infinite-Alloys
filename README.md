@@ -8,7 +8,6 @@ use github, get help [here](https://help.github.com/). Join the [#InfiniteAlloys
 ### Source Setup
 1. Follow the intructions [here](http://www.minecraftforge.net/forum/index.php/topic,14048.0.html) to set up forge with gradle
 2. Clone this repo into folder you just set up forge in
-3. Use the /eclipse/ folder as your workspace
 
 ### Dependencies
 Minecraft Forge  
