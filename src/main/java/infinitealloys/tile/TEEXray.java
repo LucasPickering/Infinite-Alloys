@@ -60,6 +60,7 @@ public class TEEXray extends TileEntityElectric {
     super.updateEntity();
 
     if (inventoryStacks[0] == null) {
+      detectedBlocks.clear();
       shouldSearch = false;
     } else if (!worldObj.isRemote && shouldSearch) {
       search();
