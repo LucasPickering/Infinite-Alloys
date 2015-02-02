@@ -18,7 +18,7 @@ public class TEEXray extends TileEntityElectric {
   /**
    * A list of the detected blocks, x and z are relative to the machine, y is absolute
    */
-  public final ArrayList<Point3> detectedBlocks = new ArrayList<>();
+  private final ArrayList<Point3> detectedBlocks = new ArrayList<>();
   public int range;
 
   /**
@@ -38,9 +38,10 @@ public class TEEXray extends TileEntityElectric {
   private Point3 lastSearch;
 
   /**
-   * Should searching continue, or is it complete. Set this to true to begin a search.
+   * Should ACTUAL searching continue, set this to true to begin a search. This is NOT related to
+   * the progress bar, or anything that is displayed client-side.
    */
-  public boolean shouldSearch;
+  private boolean shouldSearch;
 
   public TEEXray() {
     super(2);
@@ -86,9 +87,8 @@ public class TEEXray extends TileEntityElectric {
   }
 
   /**
-   * Perform a search for the target block. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK
-   * a set amount of} blocks in a tick, then saves its place and picks up where it left off next
-   * tick. This eliminates stutter during searches.
+   * Perform a search for the target block. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK}
+   * blocks in a tick, then saves its place and picks up where it left off next tick.
    */
   private void search() {
     // Convenience variables for the data pertaining to the target block that is being searched for
@@ -132,10 +132,19 @@ public class TEEXray extends TileEntityElectric {
     }
 
     lastSearch.y = 0; // If we've search all the y values, reset the y position.
-    shouldSearch =
-        false; // The search is done. Stop running the function until another search is initiated.
-    worldObj.markBlockForUpdate(xCoord, yCoord,
-                                zCoord); // Mark the block so that the search info will be synced to clients
+    shouldSearch = false; // The search is done. Stop running the function.
+    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord); // Mark the block so it will be synced
+  }
+
+  /**
+   * Begin a search for blocks.
+   */
+  public void startSearch() {
+    shouldSearch = true;
+  }
+
+  public Point3[] getDetectedBlocks() {
+    return detectedBlocks.toArray(new Point3[detectedBlocks.size()]);
   }
 
   @Override

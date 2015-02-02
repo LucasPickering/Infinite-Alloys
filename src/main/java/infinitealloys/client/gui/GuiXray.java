@@ -23,6 +23,7 @@ public class GuiXray extends GuiElectric {
    * Thew amount of columns of {@link BlockButton BlockButtons} that fit on the scroll menu at once
    */
   private final int LIST_WIDTH = 4;
+
   /**
    * The amount of rows of {@link BlockButton BlockButtons} that fit on the scroll menu at once
    */
@@ -144,7 +145,7 @@ public class GuiXray extends GuiElectric {
             blockButtons[i].selected = true;
 
             // The blocks that are represented by the newly selected button get highlighted
-            for (final Point3 block : tex.detectedBlocks) {
+            for (Point3 block : tex.getDetectedBlocks()) {
               // Is this block represented by the newly selected button?
               if (block.y == blockButtons[i].yValue) {
                 // If so, add this block to the list of blocks to be highlighted.
@@ -188,7 +189,8 @@ public class GuiXray extends GuiElectric {
       int[] blockCounts = new int[tee.yCoord];
       ArrayList<Integer> levels = new ArrayList<>();
 
-      for (Point3 block : tex.detectedBlocks) { // For each detected block
+      // For each detected block
+      for (Point3 block : tex.getDetectedBlocks()) {
         // If there hasn't been a block for that y-level yet, at that y to the list
         if (blockCounts[block.y]++ == 0) {
           levels.add(block.y);
@@ -224,7 +226,7 @@ public class GuiXray extends GuiElectric {
     if (button.id == 1) {
       tex.selectedButton = -1;
       InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
-      tex.shouldSearch = true;
+      tex.startSearch();
       tex.syncToServer();
     }
   }
