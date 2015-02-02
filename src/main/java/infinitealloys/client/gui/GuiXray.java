@@ -53,7 +53,7 @@ public class GuiXray extends GuiElectric {
   @Override
   public void initGui() {
     super.initGui();
-    buttonList.add(searchButton = new GuiButton(1, width / 2 - 30, height / 2 - 90, 80, 20,
+    buttonList.add(searchButton = new GuiButton(1, width / 2 - 40, height / 2 - 90, 80, 20,
                                                 Funcs.getLoc("machine.xray.search")));
     setButtons();
   }
@@ -99,9 +99,19 @@ public class GuiXray extends GuiElectric {
 
     Funcs.bindTexture(GuiMachine.extraIcons);
 
-    for (int i = scrollPos * LIST_WIDTH;
-         i < blockButtons.length && i < (scrollPos + LIST_HEIGHT) * LIST_WIDTH; i++) {
-      blockButtons[i].drawButton();
+    if (wasSearching) {
+      drawCenteredString(fontRendererObj, Funcs.getLoc("machine.xray.searching"), xSize / 2, 56,
+                         0xffffff);
+    } else {
+      if (blockButtons.length == 0) {
+        drawCenteredString(fontRendererObj, Funcs.getLoc("machine.xray.noBlocks"), xSize / 2, 56,
+                           0xffffff);
+      } else {
+        for (int i = scrollPos * LIST_WIDTH;
+             i < blockButtons.length && i < (scrollPos + LIST_HEIGHT) * LIST_WIDTH; i++) {
+          blockButtons[i].drawButton();
+        }
+      }
     }
   }
 

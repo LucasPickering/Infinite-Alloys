@@ -18,11 +18,11 @@ public class TEEXray extends TileEntityElectric {
   /**
    * A list of the detected blocks, x and z are relative to the machine, y is absolute
    */
-  public final ArrayList<Point3> detectedBlocks = new ArrayList<Point3>();
+  public final ArrayList<Point3> detectedBlocks = new ArrayList<>();
   public int range;
 
   /**
-   * The selected button for the user, client-side only
+   * Client-only, the index of the button selected by the user, or -1 if no buttons are selected.
    */
   public int selectedButton = -1;
 
