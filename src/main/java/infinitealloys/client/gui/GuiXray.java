@@ -11,7 +11,6 @@ import org.lwjgl.opengl.GL11;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.List;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.tile.TEEXray;
@@ -20,9 +19,16 @@ import infinitealloys.util.Point3;
 
 public class GuiXray extends GuiElectric {
 
-  private final TEEXray tex;
+  /**
+   * Thew amount of columns of {@link BlockButton BlockButtons} that fit on the scroll menu at once
+   */
+  private final int LIST_WIDTH = 4;
+  /**
+   * The amount of rows of {@link BlockButton BlockButtons} that fit on the scroll menu at once
+   */
+  private final int LIST_HEIGHT = 5;
 
-  /** The scroll bar (width is for the scrolling block) */
+  private final TEEXray tex;
 
   /**
    * TileEntityXray.searchingClient, used to checking if searching just finished
@@ -30,8 +36,7 @@ public class GuiXray extends GuiElectric {
   private boolean wasSearching;
 
   /**
-   * The number of the first displayed line of blocks. Min is 0, max is num of rows - number on
-   * screen (5)
+   * The number of the first displayed line of blocks, starting from 0.
    */
   private int scrollPos;
 
@@ -85,7 +90,7 @@ public class GuiXray extends GuiElectric {
     // Disable the search button if there are no ores in the machine
     searchButton.enabled = tex.inventoryStacks[0] != null;
 
-    // If it was searching last tick and it's now done, refresh the buttons
+    // If it was searching last tick and now it's done, refresh the buttons
     if (wasSearching && tex.getProcessProgress() == 0) {
       setButtons();
     }
@@ -94,7 +99,8 @@ public class GuiXray extends GuiElectric {
 
     Funcs.bindTexture(GuiMachine.extraIcons);
 
-    for (int i = scrollPos * 4; i < blockButtons.length && i < scrollPos * 4 + 20; i++) {
+    for (int i = scrollPos * LIST_WIDTH;
+         i < blockButtons.length && i < (scrollPos + LIST_HEIGHT) * LIST_WIDTH; i++) {
       blockButtons[i].drawButton();
     }
   }
@@ -128,14 +134,13 @@ public class GuiXray extends GuiElectric {
             blockButtons[i].selected = true;
 
             // The blocks that are represented by the newly selected button get highlighted
-            for (final Point3 block : tex.detectedBlocks)
-            // Is this block represented by the newly selected button?
-            {
-              if (block.y == blockButtons[i].getYValue())
-              // If so, add this block to the list of blocks to be highlighted. Convert the x and z coords from relative to absolute
-              {
-                InfiniteAlloys.proxy.gfxHandler.xrayBlocks
-                    .add(new Point3(tex.xCoord + block.x, block.y, tex.zCoord + block.z));
+            for (final Point3 block : tex.detectedBlocks) {
+              // Is this block represented by the newly selected button?
+              if (block.y == blockButtons[i].yValue) {
+                // If so, add this block to the list of blocks to be highlighted.
+                // Convert the x and z coords from relative to absolute.
+                InfiniteAlloys.proxy.gfxHandler.xrayBlocks.add(
+                    new Point3(tex.xCoord + block.x, block.y, tex.zCoord + block.z));
               }
             }
           }
@@ -171,7 +176,7 @@ public class GuiXray extends GuiElectric {
       blockButtons = new BlockButton[0];
     } else {
       int[] blockCounts = new int[tee.yCoord];
-      List<Integer> levels = new ArrayList<Integer>();
+      ArrayList<Integer> levels = new ArrayList<>();
 
       for (Point3 block : tex.detectedBlocks) { // For each detected block
         // If there hasn't been a block for that y-level yet, at that y to the list
@@ -181,10 +186,10 @@ public class GuiXray extends GuiElectric {
       }
       blockButtons = new BlockButton[levels.size()];
       for (int i = 0; i < blockButtons.length; i++) {
-        blockButtons[i] =
-            new BlockButton(i % 4 * 40 + 9, (i / 4 - scrollPos) * 20 + 52,
-                            tex.inventoryStacks[0].getItem(), blockCounts[levels.get(i)],
-                            tex.inventoryStacks[0].getItemDamage(), levels.get(i));
+        blockButtons[i]
+            = new BlockButton(i % LIST_WIDTH * 40 + 9, (i / LIST_WIDTH - scrollPos) * 20 + 52,
+                              tex.inventoryStacks[0].getItem(), blockCounts[levels.get(i)],
+                              tex.inventoryStacks[0].getItemDamage(), levels.get(i));
       }
       if (tex.selectedButton != -1) {
         blockButtons[tex.selectedButton].selected = true;
@@ -196,7 +201,8 @@ public class GuiXray extends GuiElectric {
    * Scroll the block list the specified amount of lines. Positive is down, negative is up.
    */
   private void scroll(int lines) {
-    if (lines > 0 && scrollPos < blockButtons.length / 4 - 4 || lines < 0 && scrollPos > 0) {
+    if (lines > 0 && scrollPos < (blockButtons.length - 1) / LIST_WIDTH
+        || lines < 0 && scrollPos > 0) {
       scrollPos += lines;
     }
     setButtons();
@@ -244,7 +250,7 @@ public class GuiXray extends GuiElectric {
       height = 15;
 
       // Set the backgroundIcon of the button based on its y-value
-      for (final Background bg : Background.values()) {
+      for (Background bg : Background.values()) {
         if (bg.start <= yValue && yValue <= bg.end) {
           background = bg;
           break;
@@ -273,28 +279,20 @@ public class GuiXray extends GuiElectric {
 
         GL11.glEnable(GL11.GL_LIGHTING);
 
-        itemRender
-            .renderItemIntoGUI(mc.fontRenderer, mc.renderEngine, new ItemStack(block, 1, blockMeta),
-                               xPos + 18, yPos);
-        itemRender.renderItemOverlayIntoGUI(mc.fontRenderer, mc.renderEngine,
-                                            new ItemStack(block, blockAmount, blockMeta), xPos + 19,
-                                            yPos + 1, blockAmount + "");
+        itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine,
+                                     new ItemStack(block, 1, blockMeta), xPos + 18, yPos);
+        itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine,
+                                            new ItemStack(block, blockAmount, blockMeta),
+                                            xPos + 19, yPos + 1, String.valueOf(blockAmount));
 
         GL11.glDisable(GL11.GL_LIGHTING);
       }
     }
-
-    int getYValue() {
-      return yValue;
-    }
   }
 
   private enum Background {
-
-    BEDROCK(0, 5, 84, 24), STONE(6, 50, 118, 24), DIRT(51, 60, 152, 24), GRASS(61, 85, 186,
-                                                                               24), SKY(86,
-                                                                                        Short.MAX_VALUE,
-                                                                                        220, 24);
+    BEDROCK(0, 5, 84, 24), STONE(6, 50, 118, 24), DIRT(51, 60, 152, 24),
+    GRASS(61, 85, 186, 24), SKY(86, Short.MAX_VALUE, 220, 24);
 
     /**
      * The y-value of the start of the texture's range (inclusive)

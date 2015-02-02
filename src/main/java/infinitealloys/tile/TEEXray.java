@@ -45,7 +45,7 @@ public class TEEXray extends TileEntityElectric {
   public TEEXray() {
     super(2);
     stackLimit = 1;
-    ticksToProcess = 2400;
+    ticksToProcess = 240; // TODO: Change this back to 2400
     baseRKPerTick = -360;
   }
 
@@ -154,8 +154,8 @@ public class TEEXray extends TileEntityElectric {
 
   @Override
   public Object[] getSyncDataToClient() {
-    return ArrayUtils
-        .addAll(super.getSyncDataToClient(), detectedBlocks.size(), detectedBlocks.toArray());
+    return ArrayUtils.addAll(super.getSyncDataToClient(),
+                             detectedBlocks.size(), detectedBlocks.toArray());
   }
 
   @Override
@@ -166,6 +166,7 @@ public class TEEXray extends TileEntityElectric {
   @Override
   public void readServerToClientData(ByteBuf bytes) {
     super.readServerToClientData(bytes);
+    detectedBlocks.clear();
     int detectedBlocksSize = bytes.readInt();
     for (int i = 0; i < detectedBlocksSize; i++) {
       detectedBlocks.add(new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt()));
