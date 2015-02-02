@@ -63,7 +63,23 @@ public class MachineHelper {
   }
 
   /**
-   * Get the detectable value of the block with the given information
+   * Get the color of the detectable block with the given information.
+   *
+   * @param block    the block type of the detectable block
+   * @param metadata the metdata of the detectable block
+   * @return color of the block if it is detectable, otherwise 0
+   */
+  public static int getDetectableColor(Block block, int metadata) {
+    for (DetectableBlock detectable : detectableBlocks) {
+      if (detectable.block == block && detectable.metadata == metadata) {
+        return detectable.color;
+      }
+    }
+    return 0;
+  }
+
+  /**
+   * Get the value of the detectable block with the given information.
    *
    * @param block    the block type of the detectable block
    * @param metadata the metadata of the detectable block

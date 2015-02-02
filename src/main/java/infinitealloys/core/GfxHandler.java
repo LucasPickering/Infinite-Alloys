@@ -15,7 +15,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -45,10 +45,10 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
   }
 
   /**
-   * The list of blocks identified by an x-ray machine to be highlighted
+   * A map of blocks identified by an x-ray machine to be highlighted, their respective colors.
    */
   @SideOnly(Side.CLIENT)
-  public ArrayList<Point3> xrayBlocks = new ArrayList<Point3>();
+  public HashMap<Point3, Integer> xrayBlocks = new HashMap<>();
 
   @Override
   public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -237,8 +237,8 @@ public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
   @SuppressWarnings("unchecked")
   @SubscribeEvent
   public void onRenderWorldLast(RenderWorldLastEvent event) {
-    for (Point3 block : xrayBlocks) {
-      renderBlockOutline(block.x, block.y, block.z, 0xff0000);
+    for (Point3 block : xrayBlocks.keySet()) {
+      renderBlockOutline(block.x, block.y, block.z, xrayBlocks.get(block));
     }
   }
 

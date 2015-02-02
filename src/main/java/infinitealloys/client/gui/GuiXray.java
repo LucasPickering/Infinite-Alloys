@@ -1,8 +1,8 @@
 package infinitealloys.client.gui;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import org.lwjgl.input.Mouse;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.tile.TEEXray;
 import infinitealloys.util.Funcs;
+import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point3;
 
 public class GuiXray extends GuiElectric {
@@ -150,8 +151,10 @@ public class GuiXray extends GuiElectric {
               if (block.y == blockButtons[i].yValue) {
                 // If so, add this block to the list of blocks to be highlighted.
                 // Convert the x and z coords from relative to absolute.
-                InfiniteAlloys.proxy.gfxHandler.xrayBlocks.add(
-                    new Point3(tex.xCoord + block.x, block.y, tex.zCoord + block.z));
+                InfiniteAlloys.proxy.gfxHandler.xrayBlocks.put(
+                    new Point3(tex.xCoord + block.x, block.y, tex.zCoord + block.z),
+                    MachineHelper.getDetectableColor(blockButtons[i].block,
+                                                     blockButtons[i].blockMeta));
               }
             }
           }
@@ -182,6 +185,9 @@ public class GuiXray extends GuiElectric {
     }
   }
 
+  /**
+   * Set the value of each {@link BlockButton} based on the current search results.
+   */
   private void setButtons() {
     if (tex.inventoryStacks[0] == null || tee.getProcessProgress() > 0) {
       blockButtons = new BlockButton[0];
@@ -198,10 +204,10 @@ public class GuiXray extends GuiElectric {
       }
       blockButtons = new BlockButton[levels.size()];
       for (int i = 0; i < blockButtons.length; i++) {
-        blockButtons[i]
-            = new BlockButton(i % LIST_WIDTH * 40 + 9, (i / LIST_WIDTH - scrollPos) * 20 + 52,
-                              tex.inventoryStacks[0].getItem(), blockCounts[levels.get(i)],
-                              tex.inventoryStacks[0].getItemDamage(), levels.get(i));
+        blockButtons[i] = new BlockButton(
+            i % LIST_WIDTH * 40 + 9, (i / LIST_WIDTH - scrollPos) * 20 + 52,
+            Block.getBlockFromItem(tex.inventoryStacks[0].getItem()), blockCounts[levels.get(i)],
+            tex.inventoryStacks[0].getItemDamage(), levels.get(i));
       }
       if (tex.selectedButton != -1) {
         blockButtons[tex.selectedButton].selected = true;
@@ -239,7 +245,7 @@ public class GuiXray extends GuiElectric {
 
     private final int xPos, yPos;
     private final int width, height;
-    private final Item block;
+    private final Block block;
     private final int blockAmount, blockMeta;
 
     /**
@@ -250,7 +256,7 @@ public class GuiXray extends GuiElectric {
     private Background background;
     private boolean selected;
 
-    private BlockButton(int xPos, int yPos, Item block, int blockAmount, int blockMeta,
+    private BlockButton(int xPos, int yPos, Block block, int blockAmount, int blockMeta,
                         int yValue) {
       this.xPos = xPos;
       this.yPos = yPos;
