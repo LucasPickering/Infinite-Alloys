@@ -28,8 +28,8 @@ import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 /**
- * A base class for Tile Entities that can receive upgrades. TileEntityElectric blocks are
- * a sub-type of this. Often referred to as TEMs or machines.
+ * A base class for Tile Entities that can receive upgrades. TileEntityElectric blocks are a
+ * sub-type of this. Often referred to as TEMs or machines.
  *
  * @see TileEntityElectric
  */
@@ -221,28 +221,28 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   }
 
   /**
-   * A list of the data that gets sent from server to client over the network
-   */
-  public Object[] getSyncDataToClient() {
-    return new Object[]{(byte) orientation.ordinal(), upgrades};
-  }
-
-  /**
-   * A list of the data that gets sent from client to server over the network
-   */
-  public Object[] getSyncDataToServer() {
-    return null;
-  }
-
-  /**
    * Read data from a server->client packet and sync certain values
    *
    * @param bytes the data from the server->client packet
    */
-  public void readServerToClientData(ByteBuf bytes) {
+  public void readToClientData(ByteBuf bytes) {
     orientation = EnumFacing.values()[bytes.readByte()];
     for (int i = 0; i < upgrades.length; i++) {
       upgrades[i] = bytes.readInt();
+    }
+  }
+
+  /**
+   * Write the data that this machine will send to clients to the given {@link
+   * io.netty.buffer.ByteBuf}.
+   *
+   * @param bytes the {@link io.netty.buffer.ByteBuf} that will be written to
+   */
+  public void writeToClientData(ByteBuf bytes) {
+    coords().writeToByteBuf(bytes);
+    bytes.writeByte(orientation.ordinal());
+    for (int upgrade : upgrades) {
+      bytes.writeInt(upgrade);
     }
   }
 
@@ -251,14 +251,24 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
    *
    * @param bytes the data from the client->server packet
    */
-  public void readClientToServerData(ByteBuf bytes) {
+  public void readToServerData(ByteBuf bytes) {
+  }
+
+  /**
+   * Write the data that this machine will send to the server to the given {@link
+   * io.netty.buffer.ByteBuf}.
+   *
+   * @param bytes the {@link io.netty.buffer.ByteBuf} that will be written to
+   */
+  public void writeToServerData(ByteBuf bytes) {
+    coords().writeToByteBuf(bytes);
   }
 
   /**
    * Get the current (x, y, z) coordinates of this machine in the form of a {@link
    * infinitealloys.util.Point3 Point}
    */
-  public Point3 coords() {
+  public final Point3 coords() {
     return new Point3(xCoord, yCoord, zCoord);
   }
 

@@ -3,8 +3,6 @@ package infinitealloys.tile;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.ArrayList;
 
 import infinitealloys.util.EnumMachine;
@@ -163,31 +161,35 @@ public class TEEXray extends TileEntityElectric {
   }
 
   @Override
-  public Object[] getSyncDataToClient() {
-    return ArrayUtils.addAll(super.getSyncDataToClient(),
-                             detectedBlocks.size(), detectedBlocks.toArray());
-  }
-
-  @Override
-  public Object[] getSyncDataToServer() {
-    return new Object[]{shouldSearch};
-  }
-
-  @Override
-  public void readServerToClientData(ByteBuf bytes) {
-    super.readServerToClientData(bytes);
+  public void readToClientData(ByteBuf bytes) {
+    super.readToClientData(bytes);
     detectedBlocks.clear();
     int detectedBlocksSize = bytes.readInt();
     for (int i = 0; i < detectedBlocksSize; i++) {
-      detectedBlocks.add(new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt()));
+      detectedBlocks.add(Point3.readFromByteBuf(bytes));
     }
     refreshGUI = true;
   }
 
   @Override
-  public void readClientToServerData(ByteBuf bytes) {
-    super.readClientToServerData(bytes);
+  public void writeToClientData(ByteBuf bytes) {
+    super.writeToClientData(bytes);
+    bytes.writeInt(detectedBlocks.size());
+    for (Point3 detectedBlock : detectedBlocks) {
+      detectedBlock.writeToByteBuf(bytes);
+    }
+  }
+
+  @Override
+  public void readToServerData(ByteBuf bytes) {
+    super.readToServerData(bytes);
     shouldSearch = bytes.readBoolean();
+  }
+
+  @Override
+  public void writeToServerData(ByteBuf bytes) {
+    super.writeToServerData(bytes);
+    bytes.writeBoolean(shouldSearch);
   }
 
   @Override

@@ -3,8 +3,6 @@ package infinitealloys.tile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.ArrayList;
 
 import infinitealloys.item.IAItems;
@@ -98,18 +96,8 @@ public class TEEMetalForge extends TileEntityElectric {
   }
 
   @Override
-  public Object[] getSyncDataToClient() {
-    return ArrayUtils.addAll(super.getSyncDataToClient(), recipeAlloyID);
-  }
-
-  @Override
-  public Object[] getSyncDataToServer() {
-    return new Object[]{recipeAlloyID};
-  }
-
-  @Override
-  public void readServerToClientData(ByteBuf bytes) {
-    super.readServerToClientData(bytes);
+  public void readToClientData(ByteBuf bytes) {
+    super.readToClientData(bytes);
     byte recipeAlloyID = bytes.readByte();
     if (recipeAlloyID != this.recipeAlloyID) {
       recipeChanged = true;
@@ -118,13 +106,25 @@ public class TEEMetalForge extends TileEntityElectric {
   }
 
   @Override
-  public void readClientToServerData(ByteBuf bytes) {
-    super.readClientToServerData(bytes);
+  public void writeToClientData(ByteBuf bytes) {
+    super.writeToClientData(bytes);
+    bytes.writeByte(recipeAlloyID);
+  }
+
+  @Override
+  public void readToServerData(ByteBuf bytes) {
+    super.readToServerData(bytes);
     byte recipeAlloyID = bytes.readByte();
     if (recipeAlloyID != this.recipeAlloyID) {
       recipeChanged = true;
     }
     this.recipeAlloyID = recipeAlloyID;
+  }
+
+  @Override
+  public void writeToServerData(ByteBuf bytes) {
+    super.writeToServerData(bytes);
+    bytes.writeByte(recipeAlloyID);
   }
 
   /**

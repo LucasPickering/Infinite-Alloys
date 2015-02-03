@@ -306,7 +306,7 @@ public class GuiInternetWand extends GuiScreen {
       case 1: // Add the block that was clicked to the wand's list
         ItemStack heldItem = mc.thePlayer.getHeldItem();
         int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
-        Funcs.sendPacketToServer(new MessageWand(a[1], a[2], a[3]));
+        Funcs.sendPacketToServer(new MessageWand(new Point3(a[1], a[2], a[3])));
         ((ItemInternetWand) heldItem.getItem()).addMachine(mc.theWorld, heldItem, a[1], a[2], a[3]);
         break;
 
@@ -314,17 +314,17 @@ public class GuiInternetWand extends GuiScreen {
         heldItem = mc.thePlayer.getHeldItem();
         int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 
-        if (mc.theWorld
-            .getTileEntity(host[1], host[2], host[3]) instanceof IHost) { // If this is a host
-          for (MachineButton machineButton : machineButtons) { // Go over each button
-            if (machineButton != null && (selectedButtons & 1 << machineButton.buttonID)
-                                         != 0) { // If this button is selected
+        // If this is a host
+        if (mc.theWorld.getTileEntity(host[1], host[2], host[3]) instanceof IHost) {
+          // Go over each button
+          for (MachineButton machineButton : machineButtons) {
+            // If this button is selected
+            if (machineButton != null && (selectedButtons & 1 << machineButton.buttonID) != 0) {
               // Add the selected machine to the host
-              int[]
-                  client =
+              int[] client =
                   heldItem.getTagCompound().getIntArray("Coords" + (machineButton.buttonID));
-              if (host[0] == client[0]) // They're in the same dimension
-              {
+              // They're in the same dimension
+              if (host[0] == client[0]) {
                 ((IHost) mc.theWorld.getTileEntity(host[1], host[2], host[3]))
                     .addClient(mc.thePlayer, new Point3(client[1], client[2], client[3]), true);
               }

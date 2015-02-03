@@ -23,12 +23,12 @@ public class MessageOpenGui implements IMessage, IMessageHandler<MessageOpenGui,
 
   @Override
   public void fromBytes(ByteBuf bytes) {
-    machine = new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt());
+    machine = Point3.readFromByteBuf(bytes);
   }
 
   @Override
   public void toBytes(ByteBuf bytes) {
-    NetworkHandler.writeObject(bytes, machine);
+    machine.writeToByteBuf(bytes);
   }
 
   @Override

@@ -22,9 +22,9 @@ public class MessageWand implements IMessage, IMessageHandler<MessageWand, IMess
   /**
    * Adding
    */
-  public MessageWand(int x, int y, int z) {
+  public MessageWand(Point3 machine) {
     adding = true;
-    machine = new Point3(x, y, z);
+    this.machine = machine;
   }
 
   /**
@@ -40,7 +40,7 @@ public class MessageWand implements IMessage, IMessageHandler<MessageWand, IMess
     adding = bytes.readBoolean();
 
     if (adding) {
-      machine = new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt());
+      machine = Point3.readFromByteBuf(bytes);
     } else {
       index = bytes.readByte();
     }
@@ -48,11 +48,11 @@ public class MessageWand implements IMessage, IMessageHandler<MessageWand, IMess
 
   @Override
   public void toBytes(ByteBuf bytes) {
-    NetworkHandler.writeObject(bytes, adding);
+    bytes.writeBoolean(adding);
     if (adding) {
-      NetworkHandler.writeObject(bytes, machine);
+      machine.writeToByteBuf(bytes);
     } else {
-      NetworkHandler.writeObject(bytes, index);
+      bytes.writeByte(index);
     }
   }
 

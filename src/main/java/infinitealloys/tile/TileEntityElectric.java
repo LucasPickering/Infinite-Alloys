@@ -2,8 +2,6 @@ package infinitealloys.tile;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.Funcs;
@@ -166,13 +164,14 @@ public abstract class TileEntityElectric extends TileEntityMachine {
   }
 
   @Override
-  public Object[] getSyncDataToClient() {
-    return ArrayUtils.addAll(super.getSyncDataToClient(), processProgress);
+  public void readToClientData(ByteBuf bytes) {
+    super.readToClientData(bytes);
+    processProgress = bytes.readInt();
   }
 
   @Override
-  public void readServerToClientData(ByteBuf bytes) {
-    super.readServerToClientData(bytes);
-    processProgress = bytes.readInt();
+  public void writeToClientData(ByteBuf bytes) {
+    super.writeToClientData(bytes);
+    bytes.writeInt(processProgress);
   }
 }

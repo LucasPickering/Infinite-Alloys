@@ -27,7 +27,9 @@ public class MessageValidAlloys implements IMessage, IMessageHandler<MessageVali
 
   @Override
   public void toBytes(ByteBuf bytes) {
-    NetworkHandler.writeObject(bytes, validAlloys);
+    for (int validAlloy : validAlloys) {
+      bytes.writeInt(validAlloy);
+    }
   }
 
   @Override

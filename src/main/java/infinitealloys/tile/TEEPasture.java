@@ -11,8 +11,6 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -149,28 +147,34 @@ public class TEEPasture extends TileEntityElectric {
   }
 
   @Override
-  public Object[] getSyncDataToClient() {
-    return ArrayUtils.addAll(super.getSyncDataToClient(), mobActions);
-  }
-
-  @Override
-  public Object[] getSyncDataToServer() {
-    return new Object[]{mobActions};
-  }
-
-  @Override
-  public void readServerToClientData(ByteBuf bytes) {
-    super.readServerToClientData(bytes);
+  public void readToClientData(ByteBuf bytes) {
+    super.readToClientData(bytes);
     for (int i = 0; i < mobActions.length; i++) {
       mobActions[i] = bytes.readByte();
     }
   }
 
   @Override
-  public void readClientToServerData(ByteBuf bytes) {
-    super.readClientToServerData(bytes);
+  public void writeToClientData(ByteBuf bytes) {
+    super.writeToClientData(bytes);
+    for (byte mobAction : mobActions) {
+      bytes.writeByte(mobAction);
+    }
+  }
+
+  @Override
+  public void readToServerData(ByteBuf bytes) {
+    super.readToServerData(bytes);
     for (int i = 0; i < mobActions.length; i++) {
       mobActions[i] = bytes.readByte();
+    }
+  }
+
+  @Override
+  public void writeToServerData(ByteBuf bytes) {
+    super.writeToServerData(bytes);
+    for (byte mobAction : mobActions) {
+      bytes.writeByte(mobAction);
     }
   }
 

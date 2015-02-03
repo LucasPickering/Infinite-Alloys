@@ -6,8 +6,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ChatComponentText;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.ArrayList;
 
 import infinitealloys.network.MessageNetworkEditToClient;
@@ -284,15 +282,17 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
   }
 
   @Override
-  public Object[] getSyncDataToClient() {
-    return ArrayUtils.addAll(super.getSyncDataToClient(), currentRK, baseRKPerTick);
+  public void readToClientData(ByteBuf bytes) {
+    super.readToClientData(bytes);
+    currentRK = bytes.readInt();
+    baseRKPerTick = bytes.readInt();
   }
 
   @Override
-  public void readServerToClientData(ByteBuf bytes) {
-    super.readServerToClientData(bytes);
-    currentRK = bytes.readInt();
-    baseRKPerTick = bytes.readInt();
+  public void writeToClientData(ByteBuf bytes) {
+    super.writeToClientData(bytes);
+    bytes.writeInt(currentRK);
+    bytes.writeInt(baseRKPerTick);
   }
 
   @Override

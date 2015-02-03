@@ -1,9 +1,21 @@
 package infinitealloys.util;
 
+import io.netty.buffer.ByteBuf;
+
 /**
  * A 3D coordinate
  */
 public class Point3 {
+
+  /**
+   * Create a new {@code Point3} instance from the next three values in the given {@link ByteBuf}
+   *
+   * @param bytes the {@link ByteBuf} to be read from
+   * @return a new {@code Point3} with the values from {@code bytes}
+   */
+  public static Point3 readFromByteBuf(ByteBuf bytes) {
+    return new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt());
+  }
 
   public int x, y, z;
 
@@ -50,5 +62,16 @@ public class Point3 {
   @Override
   public String toString() {
     return "(" + x + ", " + y + ", " + z + ")";
+  }
+
+  /**
+   * Write this {@code Point3}'s data to the given {@link io.netty.buffer.ByteBuf}
+   *
+   * @param bytes the {@link io.netty.buffer.ByteBuf} to be written to
+   */
+  public void writeToByteBuf(ByteBuf bytes) {
+    bytes.writeInt(x);
+    bytes.writeInt(y);
+    bytes.writeInt(z);
   }
 }

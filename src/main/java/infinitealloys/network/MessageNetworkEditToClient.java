@@ -38,16 +38,16 @@ public class MessageNetworkEditToClient
   public void fromBytes(ByteBuf bytes) {
     adding = bytes.readBoolean();
     dimensionID = bytes.readInt();
-    host = new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt());
-    client = new Point3(bytes.readInt(), bytes.readInt(), bytes.readInt());
+    host = Point3.readFromByteBuf(bytes);
+    client = Point3.readFromByteBuf(bytes);
   }
 
   @Override
   public void toBytes(ByteBuf bytes) {
-    NetworkHandler.writeObject(bytes, adding);
-    NetworkHandler.writeObject(bytes, dimensionID);
-    NetworkHandler.writeObject(bytes, host);
-    NetworkHandler.writeObject(bytes, client);
+    bytes.writeBoolean(adding);
+    bytes.writeInt(dimensionID);
+    host.writeToByteBuf(bytes);
+    client.writeToByteBuf(bytes);
   }
 
   @Override
@@ -61,11 +61,11 @@ public class MessageNetworkEditToClient
     if (dimensionID == player.dimension) {
       TileEntity te = Funcs.getTileEntity(player.worldObj, host);
       if (te instanceof IHost) {
-	if (adding) {
-	  ((IHost) te).addClient(null, client, false);
-	} else {
-	  ((IHost) te).removeClient(client, false);
-	}
+        if (adding) {
+          ((IHost) te).addClient(null, client, false);
+        } else {
+          ((IHost) te).removeClient(client, false);
+        }
       }
     }
 
