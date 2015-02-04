@@ -1,10 +1,12 @@
 package infinitealloys.tile;
 
-import net.minecraft.item.Item;
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
@@ -36,10 +38,15 @@ public class TEEXray extends TileEntityElectric {
   private Point3 lastSearch;
 
   /**
-   * Should ACTUAL searching continue, set this to true to begin a search. This is NOT related to
-   * the progress bar, or anything that is displayed client-side.
+   * Was {@link #search} still running when it terminated?
    */
-  private boolean shouldSearch;
+  private boolean searchingGround;
+
+  /**
+   * Should the process bar start to tick? Once it starts, this does NOT need to be true for it to
+   * continue;
+   */
+  private boolean shouldStartProcess;
 
   public TEEXray() {
     super(2);
@@ -56,18 +63,19 @@ public class TEEXray extends TileEntityElectric {
   @Override
   public void updateEntity() {
     super.updateEntity();
-
-    if (inventoryStacks[0] == null) {
-      detectedBlocks.clear();
-      shouldSearch = false;
-    } else if (!worldObj.isRemote && shouldSearch) {
+    if (!worldObj.isRemote && (searchingGround || inventoryStacks[0] != null
+                                                  && detectedBlocks.isEmpty())) {
       search();
     }
   }
 
   @Override
   public boolean shouldProcess() {
-    return shouldSearch || getProcessProgress() > 0;
+    if (shouldStartProcess) {
+      shouldStartProcess = false;
+      return true;
+    }
+    return getProcessProgress() > 0;
   }
 
   @Override
@@ -76,22 +84,21 @@ public class TEEXray extends TileEntityElectric {
   }
 
   /**
-   * Called when processProgress reaches ticksToProgress
-   */
-  @Override
-  protected void onFinishProcess() {
-    if (worldObj.isRemote) {
-      shouldSearch = false;
-    }
-  }
-
-  /**
-   * Perform a search for the target block. This checks {@link infinitealloys.util.MachineHelper#SEARCH_PER_TICK}
-   * blocks in a tick, then saves its place and picks up where it left off next tick.
+   * Perform a search for the target block type. This checks {@link MachineHelper#SEARCH_PER_TICK}
+   * blocks in a tick, then saves its place and picks up where it left off next tick. This should
+   * ONLY be called on the server.
+   *
+   * @throws RuntimeException if called on the client
    */
   private void search() {
+    if (worldObj.isRemote) {
+      throw new RuntimeException("cannot search on client");
+    }
+
+    searchingGround = true;
+
     // Convenience variables for the data pertaining to the target block that is being searched for
-    Item targetBlock = inventoryStacks[0].getItem();
+    Block targetBlock = Block.getBlockFromItem(inventoryStacks[0].getItem());
     int targetMetadata = inventoryStacks[0].getItemDamage();
 
     // The amount of blocks that have been iterated over this tick. When this reaches TEHelper.SEARCH_PER_TICK, the loops break
@@ -111,7 +118,7 @@ public class TEEXray extends TileEntityElectric {
 
           // If the block at the given coords (which have been converted to absolute coordinates) is of the target block's type, add it to the
           // list of blocks that have been found.
-          if (targetBlock == Item.getItemFromBlock(worldObj.getBlock(xCoord + x, y, zCoord + z))
+          if (targetBlock == worldObj.getBlock(xCoord + x, y, zCoord + z)
               && targetMetadata == worldObj.getBlockMetadata(xCoord + x, y, zCoord + z)) {
             detectedBlocks.add(new Point3(x, y, z));
           }
@@ -123,23 +130,25 @@ public class TEEXray extends TileEntityElectric {
             return;
           }
         }
-        // If we've search all the z values, reset the z position.
+        // If we've searched all the z values, reset the z position.
         lastSearch.z = -range;
       }
-      // If we've search all the x values, reset the x position.
+      // If we've searched all the x values, reset the x position.
       lastSearch.x = -range;
     }
 
-    lastSearch.y = 0; // If we've search all the y values, reset the y position.
-    shouldSearch = false; // The search is done. Stop running the function.
+    lastSearch.y = 0; // If we've searched all the y values, reset the y position.
+    searchingGround = false; // The search is done. Stop running the function.
     worldObj.markBlockForUpdate(xCoord, yCoord, zCoord); // Mark the block so it will be synced
   }
 
   /**
-   * Begin a search for blocks.
+   * Start the processing, i.e. make the progress bar start ticking.
    */
-  public void startSearch() {
-    shouldSearch = true;
+  @SideOnly(Side.CLIENT)
+  public void startProcess() {
+    shouldStartProcess = true;
+    syncToServer();
   }
 
   public Point3[] getDetectedBlocks() {
@@ -147,17 +156,27 @@ public class TEEXray extends TileEntityElectric {
   }
 
   @Override
+  public void onInventoryChanged() {
+    detectedBlocks.clear();
+  }
+
+  @Override
   public void readFromNBT(NBTTagCompound tagCompound) {
     super.readFromNBT(tagCompound);
-    // True if there were blocks before to be restored, false if it was empty
-    shouldSearch = tagCompound.getBoolean("shouldSearch");
+    for (int i = 0; tagCompound.hasKey("detectedBlock" + i); i++) {
+      int[] detectedBlock = tagCompound.getIntArray("detectedBlock" + i);
+      detectedBlocks.add(new Point3(detectedBlock[0], detectedBlock[1], detectedBlock[2]));
+    }
   }
 
   @Override
   public void writeToNBT(NBTTagCompound tagCompound) {
     super.writeToNBT(tagCompound);
-    // True if there are blocks on the GUI, false if there are no blocks
-    tagCompound.setBoolean("shouldSearch", detectedBlocks.size() > 0);
+    for (int i = 0; i < detectedBlocks.size(); i++) {
+      Point3 detectedBlock = detectedBlocks.get(i);
+      tagCompound.setIntArray("detectedBlock" + i,
+                              new int[]{detectedBlock.x, detectedBlock.y, detectedBlock.z});
+    }
   }
 
   @Override
@@ -183,13 +202,9 @@ public class TEEXray extends TileEntityElectric {
   @Override
   public void readToServerData(ByteBuf bytes) {
     super.readToServerData(bytes);
-    shouldSearch = bytes.readBoolean();
-  }
-
-  @Override
-  public void writeToServerData(ByteBuf bytes) {
-    super.writeToServerData(bytes);
-    bytes.writeBoolean(shouldSearch);
+    // A sync packet is only sent to the server when the Search button is clicked,
+    // so processing should always begin when the packet is received.
+    shouldStartProcess = true;
   }
 
   @Override

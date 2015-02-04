@@ -211,6 +211,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
     tagCompound.setTag("Items", nbttaglist);
   }
 
+  /**
+   * Send a packet to the server to sync this machine's
+   */
   public void syncToServer() {
     Funcs.sendPacketToServer(new MessageTEToServer(this));
   }
@@ -300,12 +303,14 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
       if (inventoryStacks[slot].stackSize <= amt) {
         stack = inventoryStacks[slot];
         inventoryStacks[slot] = null;
+        onInventoryChanged();
         return stack;
       }
       stack = inventoryStacks[slot].splitStack(amt);
       if (inventoryStacks[slot].stackSize == 0) {
         inventoryStacks[slot] = null;
       }
+      onInventoryChanged();
       return stack;
     }
     return null;
@@ -348,6 +353,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   public void closeInventory() {
   }
 
+  /**
+   * Called when the inventory of this machine changes.
+   */
   public void onInventoryChanged() {
   }
 

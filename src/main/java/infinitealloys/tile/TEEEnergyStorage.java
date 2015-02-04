@@ -227,24 +227,14 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
   }
 
   @Override
-  public void onInventoryChanged() {
-    // Set baseRKPerTick based on the first fuel in the supply slots
-    for (int i = 0; i < 9; i++) {
-      if (inventoryStacks[i] != null) {
-        baseRKPerTick =
-            (int) (TileEntityFurnace.getItemBurnTime(inventoryStacks[i]) * FURNACE_TO_ESU__RATIO);
-        break;
-      }
-    }
-  }
-
-  @Override
   protected void onStartProcess() {
     // Take one piece of fuel out of the first slot that has fuel
     for (int i = 0; i < 9; i++) {
       if (inventoryStacks[i] != null) {
+        baseRKPerTick =
+            (int) (TileEntityFurnace.getItemBurnTime(inventoryStacks[i]) * FURNACE_TO_ESU__RATIO);
         decrStackSize(i, 1);
-        break;
+        return;
       }
     }
   }

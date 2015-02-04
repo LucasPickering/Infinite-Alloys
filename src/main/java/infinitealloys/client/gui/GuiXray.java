@@ -80,17 +80,13 @@ public class GuiXray extends GuiElectric {
   @Override
   protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
     super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+    // Disable the search button if there are no ores in the machine
+    searchButton.enabled = tex.inventoryStacks[0] != null;
 
     if (tex.refreshGUI) {
       tex.refreshGUI = false;
       setButtons();
     }
-
-    GL11.glDisable(GL11.GL_LIGHTING);
-    GL11.glDisable(GL11.GL_DEPTH_TEST);
-
-    // Disable the search button if there are no ores in the machine
-    searchButton.enabled = tex.inventoryStacks[0] != null;
 
     // If it was searching last tick and now it's done, refresh the buttons
     if (wasSearching && tex.getProcessProgress() == 0) {
@@ -99,8 +95,8 @@ public class GuiXray extends GuiElectric {
     // Set the searching status for this tick (used next tick)
     wasSearching = tex.getProcessProgress() > 0;
 
-    Funcs.bindTexture(GuiMachine.extraIcons);
-
+    GL11.glDisable(GL11.GL_LIGHTING);
+    GL11.glDisable(GL11.GL_DEPTH_TEST);
     if (wasSearching) {
       drawCenteredString(fontRendererObj, Funcs.getLoc("machine.xray.searching"), xSize / 2, 56,
                          0xffffff);
@@ -109,6 +105,7 @@ public class GuiXray extends GuiElectric {
         drawCenteredString(fontRendererObj, Funcs.getLoc("machine.xray.noBlocks"), xSize / 2, 56,
                            0xffffff);
       } else {
+        Funcs.bindTexture(GuiMachine.extraIcons);
         for (int i = scrollPos * LIST_WIDTH;
              i < blockButtons.length && i < (scrollPos + LIST_HEIGHT) * LIST_WIDTH; i++) {
           blockButtons[i].drawButton();
@@ -232,8 +229,7 @@ public class GuiXray extends GuiElectric {
     if (button.id == 1) {
       tex.selectedButton = -1;
       InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
-      tex.startSearch();
-      tex.syncToServer();
+      tex.startProcess();
     }
   }
 
