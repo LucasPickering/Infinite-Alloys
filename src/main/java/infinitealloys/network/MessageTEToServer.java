@@ -1,6 +1,5 @@
 package infinitealloys.network;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
@@ -23,11 +22,6 @@ public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToS
 
   @Override
   public void fromBytes(ByteBuf bytes) {
-    TileEntity te = Minecraft.getMinecraft().theWorld.getTileEntity(
-        bytes.readInt(), bytes.readInt(), bytes.readInt());
-    if (te instanceof TileEntityMachine) {
-      tem = (TileEntityMachine) te;
-    }
     this.bytes = bytes;
   }
 
@@ -38,7 +32,11 @@ public class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToS
 
   @Override
   public IMessage onMessage(MessageTEToServer message, MessageContext context) {
-    message.tem.readToServerData(message.bytes);
+    TileEntity te = context.getServerHandler().playerEntity.worldObj.getTileEntity(
+        message.bytes.readInt(), message.bytes.readInt(), message.bytes.readInt());
+    if (te instanceof TileEntityMachine) {
+      ((TileEntityMachine) te).readToServerData(message.bytes);
+    }
     return null;
   }
 }

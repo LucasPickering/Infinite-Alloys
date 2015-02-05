@@ -61,9 +61,6 @@ public class TEEXray extends TileEntityElectric {
   @Override
   public void updateEntity() {
     super.updateEntity();
-    if (!worldObj.isRemote) {
-      System.out.println("shouldProcess: " + shouldProcess);
-    }
     if (inventoryStacks[0] == null) {
       shouldSearch = false;
     } else if (!worldObj.isRemote && shouldSearch) {
@@ -140,7 +137,11 @@ public class TEEXray extends TileEntityElectric {
     return detectedBlocks.toArray(new Point3[detectedBlocks.size()]);
   }
 
-  public boolean getRevealBlocks() {
+  public boolean shouldSearch() {
+    return shouldSearch;
+  }
+
+  public boolean shouldRevealBlocks() {
     return revealBlocks;
   }
 
@@ -192,6 +193,7 @@ public class TEEXray extends TileEntityElectric {
   @Override
   public void readToClientData(ByteBuf bytes) {
     super.readToClientData(bytes);
+    shouldProcess = bytes.readBoolean();
     revealBlocks = bytes.readBoolean();
     detectedBlocks.clear();
     int detectedBlocksSize = bytes.readInt();
@@ -203,6 +205,7 @@ public class TEEXray extends TileEntityElectric {
   @Override
   public void writeToClientData(ByteBuf bytes) {
     super.writeToClientData(bytes);
+    bytes.writeBoolean(shouldProcess);
     bytes.writeBoolean(revealBlocks);
     bytes.writeInt(detectedBlocks.size());
     for (Point3 detectedBlock : detectedBlocks) {
@@ -216,7 +219,6 @@ public class TEEXray extends TileEntityElectric {
     // A sync packet is only sent to the server when the Search button is clicked,
     // so processing should always begin when the packet is received.
     shouldProcess = true;
-    System.out.println("shouldProcesss: " + shouldProcess);
     revealBlocks = false;
   }
 

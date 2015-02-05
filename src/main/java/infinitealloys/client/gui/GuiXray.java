@@ -33,12 +33,7 @@ public class GuiXray extends GuiElectric {
   private final TEEXray tex;
 
   /**
-   * TileEntityXray.searchingClient, used to checking if searching just finished
-   */
-  private boolean wasProcessing;
-
-  /**
-   * The number of the first displayed line of blocks, starting from 0.
+   * The number of the first displayed line of blocks. Starts from 0 and goes top-down.
    */
   private int scrollPos;
 
@@ -67,9 +62,7 @@ public class GuiXray extends GuiElectric {
     if (blockButtons.length <= 20) {
       Funcs.drawTexturedModalRect(this, topLeft.x + SCROLL_BAR.x, topLeft.y + SCROLL_BAR.y,
                                   SCROLL_OFF);
-    }
-    // Otherwise, enable it
-    else {
+    } else {
       Funcs.drawTexturedModalRect(this, topLeft.x + SCROLL_BAR.x, topLeft.y + SCROLL_BAR.y + (int) (
                                       (float) (SCROLL_BAR.height - 15) / (float) (
                                           blockButtons.length / 4 - 4) * scrollPos),
@@ -83,19 +76,16 @@ public class GuiXray extends GuiElectric {
     // Disable the search button if there are no ores in the machine
     searchButton.enabled = tex.inventoryStacks[0] != null;
 
-    // If it was searching last tick and now it's done, refresh the buttons
-    if (wasProcessing && tex.getProcessProgress() == 0) {
+    if (tex.shouldSearch()) {
       setButtons();
     }
-    // Set the searching status for this tick (used next tick)
-    wasProcessing = tex.getProcessProgress() > 0;
 
     GL11.glDisable(GL11.GL_LIGHTING);
     GL11.glDisable(GL11.GL_DEPTH_TEST);
-    if (wasProcessing) {
+    if (tex.shouldProcess()) {
       drawCenteredString(fontRendererObj, Funcs.getLoc("machine.xray.searching"), xSize / 2, 56,
                          0xffffff);
-    } else if (tex.getRevealBlocks()) {
+    } else if (tex.shouldRevealBlocks()) {
       if (blockButtons.length == 0) {
         drawCenteredString(fontRendererObj, Funcs.getLoc("machine.xray.noBlocks"), xSize / 2, 56,
                            0xffffff);
@@ -189,7 +179,7 @@ public class GuiXray extends GuiElectric {
 
       // For each detected block
       for (Point3 block : tex.getDetectedBlocks()) {
-        // If there hasn't been a block for that y-level yet, at that y to the list
+        // If there hasn't been a block for that y-level yet, add that y to the list
         if (blockCounts[block.y]++ == 0) {
           levels.add(block.y);
         }

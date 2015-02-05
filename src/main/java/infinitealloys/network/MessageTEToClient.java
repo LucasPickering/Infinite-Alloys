@@ -23,11 +23,6 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 
   @Override
   public void fromBytes(ByteBuf bytes) {
-    TileEntity te = Minecraft.getMinecraft().theWorld.getTileEntity(
-        bytes.readInt(), bytes.readInt(), bytes.readInt());
-    if (te instanceof TileEntityMachine) {
-      tem = (TileEntityMachine) te;
-    }
     this.bytes = bytes;
   }
 
@@ -38,7 +33,11 @@ public class MessageTEToClient implements IMessage, IMessageHandler<MessageTEToC
 
   @Override
   public IMessage onMessage(MessageTEToClient message, MessageContext context) {
-    message.tem.readToClientData(message.bytes);
+    TileEntity te = Minecraft.getMinecraft().theWorld.getTileEntity(
+        message.bytes.readInt(), message.bytes.readInt(), message.bytes.readInt());
+    if (te instanceof TileEntityMachine) {
+      ((TileEntityMachine) te).readToClientData(message.bytes);
+    }
     return null;
   }
 }
