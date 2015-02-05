@@ -87,11 +87,11 @@ public class TEEXray extends TileEntityElectric {
    * blocks in a tick, then saves its place and picks up where it left off next tick. This should
    * ONLY be called on the server.
    *
-   * @throws RuntimeException if called on the client
+   * @throws IllegalStateException if called on the client
    */
   private void search() {
     if (worldObj.isRemote) {
-      throw new RuntimeException("cannot search on client");
+      throw new IllegalStateException("cannot search on client");
     }
 
     Block targetBlock = Block.getBlockFromItem(inventoryStacks[0].getItem());
