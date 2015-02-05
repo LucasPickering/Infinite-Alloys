@@ -40,7 +40,8 @@ public abstract class TileEntityElectric extends TileEntityMachine {
   protected float processTimeMult = 1.0F;
 
   /**
-   * A multiplier for the power used, changed with upgrades. NOTE: Less will consume less power, but
+   * A multiplier for the power used, changed with upgrades. NOTE: Less will consume less power,
+   * but
    * also generate less
    */
   protected float rkPerTickMult = 1.0F;

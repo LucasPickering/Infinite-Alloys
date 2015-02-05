@@ -5,8 +5,6 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import java.util.ArrayList;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
@@ -27,26 +25,26 @@ public class TEEXray extends TileEntityElectric {
   public int selectedButton = -1;
 
   /**
-   * Client-only, set to true when a sync packet comes in to refresh the GUI
-   */
-  public boolean refreshGUI;
-
-  /**
    * The last point that was checked for the target block in the previous iteration of {@link
    * #search}. The x and z coords are relative to the x-ray block; the y coord is absolute
    */
   private Point3 lastSearch;
 
   /**
-   * Was {@link #search} still running when it terminated?
+   * Should the block search run? Should only be modified server-side, as it has no effect
+   * client-side.
    */
-  private boolean searchingGround;
+  private boolean shouldSearch;
 
   /**
-   * Should the process bar start to tick? Once it starts, this does NOT need to be true for it to
-   * continue;
+   * Should the process bar progress?
    */
-  private boolean shouldStartProcess;
+  private boolean shouldProcess;
+
+  /**
+   * Should the GUI display the
+   */
+  private boolean revealBlocks;
 
   public TEEXray() {
     super(2);
@@ -63,24 +61,25 @@ public class TEEXray extends TileEntityElectric {
   @Override
   public void updateEntity() {
     super.updateEntity();
-    if (!worldObj.isRemote && (searchingGround || inventoryStacks[0] != null
-                                                  && detectedBlocks.isEmpty())) {
+    if (!worldObj.isRemote) {
+      System.out.println("shouldProcess: " + shouldProcess);
+    }
+    if (inventoryStacks[0] == null) {
+      shouldSearch = false;
+    } else if (!worldObj.isRemote && shouldSearch) {
       search();
     }
   }
 
   @Override
   public boolean shouldProcess() {
-    if (shouldStartProcess) {
-      shouldStartProcess = false;
-      return true;
-    }
-    return getProcessProgress() > 0;
+    return shouldProcess;
   }
 
   @Override
-  protected boolean shouldResetProgress() {
-    return inventoryStacks[0] == null;
+  protected void onFinishProcess() {
+    shouldProcess = false;
+    revealBlocks = true;
   }
 
   /**
@@ -95,74 +94,82 @@ public class TEEXray extends TileEntityElectric {
       throw new RuntimeException("cannot search on client");
     }
 
-    searchingGround = true;
-
-    // Convenience variables for the data pertaining to the target block that is being searched for
     Block targetBlock = Block.getBlockFromItem(inventoryStacks[0].getItem());
     int targetMetadata = inventoryStacks[0].getItemDamage();
 
-    // The amount of blocks that have been iterated over this tick. When this reaches TEHelper.SEARCH_PER_TICK, the loops break
+    // The amount of blocks that have been iterated over this tick.
+    // When this reaches MachineHelper.SEARCH_PER_TICK, the loops break.
     int blocksSearched = 0;
 
-    // (-range, 0, -range) is the start point for the search. When lastSearch == (-range, 0, -range), this is the first tick of the search. The block list
-    // is cleared to be repopulated in this search.
+    // If this is first tick of the search, clear detectedBlocks.
     if (lastSearch.equals(-range, 0, -range)) {
       detectedBlocks.clear();
     }
 
-    // Iterate over each block that is within the given range horizontally. Note that it searches all blocks below x-ray within that horizontal range, which
-    // is why the y loop comes first and why it looks a bit different from the x and z loops.
+    // Iterate over each block that is within the given range horizontally. Note that it searches
+    // all blocks below x-ray within that horizontal range, which is why the y loop comes first and
+    // why it looks a bit different from the x and z loops.
     for (int y = lastSearch.y; y <= yCoord; y++) {
       for (int x = lastSearch.x; x <= range; x++) {
         for (int z = lastSearch.z; z <= range; z++) {
 
-          // If the block at the given coords (which have been converted to absolute coordinates) is of the target block's type, add it to the
-          // list of blocks that have been found.
+          // If the block at the given coords (which have been converted to absolute coordinates) is
+          // of the target block's type, add it to the list of blocks that have been found.
           if (targetBlock == worldObj.getBlock(xCoord + x, y, zCoord + z)
               && targetMetadata == worldObj.getBlockMetadata(xCoord + x, y, zCoord + z)) {
             detectedBlocks.add(new Point3(x, y, z));
           }
 
-          // If the amounts of blocks search this tick has reached the limit, save our place and end the function. The search will be
-          // continued next tick.
+          // If the amounts of blocks search this tick has reached the limit, save our place and end
+          // the function. The search will be continued next tick.
           if (++blocksSearched >= MachineHelper.SEARCH_PER_TICK) {
             lastSearch.set(x, y, z);
             return;
           }
         }
-        // If we've searched all the z values, reset the z position.
         lastSearch.z = -range;
       }
-      // If we've searched all the x values, reset the x position.
       lastSearch.x = -range;
     }
-
-    lastSearch.y = 0; // If we've searched all the y values, reset the y position.
-    searchingGround = false; // The search is done. Stop running the function.
+    lastSearch.y = 0;
+    shouldSearch = false;
     worldObj.markBlockForUpdate(xCoord, yCoord, zCoord); // Mark the block so it will be synced
-  }
-
-  /**
-   * Start the processing, i.e. make the progress bar start ticking.
-   */
-  @SideOnly(Side.CLIENT)
-  public void startProcess() {
-    shouldStartProcess = true;
-    syncToServer();
   }
 
   public Point3[] getDetectedBlocks() {
     return detectedBlocks.toArray(new Point3[detectedBlocks.size()]);
   }
 
+  public boolean getRevealBlocks() {
+    return revealBlocks;
+  }
+
+  /**
+   * Start the processing, i.e. make the progress bar start ticking. If this is client-side, also
+   * tell the server to start processing.
+   */
+  public void startProcess() {
+    shouldProcess = true;
+    revealBlocks = false;
+    if (worldObj.isRemote) {
+      syncToServer();
+    }
+  }
+
   @Override
   public void onInventoryChanged() {
     detectedBlocks.clear();
+    shouldSearch = true;
+    shouldProcess = false;
+    revealBlocks = false;
   }
 
   @Override
   public void readFromNBT(NBTTagCompound tagCompound) {
     super.readFromNBT(tagCompound);
+    shouldSearch = tagCompound.getBoolean("shouldSearch");
+    shouldProcess = tagCompound.getBoolean("shouldProcess");
+    revealBlocks = tagCompound.getBoolean("revealBlocks");
     for (int i = 0; tagCompound.hasKey("detectedBlock" + i); i++) {
       int[] detectedBlock = tagCompound.getIntArray("detectedBlock" + i);
       detectedBlocks.add(new Point3(detectedBlock[0], detectedBlock[1], detectedBlock[2]));
@@ -172,6 +179,9 @@ public class TEEXray extends TileEntityElectric {
   @Override
   public void writeToNBT(NBTTagCompound tagCompound) {
     super.writeToNBT(tagCompound);
+    tagCompound.setBoolean("shouldSearch", shouldSearch);
+    tagCompound.setBoolean("shouldProcess", shouldProcess);
+    tagCompound.setBoolean("revealBlocks", revealBlocks);
     for (int i = 0; i < detectedBlocks.size(); i++) {
       Point3 detectedBlock = detectedBlocks.get(i);
       tagCompound.setIntArray("detectedBlock" + i,
@@ -182,17 +192,18 @@ public class TEEXray extends TileEntityElectric {
   @Override
   public void readToClientData(ByteBuf bytes) {
     super.readToClientData(bytes);
+    revealBlocks = bytes.readBoolean();
     detectedBlocks.clear();
     int detectedBlocksSize = bytes.readInt();
     for (int i = 0; i < detectedBlocksSize; i++) {
       detectedBlocks.add(Point3.readFromByteBuf(bytes));
     }
-    refreshGUI = true;
   }
 
   @Override
   public void writeToClientData(ByteBuf bytes) {
     super.writeToClientData(bytes);
+    bytes.writeBoolean(revealBlocks);
     bytes.writeInt(detectedBlocks.size());
     for (Point3 detectedBlock : detectedBlocks) {
       detectedBlock.writeToByteBuf(bytes);
@@ -204,7 +215,9 @@ public class TEEXray extends TileEntityElectric {
     super.readToServerData(bytes);
     // A sync packet is only sent to the server when the Search button is clicked,
     // so processing should always begin when the packet is received.
-    shouldStartProcess = true;
+    shouldProcess = true;
+    System.out.println("shouldProcesss: " + shouldProcess);
+    revealBlocks = false;
   }
 
   @Override

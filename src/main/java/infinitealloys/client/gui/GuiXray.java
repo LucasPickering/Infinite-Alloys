@@ -35,7 +35,7 @@ public class GuiXray extends GuiElectric {
   /**
    * TileEntityXray.searchingClient, used to checking if searching just finished
    */
-  private boolean wasSearching;
+  private boolean wasProcessing;
 
   /**
    * The number of the first displayed line of blocks, starting from 0.
@@ -83,24 +83,19 @@ public class GuiXray extends GuiElectric {
     // Disable the search button if there are no ores in the machine
     searchButton.enabled = tex.inventoryStacks[0] != null;
 
-    if (tex.refreshGUI) {
-      tex.refreshGUI = false;
-      setButtons();
-    }
-
     // If it was searching last tick and now it's done, refresh the buttons
-    if (wasSearching && tex.getProcessProgress() == 0) {
+    if (wasProcessing && tex.getProcessProgress() == 0) {
       setButtons();
     }
     // Set the searching status for this tick (used next tick)
-    wasSearching = tex.getProcessProgress() > 0;
+    wasProcessing = tex.getProcessProgress() > 0;
 
     GL11.glDisable(GL11.GL_LIGHTING);
     GL11.glDisable(GL11.GL_DEPTH_TEST);
-    if (wasSearching) {
+    if (wasProcessing) {
       drawCenteredString(fontRendererObj, Funcs.getLoc("machine.xray.searching"), xSize / 2, 56,
                          0xffffff);
-    } else {
+    } else if (tex.getRevealBlocks()) {
       if (blockButtons.length == 0) {
         drawCenteredString(fontRendererObj, Funcs.getLoc("machine.xray.noBlocks"), xSize / 2, 56,
                            0xffffff);

@@ -212,9 +212,14 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   }
 
   /**
-   * Send a packet to the server to sync this machine's
+   * Send a packet to the server to sync this machine's data. Should only be called client-side.
+   *
+   * @throws RuntimeException if this is called server-side
    */
   public void syncToServer() {
+    if (!worldObj.isRemote) {
+      throw new RuntimeException("cannot sync to server while server-side");
+    }
     Funcs.sendPacketToServer(new MessageTEToServer(this));
   }
 
