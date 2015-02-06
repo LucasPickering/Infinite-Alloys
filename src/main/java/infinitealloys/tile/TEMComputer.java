@@ -29,7 +29,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
   /**
    * A list of clients currently connected to this computer control network
    */
-  private final ArrayList<Point3> networkClients = new ArrayList<Point3>();
+  private final ArrayList<Point3> networkClients = new ArrayList<>();
 
   /**
    * False until the first call of {@link #updateEntity()}
@@ -104,38 +104,28 @@ public class TEMComputer extends TileEntityMachine implements IHost {
   public boolean addClient(EntityPlayer player, Point3 client, boolean sync) {
     if (networkClients.contains(client)) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs
-                                                                 .getLoc("machine.textOutput.error",
-                                                                         "/: ",
-                                                                         "machine.textOutput.error.alreadyInNetwork")));
+        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
+            "machine.textOutput.error", "/: ", "machine.textOutput.error.alreadyInNetwork")));
       }
     } else if (networkClients.size() >= networkCapacity) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs
-                                                                 .getLoc("machine.textOutput.error",
-                                                                         "/: ",
-                                                                         "machine.textOutput.error.networkFull")));
+        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
+            "machine.textOutput.error", "/: ", "machine.textOutput.error.networkFull")));
       }
     } else if (client.equals(xCoord, yCoord, zCoord)) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs
-                                                                 .getLoc("machine.textOutput.error",
-                                                                         "/: ",
-                                                                         "machine.textOutput.error.cannotAddSelf")));
+        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
+            "machine.textOutput.error", "/: ", "machine.textOutput.error.cannotAddSelf")));
       }
     } else if (client.distanceTo(xCoord, yCoord, zCoord) > range) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs
-                                                                 .getLoc("machine.textOutput.error",
-                                                                         "/: ",
-                                                                         "machine.textOutput.error.outOfRange")));
+        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
+            "machine.textOutput.error", "/: ", "machine.textOutput.error.outOfRange")));
       }
     } else if (!isClientValid(client)) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs
-                                                                 .getLoc("machine.textOutput.error",
-                                                                         "/: ",
-                                                                         "machine.textOutput.error.notWireless")));
+        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
+            "machine.textOutput.error", "/: ", "machine.textOutput.error.notWireless")));
       }
     } else {
       networkClients.add(client); // Add the machine

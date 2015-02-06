@@ -34,7 +34,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
   public int range;
 
   /**
-   * The ratio between how much RK an item produces and how long it will burn in a furnace. furnace
+   * The ratio between how much RK an item produces and how long it will burn in a furnace. Furnace
    * is numerator, ESU is denominator.
    */
   private final float FURNACE_TO_ESU__RATIO = 0.18F;
@@ -42,7 +42,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
   /**
    * A list of clients currently connected to this energy network
    */
-  private final ArrayList<Point3> networkClients = new ArrayList<Point3>();
+  private final ArrayList<Point3> networkClients = new ArrayList<>();
 
   /**
    * False until the first call of {@link #updateEntity()}
@@ -115,38 +115,28 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
   public boolean addClient(EntityPlayer player, Point3 client, boolean sync) {
     if (energyHost != null && !energyHost.equals(coords())) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs
-                                                                 .getLoc("machine.textOutput.error",
-                                                                         "/: ",
-                                                                         "machine.textOutput.error.notHosting")));
+        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
+            "machine.textOutput.error", "/: ", "machine.textOutput.error.notHosting")));
       }
-    } else if (initialized && !isClientValid(client)) {
+    } else if (!isClientValid(client)) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs
-                                                                 .getLoc("machine.textOutput.error",
-                                                                         "/: ",
-                                                                         "machine.textOutput.error.notElectric")));
+        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
+            "machine.textOutput.error", "/: ", "machine.textOutput.error.notElectric")));
       }
     } else if (networkClients.contains(client)) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs
-                                                                 .getLoc("machine.textOutput.error",
-                                                                         "/: ",
-                                                                         "machine.textOutput.error.alreadyInNetwork")));
+        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
+            "machine.textOutput.error", "/: ", "machine.textOutput.error.alreadyInNetwork")));
       }
     } else if (client.equals(xCoord, yCoord, zCoord)) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs
-                                                                 .getLoc("machine.textOutput.error",
-                                                                         "/: ",
-                                                                         "machine.textOutput.error.cannotAddSelf")));
+        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
+            "machine.textOutput.error", "/: ", "machine.textOutput.error.cannotAddSelf")));
       }
     } else if (client.distanceTo(xCoord, yCoord, zCoord) > range) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs
-                                                                 .getLoc("machine.textOutput.error",
-                                                                         "/: ",
-                                                                         "machine.textOutput.error.outOfRange")));
+        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
+            "machine.textOutput.error", "/: ", "machine.textOutput.error.outOfRange")));
       }
     } else {
       networkClients.add(client); // Add the machine
