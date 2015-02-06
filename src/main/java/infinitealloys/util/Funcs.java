@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import java.awt.Rectangle;
+import java.util.List;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -32,7 +33,8 @@ public class Funcs {
   }
 
   /**
-   * Get a localization or series of localization via keys. Add '/' to the start of a key to have it
+   * Get a localization or series of localization via keys. Add '/' to the start of a key to have
+   * it
    * added to the final string without being localized. e.g. getLoc("general.off", "/is not",
    * "general.on") would return "Off is not On" (If the language is English)
    *

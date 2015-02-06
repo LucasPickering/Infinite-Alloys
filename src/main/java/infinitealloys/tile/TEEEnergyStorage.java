@@ -44,11 +44,6 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
    */
   private final ArrayList<Point3> networkClients = new ArrayList<>();
 
-  /**
-   * False until the first call of {@link #updateEntity()}
-   */
-  private boolean initialized;
-
   public TEEEnergyStorage() {
     super(10);
     baseRKPerTick = 1;
@@ -70,10 +65,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
       energyHost = coords();
     }
 
-    if (!initialized) {
-      initialized = true;
-    }
-
+    System.out.println("" + orientation);
     super.updateEntity();
   }
 
@@ -111,14 +103,25 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
     return Funcs.getTileEntity(worldObj, client) instanceof TileEntityElectric;
   }
 
+  private void addClient(Point3 client) {
+    networkClients.add(client); // Add the machine
+    if (worldObj != null) {
+      TileEntity clientTE = Funcs.getTileEntity(worldObj, client);
+      if (clientTE instanceof TileEntityElectric) {
+        // Tell the client machine to connect
+        ((TileEntityElectric) clientTE).connectToEnergyNetwork(coords());
+      }
+    }
+  }
+
   @Override
-  public boolean addClient(EntityPlayer player, Point3 client, boolean sync) {
+  public boolean addClientWithChecks(EntityPlayer player, Point3 client, boolean sync) {
     if (energyHost != null && !energyHost.equals(coords())) {
       if (player != null && worldObj.isRemote) {
         player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
             "machine.textOutput.error", "/: ", "machine.textOutput.error.notHosting")));
       }
-    } else if (!isClientValid(client)) {
+    } else if (worldObj != null && !isClientValid(client)) {
       if (player != null && worldObj.isRemote) {
         player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
             "machine.textOutput.error", "/: ", "machine.textOutput.error.notElectric")));
@@ -139,12 +142,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
             "machine.textOutput.error", "/: ", "machine.textOutput.error.outOfRange")));
       }
     } else {
-      networkClients.add(client); // Add the machine
-
-      if (initialized) {
-        ((TileEntityElectric) Funcs.getTileEntity(worldObj, client))
-            .connectToEnergyNetwork(coords()); // Tell the client machine to connect
-      }
+      addClient(client);
 
       // Sync the data to the server/all clients
       if (sync) { // If we should sync
@@ -153,13 +151,14 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
               new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(),
                                              client)); // Sync to server
           if (player != null) {
+            // Send a chat message
             player.addChatComponentMessage(new ChatComponentText(
-                Funcs.getLoc("machine.textOutput.addingMachine") + client)); // Send a chat message
+                Funcs.getLoc("machine.textOutput.addingMachine") + client));
           }
         } else {
-          Funcs.sendPacketToAllPlayers(
-              new MessageNetworkEditToClient(true, worldObj.provider.dimensionId, coords(),
-                                             client)); // Sync to clients
+          // Sync to clients
+          Funcs.sendPacketToAllPlayers(new MessageNetworkEditToClient(
+              true, worldObj.provider.dimensionId, coords(), client));
         }
       }
 
@@ -189,9 +188,8 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
   @Override
   public void syncAllClients(EntityPlayer player) {
     for (Point3 client : networkClients) {
-      Funcs.sendPacketToPlayer(
-          new MessageNetworkEditToClient(true, worldObj.provider.dimensionId, coords(), client),
-          player);
+      Funcs.sendPacketToPlayer(new MessageNetworkEditToClient(true, worldObj.provider.dimensionId,
+                                                              coords(), client), player);
     }
   }
 
@@ -251,7 +249,7 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
     baseRKPerTick = tagCompound.getInteger("baseRKPerTick");
     for (int i = 0; tagCompound.hasKey("client" + i); i++) {
       int[] client = tagCompound.getIntArray("client" + i);
-      addClient(null, new Point3(client[0], client[1], client[2]), false);
+      addClient(new Point3(client[0], client[1], client[2]));
     }
   }
 
@@ -283,9 +281,8 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
   @Override
   public void onNeighborChange(int x, int y, int z) {
     TileEntity te = worldObj.getTileEntity(x, y, z);
-    if (initialized && te instanceof TileEntityElectric
-        && ((TileEntityElectric) te).energyHost == null) {
-      addClient(null, new Point3(x, y, z), false);
+    if (te instanceof TileEntityElectric && ((TileEntityElectric) te).energyHost == null) {
+      addClientWithChecks(null, new Point3(x, y, z), false);
     }
   }
 

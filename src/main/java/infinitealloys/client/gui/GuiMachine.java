@@ -157,14 +157,13 @@ public abstract class GuiMachine extends GuiContainer {
     machineTabs.clear();
     if (tem.computerHost != null) {
       TEMComputer tec = (TEMComputer) Funcs.getTileEntity(mc.theWorld, tem.computerHost);
-      computerTab =
-          new GuiMachineTab(mc, itemRender, -24, 6, tec, true,
-                            tem.coords().equals(tem.computerHost));
+      computerTab = new GuiMachineTab(mc, itemRender, -24, 6, tec, true,
+                                      tem.coords().equals(tem.computerHost));
       computerTab.drawButton();
       // Draw a text box with the machine's name and coordinates
-      if (Funcs
-          .mouseInZone(mouseX, mouseY, topLeft.x + computerTab.xPos, topLeft.y + computerTab.yPos,
-                       computerTab.width, computerTab.height)) {
+      if (Funcs.mouseInZone(mouseX, mouseY,
+                            topLeft.x + computerTab.xPos, topLeft.y + computerTab.yPos,
+                            computerTab.width, computerTab.height)) {
 
         new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y,
                        Funcs.getLoc("tile." + computerTab.tem.getEnumMachine().name + ".name"),

@@ -31,11 +31,6 @@ public class TEMComputer extends TileEntityMachine implements IHost {
    */
   private final ArrayList<Point3> networkClients = new ArrayList<>();
 
-  /**
-   * False until the first call of {@link #updateEntity()}
-   */
-  private boolean initialized;
-
   public TEMComputer() {
     super(1);
   }
@@ -50,11 +45,6 @@ public class TEMComputer extends TileEntityMachine implements IHost {
     if (computerHost == null) {
       computerHost = coords();
     }
-
-    if (!initialized) {
-      initialized = true;
-    }
-
     super.updateEntity();
   }
 
@@ -100,8 +90,17 @@ public class TEMComputer extends TileEntityMachine implements IHost {
            && ((TileEntityMachine) te).hasUpgrade(EnumUpgrade.WIRELESS, 1);
   }
 
+  private void addClient(Point3 client) {
+    networkClients.add(client); // Add the machine
+    TileEntity clientTE = Funcs.getTileEntity(worldObj, client);
+    if (clientTE instanceof TileEntityMachine) {
+      // Tell the client machine to connect
+      ((TileEntityMachine) clientTE).connectToComputerNetwork(coords());
+    }
+  }
+
   @Override
-  public boolean addClient(EntityPlayer player, Point3 client, boolean sync) {
+  public boolean addClientWithChecks(EntityPlayer player, Point3 client, boolean sync) {
     if (networkClients.contains(client)) {
       if (player != null && worldObj.isRemote) {
         player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
@@ -128,12 +127,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
             "machine.textOutput.error", "/: ", "machine.textOutput.error.notWireless")));
       }
     } else {
-      networkClients.add(client); // Add the machine
-
-      if (initialized) {
-        ((TileEntityMachine) Funcs.getTileEntity(worldObj, client))
-            .connectToComputerNetwork(coords()); // Tell the client machine to connect
-      }
+      addClient(client);
 
       // Sync the data to the server/all clients
       if (sync) { // If we should sync
@@ -174,9 +168,8 @@ public class TEMComputer extends TileEntityMachine implements IHost {
   @Override
   public void syncAllClients(EntityPlayer player) {
     for (Point3 client : networkClients) {
-      Funcs.sendPacketToPlayer(
-          new MessageNetworkEditToClient(true, worldObj.provider.dimensionId, coords(), client),
-          player);
+      Funcs.sendPacketToPlayer(new MessageNetworkEditToClient(true, worldObj.provider.dimensionId,
+                                                              coords(), client), player);
     }
   }
 
@@ -185,8 +178,11 @@ public class TEMComputer extends TileEntityMachine implements IHost {
     return networkClients.size();
   }
 
+  /**
+   * Get an array of clients connected to this machine.
+   */
   public Point3[] getClients() {
-    return networkClients.toArray(new Point3[]{});
+    return networkClients.toArray(new Point3[networkClients.size()]);
   }
 
   @Override
@@ -194,7 +190,7 @@ public class TEMComputer extends TileEntityMachine implements IHost {
     super.readFromNBT(tagCompound);
     for (int i = 0; tagCompound.hasKey("client" + i); i++) {
       int[] client = tagCompound.getIntArray("client" + i);
-      networkClients.add(new Point3(client[0], client[1], client[2]));
+      addClient(new Point3(client[0], client[1], client[2]));
     }
   }
 
@@ -210,9 +206,9 @@ public class TEMComputer extends TileEntityMachine implements IHost {
   @Override
   public void onNeighborChange(int x, int y, int z) {
     TileEntity te = worldObj.getTileEntity(x, y, z);
-    if (initialized && te instanceof TileEntityMachine
+    if (te instanceof TileEntityMachine
         && ((TileEntityMachine) te).computerHost == null) {
-      addClient(null, new Point3(x, y, z), false);
+      addClientWithChecks(null, new Point3(x, y, z), false);
     }
   }
 

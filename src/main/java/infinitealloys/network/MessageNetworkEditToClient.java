@@ -62,7 +62,7 @@ public class MessageNetworkEditToClient
       TileEntity te = Funcs.getTileEntity(player.worldObj, host);
       if (te instanceof IHost) {
         if (adding) {
-          ((IHost) te).addClient(null, client, false);
+          ((IHost) te).addClientWithChecks(null, client, false);
         } else {
           ((IHost) te).removeClient(client, false);
         }

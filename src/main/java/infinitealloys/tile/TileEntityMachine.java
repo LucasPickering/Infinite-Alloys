@@ -108,6 +108,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
       initialized = true;
       onFirstTick();
     }
+
     // Check for upgrades in the upgrade inventory slot.
     // If one is there, remove it from the slot and add it to the machine.
     if (inventoryStacks[upgradeSlotIndex] != null

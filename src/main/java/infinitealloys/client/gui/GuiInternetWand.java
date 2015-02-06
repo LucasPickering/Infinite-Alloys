@@ -326,7 +326,8 @@ public class GuiInternetWand extends GuiScreen {
               // They're in the same dimension
               if (host[0] == client[0]) {
                 ((IHost) mc.theWorld.getTileEntity(host[1], host[2], host[3]))
-                    .addClient(mc.thePlayer, new Point3(client[1], client[2], client[3]), true);
+                    .addClientWithChecks(mc.thePlayer, new Point3(client[1], client[2], client[3]),
+                                         true);
               }
             }
           }
