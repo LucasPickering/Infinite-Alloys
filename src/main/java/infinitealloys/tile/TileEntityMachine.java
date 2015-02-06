@@ -72,6 +72,11 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   public Point3 computerHost;
 
   /**
+   * False until {@link #updateEntity} has been called for the first time.
+   */
+  private boolean initialized = false;
+
+  /**
    * @param inventoryLength The amount of total slots in the inventory
    */
   public TileEntityMachine(int inventoryLength) {
@@ -82,7 +87,6 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
   public TileEntityMachine() {
     populateValidUpgrades();
-    updateUpgrades();
   }
 
   /**
@@ -100,7 +104,12 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
   @Override
   public void updateEntity() {
-    // Check for upgrades in the upgrade inventory slot. If there is one, remove it from the slot and add it to the machine.
+    if (!initialized) {
+      initialized = true;
+      onFirstTick();
+    }
+    // Check for upgrades in the upgrade inventory slot.
+    // If one is there, remove it from the slot and add it to the machine.
     if (inventoryStacks[upgradeSlotIndex] != null
         && isUpgradeValid(inventoryStacks[upgradeSlotIndex])) {
       // Increment the element in the upgrades array that corresponds to
@@ -108,6 +117,13 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
       inventoryStacks[upgradeSlotIndex] = null;
       updateUpgrades();
     }
+  }
+
+  /**
+   * Called on the first tick of {@link #updateEntity}, then never again.
+   */
+  protected void onFirstTick() {
+    updateUpgrades();
   }
 
   public void connectToComputerNetwork(Point3 host) {
@@ -308,14 +324,14 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
       if (inventoryStacks[slot].stackSize <= amt) {
         stack = inventoryStacks[slot];
         inventoryStacks[slot] = null;
-        onInventoryChanged();
+        onInventoryChanged(slot);
         return stack;
       }
       stack = inventoryStacks[slot].splitStack(amt);
       if (inventoryStacks[slot].stackSize == 0) {
         inventoryStacks[slot] = null;
       }
-      onInventoryChanged();
+      onInventoryChanged(slot);
       return stack;
     }
     return null;
@@ -347,7 +363,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
     if (stack != null && stack.stackSize > getInventoryStackLimit()) {
       stack.stackSize = getInventoryStackLimit();
     }
-    onInventoryChanged();
+    onInventoryChanged(slot);
   }
 
   @Override
@@ -360,8 +376,10 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
 
   /**
    * Called when the inventory of this machine changes.
+   *
+   * @param slotIndex the index of the slot that changed
    */
-  public void onInventoryChanged() {
+  public void onInventoryChanged(int slotIndex) {
   }
 
   @Override

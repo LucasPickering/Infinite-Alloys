@@ -53,15 +53,20 @@ public class TEMComputer extends TileEntityMachine implements IHost {
 
     if (!initialized) {
       initialized = true;
-      if (!worldObj.isRemote) {
-        for (Point3 client : networkClients) {
-          ((TileEntityMachine) Funcs.getTileEntity(worldObj, client))
-              .connectToComputerNetwork(coords());
-        }
-      }
     }
 
     super.updateEntity();
+  }
+
+  @Override
+  public void onFirstTick() {
+    super.onFirstTick();
+    if (!worldObj.isRemote) {
+      for (Point3 client : networkClients) {
+        ((TileEntityMachine) Funcs.getTileEntity(worldObj, client))
+            .connectToComputerNetwork(coords());
+      }
+    }
   }
 
   @Override

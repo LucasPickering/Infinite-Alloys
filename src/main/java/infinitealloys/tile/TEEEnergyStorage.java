@@ -72,15 +72,20 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
     if (!initialized) {
       initialized = true;
-      if (!worldObj.isRemote) {
-        for (Point3 client : networkClients) {
-          ((TileEntityElectric) Funcs.getTileEntity(worldObj, client))
-              .connectToEnergyNetwork(coords());
-        }
-      }
     }
 
     super.updateEntity();
+  }
+
+  @Override
+  public void onFirstTick() {
+    super.onFirstTick();
+    if (!worldObj.isRemote) {
+      for (Point3 client : networkClients) {
+        ((TileEntityElectric) Funcs.getTileEntity(worldObj, client))
+            .connectToEnergyNetwork(coords());
+      }
+    }
   }
 
   @Override
@@ -296,7 +301,8 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
   /**
    * Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK,
-   * will the result be between zero and the machine's capacity? If this condition is true, make the
+   * will the result be between zero and the machine's capacity? If this condition is true, make
+   * the
    * change, i.e. add changeInRK to currentRK
    *
    * @param changeInRK the specified change in RK

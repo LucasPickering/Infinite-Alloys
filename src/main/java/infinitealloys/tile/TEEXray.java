@@ -49,7 +49,7 @@ public class TEEXray extends TileEntityElectric {
   public TEEXray() {
     super(2);
     stackLimit = 1;
-    ticksToProcess = 2400; // TODO: Change this back to 2400
+    ticksToProcess = 2400;
     baseRKPerTick = -360;
   }
 
@@ -158,11 +158,13 @@ public class TEEXray extends TileEntityElectric {
   }
 
   @Override
-  public void onInventoryChanged() {
-    detectedBlocks.clear();
-    shouldSearch = true;
-    shouldProcess = false;
-    revealBlocks = false;
+  public void onInventoryChanged(int slotIndex) {
+    if (slotIndex == 0) {
+      detectedBlocks.clear();
+      shouldSearch = true;
+      shouldProcess = false;
+      revealBlocks = false;
+    }
   }
 
   @Override
