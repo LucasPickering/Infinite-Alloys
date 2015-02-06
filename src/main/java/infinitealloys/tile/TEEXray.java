@@ -49,7 +49,7 @@ public class TEEXray extends TileEntityElectric {
   public TEEXray() {
     super(2);
     stackLimit = 1;
-    ticksToProcess = 240; // TODO: Change this back to 2400
+    ticksToProcess = 2400; // TODO: Change this back to 2400
     baseRKPerTick = -360;
   }
 
@@ -224,10 +224,10 @@ public class TEEXray extends TileEntityElectric {
 
   @Override
   protected void updateUpgrades() {
-    float[] speedUpgradeValues = {1F, 0.83F, 0.67F, 0.5F};
-    processTimeMult = speedUpgradeValues[getUpgradeTier(EnumUpgrade.SPEED)];
+    float[] speedUpgradeValues = {1F, 1.33F, 1.67F, 2F};
+    processSpeedMult = speedUpgradeValues[getUpgradeTier(EnumUpgrade.SPEED)];
 
-    float[] efficiencyUpgradeValues = {1F, 1.33F, 1.67F, 2F};
+    float[] efficiencyUpgradeValues = {1F, 0.83F, 0.67F, 0.5F};
     rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(EnumUpgrade.EFFICIENCY)];
 
     int[] rangeUpgradeValues = {4, 6, 8, 10};

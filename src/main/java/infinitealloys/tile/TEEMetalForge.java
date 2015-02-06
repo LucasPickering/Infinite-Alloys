@@ -80,7 +80,7 @@ public class TEEMetalForge extends TileEntityElectric {
 
   @Override
   public int getRKChange() {
-    return (int) (baseRKPerTick * rkPerTickMult / processTimeMult * getIngotsInRecipe());
+    return (int) (baseRKPerTick * rkPerTickMult / processSpeedMult * getIngotsInRecipe());
   }
 
   @Override
@@ -192,8 +192,8 @@ public class TEEMetalForge extends TileEntityElectric {
 
   @Override
   protected void updateUpgrades() {
-    float[] speedUpgradeValues = {1F, 0.83F, 0.67F, 0.5F};
-    processTimeMult = speedUpgradeValues[getUpgradeTier(EnumUpgrade.SPEED)];
+    float[] speedUpgradeValues = {1F, 1.33F, 1.67F, 2F};
+    processSpeedMult = speedUpgradeValues[getUpgradeTier(EnumUpgrade.SPEED)];
 
     float[] efficiencyUpgradeValues = {1F, 0.83F, 0.67F, 0.5F};
     rkPerTickMult = efficiencyUpgradeValues[getUpgradeTier(EnumUpgrade.EFFICIENCY)];

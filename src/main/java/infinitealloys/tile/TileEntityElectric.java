@@ -32,19 +32,18 @@ public abstract class TileEntityElectric extends TileEntityMachine {
    * Amount of ticks this machine has been running its process for, when this reaches ticksToFinish
    * it is done
    */
-  private int processProgress;
+  private float processProgress;
 
   /**
-   * A multiplier for the time it takes to process, changed with upgrades. NOTE: Less is faster
+   * A multiplier for the time it takes to process, changed with upgrades. Greater is faster
    */
-  protected float processTimeMult = 1.0F;
+  protected float processSpeedMult = 1F;
 
   /**
-   * A multiplier for the power used, changed with upgrades. NOTE: Less will consume less power,
-   * but
-   * also generate less
+   * A multiplier for the power used, changed with upgrades. Less will consume less power,
+   * but also generate less power in the case of the ESU.
    */
-  protected float rkPerTickMult = 1.0F;
+  protected float rkPerTickMult = 1F;
 
   /**
    * The coordinates of the {@link infinitealloys.tile.TEEEnergyStorage ESU} that is providing
@@ -79,7 +78,8 @@ public abstract class TileEntityElectric extends TileEntityMachine {
         if (processProgress == 0) {
           onStartProcess();
         }
-        if (++processProgress >= ticksToProcess) {
+        processProgress += processSpeedMult;
+        if (processProgress >= ticksToProcess) {
           processProgress = 0;
           onFinishProcess();
         }
@@ -123,13 +123,13 @@ public abstract class TileEntityElectric extends TileEntityMachine {
   }
 
   /**
-   * Called on the first tick of a process
+   * Called on the first tick of the process.
    */
   protected void onStartProcess() {
   }
 
   /**
-   * Called when processProgress reaches ticksToProgress
+   * Called on the last tick of the process.
    */
   protected void onFinishProcess() {
   }
@@ -139,10 +139,10 @@ public abstract class TileEntityElectric extends TileEntityMachine {
    * produced RK and negative is consumed RK.
    */
   public int getRKChange() {
-    return (int) (baseRKPerTick * rkPerTickMult / processTimeMult);
+    return (int) (baseRKPerTick * rkPerTickMult * processSpeedMult);
   }
 
-  public int getProcessProgress() {
+  public float getProcessProgress() {
     return processProgress;
   }
 
@@ -154,24 +154,24 @@ public abstract class TileEntityElectric extends TileEntityMachine {
   @Override
   public void readFromNBT(NBTTagCompound tagCompound) {
     super.readFromNBT(tagCompound);
-    processProgress = tagCompound.getInteger("processProgress");
+    processProgress = tagCompound.getFloat("processProgress");
   }
 
   @Override
   public void writeToNBT(NBTTagCompound tagCompound) {
     super.writeToNBT(tagCompound);
-    tagCompound.setInteger("processProgress", processProgress);
+    tagCompound.setFloat("processProgress", processProgress);
   }
 
   @Override
   public void readToClientData(ByteBuf bytes) {
     super.readToClientData(bytes);
-    processProgress = bytes.readInt();
+    processProgress = bytes.readFloat();
   }
 
   @Override
   public void writeToClientData(ByteBuf bytes) {
     super.writeToClientData(bytes);
-    bytes.writeInt(processProgress);
+    bytes.writeFloat(processProgress);
   }
 }
