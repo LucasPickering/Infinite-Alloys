@@ -23,13 +23,13 @@ public class MachineHelper {
    * A set of the blocks that the x-ray can detect. As a {@link java.util.Set}, this will not take
    * duplicates of each block.
    */
-  private static HashSet<DetectableBlock> detectableBlocks = new HashSet<DetectableBlock>();
+  private static HashSet<DetectableBlock> detectableBlocks = new HashSet<>();
 
   /**
    * A list of the players who still need network information for the machines to be synced. This
    * sync is done when they first activate a machine.
    */
-  public static ArrayList<String> playersToSync = new ArrayList<String>();
+  public static ArrayList<String> playersToSync = new ArrayList<>();
 
   /**
    * Add a block or blocks to the set of blocks that can be detected by the x-ray via the block(s)'s

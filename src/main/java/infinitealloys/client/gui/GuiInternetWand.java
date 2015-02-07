@@ -2,7 +2,6 @@ package infinitealloys.client.gui;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -31,7 +30,6 @@ import infinitealloys.util.Point3;
 
 public class GuiInternetWand extends GuiScreen {
 
-  private final RenderItem itemRenderer = new RenderItem();
   private final ResourceLocation background = Funcs.getGuiTexture("wand");
   private final int WIDTH = 178;
   private final int HEIGHT = 160;
@@ -45,6 +43,11 @@ public class GuiInternetWand extends GuiScreen {
    * Coordinates of the top-left corner of the GUI
    */
   protected Point topLeft = new Point();
+
+  /**
+   * The button that toggles the help screen.
+   */
+  private GuiButton helpButton;
 
   /**
    * If the GUI was opened by clicking on a machine, this button adds the machine that was clicked
@@ -61,7 +64,7 @@ public class GuiInternetWand extends GuiScreen {
   /**
    * The list of buttons that apply to each machine
    */
-  private final ArrayList<MachineButton> machineButtons = new ArrayList<MachineButton>();
+  private final ArrayList<MachineButton> machineButtons = new ArrayList<>();
 
   /**
    * When help is enabled, slots get a colored outline and a mouse-over description
@@ -80,12 +83,12 @@ public class GuiInternetWand extends GuiScreen {
    */
   private int scrollPos;
 
-  private HashMap<String, ColoredText[]> helpText = new HashMap<String, ColoredText[]>();
+  private HashMap<String, ColoredText[]> helpText = new HashMap<>();
 
   public GuiInternetWand() {
     // Make an array with the help title and the lines of help text
     for (EnumHelp help : EnumHelp.getNetworkWandBoxes()) {
-      List<ColoredText> lines = new ArrayList<ColoredText>();
+      List<ColoredText> lines = new ArrayList<>();
       lines.add(new ColoredText(Funcs.getLoc("machineHelp." + help.name + ".title"), 0xffffff));
       for (String s : Funcs.getLoc("machineHelp." + help.name + ".info").split("/n")) {
         lines.add(new ColoredText(s, 0xaaaaaa));
@@ -99,14 +102,11 @@ public class GuiInternetWand extends GuiScreen {
     topLeft.setLocation((width - WIDTH) / 2, (height - HEIGHT) / 2);
 
     buttonList.clear();
-    buttonList.add(new GuiButton(0, width - 20, 0, 20, 20, "?")); // Help button
-    buttonList.add(
-        addToWand =
-            new GuiButton(1, topLeft.x + 6, topLeft.y + 6, 82, 20, Funcs.getLoc("wand.addToWand")));
-    buttonList.add(
-        addSelected =
-            new GuiButton(2, topLeft.x + 90, topLeft.y + 6, 82, 20,
-                          Funcs.getLoc("wand.addSelected")));
+    buttonList.add(helpButton = new GuiButton(0, width - 20, 0, 20, 20, "?"));
+    buttonList.add(addToWand = new GuiButton(1, topLeft.x + 6, topLeft.y + 6, 82, 20,
+                                             Funcs.getLoc("wand.addToWand")));
+    buttonList.add(addSelected = new GuiButton(2, topLeft.x + 90, topLeft.y + 6, 82, 20,
+                                               Funcs.getLoc("wand.addSelected")));
 
     // Reset button states
     addToWand.enabled = false;
@@ -140,9 +140,8 @@ public class GuiInternetWand extends GuiScreen {
 
       if (tagCompound.hasKey("CoordsCurrent")) {
         int[] a = tagCompound.getIntArray("CoordsCurrent");
-        addToWand.enabled =
-            ((ItemInternetWand) heldItem.getItem())
-                .isMachineValid(DimensionManager.getWorld(a[0]), heldItem, a[1], a[2], a[3]);
+        addToWand.enabled = ((ItemInternetWand) heldItem.getItem())
+            .isMachineValid(DimensionManager.getWorld(a[0]), heldItem, a[1], a[2], a[3]);
 
         TileEntity te = DimensionManager.getWorld(a[0]).getTileEntity(a[1], a[2], a[3]);
 
@@ -154,10 +153,8 @@ public class GuiInternetWand extends GuiScreen {
           // If the selected machine is not valid for the block that was clicked
           {
             if (!(te instanceof IHost)
-                || button.dimensionID != te.getWorldObj().provider.dimensionId
-                || !((IHost) te).isClientValid(new Point3(button.machineX,
-                                                          button.machineY,
-                                                          button.machineZ))) {
+                || button.dimensionID != te.getWorldObj().provider.dimensionId || !((IHost) te)
+                .isClientValid(new Point3(button.machineX, button.machineY, button.machineZ))) {
               addSelected.enabled = false; // Set the button to false
             }
           }
@@ -298,47 +295,37 @@ public class GuiInternetWand extends GuiScreen {
 
   @Override
   public void actionPerformed(GuiButton button) {
-    switch (button.id) {
-      case 0: // Help button
-        helpEnabled = !helpEnabled;
-        break;
+    ItemStack heldItem = mc.thePlayer.getHeldItem();
+    if (button == helpButton) {
+      helpEnabled = !helpEnabled;
+    } else if (button == addToWand) {
+      int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
+      Funcs.sendPacketToServer(new MessageWand(new Point3(a[1], a[2], a[3])));
+      ((ItemInternetWand) heldItem.getItem()).addMachine(mc.theWorld, heldItem, a[1], a[2], a[3]);
+    } else if (button == addSelected) {
+      int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 
-      case 1: // Add the block that was clicked to the wand's list
-        ItemStack heldItem = mc.thePlayer.getHeldItem();
-        int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
-        Funcs.sendPacketToServer(new MessageWand(new Point3(a[1], a[2], a[3])));
-        ((ItemInternetWand) heldItem.getItem()).addMachine(mc.theWorld, heldItem, a[1], a[2], a[3]);
-        break;
-
-      case 2: // Add selected machines to a host
-        heldItem = mc.thePlayer.getHeldItem();
-        int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
-
-        // If this is a host
-        if (mc.theWorld.getTileEntity(host[1], host[2], host[3]) instanceof IHost) {
-          // Go over each button
-          for (MachineButton machineButton : machineButtons) {
-            // If this button is selected
-            if (machineButton != null && (selectedButtons & 1 << machineButton.buttonID) != 0) {
-              // Add the selected machine to the host
-              int[] client =
-                  heldItem.getTagCompound().getIntArray("Coords" + (machineButton.buttonID));
-              // They're in the same dimension
-              if (host[0] == client[0]) {
-                ((IHost) mc.theWorld.getTileEntity(host[1], host[2], host[3]))
-                    .addClientWithChecks(mc.thePlayer, new Point3(client[1], client[2], client[3]),
-                                         true);
-              }
+      // If this is a host
+      if (mc.theWorld.getTileEntity(host[1], host[2], host[3]) instanceof IHost) {
+        // Go over each button
+        for (MachineButton machineButton : machineButtons) {
+          // If this button is selected
+          if (machineButton != null && (selectedButtons & 1 << machineButton.buttonID) != 0) {
+            // Add the selected machine to the host
+            int[] client =
+                heldItem.getTagCompound().getIntArray("Coords" + (machineButton.buttonID));
+            // They're in the same dimension
+            if (host[0] == client[0]) {
+              ((IHost) mc.theWorld.getTileEntity(host[1], host[2], host[3]))
+                  .addClientWithChecks(mc.thePlayer, new Point3(client[1], client[2], client[3]),
+                                       true);
             }
           }
         }
-        break;
-
-      default:
-        heldItem = mc.thePlayer.getHeldItem();
-        Funcs.sendPacketToServer(new MessageWand((byte) (button.id - 3)));
-        ((ItemInternetWand) heldItem.getItem()).removeMachine(heldItem, (byte) button.id - 3);
-        break;
+      }
+    } else {
+      Funcs.sendPacketToServer(new MessageWand((byte) (button.id - 3)));
+      ((ItemInternetWand) heldItem.getItem()).removeMachine(heldItem, (byte) button.id - 3);
     }
   }
 
