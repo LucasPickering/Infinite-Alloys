@@ -10,7 +10,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import java.awt.Rectangle;
-import java.util.List;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -33,10 +32,9 @@ public class Funcs {
   }
 
   /**
-   * Get a localization or series of localization via keys. Add '/' to the start of a key to have
-   * it
-   * added to the final string without being localized. e.g. getLoc("general.off", "/is not",
-   * "general.on") would return "Off is not On" (If the language is English)
+   * Get a localization or series of localizations via keys. Add '/' to the start of a key to have
+   * it added to the final string without being localized. e.g. getLoc("general.off", "/is not",
+   * "general.on") would return "Off is not On" if the language is English.
    *
    * @param keys the list of keys to be localized and spliced together into a final string
    * @return the final string of one or more concatenated literal and/or localized strings
@@ -44,9 +42,7 @@ public class Funcs {
   public static String getLoc(String... keys) {
     String finalKey = "";
     for (String key : keys) {
-      if (key.length() == 0) {
-        continue;
-      } else if (key.charAt(0) == '/') {
+      if (key.length() > 0 && key.charAt(0) == '/') {
         finalKey += key.substring(1);
       } else {
         finalKey += LanguageRegistry.instance().getStringLocalization(key);
@@ -97,14 +93,14 @@ public class Funcs {
    */
   public static int reduceAlloy(int alloy) {
     int gcf = 1;
+
     factors:
-    for (int i = 2; i < Consts.ALLOY_RADIX;
-         i++) { // Iterate over every integer in [2, Consts.ALLOY_RADIX)
-      for (int j = 0; j < Consts.METAL_COUNT; j++) { // Iterate over every digit in the number
+    // Iterate over every integer in [2, Consts.ALLOY_RADIX)
+    for (int i = 2; i < Consts.ALLOY_RADIX; i++) {
+      // Iterate over every digit in the number
+      for (int j = 0; j < Consts.METAL_COUNT; j++) {
         final int metalAmt = intAtPos(alloy, Consts.ALLOY_RADIX, j);
-        if (metalAmt == 0) {
-          continue; // Go to the next metal if this one is 0
-        } else if (i > metalAmt) {
+        if (0 < metalAmt && metalAmt < i) {
           break factors; // Break the whole loop if the factors have exceeded one of the digits
         } else if (metalAmt % i != 0) {
           continue factors; // If i is not a factor of the digit of alloy at j, skip to the next factor
