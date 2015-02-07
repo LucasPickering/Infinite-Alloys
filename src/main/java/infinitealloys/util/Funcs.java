@@ -19,7 +19,7 @@ public class Funcs {
 
   /**
    * Translate a number n into a radix, then get the digit at pos. The right-most position is 0 and
-   * it increases to the left.
+   * it increases to the left. If the given number is negative, the output will be negative.
    *
    * @param n     the number that is being used
    * @param radix the radix of the number being given, e.g. 10 (decimal) or 2 (binary)
@@ -27,8 +27,8 @@ public class Funcs {
    * @return the digit at pos
    */
   public static int intAtPos(int n, int radix, int pos) {
-    return n / (int) (Math.pow(radix, pos) + 0.5F)
-           % radix; // Adding 0.5F makes the cast round to the nearest int
+    // Adding 0.5F makes the cast round to the nearest int
+    return n / (int) (Math.pow(radix, pos) + 0.5F) % radix;
   }
 
   /**
@@ -76,12 +76,21 @@ public class Funcs {
   }
 
   /**
-   * Given a mouse X and Y, is the mouse within a zone that starts at xStart, yStart
+   * Given a mouse X and Y, is the mouse within a zone that starts at {@code xStart}, {@code
+   * yStart}, is {@code width} wide and {@code height} high? All four bounds are inclusive.
+   *
+   * @param mouseX the x-coordinate of the mouse
+   * @param mouseY the y-coordinate of the mouse
+   * @param xStart the left edge of the zone
+   * @param yStart the top edge of the zone
+   * @param width  the width of the zone
+   * @param height the height of the zone
+   * @return is (mouseX, mouseY) inclusively within the zone?
    */
   public static boolean mouseInZone(int mouseX, int mouseY, int xStart, int yStart, int width,
                                     int height) {
-    return mouseX >= xStart && mouseY >= yStart && mouseX < xStart + width
-           && mouseY < yStart + height;
+    return xStart <= mouseX && mouseX <= xStart + width
+           && yStart <= mouseY && mouseY <= yStart + height;
   }
 
   /**
@@ -97,7 +106,7 @@ public class Funcs {
     factors:
     // Iterate over every integer in [2, Consts.ALLOY_RADIX)
     for (int i = 2; i < Consts.ALLOY_RADIX; i++) {
-      // Iterate over every digit in the number
+      // Iterate over every digit in the alloy
       for (int j = 0; j < Consts.METAL_COUNT; j++) {
         final int metalAmt = intAtPos(alloy, Consts.ALLOY_RADIX, j);
         if (0 < metalAmt && metalAmt < i) {
@@ -141,19 +150,28 @@ public class Funcs {
   }
 
   /**
-   * Shorten a full number to 3 digits with K, M, and B suffixes, e.g. 1411 become 1.41K and
-   * 67,000,000 becomes 67.0M
+   * Shorten a full number to 3 digits and add K, M, or B as an appropriate suffix, with the
+   * right-most digit
+   * always being rounded down. Abbreviation uses the following rules:
+   *
+   * <ul>
+   * <li>For {@code n < 1000}, nothing changes</li>
+   * <li>For {@code 1000 <= n < 1,000,000}, the suffix is "K"</li>
+   * <li>For {@code 1, 000, 000 <= n < 1,000,000,000}, the suffix is "M"</li>
+   * <li>For {@code n > 1,000,000,000}, the suffix is "B"</li>
+   * <li>Rounding is applied according to {@link String#format}'s 'g' specifier</li>
+   * </ul>
+   *
+   * @param n the number to be abbreviated
+   * @return the abbreviated number, represented as a {@link String}
    */
   public static String abbreviateNum(int n) {
-    if (n >= 1000000000) // Billions
-    {
-      return String.format("%.3G", n / 1000000000F) + "B";
-    } else if (n >= 1000000) // Millions
-    {
-      return String.format("%.3G", n / 1000000F) + "M";
-    } else if (n >= 1000) // Thousands
-    {
-      return String.format("%.3G", n / 1000F) + "K";
+    if (n >= 1000000000) { // Billions
+      return String.format("%.3gB", n / 1000000000F);
+    } else if (n >= 1000000) { // Millions
+      return String.format("%.3gM", n / 1000000F);
+    } else if (n >= 1000) { // Thousands
+      return String.format("%.3gK", n / 1000F);
     }
     return String.valueOf(n);
   }
@@ -198,7 +216,7 @@ public class Funcs {
    * @return -90, 0, 90, or 180
    * */
   //@formatter:on
-  public static float facingToYaw(EnumFacing facing) {
+  public static int facingToYaw(EnumFacing facing) {
     switch (facing) {
       case WEST:
         return 90;
