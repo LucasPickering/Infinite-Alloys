@@ -25,10 +25,16 @@ public class Consts {
    * The amount of coords that the Internet Wand can hold
    */
   public static final int WAND_SIZE = 10;
+
   /**
-   * The GUI id for the Wand GUI
+   * GUI ID for the Wand GUI
    */
   public static final int WAND_GUI_ID = MACHINE_COUNT;
+
+  /**
+   * GUI ID for the Summoner GUI
+   */
+  public static final int SUMMONER_GUI_ID = MACHINE_COUNT + 1;
 
   /**
    * The amount of states that each mob can be in. Off, Attract, or Repel

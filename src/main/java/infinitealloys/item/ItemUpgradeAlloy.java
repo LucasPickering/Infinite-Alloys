@@ -22,7 +22,7 @@ public class ItemUpgradeAlloy extends ItemUpgrade {
   @Override
   @SideOnly(Side.CLIENT)
   public void registerIcons(IIconRegister iconRegister) {
-    backgroundIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "upgradebackground");
+    itemIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "upgradebackground");
     ingotIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "upgradeingot");
   }
 
@@ -32,7 +32,7 @@ public class ItemUpgradeAlloy extends ItemUpgrade {
     if (renderPass == 1) {
       return ingotIcon;
     }
-    return backgroundIcon;
+    return itemIcon;
   }
 
   @Override

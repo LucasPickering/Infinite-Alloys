@@ -15,9 +15,7 @@ import infinitealloys.util.EnumUpgrade;
 
 public class ItemUpgrade extends ItemIA {
 
-  protected IIcon backgroundIcon;
   private final IIcon[] upgradeIcons;
-
   public final EnumUpgrade upgradeType;
 
   public ItemUpgrade(EnumUpgrade upgradeType) {
@@ -31,7 +29,7 @@ public class ItemUpgrade extends ItemIA {
   @Override
   @SideOnly(Side.CLIENT)
   public void registerIcons(IIconRegister iconRegister) {
-    backgroundIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "upgradebackground");
+    itemIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "upgradebackground");
     for (int i = 0; i < upgradeType.tiers; i++) {
       upgradeIcons[i] =
           iconRegister.registerIcon(Consts.TEXTURE_PREFIX + upgradeType.name + (i + 1));
@@ -44,7 +42,7 @@ public class ItemUpgrade extends ItemIA {
     if (renderPass == 1) {
       return upgradeIcons[damage];
     }
-    return backgroundIcon;
+    return itemIcon;
   }
 
   @Override

@@ -64,8 +64,6 @@ public class TEEEnergyStorage extends TileEntityElectric implements IHost {
     if (energyHost == null) {
       energyHost = coords();
     }
-
-    System.out.println("" + orientation);
     super.updateEntity();
   }
 

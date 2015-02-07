@@ -10,21 +10,20 @@ import infinitealloys.util.Consts;
 
 public class ItemIA extends Item {
 
-  private String textureName;
-
   public ItemIA() {
-    super();
     setCreativeTab(InfiniteAlloys.tabIA);
-  }
-
-  public ItemIA(String textureName) {
-    this();
-    this.textureName = textureName;
   }
 
   @Override
   @SideOnly(Side.CLIENT)
   public void registerIcons(IIconRegister iconRegister) {
-    itemIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + textureName);
+    itemIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + getIconString());
+  }
+
+  @Override
+  public Item setUnlocalizedName(String unlocalizedName) {
+    super.setUnlocalizedName(unlocalizedName);
+    setTextureName(unlocalizedName);
+    return this;
   }
 }

@@ -29,24 +29,23 @@ public enum EnumBoss {
   public final Class<? extends EntityIABoss> entityClass;
   public final ModelBase model;
   public final EnumAlloy alloy;
-  public final int unlockXP;
+  public final int summonXP;
 
   /**
    * Constructs a new EnumBoss object
-   *
+   *h
    * @param name        the unlocalized name of the boss
    * @param entityClass the class associated with this boss's entity
    * @param model       an instance of this boss's model
    * @param alloy       the alloy type that this boss drops
-   * @param unlockXP    the total XP needed to unlock this boss. This is XP from 0, NOT from the
-   *                    last boss
+   * @param summonXP    the XP needed to summon this boss
    */
   private EnumBoss(String name, Class<? extends EntityIABoss> entityClass,
-                   ModelBase model, EnumAlloy alloy, int unlockXP) {
+                   ModelBase model, EnumAlloy alloy, int summonXP) {
     this.name = name;
     this.entityClass = entityClass;
     this.model = model;
-    this.unlockXP = unlockXP;
+    this.summonXP = summonXP;
     this.alloy = alloy;
   }
 }

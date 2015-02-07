@@ -14,7 +14,7 @@ import infinitealloys.util.EnumMetal;
 public class ItemIngot extends ItemIA {
 
   public ItemIngot() {
-    super("ingot");
+    super();
     setHasSubtypes(true);
   }
 

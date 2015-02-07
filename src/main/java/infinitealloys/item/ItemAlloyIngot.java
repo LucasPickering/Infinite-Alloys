@@ -18,7 +18,7 @@ import infinitealloys.util.MachineHelper;
 public class ItemAlloyIngot extends ItemIA {
 
   public ItemAlloyIngot() {
-    super("ingot");
+    super();
     setCreativeTab(null);
     setHasSubtypes(true);
   }
@@ -48,9 +48,7 @@ public class ItemAlloyIngot extends ItemIA {
       totalMass += metalContent[i] = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
     }
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
-      final float
-          percentage =
-          Math.round((float) metalContent[i] / (float) totalMass * 1000F) / 10F;
+      float percentage = Math.round((float) metalContent[i] / (float) totalMass * 1000F) / 10F;
       if (percentage != 0) {
         list.add(percentage + "% " + Funcs.getLoc("metal." + EnumMetal.values()[i].name + ".name"));
       }

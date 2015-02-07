@@ -26,6 +26,7 @@ import infinitealloys.item.ItemBlockOre;
 import infinitealloys.item.ItemIngot;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.item.ItemMulti;
+import infinitealloys.item.ItemSummoner;
 import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;
@@ -66,8 +67,10 @@ public class CommonProxy {
   public void initItems() {
     IAItems.multi = new ItemMulti().setUnlocalizedName("multi");
     IAItems.ingot = new ItemIngot().setUnlocalizedName("ingot");
-    IAItems.alloyIngot = new ItemAlloyIngot().setUnlocalizedName("alloyIngot");
+    IAItems.alloyIngot =
+        new ItemAlloyIngot().setUnlocalizedName("alloyIngot").setTextureName("ingot");
     IAItems.internetWand = new ItemInternetWand().setUnlocalizedName("internetWand");
+    IAItems.summoner = new ItemSummoner().setUnlocalizedName("summoner");
     for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
       IAItems.upgrades[upgradeType.ordinal()] = upgradeType.getItem();
     }
@@ -76,6 +79,7 @@ public class CommonProxy {
     GameRegistry.registerItem(IAItems.ingot, IAItems.ingot.getUnlocalizedName());
     GameRegistry.registerItem(IAItems.alloyIngot, IAItems.alloyIngot.getUnlocalizedName());
     GameRegistry.registerItem(IAItems.internetWand, IAItems.internetWand.getUnlocalizedName());
+    GameRegistry.registerItem(IAItems.summoner, IAItems.summoner.getUnlocalizedName());
     for (Item upgrade : IAItems.upgrades) {
       GameRegistry.registerItem(upgrade, upgrade.getUnlocalizedName());
     }

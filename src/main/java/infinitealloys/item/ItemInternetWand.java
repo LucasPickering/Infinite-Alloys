@@ -12,7 +12,7 @@ import infinitealloys.util.MachineHelper;
 public class ItemInternetWand extends ItemIA {
 
   public ItemInternetWand() {
-    super("internetwand");
+    super();
     setMaxStackSize(1);
   }
 
@@ -85,10 +85,10 @@ public class ItemInternetWand extends ItemIA {
   /**
    * Removes the machine with the given index from the wand
    */
-  public void removeMachine(ItemStack itemstack, int index) {
-    if (itemstack.getItem() == IAItems.internetWand && itemstack
+  public void removeMachine(ItemStack itemStack, int index) {
+    if (itemStack.getItem() == IAItems.internetWand && itemStack
         .hasTagCompound()) { // If this is a wand and has stored data
-      final NBTTagCompound tagCompound = itemstack.getTagCompound();
+      final NBTTagCompound tagCompound = itemStack.getTagCompound();
       tagCompound.removeTag("Coords" + index); // Remove the tag at index
       for (int i = index + 1; i < Consts.WAND_SIZE;
            i++) { // Iterate over each coord below the one that was removed
