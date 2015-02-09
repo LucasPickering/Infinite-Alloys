@@ -59,15 +59,6 @@ public class Funcs {
   }
 
   /**
-   * Bind the texture with the given resource to the render engine so that it can be used.
-   * Convenience method for {@link net.minecraft.client.renderer.texture.TextureManager#bindTexture
-   * TextureManager.bindTexture}
-   */
-  public static void bindTexture(ResourceLocation texture) {
-    Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-  }
-
-  /**
    * Convenience method for {@link net.minecraft.client.gui.Gui#drawTexturedModalRect
    * Gui.drawTecturedModalRect} with a Rectangle for texture's location and size.
    */

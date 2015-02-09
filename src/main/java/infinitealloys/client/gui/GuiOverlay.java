@@ -27,7 +27,7 @@ public class GuiOverlay extends GuiScreen {
       drawCenteredString(fontRendererObj, nearestBoss.getCommandSenderName(),
                          width / 2, 2, 0xffffff);
 
-      Funcs.bindTexture(GuiMachine.extraIcons);
+      mc.renderEngine.bindTexture(GuiMachine.extraIcons);
       int barX = (width - GuiMachine.HEALTH_BAR_BG.width) / 2;
       final int barY = 12;
       Funcs.drawTexturedModalRect(this, barX, barY, GuiMachine.HEALTH_BAR_BG);

@@ -90,7 +90,7 @@ public class GuiXray extends GuiElectric {
         drawCenteredString(fontRendererObj, Funcs.getLoc("machine.xray.noBlocks"), xSize / 2, 56,
                            0xffffff);
       } else {
-        Funcs.bindTexture(GuiMachine.extraIcons);
+        mc.renderEngine.bindTexture(GuiMachine.extraIcons);
         for (int i = scrollPos * LIST_WIDTH;
              i < blockButtons.length && i < (scrollPos + LIST_HEIGHT) * LIST_WIDTH; i++) {
           blockButtons[i].drawButton();
@@ -260,7 +260,7 @@ public class GuiXray extends GuiElectric {
     private void drawButton() {
       if (blockAmount > 0) {
         // Draw the backgroundIcon texture for the button
-        Funcs.bindTexture(GuiMachine.extraIcons);
+        mc.renderEngine.bindTexture(GuiMachine.extraIcons);
         drawTexturedModalRect(xPos, yPos, background.texture.x, background.texture.y,
                               background.texture.width, background.texture.height);
 

@@ -135,7 +135,7 @@ public abstract class GuiMachine extends GuiContainer {
 
   @Override
   protected void drawGuiContainerBackgroundLayer(float partialTick, int mouseX, int mouseY) {
-    Funcs.bindTexture(background);
+    mc.renderEngine.bindTexture(background);
     drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, xSize, ySize);
   }
 
@@ -144,7 +144,7 @@ public abstract class GuiMachine extends GuiContainer {
     GL11.glDisable(GL11.GL_LIGHTING);
     GL11.glDisable(GL11.GL_DEPTH_TEST);
     GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-    Funcs.bindTexture(extraIcons);
+    mc.renderEngine.bindTexture(extraIcons);
     GL11.glPushMatrix();
 
     // Draw the network icon if this GUI has one

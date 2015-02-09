@@ -33,6 +33,7 @@ public class GuiInternetWand extends GuiScreen {
   private final ResourceLocation background = Funcs.getGuiTexture("wand");
   private final int WIDTH = 178;
   private final int HEIGHT = 160;
+
   /**
    * The amount of machines that can appear on the GUI at once
    */
@@ -42,7 +43,7 @@ public class GuiInternetWand extends GuiScreen {
   /**
    * Coordinates of the top-left corner of the GUI
    */
-  protected Point topLeft = new Point();
+  private final Point topLeft = new Point();
 
   /**
    * The button that toggles the help screen.
@@ -97,6 +98,7 @@ public class GuiInternetWand extends GuiScreen {
     }
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void initGui() {
     topLeft.setLocation((width - WIDTH) / 2, (height - HEIGHT) / 2);
@@ -169,11 +171,11 @@ public class GuiInternetWand extends GuiScreen {
 
   @Override
   public void drawScreen(int mouseX, int mouseY, float partialTick) {
-    Funcs.bindTexture(background);
+    mc.renderEngine.bindTexture(background);
     drawTexturedModalRect(topLeft.x, topLeft.y, 0, 0, WIDTH, HEIGHT);
     super.drawScreen(mouseX, mouseY, partialTick);
 
-    Funcs.bindTexture(GuiMachine.extraIcons);
+    mc.renderEngine.bindTexture(GuiMachine.extraIcons);
     GL11.glPushMatrix();
     GL11.glColor4f(1, 1, 1, 1);
     // If the list of machines is short enough to fit on one page, disable the scroll bar
@@ -400,7 +402,7 @@ public class GuiInternetWand extends GuiScreen {
     }
 
     void drawButton() {
-      Funcs.bindTexture(GuiMachine.extraIcons);
+      mc.renderEngine.bindTexture(GuiMachine.extraIcons);
 
       // If the button isn't currently in the scroll window, don't draw it
       if (!visible) {

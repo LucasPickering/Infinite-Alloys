@@ -24,7 +24,7 @@ public class GuiEnergyStorage extends GuiElectric {
   protected void drawGuiContainerBackgroundLayer(float partialTick, int mouseX, int mouseY) {
     super.drawGuiContainerBackgroundLayer(partialTick, mouseX, mouseY);
     GL11.glDisable(GL11.GL_LIGHTING);
-    Funcs.bindTexture(extraIcons);
+    mc.renderEngine.bindTexture(extraIcons);
 
     // Draw the energy amount
     drawString(fontRendererObj, Funcs.abbreviateNum(tees.getCurrentRK()) + "/"
