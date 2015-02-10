@@ -7,7 +7,6 @@ import net.minecraftforge.common.config.Configuration;
 import java.util.Random;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -34,11 +33,9 @@ public class InfiniteAlloys {
   public void preInit(FMLPreInitializationEvent event) {
     Configuration config = new Configuration(event.getSuggestedConfigurationFile());
     config.load();
-
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
       spawnOres[i] = config.get("World Gen", EnumMetal.values()[i].name, true).getBoolean(true);
     }
-
     config.save();
   }
 

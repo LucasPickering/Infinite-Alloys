@@ -105,7 +105,7 @@ public class CommonProxy {
       alloys[i] = new ItemStack(IAItems.alloyIngot, 1, i + 1);
     }
 
-		/*---MACHINES---*/
+		//*---MACHINES---*/
                 /* Computer */
     addRecipeDict(new ItemStack(IABlocks.machine), "W3G", "2M2", "R3R",
                   '2', alloys[2], '3', alloys[3], 'M', machineComponent, 'G', Blocks.glass_pane,
