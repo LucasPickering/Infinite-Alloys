@@ -32,11 +32,6 @@ public class Consts {
   public static final int WAND_GUI_ID = MACHINE_COUNT;
 
   /**
-   * GUI ID for the Summoner GUI
-   */
-  public static final int SUMMONER_GUI_ID = MACHINE_COUNT + 1;
-
-  /**
    * The amount of states that each mob can be in. Off, Attract, or Repel
    */
   public static final int PASTURE_MODES = 3;
