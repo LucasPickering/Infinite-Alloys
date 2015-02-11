@@ -238,6 +238,8 @@ public class TeleporterBoss extends Teleporter {
   }
 
   public boolean makePortal(Entity entity) {
+    entity.setPosition(0, 5, 0);
+
     byte b0 = 16;
     double d0 = -1.0D;
     int i = MathHelper.floor_double(entity.posX);
@@ -428,14 +430,14 @@ public class TeleporterBoss extends Teleporter {
   }
 
   /**
-   * called periodically to remove out-of-date portal locations from the cache list. Argument par1
-   * is a
-   * WorldServer.getTotalWorldTime() value.
+   * called periodically to remove out-of-date portal locations from the cache list.
+   *
+   * @param time the world time, from {@link WorldServer#getTotalWorldTime}
    */
-  public void removeStalePortalLocations(long par1) {
-    if (par1 % 100L == 0L) {
+  public void removeStalePortalLocations(long time) {
+    if (time % 100L == 0L) {
       Iterator iterator = destinationCoordinateKeys.iterator();
-      long j = par1 - 600L;
+      long j = time - 600L;
 
       while (iterator.hasNext()) {
         Long olong = (Long) iterator.next();

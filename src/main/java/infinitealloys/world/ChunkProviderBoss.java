@@ -2,6 +2,7 @@ package infinitealloys.world;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
@@ -13,8 +14,6 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import java.util.ArrayList;
 import java.util.List;
 
-import infinitealloys.util.EnumBoss;
-
 /**
  * An {@link IChunkProvider} for dimensions that contain an IA boss. These dimensions have static
  * terrain (no generation) that is defined by a JSON file.
@@ -22,13 +21,9 @@ import infinitealloys.util.EnumBoss;
 public class ChunkProviderBoss implements IChunkProvider {
 
   private World worldObj;
-  private final EnumBoss bossType;
-  private final Block[] cachedBlockIDs = new Block[256];
-  private final byte[] cachedBlockMetadata = new byte[256];
 
-  public ChunkProviderBoss(World world, EnumBoss bossType) {
+  public ChunkProviderBoss(World world) {
     this.worldObj = world;
-    this.bossType = bossType;
   }
 
   /**
@@ -44,38 +39,30 @@ public class ChunkProviderBoss implements IChunkProvider {
    * the blocks for the specified chunk from the map seed and chunk seed
    */
   @Override
-  public Chunk provideChunk(int x, int z) {
-    Chunk chunk = new Chunk(this.worldObj, x, z);
-    int l;
+  public Chunk provideChunk(int chunkX, int chunkZ) {
+    Chunk chunk = new Chunk(worldObj, chunkX, chunkZ);
 
-    for (int k = 0; k < this.cachedBlockIDs.length; ++k) {
-      Block block = this.cachedBlockIDs[k];
+    for (int y = 0; y < 10; y++) {
+      Block block = null;
+      if (chunkX == 0 && chunkZ == 0) {
+        block = Blocks.grass;
+      }
 
       if (block != null) {
-        l = k >> 4;
-        ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[l];
+        ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[y / 16];
 
         if (extendedblockstorage == null) {
-          extendedblockstorage = new ExtendedBlockStorage(k, !this.worldObj.provider.hasNoSky);
-          chunk.getBlockStorageArray()[l] = extendedblockstorage;
+          extendedblockstorage = new ExtendedBlockStorage(y, !this.worldObj.provider.hasNoSky);
+          chunk.getBlockStorageArray()[y / 16] = extendedblockstorage;
         }
 
         for (int i1 = 0; i1 < 16; ++i1) {
           for (int j1 = 0; j1 < 16; ++j1) {
-            extendedblockstorage.func_150818_a(i1, k & 15, j1, block);
-            extendedblockstorage.setExtBlockMetadata(i1, k & 15, j1, this.cachedBlockMetadata[k]);
+            extendedblockstorage.func_150818_a(i1, y & 15, j1, block);
+            extendedblockstorage.setExtBlockMetadata(i1, y & 15, j1, 0);
           }
         }
       }
-    }
-
-    chunk.generateSkylightMap();
-    BiomeGenBase[] abiomegenbase =
-        worldObj.getWorldChunkManager().loadBlockGeneratorData(null, x * 16, z * 16, 16, 16);
-    byte[] abyte = chunk.getBiomeArray();
-
-    for (l = 0; l < abyte.length; ++l) {
-      abyte[l] = (byte) abiomegenbase[l].biomeID;
     }
 
     chunk.generateSkylightMap();
@@ -141,7 +128,7 @@ public class ChunkProviderBoss implements IChunkProvider {
    */
   @Override
   public String makeString() {
-    return bossType.name + "LevelSource";
+    return "IaBossLevelSource";
   }
 
   /**
