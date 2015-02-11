@@ -2,6 +2,7 @@ package infinitealloys.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPortal;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -10,11 +11,18 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.Consts;
 import infinitealloys.world.TeleporterBoss;
 
 public class BlockBossPortal extends BlockPortal {
 
+  @Override
+  @SideOnly(Side.CLIENT)
+  public void registerBlockIcons(IIconRegister iconRegister) {
+    blockIcon = iconRegister.registerIcon(Consts.TEXTURE_PREFIX + "portal");
+  }
 
   @Override
   public void updateTick(World world, int x, int y, int z, Random random) {
