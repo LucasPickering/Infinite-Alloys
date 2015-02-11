@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 import infinitealloys.block.IABlocks;
+import infinitealloys.util.Consts;
 
 public class TeleporterBoss extends Teleporter {
 
@@ -40,9 +41,7 @@ public class TeleporterBoss extends Teleporter {
     random = new Random(worldServer.getSeed());
   }
 
-  /**
-   * Place an entity in a nearby portal, creating one if necessary.
-   */
+  @Override
   public void placeInPortal(Entity par1Entity, double par2, double par4, double par6, float par8) {
     if (worldServerInstance.provider.dimensionId != 1) {
       if (!placeInExistingPortal(par1Entity, par2, par4, par6, par8)) {
@@ -74,9 +73,7 @@ public class TeleporterBoss extends Teleporter {
     }
   }
 
-  /**
-   * Place an entity in a nearby portal which already exists.
-   */
+  @Override
   public boolean placeInExistingPortal(Entity entity, double par2, double par4, double par6,
                                        float par8) {
     short short1 = 128;
@@ -131,7 +128,7 @@ public class TeleporterBoss extends Teleporter {
       if (flag) {
         destinationCoordinateCache.add(j1, new PortalPosition(i, j, k, worldServerInstance
             .getTotalWorldTime()));
-        destinationCoordinateKeys.add(Long.valueOf(j1));
+        destinationCoordinateKeys.add(j1);
       }
 
       double d8 = (double) i + 0.5D;
@@ -237,17 +234,21 @@ public class TeleporterBoss extends Teleporter {
     }
   }
 
+  @Override
   public boolean makePortal(Entity entity) {
-    entity.setPosition(0, 5, 0);
+    if (entity.dimension == Consts.dimensionId) {
+      entity.setPosition(8, 10, 8);
+    }
 
-    byte b0 = 16;
+    final byte b0 = 16;
+    final int x = MathHelper.floor_double(entity.posX);
+    final int y = MathHelper.floor_double(entity.posY);
+    final int z = MathHelper.floor_double(entity.posZ);
+
     double d0 = -1.0D;
-    int i = MathHelper.floor_double(entity.posX);
-    int j = MathHelper.floor_double(entity.posY);
-    int k = MathHelper.floor_double(entity.posZ);
-    int l = i;
-    int i1 = j;
-    int j1 = k;
+    int l = x;
+    int i1 = y;
+    int j1 = z;
     int k1 = 0;
     int l1 = random.nextInt(4);
     int i2;
@@ -266,10 +267,10 @@ public class TeleporterBoss extends Teleporter {
     double d3;
     double d4;
 
-    for (i2 = i - b0; i2 <= i + b0; ++i2) {
+    for (i2 = x - b0; i2 <= x + b0; ++i2) {
       d1 = (double) i2 + 0.5D - entity.posX;
 
-      for (j2 = k - b0; j2 <= k + b0; ++j2) {
+      for (j2 = z - b0; j2 <= z + b0; ++j2) {
         d2 = (double) j2 + 0.5D - entity.posZ;
         label274:
 
@@ -320,10 +321,10 @@ public class TeleporterBoss extends Teleporter {
     }
 
     if (d0 < 0.0D) {
-      for (i2 = i - b0; i2 <= i + b0; ++i2) {
+      for (i2 = x - b0; i2 <= x + b0; ++i2) {
         d1 = (double) i2 + 0.5D - entity.posX;
 
-        for (j2 = k - b0; j2 <= k + b0; ++j2) {
+        for (j2 = z - b0; j2 <= z + b0; ++j2) {
           d2 = (double) j2 + 0.5D - entity.posZ;
           label222:
 
@@ -441,13 +442,12 @@ public class TeleporterBoss extends Teleporter {
 
       while (iterator.hasNext()) {
         Long olong = (Long) iterator.next();
-        PortalPosition
-            portalposition =
-            (PortalPosition) destinationCoordinateCache.getValueByKey(olong.longValue());
+        PortalPosition portalposition =
+            (PortalPosition) destinationCoordinateCache.getValueByKey(olong);
 
         if (portalposition == null || portalposition.lastUpdateTime < j) {
           iterator.remove();
-          destinationCoordinateCache.remove(olong.longValue());
+          destinationCoordinateCache.remove(olong);
         }
       }
     }
