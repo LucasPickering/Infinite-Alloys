@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
 
@@ -14,6 +15,7 @@ import java.io.FileOutputStream;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import infinitealloys.network.MessageValidAlloys;
+import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 
@@ -68,6 +70,20 @@ public class EventHandler {
       if (!MachineHelper.playersToSync.contains(((EntityPlayer) event.entity).getDisplayName())) {
         MachineHelper.playersToSync.add(((EntityPlayer) event.entity).getDisplayName());
       }
+    }
+  }
+
+  @SubscribeEvent
+  public void onBlockBreak(BlockEvent.BreakEvent event) {
+    if (event.world.provider.dimensionId == Consts.dimensionId) {
+      event.setCanceled(true);
+    }
+  }
+
+  @SubscribeEvent
+  public void onBlockPlace(BlockEvent.PlaceEvent event) {
+    if (event.world.provider.dimensionId == Consts.dimensionId) {
+      event.setCanceled(true);
     }
   }
 }

@@ -24,4 +24,9 @@ public class WorldProviderBoss extends WorldProvider {
   public IChunkProvider createChunkGenerator() {
     return new ChunkProviderBoss(worldObj);
   }
+
+  @Override
+  public boolean canRespawnHere() {
+    return false;
+  }
 }

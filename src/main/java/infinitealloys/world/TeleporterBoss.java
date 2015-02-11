@@ -238,6 +238,32 @@ public class TeleporterBoss extends Teleporter {
   public boolean makePortal(Entity entity) {
     if (entity.dimension == Consts.dimensionId) {
       entity.setPosition(8, 10, 8);
+      worldServerInstance.setBlock(7, 9, 8, Blocks.sandstone);
+      worldServerInstance.setBlock(8, 9, 8, Blocks.sandstone);
+      worldServerInstance.setBlock(9, 9, 8, Blocks.sandstone);
+      worldServerInstance.setBlock(10, 9, 8, Blocks.sandstone);
+
+      worldServerInstance.setBlock(7, 10, 8, Blocks.sandstone);
+      worldServerInstance.setBlock(8, 10, 8, IABlocks.portal, 0, 2);
+      worldServerInstance.setBlock(9, 10, 8, IABlocks.portal, 0, 2);
+      worldServerInstance.setBlock(10, 10, 8, Blocks.sandstone);
+
+      worldServerInstance.setBlock(7, 11, 8, Blocks.sandstone);
+      worldServerInstance.setBlock(8, 11, 8, IABlocks.portal, 0, 2);
+      worldServerInstance.setBlock(9, 11, 8, IABlocks.portal, 0, 2);
+      worldServerInstance.setBlock(10, 11, 8, Blocks.sandstone);
+
+      worldServerInstance.setBlock(7, 12, 8, Blocks.sandstone);
+      worldServerInstance.setBlock(8, 12, 8, IABlocks.portal, 0, 2);
+      worldServerInstance.setBlock(9, 12, 8, IABlocks.portal, 0, 2);
+      worldServerInstance.setBlock(10, 12, 8, Blocks.sandstone);
+
+      worldServerInstance.setBlock(7, 13, 8, Blocks.sandstone);
+      worldServerInstance.setBlock(8, 13, 8, Blocks.sandstone);
+      worldServerInstance.setBlock(9, 13, 8, Blocks.sandstone);
+      worldServerInstance.setBlock(10, 13, 8, Blocks.sandstone);
+
+      return true;
     }
 
     final byte b0 = 16;

@@ -34,7 +34,6 @@ import infinitealloys.util.Point3;
 public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
   public int renderID;
-  private final Minecraft mc = Minecraft.getMinecraft();
   private final GuiOverlay guiOverlay = new GuiOverlay();
   private final TileEntityMachine[] temInstances = new TileEntityMachine[Consts.MACHINE_COUNT];
 
