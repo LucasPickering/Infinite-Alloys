@@ -75,14 +75,16 @@ public class EventHandler {
 
   @SubscribeEvent
   public void onBlockBreak(BlockEvent.BreakEvent event) {
-    if (event.world.provider.dimensionId == Consts.dimensionId) {
+    if (event.world.provider.dimensionId == Consts.dimensionId
+        && !event.getPlayer().capabilities.isCreativeMode) {
       event.setCanceled(true);
     }
   }
 
   @SubscribeEvent
   public void onBlockPlace(BlockEvent.PlaceEvent event) {
-    if (event.world.provider.dimensionId == Consts.dimensionId) {
+    if (event.world.provider.dimensionId == Consts.dimensionId
+        && !event.player.capabilities.isCreativeMode) {
       event.setCanceled(true);
     }
   }

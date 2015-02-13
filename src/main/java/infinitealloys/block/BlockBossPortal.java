@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -47,7 +48,7 @@ public class BlockBossPortal extends BlockPortal {
         player.timeUntilPortal = 10;
         player.mcServer.getConfigurationManager()
             .transferPlayerToDimension(player, 0,
-                                       new TeleporterBoss(mServer.worldServerForDimension(1)));
+                                       new Teleporter(mServer.worldServerForDimension(1)));
       }
     }
   }
@@ -92,60 +93,6 @@ public class BlockBossPortal extends BlockPortal {
       } else {
         world.setBlockToAir(x, y, z);
       }
-    }
-  }
-
-  public boolean tryToCreatePortal(World world, int x, int y, int z) {
-    byte b0 = 0;
-    byte b1 = 0;
-
-    if (world.getBlock(x - 1, y, z) == Blocks.sandstone
-        || world.getBlock(x + 1, y, z) == Blocks.sandstone) {
-      b0 = 1;
-    }
-
-    if (world.getBlock(x, y, z - 1) == Blocks.sandstone
-        || world.getBlock(x, y, z + 1) == Blocks.sandstone) {
-      b1 = 1;
-    }
-
-    if (b0 == b1) {
-      return false;
-    } else {
-      if (world.isAirBlock(x - b0, y, z - b1)) {
-        x -= b0;
-        z -= b1;
-      }
-
-      int l;
-      int i1;
-
-      for (l = -1; l <= 2; ++l) {
-        for (i1 = -1; i1 <= 3; ++i1) {
-          boolean flag = l == -1 || l == 2 || i1 == -1 || i1 == 3;
-
-          if (l != -1 && l != 2 || i1 != -1 && i1 != 3) {
-            Block block = world.getBlock(x + b0 * l, y + i1, z + b1 * l);
-            boolean isAirBlock = world.isAirBlock(x + b0 * l, y + i1, z + b1 * l);
-
-            if (flag) {
-              if (block != Blocks.sandstone) {
-                return false;
-              }
-            } else if (!isAirBlock && block != Blocks.fire) {
-              return false;
-            }
-          }
-        }
-      }
-
-      for (l = 0; l < 2; ++l) {
-        for (i1 = 0; i1 < 3; ++i1) {
-          world.setBlock(x + b0 * l, y + i1, z + b1 * l, IABlocks.portal, 0, 2);
-        }
-      }
-
-      return true;
     }
   }
 }
