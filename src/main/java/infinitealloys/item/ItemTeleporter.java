@@ -1,15 +1,20 @@
 package infinitealloys.item;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
+import infinitealloys.util.Point3;
 
-public class ItemInternetWand extends ItemIA {
+public class ItemTeleporter extends ItemIA {
 
   @Override
   public boolean getShareTag() {
@@ -17,12 +22,42 @@ public class ItemInternetWand extends ItemIA {
   }
 
   @Override
-  public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer player) {
-    if (itemstack.hasTagCompound()) {
-      itemstack.getTagCompound().removeTag("CoordsCurrent");
+  public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityPlayer) {
+    if (entityPlayer.ridingEntity == null && entityPlayer.riddenByEntity == null
+        && entityPlayer instanceof EntityPlayerMP) {
+      EntityPlayerMP player = (EntityPlayerMP) entityPlayer;
+      NBTTagCompound tagCompound = itemstack.getTagCompound();
+      int destinationDimension;
+      Point3 destinationCoords;
+      if (player.dimension == Consts.dimensionId) {
+        if (tagCompound == null || !tagCompound.hasKey("ReturnCoords")) {
+          destinationDimension = 0;
+          ChunkCoordinates spawnPoint =
+              MinecraftServer.getServer().worldServerForDimension(0).getSpawnPoint();
+          destinationCoords = new Point3(spawnPoint.posX, spawnPoint.posY, spawnPoint.posZ);
+        } else {
+          int[] destination = tagCompound.getIntArray("ReturnCoords");
+          destinationDimension = destination[0];
+          destinationCoords = new Point3(destination[1], destination[2], destination[3]);
+        }
+      } else {
+        if (tagCompound == null) {
+          tagCompound = new NBTTagCompound();
+        }
+        tagCompound.setIntArray("ReturnCoords", new int[]{player.dimension,
+                                                          MathHelper.floor_double(player.posX),
+                                                          MathHelper.floor_double(player.posY),
+                                                          MathHelper.floor_double(player.posZ)});
+        destinationDimension = Consts.dimensionId;
+        destinationCoords = new Point3(8, 10, 8);
+      }
+
+      player.setPosition(destinationCoords.x, destinationCoords.y, destinationCoords.z);
+      MinecraftServer mServer = MinecraftServer.getServer();
+      mServer.getConfigurationManager().transferPlayerToDimension(player,
+                                                                  destinationDimension,
+                                                                  InfiniteAlloys.proxy.teleporter);
     }
-    player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI_ID, world, (int) player.posX,
-                   (int) player.posY, (int) player.posZ);
     return itemstack;
   }
 

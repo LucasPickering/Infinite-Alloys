@@ -10,5 +10,6 @@ public class IAItems {
   public static Item ingot;
   public static Item alloyIngot;
   public static Item internetWand;
+  public static Item teleporter;
   public static final ItemUpgrade[] upgrades = new ItemUpgrade[Consts.UPGRADE_TYPE_COUNT];
 }

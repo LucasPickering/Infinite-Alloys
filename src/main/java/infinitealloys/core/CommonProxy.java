@@ -7,6 +7,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
@@ -28,6 +29,7 @@ import infinitealloys.item.ItemBlockOre;
 import infinitealloys.item.ItemIngot;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.item.ItemMulti;
+import infinitealloys.item.ItemTeleporter;
 import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;
@@ -35,11 +37,13 @@ import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumMetal;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
+import infinitealloys.world.TeleporterBoss;
 import infinitealloys.world.WorldProviderBoss;
 
 public class CommonProxy {
 
   public GfxHandler gfxHandler;
+  public TeleporterBoss teleporter;
 
   public void initBlocks() {
     IABlocks.ore =
@@ -74,7 +78,9 @@ public class CommonProxy {
     IAItems.ingot = new ItemIngot().setUnlocalizedName("ingot");
     IAItems.alloyIngot =
         new ItemAlloyIngot().setUnlocalizedName("alloyIngot").setTextureName("ingot");
-    IAItems.internetWand = new ItemInternetWand().setUnlocalizedName("internetWand");
+    IAItems.internetWand =
+        new ItemInternetWand().setMaxStackSize(1).setUnlocalizedName("internetWand");
+    IAItems.teleporter = new ItemTeleporter().setMaxStackSize(1).setUnlocalizedName("teleporter");
     for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
       IAItems.upgrades[upgradeType.ordinal()] = upgradeType.getItem();
     }
@@ -83,6 +89,7 @@ public class CommonProxy {
     GameRegistry.registerItem(IAItems.ingot, IAItems.ingot.getUnlocalizedName());
     GameRegistry.registerItem(IAItems.alloyIngot, IAItems.alloyIngot.getUnlocalizedName());
     GameRegistry.registerItem(IAItems.internetWand, IAItems.internetWand.getUnlocalizedName());
+    GameRegistry.registerItem(IAItems.teleporter, IAItems.teleporter.getUnlocalizedName());
     for (Item upgrade : IAItems.upgrades) {
       GameRegistry.registerItem(upgrade, upgrade.getUnlocalizedName());
     }
