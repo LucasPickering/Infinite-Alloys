@@ -6,7 +6,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -20,10 +19,10 @@ import java.util.List;
  */
 public class ChunkProviderBoss implements IChunkProvider {
 
-  private World worldObj;
+  private final World worldObj;
 
   public ChunkProviderBoss(World world) {
-    this.worldObj = world;
+    worldObj = world;
   }
 
   /**
@@ -44,7 +43,7 @@ public class ChunkProviderBoss implements IChunkProvider {
 
     for (int y = 0; y < 10; y++) {
       Block block = null;
-      if (chunkX == 0 && chunkZ == 0) {
+      if (Math.abs(chunkX) < 2 && Math.abs(chunkZ) < 2) {
         block = Blocks.grass;
       }
 
@@ -52,7 +51,7 @@ public class ChunkProviderBoss implements IChunkProvider {
         ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[y / 16];
 
         if (extendedblockstorage == null) {
-          extendedblockstorage = new ExtendedBlockStorage(y, !this.worldObj.provider.hasNoSky);
+          extendedblockstorage = new ExtendedBlockStorage(y, !worldObj.provider.hasNoSky);
           chunk.getBlockStorageArray()[y / 16] = extendedblockstorage;
         }
 
@@ -82,9 +81,8 @@ public class ChunkProviderBoss implements IChunkProvider {
    */
   @Override
   public void populate(IChunkProvider chunkProvider, int x, int z) {
-    int k = x * 16;
-    int l = z * 16;
-    BiomeGenBase biomegenbase = this.worldObj.getBiomeGenForCoords(k + 16, l + 16);
+    int blockX = x * 16;
+    int blockY = z * 16;
   }
 
   /**

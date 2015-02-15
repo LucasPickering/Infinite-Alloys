@@ -7,7 +7,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -48,7 +47,7 @@ public class BlockBossPortal extends BlockPortal {
         player.timeUntilPortal = 10;
         player.mcServer.getConfigurationManager()
             .transferPlayerToDimension(player, 0,
-                                       new Teleporter(mServer.worldServerForDimension(1)));
+                                       mServer.worldServerForDimension(1).getDefaultTeleporter());
       }
     }
   }
