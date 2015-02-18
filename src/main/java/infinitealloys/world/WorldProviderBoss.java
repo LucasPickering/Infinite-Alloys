@@ -11,13 +11,12 @@ public class WorldProviderBoss extends WorldProvider {
 
   @Override
   public String getDimensionName() {
-    return "IA Bosses " + dimensionId;
+    return "InfiniteAlloys";
   }
 
   @Override
   public void registerWorldChunkManager() {
     worldChunkMgr = new WorldChunkManagerHell(BiomeGenBase.desert, 0F);
-    dimensionId = Consts.dimensionId;
   }
 
   @Override

@@ -35,6 +35,4 @@ public class Consts {
    * The amount of states that each mob can be in. Off, Attract, or Repel
    */
   public static final int PASTURE_MODES = 3;
-
-  public static int dimensionId;
 }

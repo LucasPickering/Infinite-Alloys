@@ -7,8 +7,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -18,7 +16,6 @@ import java.util.Random;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import infinitealloys.block.BlockBossPortal;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.block.BlockOre;
 import infinitealloys.block.IABlocks;
@@ -37,26 +34,20 @@ import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumMetal;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.world.TeleporterBoss;
-import infinitealloys.world.WorldProviderBoss;
 
 public class CommonProxy {
 
   public GfxHandler gfxHandler;
-  public TeleporterBoss teleporter;
 
   public void initBlocks() {
     IABlocks.ore =
         new BlockOre().setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName("ore");
     IABlocks.machine = new BlockMachine().setHardness(3F)
         .setCreativeTab(InfiniteAlloys.tabIA).setBlockName("machine");
-    IABlocks.portal =
-        new BlockBossPortal().setCreativeTab(InfiniteAlloys.tabIA).setBlockName("portal");
 
     GameRegistry.registerBlock(IABlocks.ore, ItemBlockOre.class, IABlocks.ore.getUnlocalizedName());
     GameRegistry.registerBlock(IABlocks.machine, ItemBlockMachine.class,
                                IABlocks.machine.getUnlocalizedName());
-    GameRegistry.registerBlock(IABlocks.portal, IABlocks.portal.getUnlocalizedName());
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
       OreDictionary
@@ -243,9 +234,6 @@ public class CommonProxy {
     MinecraftForge.EVENT_BUS.register(new EventHandler());
     GameRegistry.registerWorldGenerator(new WorldGenHandler(), 100);
     NetworkRegistry.INSTANCE.registerGuiHandler(InfiniteAlloys.instance, gfxHandler);
-    Consts.dimensionId = DimensionManager.getNextFreeDimId();
-    DimensionManager.registerProviderType(Consts.dimensionId, WorldProviderBoss.class, false);
-    DimensionManager.registerDimension(Consts.dimensionId, Consts.dimensionId);
   }
 
   public void initRendering() {

@@ -15,7 +15,6 @@ import java.io.FileOutputStream;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import infinitealloys.network.MessageValidAlloys;
-import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 
@@ -75,7 +74,7 @@ public class EventHandler {
 
   @SubscribeEvent
   public void onBlockBreak(BlockEvent.BreakEvent event) {
-    if (event.world.provider.dimensionId == Consts.dimensionId
+    if (event.world.provider.getDimensionName().equals("InfiniteAlloys")
         && !event.getPlayer().capabilities.isCreativeMode) {
       event.setCanceled(true);
     }
@@ -83,7 +82,7 @@ public class EventHandler {
 
   @SubscribeEvent
   public void onBlockPlace(BlockEvent.PlaceEvent event) {
-    if (event.world.provider.dimensionId == Consts.dimensionId
+    if (event.world.provider.getDimensionName().equals("InfiniteAlloys")
         && !event.player.capabilities.isCreativeMode) {
       event.setCanceled(true);
     }
