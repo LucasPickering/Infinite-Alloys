@@ -10,10 +10,6 @@ import infinitealloys.util.Consts;
 
 public class ItemIA extends Item {
 
-  public ItemIA() {
-    setCreativeTab(InfiniteAlloys.tabIA);
-  }
-
   @Override
   @SideOnly(Side.CLIENT)
   public void registerIcons(IIconRegister iconRegister) {

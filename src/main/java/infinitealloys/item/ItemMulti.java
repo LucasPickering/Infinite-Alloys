@@ -16,11 +16,6 @@ public class ItemMulti extends ItemIA {
 
   private final IIcon[] icons = new IIcon[Consts.MULTI_ITEM_NAMES.length];
 
-  public ItemMulti() {
-    super();
-    setHasSubtypes(true);
-  }
-
   @Override
   @SideOnly(Side.CLIENT)
   public void registerIcons(IIconRegister iconRegister) {

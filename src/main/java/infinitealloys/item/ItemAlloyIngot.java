@@ -20,7 +20,6 @@ public class ItemAlloyIngot extends ItemIA {
   public ItemAlloyIngot() {
     super();
     setCreativeTab(null);
-    setHasSubtypes(true);
   }
 
   @Override

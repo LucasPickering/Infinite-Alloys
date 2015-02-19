@@ -13,11 +13,6 @@ import infinitealloys.util.EnumMetal;
 
 public class ItemIngot extends ItemIA {
 
-  public ItemIngot() {
-    super();
-    setHasSubtypes(true);
-  }
-
   @Override
   @SideOnly(Side.CLIENT)
   public void getSubItems(Item item, CreativeTabs creativetabs, List list) {

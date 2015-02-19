@@ -41,12 +41,9 @@ public class CommonProxy {
   public GfxHandler gfxHandler;
 
   public void initBlocks() {
-    IABlocks.ore =
-        new BlockOre().setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName("ore");
-    IABlocks.machine = new BlockMachine().setHardness(3F)
-        .setCreativeTab(InfiniteAlloys.tabIA).setBlockName("machine");
-    IABlocks.portal =
-        new BlockBossPortal().setCreativeTab(InfiniteAlloys.tabIA).setBlockName("portal");
+    IABlocks.ore.setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName("ore");
+    IABlocks.machine.setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName("machine");
+    IABlocks.portal.setCreativeTab(InfiniteAlloys.tabIA).setBlockName("portal");
 
     GameRegistry.registerBlock(IABlocks.ore, ItemBlockOre.class, IABlocks.ore.getUnlocalizedName());
     GameRegistry.registerBlock(IABlocks.machine, ItemBlockMachine.class,
@@ -69,13 +66,16 @@ public class CommonProxy {
   }
 
   public void initItems() {
-    IAItems.multi = new ItemMulti().setUnlocalizedName("multi");
-    IAItems.ingot = new ItemIngot().setUnlocalizedName("ingot");
-    IAItems.alloyIngot =
-        new ItemAlloyIngot().setUnlocalizedName("alloyIngot").setTextureName("ingot");
-    IAItems.internetWand =
-        new ItemInternetWand().setMaxStackSize(1).setUnlocalizedName("internetWand");
-    IAItems.teleporter = new ItemTeleporter().setMaxStackSize(1).setUnlocalizedName("teleporter");
+    IAItems.multi.setHasSubtypes(true).setCreativeTab(InfiniteAlloys.tabIA)
+        .setUnlocalizedName("multi");
+    IAItems.ingot.setHasSubtypes(true).setCreativeTab(InfiniteAlloys.tabIA)
+        .setUnlocalizedName("ingot");
+    IAItems.alloyIngot.setHasSubtypes(true).setUnlocalizedName("alloyIngot")
+        .setTextureName("ingot");
+    IAItems.internetWand.setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA)
+        .setUnlocalizedName("internetWand");
+    IAItems.teleporter.setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA)
+        .setUnlocalizedName("teleporter");
     for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
       IAItems.upgrades[upgradeType.ordinal()] = upgradeType.getItem();
     }
