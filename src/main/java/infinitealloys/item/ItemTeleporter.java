@@ -25,16 +25,28 @@ public class ItemTeleporter extends ItemIA {
   public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer entityPlayer) {
     if (entityPlayer.ridingEntity == null && entityPlayer.riddenByEntity == null
         && entityPlayer instanceof EntityPlayerMP) {
+      MinecraftServer mServer = MinecraftServer.getServer();
       EntityPlayerMP player = (EntityPlayerMP) entityPlayer;
       int destinationDimension;
       Point3 destinationCoords;
 
-      if (!itemStack.hasTagCompound()) {
-        createDimension(itemStack);
+      NBTTagCompound tagCompound;
+      int bossDimensionId;
+      if (itemStack.hasTagCompound()) {
+        tagCompound = itemStack.getTagCompound();
+        bossDimensionId = tagCompound.getInteger("dimensionId");
+      } else {
+        tagCompound = new NBTTagCompound();
+        itemStack.setTagCompound(tagCompound);
+        bossDimensionId = DimensionManager.getNextFreeDimId();
+        tagCompound.setInteger("dimensionId", bossDimensionId);
       }
 
-      NBTTagCompound tagCompound = itemStack.getTagCompound();
-      final int bossDimensionId = tagCompound.getInteger("dimensionId");
+      if (!DimensionManager.isDimensionRegistered(bossDimensionId)) {
+        DimensionManager.registerProviderType(bossDimensionId, WorldProviderBoss.class, false);
+        DimensionManager.registerDimension(bossDimensionId, bossDimensionId);
+      }
+
       if (player.dimension == bossDimensionId) {
         if (tagCompound.hasKey("returnCoords")) {
           int[] destination = tagCompound.getIntArray("returnCoords");
@@ -42,8 +54,7 @@ public class ItemTeleporter extends ItemIA {
           destinationCoords = new Point3(destination[1], destination[2], destination[3]);
         } else {
           destinationDimension = 0;
-          ChunkCoordinates spawnPoint =
-              MinecraftServer.getServer().worldServerForDimension(0).getSpawnPoint();
+          ChunkCoordinates spawnPoint = mServer.worldServerForDimension(0).getSpawnPoint();
           destinationCoords = new Point3(spawnPoint.posX, spawnPoint.posY, spawnPoint.posZ);
         }
       } else {
@@ -56,7 +67,6 @@ public class ItemTeleporter extends ItemIA {
       }
 
       player.setPosition(destinationCoords.x, destinationCoords.y, destinationCoords.z);
-      MinecraftServer mServer = MinecraftServer.getServer();
       mServer.getConfigurationManager()
           .transferPlayerToDimension(player,
                                      destinationDimension,
@@ -64,19 +74,5 @@ public class ItemTeleporter extends ItemIA {
                                          mServer.worldServerForDimension(destinationDimension)));
     }
     return itemStack;
-  }
-
-  /**
-   * Create a new dimension for the teleporter with the given {@link ItemStack}.
-   *
-   * @param itemStack the teleporter attached to the dimension
-   */
-  private void createDimension(ItemStack itemStack) {
-    final int dimensionId = DimensionManager.getNextFreeDimId();
-    DimensionManager.registerProviderType(dimensionId, WorldProviderBoss.class, false);
-    DimensionManager.registerDimension(dimensionId, dimensionId);
-    NBTTagCompound tagCompound = new NBTTagCompound();
-    itemStack.setTagCompound(tagCompound);
-    tagCompound.setInteger("dimensionId", dimensionId);
   }
 }

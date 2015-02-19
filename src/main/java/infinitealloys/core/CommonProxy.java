@@ -16,6 +16,7 @@ import java.util.Random;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import infinitealloys.block.BlockBossPortal;
 import infinitealloys.block.BlockMachine;
 import infinitealloys.block.BlockOre;
 import infinitealloys.block.IABlocks;
@@ -44,10 +45,13 @@ public class CommonProxy {
         new BlockOre().setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName("ore");
     IABlocks.machine = new BlockMachine().setHardness(3F)
         .setCreativeTab(InfiniteAlloys.tabIA).setBlockName("machine");
+    IABlocks.portal =
+        new BlockBossPortal().setCreativeTab(InfiniteAlloys.tabIA).setBlockName("portal");
 
     GameRegistry.registerBlock(IABlocks.ore, ItemBlockOre.class, IABlocks.ore.getUnlocalizedName());
     GameRegistry.registerBlock(IABlocks.machine, ItemBlockMachine.class,
                                IABlocks.machine.getUnlocalizedName());
+    GameRegistry.registerBlock(IABlocks.portal, IABlocks.portal.getUnlocalizedName());
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
       OreDictionary
