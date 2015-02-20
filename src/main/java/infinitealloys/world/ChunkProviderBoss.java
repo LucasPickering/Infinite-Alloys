@@ -19,6 +19,8 @@ import java.util.List;
  */
 public class ChunkProviderBoss implements IChunkProvider {
 
+  private final String JSON_FILE="."
+
   private final World worldObj;
 
   public ChunkProviderBoss(World world) {
@@ -34,8 +36,8 @@ public class ChunkProviderBoss implements IChunkProvider {
   }
 
   /**
-   * Will return back a chunk, if it doesn't exist and its not a MP client it will generates all
-   * the blocks for the specified chunk from the map seed and chunk seed
+   * Will return back a chunk, if it doesn't exist and its not a MP client it will generates all the
+   * blocks for the specified chunk from the map seed and chunk seed
    */
   @Override
   public Chunk provideChunk(int chunkX, int chunkZ) {
@@ -43,7 +45,7 @@ public class ChunkProviderBoss implements IChunkProvider {
 
     for (int y = 0; y < 10; y++) {
       Block block = null;
-      if (Math.abs(chunkX) < 2 && Math.abs(chunkZ) < 2) {
+      if (chunkX == 0 && chunkZ == 0) {
         block = Blocks.grass;
       }
 
@@ -69,6 +71,30 @@ public class ChunkProviderBoss implements IChunkProvider {
   }
 
   /**
+   * Get the block type of the block at the given location in the JSON data.
+   *
+   * @param x the x-coord
+   * @param y the y-coord
+   * @param z the z-coord
+   * @return the block type at (x, y, z)
+   */
+  private Block getBlockAt(int x, int y, int z) {
+
+  }
+
+  /**
+   * Get the metadata of the block at the given location in the JSON data.
+   *
+   * @param x the x-coord
+   * @param y the y-coord
+   * @param z the z-coord
+   * @return the metadata of the block at (x, y, z)
+   */
+  private int getMetadataAt(int x, int y, int z) {
+
+  }
+
+  /**
    * Checks to see if a chunk exists at x, z
    */
   @Override
@@ -81,13 +107,11 @@ public class ChunkProviderBoss implements IChunkProvider {
    */
   @Override
   public void populate(IChunkProvider chunkProvider, int x, int z) {
-    int blockX = x * 16;
-    int blockY = z * 16;
   }
 
   /**
-   * Two modes of operation: if passed true, save all Chunks in one go.  If passed false, save up
-   * to two chunks.
+   * Two modes of operation: if passed true, save all Chunks in one go.  If passed false, save up to
+   * two chunks.
    *
    * @return true if all chunks have been saved, false otherwise
    */
