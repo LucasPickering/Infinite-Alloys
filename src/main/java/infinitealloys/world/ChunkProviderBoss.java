@@ -19,8 +19,6 @@ import java.util.List;
  */
 public class ChunkProviderBoss implements IChunkProvider {
 
-  private final String JSON_FILE="."
-
   private final World worldObj;
 
   public ChunkProviderBoss(World world) {
@@ -79,7 +77,7 @@ public class ChunkProviderBoss implements IChunkProvider {
    * @return the block type at (x, y, z)
    */
   private Block getBlockAt(int x, int y, int z) {
-
+    return null;
   }
 
   /**
@@ -91,7 +89,7 @@ public class ChunkProviderBoss implements IChunkProvider {
    * @return the metadata of the block at (x, y, z)
    */
   private int getMetadataAt(int x, int y, int z) {
-
+    return 0;
   }
 
   /**
