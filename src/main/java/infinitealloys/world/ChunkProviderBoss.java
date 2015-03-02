@@ -97,7 +97,7 @@ public class ChunkProviderBoss implements IChunkProvider {
    */
   @Override
   public boolean chunkExists(int x, int z) {
-    return true;
+    return x == 0 && z == 0;
   }
 
   /**

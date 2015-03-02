@@ -45,6 +45,7 @@ public class ItemTeleporter extends ItemIA {
       if (!DimensionManager.isDimensionRegistered(bossDimensionId)) {
         DimensionManager.registerProviderType(bossDimensionId, WorldProviderBoss.class, false);
         DimensionManager.registerDimension(bossDimensionId, bossDimensionId);
+        System.out.println("Registered InfiniteAlloys dimension with ID " + bossDimensionId);
       }
 
       if (player.dimension == bossDimensionId) {
