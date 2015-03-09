@@ -10,14 +10,21 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import infinitealloys.util.Consts;
 
 /**
  * An {@link IChunkProvider} for dimensions that contain an IA boss. These dimensions have static
  * terrain (no generation) that is defined by a JSON file.
  */
 public class ChunkProviderBoss implements IChunkProvider {
+
+  private static final String JSON_DIR = Consts.MOD_ID + "/json/";
+  private static final int CHUNKS_X = 4;
+  private static final int CHUNKS_Z = 1;
 
   private final World worldObj;
 
@@ -43,7 +50,7 @@ public class ChunkProviderBoss implements IChunkProvider {
 
     for (int y = 0; y < 10; y++) {
       Block block = null;
-      if (Math.abs(chunkX) < 2 && Math.abs(chunkZ) < 2) {
+      if (chunkExists(chunkX, chunkZ)) {
         block = Blocks.grass;
       }
 
@@ -69,11 +76,36 @@ public class ChunkProviderBoss implements IChunkProvider {
   }
 
   /**
+   * Get the block type of the block that should go at the given coords
+   *
+   * @param x the x-coord
+   * @param y the y-coord
+   * @param z the z-coord
+   * @return the block type
+   */
+  private Block getBlockForCoords(int x, int y, int z) {
+    File jsonFile = new File(JSON_DIR + "chunk" + x % 16 + z % 16 + ".json");
+
+  }
+
+  /**
+   * Get the metadata of the block that should go at the given coords
+   *
+   * @param x the x-coord
+   * @param y the y-coord
+   * @param z the z-coord
+   * @return the metadata
+   */
+  private int getMetadataForCoords(int x, int y, int z) {
+
+  }
+
+  /**
    * Checks to see if a chunk exists at x, z
    */
   @Override
-  public boolean chunkExists(int x, int z) {
-    return true;
+  public boolean chunkExists(int chunkX, int chunkZ) {
+    return 0 <= chunkX && chunkX < CHUNKS_X && 0 <= chunkZ && chunkZ < CHUNKS_Z;
   }
 
   /**
@@ -81,8 +113,6 @@ public class ChunkProviderBoss implements IChunkProvider {
    */
   @Override
   public void populate(IChunkProvider chunkProvider, int x, int z) {
-    int blockX = x * 16;
-    int blockY = z * 16;
   }
 
   /**
@@ -126,7 +156,7 @@ public class ChunkProviderBoss implements IChunkProvider {
    */
   @Override
   public String makeString() {
-    return "IaBossLevelSource";
+    return "InfiniteAlloysSource";
   }
 
   /**
