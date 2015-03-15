@@ -10,6 +10,9 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
+import infinitealloys.tile.TEEEnergyStorage;
+import infinitealloys.tile.TEEMetalForge;
+import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Point3;
 import infinitealloys.world.TeleporterBoss;
 import infinitealloys.world.WorldProviderBoss;

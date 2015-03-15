@@ -1,9 +1,12 @@
 package infinitealloys.util;
 
+import java.io.File;
+
 public class Consts {
 
   public static final String MOD_ID = "infinitealloys";
   public static final String TEXTURE_PREFIX = MOD_ID + ":";
+  public static final File BOSS_REGION_FILE = new File("region/bossRegion.mca");
 
   /**
    * The names of each item that has damage values

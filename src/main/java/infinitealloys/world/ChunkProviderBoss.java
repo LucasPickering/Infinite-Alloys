@@ -3,15 +3,21 @@ package infinitealloys.world;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraft.world.chunk.storage.RegionFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import infinitealloys.util.Consts;
 
 /**
  * An {@link IChunkProvider} for dimensions that contain an IA boss. These dimensions have static
@@ -40,6 +46,20 @@ public class ChunkProviderBoss implements IChunkProvider {
   @Override
   public Chunk provideChunk(int chunkX, int chunkZ) {
     Chunk chunk = new Chunk(worldObj, chunkX, chunkZ);
+
+    if (chunkX / 32 == 0 && chunkZ / 32 == 0) {
+      RegionFile regionFile = new RegionFile(Consts.BOSS_REGION_FILE);
+      NBTTagCompound tagCompound;
+      try {
+        tagCompound =
+            CompressedStreamTools.read(regionFile.getChunkDataInputStream(chunkX, chunkZ));
+      } catch (IOException e) {
+        e.printStackTrace();
+        return null;
+      }
+
+      System.out.println(tagCompound);
+    }
 
     for (int y = 0; y < 10; y++) {
       Block block = null;
