@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class FuncsTest {
+public final class FuncsTest {
 
   @Test
   public void testIntAtPos() throws Exception {

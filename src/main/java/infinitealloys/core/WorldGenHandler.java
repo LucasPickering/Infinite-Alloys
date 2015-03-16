@@ -11,7 +11,7 @@ import cpw.mods.fml.common.IWorldGenerator;
 import infinitealloys.block.IABlocks;
 import infinitealloys.util.Consts;
 
-public class WorldGenHandler implements IWorldGenerator {
+public final class WorldGenHandler implements IWorldGenerator {
 
   private final int[] spawnChance = {1, 1, 1, 1, 2, 2, 3, 3};
   private final int[] heights = {60, 55, 50, 45, 40, 35, 30, 25};

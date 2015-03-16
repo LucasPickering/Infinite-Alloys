@@ -10,7 +10,7 @@ import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
-public class MessageOpenGui implements IMessage, IMessageHandler<MessageOpenGui, IMessage> {
+public final class MessageOpenGui implements IMessage, IMessageHandler<MessageOpenGui, IMessage> {
 
   private Point3 machine;
 

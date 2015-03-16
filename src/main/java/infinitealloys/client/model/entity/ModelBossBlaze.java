@@ -5,7 +5,7 @@ import net.minecraft.entity.Entity;
 
 import org.lwjgl.opengl.GL11;
 
-public class ModelBossBlaze extends ModelBlaze {
+public final class ModelBossBlaze extends ModelBlaze {
 
   @Override
   public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6,

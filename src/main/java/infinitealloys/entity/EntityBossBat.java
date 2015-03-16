@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 import infinitealloys.util.EnumBoss;
 
-public class EntityBossBat extends EntityIABoss {
+public final class EntityBossBat extends EntityIABoss {
 
   private ChunkCoordinates targetPosition;
 

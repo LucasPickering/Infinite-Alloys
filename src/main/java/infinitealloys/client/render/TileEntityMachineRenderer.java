@@ -12,7 +12,7 @@ import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
 
-public class TileEntityMachineRenderer extends TileEntitySpecialRenderer {
+public final class TileEntityMachineRenderer extends TileEntitySpecialRenderer {
 
   private final EnumMachine machine;
 

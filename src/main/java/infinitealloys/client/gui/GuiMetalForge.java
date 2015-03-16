@@ -15,7 +15,7 @@ import infinitealloys.util.EnumMetal;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 
-public class GuiMetalForge extends GuiElectric {
+public final class GuiMetalForge extends GuiElectric {
 
   private final TEEMetalForge temf;
 

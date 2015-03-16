@@ -2,7 +2,7 @@ package infinitealloys.util;
 
 import java.io.File;
 
-public class Consts {
+public final class Consts {
 
   public static final String MOD_ID = "infinitealloys";
   public static final String TEXTURE_PREFIX = MOD_ID + ":";

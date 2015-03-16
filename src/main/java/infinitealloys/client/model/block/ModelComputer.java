@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelComputer extends ModelBase {
+public final class ModelComputer extends ModelBase {
 
   ModelRenderer mouse;
   ModelRenderer keyboard;

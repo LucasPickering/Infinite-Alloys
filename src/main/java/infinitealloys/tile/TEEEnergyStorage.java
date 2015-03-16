@@ -16,7 +16,7 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
-public class TEEEnergyStorage extends TileEntityElectric implements IHost {
+public final class TEEEnergyStorage extends TileEntityElectric implements IHost {
 
   /**
    * The maximum amount of RK that this machine can store

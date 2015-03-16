@@ -5,7 +5,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import infinitealloys.util.Consts;
 
-public class NetworkHandler {
+public final class NetworkHandler {
 
   public static final SimpleNetworkWrapper simpleNetworkWrapper =
       NetworkRegistry.INSTANCE.newSimpleChannel(Consts.MOD_ID);

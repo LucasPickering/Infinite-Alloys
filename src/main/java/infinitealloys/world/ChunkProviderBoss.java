@@ -23,7 +23,7 @@ import infinitealloys.util.Consts;
  * An {@link IChunkProvider} for dimensions that contain an IA boss. These dimensions have static
  * terrain (no generation) that is defined by a JSON file.
  */
-public class ChunkProviderBoss implements IChunkProvider {
+public final class ChunkProviderBoss implements IChunkProvider {
 
   private final World worldObj;
 

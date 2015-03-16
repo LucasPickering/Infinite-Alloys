@@ -17,7 +17,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.Consts;
 import infinitealloys.world.TeleporterBoss;
 
-public class BlockBossPortal extends BlockPortal {
+public final class BlockBossPortal extends BlockPortal {
 
   @Override
   @SideOnly(Side.CLIENT)

@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 
 import infinitealloys.util.EnumMachine;
 
-public class SlotMachine extends Slot {
+public final class SlotMachine extends Slot {
 
   private final EnumMachine machine;
   private final int slotIndex;

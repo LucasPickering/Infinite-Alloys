@@ -4,7 +4,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import infinitealloys.tile.TEMComputer;
 
-public class GuiComputer extends GuiMachine {
+public final class GuiComputer extends GuiMachine {
 
   public GuiComputer(InventoryPlayer inventoryPlayer, TEMComputer tileEntity) {
     super(176, 166, inventoryPlayer, tileEntity);

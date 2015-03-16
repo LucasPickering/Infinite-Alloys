@@ -6,7 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 
 import org.lwjgl.opengl.GL11;
 
-public class ModelBossSkeleton extends ModelSkeleton {
+public final class ModelBossSkeleton extends ModelSkeleton {
 
   @Override
   public void render(Entity par1Entity, float par2, float par3, float par4, float par5, float par6,

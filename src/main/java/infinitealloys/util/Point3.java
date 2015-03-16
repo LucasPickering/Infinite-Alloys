@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf;
 /**
  * A 3D coordinate
  */
-public class Point3 {
+public final class Point3 {
 
   public int x, y, z;
 

@@ -4,7 +4,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import infinitealloys.tile.TileEntityMachine;
 
-public class ContainerMetalForge extends ContainerMachine {
+public final class ContainerMetalForge extends ContainerMachine {
 
   public ContainerMetalForge(InventoryPlayer inventoryPlayer, TileEntityMachine tileEntity) {
     super(tileEntity, 20);

@@ -18,7 +18,7 @@ import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import io.netty.buffer.ByteBuf;
 
-public class TEEPasture extends TileEntityElectric {
+public final class TEEPasture extends TileEntityElectric {
 
   /**
    * The the mode value for turning the machine off

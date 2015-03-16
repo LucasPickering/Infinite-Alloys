@@ -11,7 +11,7 @@ import infinitealloys.util.EnumAlloy;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
 
-public class ItemUpgradeAlloy extends ItemUpgrade {
+public final class ItemUpgradeAlloy extends ItemUpgrade {
 
   private IIcon ingotIcon;
 

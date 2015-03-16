@@ -14,7 +14,7 @@ import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.Point3;
 
-public class TEMComputer extends TileEntityMachine implements IHost {
+public final class TEMComputer extends TileEntityMachine implements IHost {
 
   /**
    * The max range that machines can be added at with the Internet Wand

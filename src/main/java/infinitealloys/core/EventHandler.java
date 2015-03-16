@@ -18,7 +18,7 @@ import infinitealloys.network.MessageValidAlloys;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 
-public class EventHandler {
+public final class EventHandler {
 
   private final String fileName = "InfiniteAlloys.dat";
   private String worldDir;

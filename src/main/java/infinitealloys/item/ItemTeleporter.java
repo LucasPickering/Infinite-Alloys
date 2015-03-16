@@ -17,7 +17,7 @@ import infinitealloys.util.Point3;
 import infinitealloys.world.TeleporterBoss;
 import infinitealloys.world.WorldProviderBoss;
 
-public class ItemTeleporter extends ItemIA {
+public final class ItemTeleporter extends ItemIA {
 
   @Override
   public boolean getShareTag() {

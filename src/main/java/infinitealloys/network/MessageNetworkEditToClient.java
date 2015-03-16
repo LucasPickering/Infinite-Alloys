@@ -16,7 +16,7 @@ import io.netty.buffer.ByteBuf;
  * Add or remove a machine to or from a machine network. Sorry for the confusion between machine
  * networks and real networks.
  */
-public class MessageNetworkEditToClient
+public final class MessageNetworkEditToClient
     implements IMessage, IMessageHandler<MessageNetworkEditToClient, IMessage> {
 
   private boolean adding;

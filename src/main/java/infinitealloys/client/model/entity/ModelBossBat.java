@@ -7,7 +7,7 @@ import net.minecraft.util.MathHelper;
 
 import org.lwjgl.opengl.GL11;
 
-public class ModelBossBat extends ModelBase {
+public final class ModelBossBat extends ModelBase {
 
   private final ModelRenderer batHead;
   /**

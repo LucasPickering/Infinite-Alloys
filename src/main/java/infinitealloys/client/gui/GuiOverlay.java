@@ -8,7 +8,7 @@ import net.minecraft.util.AxisAlignedBB;
 import infinitealloys.entity.EntityIABoss;
 import infinitealloys.util.Funcs;
 
-public class GuiOverlay extends GuiScreen {
+public final class GuiOverlay extends GuiScreen {
 
   public GuiOverlay() {
     Minecraft.getMinecraft().displayGuiScreen(this);

@@ -15,7 +15,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 
-public class BlockOre extends Block {
+public final class BlockOre extends Block {
 
   public BlockOre() {
     super(Material.rock);
