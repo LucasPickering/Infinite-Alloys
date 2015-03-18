@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelPasture extends ModelBase {
+public final class ModelPasture extends ModelBase {
 
   ModelRenderer post1;
   ModelRenderer post2;

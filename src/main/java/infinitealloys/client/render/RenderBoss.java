@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;
 
-public class RenderBoss extends RenderLiving {
+public final class RenderBoss extends RenderLiving {
 
   private final ResourceLocation textureLocation;
 

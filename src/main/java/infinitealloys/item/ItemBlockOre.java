@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMetal;
 
-public class ItemBlockOre extends ItemBlock {
+public final class ItemBlockOre extends ItemBlock {
 
   public ItemBlockOre(Block block) {
     super(block);

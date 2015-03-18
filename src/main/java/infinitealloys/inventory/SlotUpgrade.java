@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 
 import infinitealloys.tile.TileEntityMachine;
 
-public class SlotUpgrade extends Slot {
+public final class SlotUpgrade extends Slot {
 
   public SlotUpgrade(TileEntityMachine tem, int index, int x, int y) {
     super(tem, index, x, y);

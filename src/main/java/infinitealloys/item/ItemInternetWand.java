@@ -9,7 +9,7 @@ import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
 
-public class ItemInternetWand extends ItemIA {
+public final class ItemInternetWand extends ItemIA {
 
   @Override
   public boolean getShareTag() {

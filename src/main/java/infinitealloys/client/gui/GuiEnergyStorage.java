@@ -9,7 +9,7 @@ import java.awt.Point;
 import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.util.Funcs;
 
-public class GuiEnergyStorage extends GuiElectric {
+public final class GuiEnergyStorage extends GuiElectric {
 
   public TEEEnergyStorage tees;
 

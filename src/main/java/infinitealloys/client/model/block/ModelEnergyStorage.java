@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelEnergyStorage extends ModelBase {
+public final class ModelEnergyStorage extends ModelBase {
 
   ModelRenderer base;
   ModelRenderer frontWall;

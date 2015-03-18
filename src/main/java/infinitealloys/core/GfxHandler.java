@@ -31,7 +31,7 @@ import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumMetal;
 import infinitealloys.util.Point3;
 
-public class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
+public final class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 
   public int renderID;
   private final GuiOverlay guiOverlay = new GuiOverlay();

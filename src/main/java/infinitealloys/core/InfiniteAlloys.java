@@ -19,7 +19,7 @@ import infinitealloys.util.EnumMetal;
 import infinitealloys.util.Funcs;
 
 @Mod(modid = Consts.MOD_ID, name = "Infinite Alloys", version = "@VERSION@")
-public class InfiniteAlloys {
+public final class InfiniteAlloys {
 
   @Instance(Consts.MOD_ID)
   public static InfiniteAlloys instance;

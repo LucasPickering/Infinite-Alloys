@@ -11,7 +11,7 @@ import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
-public class TEEXray extends TileEntityElectric {
+public final class TEEXray extends TileEntityElectric {
 
   /**
    * A list of the detected blocks, x and z are relative to the machine, y is absolute

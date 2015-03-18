@@ -28,7 +28,7 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point3;
 
-public class GuiInternetWand extends GuiScreen {
+public final class GuiInternetWand extends GuiScreen {
 
   private final ResourceLocation background = Funcs.getGuiTexture("wand");
   private final int WIDTH = 178;

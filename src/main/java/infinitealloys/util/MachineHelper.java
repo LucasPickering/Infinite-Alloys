@@ -12,7 +12,7 @@ import infinitealloys.item.IAItems;
 import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 
-public class MachineHelper {
+public final class MachineHelper {
 
   /**
    * How many blocks are searched per tick. Used to limit lag on the x-ray.

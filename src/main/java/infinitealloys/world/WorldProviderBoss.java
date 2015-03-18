@@ -7,7 +7,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 
 import infinitealloys.util.Consts;
 
-public class WorldProviderBoss extends WorldProvider {
+public final class WorldProviderBoss extends WorldProvider {
 
   @Override
   public String getDimensionName() {

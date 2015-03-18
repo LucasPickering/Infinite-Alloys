@@ -11,12 +11,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMetal;
 
-public class ItemIngot extends ItemIA {
-
-  public ItemIngot() {
-    super();
-    setHasSubtypes(true);
-  }
+public final class ItemIngot extends ItemIA {
 
   @Override
   @SideOnly(Side.CLIENT)

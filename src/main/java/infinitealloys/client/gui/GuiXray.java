@@ -18,7 +18,7 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 import infinitealloys.util.Point3;
 
-public class GuiXray extends GuiElectric {
+public final class GuiXray extends GuiElectric {
 
   /**
    * Thew amount of columns of {@link BlockButton BlockButtons} that fit on the scroll menu at once

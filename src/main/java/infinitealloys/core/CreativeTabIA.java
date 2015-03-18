@@ -9,7 +9,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.block.IABlocks;
 import infinitealloys.util.Funcs;
 
-public class CreativeTabIA extends CreativeTabs {
+public final class CreativeTabIA extends CreativeTabs {
 
   public CreativeTabIA(int id, String name) {
     super(id, name);

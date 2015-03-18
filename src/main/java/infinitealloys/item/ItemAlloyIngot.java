@@ -15,12 +15,11 @@ import infinitealloys.util.EnumMetal;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 
-public class ItemAlloyIngot extends ItemIA {
+public final class ItemAlloyIngot extends ItemIA {
 
   public ItemAlloyIngot() {
     super();
     setCreativeTab(null);
-    setHasSubtypes(true);
   }
 
   @Override

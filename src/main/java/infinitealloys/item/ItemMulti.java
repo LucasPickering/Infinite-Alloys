@@ -12,14 +12,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.Consts;
 
-public class ItemMulti extends ItemIA {
+public final class ItemMulti extends ItemIA {
 
   private final IIcon[] icons = new IIcon[Consts.MULTI_ITEM_NAMES.length];
-
-  public ItemMulti() {
-    super();
-    setHasSubtypes(true);
-  }
 
   @Override
   @SideOnly(Side.CLIENT)

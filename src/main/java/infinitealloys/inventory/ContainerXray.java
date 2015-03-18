@@ -4,7 +4,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import infinitealloys.tile.TileEntityMachine;
 
-public class ContainerXray extends ContainerMachine {
+public final class ContainerXray extends ContainerMachine {
 
   public ContainerXray(InventoryPlayer inventoryPlayer, TileEntityMachine tileEntity) {
     super(tileEntity, 2);

@@ -4,7 +4,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import infinitealloys.tile.TileEntityMachine;
 
-public class ContainerEnergyStorage extends ContainerMachine {
+public final class ContainerEnergyStorage extends ContainerMachine {
 
   public ContainerEnergyStorage(InventoryPlayer inventoryPlayer, TileEntityMachine tileEntity) {
     super(tileEntity, 10);

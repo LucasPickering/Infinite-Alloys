@@ -28,7 +28,7 @@ import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 
-public class BlockMachine extends BlockContainer {
+public final class BlockMachine extends BlockContainer {
 
   public BlockMachine() {
     super(Material.iron);

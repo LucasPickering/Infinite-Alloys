@@ -5,7 +5,7 @@ import net.minecraft.world.World;
 
 import infinitealloys.util.EnumBoss;
 
-public class EntityBossBlaze extends EntityIABoss {
+public final class EntityBossBlaze extends EntityIABoss {
 
   public EntityBossBlaze(World world) {
     super(world, EnumBoss.BLAZE.alloy);

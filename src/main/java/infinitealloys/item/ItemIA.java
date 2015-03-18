@@ -8,11 +8,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 
-public class ItemIA extends Item {
-
-  public ItemIA() {
-    setCreativeTab(InfiniteAlloys.tabIA);
-  }
+public abstract class ItemIA extends Item {
 
   @Override
   @SideOnly(Side.CLIENT)

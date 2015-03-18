@@ -10,11 +10,14 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
+import infinitealloys.tile.TEEEnergyStorage;
+import infinitealloys.tile.TEEMetalForge;
+import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Point3;
 import infinitealloys.world.TeleporterBoss;
 import infinitealloys.world.WorldProviderBoss;
 
-public class ItemTeleporter extends ItemIA {
+public final class ItemTeleporter extends ItemIA {
 
   @Override
   public boolean getShareTag() {
@@ -45,6 +48,7 @@ public class ItemTeleporter extends ItemIA {
       if (!DimensionManager.isDimensionRegistered(bossDimensionId)) {
         DimensionManager.registerProviderType(bossDimensionId, WorldProviderBoss.class, false);
         DimensionManager.registerDimension(bossDimensionId, bossDimensionId);
+        System.out.println("Registered InfiniteAlloys dimension with ID " + bossDimensionId);
       }
 
       if (player.dimension == bossDimensionId) {

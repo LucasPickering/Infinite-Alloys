@@ -3,14 +3,17 @@ package infinitealloys.world;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraft.world.chunk.storage.RegionFile;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +23,7 @@ import infinitealloys.util.Consts;
  * An {@link IChunkProvider} for dimensions that contain an IA boss. These dimensions have static
  * terrain (no generation) that is defined by a JSON file.
  */
-public class ChunkProviderBoss implements IChunkProvider {
-
-  private static final String JSON_DIR = Consts.MOD_ID + "/json/";
-  private static final int CHUNKS_X = 4;
-  private static final int CHUNKS_Z = 1;
+public final class ChunkProviderBoss implements IChunkProvider {
 
   private final World worldObj;
 
@@ -42,15 +41,30 @@ public class ChunkProviderBoss implements IChunkProvider {
 
   /**
    * Will return back a chunk, if it doesn't exist and its not a MP client it will generates all
-   * the blocks for the specified chunk from the map seed and chunk seed
+   * the
+   * blocks for the specified chunk from the map seed and chunk seed
    */
   @Override
   public Chunk provideChunk(int chunkX, int chunkZ) {
     Chunk chunk = new Chunk(worldObj, chunkX, chunkZ);
 
+    if (chunkX / 32 == 0 && chunkZ / 32 == 0) {
+      RegionFile regionFile = new RegionFile(Consts.BOSS_REGION_FILE);
+      NBTTagCompound tagCompound;
+      try {
+        tagCompound =
+            CompressedStreamTools.read(regionFile.getChunkDataInputStream(chunkX, chunkZ));
+      } catch (IOException e) {
+        e.printStackTrace();
+        return null;
+      }
+
+      System.out.println(tagCompound);
+    }
+
     for (int y = 0; y < 10; y++) {
       Block block = null;
-      if (chunkExists(chunkX, chunkZ)) {
+      if (chunkX == 0 && chunkZ == 0) {
         block = Blocks.grass;
       }
 
@@ -76,36 +90,35 @@ public class ChunkProviderBoss implements IChunkProvider {
   }
 
   /**
-   * Get the block type of the block that should go at the given coords
+   * Get the block type of the block at the given location in the JSON data.
    *
    * @param x the x-coord
    * @param y the y-coord
    * @param z the z-coord
-   * @return the block type
+   * @return the block type at (x, y, z)
    */
-  private Block getBlockForCoords(int x, int y, int z) {
-    File jsonFile = new File(JSON_DIR + "chunk" + x % 16 + z % 16 + ".json");
-
+  private Block getBlockAt(int x, int y, int z) {
+    return null;
   }
 
   /**
-   * Get the metadata of the block that should go at the given coords
+   * Get the metadata of the block at the given location in the JSON data.
    *
    * @param x the x-coord
    * @param y the y-coord
    * @param z the z-coord
-   * @return the metadata
+   * @return the metadata of the block at (x, y, z)
    */
-  private int getMetadataForCoords(int x, int y, int z) {
-
+  private int getMetadataAt(int x, int y, int z) {
+    return 0;
   }
 
   /**
    * Checks to see if a chunk exists at x, z
    */
   @Override
-  public boolean chunkExists(int chunkX, int chunkZ) {
-    return 0 <= chunkX && chunkX < CHUNKS_X && 0 <= chunkZ && chunkZ < CHUNKS_Z;
+  public boolean chunkExists(int x, int z) {
+    return x == 0 && z == 0;
   }
 
   /**
@@ -117,7 +130,8 @@ public class ChunkProviderBoss implements IChunkProvider {
 
   /**
    * Two modes of operation: if passed true, save all Chunks in one go.  If passed false, save up
-   * to two chunks.
+   * to
+   * two chunks.
    *
    * @return true if all chunks have been saved, false otherwise
    */
@@ -156,7 +170,7 @@ public class ChunkProviderBoss implements IChunkProvider {
    */
   @Override
   public String makeString() {
-    return "InfiniteAlloysSource";
+    return "IaBossLevelSource";
   }
 
   /**

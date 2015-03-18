@@ -13,7 +13,7 @@ import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.MachineHelper;
 import io.netty.buffer.ByteBuf;
 
-public class TEEMetalForge extends TileEntityElectric {
+public final class TEEMetalForge extends TileEntityElectric {
 
   /**
    * The ID of the alloy that is currently set as the recipe

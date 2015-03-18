@@ -1,6 +1,5 @@
 package infinitealloys.util;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -15,7 +14,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import infinitealloys.network.NetworkHandler;
 
-public class Funcs {
+public final class Funcs {
 
   /**
    * Translate a number n into a radix, then get the digit at pos. The right-most position is 0 and

@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 
-public class TeleporterBoss extends Teleporter {
+public final class TeleporterBoss extends Teleporter {
 
   public TeleporterBoss(WorldServer worldServer) {
     super(worldServer);

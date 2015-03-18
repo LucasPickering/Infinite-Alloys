@@ -10,7 +10,7 @@ import infinitealloys.core.CommonProxy;
 import infinitealloys.util.EnumBoss;
 import infinitealloys.util.EnumMachine;
 
-public class ClientProxy extends CommonProxy {
+public final class ClientProxy extends CommonProxy {
 
   @Override
   public void initHandlers() {

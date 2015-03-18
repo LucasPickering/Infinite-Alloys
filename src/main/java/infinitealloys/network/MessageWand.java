@@ -10,7 +10,7 @@ import infinitealloys.item.ItemInternetWand;
 import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
-public class MessageWand implements IMessage, IMessageHandler<MessageWand, IMessage> {
+public final class MessageWand implements IMessage, IMessageHandler<MessageWand, IMessage> {
 
   private boolean adding;
   private Point3 machine;

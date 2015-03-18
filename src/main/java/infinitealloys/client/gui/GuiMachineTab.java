@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Funcs;
 
-public class GuiMachineTab extends GuiScreen {
+public final class GuiMachineTab extends GuiScreen {
 
   private final RenderItem itemRenderer;
   public TileEntityMachine tem;

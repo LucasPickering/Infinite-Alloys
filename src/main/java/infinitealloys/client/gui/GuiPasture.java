@@ -9,7 +9,7 @@ import infinitealloys.tile.TEEPasture;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 
-public class GuiPasture extends GuiElectric {
+public final class GuiPasture extends GuiElectric {
 
   public TEEPasture tep;
 

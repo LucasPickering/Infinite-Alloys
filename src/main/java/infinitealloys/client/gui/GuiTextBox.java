@@ -4,7 +4,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 
 /** A text box with one or more lines of text, each with its own color */
-class GuiTextBox extends GuiScreen {
+final class GuiTextBox extends GuiScreen {
 
   private int x;
   private int y;
@@ -73,7 +73,7 @@ class GuiTextBox extends GuiScreen {
 
 }
 
-class ColoredText {
+final class ColoredText {
   /** The line's text */
   String text;
   /** The line's hexadecimal color */

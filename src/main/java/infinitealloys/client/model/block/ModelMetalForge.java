@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelMetalForge extends ModelBase {
+public final class ModelMetalForge extends ModelBase {
 
   ModelRenderer bottom;
   ModelRenderer back;

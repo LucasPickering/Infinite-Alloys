@@ -13,7 +13,7 @@ import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
 
-public class ItemBlockMachine extends ItemBlock {
+public final class ItemBlockMachine extends ItemBlock {
 
   public ItemBlockMachine(Block block) {
     super(block);
