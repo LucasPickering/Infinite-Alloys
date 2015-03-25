@@ -4,7 +4,7 @@ import net.minecraft.item.Item;
 
 import infinitealloys.util.Consts;
 
-public class IAItems {
+public final class IAItems {
 
   public static final Item multi = new ItemMulti();
   public static final Item ingot = new ItemIngot();

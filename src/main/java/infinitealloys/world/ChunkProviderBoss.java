@@ -49,6 +49,7 @@ public final class ChunkProviderBoss implements IChunkProvider {
     Chunk chunk = new Chunk(worldObj, chunkX, chunkZ);
 
     if (chunkX / 32 == 0 && chunkZ / 32 == 0) {
+      System.out.println(Consts.BOSS_REGION_FILE.getAbsolutePath());
       RegionFile regionFile = new RegionFile(Consts.BOSS_REGION_FILE);
       NBTTagCompound tagCompound;
       try {
