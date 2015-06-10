@@ -117,84 +117,84 @@ public class CommonProxy {
                   '4', alloys[4], '5', alloys[5], 'M', machineComponent, 'D', Items.diamond, 'E',
                   Items.ender_pearl, 'G', Blocks.glass_pane);
 
-		/* Pasture */
+    /* Pasture */
     addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
                   '3', alloys[3], '4', alloys[4], 'M', machineComponent, 'F', Blocks.fence);
 
-		/* ESU */
+    /* ESU */
     addRecipeDict(new ItemStack(IABlocks.machine, 1, 4), "IAI", "CMC", "IAI",
                   'M', machineComponent, 'I', Items.iron_ingot,
                   'C', "ingotCopper", 'A', "ingotAluminium");
 
-		/*---UPGRADES---*/
-                /* Speed I */
+    /*---UPGRADES---*/
+    /* Speed I */
     addRecipeDict(EnumUpgrade.SPEED.getItemStackForTier(1), "0C0", "0U0",
                   '0', alloys[0], 'C', Items.cookie, 'U', upgradeComponent);
 
-		/* Speed II */
+    /* Speed II */
     addRecipeDict(EnumUpgrade.SPEED.getItemStackForTier(2), "2C2", "2U2",
                   '2', alloys[2], 'D', Items.cake, 'U', EnumUpgrade.SPEED.getItemStackForTier(1));
 
-		/* Speed III */
+    /* Speed III */
     addRecipeDict(EnumUpgrade.SPEED.getItemStackForTier(3), "4C4", "4U4",
                   '4', alloys[4], 'D', Items.golden_carrot,
                   'U', EnumUpgrade.SPEED.getItemStackForTier(2));
 
-		/* Efficiency I */
+    /* Efficiency I */
     addRecipeDict(EnumUpgrade.EFFICIENCY.getItemStackForTier(1), "1S1", "1U1",
                   '1', alloys[1], 'S', Items.iron_shovel, 'U', upgradeComponent);
 
-		/* Efficiency II */
+    /* Efficiency II */
     addRecipeDict(EnumUpgrade.EFFICIENCY.getItemStackForTier(2), "3S3", "3U3",
                   '3', alloys[3], 'S', Items.golden_shovel,
                   'U', EnumUpgrade.EFFICIENCY.getItemStackForTier(1));
 
-		/* Efficiency III */
+    /* Efficiency III */
     addRecipeDict(EnumUpgrade.EFFICIENCY.getItemStackForTier(3), "5S5", "5U5",
                   '5', alloys[5], 'S', Items.diamond_shovel,
                   'U', EnumUpgrade.EFFICIENCY.getItemStackForTier(2));
 
-		/* Capacity I */
+    /* Capacity I */
     addRecipeDict(EnumUpgrade.CAPACITY.getItemStackForTier(1), "0C0", "0U0", "III",
                   '0', alloys[0], 'C', Blocks.chest, 'I', Items.iron_ingot, 'U', upgradeComponent);
 
-		/* Capacity II */
+    /* Capacity II */
     addRecipeDict(EnumUpgrade.CAPACITY.getItemStackForTier(2), "2C2", "2U2", "GGG",
                   '2', alloys[2], 'C', Blocks.chest, 'G', Items.gold_ingot,
                   'U', EnumUpgrade.CAPACITY.getItemStackForTier(1));
 
-		/* Capacity III */
+    /* Capacity III */
     addRecipeDict(EnumUpgrade.CAPACITY.getItemStackForTier(3), "4C4", "4U4", "DDD",
                   '4', alloys[4], 'C', Blocks.chest, 'D', Items.diamond,
                   'U', EnumUpgrade.CAPACITY.getItemStackForTier(2));
 
-		/* Range I */
+    /* Range I */
     addRecipeDict(EnumUpgrade.RANGE.getItemStackForTier(1), "1S1", "1U1",
                   '1', alloys[1], 'S', Items.snowball, 'U', upgradeComponent);
 
-		/* Range II */
+    /* Range II */
     addRecipeDict(EnumUpgrade.RANGE.getItemStackForTier(2), "3B3", "3U3",
                   '3', alloys[3], 'B', Items.blaze_rod,
                   'U', EnumUpgrade.RANGE.getItemStackForTier(1));
 
-		/* Range III */
+    /* Range III */
     addRecipeDict(EnumUpgrade.RANGE.getItemStackForTier(3), "5E5", "5U5",
                   '5', alloys[5], 'E', Items.ender_eye,
                   'U', EnumUpgrade.RANGE.getItemStackForTier(2));
 
-		/* Wireless */
+    /* Wireless */
     addRecipeDict(EnumUpgrade.WIRELESS.getItemStackForTier(1), "1E1", "1U1",
                   '1', alloys[1], 'E', Items.ender_pearl, 'U', upgradeComponent);
 
-		/*---OTHER ITEMS---*/
-                /* Internet Wand */
+    /*---OTHER ITEMS---*/
+    /* Internet Wand */
     addRecipeDict(new ItemStack(IAItems.internetWand), " W ", "RSR",
                   'R', Items.redstone, 'S', Items.stick,
                   'W', EnumUpgrade.WIRELESS.getItemStackForTier(1));
-                /* Machine Frame */
+    /* Machine Frame */
     addRecipeDict(new ItemStack(IAItems.multi, 1, 0), "CCC", "AAA", "MMM",
                   'C', "ingotCopper", 'A', "ingotAluminium", 'M', "ingotMagnesium");
-                /* Upgrade Component */
+    /* Upgrade Component */
     addRecipeDict(new ItemStack(IAItems.multi, 1, 1), "CTC", "ATA", "A A",
                   'C', "ingotCopper", 'A', "ingotAluminium", 'T', "ingotTantalum");
 
