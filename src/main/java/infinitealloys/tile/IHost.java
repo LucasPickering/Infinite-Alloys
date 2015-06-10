@@ -11,9 +11,8 @@ public interface IHost {
 
   /**
    * Is the block at the specified point a valid client for this network? This checks general
-   * critera, e.g. the ESU just checks that it's an electrical block. More extensive
-   * checks, such as if the client is already in the network, are done in {@link
-   * #addClientWithChecks}.
+   * critera, e.g. the ESU just checks that it's an electrical block. More extensive checks, such as
+   * if the client is already in the network, are done in {@link #addClientWithChecks}.
    */
   public boolean isClientValid(Point3 client);
 

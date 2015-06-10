@@ -4,7 +4,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 
 import org.lwjgl.opengl.GL11;
 
-import java.awt.Point;
+import java.awt.*;
 
 import infinitealloys.tile.TEEEnergyStorage;
 import infinitealloys.util.Funcs;

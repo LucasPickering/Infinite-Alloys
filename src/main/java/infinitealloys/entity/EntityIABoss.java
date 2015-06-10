@@ -35,7 +35,7 @@ public abstract class EntityIABoss extends EntityMob {
     // All the AI tasks needed for proper operation
     tasks.addTask(0, new EntityAISwimming(this));
     tasks.addTask(2, new EntityAIAttackOnCollide(this, EntityPlayer.class, 1D, false));
-    tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityVillager.class,.0D, true));
+    tasks.addTask(4, new EntityAIAttackOnCollide(this, EntityVillager.class, .0D, true));
     tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1D));
     tasks.addTask(7, new EntityAIWander(this, 1.2D));
     tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8F));

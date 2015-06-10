@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 
 import org.lwjgl.opengl.GL11;
 
-import java.awt.Point;
+import java.awt.*;
 
 import infinitealloys.item.IAItems;
 import infinitealloys.tile.TEEMetalForge;

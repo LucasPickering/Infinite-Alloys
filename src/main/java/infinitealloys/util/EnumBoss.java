@@ -32,8 +32,7 @@ public enum EnumBoss {
   public final int portalXP;
 
   /**
-   * Constructs a new EnumBoss object
-   * h
+   * Constructs a new EnumBoss object h
    *
    * @param name        the unlocalized name of the boss
    * @param entityClass the class associated with this boss's entity

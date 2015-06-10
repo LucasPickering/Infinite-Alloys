@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-import java.awt.Rectangle;
+import java.awt.*;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -141,16 +141,12 @@ public final class Funcs {
 
   /**
    * Shorten a full number to 3 digits and add K, M, or B as an appropriate suffix, with the
-   * right-most digit
-   * always being rounded down. Abbreviation uses the following rules:
+   * right-most digit always being rounded down. Abbreviation uses the following rules:
    *
-   * <ul>
-   * <li>For {@code n < 1000}, nothing changes</li>
-   * <li>For {@code 1000 <= n < 1,000,000}, the suffix is "K"</li>
-   * <li>For {@code 1, 000, 000 <= n < 1,000,000,000}, the suffix is "M"</li>
-   * <li>For {@code n > 1,000,000,000}, the suffix is "B"</li>
-   * <li>Rounding is applied according to {@link String#format}'s 'g' specifier</li>
-   * </ul>
+   * <ul> <li>For {@code n < 1000}, nothing changes</li> <li>For {@code 1000 <= n < 1,000,000}, the
+   * suffix is "K"</li> <li>For {@code 1, 000, 000 <= n < 1,000,000,000}, the suffix is "M"</li>
+   * <li>For {@code n > 1,000,000,000}, the suffix is "B"</li> <li>Rounding is applied according to
+   * {@link String#format}'s 'g' specifier</li> </ul>
    *
    * @param n the number to be abbreviated
    * @return the abbreviated number, represented as a {@link String}
@@ -167,17 +163,16 @@ public final class Funcs {
   }
 
   // @formatter:off
+
   /**
-   * Convert an entity's yaw, on the range [-180, 180] to an EnumFacing value.
-   * The mapping works as follows:
-   * [-45, 45)   -> {@link net.minecraft.util.EnumFacing#SOUTH SOUTH}
-   * [45, 135)   -> {@link net.minecraft.util.EnumFacing#WEST  WEST}
-   * [135, -135) -> {@link net.minecraft.util.EnumFacing#NORTH NORTH}
-   * [-135, -45) -> {@link net.minecraft.util.EnumFacing#EAST  EAST}
+   * Convert an entity's yaw, on the range [-180, 180] to an EnumFacing value. The mapping works as
+   * follows: [-45, 45)   -> {@link net.minecraft.util.EnumFacing#SOUTH SOUTH} [45, 135)   -> {@link
+   * net.minecraft.util.EnumFacing#WEST  WEST} [135, -135) -> {@link net.minecraft.util.EnumFacing#NORTH
+   * NORTH} [-135, -45) -> {@link net.minecraft.util.EnumFacing#EAST  EAST}
    *
    * @param yaw entity's yaw
    * @return the yaw as a compass direction
-   * */
+   */
   //@formatter:on
   public static EnumFacing yawToFacing(float yaw) {
     int i = (int) Math.floor(yaw / 90F + 0.5F) & 3;
@@ -194,17 +189,16 @@ public final class Funcs {
   }
 
   // @formatter:off
+
   /**
-   * Convert an EnumFacing value to a yaw value.
-   * The mapping works as follows:
-   * {@link net.minecraft.util.EnumFacing#SOUTH SOUTH} -> 0
-   * {@link net.minecraft.util.EnumFacing#WEST  WEST}  -> 90
-   * {@link net.minecraft.util.EnumFacing#NORTH NORTH} -> 180
-   * {@link net.minecraft.util.EnumFacing#EAST  EAST}  -> -90
+   * Convert an EnumFacing value to a yaw value. The mapping works as follows: {@link
+   * net.minecraft.util.EnumFacing#SOUTH SOUTH} -> 0 {@link net.minecraft.util.EnumFacing#WEST
+   * WEST}  -> 90 {@link net.minecraft.util.EnumFacing#NORTH NORTH} -> 180 {@link
+   * net.minecraft.util.EnumFacing#EAST  EAST}  -> -90
    *
    * @param facing given compass direction
    * @return -90, 0, 90, or 180
-   * */
+   */
   //@formatter:on
   public static int facingToYaw(EnumFacing facing) {
     switch (facing) {

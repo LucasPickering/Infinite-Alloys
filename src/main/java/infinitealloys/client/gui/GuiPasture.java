@@ -3,7 +3,7 @@ package infinitealloys.client.gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 
-import java.awt.Point;
+import java.awt.*;
 
 import infinitealloys.tile.TEEPasture;
 import infinitealloys.util.Consts;

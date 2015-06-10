@@ -20,10 +20,10 @@ public final class WorldGenHandler implements IWorldGenerator {
 
   @Override
   public void generate(Random random, int chunkX, int chunkZ, World world,
-		       IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+                       IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
       if (!InfiniteAlloys.spawnOres[i] || random.nextInt(spawnChance[i]) == 0) {
-	continue;
+        continue;
       }
       for (int j = 0; j < rarities[i]; j++) {
         final int x = chunkX * 16 + random.nextInt(16);

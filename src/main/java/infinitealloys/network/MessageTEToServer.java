@@ -8,7 +8,8 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import infinitealloys.tile.TileEntityMachine;
 import io.netty.buffer.ByteBuf;
 
-public final class MessageTEToServer implements IMessage, IMessageHandler<MessageTEToServer, IMessage> {
+public final class MessageTEToServer
+    implements IMessage, IMessageHandler<MessageTEToServer, IMessage> {
 
   private TileEntityMachine tem;
   private ByteBuf bytes;

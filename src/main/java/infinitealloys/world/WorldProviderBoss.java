@@ -5,8 +5,6 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManagerHell;
 import net.minecraft.world.chunk.IChunkProvider;
 
-import infinitealloys.util.Consts;
-
 public final class WorldProviderBoss extends WorldProvider {
 
   @Override

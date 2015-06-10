@@ -103,16 +103,16 @@ public class CommonProxy {
     }
 
     //*---MACHINES---*/
-                /* Computer */
+    /* Computer */
     addRecipeDict(new ItemStack(IABlocks.machine), "W3G", "2M2", "R3R",
                   '2', alloys[2], '3', alloys[3], 'M', machineComponent, 'G', Blocks.glass_pane,
                   'R', Items.redstone, 'W', EnumUpgrade.WIRELESS.getItemStackForTier(1));
 
-		/* Metal Forge */
+    /* Metal Forge */
     addRecipeDict(new ItemStack(IABlocks.machine, 1, 1), "BBB", "BMB", "BBB",
                   'B', Items.brick, 'M', machineComponent);
 
-		/* X-ray */
+    /* X-ray */
     addRecipeDict(new ItemStack(IABlocks.machine, 1, 2), "E5E", "4M4", "D5G",
                   '4', alloys[4], '5', alloys[5], 'M', machineComponent, 'D', Items.diamond, 'E',
                   Items.ender_pearl, 'G', Blocks.glass_pane);

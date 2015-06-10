@@ -19,8 +19,10 @@ public final class GuiOverlay extends GuiScreen {
     final int searchSize = 20;
     EntityIABoss nearestBoss = (EntityIABoss) mc.theWorld.findNearestEntityWithinAABB(
         EntityIABoss.class, AxisAlignedBB.getBoundingBox(
-            mc.thePlayer.posX - searchSize, mc.thePlayer.posY - searchSize, mc.thePlayer.posZ - searchSize,
-            mc.thePlayer.posX + searchSize, mc.thePlayer.posY + searchSize, mc.thePlayer.posZ + searchSize),
+            mc.thePlayer.posX - searchSize, mc.thePlayer.posY - searchSize,
+            mc.thePlayer.posZ - searchSize,
+            mc.thePlayer.posX + searchSize, mc.thePlayer.posY + searchSize,
+            mc.thePlayer.posZ + searchSize),
         mc.thePlayer);
 
     if (nearestBoss != null) {

@@ -5,7 +5,6 @@ import net.minecraft.item.Item;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 
 public abstract class ItemIA extends Item {

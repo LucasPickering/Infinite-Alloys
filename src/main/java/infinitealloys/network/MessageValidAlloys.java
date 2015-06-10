@@ -7,7 +7,8 @@ import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 import io.netty.buffer.ByteBuf;
 
-public final class MessageValidAlloys implements IMessage, IMessageHandler<MessageValidAlloys, IMessage> {
+public final class MessageValidAlloys
+    implements IMessage, IMessageHandler<MessageValidAlloys, IMessage> {
 
   private int[] validAlloys = new int[Consts.VALID_ALLOY_COUNT];
 

@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import infinitealloys.tile.TileEntityMachine;
-import infinitealloys.util.Funcs;
 
 public final class GuiMachineTab extends GuiScreen {
 

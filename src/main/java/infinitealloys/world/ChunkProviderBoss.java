@@ -40,8 +40,7 @@ public final class ChunkProviderBoss implements IChunkProvider {
   }
 
   /**
-   * Will return back a chunk, if it doesn't exist and its not a MP client it will generates all
-   * the
+   * Will return back a chunk, if it doesn't exist and its not a MP client it will generates all the
    * blocks for the specified chunk from the map seed and chunk seed
    */
   @Override
@@ -130,8 +129,7 @@ public final class ChunkProviderBoss implements IChunkProvider {
   }
 
   /**
-   * Two modes of operation: if passed true, save all Chunks in one go.  If passed false, save up
-   * to
+   * Two modes of operation: if passed true, save all Chunks in one go.  If passed false, save up to
    * two chunks.
    *
    * @return true if all chunks have been saved, false otherwise

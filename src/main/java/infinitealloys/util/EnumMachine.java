@@ -19,7 +19,6 @@ import infinitealloys.client.model.block.ModelEnergyStorage;
 import infinitealloys.client.model.block.ModelMetalForge;
 import infinitealloys.client.model.block.ModelPasture;
 import infinitealloys.client.model.block.ModelXray;
-import infinitealloys.client.render.TileEntityMachineRenderer;
 import infinitealloys.inventory.ContainerComputer;
 import infinitealloys.inventory.ContainerEnergyStorage;
 import infinitealloys.inventory.ContainerMachine;
