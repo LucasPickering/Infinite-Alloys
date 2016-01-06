@@ -1,10 +1,12 @@
 package infinitealloys.core;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -43,13 +45,13 @@ public final class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandl
    * A map of blocks identified by an x-ray machine to be highlighted, their respective colors.
    */
   @SideOnly(Side.CLIENT)
-  public HashMap<Point3, Integer> xrayBlocks = new HashMap<>();
+  public HashMap<BlockPos, Integer> xrayBlocks = new HashMap<>();
 
   @Override
   public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
     if (id < Consts.MACHINE_COUNT) {
-      return EnumMachine.values()[id]
-          .getNewContainer(player.inventory, (TileEntityMachine) world.getTileEntity(x, y, z));
+      return EnumMachine.values()[id].getNewContainer(
+          player.inventory, (TileEntityMachine) world.getTileEntity(new BlockPos(x, y, z)));
     }
     return null;
   }
@@ -57,8 +59,8 @@ public final class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandl
   @Override
   public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
     if (id < Consts.MACHINE_COUNT) {
-      return EnumMachine.values()[id]
-          .getNewGui(player.inventory, (TileEntityMachine) world.getTileEntity(x, y, z));
+      return EnumMachine.values()[id].getNewGui(
+          player.inventory, (TileEntityMachine) world.getTileEntity(new BlockPos(x, y, z)));
     } else if (id == Consts.WAND_GUI_ID) {
       return new GuiInternetWand();
     }
@@ -266,13 +268,13 @@ public final class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandl
   @SideOnly(Side.CLIENT)
   private void renderOutlineBox(double minX, double minY, double minZ,
                                 double maxX, double maxY, double maxZ, int color) {
-    Tessellator tess = Tessellator.instance;
-    Tessellator.renderingWorldRenderer = false;
+    final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+    final Tessellator tess = Tessellator.getInstance();
 
     GL11.glPushMatrix();
     GL11.glDisable(GL11.GL_DEPTH_TEST);
     GL11.glDisable(GL11.GL_TEXTURE_2D);
-    GL11.glTranslated(-RenderManager.renderPosX, -RenderManager.renderPosY,
+    GL11.glTranslated(-renderManager.render, -RenderManager.renderPosY,
                       -RenderManager.renderPosZ);
 
     tess.startDrawing(GL11.GL_LINES);

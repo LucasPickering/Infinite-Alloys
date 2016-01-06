@@ -36,8 +36,8 @@ public enum EnumUpgrade {
       return itemClass.getConstructor(EnumUpgrade.class).newInstance(this);
     } catch (Exception e) {
       e.printStackTrace();
+      return null;
     }
-    return null;
   }
 
   /**

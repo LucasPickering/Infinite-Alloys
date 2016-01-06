@@ -1,0 +1,6 @@
+{
+  "parent": "infinitealloys:item/base",
+  "textures": {
+    "layer1": "infinitealloys:items/upgradeCapacity2"
+  }
+}

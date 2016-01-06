@@ -1,15 +1,12 @@
 package infinitealloys.entity;
 
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import infinitealloys.util.EnumBoss;
 
 public final class EntityBossBat extends EntityIABoss {
-
-  private ChunkCoordinates targetPosition;
 
   public EntityBossBat(World world) {
     super(world, EnumBoss.BAT.alloy);
