@@ -41,7 +41,7 @@ public abstract class EntityIABoss extends EntityMob {
     tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 8F));
     tasks.addTask(8, new EntityAILookIdle(this));
     targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
-    targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
+    targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true, true));
   }
 
   @Override
@@ -75,10 +75,5 @@ public abstract class EntityIABoss extends EntityMob {
     getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(40.0D);
     getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.23000000417232513D);
     getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(3.0D);
-  }
-
-  @Override
-  protected boolean isAIEnabled() {
-    return true;
   }
 }

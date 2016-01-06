@@ -13,6 +13,7 @@ import net.minecraft.util.AxisAlignedBB;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
@@ -75,21 +76,17 @@ public final class TEEPasture extends TileEntityElectric {
 
     for (int i = 0; i < mobActions.length; i++) {
       if (mobActions[i] == 1) {
-        for (EntityCreature creature : (List<EntityCreature>) worldObj.getEntitiesWithinAABB(
-            mobClasses[i], AxisAlignedBB
-                .getBoundingBox(xCoord - trapRange - 1, 0, zCoord - trapRange - 1,
-                                xCoord + trapRange + 2, worldObj.getHeight(),
-                                zCoord + trapRange + 2))) {
-          trapList.add(creature);
-        }
+        trapList.addAll(((List<EntityCreature>) worldObj.getEntitiesWithinAABB(
+            mobClasses[i], new AxisAlignedBB(
+                pos.getX() - trapRange - 1, 0, pos.getZ() - trapRange - 1,
+                pos.getX() + trapRange + 2, worldObj.getHeight(), pos.getZ() + trapRange + 2)))
+                            .stream().collect(Collectors.toList()));
       } else if (mobActions[i] == 2) {
-        for (EntityCreature creature : (List<EntityCreature>) worldObj.getEntitiesWithinAABB(
-            mobClasses[i], AxisAlignedBB
-                .getBoundingBox(xCoord - repelRange, 0, zCoord - repelRange,
-                                xCoord + repelRange + 1,
-                                worldObj.getHeight(), zCoord + repelRange + 1))) {
-          repelList.add(creature);
-        }
+        repelList.addAll(((List<EntityCreature>) worldObj.getEntitiesWithinAABB(
+            mobClasses[i], new AxisAlignedBB
+                (pos.getX() - repelRange, 0, pos.getZ() - repelRange,
+                 pos.getX() + repelRange + 1, worldObj.getHeight(), pos.getZ() + repelRange + 1)))
+                             .stream().collect(Collectors.toList()));
       }
     }
 
