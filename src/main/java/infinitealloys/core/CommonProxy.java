@@ -8,24 +8,26 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.Random;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import infinitealloys.block.IABlocks;
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemBlockMachine;
 import infinitealloys.item.ItemBlockOre;
+import infinitealloys.item.ItemUpgrade;
 import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumMetal;
 import infinitealloys.util.EnumUpgrade;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 
 public class CommonProxy {
@@ -58,27 +60,19 @@ public class CommonProxy {
   }
 
   public void initItems() {
+    Funcs.registerItem(IAItems.multi, "multi");
+    Funcs.registerItem(IAItems.ingot, "ingot");
+    Funcs.registerItem(IAItems.alloyIngot, "alloyIngot", "ingot");
+    Funcs.registerItem(IAItems.internetWand, "internetWand");
+    Funcs.registerItem(IAItems.teleporter, "teleporter");
+
     IAItems.multi.setHasSubtypes(true).setCreativeTab(InfiniteAlloys.tabIA)
         .setUnlocalizedName("multi");
-    IAItems.ingot.setHasSubtypes(true).setCreativeTab(InfiniteAlloys.tabIA)
-        .setUnlocalizedName("ingot");
-    IAItems.alloyIngot.setHasSubtypes(true).setUnlocalizedName("alloyIngot")
-        .setTextureName("ingot");
-    IAItems.internetWand.setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA)
-        .setUnlocalizedName("internetWand");
-    IAItems.teleporter.setMaxStackSize(1).setCreativeTab(InfiniteAlloys.tabIA)
-        .setUnlocalizedName("teleporter");
-    for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
-      IAItems.upgrades[upgradeType.ordinal()] = upgradeType.getItem();
-    }
 
-    GameRegistry.registerItem(IAItems.multi, IAItems.multi.getUnlocalizedName());
-    GameRegistry.registerItem(IAItems.ingot, IAItems.ingot.getUnlocalizedName());
-    GameRegistry.registerItem(IAItems.alloyIngot, IAItems.alloyIngot.getUnlocalizedName());
-    GameRegistry.registerItem(IAItems.internetWand, IAItems.internetWand.getUnlocalizedName());
-    GameRegistry.registerItem(IAItems.teleporter, IAItems.teleporter.getUnlocalizedName());
-    for (Item upgrade : IAItems.upgrades) {
-      GameRegistry.registerItem(upgrade, upgrade.getUnlocalizedName());
+    for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
+      ItemUpgrade upgradeItem = upgradeType.getItem();
+      Funcs.registerItem(IAItems.upgrades[upgradeType.ordinal()] = upgradeItem,
+                         upgradeItem.getUnlocalizedName());
     }
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
@@ -199,9 +193,8 @@ public class CommonProxy {
                   'C', "ingotCopper", 'A', "ingotAluminium", 'T', "ingotTantalum");
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
-      FurnaceRecipes.smelting()
-          .func_151394_a(new ItemStack(IABlocks.ore, 1, i), new ItemStack(IAItems.ingot, 1, i),
-                         0.6F);
+      FurnaceRecipes.instance().addSmeltingRecipe(new ItemStack(IABlocks.ore, 1, i),
+                                                  new ItemStack(IAItems.ingot, 1, i), 0.6F);
     }
   }
 

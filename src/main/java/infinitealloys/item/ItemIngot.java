@@ -3,15 +3,22 @@ package infinitealloys.item;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMetal;
 
 public final class ItemIngot extends ItemIA {
+
+  public ItemIngot() {
+    super();
+    setCreativeTab(InfiniteAlloys.tabIA);
+    setHasSubtypes(true);
+  }
 
   @Override
   @SideOnly(Side.CLIENT)

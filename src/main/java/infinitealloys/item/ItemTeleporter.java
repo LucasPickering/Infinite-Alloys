@@ -10,11 +10,18 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
+import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Point3;
 import infinitealloys.world.TeleporterBoss;
 import infinitealloys.world.WorldProviderBoss;
 
 public final class ItemTeleporter extends ItemIA {
+
+  public ItemTeleporter() {
+    super();
+    setCreativeTab(InfiniteAlloys.tabIA);
+    setMaxStackSize(1);
+  }
 
   @Override
   public boolean getShareTag() {

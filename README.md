@@ -13,5 +13,5 @@ use github, get help [here](https://help.github.com/). Join the [#InfiniteAlloys
 Minecraft Forge  
 
 ### Versions
-MC: 1.7.10  
-Forge: #1230  
+MC: 1.8.1  
+Forge: #1577  

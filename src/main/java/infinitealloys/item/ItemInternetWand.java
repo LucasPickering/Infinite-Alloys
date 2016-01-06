@@ -11,6 +11,12 @@ import infinitealloys.util.MachineHelper;
 
 public final class ItemInternetWand extends ItemIA {
 
+  public ItemInternetWand() {
+    super();
+    setCreativeTab(InfiniteAlloys.tabIA);
+    setMaxStackSize(1);
+  }
+
   @Override
   public boolean getShareTag() {
     return true;

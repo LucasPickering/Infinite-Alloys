@@ -1,24 +1,56 @@
 package infinitealloys.util;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.LanguageRegistry;
 
 import java.awt.*;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import infinitealloys.network.NetworkHandler;
 
 public final class Funcs {
 
   /**
-   * Translate a number n into a radix, then get the digit at pos. The right-most position is 0 and
-   * it increases to the left. If the given number is negative, the output will be negative.
+   * Gives an items an unlocalized name, then registers it under that name.
+   *
+   * @param item            the items to be registered
+   * @param unlocalizedName unlocalized name of the item
+   */
+  public static void registerItem(Item item, String unlocalizedName) {
+    registerItem(item, unlocalizedName, unlocalizedName);
+  }
+
+  /**
+   * Gives an items an unlocalized name, then registers it under that name.
+   *
+   * @param item            the items to be registered
+   * @param unlocalizedName unlocalized name of the item
+   * @param textureName     the name of the item's texture
+   */
+  public static void registerItem(Item item, String unlocalizedName, String textureName) {
+    item.setUnlocalizedName(unlocalizedName);
+    GameRegistry.registerItem(item, unlocalizedName);
+    if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+      Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
+          .register(item, 0,
+                    new ModelResourceLocation(Consts.MOD_ID + ":" + textureName, "inventory"));
+    }
+  }
+
+  /**
+   * Translate a number n into a radix, then get the digit at pos. The right-most position is 0 and it
+   * increases to the left. If the given number is negative, the output will be negative.
    *
    * @param n     the number that is being used
    * @param radix the radix of the number being given, e.g. 10 (decimal) or 2 (binary)
@@ -31,8 +63,8 @@ public final class Funcs {
   }
 
   /**
-   * Get a localization or series of localizations via keys. Add '/' to the start of a key to have
-   * it added to the final string without being localized. e.g. getLoc("general.off", "/is not",
+   * Get a localization or series of localizations via keys. Add '/' to the start of a key to have it
+   * added to the final string without being localized. e.g. getLoc("general.off", "/is not",
    * "general.on") would return "Off is not On" if the language is English.
    *
    * @param keys the list of keys to be localized and spliced together into a final string
@@ -66,8 +98,8 @@ public final class Funcs {
   }
 
   /**
-   * Given a mouse X and Y, is the mouse within a zone that starts at {@code xStart}, {@code
-   * yStart}, is {@code width} wide and {@code height} high? All four bounds are inclusive.
+   * Given a mouse X and Y, is the mouse within a zone that starts at {@code xStart}, {@code yStart},
+   * is {@code width} wide and {@code height} high? All four bounds are inclusive.
    *
    * @param mouseX the x-coordinate of the mouse
    * @param mouseY the y-coordinate of the mouse
@@ -84,8 +116,8 @@ public final class Funcs {
   }
 
   /**
-   * Reduce the values within an alloy, i.e. 44442222 becomes 22221111 Rightmost digits are the
-   * lesser metals
+   * Reduce the values within an alloy, i.e. 44442222 becomes 22221111 Rightmost digits are the lesser
+   * metals
    *
    * @param alloy the raw alloy data, before reduction
    * @return an alloy with reduced digits
@@ -162,8 +194,6 @@ public final class Funcs {
     return String.valueOf(n);
   }
 
-  // @formatter:off
-
   /**
    * Convert an entity's yaw, on the range [-180, 180] to an EnumFacing value. The mapping works as
    * follows: [-45, 45)   -> {@link net.minecraft.util.EnumFacing#SOUTH SOUTH} [45, 135)   -> {@link
@@ -173,7 +203,6 @@ public final class Funcs {
    * @param yaw entity's yaw
    * @return the yaw as a compass direction
    */
-  //@formatter:on
   public static EnumFacing yawToFacing(float yaw) {
     int i = (int) Math.floor(yaw / 90F + 0.5F) & 3;
     switch (i) {
@@ -188,18 +217,15 @@ public final class Funcs {
     }
   }
 
-  // @formatter:off
-
   /**
    * Convert an EnumFacing value to a yaw value. The mapping works as follows: {@link
-   * net.minecraft.util.EnumFacing#SOUTH SOUTH} -> 0 {@link net.minecraft.util.EnumFacing#WEST
-   * WEST}  -> 90 {@link net.minecraft.util.EnumFacing#NORTH NORTH} -> 180 {@link
+   * net.minecraft.util.EnumFacing#SOUTH SOUTH} -> 0 {@link net.minecraft.util.EnumFacing#WEST WEST}
+   * -> 90 {@link net.minecraft.util.EnumFacing#NORTH NORTH} -> 180 {@link
    * net.minecraft.util.EnumFacing#EAST  EAST}  -> -90
    *
    * @param facing given compass direction
    * @return -90, 0, 90, or 180
    */
-  //@formatter:on
   public static int facingToYaw(EnumFacing facing) {
     switch (facing) {
       case WEST:
