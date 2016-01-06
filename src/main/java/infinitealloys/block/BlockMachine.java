@@ -1,8 +1,10 @@
 package infinitealloys.block;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,10 +12,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,8 @@ import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 
 public final class BlockMachine extends BlockContainer {
+
+  private static final PropertyEnum MACHINE_PROP = PropertyEnum.create("machine", EnumMachine.class);
 
   public BlockMachine() {
     super(Material.iron);
@@ -44,29 +48,40 @@ public final class BlockMachine extends BlockContainer {
   }
 
   @Override
-  public boolean renderAsNormalBlock() {
-    return false;
+  @SuppressWarnings("unchecked")
+  public void getSubBlocks(Item item, CreativeTabs creativetabs, List list) {
+    for (int i = 0; i < Consts.MACHINE_COUNT; i++) {
+      list.add(new ItemStack(item, 1, i));
+    }
   }
 
   @Override
-  @SideOnly(Side.CLIENT)
-  public void registerBlockIcons(IIconRegister iconRegister) {
+  protected BlockState createBlockState() {
+    return new BlockState(this, MACHINE_PROP);
   }
 
   @Override
-  public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int facing,
-                                  float f, float f1, float f2) {
+  public IBlockState getStateFromMeta(int meta) {
+    return getDefaultState().withProperty(MACHINE_PROP, EnumMachine.byMetadata(meta));
+  }
+
+  @Override
+  public int getMetaFromState(IBlockState state) {
+    return ((EnumMachine) state.getValue(MACHINE_PROP)).ordinal();
+  }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player,
+                                  EnumFacing side, float hitX, float hitY, float hitZ) {
     ItemStack heldItem = player.inventory.getCurrentItem();
-    TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(x, y, z);
+    TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(pos);
 
     // Sync the network data for each host TE in this world if it has not already been done for this player
-    if (!world.isRemote && MachineHelper.playersToSync.contains(player.getDisplayName())) {
-      for (Object te : world.loadedTileEntityList) {
-        if (te instanceof IHost) {
-          ((IHost) te).syncAllClients(player);
-        }
-      }
-      MachineHelper.playersToSync.remove(player.getDisplayName());
+    if (!world.isRemote && MachineHelper.playersToSync.contains(player.getName())) {
+      world.loadedTileEntityList.stream().filter(te -> te instanceof IHost)
+          .forEach(te -> ((IHost) te).syncAllClients(player));
+      MachineHelper.playersToSync.remove(player.getName());
     }
 
     // Is the player holding a network wand?
@@ -78,7 +93,8 @@ public final class BlockMachine extends BlockContainer {
         heldItem.setTagCompound(new NBTTagCompound());
       }
       heldItem.getTagCompound()
-          .setIntArray("CoordsCurrent", new int[]{world.provider.dimensionId, x, y, z});
+          .setIntArray("CoordsCurrent", new int[]{world.provider.getDimensionId(),
+                                                  pos.getX(), pos.getY(), pos.getZ()});
 
       // Open the GUI for the wand to let the player decide what they want to do with this block
       player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI_ID, world, (int) player.posX,
@@ -92,10 +108,10 @@ public final class BlockMachine extends BlockContainer {
 
   public void openGui(World world, EntityPlayer player, TileEntityMachine tem) {
     if (!world.isRemote) {
-      world.markBlockForUpdate(tem.xCoord, tem.yCoord, tem.zCoord);
+      world.markBlockForUpdate(tem.getPos());
     }
-    player.openGui(InfiniteAlloys.instance, tem.getEnumMachine().ordinal(), world, tem.xCoord,
-                   tem.yCoord, tem.zCoord);
+    player.openGui(InfiniteAlloys.instance, tem.getEnumMachine().ordinal(), world,
+                   tem.getPos().getX(), tem.getPos().getY(), tem.getPos().getZ());
   }
 
   @Override
@@ -109,42 +125,34 @@ public final class BlockMachine extends BlockContainer {
   }
 
   @Override
-  public void onNeighborChange(IBlockAccess world, int x, int y, int z, int tileX, int tileY,
-                               int tileZ) {
-    ((TileEntityMachine) world.getTileEntity(x, y, z)).onNeighborChange(tileX, tileY, tileZ);
+  public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+    ((TileEntityMachine) world.getTileEntity(pos)).onNeighborChange(neighbor);
   }
 
   @Override
-  public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata,
+  public ArrayList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state,
                                        int fortune) {
-    return new ArrayList<ItemStack>();
+    return new ArrayList<>();
   }
 
   @Override
-  public void getSubBlocks(Item item, CreativeTabs creativetabs, List list) {
-    for (int i = 0; i < Consts.MACHINE_COUNT; i++) {
-      list.add(new ItemStack(item, 1, i));
-    }
-  }
-
-  @Override
-  public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving,
-                              ItemStack itemstack) {
-    TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(x, y, z);
+  public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer,
+                              ItemStack stack) {
+    TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(pos);
     if (tem != null) {
-      tem.orientation = Funcs.yawToFacing(entityLiving.rotationYaw + 180F);
-      if (itemstack.hasTagCompound()) {
-        tem.loadNBTData(itemstack.getTagCompound());
+      tem.orientation = Funcs.yawToFacing(placer.rotationYaw + 180F);
+      if (stack.hasTagCompound()) {
+        tem.loadNBTData(stack.getTagCompound());
       }
     }
   }
 
   @Override
-  public void breakBlock(World world, int x, int y, int z, Block block, int metadata) {
-    TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(x, y, z);
+  public void breakBlock(World world, BlockPos pos, IBlockState state) {
+    TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(pos);
     if (tem != null) {
       tem.onBlockDestroyed();
     }
-    super.breakBlock(world, x, y, z, block, metadata);
+    super.breakBlock(world, pos, state);
   }
 }

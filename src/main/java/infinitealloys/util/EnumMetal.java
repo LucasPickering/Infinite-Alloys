@@ -24,4 +24,8 @@ public enum EnumMetal {
     this.name = name;
     this.color = color;
   }
+
+  public static EnumMetal byMetadata(int meta) {
+    return values()[0 <= meta && meta < Consts.METAL_COUNT ? meta : 0];
+  }
 }

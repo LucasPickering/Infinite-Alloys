@@ -57,10 +57,10 @@ public enum EnumMachine {
   public final String[] persistentFields;
 
   EnumMachine(String name, Class<? extends TileEntityMachine> temClass,
-                      Class<? extends ContainerMachine> containerClass,
-                      Class<? extends GuiMachine> guiClass,
-                      ModelBase model,
-                      String... persistentFields) {
+              Class<? extends ContainerMachine> containerClass,
+              Class<? extends GuiMachine> guiClass,
+              ModelBase model,
+              String... persistentFields) {
     this.name = name;
     this.temClass = temClass;
     this.containerClass = containerClass;
@@ -136,5 +136,9 @@ public enum EnumMachine {
       default:
         return null;
     }
+  }
+
+  public static EnumMachine byMetadata(int meta) {
+    return values()[0 <= meta && meta < Consts.MACHINE_COUNT ? meta : 0];
   }
 }

@@ -39,14 +39,14 @@ public class CommonProxy {
           .registerOre("ore" + EnumMetal.values()[i].name, new ItemStack(IABlocks.ore, 1, i));
     }
 
-    IABlocks.ore.setHarvestLevel("pickaxe", 1, 0);
-    IABlocks.ore.setHarvestLevel("pickaxe", 1, 1);
-    IABlocks.ore.setHarvestLevel("pickaxe", 1, 2);
-    IABlocks.ore.setHarvestLevel("pickaxe", 1, 3);
-    IABlocks.ore.setHarvestLevel("pickaxe", 2, 4);
-    IABlocks.ore.setHarvestLevel("pickaxe", 2, 5);
-    IABlocks.ore.setHarvestLevel("pickaxe", 2, 6);
-    IABlocks.ore.setHarvestLevel("pickaxe", 3, 7);
+    IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(0));
+    IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(1));
+    IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(2));
+    IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(3));
+    IABlocks.ore.setHarvestLevel("pickaxe", 2, IABlocks.ore.getStateFromMeta(4));
+    IABlocks.ore.setHarvestLevel("pickaxe", 2, IABlocks.ore.getStateFromMeta(5));
+    IABlocks.ore.setHarvestLevel("pickaxe", 2, IABlocks.ore.getStateFromMeta(6));
+    IABlocks.ore.setHarvestLevel("pickaxe", 3, IABlocks.ore.getStateFromMeta(7));
   }
 
   public void initItems() {

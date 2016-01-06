@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "layer0": "blocks/ore_background",
+    "layer1": "blocks/ore_foreground"
+  }
+}

@@ -1,5 +1,6 @@
 package infinitealloys.client.gui;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -52,8 +53,8 @@ public final class GuiInternetWand extends GuiScreen {
   private GuiButton helpButton;
 
   /**
-   * If the GUI was opened by clicking on a machine, this button adds the machine that was clicked
-   * to the wand
+   * If the GUI was opened by clicking on a machine, this button adds the machine that was clicked to
+   * the wand
    */
   private GuiButton addToWand;
 
@@ -134,34 +135,30 @@ public final class GuiInternetWand extends GuiScreen {
             i--; // Decrement i so that it repeats this number for the new button
           } else {
             // Create a button
-            machineButtons.add(new MachineButton(i, topLeft.x + 7,
-                                                 topLeft.y + 42 + (i - scrollPos) * 21,
-                                                 client[0], client[1], client[2], client[3]));
+            machineButtons.add(new MachineButton(
+                i, topLeft.x + 7, topLeft.y + 42 + (i - scrollPos) * 21,
+                client[0], new BlockPos(client[1], client[2], client[3])));
           }
         }
       }
 
       if (tagCompound.hasKey("CoordsCurrent")) {
-        int[] a = tagCompound.getIntArray("CoordsCurrent");
+        final int[] a = tagCompound.getIntArray("CoordsCurrent");
+        final BlockPos pos = new BlockPos(a[1], a[2], a[3]);
         addToWand.enabled = ((ItemInternetWand) heldItem.getItem())
-            .isMachineValid(DimensionManager.getWorld(a[0]), heldItem, a[1], a[2], a[3]);
+            .isMachineValid(DimensionManager.getWorld(a[0]), heldItem, pos);
 
-        TileEntity te = DimensionManager.getWorld(a[0]).getTileEntity(a[1], a[2], a[3]);
+        TileEntity te = DimensionManager.getWorld(a[0]).getTileEntity(pos);
 
         addSelected.enabled = selectedButtons != 0;
-        // Go over each machine button
-        for (MachineButton button : machineButtons) {
-          if (button != null
-              && (selectedButtons & 1 << button.buttonID) != 0) // If this button is selected
-          // If the selected machine is not valid for the block that was clicked
-          {
-            if (!(te instanceof IHost)
-                || button.dimensionID != te.getWorldObj().provider.dimensionId || !((IHost) te)
-                .isClientValid(button.machinePos)) {
-              addSelected.enabled = false; // Set the button to false
-            }
-          }
-        }
+        // Go over each machine button. For the selected button (if it exists), but the selected
+        // machine is not valid
+        // If this button is selected
+        // If the selected machine is not valid for the block that was clicked
+        machineButtons.stream().filter(
+            button -> button != null && (selectedButtons >> button.buttonID & 1) == 1
+                      && (!(te instanceof IHost) || button.dimensionID != te.getWorld().provider.getDimensionId() || !((IHost) te)
+            .isClientValid(button.machinePos))).forEach(button -> addSelected.enabled = false);
       }
 
       if (0 <= machineButtons.size() - MAX_ROWS && machineButtons.size() - MAX_ROWS < scrollPos) {
@@ -188,25 +185,23 @@ public final class GuiInternetWand extends GuiScreen {
     else {
       Funcs.drawTexturedModalRect(this, topLeft.x + SCROLL_BAR.x,
                                   topLeft.y + SCROLL_BAR.y + (int)
-                                      ((float) (SCROLL_BAR.height - GuiMachine.SCROLL_ON.height)
+                                      (                                        (float) (SCROLL_BAR.height - GuiMachine.SCROLL_ON.height)
                                        / (float) (machineButtons.size() - 5) * scrollPos),
                                   GuiMachine.SCROLL_ON);
     }
     GL11.glPopMatrix();
 
-    for (MachineButton button : machineButtons) {
-      if (button != null) {
-        button.drawButton();
-      }
-    }
+    // Draw each non-null button
+    machineButtons.stream().filter(button -> button != null).forEach(MachineButton::drawButton);
 
     GL11.glPushMatrix();
     GL11.glTranslatef(topLeft.x, topLeft.y, 0);
 
-    mc.fontRenderer.drawStringWithShadow("D", 30, 30, 0xffffff);
-    mc.fontRenderer.drawStringWithShadow("X", 62, 30, 0xffffff);
-    mc.fontRenderer.drawStringWithShadow("Y", 86, 30, 0xffffff);
-    mc.fontRenderer.drawStringWithShadow("Z", 110, 30, 0xffffff);
+    final FontRenderer fontRenderer = mc.getRenderManager().getFontRenderer();
+    fontRenderer.drawStringWithShadow("D", 30, 30, 0xffffff);
+    fontRenderer.drawStringWithShadow("X", 62, 30, 0xffffff);
+    fontRenderer.drawStringWithShadow("Y", 86, 30, 0xffffff);
+    fontRenderer.drawStringWithShadow("Z", 110, 30, 0xffffff);
 
     // Draw the help dialogue and shade the help zone if help is enabled and the mouse is over a help zone
     if (helpEnabled) {
@@ -303,29 +298,31 @@ public final class GuiInternetWand extends GuiScreen {
       helpEnabled = !helpEnabled;
     } else if (button == addToWand) {
       int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
-      final BlockPos pos= new BlockPos(a[1],a[2],a[3]);
+      final BlockPos pos = new BlockPos(a[1], a[2], a[3]);
       Funcs.sendPacketToServer(new MessageWand(pos));
       ((ItemInternetWand) heldItem.getItem()).addMachine(mc.theWorld, heldItem, pos);
     } else if (button == addSelected) {
       int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 
       // If this is a host
-      if (mc.theWorld.getTileEntity(host[1], host[2], host[3]) instanceof IHost) {
-        // Go over each button
-        for (MachineButton machineButton : machineButtons) {
-          // If this button is selected
-          if (machineButton != null && (selectedButtons & 1 << machineButton.buttonID) != 0) {
-            // Add the selected machine to the host
-            int[] client =
-                heldItem.getTagCompound().getIntArray("Coords" + (machineButton.buttonID));
-            // They're in the same dimension
-            if (host[0] == client[0]) {
-              ((IHost) mc.theWorld.getTileEntity(host[1], host[2], host[3]))
-                  .addClientWithChecks(mc.thePlayer, new Point3(client[1], client[2], client[3]),
-                                       true);
-            }
-          }
-        }
+      final BlockPos hostPos = new BlockPos(host[1], host[2], host[3]);
+      if (mc.theWorld.getTileEntity(hostPos) instanceof IHost) {
+        // Go over each button. For each selected button...
+        machineButtons.stream().filter(
+            machineButton -> machineButton != null
+                             && ((selectedButtons >> machineButton.buttonID) & 1) == 1)
+            .forEach(machineButton -> {
+              // Add the selected machine to the host
+              int[] client =
+                  heldItem.getTagCompound().getIntArray("Coords" + (machineButton.buttonID));
+
+              // They're in the same dimension
+              if (host[0] == client[0]) {
+                ((IHost) mc.theWorld.getTileEntity(hostPos))
+                    .addClientWithChecks(mc.thePlayer, new BlockPos(client[1], client[2], client[3]),
+                                         true);
+              }
+            });
       }
     } else {
       Funcs.sendPacketToServer(new MessageWand((byte) (button.id - 3)));
@@ -375,21 +372,22 @@ public final class GuiInternetWand extends GuiScreen {
     int xPos;
     int yPos;
 
-    int machineID;
     int dimensionID;
     BlockPos machinePos;
+    int machineID;
 
     GuiButton removeButton;
 
+    @SuppressWarnings("unchecked")
     MachineButton(int buttonID, int xPos, int yPos, int dimensionID, BlockPos machinePos) {
       super();
       this.buttonID = buttonID;
       this.xPos = xPos;
       this.yPos = yPos;
       this.dimensionID = dimensionID;
-      machineID =
-          DimensionManager.getWorld(dimensionID).getBlockMetadata(machineX, machineY, machineZ);
       this.machinePos = machinePos;
+      final IBlockState state = DimensionManager.getWorld(dimensionID).getBlockState(machinePos);
+      machineID = state.getBlock().getMetaFromState(state);
 
       visible = scrollPos <= buttonID && buttonID < scrollPos + MAX_ROWS;
 
@@ -406,8 +404,8 @@ public final class GuiInternetWand extends GuiScreen {
         return;
       }
 
-      if ((1 << buttonID & selectedButtons)
-          != 0) { // If this button is selected, draw a box around it
+      // If this button is selected...
+      if ((selectedButtons >> buttonID & 1) == 1) {
         int yPosBox = yPos;
         int heightBox = height;
 
