@@ -1,17 +1,9 @@
 package infinitealloys.util;
 
-import java.io.File;
-
 public final class Consts {
 
   public static final String MOD_ID = "infinitealloys";
   public static final String TEXTURE_PREFIX = MOD_ID + ":";
-  public static final File BOSS_REGION_FILE = new File(TEXTURE_PREFIX + "region/bossRegion.mca");
-
-  /**
-   * The names of each item that has damage values
-   */
-  public static final String[] MULTI_ITEM_NAMES = {"machineComponent", "upgradeComponent"};
 
   public static final int METAL_COUNT = EnumMetal.values().length;
   public static final int MACHINE_COUNT = EnumMachine.values().length;

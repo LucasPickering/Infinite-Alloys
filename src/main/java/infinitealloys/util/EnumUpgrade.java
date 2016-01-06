@@ -25,7 +25,7 @@ public enum EnumUpgrade {
 
   private final Class<? extends ItemUpgrade> itemClass;
 
-  private EnumUpgrade(String name, int tiers, Class<? extends ItemUpgrade> itemClass) {
+  EnumUpgrade(String name, int tiers, Class<? extends ItemUpgrade> itemClass) {
     this.name = name;
     this.tiers = tiers;
     this.itemClass = itemClass;

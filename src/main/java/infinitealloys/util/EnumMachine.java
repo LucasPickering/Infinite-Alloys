@@ -4,9 +4,9 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.client.gui.GuiComputer;
 import infinitealloys.client.gui.GuiEnergyStorage;
@@ -56,7 +56,7 @@ public enum EnumMachine {
    */
   public final String[] persistentFields;
 
-  private EnumMachine(String name, Class<? extends TileEntityMachine> temClass,
+  EnumMachine(String name, Class<? extends TileEntityMachine> temClass,
                       Class<? extends ContainerMachine> containerClass,
                       Class<? extends GuiMachine> guiClass,
                       ModelBase model,

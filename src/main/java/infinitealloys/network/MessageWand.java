@@ -1,18 +1,20 @@
 package infinitealloys.network;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemInternetWand;
+import infinitealloys.util.Funcs;
 import io.netty.buffer.ByteBuf;
 
 public final class MessageWand implements IMessage, IMessageHandler<MessageWand, IMessage> {
 
   private boolean adding;
-  private Point3 machine;
+  private BlockPos machine;
   private byte index;
 
   public MessageWand() {
@@ -21,7 +23,7 @@ public final class MessageWand implements IMessage, IMessageHandler<MessageWand,
   /**
    * Adding
    */
-  public MessageWand(Point3 machine) {
+  public MessageWand(BlockPos machine) {
     adding = true;
     this.machine = machine;
   }
@@ -39,7 +41,7 @@ public final class MessageWand implements IMessage, IMessageHandler<MessageWand,
     adding = bytes.readBoolean();
 
     if (adding) {
-      machine = Point3.readFromByteBuf(bytes);
+      machine = Funcs.readBlockPosFromByteBuf(bytes);
     } else {
       index = bytes.readByte();
     }
@@ -49,7 +51,7 @@ public final class MessageWand implements IMessage, IMessageHandler<MessageWand,
   public void toBytes(ByteBuf bytes) {
     bytes.writeBoolean(adding);
     if (adding) {
-      machine.writeToByteBuf(bytes);
+      Funcs.writeBlockPosToByteBuf(bytes, machine);
     } else {
       bytes.writeByte(index);
     }
@@ -65,8 +67,7 @@ public final class MessageWand implements IMessage, IMessageHandler<MessageWand,
     if (heldItem.getItem() == IAItems.internetWand) {
       if (adding) {
         ((ItemInternetWand) heldItem.getItem())
-            .addMachine(context.getServerHandler().playerEntity.worldObj, heldItem, machine.x,
-                        machine.y, machine.z);
+            .addMachine(context.getServerHandler().playerEntity.worldObj, heldItem, machine);
       } else {
         ((ItemInternetWand) heldItem.getItem()).removeMachine(heldItem, index);
       }

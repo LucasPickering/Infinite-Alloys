@@ -20,7 +20,7 @@ public enum EnumMetal {
    * @param name  the name of the metal, in lower case
    * @param color the color of the metal as an RGB hexcode
    */
-  private EnumMetal(String name, int color) {
+  EnumMetal(String name, int color) {
     this.name = name;
     this.color = color;
   }

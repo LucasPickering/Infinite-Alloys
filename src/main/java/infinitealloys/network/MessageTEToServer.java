@@ -1,6 +1,7 @@
 package infinitealloys.network;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -34,7 +35,7 @@ public final class MessageTEToServer
   @Override
   public IMessage onMessage(MessageTEToServer message, MessageContext context) {
     TileEntity te = context.getServerHandler().playerEntity.worldObj.getTileEntity(
-        message.bytes.readInt(), message.bytes.readInt(), message.bytes.readInt());
+        new BlockPos(message.bytes.readInt(), message.bytes.readInt(), message.bytes.readInt()));
     if (te instanceof TileEntityMachine) {
       ((TileEntityMachine) te).readToServerData(message.bytes);
     }

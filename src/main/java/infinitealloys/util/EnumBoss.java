@@ -40,7 +40,7 @@ public enum EnumBoss {
    * @param alloy       the alloy type that this boss drops
    * @param portalXP    the XP needed to enter the portal to this boss's dimension
    */
-  private EnumBoss(String name, Class<? extends EntityIABoss> entityClass, ModelBase model,
+  EnumBoss(String name, Class<? extends EntityIABoss> entityClass, ModelBase model,
                    EnumAlloy alloy, int portalXP) {
     this.name = name;
     this.entityClass = entityClass;

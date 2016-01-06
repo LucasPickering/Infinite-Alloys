@@ -47,7 +47,7 @@ public enum EnumAlloy {
   public final int min;
   public final int max;
 
-  private EnumAlloy(String name, int min, int max) {
+  EnumAlloy(String name, int min, int max) {
     this.name = name;
     this.min = min;
     this.max = max;
@@ -58,13 +58,6 @@ public enum EnumAlloy {
    */
   public int getAlloy() {
     return InfiniteAlloys.instance.getValidAlloys()[ordinal()];
-  }
-
-  /**
-   * Get the ID of this alloy. The ID is this alloy's index in the enum.
-   */
-  public int getID() {
-    return ordinal();
   }
 
 }
