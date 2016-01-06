@@ -46,24 +46,27 @@ public final class Funcs {
    * @param unlocalizedName unlocalized name of the item
    */
   public static void registerItem(Item item, String unlocalizedName) {
-    registerItem(item, unlocalizedName, unlocalizedName);
+    item.setUnlocalizedName(unlocalizedName);
+    GameRegistry.registerItem(item, unlocalizedName);
+  }
+
+  public static void registerItemModel(Item item, int subType, String textureName) {
+    if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+      Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
+          .register(item, subType,
+                    new ModelResourceLocation(Consts.MOD_ID + ":" + textureName, "inventory"));
+    }
   }
 
   /**
-   * Gives an items an unlocalized name, then registers it under that name.
+   * Gives an items an unlocalized name, then registers it under that name and gives it a texture.
    *
    * @param item            the items to be registered
    * @param unlocalizedName unlocalized name of the item
-   * @param textureName     the name of the item's texture
    */
-  public static void registerItem(Item item, String unlocalizedName, String textureName) {
-    item.setUnlocalizedName(unlocalizedName);
-    GameRegistry.registerItem(item, unlocalizedName);
-    if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
-      Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-          .register(item, 0,
-                    new ModelResourceLocation(Consts.MOD_ID + ":" + textureName, "inventory"));
-    }
+  public static void registerItemAndModel(Item item, String unlocalizedName) {
+    registerItem(item, unlocalizedName);
+    registerItemModel(item, 0, unlocalizedName);
   }
 
   /**

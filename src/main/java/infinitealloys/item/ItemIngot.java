@@ -14,7 +14,16 @@ import infinitealloys.util.EnumMetal;
 public final class ItemIngot extends Item {
 
   @Override
+  public String getUnlocalizedName(ItemStack stack) {
+    if (stack.getItemDamage() < Consts.METAL_COUNT) {
+      return "item." + EnumMetal.values()[stack.getItemDamage()].name + "Ingot";
+    }
+    return super.getUnlocalizedName(stack);
+  }
+
+  @Override
   @SideOnly(Side.CLIENT)
+  @SuppressWarnings("unchecked")
   public void getSubItems(Item item, CreativeTabs creativetabs, List list) {
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
       list.add(new ItemStack(item, 1, i));
@@ -31,13 +40,5 @@ public final class ItemIngot extends Item {
       return EnumMetal.values()[itemstack.getItemDamage()].color;
     }
     return 0xffffff;
-  }
-
-  @Override
-  public String getUnlocalizedName(ItemStack itemstack) {
-    if (itemstack.getItemDamage() < Consts.METAL_COUNT) {
-      return "item." + EnumMetal.values()[itemstack.getItemDamage()].name + "Ingot";
-    }
-    return super.getUnlocalizedName(itemstack);
   }
 }

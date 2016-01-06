@@ -50,11 +50,16 @@ public class CommonProxy {
   }
 
   public void initItems() {
-    Funcs.registerItem(IAItems.machineComponent, "machineComponent");
-    Funcs.registerItem(IAItems.upgradeComponent, "upgradeComponent");
+    Funcs.registerItemAndModel(IAItems.machineComponent, "machineComponent");
+    Funcs.registerItemAndModel(IAItems.upgradeComponent, "upgradeComponent");
+
     Funcs.registerItem(IAItems.ingot, "ingot");
-    Funcs.registerItem(IAItems.alloyIngot, "alloyIngot", "ingot");
-    Funcs.registerItem(IAItems.internetWand, "internetWand");
+    for (int i = 0; i < Consts.METAL_COUNT; i++) {
+      Funcs.registerItemModel(IAItems.ingot, i, "ingot");
+    }
+
+    Funcs.registerItem(IAItems.alloyIngot, "alloyIngot");
+    Funcs.registerItemAndModel(IAItems.internetWand, "internetWand");
 
     for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
       Funcs.registerItem(IAItems.upgrades[upgradeType.ordinal()] = upgradeType.getItem(),
@@ -233,6 +238,7 @@ public class CommonProxy {
     GameRegistry.addRecipe(new ShapedOreRecipe(result, params));
   }
 
+  @SuppressWarnings("unchecked")
   private void registerEntity(Class<? extends Entity> entityClass, String name) {
     int entityID = EntityRegistry.findGlobalUniqueEntityId();
     Random rand = new Random(name.hashCode());
