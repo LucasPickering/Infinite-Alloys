@@ -8,17 +8,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMetal;
 
 public final class ItemIngot extends ItemIA {
-
-  public ItemIngot() {
-    super();
-    setCreativeTab(InfiniteAlloys.tabIA);
-    setHasSubtypes(true);
-  }
 
   @Override
   @SideOnly(Side.CLIENT)

@@ -17,11 +17,6 @@ import infinitealloys.util.MachineHelper;
 
 public final class ItemAlloyIngot extends ItemIA {
 
-  public ItemAlloyIngot() {
-    super();
-    setHasSubtypes(true);
-  }
-
   @Override
   public boolean getShareTag() {
     return true;

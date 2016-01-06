@@ -2,14 +2,17 @@ package infinitealloys.item;
 
 import net.minecraft.item.Item;
 
+import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 
 public final class IAItems {
 
-  public static final Item multi = new ItemMulti();
-  public static final Item ingot = new ItemIngot();
-  public static final Item alloyIngot = new ItemAlloyIngot();
-  public static final Item internetWand = new ItemInternetWand();
-  public static final Item teleporter = new ItemTeleporter();
+  public static final Item multi =
+      new ItemMulti().setCreativeTab(InfiniteAlloys.tabIA).setHasSubtypes(true);
+  public static final Item ingot =
+      new ItemIngot().setCreativeTab(InfiniteAlloys.tabIA).setHasSubtypes(true);
+  public static final Item alloyIngot = new ItemAlloyIngot().setHasSubtypes(true);
+  public static final Item internetWand =
+      new ItemInternetWand().setCreativeTab(InfiniteAlloys.tabIA).setMaxStackSize(1);
   public static final ItemUpgrade[] upgrades = new ItemUpgrade[Consts.UPGRADE_TYPE_COUNT];
 }

@@ -64,10 +64,6 @@ public class CommonProxy {
     Funcs.registerItem(IAItems.ingot, "ingot");
     Funcs.registerItem(IAItems.alloyIngot, "alloyIngot", "ingot");
     Funcs.registerItem(IAItems.internetWand, "internetWand");
-    Funcs.registerItem(IAItems.teleporter, "teleporter");
-
-    IAItems.multi.setHasSubtypes(true).setCreativeTab(InfiniteAlloys.tabIA)
-        .setUnlocalizedName("multi");
 
     for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
       ItemUpgrade upgradeItem = upgradeType.getItem();

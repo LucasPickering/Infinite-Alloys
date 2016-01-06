@@ -8,18 +8,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 
 public final class ItemMulti extends ItemIA {
 
   private final IIcon[] icons = new IIcon[Consts.MULTI_ITEM_NAMES.length];
-
-  public ItemMulti() {
-    super();
-    setCreativeTab(InfiniteAlloys.tabIA);
-    setHasSubtypes(true);
-  }
 
   @Override
   @SideOnly(Side.CLIENT)
