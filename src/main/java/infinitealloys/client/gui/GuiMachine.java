@@ -6,12 +6,14 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -154,9 +156,9 @@ public abstract class GuiMachine extends GuiContainer {
     // Draw the tabs of other machines on the network if this machine is connected to a computer
     machineTabs.clear();
     if (tem.computerHost != null) {
-      TEMComputer tec = (TEMComputer) Funcs.getTileEntity(mc.theWorld, tem.computerHost);
+      TEMComputer tec = (TEMComputer) mc.theWorld.getTileEntity(tem.computerHost);
       computerTab = new GuiMachineTab(mc, itemRender, -24, 6, tec, true,
-                                      tem.coords().equals(tem.computerHost));
+                                      tem.getPos().equals(tem.computerHost));
       computerTab.drawButton();
       // Draw a text box with the machine's name and coordinates
       if (Funcs.mouseInZone(mouseX, mouseY,
@@ -165,17 +167,16 @@ public abstract class GuiMachine extends GuiContainer {
 
         new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y,
                        Funcs.getLoc("tile." + computerTab.tem.getEnumMachine().name + ".name"),
-                       computerTab.tem.coords().toString()).draw();
+                       computerTab.tem.getPos().toString()).draw();
 
       }
 
-      Point3[] clients = tec.getClients();
+      BlockPos[] clients = tec.getClients();
       // For each client
       for (int i = 0; i < clients.length; i++) {
         machineTabs.add(new GuiMachineTab(mc, itemRender, i / 5 * 197 - 24, i % 5 * 25 + 36,
-                                          (TileEntityElectric) Funcs
-                                              .getTileEntity(mc.theWorld, clients[i]),
-                                          i / 5 == 0, clients[i].equals(tem.coords())));
+                                          (TileEntityElectric) mc.theWorld.getTileEntity(clients[i]),
+                                          i / 5 == 0, clients[i].equals(tem.getPos())));
         machineTabs.get(i).drawButton();
 
         // If the mouse is over this client's tab, draw a text box with its name and coords
@@ -186,7 +187,7 @@ public abstract class GuiMachine extends GuiContainer {
           new GuiTextBox(fontRendererObj,
                          mouseX - topLeft.x, mouseY - topLeft.y,
                          Funcs.getLoc("tile." + machineTabs.get(i).tem.getEnumMachine().name
-                                      + ".name"), machineTabs.get(i).tem.coords().toString());
+                                      + ".name"), machineTabs.get(i).tem.getPos().toString());
 
         }
       }
@@ -237,18 +238,17 @@ public abstract class GuiMachine extends GuiContainer {
   }
 
   @Override
-  protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+  protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
     super.mouseClicked(mouseX, mouseY, mouseButton);
     World world = Minecraft.getMinecraft().theWorld;
     EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
     // Was the network tab of the controlling computer clicked? Go to that computer
     if (computerTab != null && computerTab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
-      if (!tem.coords().equals(computerTab.tem.coords())) {
-        ((BlockMachine) world
-            .getBlock(computerTab.tem.xCoord, computerTab.tem.yCoord, computerTab.tem.zCoord))
+      if (!tem.getPos().equals(computerTab.tem.getPos())) {
+        ((BlockMachine) world.getBlockState(computerTab.tem.getPos()).getBlock())
             .openGui(world, player, computerTab.tem);
-        Funcs.sendPacketToServer(new MessageOpenGui(computerTab.tem.coords()));
+        Funcs.sendPacketToServer(new MessageOpenGui(computerTab.tem.getPos()));
       }
       return;
     }
@@ -256,10 +256,10 @@ public abstract class GuiMachine extends GuiContainer {
     // Was the network tab of another machine clicked? Go to that machine
     for (GuiMachineTab tab : machineTabs) {
       if (tab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
-        if (!tem.coords().equals(tab.tem.coords())) {
-          ((BlockMachine) world.getBlock(tab.tem.xCoord, tab.tem.yCoord, tab.tem.zCoord))
+        if (!tem.getPos().equals(tab.tem.getPos())) {
+          ((BlockMachine) world.getBlockState(tab.tem.getPos()).getBlock())
               .openGui(world, player, tab.tem);
-          Funcs.sendPacketToServer(new MessageOpenGui(tab.tem.coords()));
+          Funcs.sendPacketToServer(new MessageOpenGui(tab.tem.getPos()));
         }
         return;
       }

@@ -53,8 +53,7 @@ public final class GuiMachineTab extends GuiScreen {
                               GuiElectric.TAB_RIGHT_OFF.width, GuiElectric.TAB_RIGHT_OFF.height);
       }
     }
-    itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.renderEngine,
-                                   new ItemStack(tem.getBlockType(), 1, tem.getBlockMetadata()),
+    itemRenderer.renderItemIntoGUI(new ItemStack(tem.getBlockType(), 1, tem.getBlockMetadata()),
                                    xPos + 5, yPos + 4);
   }
 

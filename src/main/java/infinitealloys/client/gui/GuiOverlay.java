@@ -18,7 +18,7 @@ public final class GuiOverlay extends GuiScreen {
   public void drawHealthBar() {
     final int searchSize = 20;
     EntityIABoss nearestBoss = (EntityIABoss) mc.theWorld.findNearestEntityWithinAABB(
-        EntityIABoss.class, AxisAlignedBB.getBoundingBox(
+        EntityIABoss.class, new AxisAlignedBB(
             mc.thePlayer.posX - searchSize, mc.thePlayer.posY - searchSize,
             mc.thePlayer.posZ - searchSize,
             mc.thePlayer.posX + searchSize, mc.thePlayer.posY + searchSize,
@@ -26,8 +26,7 @@ public final class GuiOverlay extends GuiScreen {
         mc.thePlayer);
 
     if (nearestBoss != null) {
-      drawCenteredString(fontRendererObj, nearestBoss.getCommandSenderName(),
-                         width / 2, 2, 0xffffff);
+      drawCenteredString(fontRendererObj, nearestBoss.getName(), width / 2, 2, 0xffffff);
 
       mc.renderEngine.bindTexture(GuiMachine.extraIcons);
       int barX = (width - GuiMachine.HEALTH_BAR_BG.width) / 2;

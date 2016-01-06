@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.io.IOException;
 
 import infinitealloys.item.IAItems;
 import infinitealloys.tile.TEEMetalForge;
@@ -55,15 +56,13 @@ public final class GuiMetalForge extends GuiElectric {
     if (temf.recipeAlloyID >= 0)
     // Render the item icon for the alloy. The itemstack for a valid alloy is obtained by setting the damage to one more than the alloy's ID.
     {
-      itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine,
-                                   new ItemStack(IAItems.alloyIngot, 1, temf.recipeAlloyID + 1),
+      itemRender.renderItemIntoGUI(new ItemStack(IAItems.alloyIngot, 1, temf.recipeAlloyID + 1),
                                    topLeft.x + 40, topLeft.y + 52);
     }
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
-      itemRender
-          .renderItemIntoGUI(fontRendererObj, mc.renderEngine, new ItemStack(IAItems.ingot, 1, i),
-                             topLeft.x + i % 4 * 18 + 66, topLeft.y + i / 4 * 18 + 43);
+      itemRender.renderItemIntoGUI(new ItemStack(IAItems.ingot, 1, i),
+                                   topLeft.x + i % 4 * 18 + 66, topLeft.y + i / 4 * 18 + 43);
     }
 
     GL11.glDisable(GL11.GL_LIGHTING);
@@ -79,7 +78,7 @@ public final class GuiMetalForge extends GuiElectric {
   }
 
   @Override
-  protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+  protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
     super.mouseClicked(mouseX, mouseY, mouseButton);
 
     // If the preset selection slot was clicked, adjust its value accordingly

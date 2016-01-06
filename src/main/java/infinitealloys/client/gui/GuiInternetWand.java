@@ -1,10 +1,12 @@
 package infinitealloys.client.gui;
 
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.DimensionManager;
 
@@ -12,6 +14,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,7 +128,7 @@ public final class GuiInternetWand extends GuiScreen {
           int[] client = tagCompound.getIntArray("Coords" + i); // Variables for this machine's data
           // If the block is no longer valid
           if (!MachineHelper.isClient(DimensionManager.getWorld(client[0]).getTileEntity(
-              client[1], client[2], client[3]))) {
+              new BlockPos(client[1], client[2], client[3])))) {
             Funcs.sendPacketToServer(new MessageWand((byte) i)); // Remove it
             ((ItemInternetWand) heldItem.getItem()).removeMachine(heldItem, i);
             i--; // Decrement i so that it repeats this number for the new button
@@ -154,7 +157,7 @@ public final class GuiInternetWand extends GuiScreen {
           {
             if (!(te instanceof IHost)
                 || button.dimensionID != te.getWorldObj().provider.dimensionId || !((IHost) te)
-                .isClientValid(new Point3(button.machineX, button.machineY, button.machineZ))) {
+                .isClientValid(button.machinePos)) {
               addSelected.enabled = false; // Set the button to false
             }
           }
@@ -240,7 +243,7 @@ public final class GuiInternetWand extends GuiScreen {
   }
 
   @Override
-  public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+  public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
     super.mouseClicked(mouseX, mouseY, mouseButton);
     if (mouseButton == 0) { // If it was a left-click and there are stored machines
       for (int i = scrollPos; i < machineButtons.size() && i < scrollPos + MAX_ROWS; i++) {
@@ -300,8 +303,9 @@ public final class GuiInternetWand extends GuiScreen {
       helpEnabled = !helpEnabled;
     } else if (button == addToWand) {
       int[] a = heldItem.getTagCompound().getIntArray("CoordsCurrent");
-      Funcs.sendPacketToServer(new MessageWand(new Point3(a[1], a[2], a[3])));
-      ((ItemInternetWand) heldItem.getItem()).addMachine(mc.theWorld, heldItem, a[1], a[2], a[3]);
+      final BlockPos pos= new BlockPos(a[1],a[2],a[3]);
+      Funcs.sendPacketToServer(new MessageWand(pos));
+      ((ItemInternetWand) heldItem.getItem()).addMachine(mc.theWorld, heldItem, pos);
     } else if (button == addSelected) {
       int[] host = heldItem.getTagCompound().getIntArray("CoordsCurrent");
 
@@ -330,7 +334,7 @@ public final class GuiInternetWand extends GuiScreen {
   }
 
   @Override
-  public void handleMouseInput() {
+  public void handleMouseInput() throws IOException {
     super.handleMouseInput();
     int scrollAmt = Mouse.getEventDWheel();
     if (scrollAmt != 0) {
@@ -373,14 +377,11 @@ public final class GuiInternetWand extends GuiScreen {
 
     int machineID;
     int dimensionID;
-    int machineX;
-    int machineY;
-    int machineZ;
+    BlockPos machinePos;
 
     GuiButton removeButton;
 
-    MachineButton(int buttonID, int xPos, int yPos, int dimensionID, int machineX, int machineY,
-                  int machineZ) {
+    MachineButton(int buttonID, int xPos, int yPos, int dimensionID, BlockPos machinePos) {
       super();
       this.buttonID = buttonID;
       this.xPos = xPos;
@@ -388,9 +389,7 @@ public final class GuiInternetWand extends GuiScreen {
       this.dimensionID = dimensionID;
       machineID =
           DimensionManager.getWorld(dimensionID).getBlockMetadata(machineX, machineY, machineZ);
-      this.machineX = machineX;
-      this.machineY = machineY;
-      this.machineZ = machineZ;
+      this.machinePos = machinePos;
 
       visible = scrollPos <= buttonID && buttonID < scrollPos + MAX_ROWS;
 
@@ -438,25 +437,21 @@ public final class GuiInternetWand extends GuiScreen {
       GL11.glColor3f(1F, 1F, 1F); // Reset the color
 
       // Draw the string for the coordinates
-      mc.fontRenderer.drawStringWithShadow(dimensionID + "", xPos + 26 - mc.fontRenderer
-                                                                             .getStringWidth(
-                                                                                 dimensionID + "")
-                                                                         / 2, yPos + 5, 0xffffff);
-      mc.fontRenderer.drawStringWithShadow(machineX + "", xPos + 58 - mc.fontRenderer
-                                                                          .getStringWidth(
-                                                                              machineX + "") / 2,
-                                           yPos + 5, 0xffffff);
-      mc.fontRenderer.drawStringWithShadow(machineY + "", xPos + 82 - mc.fontRenderer
-                                                                          .getStringWidth(
-                                                                              machineY + "") / 2,
-                                           yPos + 5, 0xffffff);
-      mc.fontRenderer.drawStringWithShadow(machineZ + "", xPos + 106 - mc.fontRenderer
-                                                                           .getStringWidth(
-                                                                               machineZ + "") / 2,
-                                           yPos + 5, 0xffffff);
+      final FontRenderer fontRenderer = mc.getRenderManager().getFontRenderer();
+      final String dimId = Integer.toString(dimensionID);
+      final String machineX = Integer.toString(machinePos.getX());
+      final String machineY = Integer.toString(machinePos.getY());
+      final String machineZ = Integer.toString(machinePos.getZ());
+      fontRenderer.drawStringWithShadow(
+          dimId, xPos + 26 - fontRenderer.getStringWidth(dimId) / 2, yPos + 5, 0xffffff);
+      fontRenderer.drawStringWithShadow(
+          machineX, xPos + 58 - fontRenderer.getStringWidth(machineX) / 2, yPos + 5, 0xffffff);
+      fontRenderer.drawStringWithShadow(
+          machineY, xPos + 82 - fontRenderer.getStringWidth(machineY) / 2, yPos + 5, 0xffffff);
+      fontRenderer.drawStringWithShadow(
+          machineZ, xPos + 106 - fontRenderer.getStringWidth(machineZ) / 2, yPos + 5, 0xffffff);
 
-      itemRender.renderItemIntoGUI(fontRendererObj, mc.getTextureManager(),
-                                   new ItemStack(IABlocks.machine, 1, machineID), xPos, yPos + 1);
+      itemRender.renderItemIntoGUI(new ItemStack(IABlocks.machine, 1, machineID), xPos, yPos + 1);
     }
   }
 }
