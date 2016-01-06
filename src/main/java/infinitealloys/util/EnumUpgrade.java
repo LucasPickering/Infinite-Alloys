@@ -13,7 +13,7 @@ public enum EnumUpgrade {
   CAPACITY("upgradeCapacity", 3, ItemUpgrade.class),
   RANGE("upgradeRange", 3, ItemUpgrade.class),
   WIRELESS("upgradeWireless", 1, ItemUpgrade.class),
-  ALLOY("upgradeAlloy", 6, ItemUpgradeAlloy.class);
+  ALLOY("upgradeAlloy", Consts.VALID_ALLOY_COUNT, ItemUpgradeAlloy.class);
 
   public final String name;
 

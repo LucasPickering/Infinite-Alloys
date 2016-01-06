@@ -17,9 +17,6 @@ import java.util.Random;
 
 import infinitealloys.block.IABlocks;
 import infinitealloys.item.IAItems;
-import infinitealloys.item.ItemBlockMachine;
-import infinitealloys.item.ItemBlockOre;
-import infinitealloys.item.ItemUpgrade;
 import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;
@@ -60,9 +57,8 @@ public class CommonProxy {
     Funcs.registerItem(IAItems.internetWand, "internetWand");
 
     for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
-      ItemUpgrade upgradeItem = upgradeType.getItem();
-      Funcs.registerItem(IAItems.upgrades[upgradeType.ordinal()] = upgradeItem,
-                         upgradeItem.getUnlocalizedName());
+      Funcs.registerItem(IAItems.upgrades[upgradeType.ordinal()] = upgradeType.getItem(),
+                         upgradeType.name);
     }
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
@@ -101,7 +97,23 @@ public class CommonProxy {
 
     /* Pasture */
     addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
-                  '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent, 'F', Blocks.fence);
+                  '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent,
+                  'F', Blocks.oak_fence);
+    addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
+                  '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent,
+                  'F', Blocks.spruce_fence);
+    addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
+                  '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent,
+                  'F', Blocks.birch_fence);
+    addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
+                  '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent,
+                  'F', Blocks.jungle_fence);
+    addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
+                  '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent,
+                  'F', Blocks.dark_oak_fence);
+    addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
+                  '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent,
+                  'F', Blocks.acacia_fence);
 
     /* ESU */
     addRecipeDict(new ItemStack(IABlocks.machine, 1, 4), "IAI", "CMC", "IAI",

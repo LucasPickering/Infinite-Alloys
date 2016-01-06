@@ -21,7 +21,7 @@ public final class TileEntityMachineRenderer extends TileEntitySpecialRenderer {
   }
 
   @Override
-  public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale) {
+  public void renderTileEntityAt(TileEntity te, double x, double y, double z, float scale, int i) {
     ResourceLocation textures =
         new ResourceLocation(Consts.TEXTURE_PREFIX + "textures/blocks/" + machine.name + ".png");
     Minecraft.getMinecraft().renderEngine.bindTexture(textures);
