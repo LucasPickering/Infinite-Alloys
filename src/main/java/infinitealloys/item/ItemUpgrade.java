@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumUpgrade;
 
-public class ItemUpgrade extends ItemIA {
+public class ItemUpgrade extends Item {
 
   private final IIcon[] upgradeIcons;
   public final EnumUpgrade upgradeType;

@@ -11,7 +11,7 @@ import java.util.List;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMetal;
 
-public final class ItemIngot extends ItemIA {
+public final class ItemIngot extends Item {
 
   @Override
   @SideOnly(Side.CLIENT)

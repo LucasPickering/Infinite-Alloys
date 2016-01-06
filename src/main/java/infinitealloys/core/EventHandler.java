@@ -8,12 +8,12 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent.Load;
 import net.minecraftforge.event.world.WorldEvent.Save;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import infinitealloys.network.MessageValidAlloys;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
@@ -26,7 +26,7 @@ public final class EventHandler {
   @SubscribeEvent
   public void onWorldLoad(Load event) {
     if (!event.world.isRemote) {
-      if (event.world.provider.dimensionId == 0) {
+      if (event.world.provider.getDimensionId() == 0) {
         worldDir = DimensionManager.getWorld(0).getChunkSaveLocation().getPath();
         try {
           NBTTagCompound nbtTagCompound =
@@ -49,7 +49,7 @@ public final class EventHandler {
 
   @SubscribeEvent
   public void onWorldSave(Save event) {
-    if (!event.world.isRemote && event.world.provider.dimensionId == 0) {
+    if (!event.world.isRemote && event.world.provider.getDimensionId() == 0) {
       NBTTagCompound nbtTagCompound = new NBTTagCompound();
       InfiniteAlloys.instance.saveAlloyData(nbtTagCompound); // Add the alloy data
       try {
@@ -64,10 +64,11 @@ public final class EventHandler {
   @SubscribeEvent
   public void onEntityJoinWorld(EntityJoinWorldEvent event) {
     if (!event.world.isRemote && event.entity instanceof EntityPlayer) {
+      EntityPlayer player = (EntityPlayer) event.entity;
       Funcs.sendPacketToPlayer(new MessageValidAlloys(InfiniteAlloys.instance.getValidAlloys()),
-                               (EntityPlayer) event.entity);
-      if (!MachineHelper.playersToSync.contains(((EntityPlayer) event.entity).getDisplayName())) {
-        MachineHelper.playersToSync.add(((EntityPlayer) event.entity).getDisplayName());
+                               player);
+      if (!MachineHelper.playersToSync.contains(player.getDisplayNameString())) {
+        MachineHelper.playersToSync.add(player.getDisplayNameString());
       }
     }
   }

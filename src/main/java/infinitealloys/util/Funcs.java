@@ -6,10 +6,8 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -140,14 +138,6 @@ public final class Funcs {
       gcf = i;
     }
     return alloy / gcf;
-  }
-
-  /**
-   * Convenience method for getting a TE in a specific world when the coordinates are stored in a
-   * {@link Point3}
-   */
-  public static TileEntity getTileEntity(World world, Point3 p) {
-    return world.getTileEntity(p.x, p.y, p.z);
   }
 
   /**

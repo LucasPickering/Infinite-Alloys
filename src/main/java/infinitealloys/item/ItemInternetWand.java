@@ -1,15 +1,17 @@
 package infinitealloys.item;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 import infinitealloys.util.MachineHelper;
 
-public final class ItemInternetWand extends ItemIA {
+public final class ItemInternetWand extends Item {
 
   @Override
   public boolean getShareTag() {
@@ -29,13 +31,11 @@ public final class ItemInternetWand extends ItemIA {
   /**
    * Is the machine that is at (x, y, z) OK to be added to this wand?
    *
-   * @param x the machine's x coord
-   * @param y the machine's y coord
-   * @param z the machine's z coord
+   * @param pos the machine's pos
    * @return true if there is space for the machine, the machine is a valid client, and it does not
    * already exist in the wand
    */
-  public boolean isMachineValid(World world, ItemStack itemstack, int x, int y, int z) {
+  public boolean isMachineValid(World world, ItemStack itemstack, BlockPos pos) {
     // If the item does not already have a tag compound, create a new one
     NBTTagCompound tagCompound = itemstack.getTagCompound();
     if (tagCompound == null) {
@@ -43,13 +43,14 @@ public final class ItemInternetWand extends ItemIA {
     }
 
     // If the wand is not full and the machine is a valid remote client
-    if (!tagCompound.hasKey("Coords" + (Consts.WAND_SIZE - 1)) && MachineHelper
-        .isClient(world.getTileEntity(x, y, z))) {
+    if (!tagCompound.hasKey("Coords" + (Consts.WAND_SIZE - 1)) &&
+        MachineHelper.isClient(world.getTileEntity(pos))) {
       for (int i = 0; i < Consts.WAND_SIZE; i++) { // Iterate over each coord that the wand contains
         if (tagCompound.hasKey("Coords" + i)) {
           // If the wand already contains this machine, return false
           final int[] a = tagCompound.getIntArray("Coords" + i);
-          if (a[0] == world.provider.dimensionId && a[1] == x && a[2] == y && a[3] == z) {
+          if (a[0] == world.provider.getDimensionId() &&
+              a[1] == pos.getX() && a[2] == pos.getY() && a[3] == pos.getZ()) {
             return false;
           }
         }
@@ -61,16 +62,16 @@ public final class ItemInternetWand extends ItemIA {
   }
 
   /**
-   * Checks if the machine at x, y, z, can be added to the wand at itemstack, then adds it if it
-   * can
+   * Checks if the machine at x, y, z, can be added to the wand at itemstack, then adds it if it can
    */
-  public void addMachine(World world, ItemStack itemstack, int x, int y, int z) {
+  public void addMachine(World world, ItemStack itemstack, BlockPos pos) {
     if (itemstack.getItem() == IAItems.internetWand && isMachineValid(world, itemstack,
-                                                                      x, y, z)) {
+                                                                      pos)) {
       final NBTTagCompound tagCompound = itemstack.getTagCompound();
       for (int i = 0; i < Consts.WAND_SIZE; i++) {
         if (!tagCompound.hasKey("Coords" + i)) {
-          tagCompound.setIntArray("Coords" + i, new int[]{world.provider.dimensionId, x, y, z});
+          tagCompound.setIntArray("Coords" + i, new int[]{world.provider.getDimensionId(),
+                                                          pos.getX(), pos.getY(), pos.getZ()});
           break;
         }
       }

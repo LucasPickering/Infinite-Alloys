@@ -4,7 +4,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.common.MinecraftForge;
@@ -60,7 +59,8 @@ public class CommonProxy {
   }
 
   public void initItems() {
-    Funcs.registerItem(IAItems.multi, "multi");
+    Funcs.registerItem(IAItems.machineComponent, "machineComponent");
+    Funcs.registerItem(IAItems.upgradeComponent, "upgradeComponent");
     Funcs.registerItem(IAItems.ingot, "ingot");
     Funcs.registerItem(IAItems.alloyIngot, "alloyIngot", "ingot");
     Funcs.registerItem(IAItems.internetWand, "internetWand");
@@ -84,9 +84,6 @@ public class CommonProxy {
   }
 
   public void initRecipes() {
-    ItemStack machineComponent = new ItemStack(IAItems.multi, 1, 0);
-    ItemStack upgradeComponent = new ItemStack(IAItems.multi, 1, 1);
-
     ItemStack[] alloys = new ItemStack[Consts.VALID_ALLOY_COUNT];
     for (int i = 0; i < alloys.length; i++) {
       alloys[i] = new ItemStack(IAItems.alloyIngot, 1, i + 1);
@@ -95,31 +92,32 @@ public class CommonProxy {
     //*---MACHINES---*/
     /* Computer */
     addRecipeDict(new ItemStack(IABlocks.machine), "W3G", "2M2", "R3R",
-                  '2', alloys[2], '3', alloys[3], 'M', machineComponent, 'G', Blocks.glass_pane,
-                  'R', Items.redstone, 'W', EnumUpgrade.WIRELESS.getItemStackForTier(1));
+                  '2', alloys[2], '3', alloys[3], 'M', IAItems.machineComponent,
+                  'G', Blocks.glass_pane, 'R', Items.redstone,
+                  'W', EnumUpgrade.WIRELESS.getItemStackForTier(1));
 
     /* Metal Forge */
     addRecipeDict(new ItemStack(IABlocks.machine, 1, 1), "BBB", "BMB", "BBB",
-                  'B', Items.brick, 'M', machineComponent);
+                  'B', Items.brick, 'M', IAItems.machineComponent);
 
     /* X-ray */
     addRecipeDict(new ItemStack(IABlocks.machine, 1, 2), "E5E", "4M4", "D5G",
-                  '4', alloys[4], '5', alloys[5], 'M', machineComponent, 'D', Items.diamond, 'E',
-                  Items.ender_pearl, 'G', Blocks.glass_pane);
+                  '4', alloys[4], '5', alloys[5], 'M', IAItems.machineComponent, 'D', Items.diamond,
+                  'E', Items.ender_pearl, 'G', Blocks.glass_pane);
 
     /* Pasture */
     addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
-                  '3', alloys[3], '4', alloys[4], 'M', machineComponent, 'F', Blocks.fence);
+                  '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent, 'F', Blocks.fence);
 
     /* ESU */
     addRecipeDict(new ItemStack(IABlocks.machine, 1, 4), "IAI", "CMC", "IAI",
-                  'M', machineComponent, 'I', Items.iron_ingot,
+                  'M', IAItems.machineComponent, 'I', Items.iron_ingot,
                   'C', "ingotCopper", 'A', "ingotAluminium");
 
     /*---UPGRADES---*/
     /* Speed I */
     addRecipeDict(EnumUpgrade.SPEED.getItemStackForTier(1), "0C0", "0U0",
-                  '0', alloys[0], 'C', Items.cookie, 'U', upgradeComponent);
+                  '0', alloys[0], 'C', Items.cookie, 'U', IAItems.upgradeComponent);
 
     /* Speed II */
     addRecipeDict(EnumUpgrade.SPEED.getItemStackForTier(2), "2C2", "2U2",
@@ -132,7 +130,7 @@ public class CommonProxy {
 
     /* Efficiency I */
     addRecipeDict(EnumUpgrade.EFFICIENCY.getItemStackForTier(1), "1S1", "1U1",
-                  '1', alloys[1], 'S', Items.iron_shovel, 'U', upgradeComponent);
+                  '1', alloys[1], 'S', Items.iron_shovel, 'U', IAItems.upgradeComponent);
 
     /* Efficiency II */
     addRecipeDict(EnumUpgrade.EFFICIENCY.getItemStackForTier(2), "3S3", "3U3",
@@ -146,7 +144,8 @@ public class CommonProxy {
 
     /* Capacity I */
     addRecipeDict(EnumUpgrade.CAPACITY.getItemStackForTier(1), "0C0", "0U0", "III",
-                  '0', alloys[0], 'C', Blocks.chest, 'I', Items.iron_ingot, 'U', upgradeComponent);
+                  '0', alloys[0], 'C', Blocks.chest, 'I', Items.iron_ingot,
+                  'U', IAItems.upgradeComponent);
 
     /* Capacity II */
     addRecipeDict(EnumUpgrade.CAPACITY.getItemStackForTier(2), "2C2", "2U2", "GGG",
@@ -160,7 +159,7 @@ public class CommonProxy {
 
     /* Range I */
     addRecipeDict(EnumUpgrade.RANGE.getItemStackForTier(1), "1S1", "1U1",
-                  '1', alloys[1], 'S', Items.snowball, 'U', upgradeComponent);
+                  '1', alloys[1], 'S', Items.snowball, 'U', IAItems.upgradeComponent);
 
     /* Range II */
     addRecipeDict(EnumUpgrade.RANGE.getItemStackForTier(2), "3B3", "3U3",
@@ -174,18 +173,18 @@ public class CommonProxy {
 
     /* Wireless */
     addRecipeDict(EnumUpgrade.WIRELESS.getItemStackForTier(1), "1E1", "1U1",
-                  '1', alloys[1], 'E', Items.ender_pearl, 'U', upgradeComponent);
+                  '1', alloys[1], 'E', Items.ender_pearl, 'U', IAItems.upgradeComponent);
 
     /*---OTHER ITEMS---*/
     /* Internet Wand */
     addRecipeDict(new ItemStack(IAItems.internetWand), " W ", "RSR",
                   'R', Items.redstone, 'S', Items.stick,
                   'W', EnumUpgrade.WIRELESS.getItemStackForTier(1));
-    /* Machine Frame */
-    addRecipeDict(new ItemStack(IAItems.multi, 1, 0), "CCC", "AAA", "MMM",
+    /* Machine Component */
+    addRecipeDict(new ItemStack(IAItems.machineComponent), "CCC", "AAA", "MMM",
                   'C', "ingotCopper", 'A', "ingotAluminium", 'M', "ingotMagnesium");
     /* Upgrade Component */
-    addRecipeDict(new ItemStack(IAItems.multi, 1, 1), "CTC", "ATA", "A A",
+    addRecipeDict(new ItemStack(IAItems.upgradeComponent, 1, 1), "CTC", "ATA", "A A",
                   'C', "ingotCopper", 'A', "ingotAluminium", 'T', "ingotTantalum");
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {

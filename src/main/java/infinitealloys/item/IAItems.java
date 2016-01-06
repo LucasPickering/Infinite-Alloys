@@ -7,8 +7,8 @@ import infinitealloys.util.Consts;
 
 public final class IAItems {
 
-  public static final Item multi =
-      new ItemMulti().setCreativeTab(InfiniteAlloys.tabIA).setHasSubtypes(true);
+  public static final Item machineComponent = new Item().setCreativeTab(InfiniteAlloys.tabIA);
+  public static final Item upgradeComponent = new Item().setCreativeTab(InfiniteAlloys.tabIA);
   public static final Item ingot =
       new ItemIngot().setCreativeTab(InfiniteAlloys.tabIA).setHasSubtypes(true);
   public static final Item alloyIngot = new ItemAlloyIngot().setHasSubtypes(true);

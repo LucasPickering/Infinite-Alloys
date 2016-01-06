@@ -15,7 +15,7 @@ import infinitealloys.util.EnumMetal;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 
-public final class ItemAlloyIngot extends ItemIA {
+public final class ItemAlloyIngot extends Item {
 
   @Override
   public boolean getShareTag() {

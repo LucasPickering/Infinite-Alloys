@@ -1,11 +1,10 @@
 package infinitealloys.tile;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import infinitealloys.util.Funcs;
-import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 /**
@@ -49,7 +48,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
    * The coordinates of the {@link infinitealloys.tile.TEEEnergyStorage ESU} that is providing
    * energy to this machine.
    */
-  public Point3 energyHost;
+  public BlockPos energyHost;
 
   public TileEntityElectric(int inventoryLength) {
     super(inventoryLength);
@@ -66,14 +65,14 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 
     if (energyHost != null) {
       // If the host has been destroyed, reset it
-      if (!(Funcs.getTileEntity(worldObj, energyHost) instanceof TEEEnergyStorage)) {
+      if (!(worldObj.getTileEntity(energyHost) instanceof TEEEnergyStorage)) {
         energyHost = null;
       }
 
       // If the machine should be processing and enough energy is available, increment the progress
       // by one. If this is the first tick of the process, call startProcess(). If it has reached
       // or exceeded the limit for completion, then finish the process and reset the counter.
-      else if (shouldProcess() && ((TEEEnergyStorage) Funcs.getTileEntity(worldObj, energyHost))
+      else if (shouldProcess() && ((TEEEnergyStorage) worldObj.getTileEntity(energyHost))
           .changeRK(getRKChange())) {
         if (processProgress == 0) {
           onStartProcess();
@@ -91,13 +90,13 @@ public abstract class TileEntityElectric extends TileEntityMachine {
   public void onBlockDestroyed() {
     super.onBlockDestroyed();
     if (energyHost != null) {
-      ((IHost) Funcs.getTileEntity(worldObj, energyHost)).removeClient(coords(), true);
+      ((IHost) worldObj.getTileEntity(energyHost)).removeClient(coords(), true);
     }
   }
 
-  public void connectToEnergyNetwork(Point3 host) {
+  public void connectToEnergyNetwork(BlockPos host) {
     if (energyHost != null) {
-      ((TEEEnergyStorage) worldObj.getTileEntity(energyHost.x, energyHost.y, energyHost.z))
+      ((TEEEnergyStorage) worldObj.getTileEntity(energyHost))
           .removeClient(coords(), false);
     }
     energyHost = host;
@@ -105,7 +104,7 @@ public abstract class TileEntityElectric extends TileEntityMachine {
 
   public void disconnectFromEnergyNetwork() {
     energyHost = null;
-    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    worldObj.markBlockForUpdate(pos);
   }
 
   /**
