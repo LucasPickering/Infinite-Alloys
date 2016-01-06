@@ -1,6 +1,6 @@
 package infinitealloys.core;
 
-import net.minecraft.init.Blocks;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
@@ -26,11 +26,11 @@ public final class WorldGenHandler implements IWorldGenerator {
         continue;
       }
       for (int j = 0; j < rarities[i]; j++) {
-        final int x = chunkX * 16 + random.nextInt(16);
-        final int y = random.nextInt(heights[i]);
-        final int z = chunkZ * 16 + random.nextInt(16);
-        new WorldGenMinable(IABlocks.ore, i, groupSizes[i], Blocks.stone)
-            .generate(world, random, x, y, z);
+        final BlockPos pos = new BlockPos(chunkX * 16 + random.nextInt(16),
+                                          random.nextInt(heights[i]),
+                                          chunkZ * 16 + random.nextInt(16));
+        new WorldGenMinable(IABlocks.ore.getStateFromMeta(i), groupSizes[i])
+            .generate(world, random, pos);
       }
     }
   }

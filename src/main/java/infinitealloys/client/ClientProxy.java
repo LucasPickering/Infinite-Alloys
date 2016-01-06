@@ -20,12 +20,12 @@ public final class ClientProxy extends CommonProxy {
 
   @Override
   public void initRendering() {
-    gfxHandler.renderID = RenderingRegistry.getNextAvailableRenderId();
+//    gfxHandler.renderID = RenderingRegistry.getNextAvailableRenderId();
     for (EnumMachine machine : EnumMachine.values()) {
       ClientRegistry.bindTileEntitySpecialRenderer(machine.temClass,
                                                    new TileEntityMachineRenderer(machine));
     }
-    RenderingRegistry.registerBlockHandler(gfxHandler);
+//    RenderingRegistry.registerBlockHandler(gfxHandler);
     try {
       for (EnumBoss boss : EnumBoss.values()) {
         RenderingRegistry.registerEntityRenderingHandler(boss.entityClass, new RenderBoss(boss));

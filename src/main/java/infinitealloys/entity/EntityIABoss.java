@@ -47,9 +47,11 @@ public abstract class EntityIABoss extends EntityMob {
   @Override
   public void onUpdate() {
     super.onUpdate();
+    /*
     if (!hasHome()) {
       setHomeArea((int) posX, (int) posY, (int) posZ, 15); // Fix the entity to a certain area
     }
+    */
   }
 
   @Override

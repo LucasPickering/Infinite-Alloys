@@ -13,7 +13,6 @@ import java.util.List;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
-import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumMetal;
 
 public final class BlockOre extends Block {
@@ -44,7 +43,7 @@ public final class BlockOre extends Block {
 
   @Override
   public int getMetaFromState(IBlockState state) {
-    return ((EnumMachine) state.getValue(METAL_PROP)).ordinal();
+    return ((EnumMetal) state.getValue(METAL_PROP)).ordinal();
   }
 
   @Override

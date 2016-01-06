@@ -1,6 +1,8 @@
 package infinitealloys.util;
 
-public enum EnumMetal {
+import net.minecraft.util.IStringSerializable;
+
+public enum EnumMetal implements IStringSerializable {
 
   COPPER("copper", 0xCE7136),
   ALUMINIUM("aluminium", 0xCBCEC7), // Yes it has to be spelled that way
@@ -23,6 +25,11 @@ public enum EnumMetal {
   EnumMetal(String name, int color) {
     this.name = name;
     this.color = color;
+  }
+
+  @Override
+  public String getName() {
+    return name;
   }
 
   public static EnumMetal byMetadata(int meta) {

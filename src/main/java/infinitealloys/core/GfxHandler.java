@@ -1,45 +1,24 @@
 package infinitealloys.core;
 
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import org.lwjgl.opengl.GL11;
-
 import java.util.HashMap;
 
-import infinitealloys.block.IABlocks;
 import infinitealloys.client.gui.GuiInternetWand;
 import infinitealloys.client.gui.GuiOverlay;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.EnumMetal;
 
-public final class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
+public final class GfxHandler implements IGuiHandler {
 
   public int renderID;
   private final GuiOverlay guiOverlay = new GuiOverlay();
-  private final TileEntityMachine[] temInstances = new TileEntityMachine[Consts.MACHINE_COUNT];
-
-  public GfxHandler() {
-    for (int i = 0; i < temInstances.length; i++) {
-      temInstances[i] = EnumMachine.values()[i].getNewTEM();
-    }
-  }
 
   /**
    * A map of blocks identified by an x-ray machine to be highlighted, their respective colors.
@@ -67,6 +46,7 @@ public final class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandl
     return null;
   }
 
+  /*
   @Override
   public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer) {
     if (block == IABlocks.machine) {
@@ -238,6 +218,7 @@ public final class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandl
       renderBlockOutline(block.x, block.y, block.z, xrayBlocks.get(block));
     }
   }
+  */
 
   /**
    * Draw a red outline around the block at the specific coordinates. To be specific, the
@@ -268,6 +249,7 @@ public final class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandl
   @SideOnly(Side.CLIENT)
   private void renderOutlineBox(double minX, double minY, double minZ,
                                 double maxX, double maxY, double maxZ, int color) {
+    /*
     final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
     final Tessellator tess = Tessellator.getInstance();
 
@@ -324,5 +306,6 @@ public final class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandl
     GL11.glEnable(GL11.GL_DEPTH_TEST);
     GL11.glEnable(GL11.GL_TEXTURE_2D);
     GL11.glPopMatrix();
+    */
   }
 }

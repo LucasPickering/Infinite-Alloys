@@ -4,11 +4,13 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import infinitealloys.core.InfiniteAlloys;
@@ -46,6 +48,7 @@ public final class GuiXray extends GuiElectric {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public void initGui() {
     super.initGui();
     buttonList.add(searchButton = new GuiButton(1, width / 2 - 40, height / 2 - 90, 80, 20,
@@ -98,7 +101,7 @@ public final class GuiXray extends GuiElectric {
   }
 
   @Override
-  public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+  public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
     super.mouseClicked(mouseX, mouseY, mouseButton);
     if (mouseButton == 0) { // Was the left mouse button clicked?
       for (int i = 0; i < blockButtons.length; i++) { // Iterate though each block button
@@ -126,13 +129,15 @@ public final class GuiXray extends GuiElectric {
             blockButtons[i].selected = true;
 
             // The blocks that are represented by the newly selected button get highlighted
-            for (Point3 block : tex.getDetectedBlocks()) {
+            for (BlockPos block : tex.getDetectedBlocks()) {
               // Is this block represented by the newly selected button?
-              if (block.y == blockButtons[i].yValue) {
+              if (block.getY() == blockButtons[i].yValue) {
                 // If so, add this block to the list of blocks to be highlighted.
                 // Convert the x and z coords from relative to absolute.
                 InfiniteAlloys.proxy.gfxHandler.xrayBlocks.put(
-                    new Point3(tex.xCoord + block.x, block.y, tex.zCoord + block.z),
+                    new BlockPos(tex.getPos().getX() + block.getX(),
+                                 block.getY(),
+                                 tex.getPos().getZ() + block.getY()),
                     MachineHelper.getDetectableColor(blockButtons[i].block,
                                                      blockButtons[i].blockMeta));
               }
@@ -156,7 +161,7 @@ public final class GuiXray extends GuiElectric {
   }
 
   @Override
-  public void handleMouseInput() {
+  public void handleMouseInput() throws IOException {
     super.handleMouseInput();
     int scrollAmt = Mouse.getEventDWheel();
     // Scroll one line up or down based on the movement, if the list is long enough to need scrolling
@@ -172,14 +177,14 @@ public final class GuiXray extends GuiElectric {
     if (tex.inventoryStacks[0] == null || tee.getProcessProgress() > 0) {
       blockButtons = new BlockButton[0];
     } else {
-      int[] blockCounts = new int[tee.yCoord];
+      int[] blockCounts = new int[tee.getPos().getY()];
       ArrayList<Integer> levels = new ArrayList<>();
 
       // For each detected block
-      for (Point3 block : tex.getDetectedBlocks()) {
+      for (BlockPos block : tex.getDetectedBlocks()) {
         // If there hasn't been a block for that y-level yet, add that y to the list
-        if (blockCounts[block.y]++ == 0) {
-          levels.add(block.y);
+        if (blockCounts[block.getY()]++ == 0) {
+          levels.add(block.getY());
         }
       }
       blockButtons = new BlockButton[levels.size()];
@@ -272,15 +277,14 @@ public final class GuiXray extends GuiElectric {
 
         // Draw the yValue string
         fontRendererObj.drawStringWithShadow(yValue + "", xPos + 9 - fontRendererObj.getStringWidth(
-            yValue + "") / 2, yPos + 5, 0xffffff);
+            yValue + "")                                             /                                           2, yPos + 5, 0xffffff);
 
         GL11.glEnable(GL11.GL_LIGHTING);
 
-        itemRender.renderItemIntoGUI(fontRendererObj, mc.renderEngine,
-                                     new ItemStack(block, 1, blockMeta), xPos + 18, yPos);
-        itemRender.renderItemOverlayIntoGUI(fontRendererObj, mc.renderEngine,
+        itemRender.renderItemIntoGUI(new ItemStack(block, 1, blockMeta), xPos + 18, yPos);
+        itemRender.renderItemOverlayIntoGUI(fontRendererObj,
                                             new ItemStack(block, blockAmount, blockMeta),
-                                            xPos + 19, yPos + 1, String.valueOf(blockAmount));
+                                            xPos + 19, yPos + 1, Integer.toString(blockAmount));
 
         GL11.glDisable(GL11.GL_LIGHTING);
       }

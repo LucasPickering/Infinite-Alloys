@@ -4,6 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -32,7 +33,7 @@ import infinitealloys.tile.TEEXray;
 import infinitealloys.tile.TEMComputer;
 import infinitealloys.tile.TileEntityMachine;
 
-public enum EnumMachine {
+public enum EnumMachine implements IStringSerializable {
 
   COMPUTER("computer", TEMComputer.class, ContainerComputer.class, GuiComputer.class,
            new ModelComputer()),
@@ -67,6 +68,11 @@ public enum EnumMachine {
     this.guiClass = guiClass;
     this.model = model;
     this.persistentFields = persistentFields;
+  }
+
+  @Override
+  public String getName() {
+    return name;
   }
 
   public TileEntityMachine getNewTEM() {

@@ -117,7 +117,7 @@ public final class TEEXray extends TileEntityElectric {
           // If the block at the given coords (which have been converted to absolute coordinates) is
           // of the target block's type, add it to the list of blocks that have been found.
           if (targetBlock == blockState.getBlock()
-              && targetMetadata == worldObj.getBlockMetadata(xCoord + x, y, zCoord + z)) {
+              && targetMetadata == targetBlock.getMetaFromState(blockState)) {
             detectedBlocks.add(new BlockPos(x, y, z));
           }
 
