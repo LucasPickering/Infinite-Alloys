@@ -15,7 +15,6 @@ import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.tile.TEEXray;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.Point3;
 
 public final class GuiXray extends GuiElectric {
 

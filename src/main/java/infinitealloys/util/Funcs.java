@@ -1,11 +1,13 @@
 package infinitealloys.util;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -16,8 +18,26 @@ import net.minecraftforge.fml.common.registry.LanguageRegistry;
 import java.awt.*;
 
 import infinitealloys.network.NetworkHandler;
+import io.netty.buffer.ByteBuf;
 
 public final class Funcs {
+
+
+  /**
+   * Gives a block an unlocalized name, then registers it under that name.
+   *
+   * @param block           the block to be registered
+   * @param unlocalizedName unlocalized name of the block
+   */
+  public static void registerBlock(Block block, String unlocalizedName) {
+    block.setUnlocalizedName(unlocalizedName);
+    GameRegistry.registerBlock(block, unlocalizedName);
+    if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+      Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
+          .register(Item.getItemFromBlock(block), 0,
+                    new ModelResourceLocation(Consts.MOD_ID + ":" + unlocalizedName, "inventory"));
+    }
+  }
 
   /**
    * Gives an items an unlocalized name, then registers it under that name.
@@ -227,5 +247,26 @@ public final class Funcs {
       default:
         return 0;
     }
+  }
+
+  /**
+   * Create a new {@code BlockPos} instance from the next three values in the given {@link ByteBuf}
+   *
+   * @param bytes the {@link ByteBuf} to be read from
+   * @return a new {@code BlockPos} with the values from {@code bytes}
+   */
+  public static BlockPos readBlockPosFromByteBuf(ByteBuf bytes) {
+    return new BlockPos(bytes.readInt(), bytes.readInt(), bytes.readInt());
+  }
+
+  /**
+   * Write this {@code BlockPos}'s data to the given {@link io.netty.buffer.ByteBuf}
+   *
+   * @param bytes the {@link io.netty.buffer.ByteBuf} to be written to
+   */
+  public static void writeBlockPosToByteBuf(ByteBuf bytes, BlockPos pos) {
+    bytes.writeInt(pos.getX());
+    bytes.writeInt(pos.getY());
+    bytes.writeInt(pos.getZ());
   }
 }

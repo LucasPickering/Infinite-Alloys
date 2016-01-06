@@ -1,14 +1,16 @@
 package infinitealloys.tile;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 
 import java.util.ArrayList;
 
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
+import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 public final class TEEXray extends TileEntityElectric {
@@ -16,7 +18,7 @@ public final class TEEXray extends TileEntityElectric {
   /**
    * A list of the detected blocks, x and z are relative to the machine, y is absolute
    */
-  private final ArrayList<Point3> detectedBlocks = new ArrayList<>();
+  private final ArrayList<BlockPos> detectedBlocks = new ArrayList<>();
   public int range;
 
   /**
@@ -28,7 +30,7 @@ public final class TEEXray extends TileEntityElectric {
    * The last point that was checked for the target block in the previous iteration of {@link
    * #search}. The x and z coords are relative to the x-ray block; the y coord is absolute
    */
-  private Point3 lastSearch;
+  private BlockPos lastSearch;
 
   /**
    * Should the block search run? Should only be modified server-side, as it has no effect
@@ -81,8 +83,8 @@ public final class TEEXray extends TileEntityElectric {
 
   /**
    * Perform a search for the target block type. This checks {@link MachineHelper#SEARCH_PER_TICK}
-   * blocks in a tick, then saves its place and picks up where it left off next tick. This should
-   * ONLY be called on the server.
+   * blocks in a tick, then saves its place and picks up where it left off next tick. This should ONLY
+   * be called on the server.
    *
    * @throws IllegalStateException if called on the client
    */
@@ -99,42 +101,44 @@ public final class TEEXray extends TileEntityElectric {
     int blocksSearched = 0;
 
     // If this is first tick of the search, clear detectedBlocks.
-    if (lastSearch.equals(-range, 0, -range)) {
+    if (lastSearch.equals(new BlockPos(-range, 0, -range))) {
       detectedBlocks.clear();
     }
 
     // Iterate over each block that is within the given range horizontally. Note that it searches
     // all blocks below x-ray within that horizontal range, which is why the y loop comes first and
     // why it looks a bit different from the x and z loops.
-    for (int y = lastSearch.y; y <= yCoord; y++) {
-      for (int x = lastSearch.x; x <= range; x++) {
-        for (int z = lastSearch.z; z <= range; z++) {
+    for (int y = lastSearch.getY(); y <= pos.getY(); y++) {
+      for (int x = lastSearch.getX(); x <= range; x++) {
+        for (int z = lastSearch.getZ(); z <= range; z++) {
+          BlockPos searchingPos = new BlockPos(pos.getX() + x, y, pos.getZ() + z);
+          IBlockState blockState = worldObj.getBlockState(searchingPos);
 
           // If the block at the given coords (which have been converted to absolute coordinates) is
           // of the target block's type, add it to the list of blocks that have been found.
-          if (targetBlock == worldObj.getBlock(xCoord + x, y, zCoord + z)
+          if (targetBlock == blockState.getBlock()
               && targetMetadata == worldObj.getBlockMetadata(xCoord + x, y, zCoord + z)) {
-            detectedBlocks.add(new Point3(x, y, z));
+            detectedBlocks.add(new BlockPos(x, y, z));
           }
 
           // If the amounts of blocks search this tick has reached the limit, save our place and end
           // the function. The search will be continued next tick.
           if (++blocksSearched >= MachineHelper.SEARCH_PER_TICK) {
-            lastSearch.set(x, y, z);
+            lastSearch = searchingPos;
             return;
           }
         }
-        lastSearch.z = -range;
+        lastSearch = new BlockPos(lastSearch.getX(), lastSearch.getY(), -range);
       }
-      lastSearch.x = -range;
+      lastSearch = new BlockPos(-range, lastSearch.getY(), lastSearch.getZ());
     }
-    lastSearch.y = 0;
+    lastSearch = new BlockPos(lastSearch.getX(), 0, lastSearch.getZ());
     shouldSearch = false;
-    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord); // Mark the block so it will be synced
+    worldObj.markBlockForUpdate(pos); // Mark this block so it will be synced
   }
 
-  public Point3[] getDetectedBlocks() {
-    return detectedBlocks.toArray(new Point3[detectedBlocks.size()]);
+  public BlockPos[] getDetectedBlocks() {
+    return detectedBlocks.toArray(new BlockPos[detectedBlocks.size()]);
   }
 
   public boolean shouldSearch() {
@@ -146,8 +150,8 @@ public final class TEEXray extends TileEntityElectric {
   }
 
   /**
-   * Start the processing, i.e. make the progress bar start ticking. If this is client-side, also
-   * tell the server to start processing.
+   * Start the processing, i.e. make the progress bar start ticking. If this is client-side, also tell
+   * the server to start processing.
    */
   public void startProcess() {
     shouldProcess = true;
@@ -175,7 +179,7 @@ public final class TEEXray extends TileEntityElectric {
     revealBlocks = tagCompound.getBoolean("revealBlocks");
     for (int i = 0; tagCompound.hasKey("detectedBlock" + i); i++) {
       int[] detectedBlock = tagCompound.getIntArray("detectedBlock" + i);
-      detectedBlocks.add(new Point3(detectedBlock[0], detectedBlock[1], detectedBlock[2]));
+      detectedBlocks.add(new BlockPos(detectedBlock[0], detectedBlock[1], detectedBlock[2]));
     }
   }
 
@@ -186,9 +190,10 @@ public final class TEEXray extends TileEntityElectric {
     tagCompound.setBoolean("shouldProcess", shouldProcess);
     tagCompound.setBoolean("revealBlocks", revealBlocks);
     for (int i = 0; i < detectedBlocks.size(); i++) {
-      Point3 detectedBlock = detectedBlocks.get(i);
-      tagCompound.setIntArray("detectedBlock" + i,
-                              new int[]{detectedBlock.x, detectedBlock.y, detectedBlock.z});
+      BlockPos detectedBlock = detectedBlocks.get(i);
+      tagCompound.setIntArray("detectedBlock" + i, new int[]{detectedBlock.getX(),
+                                                             detectedBlock.getY(),
+                                                             detectedBlock.getZ()});
     }
   }
 
@@ -200,7 +205,7 @@ public final class TEEXray extends TileEntityElectric {
     detectedBlocks.clear();
     int detectedBlocksSize = bytes.readInt();
     for (int i = 0; i < detectedBlocksSize; i++) {
-      detectedBlocks.add(Point3.readFromByteBuf(bytes));
+      detectedBlocks.add(Funcs.readBlockPosFromByteBuf(bytes));
     }
   }
 
@@ -210,8 +215,8 @@ public final class TEEXray extends TileEntityElectric {
     bytes.writeBoolean(shouldProcess);
     bytes.writeBoolean(revealBlocks);
     bytes.writeInt(detectedBlocks.size());
-    for (Point3 detectedBlock : detectedBlocks) {
-      detectedBlock.writeToByteBuf(bytes);
+    for (BlockPos detectedBlock : detectedBlocks) {
+      Funcs.writeBlockPosToByteBuf(bytes, detectedBlock);
     }
   }
 
@@ -235,11 +240,7 @@ public final class TEEXray extends TileEntityElectric {
     int[] rangeUpgradeValues = {4, 6, 8, 10};
     range = rangeUpgradeValues[getUpgradeTier(EnumUpgrade.RANGE)];
 
-    if (lastSearch == null) {
-      lastSearch = new Point3(-range, 0, -range);
-    } else {
-      lastSearch.set(-range, 0, -range);
-    }
+    lastSearch = new BlockPos(-range, 0, -range);
   }
 
   @Override

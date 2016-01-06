@@ -7,7 +7,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemInternetWand;
-import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 public final class MessageWand implements IMessage, IMessageHandler<MessageWand, IMessage> {

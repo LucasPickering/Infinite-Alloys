@@ -34,14 +34,8 @@ public class CommonProxy {
   public GfxHandler gfxHandler;
 
   public void initBlocks() {
-    IABlocks.ore.setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName("ore");
-    IABlocks.machine.setHardness(3F).setCreativeTab(InfiniteAlloys.tabIA).setBlockName("machine");
-    IABlocks.portal.setCreativeTab(InfiniteAlloys.tabIA).setBlockName("portal");
-
-    GameRegistry.registerBlock(IABlocks.ore, ItemBlockOre.class, IABlocks.ore.getUnlocalizedName());
-    GameRegistry.registerBlock(IABlocks.machine, ItemBlockMachine.class,
-                               IABlocks.machine.getUnlocalizedName());
-    GameRegistry.registerBlock(IABlocks.portal, IABlocks.portal.getUnlocalizedName());
+    Funcs.registerBlock(IABlocks.ore, "ore");
+    Funcs.registerBlock(IABlocks.machine, "machine");
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
       OreDictionary

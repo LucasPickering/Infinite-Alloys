@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 
 import java.util.ArrayList;
@@ -13,7 +14,6 @@ import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 public final class TEEEnergyStorage extends TileEntityElectric implements IHost {
@@ -34,15 +34,15 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
   public int range;
 
   /**
-   * The ratio between how much RK an item produces and how long it will burn in a furnace. Furnace
-   * is numerator, ESU is denominator.
+   * The ratio between how much RK an item produces and how long it will burn in a furnace. Furnace is
+   * numerator, ESU is denominator.
    */
   private final float FURNACE_TO_ESU__RATIO = 0.18F;
 
   /**
    * A list of clients currently connected to this energy network
    */
-  private final ArrayList<Point3> networkClients = new ArrayList<>();
+  private final ArrayList<BlockPos> networkClients = new ArrayList<>();
 
   public TEEEnergyStorage() {
     super(10);
@@ -62,7 +62,7 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
   @Override
   public void updateEntity() {
     if (energyHost == null) {
-      energyHost = coords();
+      energyHost = pos;
     }
     super.updateEntity();
   }
@@ -71,15 +71,15 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
   public void onFirstTick() {
     super.onFirstTick();
     if (!worldObj.isRemote) {
-      for (Point3 client : networkClients) {
-        ((TileEntityElectric) Funcs.getTileEntity(worldObj, client))
-            .connectToEnergyNetwork(coords());
+      for (BlockPos client : networkClients) {
+        ((TileEntityElectric) worldObj.getTileEntity(client))
+            .connectToEnergyNetwork(pos);
       }
     }
   }
 
   @Override
-  public void connectToEnergyNetwork(Point3 host) {
+  public void connectToEnergyNetwork(BlockPos host) {
     if (!worldObj.isRemote) {
       deleteNetwork();
     }
@@ -88,8 +88,8 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
 
   @Override
   public void deleteNetwork() {
-    for (Point3 client : networkClients) {
-      TileEntity te = Funcs.getTileEntity(worldObj, client);
+    for (BlockPos client : networkClients) {
+      TileEntity te = worldObj.getTileEntity(client);
       if (te instanceof TileEntityElectric) {
         ((TileEntityElectric) te).disconnectFromEnergyNetwork();
       }
@@ -97,24 +97,24 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
   }
 
   @Override
-  public boolean isClientValid(Point3 client) {
-    return Funcs.getTileEntity(worldObj, client) instanceof TileEntityElectric;
+  public boolean isClientValid(BlockPos client) {
+    return worldObj.getTileEntity(client) instanceof TileEntityElectric;
   }
 
-  private void addClient(Point3 client) {
+  private void addClient(BlockPos client) {
     networkClients.add(client); // Add the machine
     if (worldObj != null) {
-      TileEntity clientTE = Funcs.getTileEntity(worldObj, client);
+      TileEntity clientTE = worldObj.getTileEntity(client);
       if (clientTE instanceof TileEntityElectric) {
         // Tell the client machine to connect
-        ((TileEntityElectric) clientTE).connectToEnergyNetwork(coords());
+        ((TileEntityElectric) clientTE).connectToEnergyNetwork(pos);
       }
     }
   }
 
   @Override
-  public boolean addClientWithChecks(EntityPlayer player, Point3 client, boolean sync) {
-    if (energyHost != null && !energyHost.equals(coords())) {
+  public boolean addClientWithChecks(EntityPlayer player, BlockPos client, boolean sync) {
+    if (energyHost != null && !energyHost.equals(pos)) {
       if (player != null && worldObj.isRemote) {
         player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
             "machine.textOutput.error", "/: ", "machine.textOutput.error.notHosting")));
@@ -129,12 +129,12 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
         player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
             "machine.textOutput.error", "/: ", "machine.textOutput.error.alreadyInNetwork")));
       }
-    } else if (client.equals(xCoord, yCoord, zCoord)) {
+    } else if (client.equals(pos)) {
       if (player != null && worldObj.isRemote) {
         player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
             "machine.textOutput.error", "/: ", "machine.textOutput.error.cannotAddSelf")));
       }
-    } else if (client.distanceTo(xCoord, yCoord, zCoord) > range) {
+    } else if (client.distanceSq(pos) > range) {
       if (player != null && worldObj.isRemote) {
         player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
             "machine.textOutput.error", "/: ", "machine.textOutput.error.outOfRange")));
@@ -145,9 +145,9 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
       // Sync the data to the server/all clients
       if (sync) { // If we should sync
         if (worldObj.isRemote) { // If this is the client
+          // Sync to server
           Funcs.sendPacketToServer(
-              new MessageNetworkEditToServer(true, worldObj.provider.dimensionId, coords(),
-                                             client)); // Sync to server
+              new MessageNetworkEditToServer(true, worldObj.provider.getDimensionId(), pos, client));
           if (player != null) {
             // Send a chat message
             player.addChatComponentMessage(new ChatComponentText(
@@ -155,8 +155,8 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
           }
         } else {
           // Sync to clients
-          Funcs.sendPacketToAllPlayers(new MessageNetworkEditToClient(
-              true, worldObj.provider.dimensionId, coords(), client));
+          Funcs.sendPacketToAllPlayers(
+              new MessageNetworkEditToClient(true, worldObj.provider.getDimensionId(), pos, client));
         }
       }
 
@@ -166,8 +166,8 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
   }
 
   @Override
-  public void removeClient(Point3 client, boolean sync) {
-    TileEntity te = Funcs.getTileEntity(worldObj, client);
+  public void removeClient(BlockPos client, boolean sync) {
+    TileEntity te = worldObj.getTileEntity(client);
     if (te instanceof TileEntityElectric) {
       ((TileEntityElectric) te).disconnectFromEnergyNetwork();
     }
@@ -175,19 +175,19 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
     if (sync) {
       if (worldObj.isRemote) {
         Funcs.sendPacketToServer(
-            new MessageNetworkEditToServer(false, worldObj.provider.dimensionId, coords(), client));
+            new MessageNetworkEditToServer(false, worldObj.provider.getDimensionId(), pos, client));
       } else {
         Funcs.sendPacketToAllPlayers(
-            new MessageNetworkEditToClient(false, worldObj.provider.dimensionId, coords(), client));
+            new MessageNetworkEditToClient(false, worldObj.provider.getDimensionId(), pos, client));
       }
     }
   }
 
   @Override
   public void syncAllClients(EntityPlayer player) {
-    for (Point3 client : networkClients) {
-      Funcs.sendPacketToPlayer(new MessageNetworkEditToClient(true, worldObj.provider.dimensionId,
-                                                              coords(), client), player);
+    for (BlockPos client : networkClients) {
+      Funcs.sendPacketToPlayer(new MessageNetworkEditToClient(
+          true, worldObj.provider.getDimensionId(), pos, client), player);
     }
   }
 
@@ -201,7 +201,7 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
    * generator for another ESU
    */
   public boolean isHostingNetwork() {
-    return energyHost.equals(coords());
+    return energyHost.equals(pos);
   }
 
   @Override
@@ -247,7 +247,7 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
     baseRKPerTick = tagCompound.getInteger("baseRKPerTick");
     for (int i = 0; tagCompound.hasKey("client" + i); i++) {
       int[] client = tagCompound.getIntArray("client" + i);
-      addClient(new Point3(client[0], client[1], client[2]));
+      addClient(new BlockPos(client[0], client[1], client[2]));
     }
   }
 
@@ -257,8 +257,8 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
     tagCompound.setInteger("currentRK", currentRK);
     tagCompound.setInteger("baseRKPerTick", baseRKPerTick);
     for (int i = 0; i < networkClients.size(); i++) {
-      Point3 client = networkClients.get(i);
-      tagCompound.setIntArray("client" + i, new int[]{client.x, client.y, client.z});
+      BlockPos client = networkClients.get(i);
+      tagCompound.setIntArray("client" + i, new int[]{client.getX(), client.getY(), client.getZ()});
     }
   }
 
@@ -277,16 +277,16 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
   }
 
   @Override
-  public void onNeighborChange(int x, int y, int z) {
-    TileEntity te = worldObj.getTileEntity(x, y, z);
+  public void onNeighborChange(BlockPos pos) {
+    TileEntity te = worldObj.getTileEntity(pos);
     if (te instanceof TileEntityElectric && ((TileEntityElectric) te).energyHost == null) {
-      addClientWithChecks(null, new Point3(x, y, z), false);
+      addClientWithChecks(null, new BlockPos(pos), false);
     }
   }
 
   /**
-   * Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK,
-   * will the result be between zero and the machine's capacity? If this condition is true, make the
+   * Will the unit support the specified change in RK, i.e. if changeInRK is added to currentRK, will
+   * the result be between zero and the machine's capacity? If this condition is true, make the
    * change, i.e. add changeInRK to currentRK
    *
    * @param changeInRK the specified change in RK

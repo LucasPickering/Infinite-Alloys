@@ -26,7 +26,6 @@ import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumMetal;
-import infinitealloys.util.Point3;
 
 public final class GfxHandler implements IGuiHandler, ISimpleBlockRenderingHandler {
 

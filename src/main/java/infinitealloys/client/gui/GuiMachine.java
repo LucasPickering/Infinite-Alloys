@@ -24,7 +24,6 @@ import infinitealloys.tile.TileEntityElectric;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point3;
 
 public abstract class GuiMachine extends GuiContainer {
 

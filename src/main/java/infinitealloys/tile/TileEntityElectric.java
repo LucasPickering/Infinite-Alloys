@@ -90,14 +90,13 @@ public abstract class TileEntityElectric extends TileEntityMachine {
   public void onBlockDestroyed() {
     super.onBlockDestroyed();
     if (energyHost != null) {
-      ((IHost) worldObj.getTileEntity(energyHost)).removeClient(coords(), true);
+      ((IHost) worldObj.getTileEntity(energyHost)).removeClient(pos, true);
     }
   }
 
   public void connectToEnergyNetwork(BlockPos host) {
     if (energyHost != null) {
-      ((TEEEnergyStorage) worldObj.getTileEntity(energyHost))
-          .removeClient(coords(), false);
+      ((TEEEnergyStorage) worldObj.getTileEntity(energyHost)).removeClient(pos, false);
     }
     energyHost = host;
   }

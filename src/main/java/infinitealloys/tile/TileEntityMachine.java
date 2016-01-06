@@ -8,7 +8,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,12 +26,11 @@ import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 /**
- * A base class for Tile Entities that can receive upgrades. TileEntityElectric blocks are a
- * sub-type of this. Often referred to as TEMs or machines.
+ * A base class for Tile Entities that can receive upgrades. TileEntityElectric blocks are a sub-type
+ * of this. Often referred to as TEMs or machines.
  *
  * @see TileEntityElectric
  */
@@ -69,7 +70,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   /**
    * The coordinates of the computer that is controlling this machine
    */
-  public Point3 computerHost;
+  public BlockPos computerHost;
 
   /**
    * False until {@link #updateEntity} has been called for the first time.
@@ -90,8 +91,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   }
 
   /**
-   * Get the integer from {@link infinitealloys.util.MachineHelper MachineHelper} that corresponds
-   * to this machine
+   * Get the integer from {@link infinitealloys.util.MachineHelper MachineHelper} that corresponds to
+   * this machine
    */
   public abstract EnumMachine getEnumMachine();
 
@@ -127,22 +128,21 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
     updateUpgrades();
   }
 
-  public void connectToComputerNetwork(Point3 host) {
+  public void connectToComputerNetwork(BlockPos host) {
     if (computerHost != null) {
-      ((TEMComputer) worldObj.getTileEntity(computerHost.x, computerHost.y, computerHost.z))
-          .removeClient(coords(), false);
+      ((TEMComputer) worldObj.getTileEntity(computerHost)).removeClient(pos, false);
     }
     computerHost = host;
   }
 
   public void disconnectFromComputerNetwork() {
     computerHost = null;
-    worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    worldObj.markBlockForUpdate(pos);
   }
 
   /**
-   * An NBTTagCompound to be attached to the ItemStack that is dropped when the machine is
-   * destroyed. This can have data such as energy stored in the ESU.
+   * An NBTTagCompound to be attached to the ItemStack that is dropped when the machine is destroyed.
+   * This can have data such as energy stored in the ESU.
    */
   protected NBTTagCompound getDropTagCompound() {
     return null;
@@ -177,7 +177,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
     Arrays.fill(upgrades, 0);
 
     if (computerHost != null) {
-      ((IHost) Funcs.getTileEntity(worldObj, computerHost)).removeClient(coords(), true);
+      ((IHost) worldObj.getTileEntity(computerHost)).removeClient(pos, true);
     }
   }
 
@@ -189,7 +189,8 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
     float f = random.nextFloat() * 0.8F + 0.1F;
     float f1 = random.nextFloat() * 0.8F + 0.1F;
     float f2 = random.nextFloat() * 0.8F + 0.1F;
-    EntityItem item = new EntityItem(worldObj, xCoord + f, yCoord + f1, zCoord + f2, itemstack);
+    EntityItem item = new EntityItem(worldObj, pos.getX() + f, pos.getY() + f1, pos.getZ() + f2,
+                                     itemstack);
     item.motionX = random.nextGaussian() * 0.05F;
     item.motionY = random.nextGaussian() * 0.25F;
     item.motionZ = random.nextGaussian() * 0.05F;
@@ -264,7 +265,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
    * @param bytes the {@link io.netty.buffer.ByteBuf} that will be written to
    */
   public void writeToClientData(ByteBuf bytes) {
-    coords().writeToByteBuf(bytes);
+    Funcs.writeBlockPosToByteBuf(bytes, pos);
     bytes.writeByte(orientation.ordinal());
     for (int upgrade : upgrades) {
       bytes.writeInt(upgrade);
@@ -286,19 +287,21 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
    * @param bytes the {@link io.netty.buffer.ByteBuf} that will be written to
    */
   public void writeToServerData(ByteBuf bytes) {
-    coords().writeToByteBuf(bytes);
-  }
-
-  /**
-   * Get the current (x, y, z) coordinates of this machine in the form of a {@link
-   * infinitealloys.util.Point3 Point}
-   */
-  public final Point3 coords() {
-    return new Point3(xCoord, yCoord, zCoord);
+    Funcs.writeBlockPosToByteBuf(bytes, pos);
   }
 
   @Override
-  public String getInventoryName() {
+  public String getName() {
+    return getEnumMachine().name;
+  }
+
+  @Override
+  public boolean hasCustomName() {
+    return true;
+  }
+
+  @Override
+  public IChatComponent getDisplayName() {
     return getEnumMachine().name;
   }
 
@@ -383,20 +386,13 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   public void onInventoryChanged(int slotIndex) {
   }
 
-  @Override
-  public boolean hasCustomInventoryName() {
-    return true;
-  }
-
   /**
    * Called from {@link infinitealloys.block.BlockMachine#onNeighborChange} when an adjacent
    * TileEntity changes
    *
-   * @param x the x-coord of the block the changed (not this block)
-   * @param y the y-coord of the block the changed (not this block)
-   * @param z the z-coord of the block the changed (not this block)
+   * @param pos the position of the block that changed
    */
-  public void onNeighborChange(int x, int y, int z) {
+  public void onNeighborChange(BlockPos pos) {
   }
 
   protected abstract void updateUpgrades();
@@ -404,9 +400,9 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   protected abstract void populateValidUpgrades();
 
   /**
-   * Determines if the given itemstack is a valid upgrade for the machine. Criteria: Does this
-   * machine take this type of upgrade? Does this machine already have this upgrade? Does this
-   * upgrade have a prerequisite upgrade and if so, does this machine already have that upgrade?
+   * Determines if the given itemstack is a valid upgrade for the machine. Criteria: Does this machine
+   * take this type of upgrade? Does this machine already have this upgrade? Does this upgrade have a
+   * prerequisite upgrade and if so, does this machine already have that upgrade?
    *
    * @param itemstack for upgrade item with a binary upgrade damage value (see {@link
    *                  infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)

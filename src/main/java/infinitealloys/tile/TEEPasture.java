@@ -94,39 +94,35 @@ public final class TEEPasture extends TileEntityElectric {
     }
 
     for (final EntityCreature creature : trapList) {
-      if (Math.abs(xCoord - creature.posX)
-          > trapRange + 1) // Is the creature too far away in the x direction
-      {
-        creature
-            .moveEntity(xCoord + Math.signum(creature.posX - xCoord) * trapRange - creature.posX, 0,
-                        0); // Move it back to the edge of the radius
+      // Is the creature too far away in the x direction
+      if (Math.abs(pos.getX() - creature.posX) > trapRange + 1) {
+        // Move it back to the edge of the radius
+        creature.moveEntity(
+            pos.getX() + Math.signum(creature.posX - pos.getX()) * trapRange - creature.posX, 0, 0);
       }
-      // in the x direction
-      if (Math.abs(zCoord - creature.posZ)
-          > trapRange + 1) // Is the creature too far away in the z direction
-      {
-        creature.moveEntity(0, 0, zCoord + Math.signum(creature.posZ - zCoord) * trapRange
-                                  - creature.posZ); // Move is back to the edge of the radius
+
+      // Is the creature too far away in the z direction
+      if (Math.abs(pos.getZ() - creature.posZ) > trapRange + 1) {
+        // Move it back to the edge of the radius
+        creature.moveEntity(
+            0, 0, pos.getZ() + Math.signum(creature.posZ - pos.getZ()) * trapRange - creature.posZ);
       }
-      // in the z direction
     }
 
     for (final EntityCreature creature : repelList) {
-      if (Math.abs(xCoord - creature.posX)
-          > repelRange) // Is the creature too close in the x direction
-      {
-        creature
-            .moveEntity(creature.posX - xCoord - Math.signum(creature.posX - xCoord) * repelRange,
-                        0, 0); // Move it back to the edge of the radius
+      // Is the creature too close in the x direction
+      if (Math.abs(pos.getX() - creature.posX) > repelRange) {
+        // Move it back to the edge of the radius
+        creature.moveEntity(
+            creature.posX - pos.getX() - Math.signum(creature.posX - pos.getX()) * repelRange, 0, 0);
       }
-      // in the x direction
-      if (Math.abs(zCoord - creature.posZ)
-          > repelRange) // Is the creature too close in the z direction
-      {
-        creature.moveEntity(0, 0, creature.posZ - zCoord - Math.signum(creature.posZ - zCoord)
-                                                           * repelRange); // Move is back to the edge of the radius
+
+      // Is the creature too close in the z direction
+      if (Math.abs(pos.getZ() - creature.posZ) > repelRange) {
+        // Move is back to the edge of the radius
+        creature.moveEntity(
+            0, 0, creature.posZ - pos.getZ() - Math.signum(creature.posZ - pos.getZ()) * repelRange);
       }
-      // in the z direction
     }
   }
 

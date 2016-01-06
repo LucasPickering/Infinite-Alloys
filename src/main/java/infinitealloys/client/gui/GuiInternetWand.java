@@ -25,7 +25,6 @@ import infinitealloys.tile.IHost;
 import infinitealloys.util.Consts;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
-import infinitealloys.util.Point3;
 
 public final class GuiInternetWand extends GuiScreen {
 

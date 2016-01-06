@@ -3,13 +3,13 @@ package infinitealloys.network;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import infinitealloys.tile.IHost;
 import infinitealloys.util.Funcs;
-import infinitealloys.util.Point3;
 import io.netty.buffer.ByteBuf;
 
 /**
@@ -21,13 +21,13 @@ public final class MessageNetworkEditToClient
 
   private boolean adding;
   private int dimensionID;
-  private Point3 host;
-  private Point3 client;
+  private BlockPos host;
+  private BlockPos client;
 
   public MessageNetworkEditToClient() {
   }
 
-  public MessageNetworkEditToClient(boolean adding, int dimensionID, Point3 host, Point3 client) {
+  public MessageNetworkEditToClient(boolean adding, int dimensionID, BlockPos host, BlockPos client) {
     this.adding = adding;
     this.dimensionID = dimensionID;
     this.host = host;
@@ -38,16 +38,16 @@ public final class MessageNetworkEditToClient
   public void fromBytes(ByteBuf bytes) {
     adding = bytes.readBoolean();
     dimensionID = bytes.readInt();
-    host = Point3.readFromByteBuf(bytes);
-    client = Point3.readFromByteBuf(bytes);
+    host = Funcs.readBlockPosFromByteBuf(bytes);
+    client = Funcs.readBlockPosFromByteBuf(bytes);
   }
 
   @Override
   public void toBytes(ByteBuf bytes) {
     bytes.writeBoolean(adding);
     bytes.writeInt(dimensionID);
-    host.writeToByteBuf(bytes);
-    client.writeToByteBuf(bytes);
+    Funcs.writeBlockPosToByteBuf(bytes, host);
+    Funcs.writeBlockPosToByteBuf(bytes, client);
   }
 
   @Override
@@ -59,7 +59,7 @@ public final class MessageNetworkEditToClient
 
     EntityPlayer player = Minecraft.getMinecraft().thePlayer;
     if (dimensionID == player.dimension) {
-      TileEntity te = Funcs.getTileEntity(player.worldObj, host);
+      TileEntity te = player.worldObj.getTileEntity(host);
       if (te instanceof IHost) {
         if (adding) {
           ((IHost) te).addClientWithChecks(null, client, false);
