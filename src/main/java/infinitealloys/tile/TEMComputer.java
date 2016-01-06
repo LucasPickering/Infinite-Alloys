@@ -41,11 +41,11 @@ public final class TEMComputer extends TileEntityMachine implements IHost {
   }
 
   @Override
-  public void updateEntity() {
+  public void update() {
     if (computerHost == null) {
       computerHost = pos;
     }
-    super.updateEntity();
+    super.update();
   }
 
   @Override

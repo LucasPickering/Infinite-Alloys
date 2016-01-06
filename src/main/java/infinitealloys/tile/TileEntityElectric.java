@@ -55,8 +55,8 @@ public abstract class TileEntityElectric extends TileEntityMachine {
   }
 
   @Override
-  public void updateEntity() {
-    super.updateEntity();
+  public void update() {
+    super.update();
 
     // Under certain conditions, reset the progress of the machine
     if (shouldResetProgress()) {

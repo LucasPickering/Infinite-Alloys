@@ -67,8 +67,8 @@ public final class TEEPasture extends TileEntityElectric {
   @SuppressWarnings("unchecked")
   @Override
   protected void onFinishProcess() {
-                /* NOTE: For this specific machine, ticksToProcess = 0, meaning this function is called every tick. It is essentially an updateEntity() function with
-                 * conditions applied in TileEntityMachine.updateEntity() */
+                /* NOTE: For this specific machine, ticksToProcess = 0, meaning this function is called every tick. It is essentially an update() function with
+                 * conditions applied in TileEntityMachine.update() */
 
     final ArrayList<EntityCreature> trapList = new ArrayList<EntityCreature>();
     final ArrayList<EntityCreature> repelList = new ArrayList<EntityCreature>();

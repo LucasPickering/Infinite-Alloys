@@ -60,11 +60,11 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
   }
 
   @Override
-  public void updateEntity() {
+  public void update() {
     if (energyHost == null) {
       energyHost = pos;
     }
-    super.updateEntity();
+    super.update();
   }
 
   @Override

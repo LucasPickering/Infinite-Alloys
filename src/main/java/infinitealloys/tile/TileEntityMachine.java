@@ -7,8 +7,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 
@@ -34,7 +36,8 @@ import io.netty.buffer.ByteBuf;
  *
  * @see TileEntityElectric
  */
-public abstract class TileEntityMachine extends TileEntity implements IInventory {
+public abstract class TileEntityMachine extends TileEntity implements IUpdatePlayerListBox,
+                                                                      IInventory {
 
   /**
    * The stacks that make up the inventory of this TE
@@ -73,7 +76,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   public BlockPos computerHost;
 
   /**
-   * False until {@link #updateEntity} has been called for the first time.
+   * False until {@link #update} has been called for the first time.
    */
   private boolean initialized = false;
 
@@ -104,7 +107,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   }
 
   @Override
-  public void updateEntity() {
+  public void update() {
     if (!initialized) {
       initialized = true;
       onFirstTick();
@@ -122,7 +125,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   }
 
   /**
-   * Called on the first tick of {@link #updateEntity}, then never again.
+   * Called on the first tick of {@link #update}, then never again.
    */
   protected void onFirstTick() {
     updateUpgrades();
@@ -290,92 +293,13 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
     Funcs.writeBlockPosToByteBuf(bytes, pos);
   }
 
-  @Override
-  public String getName() {
-    return getEnumMachine().name;
-  }
-
-  @Override
-  public boolean hasCustomName() {
-    return true;
-  }
-
-  @Override
-  public IChatComponent getDisplayName() {
-    return getEnumMachine().name;
-  }
-
-  @Override
-  public final boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-    return slot == upgradeSlotIndex && isUpgradeValid(itemstack)
-           || slot < upgradeSlotIndex && getEnumMachine().stackValidForSlot(slot, itemstack);
-  }
-
-  @Override
-  public int getInventoryStackLimit() {
-    return stackLimit;
-  }
-
-  @Override
-  public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-    return true;
-  }
-
-  @Override
-  public ItemStack decrStackSize(int slot, int amt) {
-    if (inventoryStacks[slot] != null) {
-      ItemStack stack;
-      if (inventoryStacks[slot].stackSize <= amt) {
-        stack = inventoryStacks[slot];
-        inventoryStacks[slot] = null;
-        onInventoryChanged(slot);
-        return stack;
-      }
-      stack = inventoryStacks[slot].splitStack(amt);
-      if (inventoryStacks[slot].stackSize == 0) {
-        inventoryStacks[slot] = null;
-      }
-      onInventoryChanged(slot);
-      return stack;
-    }
-    return null;
-  }
-
-  @Override
-  public int getSizeInventory() {
-    return inventoryStacks.length;
-  }
-
-  @Override
-  public ItemStack getStackInSlot(int slot) {
-    return inventoryStacks[slot];
-  }
-
-  @Override
-  public ItemStack getStackInSlotOnClosing(int slot) {
-    if (inventoryStacks[slot] != null) {
-      final ItemStack stack = inventoryStacks[slot];
-      inventoryStacks[slot] = null;
-      return stack;
-    }
-    return null;
-  }
-
-  @Override
-  public void setInventorySlotContents(int slot, ItemStack stack) {
-    inventoryStacks[slot] = stack;
-    if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-      stack.stackSize = getInventoryStackLimit();
-    }
-    onInventoryChanged(slot);
-  }
-
-  @Override
-  public void openInventory() {
-  }
-
-  @Override
-  public void closeInventory() {
+  /**
+   * Called from {@link infinitealloys.block.BlockMachine#onNeighborChange} when an adjacent
+   * TileEntity changes
+   *
+   * @param pos the position of the block that changed
+   */
+  public void onNeighborChange(BlockPos pos) {
   }
 
   /**
@@ -386,14 +310,7 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
   public void onInventoryChanged(int slotIndex) {
   }
 
-  /**
-   * Called from {@link infinitealloys.block.BlockMachine#onNeighborChange} when an adjacent
-   * TileEntity changes
-   *
-   * @param pos the position of the block that changed
-   */
-  public void onNeighborChange(BlockPos pos) {
-  }
+  // Upgrade methods
 
   protected abstract void updateUpgrades();
 
@@ -444,5 +361,118 @@ public abstract class TileEntityMachine extends TileEntity implements IInventory
    */
   protected void addValidUpgradeType(EnumUpgrade upgradeType) {
     validUpgradeItems.add(IAItems.upgrades[upgradeType.ordinal()]);
+  }
+
+  // IWorldNameable methods
+
+  @Override
+  public String getName() {
+    return getEnumMachine().name;
+  }
+
+  @Override
+  public boolean hasCustomName() {
+    return true;
+  }
+
+  @Override
+  public IChatComponent getDisplayName() {
+    return new ChatComponentText(getName());
+  }
+
+  //IInventory methods
+
+  @Override
+  public int getSizeInventory() {
+    return inventoryStacks.length;
+  }
+
+  @Override
+  public ItemStack getStackInSlot(int slot) {
+    return inventoryStacks[slot];
+  }
+
+  @Override
+  public ItemStack decrStackSize(int slot, int amt) {
+    if (inventoryStacks[slot] != null) {
+      ItemStack stack;
+      if (inventoryStacks[slot].stackSize <= amt) {
+        stack = inventoryStacks[slot];
+        inventoryStacks[slot] = null;
+        onInventoryChanged(slot);
+        return stack;
+      }
+      stack = inventoryStacks[slot].splitStack(amt);
+      if (inventoryStacks[slot].stackSize == 0) {
+        inventoryStacks[slot] = null;
+      }
+      onInventoryChanged(slot);
+      return stack;
+    }
+    return null;
+  }
+
+  @Override
+  public ItemStack getStackInSlotOnClosing(int slot) {
+    if (inventoryStacks[slot] != null) {
+      final ItemStack stack = inventoryStacks[slot];
+      inventoryStacks[slot] = null;
+      return stack;
+    }
+    return null;
+  }
+
+  @Override
+  public void setInventorySlotContents(int slot, ItemStack stack) {
+    inventoryStacks[slot] = stack;
+    if (stack != null && stack.stackSize > getInventoryStackLimit()) {
+      stack.stackSize = getInventoryStackLimit();
+    }
+    onInventoryChanged(slot);
+  }
+
+  @Override
+  public int getInventoryStackLimit() {
+    return stackLimit;
+  }
+
+  @Override
+  public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+    return true;
+  }
+
+  @Override
+  public void openInventory(EntityPlayer player) {
+  }
+
+  @Override
+  public void closeInventory(EntityPlayer player) {
+  }
+
+  @Override
+  public final boolean isItemValidForSlot(int slot, ItemStack itemstack) {
+    return slot == upgradeSlotIndex && isUpgradeValid(itemstack)
+           || slot < upgradeSlotIndex && getEnumMachine().stackValidForSlot(slot, itemstack);
+  }
+
+  @Override
+  public int getField(int id) {
+    return 0;
+  }
+
+  @Override
+  public void setField(int id, int value) {
+  }
+
+  @Override
+  public int getFieldCount() {
+    return 0;
+  }
+
+  @Override
+  public void clear() {
+    for (int i = 0; i < getSizeInventory(); i++) {
+      inventoryStacks[i] = null;
+    }
   }
 }

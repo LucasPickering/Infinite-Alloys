@@ -61,8 +61,8 @@ public final class TEEXray extends TileEntityElectric {
   }
 
   @Override
-  public void updateEntity() {
-    super.updateEntity();
+  public void update() {
+    super.update();
     if (inventoryStacks[0] == null) {
       shouldSearch = false;
     } else if (!worldObj.isRemote && shouldSearch) {

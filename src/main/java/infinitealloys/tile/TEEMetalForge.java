@@ -36,8 +36,8 @@ public final class TEEMetalForge extends TileEntityElectric {
   }
 
   @Override
-  public void updateEntity() {
-    super.updateEntity();
+  public void update() {
+    super.update();
     if (recipeAlloyID < 0 && hasUpgrade(EnumUpgrade.ALLOY, 1)) {
       recipeAlloyID = 0;
     }
