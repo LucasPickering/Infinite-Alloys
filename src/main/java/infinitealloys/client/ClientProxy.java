@@ -4,13 +4,38 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
+import infinitealloys.block.IABlocks;
 import infinitealloys.client.render.RenderBoss;
 import infinitealloys.client.render.TileEntityMachineRenderer;
 import infinitealloys.core.CommonProxy;
+import infinitealloys.item.IAItems;
+import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;
 import infinitealloys.util.EnumMachine;
+import infinitealloys.util.Funcs;
 
 public final class ClientProxy extends CommonProxy {
+
+  @Override
+  public void initBlocks() {
+    super.initBlocks();
+    for (int i = 0; i < Consts.METAL_COUNT; i++) {
+      Funcs.registerBlockModel(IABlocks.ore, i, "ore");
+    }
+  }
+
+  @Override
+  public void initItems() {
+    super.initItems();
+    Funcs.registerItemModel(IAItems.machineComponent, "machineComponent");
+    Funcs.registerItemModel(IAItems.upgradeComponent, "upgradeComponent");
+
+    for (int i = 0; i < Consts.METAL_COUNT; i++) {
+      Funcs.registerItemModel(IAItems.ingot, i, "ingot");
+    }
+
+    Funcs.registerItemModel(IAItems.internetWand, "internetWand");
+  }
 
   @Override
   public void initHandlers() {

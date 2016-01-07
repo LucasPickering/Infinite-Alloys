@@ -10,7 +10,6 @@ import net.minecraft.item.Item;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.LanguageRegistry;
@@ -23,11 +22,9 @@ import io.netty.buffer.ByteBuf;
 public final class Funcs {
 
   public static void registerBlockModel(Block block, int subType, String modelName) {
-    if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
       Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
           .register(Item.getItemFromBlock(block), subType,
                     new ModelResourceLocation(Consts.MOD_ID + ":" + modelName, "inventory"));
-    }
   }
 
   public static void registerItem(Item item, String unlocalizedName) {
@@ -35,17 +32,14 @@ public final class Funcs {
     GameRegistry.registerItem(item, unlocalizedName);
   }
 
+  public static void registerItemModel(Item item, String textureName) {
+    registerItemModel(item, 0, textureName);
+  }
+
   public static void registerItemModel(Item item, int subType, String modelName) {
-    if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
       Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
           .register(item, subType,
                     new ModelResourceLocation(Consts.MOD_ID + ":" + modelName, "inventory"));
-    }
-  }
-
-  public static void registerItemAndModel(Item item, String unlocalizedName) {
-    registerItem(item, unlocalizedName);
-    registerItemModel(item, 0, unlocalizedName);
   }
 
   /**

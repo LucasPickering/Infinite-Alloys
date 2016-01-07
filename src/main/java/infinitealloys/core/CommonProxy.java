@@ -34,10 +34,6 @@ public class CommonProxy {
 
   public void initBlocks() {
     GameRegistry.registerBlock(IABlocks.ore, ItemBlockOre.class, "ore");
-    for (int i = 0; i < Consts.METAL_COUNT; i++) {
-      Funcs.registerBlockModel(IABlocks.ore, i, "ore");
-    }
-
     GameRegistry.registerBlock(IABlocks.machine, ItemBlockMachine.class, "machine");
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
@@ -56,8 +52,8 @@ public class CommonProxy {
   }
 
   public void initItems() {
-    Funcs.registerItemAndModel(IAItems.machineComponent, "machineComponent");
-    Funcs.registerItemAndModel(IAItems.upgradeComponent, "upgradeComponent");
+    Funcs.registerItem(IAItems.machineComponent, "machineComponent");
+    Funcs.registerItem(IAItems.upgradeComponent, "upgradeComponent");
 
     Funcs.registerItem(IAItems.ingot, "ingot");
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
@@ -65,7 +61,7 @@ public class CommonProxy {
     }
 
     Funcs.registerItem(IAItems.alloyIngot, "alloyIngot");
-    Funcs.registerItemAndModel(IAItems.internetWand, "internetWand");
+    Funcs.registerItem(IAItems.internetWand, "internetWand");
 
     for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
       Funcs.registerItem(IAItems.upgrades[upgradeType.ordinal()] = upgradeType.getItem(),
