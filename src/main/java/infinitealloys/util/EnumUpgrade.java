@@ -35,7 +35,7 @@ public enum EnumUpgrade {
   public ItemUpgrade getItem() {
     try {
       ItemUpgrade item = itemClass.getConstructor(EnumUpgrade.class).newInstance(this);
-      item.setCreativeTab(InfiniteAlloys.tabIA).setHasSubtypes(true).setUnlocalizedName(name);
+      item.setCreativeTab(InfiniteAlloys.tabIA).setHasSubtypes(true);
       return item;
     } catch (Exception e) {
       e.printStackTrace();

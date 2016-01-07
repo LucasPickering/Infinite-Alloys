@@ -1,5 +1,5 @@
 {
-  "parent": "infinitealloys:item/base",
+  "parent": "infinitealloys:item/upgrade",
   "textures": {
     "layer1": "infinitealloys:items/upgradeEfficiency3"
   }
