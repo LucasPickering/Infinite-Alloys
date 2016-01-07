@@ -1,5 +1,7 @@
 package infinitealloys.client;
 
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -38,7 +40,12 @@ public final class ClientProxy extends CommonProxy {
     Funcs.registerItemModel(IAItems.internetWand, "internetWand");
 
     for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
-      Funcs.registerItemModel(IAItems.upgrades[upgradeType.ordinal()], upgradeType.name);
+      Item item = IAItems.upgrades[upgradeType.ordinal()];
+      for (int i = 0; i < upgradeType.tiers; i++) {
+        String variantName = upgradeType.name + (i + 1);
+        Funcs.registerItemModel(item, i, variantName);
+        ModelBakery.addVariantName(item, Consts.MOD_ID + ":" + variantName);
+      }
     }
   }
 
