@@ -1,9 +1,6 @@
 {
   "parent": "block/cube_all",
-  "variants": {
-    "metal=zinc": { "model": "ore" }
-  },
   "textures": {
-    "all": "blocks/ore_background"
+    "all": "infinitealloys:blocks/ore_background"
   }
 }

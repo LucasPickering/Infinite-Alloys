@@ -14,7 +14,7 @@ public enum EnumUpgrade {
   CAPACITY("upgradeCapacity", 3),
   RANGE("upgradeRange", 3),
   WIRELESS("upgradeWireless", 1),
-  ALLOY("upgradeAlloy", 6, ItemUpgradeAlloy.class); // Consts.VALID_ALLOY_COUNT resolves too
+  ALLOY("upgradeAlloy", 6, ItemUpgradeAlloy.class); // Consts.VALID_ALLOY_COUNT resolves too late
 
   public final String name;
 

@@ -1,9 +1,0 @@
-{
-  "variants": {
-    "machine=computer": { "model": "computer" },
-    "machine=metalForge": { "model": "metalForge" },
-    "machine=xray": { "model": "xray" },
-    "machine=pasture": { "model": "pasture" },
-    "machine=energyStorage": { "model": "energyStorage" }
-  }
-}
