@@ -42,7 +42,7 @@ public final class EventHandler {
         }
       }
     } else {
-      // Clear the list of blocks to be outlines by the x-ray on unload. This is only run client-side
+      // Clear the list of block to be outlines by the x-ray on unload. This is only run client-side
       InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
     }
   }

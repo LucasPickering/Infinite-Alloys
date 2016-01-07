@@ -15,12 +15,12 @@ import infinitealloys.tile.TileEntityMachine;
 public final class MachineHelper {
 
   /**
-   * How many blocks are searched per tick. Used to limit lag on the x-ray.
+   * How many block are searched per tick. Used to limit lag on the x-ray.
    */
   public static final int SEARCH_PER_TICK = 2000;
 
   /**
-   * A set of the blocks that the x-ray can detect. As a {@link java.util.Set}, this will not take
+   * A set of the block that the x-ray can detect. As a {@link java.util.Set}, this will not take
    * duplicates of each block.
    */
   private static HashSet<DetectableBlock> detectableBlocks = new HashSet<>();
@@ -32,7 +32,7 @@ public final class MachineHelper {
   public static ArrayList<String> playersToSync = new ArrayList<>();
 
   /**
-   * Add a block or blocks to the set of blocks that can be detected by the x-ray via the block(s)'s
+   * Add a block or block to the set of block that can be detected by the x-ray via the block(s)'s
    * {@link net.minecraftforge.oredict.OreDictionary} identifier String.
    *
    * @param dictName the ore dictionary string from which the block(s) is/are retrieved
@@ -47,7 +47,7 @@ public final class MachineHelper {
   }
 
   /**
-   * Add a block to the list of blocks that can be detected by the x-ray
+   * Add a block to the list of block that can be detected by the x-ray
    *
    * @param block    the block type of the detectable block
    * @param metadata the metadata of the detectable block
@@ -158,7 +158,7 @@ public final class MachineHelper {
      * @param block    the block type of the detectable block
      * @param metadata the metadata of the detectable block
      * @param color    the color of the outline that will highlight this block
-     * @param value    the value of this block, valuable blocks require more energy to discover
+     * @param value    the value of this block, valuable block require more energy to discover
      */
     private DetectableBlock(Block block, int metadata, int color, int value) {
       this.block = block;

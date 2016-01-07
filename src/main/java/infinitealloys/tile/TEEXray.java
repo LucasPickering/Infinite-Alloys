@@ -16,7 +16,7 @@ import io.netty.buffer.ByteBuf;
 public final class TEEXray extends TileEntityElectric {
 
   /**
-   * A list of the detected blocks, x and z are relative to the machine, y is absolute
+   * A list of the detected block, x and z are relative to the machine, y is absolute
    */
   private final ArrayList<BlockPos> detectedBlocks = new ArrayList<>();
   public int range;
@@ -83,7 +83,7 @@ public final class TEEXray extends TileEntityElectric {
 
   /**
    * Perform a search for the target block type. This checks {@link MachineHelper#SEARCH_PER_TICK}
-   * blocks in a tick, then saves its place and picks up where it left off next tick. This should ONLY
+   * block in a tick, then saves its place and picks up where it left off next tick. This should ONLY
    * be called on the server.
    *
    * @throws IllegalStateException if called on the client
@@ -96,7 +96,7 @@ public final class TEEXray extends TileEntityElectric {
     Block targetBlock = Block.getBlockFromItem(inventoryStacks[0].getItem());
     int targetMetadata = inventoryStacks[0].getItemDamage();
 
-    // The amount of blocks that have been iterated over this tick.
+    // The amount of block that have been iterated over this tick.
     // When this reaches MachineHelper.SEARCH_PER_TICK, the loops break.
     int blocksSearched = 0;
 
@@ -106,7 +106,7 @@ public final class TEEXray extends TileEntityElectric {
     }
 
     // Iterate over each block that is within the given range horizontally. Note that it searches
-    // all blocks below x-ray within that horizontal range, which is why the y loop comes first and
+    // all block below x-ray within that horizontal range, which is why the y loop comes first and
     // why it looks a bit different from the x and z loops.
     for (int y = lastSearch.getY(); y <= pos.getY(); y++) {
       for (int x = lastSearch.getX(); x <= range; x++) {
@@ -115,13 +115,13 @@ public final class TEEXray extends TileEntityElectric {
           IBlockState blockState = worldObj.getBlockState(searchingPos);
 
           // If the block at the given coords (which have been converted to absolute coordinates) is
-          // of the target block's type, add it to the list of blocks that have been found.
+          // of the target block's type, add it to the list of block that have been found.
           if (targetBlock == blockState.getBlock()
               && targetMetadata == targetBlock.getMetaFromState(blockState)) {
             detectedBlocks.add(new BlockPos(x, y, z));
           }
 
-          // If the amounts of blocks search this tick has reached the limit, save our place and end
+          // If the amounts of block search this tick has reached the limit, save our place and end
           // the function. The search will be continued next tick.
           if (++blocksSearched >= MachineHelper.SEARCH_PER_TICK) {
             lastSearch = searchingPos;

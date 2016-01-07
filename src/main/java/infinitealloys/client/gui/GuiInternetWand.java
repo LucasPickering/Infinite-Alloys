@@ -81,7 +81,7 @@ public final class GuiInternetWand extends GuiScreen {
   private int selectedButtons;
 
   /**
-   * The number of the first displayed line of blocks. Min is 0, max is num of rows minus {@link
+   * The number of the first displayed line of block. Min is 0, max is num of rows minus {@link
    * #MAX_ROWS}
    */
   private int scrollPos;

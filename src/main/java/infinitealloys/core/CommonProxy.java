@@ -17,6 +17,8 @@ import java.util.Random;
 
 import infinitealloys.block.IABlocks;
 import infinitealloys.item.IAItems;
+import infinitealloys.item.ItemBlockMachine;
+import infinitealloys.item.ItemBlockOre;
 import infinitealloys.network.NetworkHandler;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;
@@ -31,8 +33,12 @@ public class CommonProxy {
   public GfxHandler gfxHandler;
 
   public void initBlocks() {
-    Funcs.registerBlock(IABlocks.ore, "ore");
-    Funcs.registerBlock(IABlocks.machine, "machine");
+    GameRegistry.registerBlock(IABlocks.ore, ItemBlockOre.class, "ore");
+    for (int i = 0; i < Consts.METAL_COUNT; i++) {
+      Funcs.registerBlockModel(IABlocks.ore, i, "ore");
+    }
+
+    GameRegistry.registerBlock(IABlocks.machine, ItemBlockMachine.class, "machine");
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
       OreDictionary

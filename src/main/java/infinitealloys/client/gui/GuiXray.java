@@ -33,7 +33,7 @@ public final class GuiXray extends GuiElectric {
   private final TEEXray tex;
 
   /**
-   * The number of the first displayed line of blocks. Starts from 0 and goes top-down.
+   * The number of the first displayed line of block. Starts from 0 and goes top-down.
    */
   private int scrollPos;
 
@@ -59,7 +59,7 @@ public final class GuiXray extends GuiElectric {
   @Override
   protected void drawGuiContainerBackgroundLayer(float partialTick, int mouseX, int mouseY) {
     super.drawGuiContainerBackgroundLayer(partialTick, mouseX, mouseY);
-    // If the list of blocks is short enough to fit on one page, disable the scroll bar
+    // If the list of block is short enough to fit on one page, disable the scroll bar
     if (blockButtons.length <= 20) {
       Funcs.drawTexturedModalRect(this, topLeft.x + SCROLL_BAR.x, topLeft.y + SCROLL_BAR.y,
                                   SCROLL_OFF);
@@ -114,7 +114,7 @@ public final class GuiXray extends GuiElectric {
             blockButtons[tex.selectedButton].selected = false;
           }
 
-          // Clear the highlighted blocks from the last selected button
+          // Clear the highlighted block from the last selected button
           InfiniteAlloys.proxy.gfxHandler.xrayBlocks.clear();
 
           // Was this button already selected? If so, none of the buttons are selected now
@@ -128,11 +128,11 @@ public final class GuiXray extends GuiElectric {
             tex.selectedButton = i;
             blockButtons[i].selected = true;
 
-            // The blocks that are represented by the newly selected button get highlighted
+            // The block that are represented by the newly selected button get highlighted
             for (BlockPos block : tex.getDetectedBlocks()) {
               // Is this block represented by the newly selected button?
               if (block.getY() == blockButtons[i].yValue) {
-                // If so, add this block to the list of blocks to be highlighted.
+                // If so, add this block to the list of block to be highlighted.
                 // Convert the x and z coords from relative to absolute.
                 InfiniteAlloys.proxy.gfxHandler.xrayBlocks.put(
                     new BlockPos(tex.getPos().getX() + block.getX(),
@@ -233,7 +233,7 @@ public final class GuiXray extends GuiElectric {
     private final int blockAmount, blockMeta;
 
     /**
-     * The yValue of blocks that this button represents
+     * The yValue of block that this button represents
      */
     private final int yValue;
 

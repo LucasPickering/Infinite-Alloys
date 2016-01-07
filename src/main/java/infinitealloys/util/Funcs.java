@@ -22,48 +22,27 @@ import io.netty.buffer.ByteBuf;
 
 public final class Funcs {
 
-
-  /**
-   * Gives a block an unlocalized name, then registers it under that name.
-   *
-   * @param block           the block to be registered
-   * @param unlocalizedName unlocalized name of the block
-   */
-  public static void registerBlock(Block block, String unlocalizedName) {
-    block.setUnlocalizedName(unlocalizedName);
-    GameRegistry.registerBlock(block, unlocalizedName);
+  public static void registerBlockModel(Block block, int subType, String modelName) {
     if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
       Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-          .register(Item.getItemFromBlock(block), 0,
-                    new ModelResourceLocation(Consts.MOD_ID + ":" + unlocalizedName, "inventory"));
+          .register(Item.getItemFromBlock(block), subType,
+                    new ModelResourceLocation(Consts.MOD_ID + ":" + modelName, "inventory"));
     }
   }
 
-  /**
-   * Gives an items an unlocalized name, then registers it under that name.
-   *
-   * @param item            the items to be registered
-   * @param unlocalizedName unlocalized name of the item
-   */
   public static void registerItem(Item item, String unlocalizedName) {
     item.setUnlocalizedName(unlocalizedName);
     GameRegistry.registerItem(item, unlocalizedName);
   }
 
-  public static void registerItemModel(Item item, int subType, String textureName) {
+  public static void registerItemModel(Item item, int subType, String modelName) {
     if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
       Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
           .register(item, subType,
-                    new ModelResourceLocation(Consts.MOD_ID + ":" + textureName, "inventory"));
+                    new ModelResourceLocation(Consts.MOD_ID + ":" + modelName, "inventory"));
     }
   }
 
-  /**
-   * Gives an items an unlocalized name, then registers it under that name and gives it a texture.
-   *
-   * @param item            the items to be registered
-   * @param unlocalizedName unlocalized name of the item
-   */
   public static void registerItemAndModel(Item item, String unlocalizedName) {
     registerItem(item, unlocalizedName);
     registerItemModel(item, 0, unlocalizedName);

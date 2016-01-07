@@ -31,7 +31,7 @@ import infinitealloys.util.Funcs;
 import io.netty.buffer.ByteBuf;
 
 /**
- * A base class for Tile Entities that can receive upgrades. TileEntityElectric blocks are a sub-type
+ * A base class for Tile Entities that can receive upgrades. TileEntityElectric block are a sub-type
  * of this. Often referred to as TEMs or machines.
  *
  * @see TileEntityElectric
@@ -47,7 +47,7 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
   /**
    * A list of the upgrades that can be used on this machine
    */
-  private final ArrayList<ItemUpgrade> validUpgradeItems = new ArrayList<ItemUpgrade>();
+  private final ArrayList<ItemUpgrade> validUpgradeItems = new ArrayList<>();
 
   /**
    * The direction that the machine is facing.
@@ -317,18 +317,18 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
   protected abstract void populateValidUpgrades();
 
   /**
-   * Determines if the given itemstack is a valid upgrade for the machine. Criteria: Does this machine
+   * Determines if the given ItemStack is a valid upgrade for the machine. Criteria: Does this machine
    * take this type of upgrade? Does this machine already have this upgrade? Does this upgrade have a
    * prerequisite upgrade and if so, does this machine already have that upgrade?
    *
-   * @param itemstack for upgrade item with a binary upgrade damage value (see {@link
+   * @param stack for upgrade item with a binary upgrade damage value (see {@link
    *                  infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
    * @return true if valid
    */
-  public final boolean isUpgradeValid(ItemStack itemstack) {
-    if (validUpgradeItems.contains(itemstack.getItem())) {
-      EnumUpgrade upgradeType = ((ItemUpgrade) itemstack.getItem()).upgradeType;
-      int upgradeTier = itemstack.getItemDamage() + 1;
+  public final boolean isUpgradeValid(ItemStack stack) {
+    if (stack.getItem() instanceof ItemUpgrade && validUpgradeItems.contains(stack.getItem())) {
+      EnumUpgrade upgradeType = ((ItemUpgrade) stack.getItem()).upgradeType;
+      int upgradeTier = stack.getItemDamage() + 1;
       return upgrades[upgradeType.ordinal()] + 1 == upgradeTier
              && !hasUpgrade(upgradeType, upgradeTier);
     }

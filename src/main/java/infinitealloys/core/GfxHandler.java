@@ -21,7 +21,7 @@ public final class GfxHandler implements IGuiHandler {
   private final GuiOverlay guiOverlay = new GuiOverlay();
 
   /**
-   * A map of blocks identified by an x-ray machine to be highlighted, their respective colors.
+   * A map of block identified by an x-ray machine to be highlighted, their respective colors.
    */
   @SideOnly(Side.CLIENT)
   public HashMap<BlockPos, Integer> xrayBlocks = new HashMap<>();
