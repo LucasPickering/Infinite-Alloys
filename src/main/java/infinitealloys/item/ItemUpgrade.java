@@ -17,12 +17,11 @@ public class ItemUpgrade extends Item {
   public ItemUpgrade(EnumUpgrade upgradeType) {
     super();
     this.upgradeType = upgradeType;
-    setUnlocalizedName(upgradeType.name);
-    setHasSubtypes(true);
   }
 
   @Override
   @SideOnly(Side.CLIENT)
+  @SuppressWarnings("unchecked")
   public void getSubItems(Item item, CreativeTabs creativetabs, List list) {
     for (int i = 0; i < upgradeType.tiers; i++) {
       list.add(new ItemStack(item, 1, i));

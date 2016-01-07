@@ -12,6 +12,7 @@ import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;
 import infinitealloys.util.EnumMachine;
+import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 
 public final class ClientProxy extends CommonProxy {
@@ -35,6 +36,12 @@ public final class ClientProxy extends CommonProxy {
     }
 
     Funcs.registerItemModel(IAItems.internetWand, "internetWand");
+
+    for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
+      for (int i = 1; i <= upgradeType.tiers; i++) {
+        Funcs.registerItemModel(IAItems.upgrades[upgradeType.ordinal()], i, upgradeType.name + i);
+      }
+    }
   }
 
   @Override

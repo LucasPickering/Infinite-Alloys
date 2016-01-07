@@ -2,6 +2,7 @@ package infinitealloys.util;
 
 import net.minecraft.item.ItemStack;
 
+import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemUpgrade;
 import infinitealloys.item.ItemUpgradeAlloy;
@@ -33,7 +34,9 @@ public enum EnumUpgrade {
 
   public ItemUpgrade getItem() {
     try {
-      return itemClass.getConstructor(EnumUpgrade.class).newInstance(this);
+      ItemUpgrade item = itemClass.getConstructor(EnumUpgrade.class).newInstance(this);
+      item.setCreativeTab(InfiniteAlloys.tabIA).setHasSubtypes(true).setUnlocalizedName(name);
+      return item;
     } catch (Exception e) {
       e.printStackTrace();
       return null;

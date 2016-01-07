@@ -56,9 +56,6 @@ public class CommonProxy {
     Funcs.registerItem(IAItems.upgradeComponent, "upgradeComponent");
 
     Funcs.registerItem(IAItems.ingot, "ingot");
-    for (int i = 0; i < Consts.METAL_COUNT; i++) {
-      Funcs.registerItemModel(IAItems.ingot, i, "ingot");
-    }
 
     Funcs.registerItem(IAItems.alloyIngot, "alloyIngot");
     Funcs.registerItem(IAItems.internetWand, "internetWand");

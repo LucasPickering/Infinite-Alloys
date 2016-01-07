@@ -24,7 +24,7 @@ public final class Funcs {
   public static void registerBlockModel(Block block, int subType, String modelName) {
       Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
           .register(Item.getItemFromBlock(block), subType,
-                    new ModelResourceLocation(Consts.MOD_ID + ":" + modelName, "inventory"));
+                    new ModelResourceLocation(Consts.MOD_ID + ":" + modelName));
   }
 
   public static void registerItem(Item item, String unlocalizedName) {
@@ -32,8 +32,8 @@ public final class Funcs {
     GameRegistry.registerItem(item, unlocalizedName);
   }
 
-  public static void registerItemModel(Item item, String textureName) {
-    registerItemModel(item, 0, textureName);
+  public static void registerItemModel(Item item, String modelName) {
+    registerItemModel(item, 0, modelName);
   }
 
   public static void registerItemModel(Item item, int subType, String modelName) {
