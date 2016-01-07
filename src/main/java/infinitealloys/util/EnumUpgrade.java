@@ -39,7 +39,7 @@ public enum EnumUpgrade {
   public ItemUpgrade createItem() {
     try {
       ItemUpgrade item = itemClass.getConstructor(EnumUpgrade.class).newInstance(this);
-      item.setCreativeTab(InfiniteAlloys.tabIA).setHasSubtypes(true);
+      item.setCreativeTab(InfiniteAlloys.creativeTab).setHasSubtypes(true);
       return item;
     } catch (Exception e) {
       e.printStackTrace();

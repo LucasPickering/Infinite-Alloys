@@ -25,7 +25,7 @@ public final class InfiniteAlloys {
   @SidedProxy(clientSide = "infinitealloys.client.ClientProxy", serverSide = "infinitealloys.CommonProxy")
   public static CommonProxy proxy;
   public static boolean[] spawnOres = new boolean[Consts.METAL_COUNT];
-  public static CreativeTabs tabIA;
+  public static CreativeTabs creativeTab;
   private int[] validAlloys;
 
   @EventHandler
@@ -40,7 +40,7 @@ public final class InfiniteAlloys {
 
   @EventHandler
   public void load(FMLInitializationEvent event) {
-    tabIA = new CreativeTabIA(CreativeTabs.getNextID(), "main");
+    creativeTab = new CreativeTabIA(CreativeTabs.getNextID(), "main");
     proxy.initBlocks();
     proxy.initItems();
     proxy.initEntities();
