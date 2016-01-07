@@ -61,7 +61,7 @@ public class CommonProxy {
     Funcs.registerItem(IAItems.internetWand, "internetWand");
 
     for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
-      Funcs.registerItem(IAItems.upgrades[upgradeType.ordinal()] = upgradeType.getItem(),
+      Funcs.registerItem(IAItems.upgrades[upgradeType.ordinal()] = upgradeType.createItem(),
                          upgradeType.name);
     }
 

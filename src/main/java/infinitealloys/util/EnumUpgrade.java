@@ -9,12 +9,12 @@ import infinitealloys.item.ItemUpgradeAlloy;
 
 public enum EnumUpgrade {
 
-  SPEED("upgradeSpeed", 3, ItemUpgrade.class),
-  EFFICIENCY("upgradeEfficiency", 3, ItemUpgrade.class),
-  CAPACITY("upgradeCapacity", 3, ItemUpgrade.class),
-  RANGE("upgradeRange", 3, ItemUpgrade.class),
-  WIRELESS("upgradeWireless", 1, ItemUpgrade.class),
-  ALLOY("upgradeAlloy", Consts.VALID_ALLOY_COUNT, ItemUpgradeAlloy.class);
+  SPEED("upgradeSpeed", 3),
+  EFFICIENCY("upgradeEfficiency", 3),
+  CAPACITY("upgradeCapacity", 3),
+  RANGE("upgradeRange", 3),
+  WIRELESS("upgradeWireless", 1),
+  ALLOY("upgradeAlloy", 6, ItemUpgradeAlloy.class); // Consts.VALID_ALLOY_COUNT resolves too
 
   public final String name;
 
@@ -26,13 +26,17 @@ public enum EnumUpgrade {
 
   private final Class<? extends ItemUpgrade> itemClass;
 
+  EnumUpgrade(String name, int tiers) {
+    this(name, tiers, ItemUpgrade.class);
+  }
+
   EnumUpgrade(String name, int tiers, Class<? extends ItemUpgrade> itemClass) {
     this.name = name;
     this.tiers = tiers;
     this.itemClass = itemClass;
   }
 
-  public ItemUpgrade getItem() {
+  public ItemUpgrade createItem() {
     try {
       ItemUpgrade item = itemClass.getConstructor(EnumUpgrade.class).newInstance(this);
       item.setCreativeTab(InfiniteAlloys.tabIA).setHasSubtypes(true);

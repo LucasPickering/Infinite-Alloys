@@ -26,8 +26,8 @@ public final class MachineHelper {
   private static HashSet<DetectableBlock> detectableBlocks = new HashSet<>();
 
   /**
-   * A list of the players who still need network information for the machines to be synced. This
-   * sync is done when they first activate a machine.
+   * A list of the players who still need network information for the machines to be synced. This sync
+   * is done when they first activate a machine.
    */
   public static ArrayList<String> playersToSync = new ArrayList<>();
 
@@ -124,13 +124,10 @@ public final class MachineHelper {
       int ingotColor = EnumMetal.values()[i].color;
       int alloyAmt = Funcs.intAtPos(alloy, Consts.ALLOY_RADIX, i);
       colorCount += alloyAmt;
-      redTot +=
-          (ingotColor >> 16 & 255) * alloyAmt; // Get the red byte from the ingot's hex color code
-      greenTot +=
-          (ingotColor >> 8 & 255)
-          * alloyAmt; // Get the green byte from the ingot's hex color code
-      blueTot +=
-          (ingotColor & 255) * alloyAmt; // Get the blue byte from the ingot's hex color code
+
+      redTot += (ingotColor >> 16 & 255) * alloyAmt; // Get the red byte
+      greenTot += (ingotColor >> 8 & 255) * alloyAmt; // Get the green byte
+      blueTot += (ingotColor & 255) * alloyAmt; // Get the blue byte
     }
 
     int redAvg = 0, greenAvg = 0, blueAvg = 0;
