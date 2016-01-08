@@ -14,6 +14,7 @@ import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumBoss;
 import infinitealloys.util.EnumMachine;
+import infinitealloys.util.EnumMetal;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
 
@@ -24,6 +25,8 @@ public final class ClientProxy extends CommonProxy {
     super.initBlocks();
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
       Funcs.registerBlockModel(IABlocks.ore, i, "ore");
+      ModelBakery.addVariantName(Item.getItemFromBlock(IABlocks.ore),
+                                 Consts.MOD_ID + ":" + EnumMetal.values()[i].getName());
     }
   }
 

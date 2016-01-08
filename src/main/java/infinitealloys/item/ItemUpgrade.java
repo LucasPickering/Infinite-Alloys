@@ -29,9 +29,9 @@ public class ItemUpgrade extends Item {
   }
 
   @Override
-  public String getUnlocalizedName(ItemStack itemstack) {
-    if (itemstack.getItemDamage() < upgradeType.tiers) {
-      return "item." + upgradeType.name + (itemstack.getItemDamage() + 1);
+  public String getUnlocalizedName(ItemStack stack) {
+    if (stack.getItemDamage() < upgradeType.tiers) {
+      return "item." + upgradeType.name + (stack.getItemDamage() + 1);
     }
     return getUnlocalizedName();
   }

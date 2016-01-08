@@ -1,6 +1,32 @@
 {
-  "parent": "block/cube_all",
+  "elements": [
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "down":  { "texture": "#stone", "cullface": "down" },
+        "up":    { "texture": "#stone", "cullface": "up" },
+        "north": { "texture": "#stone", "cullface": "north" },
+        "south": { "texture": "#stone", "cullface": "south" },
+        "west":  { "texture": "#stone", "cullface": "west" },
+        "east":  { "texture": "#stone", "cullface": "east" }
+      }
+    },
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "down":  { "texture": "#foreground", "cullface": "down" },
+        "up":    { "texture": "#foreground", "cullface": "up" },
+        "north": { "texture": "#foreground", "cullface": "north" },
+        "south": { "texture": "#foreground", "cullface": "south" },
+        "west":  { "texture": "#foreground", "cullface": "west" },
+        "east":  { "texture": "#foreground", "cullface": "east" }
+      }
+    }
+  ],
   "textures": {
-    "all": "infinitealloys:blocks/ore_background"
+    "stone": "blocks/stone",
+    "foreground": "infinitealloys:blocks/ore_foreground"
   }
 }

@@ -22,9 +22,7 @@ import io.netty.buffer.ByteBuf;
 public final class Funcs {
 
   public static void registerBlockModel(Block block, int subType, String modelName) {
-      Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-          .register(Item.getItemFromBlock(block), subType,
-                    new ModelResourceLocation(Consts.MOD_ID + ":" + modelName));
+      registerItemModel(Item.getItemFromBlock(block), subType, modelName);
   }
 
   public static void registerItem(Item item, String unlocalizedName) {

@@ -8,6 +8,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
@@ -54,5 +58,14 @@ public final class BlockOre extends Block {
   @Override
   public int damageDropped(IBlockState state) {
     return getMetaFromState(state);
+  }
+
+  @SideOnly(Side.CLIENT)
+  @Override
+  public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
+    if (renderPass == 1) {
+      return EnumMetal.byMetadata(getMetaFromState(world.getBlockState(pos))).color;
+    }
+    return 0xffffff;
   }
 }

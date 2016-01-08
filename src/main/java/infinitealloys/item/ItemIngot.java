@@ -32,12 +32,12 @@ public final class ItemIngot extends Item {
 
   @Override
   @SideOnly(Side.CLIENT)
-  public int getColorFromItemStack(ItemStack itemstack, int renderPass) {
-    if (itemstack.getItemDamage() == 1) {
+  public int getColorFromItemStack(ItemStack stack, int renderPass) {
+    if (stack.getItemDamage() == 1) {
       return 0xcbcec7;
     }
-    if (itemstack.getItemDamage() < Consts.METAL_COUNT) {
-      return EnumMetal.values()[itemstack.getItemDamage()].color;
+    if (stack.getItemDamage() < Consts.METAL_COUNT) {
+      return EnumMetal.values()[stack.getItemDamage()].color;
     }
     return 0xffffff;
   }
