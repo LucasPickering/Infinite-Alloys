@@ -15,7 +15,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMetal;
 
@@ -51,11 +50,6 @@ public final class BlockOre extends Block {
   }
 
   @Override
-  public int getRenderType() {
-    return InfiniteAlloys.proxy.gfxHandler.renderID;
-  }
-
-  @Override
   public int damageDropped(IBlockState state) {
     return getMetaFromState(state);
   }
@@ -63,9 +57,10 @@ public final class BlockOre extends Block {
   @SideOnly(Side.CLIENT)
   @Override
   public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
+    System.out.println(renderPass);
     if (renderPass == 1) {
       return EnumMetal.byMetadata(getMetaFromState(world.getBlockState(pos))).color;
     }
-    return 0xffffff;
+    return 0xff0000;
   }
 }

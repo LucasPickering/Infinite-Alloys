@@ -35,6 +35,6 @@ public final class ItemBlockOre extends ItemBlock {
     if (renderPass == 1) {
       return EnumMetal.byMetadata(stack.getItemDamage()).color;
     }
-    return 0xff0000;
+    return 0xffffff;
   }
 }
