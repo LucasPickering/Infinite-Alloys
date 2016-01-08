@@ -63,12 +63,8 @@ public final class ClientProxy extends CommonProxy {
                                                    new TileEntityMachineRenderer(machine));
     }
 //    RenderingRegistry.registerBlockHandler(gfxHandler);
-    try {
-      for (EnumBoss boss : EnumBoss.values()) {
-        RenderingRegistry.registerEntityRenderingHandler(boss.entityClass, new RenderBoss(boss));
-      }
-    } catch (Exception e) {
-      e.printStackTrace();
+    for (EnumBoss boss : EnumBoss.values()) {
+      RenderingRegistry.registerEntityRenderingHandler(boss.entityClass, new RenderBoss(boss));
     }
   }
 }
