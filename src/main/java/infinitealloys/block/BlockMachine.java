@@ -130,12 +130,6 @@ public final class BlockMachine extends BlockContainer {
   }
 
   @Override
-  public ArrayList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state,
-                                       int fortune) {
-    return new ArrayList<>();
-  }
-
-  @Override
   public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer,
                               ItemStack stack) {
     TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(pos);
@@ -154,5 +148,11 @@ public final class BlockMachine extends BlockContainer {
       tem.onBlockDestroyed();
     }
     super.breakBlock(world, pos, state);
+  }
+
+  @Override
+  public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state,
+                                  int fortune) {
+    return new ArrayList<>(); // Drops are handled in onBlockDestroyed for the TileEntity
   }
 }

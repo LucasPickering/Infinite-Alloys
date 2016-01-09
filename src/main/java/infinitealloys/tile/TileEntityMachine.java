@@ -3,6 +3,7 @@ package infinitealloys.tile;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -155,21 +156,15 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
    * Called when the TE's block is destroyed. Ends network connections and drops items and upgrades
    */
   public void onBlockDestroyed() {
-    // Drop block
+    // Save this machine's data to an NBT Tag
     ItemStack block = new ItemStack(IABlocks.machine, 1, getEnumMachine().ordinal());
     NBTTagCompound tagCompound = getDropTagCompound();
     if (tagCompound != null) {
       block.setTagCompound(tagCompound);
     }
-    spawnItem(block);
+    spawnItem(block); // Drop block for this machine with the saved data on it
 
-    // Drop items in inventory
-    for (int i = 0; i < getSizeInventory(); i++) {
-      ItemStack stack = getStackInSlot(i);
-      if (stack != null) {
-        spawnItem(stack);
-      }
-    }
+    InventoryHelper.dropInventoryItems(worldObj, pos, this); // Drop inventory items
 
     // Drop upgrades
     for (int i = 0; i < upgrades.length; i++) {
@@ -322,7 +317,7 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
    * prerequisite upgrade and if so, does this machine already have that upgrade?
    *
    * @param stack for upgrade item with a binary upgrade damage value (see {@link
-   *                  infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
+   *              infinitealloys.util.MachineHelper TEHelper} for upgrade numbers)
    * @return true if valid
    */
   public final boolean isUpgradeValid(ItemStack stack) {
