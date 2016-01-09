@@ -5,8 +5,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 import infinitealloys.item.IAItems;
 import infinitealloys.tile.TileEntityElectric;
@@ -29,7 +30,7 @@ public final class MachineHelper {
    * A list of the players who still need network information for the machines to be synced. This sync
    * is done when they first activate a machine.
    */
-  public static ArrayList<String> playersToSync = new ArrayList<>();
+  public static List<String> playersToSync = new LinkedList<>();
 
   /**
    * Add a block or block to the set of block that can be detected by the x-ray via the block(s)'s

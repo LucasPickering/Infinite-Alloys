@@ -15,8 +15,9 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import infinitealloys.block.IABlocks;
@@ -48,7 +49,7 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
   /**
    * A list of the upgrades that can be used on this machine
    */
-  private final ArrayList<ItemUpgrade> validUpgradeItems = new ArrayList<>();
+  private final List<ItemUpgrade> validUpgradeItems = new LinkedList<>();
 
   /**
    * The direction that the machine is facing.

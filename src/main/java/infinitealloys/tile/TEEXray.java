@@ -5,7 +5,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.BlockPos;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
@@ -18,7 +19,7 @@ public final class TEEXray extends TileEntityElectric {
   /**
    * A list of the detected block, x and z are relative to the machine, y is absolute
    */
-  private final ArrayList<BlockPos> detectedBlocks = new ArrayList<>();
+  private final List<BlockPos> detectedBlocks = new LinkedList<>();
   public int range;
 
   /**
@@ -177,6 +178,7 @@ public final class TEEXray extends TileEntityElectric {
     shouldSearch = tagCompound.getBoolean("shouldSearch");
     shouldProcess = tagCompound.getBoolean("shouldProcess");
     revealBlocks = tagCompound.getBoolean("revealBlocks");
+
     for (int i = 0; tagCompound.hasKey("detectedBlock" + i); i++) {
       int[] detectedBlock = tagCompound.getIntArray("detectedBlock" + i);
       detectedBlocks.add(new BlockPos(detectedBlock[0], detectedBlock[1], detectedBlock[2]));
@@ -189,11 +191,13 @@ public final class TEEXray extends TileEntityElectric {
     tagCompound.setBoolean("shouldSearch", shouldSearch);
     tagCompound.setBoolean("shouldProcess", shouldProcess);
     tagCompound.setBoolean("revealBlocks", revealBlocks);
-    for (int i = 0; i < detectedBlocks.size(); i++) {
-      BlockPos detectedBlock = detectedBlocks.get(i);
+
+    int i = 0;
+    for (BlockPos detectedBlock : detectedBlocks) {
       tagCompound.setIntArray("detectedBlock" + i, new int[]{detectedBlock.getX(),
                                                              detectedBlock.getY(),
                                                              detectedBlock.getZ()});
+      i++;
     }
   }
 

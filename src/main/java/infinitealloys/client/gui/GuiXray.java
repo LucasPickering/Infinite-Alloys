@@ -11,7 +11,8 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import infinitealloys.core.InfiniteAlloys;
 import infinitealloys.tile.TEEXray;
@@ -178,21 +179,26 @@ public final class GuiXray extends GuiElectric {
       blockButtons = new BlockButton[0];
     } else {
       int[] blockCounts = new int[tee.getPos().getY()];
-      ArrayList<Integer> levels = new ArrayList<>();
+      List<Integer> yLevels = new LinkedList<>();
 
       // For each detected block
       for (BlockPos block : tex.getDetectedBlocks()) {
         // If there hasn't been a block for that y-level yet, add that y to the list
         if (blockCounts[block.getY()]++ == 0) {
-          levels.add(block.getY());
+          yLevels.add(block.getY());
         }
       }
-      blockButtons = new BlockButton[levels.size()];
-      for (int i = 0; i < blockButtons.length; i++) {
+      blockButtons = new BlockButton[yLevels.size()];
+
+      // Combined standard/enhanced for loop to use iterator for the LinkedList and keep an index
+      // for GUI position.
+      int i = 0;
+      for (int yLevel : yLevels) {
         blockButtons[i] = new BlockButton(
             i % LIST_WIDTH * 40 + 9, (i / LIST_WIDTH - scrollPos) * 20 + 52,
-            Block.getBlockFromItem(tex.inventoryStacks[0].getItem()), blockCounts[levels.get(i)],
-            tex.inventoryStacks[0].getItemDamage(), levels.get(i));
+            Block.getBlockFromItem(tex.inventoryStacks[0].getItem()), blockCounts[yLevel],
+            tex.inventoryStacks[0].getItemDamage(), yLevels.get(i));
+        i++; // Increment i
       }
       if (tex.selectedButton != -1) {
         blockButtons[tex.selectedButton].selected = true;

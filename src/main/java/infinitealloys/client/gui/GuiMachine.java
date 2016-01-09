@@ -14,9 +14,10 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import infinitealloys.block.BlockMachine;
 import infinitealloys.client.EnumHelp;
@@ -58,7 +59,7 @@ public abstract class GuiMachine extends GuiContainer {
 
   protected TileEntityMachine tem;
   protected GuiMachineTab computerTab;
-  protected final List<GuiMachineTab> machineTabs = new ArrayList<GuiMachineTab>();
+  protected final List<GuiMachineTab> machineTabs = new LinkedList<>();
   /**
    * Coordinates of the network icon, which shows network statuses when hovered over
    */
@@ -67,7 +68,7 @@ public abstract class GuiMachine extends GuiContainer {
    * When help is enabled, slots get a colored outline and a mouse-over description
    */
   protected boolean helpEnabled;
-  private HashMap<String, ColoredText[]> helpText = new HashMap<String, ColoredText[]>();
+  private Map<String, ColoredText[]> helpText = new HashMap<>();
 
   public GuiMachine(int xSize, int ySize, InventoryPlayer inventoryPlayer,
                     TileEntityMachine tileEntity) {
@@ -78,7 +79,7 @@ public abstract class GuiMachine extends GuiContainer {
     background = Funcs.getGuiTexture(tem.getEnumMachine().name);
     // Make an array with the help title and the lines of help text
     for (EnumHelp help : tem.getEnumMachine().getHelpBoxes()) {
-      List<ColoredText> lines = new ArrayList<ColoredText>();
+      List<ColoredText> lines = new LinkedList<>();
       lines.add(new ColoredText(Funcs.getLoc("machineHelp." + help.name + ".title"), 0xffffff));
       for (String s : Funcs.getLoc("machineHelp." + help.name + ".info").split("/n")) {
         lines.add(new ColoredText(s, 0xaaaaaa));
@@ -88,6 +89,7 @@ public abstract class GuiMachine extends GuiContainer {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public void initGui() {
     super.initGui();
     topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
@@ -105,7 +107,7 @@ public abstract class GuiMachine extends GuiContainer {
     Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
     if (!helpEnabled && Funcs.mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x,
                                           slot.yDisplayPosition + topLeft.y, 16, 16)) {
-      ArrayList<ColoredText> lines = new ArrayList<ColoredText>();
+      List<ColoredText> lines = new LinkedList<>();
       lines.add(new ColoredText(Funcs.getLoc("general.upgrades"), 0xffffff));
 
       for (EnumUpgrade upgradeType : EnumUpgrade.values()) {
@@ -159,7 +161,7 @@ public abstract class GuiMachine extends GuiContainer {
       TEMComputer tec = (TEMComputer) mc.theWorld.getTileEntity(tem.computerHost);
       computerTab = new GuiMachineTab(mc, itemRender, -24, 6, tec, true,
                                       tem.getPos().equals(tem.computerHost));
-      computerTab.drawButton();
+      computerTab.draw();
       // Draw a text box with the machine's name and coordinates
       if (Funcs.mouseInZone(mouseX, mouseY,
                             topLeft.x + computerTab.xPos, topLeft.y + computerTab.yPos,
@@ -174,30 +176,33 @@ public abstract class GuiMachine extends GuiContainer {
       BlockPos[] clients = tec.getClients();
       // For each client
       for (int i = 0; i < clients.length; i++) {
-        machineTabs.add(new GuiMachineTab(mc, itemRender, i / 5 * 197 - 24, i % 5 * 25 + 36,
-                                          (TileEntityElectric) mc.theWorld.getTileEntity(clients[i]),
-                                          i / 5 == 0, clients[i].equals(tem.getPos())));
-        machineTabs.get(i).drawButton();
+        GuiMachineTab tab =
+            new GuiMachineTab(mc, itemRender, i / 5 * 197 - 24, i % 5 * 25 + 36,
+                              (TileEntityElectric) mc.theWorld.getTileEntity(clients[i]),
+                              i / 5 == 0, clients[i].equals(tem.getPos()));
+        machineTabs.add(tab);
+
+        tab.draw(); // Draw the tab
 
         // If the mouse is over this client's tab, draw a text box with its name and coords
-        if (Funcs.mouseInZone(mouseX, mouseY, topLeft.x + machineTabs.get(i).xPos,
-                              topLeft.y + machineTabs.get(i).yPos, machineTabs.get(i).width,
-                              machineTabs.get(i).height)) {
+        if (Funcs.mouseInZone(mouseX, mouseY, topLeft.x + tab.xPos, topLeft.y + tab.yPos,
+                              tab.width, tab.height)) {
 
           new GuiTextBox(fontRendererObj,
                          mouseX - topLeft.x, mouseY - topLeft.y,
-                         Funcs.getLoc("tile." + machineTabs.get(i).tem.getEnumMachine().name
-                                      + ".name"), machineTabs.get(i).tem.getPos().toString());
+                         Funcs.getLoc("tile." + tab.tem.getEnumMachine().name
+                                      + ".name"), tab.tem.getPos().toString());
 
         }
       }
     }
 
-    // Draw the help dialogue and shade the help zone if help is enabled and the mouse is over a help zone
+    // Draw the help dialogue and shade the help zone if help is enabled and
+    // the mouse is over a help zone
     if (helpEnabled) {
-      EnumHelp
-          hoveredZone =
-          null; // The help zone that the mouse is over to render to dialogue later, null if mouse is not over a zone\
+      // The help zone that the mouse is over to render to dialogue later,
+      // null if mouse is not over a zone
+      EnumHelp hoveredZone = null;
       for (EnumHelp help : tem.getEnumMachine().getHelpBoxes()) {
         // Draw zone outline, add alpha to make the rectangles opaque
         drawRect(help.x, help.y, help.x + help.w, help.y + 1,

@@ -17,7 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import infinitealloys.core.InfiniteAlloys;
@@ -153,6 +153,6 @@ public final class BlockMachine extends BlockContainer {
   @Override
   public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state,
                                   int fortune) {
-    return new ArrayList<>(); // Drops are handled in onBlockDestroyed for the TileEntity
+    return new LinkedList<>(); // Drops are handled in onBlockDestroyed for the TileEntity
   }
 }

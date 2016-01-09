@@ -7,10 +7,12 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import infinitealloys.network.MessageNetworkEditToClient;
 import infinitealloys.network.MessageNetworkEditToServer;
+import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
@@ -34,15 +36,9 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
   public int range;
 
   /**
-   * The ratio between how much RK an item produces and how long it will burn in a furnace. Furnace is
-   * numerator, ESU is denominator.
-   */
-  private final float FURNACE_TO_ESU__RATIO = 0.18F;
-
-  /**
    * A list of clients currently connected to this energy network
    */
-  private final ArrayList<BlockPos> networkClients = new ArrayList<>();
+  private final List<BlockPos> networkClients = new LinkedList<>();
 
   public TEEEnergyStorage() {
     super(10);
@@ -222,8 +218,8 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
     // Take one piece of fuel out of the first slot that has fuel
     for (int i = 0; i < 9; i++) {
       if (inventoryStacks[i] != null) {
-        baseRKPerTick =
-            (int) (TileEntityFurnace.getItemBurnTime(inventoryStacks[i]) * FURNACE_TO_ESU__RATIO);
+        baseRKPerTick = (int) (TileEntityFurnace.getItemBurnTime(inventoryStacks[i]) *
+                               Consts.FURNACE_TO_ESU__RATIO);
         decrStackSize(i, 1);
         return;
       }

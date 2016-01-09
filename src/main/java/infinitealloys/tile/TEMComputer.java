@@ -6,7 +6,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import infinitealloys.network.MessageNetworkEditToClient;
 import infinitealloys.network.MessageNetworkEditToServer;
@@ -29,7 +30,7 @@ public final class TEMComputer extends TileEntityMachine implements IHost {
   /**
    * A list of clients currently connected to this computer control network
    */
-  private final ArrayList<BlockPos> networkClients = new ArrayList<>();
+  private final List<BlockPos> networkClients = new LinkedList<>();
 
   public TEMComputer() {
     super(1);
@@ -198,9 +199,11 @@ public final class TEMComputer extends TileEntityMachine implements IHost {
   @Override
   public void writeToNBT(NBTTagCompound tagCompound) {
     super.writeToNBT(tagCompound);
-    for (int i = 0; i < networkClients.size(); i++) {
-      BlockPos client = networkClients.get(i);
+
+    int i = 0;
+    for (BlockPos client : networkClients) {
       tagCompound.setIntArray("client" + i, new int[]{client.getX(), client.getY(), client.getZ()});
+      i++;
     }
   }
 

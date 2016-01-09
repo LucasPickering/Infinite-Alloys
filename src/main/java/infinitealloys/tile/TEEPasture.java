@@ -11,7 +11,7 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,11 +68,11 @@ public final class TEEPasture extends TileEntityElectric {
   @SuppressWarnings("unchecked")
   @Override
   protected void onFinishProcess() {
-                /* NOTE: For this specific machine, ticksToProcess = 0, meaning this function is called every tick. It is essentially an update() function with
-                 * conditions applied in TileEntityMachine.update() */
+    // For this specific machine, ticksToProcess = 0, meaning this function is called every tick.
+    // It is essentially an update() function with conditions applied in TileEntityMachine.update()
 
-    final ArrayList<EntityCreature> trapList = new ArrayList<EntityCreature>();
-    final ArrayList<EntityCreature> repelList = new ArrayList<EntityCreature>();
+    final List<EntityCreature> trapList = new LinkedList<>();
+    final List<EntityCreature> repelList = new LinkedList<>();
 
     for (int i = 0; i < mobActions.length; i++) {
       if (mobActions[i] == 1) {

@@ -16,8 +16,8 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import infinitealloys.block.IABlocks;
@@ -67,7 +67,7 @@ public final class GuiInternetWand extends GuiScreen {
   /**
    * The list of buttons that apply to each machine
    */
-  private final ArrayList<MachineButton> machineButtons = new ArrayList<>();
+  private final List<MachineButton> machineButtons = new LinkedList<>();
 
   /**
    * When help is enabled, slots get a colored outline and a mouse-over description
@@ -91,7 +91,7 @@ public final class GuiInternetWand extends GuiScreen {
   public GuiInternetWand() {
     // Make an array with the help title and the lines of help text
     for (EnumHelp help : EnumHelp.getNetworkWandBoxes()) {
-      List<ColoredText> lines = new ArrayList<>();
+      List<ColoredText> lines = new LinkedList<>();
       lines.add(new ColoredText(Funcs.getLoc("machineHelp." + help.name + ".title"), 0xffffff));
       for (String s : Funcs.getLoc("machineHelp." + help.name + ".info").split("/n")) {
         lines.add(new ColoredText(s, 0xaaaaaa));

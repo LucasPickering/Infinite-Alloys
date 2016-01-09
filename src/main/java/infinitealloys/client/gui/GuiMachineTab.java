@@ -31,9 +31,9 @@ public final class GuiMachineTab extends GuiScreen {
   }
 
   /**
-   * Draws this button to the screen.
+   * Draws this tab to the screen.
    */
-  public void drawButton() {
+  public void draw() {
     GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     mc.renderEngine.bindTexture(GuiMachine.extraIcons);
     if (leftSide) {

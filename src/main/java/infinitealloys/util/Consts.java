@@ -30,4 +30,10 @@ public final class Consts {
    * The amount of states that each mob can be in. Off, Attract, or Repel
    */
   public static final int PASTURE_MODES = 3;
+
+  /**
+   * The ratio between how much RK an item produces and how long it will burn in a furnace. Furnace
+   * time is the numerator, ESU is the denominator.
+   */
+  public static final float FURNACE_TO_ESU__RATIO = 0.18F;
 }

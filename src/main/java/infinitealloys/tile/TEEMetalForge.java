@@ -3,7 +3,8 @@ package infinitealloys.tile;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
@@ -62,7 +63,7 @@ public final class TEEMetalForge extends TileEntityElectric {
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
       ingotsToRemove[i] = EnumAlloy.getMetalAmt(recipeAlloyID, i);
     }
-    for (final int slot : getSlotsWithIngot()) {
+    for (int slot : getSlotsWithIngot()) {
       int ingotNum = MachineHelper.getIngotNum(inventoryStacks[slot]);
       int ingots = ingotsToRemove[ingotNum];
       ingotsToRemove[ingotNum] -=
@@ -158,8 +159,8 @@ public final class TEEMetalForge extends TileEntityElectric {
   /**
    * Get a list of the metal slots that contain an ingot
    */
-  private ArrayList<Integer> getSlotsWithIngot() {
-    final ArrayList<Integer> slots = new ArrayList<Integer>();
+  private List<Integer> getSlotsWithIngot() {
+    final List<Integer> slots = new LinkedList<>();
     for (int i = 1; i < 19; i++) {
       if (inventoryStacks[i] != null) {
         slots.add(i);
@@ -173,7 +174,7 @@ public final class TEEMetalForge extends TileEntityElectric {
    */
   private int[] getAvailableIngots() {
     final int[] amts = new int[Consts.METAL_COUNT];
-    for (final int slot : getSlotsWithIngot()) {
+    for (int slot : getSlotsWithIngot()) {
       amts[MachineHelper.getIngotNum(inventoryStacks[slot])] += inventoryStacks[slot].stackSize;
     }
     return amts;
