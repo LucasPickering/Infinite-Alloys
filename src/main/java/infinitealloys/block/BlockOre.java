@@ -57,10 +57,9 @@ public final class BlockOre extends Block {
   @SideOnly(Side.CLIENT)
   @Override
   public int colorMultiplier(IBlockAccess world, BlockPos pos, int renderPass) {
-    System.out.println(renderPass);
     if (renderPass == 1) {
       return EnumMetal.byMetadata(getMetaFromState(world.getBlockState(pos))).color;
     }
-    return 0xff0000;
+    return 0xffffff;
   }
 }

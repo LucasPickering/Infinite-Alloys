@@ -16,17 +16,17 @@
       "from": [ 0, 0, 0 ],
       "to": [ 16, 16, 16 ],
       "faces": {
-        "down":  { "texture": "#foreground", "cullface": "down", "tintindex": 1 },
-        "up":    { "texture": "#foreground", "cullface": "up", "tintindex": 1 },
-        "north": { "texture": "#foreground", "cullface": "north", "tintindex": 1 },
-        "south": { "texture": "#foreground", "cullface": "south", "tintindex": 1 },
-        "west":  { "texture": "#foreground", "cullface": "west", "tintindex": 1 },
-        "east":  { "texture": "#foreground", "cullface": "east", "tintindex": 1 }
+        "down":  { "texture": "#metal", "cullface": "down", "tintindex": 1 },
+        "up":    { "texture": "#metal", "cullface": "up", "tintindex": 1 },
+        "north": { "texture": "#metal", "cullface": "north", "tintindex": 1 },
+        "south": { "texture": "#metal", "cullface": "south", "tintindex": 1 },
+        "west":  { "texture": "#metal", "cullface": "west", "tintindex": 1 },
+        "east":  { "texture": "#metal", "cullface": "east", "tintindex": 1 }
       }
     }
   ],
   "textures": {
     "stone": "blocks/stone",
-    "foreground": "infinitealloys:blocks/ore_foreground"
+    "metal": "infinitealloys:blocks/ore_foreground"
   }
 }
