@@ -4,14 +4,14 @@ import net.minecraft.util.IStringSerializable;
 
 public enum EnumMetal implements IStringSerializable {
 
-  COPPER("copper", 0xCE7136),
-  ALUMINIUM("aluminium", 0xCBCEC7), // Yes it has to be spelled that way
-  ZINC("zinc", 0x787D76),
-  MAGNESIUM("magnesium", 0xD2CDA3),
-  TANTALUM("tantalum", 0xCCC34F),
-  HYDRONIUM("hydronium", 0x141DCE),
-  ROGUITE("roguite", 0xAE2305),
-  VERDITE("verdite", 0x177C19);
+  COPPER("copper", 0xce7136),
+  ZINC("zinc", 0x787d76),
+  MAGNESIUM("magnesium", 0xd2cda3),
+  TANTALUM("tantalum", 0xccc34f),
+  HYDRONITE("hydronite", 0x141dce),
+  ROGUITE("roguite", 0xae2305),
+  VERDITE("verdite", 0x177c19),
+  GROTANIUM("grotanium", 0x75009b);
 
   public final String name;
   public final int color;

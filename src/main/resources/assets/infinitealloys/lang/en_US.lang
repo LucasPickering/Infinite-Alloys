@@ -10,13 +10,13 @@ item.internetWand.name=Network Wand
 item.teleporter.name=Teleporter
 
 item.copperIngot.name=Copper Ingot
-item.aluminiumIngot.name=Aluminum Ingot
 item.zincIngot.name=Zinc Ingot
 item.magnesiumIngot.name=Magnesium Ingot
 item.tantalumIngot.name=Tantalum Ingot
-item.hydroniumIngot.name=Hydronium Ingot
+item.hydroniteIngot.name=Hydronite Ingot
 item.roguiteIngot.name=Roguite Ingot
 item.verditeIngot.name=Verdite Ingot
+item.grotaniumIngot.name=Grotanium Ingot
 
 item.upgradeSpeed1.name=Speed I
 item.upgradeSpeed2.name=Speed II
@@ -46,22 +46,22 @@ item.alloy4.name=Alloy V
 item.alloy5.name=Alloy VI
 
 metal.copper.name=Copper
-metal.aluminium.name=Aluminum
 metal.zinc.name=Zinc
 metal.magnesium.name=Magnesium
 metal.tantalum.name=Tantalum
-metal.hydronium.name=Hydronium
+metal.hydronite.name=Hydronite
 metal.roguite.name=Roguite
 metal.verdite.name=Verdite
+metal.grotanium.name=Grotanium
 
 tile.copperOre.name=Copper Ore
-tile.aluminiumOre.name=Aluminum Ore
 tile.zincOre.name=Zinc Ore
 tile.magnesiumOre.name=Magnesium Ore
 tile.tantalumOre.name=Tantalum Ore
-tile.hydroniumOre.name=Hydronium Ore
+tile.hydroniteOre.name=Hydronite Ore
 tile.roguiteOre.name=Roguite Ore
 tile.verditeOre.name=Verdite Ore
+tile.grotaniumOre.name=Grotanium Ore
 
 tile.computer.name=Computer
 tile.metalForge.name=Metal Forge
