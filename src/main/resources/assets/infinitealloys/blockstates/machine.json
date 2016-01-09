@@ -1,9 +1,28 @@
 {
   "variants": {
-    "machine=computer": { "model": "infinitealloys:computer" },
-    "machine=metalforge": { "model": "infinitealloys:metalforge" },
-    "machine=xray": { "model": "infinitealloys:xray" },
-    "machine=pasture": { "model": "infinitealloys:pasture" },
-    "machine=energystorage": { "model": "infinitealloys:energystorage" }
+    "facing=north,machine=computer": { "model": "infinitealloys:computer" },
+    "facing=east,machine=computer": { "model": "infinitealloys:computer", "y": 90 },
+    "facing=south,machine=computer": { "model": "infinitealloys:computer", "y": 180 },
+    "facing=west,machine=computer": { "model": "infinitealloys:computer", "y": 270 },
+
+    "facing=north,machine=metalforge": { "model": "infinitealloys:metalforge" },
+    "facing=east,machine=metalforge": { "model": "infinitealloys:metalforge", "y": 90 },
+    "facing=south,machine=metalforge": { "model": "infinitealloys:metalforge", "y": 180 },
+    "facing=west,machine=metalforge": { "model": "infinitealloys:metalforge", "y": 270 },
+
+    "facing=north,machine=xray": { "model": "infinitealloys:xray" },
+    "facing=east,machine=xray": { "model": "infinitealloys:xray", "y": 90 },
+    "facing=south,machine=xray": { "model": "infinitealloys:xray", "y": 180 },
+    "facing=west,machine=xray": { "model": "infinitealloys:xray", "y": 270 },
+
+    "facing=north,machine=pasture": { "model": "infinitealloys:pasture" },
+    "facing=east,machine=pasture": { "model": "infinitealloys:pasture", "y": 90 },
+    "facing=south,machine=pasture": { "model": "infinitealloys:pasture", "y": 180 },
+    "facing=west,machine=pasture": { "model": "infinitealloys:pasture", "y": 270 },
+
+    "facing=north,machine=energystorage": { "model": "infinitealloys:energystorage" },
+    "facing=east,machine=energystorage": { "model": "infinitealloys:energystorage", "y": 90 },
+    "facing=south,machine=energystorage": { "model": "infinitealloys:energystorage", "y": 180 },
+    "facing=west,machine=energystorage": { "model": "infinitealloys:energystorage", "y": 270 }
   }
 }

@@ -2,6 +2,7 @@ package infinitealloys.block;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -26,15 +27,17 @@ import infinitealloys.tile.IHost;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
-import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 
 public final class BlockMachine extends BlockContainer {
 
-  private static final PropertyEnum MACHINE_PROP = PropertyEnum.create("machine", EnumMachine.class);
+  public static final PropertyEnum MACHINE_PROP = PropertyEnum.create("machine", EnumMachine.class);
+  public static final PropertyDirection FACING_PROP =
+      PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
   public BlockMachine() {
     super(Material.iron);
+    setDefaultState(blockState.getBaseState().withProperty(FACING_PROP, EnumFacing.NORTH));
   }
 
   @Override
@@ -57,7 +60,7 @@ public final class BlockMachine extends BlockContainer {
 
   @Override
   protected BlockState createBlockState() {
-    return new BlockState(this, MACHINE_PROP);
+    return new BlockState(this, MACHINE_PROP, FACING_PROP);
   }
 
   @Override
@@ -132,9 +135,10 @@ public final class BlockMachine extends BlockContainer {
   @Override
   public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer,
                               ItemStack stack) {
-    TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(pos);
+    final TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(pos);
     if (tem != null) {
-      tem.orientation = Funcs.yawToFacing(placer.rotationYaw + 180F);
+      final EnumFacing facing = placer.getHorizontalFacing().getOpposite();
+      tem.updateOrientation(facing);
       if (stack.hasTagCompound()) {
         tem.loadNBTData(stack.getTagCompound());
       }
@@ -153,6 +157,6 @@ public final class BlockMachine extends BlockContainer {
   @Override
   public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state,
                                   int fortune) {
-    return new LinkedList<>(); // Drops are handled in onBlockDestroyed for the TileEntity
+    return new LinkedList<>(); // Drops are handled by the TileEntity in onBlockDestroyed
   }
 }

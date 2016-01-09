@@ -1,5 +1,6 @@
 package infinitealloys.tile;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -20,6 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import infinitealloys.block.BlockMachine;
 import infinitealloys.block.IABlocks;
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemUpgrade;
@@ -54,7 +56,7 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
   /**
    * The direction that the machine is facing.
    */
-  public EnumFacing orientation = EnumFacing.EAST;
+  private EnumFacing orientation = EnumFacing.NORTH;
 
   /**
    * Each element in the array corresponds to an upgrade type, and represents how many tiers in the
@@ -123,6 +125,18 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
       upgrades[((ItemUpgrade) inventoryStacks[upgradeSlotIndex].getItem()).upgradeType.ordinal()]++;
       inventoryStacks[upgradeSlotIndex] = null;
       updateUpgrades();
+    }
+  }
+
+  public void updateOrientation(EnumFacing orientation) {
+    this.orientation = orientation;
+    if (worldObj != null) {
+      System.out.println(String.format("State 1 %s, %s", worldObj.getBlockState(pos), orientation));
+      IBlockState newState = worldObj.getBlockState(pos).withProperty(BlockMachine.FACING_PROP,
+                                                                      orientation);
+      System.out.println("New state: "+newState);
+      System.out.println(worldObj.setBlockState(pos, newState));
+      System.out.println(String.format("State 2 %s, %s", worldObj.getBlockState(pos), orientation));
     }
   }
 
@@ -199,7 +213,7 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
   @Override
   public void readFromNBT(NBTTagCompound tagCompound) {
     super.readFromNBT(tagCompound);
-    orientation = EnumFacing.values()[tagCompound.getByte("orientation")];
+    updateOrientation(EnumFacing.values()[tagCompound.getByte("orientation")]);
     upgrades = tagCompound.getIntArray("upgrades");
     NBTTagList nbttaglist = tagCompound.getTagList("Items", 10);
     for (int i = 0; i < nbttaglist.tagCount(); i++) {
@@ -251,7 +265,7 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
    * @param bytes the data from the server->client packet
    */
   public void readToClientData(ByteBuf bytes) {
-    orientation = EnumFacing.values()[bytes.readByte()];
+    updateOrientation(EnumFacing.values()[bytes.readByte()]);
     for (int i = 0; i < upgrades.length; i++) {
       upgrades[i] = bytes.readInt();
     }
