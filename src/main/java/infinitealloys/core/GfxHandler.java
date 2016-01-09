@@ -22,7 +22,6 @@ import infinitealloys.util.EnumMachine;
 
 public final class GfxHandler implements IGuiHandler {
 
-  public int renderID;
   private final GuiOverlay guiOverlay = new GuiOverlay();
 
   /**

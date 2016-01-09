@@ -26,7 +26,7 @@ public final class ItemBlockOre extends ItemBlock {
     if (stack.getItemDamage() < Consts.METAL_COUNT) {
       return "tile." + EnumMetal.values()[stack.getItemDamage()].name + "Ore";
     }
-    return "tile.ore";
+    return super.getUnlocalizedName(stack);
   }
 
   @Override

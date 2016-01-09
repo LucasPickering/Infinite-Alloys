@@ -1,12 +1,12 @@
 {
   "variants": {
     "metal=copper": { "model": "infinitealloys:ore" },
-    "metal=aluminium": { "model": "infinitealloys:ore" },
     "metal=zinc": { "model": "infinitealloys:ore" },
     "metal=magnesium": { "model": "infinitealloys:ore" },
     "metal=tantalum": { "model": "infinitealloys:ore" },
-    "metal=hydronium": { "model": "infinitealloys:ore" },
+    "metal=hydronite": { "model": "infinitealloys:ore" },
     "metal=roguite": { "model": "infinitealloys:ore" },
-    "metal=verdite": { "model": "infinitealloys:ore" }
+    "metal=verdite": { "model": "infinitealloys:ore" },
+    "metal=grotanium": { "model": "infinitealloys:ore" }
   }
 }

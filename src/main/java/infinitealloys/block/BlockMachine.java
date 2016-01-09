@@ -39,7 +39,7 @@ public final class BlockMachine extends BlockContainer {
 
   @Override
   public int getRenderType() {
-    return InfiniteAlloys.proxy.gfxHandler.renderID;
+    return 3;
   }
 
   @Override

@@ -3,12 +3,10 @@ package infinitealloys.client;
 import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 import infinitealloys.block.IABlocks;
 import infinitealloys.client.render.RenderBoss;
-import infinitealloys.client.render.TileEntityMachineRenderer;
 import infinitealloys.core.CommonProxy;
 import infinitealloys.item.IAItems;
 import infinitealloys.util.Consts;
@@ -24,6 +22,12 @@ public final class ClientProxy extends CommonProxy {
     super.initBlocks();
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
       Funcs.registerBlockModel(IABlocks.ore, i, "ore");
+    }
+
+    for (EnumMachine machineType : EnumMachine.values()) {
+      Funcs.registerBlockModel(IABlocks.machine, machineType.ordinal(), machineType.name);
+      ModelBakery.addVariantName(Item.getItemFromBlock(IABlocks.machine),
+                                 Consts.MOD_ID + ":" + machineType.name);
     }
   }
 
@@ -57,12 +61,6 @@ public final class ClientProxy extends CommonProxy {
 
   @Override
   public void initRendering() {
-//    gfxHandler.renderID = RenderingRegistry.getNextAvailableRenderId();
-    for (EnumMachine machine : EnumMachine.values()) {
-      ClientRegistry.bindTileEntitySpecialRenderer(machine.temClass,
-                                                   new TileEntityMachineRenderer(machine));
-    }
-//    RenderingRegistry.registerBlockHandler(gfxHandler);
     for (EnumBoss boss : EnumBoss.values()) {
       RenderingRegistry.registerEntityRenderingHandler(boss.entityClass, new RenderBoss(boss));
     }

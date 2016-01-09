@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "machine=computer": { "model": "infinitealloys:computer" },
+    "machine=metalforge": { "model": "infinitealloys:metalforge" },
+    "machine=xray": { "model": "infinitealloys:xray" },
+    "machine=pasture": { "model": "infinitealloys:pasture" },
+    "machine=energystorage": { "model": "infinitealloys:energystorage" }
+  }
+}
