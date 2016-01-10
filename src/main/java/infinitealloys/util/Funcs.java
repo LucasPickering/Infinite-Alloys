@@ -109,7 +109,7 @@ public final class Funcs {
 
   /**
    * Reduce the values within an alloy, i.e. 44442222 becomes 22221111 Rightmost digits are the lesser
-   * metals
+   * metals.
    *
    * @param alloy the raw alloy data, before reduction
    * @return an alloy with reduced digits
@@ -117,8 +117,8 @@ public final class Funcs {
   public static int reduceAlloy(int alloy) {
     int gcf = 1;
 
+    // Iterate over every integer in [2, Consts.ALLOY_RADIX), i.e. every digit that can be reduced.
     factors:
-    // Iterate over every integer in [2, Consts.ALLOY_RADIX)
     for (int i = 2; i < Consts.ALLOY_RADIX; i++) {
       // Iterate over every digit in the alloy
       for (int j = 0; j < Consts.METAL_COUNT; j++) {

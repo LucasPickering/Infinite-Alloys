@@ -33,6 +33,7 @@ public final class FuncsTest {
   @Test
   public void testReduceAlloy() throws Exception {
     assertEquals(0, Funcs.reduceAlloy(0));
+    assertEquals(1, Funcs.reduceAlloy(1));
     assertEquals(1122, Funcs.reduceAlloy(1122));
     assertEquals(1122, Funcs.reduceAlloy(2244));
     assertEquals(33121, Funcs.reduceAlloy(99363));
