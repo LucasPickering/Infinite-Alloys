@@ -92,22 +92,4 @@ final class GuiTextBox extends GuiScreen {
     this.x = x;
     this.y = y;
   }
-
-}
-
-final class ColoredText {
-
-  /**
-   * The line's text
-   */
-  String text;
-  /**
-   * The line's hexadecimal color
-   */
-  int color;
-
-  ColoredText(String text, int color) {
-    this.text = text;
-    this.color = color;
-  }
 }
