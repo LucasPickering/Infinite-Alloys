@@ -26,6 +26,7 @@ public final class GuiPasture extends GuiElectric {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public void initGui() {
     super.initGui();
     // Initialize each mob button with the text "<off/trap/repel>"
