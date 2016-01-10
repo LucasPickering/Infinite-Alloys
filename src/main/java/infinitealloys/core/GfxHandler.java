@@ -30,8 +30,8 @@ public final class GfxHandler implements IGuiHandler {
   private final GuiOverlay guiOverlay = new GuiOverlay();
 
   /**
-   * A map of blocks and their respective colors, to have outlines drawn around them. These blocks
-   * are located and specified by {@link infinitealloys.tile.TEEXray}.
+   * A map of blocks and their respective colors, to have outlines drawn around them. These blocks are
+   * located and specified by {@link infinitealloys.tile.TEEXray}.
    */
   @SideOnly(Side.CLIENT)
   public Map<BlockPos, Integer> xrayBlocks = new HashMap<>();
@@ -78,8 +78,8 @@ public final class GfxHandler implements IGuiHandler {
   }
 
   /**
-   * Draw a red outline around the block at the specific coordinates. To be specific, the coordinates
-   * of a block are the ones given in the debug menu while standing ON TOP OF that block. Convenience
+   * Draw an outline around the block at the specific coordinates. To be specific, the coordinates of
+   * a block are the ones given in the debug menu while standing ON TOP OF that block. Convenience
    * method for {@link #renderOutlineBox}.
    *
    * @param blockX the x-coordinate of the block to be outlined
@@ -93,7 +93,7 @@ public final class GfxHandler implements IGuiHandler {
   }
 
   /**
-   * Draw a red outline
+   * Draw an outline around the specified set of block(s).
    *
    * @param minX  the x value for the first corner
    * @param minY  the y value for the first corner
