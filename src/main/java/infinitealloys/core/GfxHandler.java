@@ -30,10 +30,11 @@ public final class GfxHandler implements IGuiHandler {
   private final GuiOverlay guiOverlay = new GuiOverlay();
 
   /**
-   * A map of block identified by an x-ray machine to be highlighted, their respective colors.
+   * A map of blocks and their respective colors, to have outlines drawn around them. These blocks
+   * are located and specified by {@link infinitealloys.tile.TEEXray}.
    */
   @SideOnly(Side.CLIENT)
-  public HashMap<BlockPos, Integer> xrayBlocks = new HashMap<>();
+  public Map<BlockPos, Integer> xrayBlocks = new HashMap<>();
 
   @Override
   public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
