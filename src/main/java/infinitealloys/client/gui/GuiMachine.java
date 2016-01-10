@@ -118,8 +118,7 @@ public abstract class GuiMachine extends GuiContainer {
         }
       }
 
-      new GuiTextBox(fontRendererObj, mouseX, mouseY, lines.toArray(new ColoredText[lines.size()]))
-          .draw();
+      new GuiTextBox(mouseX, mouseY, lines.toArray(new ColoredText[lines.size()])).draw();
     }
 
     // Draw the network info if the mouse is over the network icon and help is disabled
@@ -128,7 +127,7 @@ public abstract class GuiMachine extends GuiContainer {
                      NETWORK_ICON.width, NETWORK_ICON.height))
     // Draw a text box with a line for each network show its status and information
     {
-      new GuiTextBox(fontRendererObj, mouseX, mouseY, getNetworkStatuses()).draw();
+      new GuiTextBox(mouseX, mouseY, getNetworkStatuses()).draw();
     }
 
     GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -167,7 +166,7 @@ public abstract class GuiMachine extends GuiContainer {
                             topLeft.x + computerTab.xPos, topLeft.y + computerTab.yPos,
                             computerTab.width, computerTab.height)) {
 
-        new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y,
+        new GuiTextBox(mouseX - topLeft.x, mouseY - topLeft.y,
                        Funcs.getLoc("tile." + computerTab.tem.getEnumMachine().name + ".name"),
                        computerTab.tem.getPos().toString()).draw();
 
@@ -188,8 +187,7 @@ public abstract class GuiMachine extends GuiContainer {
         if (Funcs.mouseInZone(mouseX, mouseY, topLeft.x + tab.xPos, topLeft.y + tab.yPos,
                               tab.width, tab.height)) {
 
-          new GuiTextBox(fontRendererObj,
-                         mouseX - topLeft.x, mouseY - topLeft.y,
+          new GuiTextBox(mouseX - topLeft.x, mouseY - topLeft.y,
                          Funcs.getLoc("tile." + tab.tem.getEnumMachine().name
                                       + ".name"), tab.tem.getPos().toString());
 
@@ -225,8 +223,9 @@ public abstract class GuiMachine extends GuiContainer {
         // Fill in the zone with an smaller 4th hex pair for less alpha
         drawRect(hoveredZone.x, hoveredZone.y, hoveredZone.x + hoveredZone.w,
                  hoveredZone.y + hoveredZone.h, 0x60000000 + hoveredZone.color);
-        new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y,
-                       helpText.get(hoveredZone.name)).draw(); // Draw text box with help info
+
+        // Draw text box with help info
+        new GuiTextBox(mouseX - topLeft.x, mouseY - topLeft.y, helpText.get(hoveredZone.name)).draw();
       }
     }
     GL11.glPopMatrix();

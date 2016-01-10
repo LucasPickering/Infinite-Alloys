@@ -1,7 +1,9 @@
 package infinitealloys.client.gui;
 
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+
+import java.util.Arrays;
 
 /**
  * A text box with one or more lines of text, each with its own color
@@ -16,24 +18,27 @@ final class GuiTextBox extends GuiScreen {
   private final ColoredText[] lines;
 
   /**
-   * Create a new text box, with all lines of text being black.
+   * Create a new text box, with each line being white.
+   *
+   * @param x            the x-pos for the box
+   * @param y            the y-pos for the box
+   * @param text         each line to be drawn
    */
-  public GuiTextBox(FontRenderer fontRenderer, int x, int y, String... strs) {
-    this.fontRendererObj = fontRenderer;
-    ColoredText[] lines = new ColoredText[strs.length];
-    for (int i = 0; i < strs.length; i++) {
-      lines[i] = new ColoredText(strs[i], 0xffffff);
-    }
-    this.x = x;
-    this.y = y;
-    this.lines = lines;
+  public GuiTextBox(int x, int y, String... text) {
+    this(x, y,
+         Arrays.stream(text).map(s -> new ColoredText(s, 0xffffff)).toArray(ColoredText[]::new));
   }
 
   /**
    * Create a new text box.
+   *
+   * @param x            the x-pos for the box
+   * @param y            the y-pos for the box
+   * @param text         each line to be drawn
    */
-  public GuiTextBox(FontRenderer fontRenderer, int x, int y, ColoredText... text) {
-    this.fontRendererObj = fontRenderer;
+  public GuiTextBox(int x, int y, ColoredText... text) {
+    final Minecraft mc = Minecraft.getMinecraft();
+    setWorldAndResolution(mc, mc.displayWidth, mc.displayHeight);
     this.x = x;
     this.y = y;
     this.lines = text;

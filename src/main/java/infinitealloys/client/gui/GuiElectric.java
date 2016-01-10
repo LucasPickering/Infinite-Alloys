@@ -45,7 +45,7 @@ public abstract class GuiElectric extends GuiMachine {
       String line2 = (rkChange > 0 ? "+" : "") + rkChange + " RK/t";
 
       // Draw all the information, with colors for the change based on pos/neg
-      new GuiTextBox(fontRendererObj, mouseX, mouseY, new ColoredText(line1, 0xffffff),
+      new GuiTextBox(mouseX, mouseY, new ColoredText(line1, 0xffffff),
                      new ColoredText(line2,
                                      rkChange < 0 ? 0xff0000 : rkChange > 0 ? 0x00ff00 : 0xffffff))
           .draw();

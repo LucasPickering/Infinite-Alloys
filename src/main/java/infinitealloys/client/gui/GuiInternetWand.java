@@ -230,8 +230,10 @@ public final class GuiInternetWand extends GuiScreen {
         // Fill in the zone with an smaller 4th hex pair for less alpha
         drawRect(hoveredZone.x, hoveredZone.y, hoveredZone.x + hoveredZone.w,
                  hoveredZone.y + hoveredZone.h, 0x60000000 + hoveredZone.color);
-        new GuiTextBox(fontRendererObj, mouseX - topLeft.x, mouseY - topLeft.y,
-                       helpText.get(hoveredZone.name)).draw(); // Draw text box with help info
+
+        // Draw text box with help info
+        new GuiTextBox(mouseX - topLeft.x, mouseY - topLeft.y,
+                       helpText.get(hoveredZone.name)).draw();
       }
     }
     GL11.glPopMatrix();
