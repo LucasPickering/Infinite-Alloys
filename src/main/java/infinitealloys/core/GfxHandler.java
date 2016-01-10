@@ -1,5 +1,8 @@
 package infinitealloys.core;
 
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -10,6 +13,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,63 +105,64 @@ public final class GfxHandler implements IGuiHandler {
   @SideOnly(Side.CLIENT)
   private void renderOutlineBox(double minX, double minY, double minZ,
                                 double maxX, double maxY, double maxZ, int color) {
-    /*
-    final RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
-    final Tessellator tess = Tessellator.getInstance();
+    final WorldRenderer renderer = Tessellator.getInstance().getWorldRenderer();
 
     GL11.glPushMatrix();
     GL11.glDisable(GL11.GL_DEPTH_TEST);
     GL11.glDisable(GL11.GL_TEXTURE_2D);
-    GL11.glTranslated(-renderManager.render, -RenderManager.renderPosY,
-                      -RenderManager.renderPosZ);
+    GL11.glLineWidth(5);
 
-    tess.startDrawing(GL11.GL_LINES);
-    tess.setColorOpaque_I(color);
+    final double renderX = TileEntityRendererDispatcher.staticPlayerX;
+    final double renderY = TileEntityRendererDispatcher.staticPlayerY;
+    final double renderZ = TileEntityRendererDispatcher.staticPlayerZ;
+    GL11.glTranslated(-renderX, -renderY, -renderZ);
+
+    renderer.startDrawing(GL11.GL_LINES);
+    renderer.setColorOpaque_I(color);
 
     // Front
-    tess.addVertex(minX, minY, minZ);
-    tess.addVertex(minX, maxY, minZ);
+    renderer.addVertex(minX, minY, minZ);
+    renderer.addVertex(minX, maxY, minZ);
 
-    tess.addVertex(minX, maxY, minZ);
-    tess.addVertex(maxX, maxY, minZ);
+    renderer.addVertex(minX, maxY, minZ);
+    renderer.addVertex(maxX, maxY, minZ);
 
-    tess.addVertex(maxX, maxY, minZ);
-    tess.addVertex(maxX, minY, minZ);
+    renderer.addVertex(maxX, maxY, minZ);
+    renderer.addVertex(maxX, minY, minZ);
 
-    tess.addVertex(maxX, minY, minZ);
-    tess.addVertex(minX, minY, minZ);
+    renderer.addVertex(maxX, minY, minZ);
+    renderer.addVertex(minX, minY, minZ);
 
     // Back
-    tess.addVertex(minX, minY, maxZ);
-    tess.addVertex(minX, maxY, maxZ);
+    renderer.addVertex(minX, minY, maxZ);
+    renderer.addVertex(minX, maxY, maxZ);
 
-    tess.addVertex(minX, minY, maxZ);
-    tess.addVertex(maxX, minY, maxZ);
+    renderer.addVertex(minX, minY, maxZ);
+    renderer.addVertex(maxX, minY, maxZ);
 
-    tess.addVertex(maxX, minY, maxZ);
-    tess.addVertex(maxX, maxY, maxZ);
+    renderer.addVertex(maxX, minY, maxZ);
+    renderer.addVertex(maxX, maxY, maxZ);
 
-    tess.addVertex(minX, maxY, maxZ);
-    tess.addVertex(maxX, maxY, maxZ);
+    renderer.addVertex(minX, maxY, maxZ);
+    renderer.addVertex(maxX, maxY, maxZ);
 
     // Betweens
-    tess.addVertex(minX, minY, minZ);
-    tess.addVertex(minX, minY, maxZ);
+    renderer.addVertex(minX, minY, minZ);
+    renderer.addVertex(minX, minY, maxZ);
 
-    tess.addVertex(minX, maxY, minZ);
-    tess.addVertex(minX, maxY, maxZ);
+    renderer.addVertex(minX, maxY, minZ);
+    renderer.addVertex(minX, maxY, maxZ);
 
-    tess.addVertex(maxX, minY, minZ);
-    tess.addVertex(maxX, minY, maxZ);
+    renderer.addVertex(maxX, minY, minZ);
+    renderer.addVertex(maxX, minY, maxZ);
 
-    tess.addVertex(maxX, maxY, minZ);
-    tess.addVertex(maxX, maxY, maxZ);
+    renderer.addVertex(maxX, maxY, minZ);
+    renderer.addVertex(maxX, maxY, maxZ);
 
-    tess.draw();
+    Tessellator.getInstance().draw();
 
     GL11.glEnable(GL11.GL_DEPTH_TEST);
     GL11.glEnable(GL11.GL_TEXTURE_2D);
     GL11.glPopMatrix();
-    */
   }
 }
