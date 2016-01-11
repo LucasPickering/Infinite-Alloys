@@ -35,17 +35,16 @@ public class CommonProxy {
 
   public void initBlocks() {
     GameRegistry.registerBlock(IABlocks.ore, ItemBlockOre.class, "ore");
-
-    for (EnumMachine machineType : EnumMachine.values()) {
-      Funcs.registerBlock(IABlocks.machines[machineType.ordinal()] = new BlockMachine(),
-                          ItemBlockMachine.class, machineType.getName());
-    }
-
     for (EnumMetal metalType : EnumMetal.values()) {
       final int meta = metalType.ordinal();
       OreDictionary.registerOre("ore" + metalType.getName(), new ItemStack(IABlocks.ore, 1, meta));
       IABlocks.ore.setHarvestLevel("pickaxe", metalType.harvestLevel,
                                    IABlocks.ore.getStateFromMeta(meta));
+    }
+
+    for (EnumMachine machineType : EnumMachine.values()) {
+      Funcs.registerBlock(IABlocks.machines[machineType.ordinal()] = new BlockMachine(),
+                          ItemBlockMachine.class, machineType.getName());
     }
   }
 
