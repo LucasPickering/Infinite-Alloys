@@ -104,11 +104,9 @@ public final class GfxHandler implements IGuiHandler {
     GL11.glDisable(GL11.GL_DEPTH_TEST);
     GL11.glDisable(GL11.GL_TEXTURE_2D);
     GL11.glLineWidth(5);
-
-    final double renderX = TileEntityRendererDispatcher.staticPlayerX;
-    final double renderY = TileEntityRendererDispatcher.staticPlayerY;
-    final double renderZ = TileEntityRendererDispatcher.staticPlayerZ;
-    GL11.glTranslated(-renderX, -renderY, -renderZ);
+    GL11.glTranslated(-TileEntityRendererDispatcher.staticPlayerX,
+                      -TileEntityRendererDispatcher.staticPlayerY,
+                      -TileEntityRendererDispatcher.staticPlayerZ);
 
     final int x1 = Math.min(pos1.getX(), pos2.getX());
     final int y1 = Math.min(pos1.getY(), pos2.getY());
