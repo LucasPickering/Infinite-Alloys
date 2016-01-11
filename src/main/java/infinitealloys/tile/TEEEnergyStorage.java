@@ -46,7 +46,7 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
   }
 
   @Override
-  public EnumMachine getEnumMachine() {
+  public EnumMachine getMachineType() {
     return EnumMachine.ENERGY_STORAGE;
   }
 

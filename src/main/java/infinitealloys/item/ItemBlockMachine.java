@@ -9,7 +9,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
 
@@ -17,24 +16,11 @@ public final class ItemBlockMachine extends ItemBlock {
 
   public ItemBlockMachine(Block block) {
     super(block);
-    setHasSubtypes(true);
-  }
-
-  @Override
-  public int getMetadata(int i) {
-    return i;
-  }
-
-  @Override
-  public String getUnlocalizedName(ItemStack itemstack) {
-    if (itemstack.getItemDamage() < Consts.MACHINE_COUNT) {
-      return "tile." + EnumMachine.values()[itemstack.getItemDamage()].name;
-    }
-    return super.getUnlocalizedName(itemstack);
   }
 
   @Override
   @SideOnly(Side.CLIENT)
+  @SuppressWarnings("unchecked")
   public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
     // If the item has stored data, display it
     if (itemstack.hasTagCompound()) {

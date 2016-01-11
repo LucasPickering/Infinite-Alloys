@@ -19,7 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import infinitealloys.block.IABlocks;
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemUpgrade;
 import infinitealloys.network.MessageTEToClient;
@@ -90,10 +89,9 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
   }
 
   /**
-   * Get the integer from {@link infinitealloys.util.MachineHelper MachineHelper} that corresponds to
-   * this machine
+   * Get the {@link EnumMachine} that corresponds to this machine.
    */
-  public abstract EnumMachine getEnumMachine();
+  public abstract EnumMachine getMachineType();
 
   /**
    * Called when the block is first placed to restore persistent data from before it was destroyed,
@@ -152,7 +150,7 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
    */
   public void onBlockDestroyed() {
     // Save this machine's data to an NBT Tag
-    ItemStack block = new ItemStack(IABlocks.machine, 1, getEnumMachine().ordinal());
+    ItemStack block = getMachineType().getItemStack();
     NBTTagCompound tagCompound = getDropTagCompound();
     if (tagCompound != null) {
       block.setTagCompound(tagCompound);
@@ -353,7 +351,7 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
 
   @Override
   public String getName() {
-    return getEnumMachine().name;
+    return getMachineType().name;
   }
 
   @Override
@@ -438,7 +436,7 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
   @Override
   public final boolean isItemValidForSlot(int slot, ItemStack itemstack) {
     return slot == upgradeSlotIndex && isUpgradeValid(itemstack)
-           || slot < upgradeSlotIndex && getEnumMachine().stackValidForSlot(slot, itemstack);
+           || slot < upgradeSlotIndex && getMachineType().stackValidForSlot(slot, itemstack);
   }
 
   @Override

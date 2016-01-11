@@ -37,7 +37,7 @@ public final class TEMComputer extends TileEntityMachine implements IHost {
   }
 
   @Override
-  public EnumMachine getEnumMachine() {
+  public EnumMachine getMachineType() {
     return EnumMachine.COMPUTER;
   }
 

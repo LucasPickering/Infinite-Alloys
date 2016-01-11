@@ -3,13 +3,10 @@ package infinitealloys.block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -26,17 +23,17 @@ import infinitealloys.item.IAItems;
 import infinitealloys.tile.IHost;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
-import infinitealloys.util.EnumMachine;
 import infinitealloys.util.MachineHelper;
 
 public final class BlockMachine extends BlockContainer {
 
-  public static final PropertyEnum MACHINE_PROP = PropertyEnum.create("machine", EnumMachine.class);
   public static final PropertyDirection FACING_PROP =
       PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
   public BlockMachine() {
     super(Material.iron);
+    setCreativeTab(InfiniteAlloys.creativeTab);
+    setHardness(2f);
     setDefaultState(blockState.getBaseState().withProperty(FACING_PROP, EnumFacing.NORTH));
   }
 
@@ -51,30 +48,18 @@ public final class BlockMachine extends BlockContainer {
   }
 
   @Override
-  @SuppressWarnings("unchecked")
-  public void getSubBlocks(Item item, CreativeTabs creativetabs, List list) {
-    for (int i = 0; i < Consts.MACHINE_COUNT * 4; i++) {
-      list.add(new ItemStack(item, 1, i));
-    }
-  }
-
-  @Override
   protected BlockState createBlockState() {
-    return new BlockState(this, MACHINE_PROP, FACING_PROP);
+    return new BlockState(this, FACING_PROP);
   }
 
   @Override
   public IBlockState getStateFromMeta(int meta) {
-    final IBlockState state =getDefaultState().withProperty(MACHINE_PROP, MachineHelper
-        .getMachineTypeForMeta(meta));
-    return getDefaultState().withProperty(MACHINE_PROP, MachineHelper.getMachineTypeForMeta(meta));
+    return getDefaultState().withProperty(FACING_PROP, EnumFacing.getHorizontal(meta));
   }
 
   @Override
   public int getMetaFromState(IBlockState state) {
-    final int machineId = ((EnumMachine) state.getValue(MACHINE_PROP)).ordinal();
-    final int dir = ((EnumFacing) state.getValue(FACING_PROP)).getHorizontalIndex();
-    return machineId * 4 + dir;
+    return ((EnumFacing) state.getValue(FACING_PROP)).getHorizontalIndex();
   }
 
   @Override
@@ -118,7 +103,7 @@ public final class BlockMachine extends BlockContainer {
     if (!world.isRemote) {
       world.markBlockForUpdate(tem.getPos());
     }
-    player.openGui(InfiniteAlloys.instance, tem.getEnumMachine().ordinal(), world,
+    player.openGui(InfiniteAlloys.instance, tem.getMachineType().ordinal(), world,
                    tem.getPos().getX(), tem.getPos().getY(), tem.getPos().getZ());
   }
 

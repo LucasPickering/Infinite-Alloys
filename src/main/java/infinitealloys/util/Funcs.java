@@ -7,6 +7,7 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -21,8 +22,22 @@ import io.netty.buffer.ByteBuf;
 
 public final class Funcs {
 
+  public static void registerBlock(Block block, String unlocalizedName) {
+    registerBlock(block, ItemBlock.class, unlocalizedName);
+  }
+
+  public static void registerBlock(Block block, Class<? extends ItemBlock> itemClass,
+                                   String unlocalizedName) {
+    block.setUnlocalizedName(unlocalizedName);
+    GameRegistry.registerBlock(block, itemClass, unlocalizedName);
+  }
+
+  public static void registerBlockModel(Block block, String modelName) {
+    registerItemModel(Item.getItemFromBlock(block), 0, modelName);
+  }
+
   public static void registerBlockModel(Block block, int subType, String modelName) {
-      registerItemModel(Item.getItemFromBlock(block), subType, modelName);
+    registerItemModel(Item.getItemFromBlock(block), subType, modelName);
   }
 
   public static void registerItem(Item item, String unlocalizedName) {
@@ -35,9 +50,9 @@ public final class Funcs {
   }
 
   public static void registerItemModel(Item item, int subType, String modelName) {
-      Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-          .register(item, subType,
-                    new ModelResourceLocation(Consts.MOD_ID + ":" + modelName, "inventory"));
+    Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
+        .register(item, subType,
+                  new ModelResourceLocation(Consts.MOD_ID + ":" + modelName, "inventory"));
   }
 
   /**

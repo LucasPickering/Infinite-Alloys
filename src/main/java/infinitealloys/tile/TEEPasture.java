@@ -56,7 +56,7 @@ public final class TEEPasture extends TileEntityElectric {
   }
 
   @Override
-  public EnumMachine getEnumMachine() {
+  public EnumMachine getMachineType() {
     return EnumMachine.PASTURE;
   }
 

@@ -15,6 +15,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.util.Random;
 
+import infinitealloys.block.BlockMachine;
 import infinitealloys.block.IABlocks;
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemBlockMachine;
@@ -34,11 +35,15 @@ public class CommonProxy {
 
   public void initBlocks() {
     GameRegistry.registerBlock(IABlocks.ore, ItemBlockOre.class, "ore");
-    GameRegistry.registerBlock(IABlocks.machine, ItemBlockMachine.class, "machine");
+
+    for (EnumMachine machineType : EnumMachine.values()) {
+      Funcs.registerBlock(IABlocks.machines[machineType.ordinal()] = new BlockMachine(),
+                          ItemBlockMachine.class, machineType.getName());
+    }
 
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
-      OreDictionary
-          .registerOre("ore" + EnumMetal.values()[i].name, new ItemStack(IABlocks.ore, 1, i));
+      OreDictionary.registerOre("ore" + EnumMetal.values()[i].getName(),
+                                new ItemStack(IABlocks.ore, 1, i));
     }
 
     IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(1));
@@ -85,42 +90,42 @@ public class CommonProxy {
 
     //*---MACHINES---*/
     /* Computer */
-    addRecipeDict(new ItemStack(IABlocks.machine), "W3G", "2M2", "R3R",
+    addRecipeDict(EnumMachine.COMPUTER.getItemStack(), "W3G", "2M2", "R3R",
                   '2', alloys[2], '3', alloys[3], 'M', IAItems.machineComponent,
                   'G', Blocks.glass_pane, 'R', Items.redstone,
                   'W', EnumUpgrade.WIRELESS.getItemStackForTier(1));
 
     /* Metal Forge */
-    addRecipeDict(new ItemStack(IABlocks.machine, 1, 1), "BBB", "BMB", "BBB",
+    addRecipeDict(EnumMachine.METAL_FORGE.getItemStack(), "BBB", "BMB", "BBB",
                   'B', Items.brick, 'M', IAItems.machineComponent);
 
     /* X-ray */
-    addRecipeDict(new ItemStack(IABlocks.machine, 1, 2), "E5E", "4M4", "D5G",
+    addRecipeDict(EnumMachine.XRAY.getItemStack(), "E5E", "4M4", "D5G",
                   '4', alloys[4], '5', alloys[5], 'M', IAItems.machineComponent, 'D', Items.diamond,
                   'E', Items.ender_pearl, 'G', Blocks.glass_pane);
 
     /* Pasture */
-    addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
+    addRecipeDict(EnumMachine.PASTURE.getItemStack(), "F4F", "3M3", "F4F",
                   '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent,
                   'F', Blocks.oak_fence);
-    addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
+    addRecipeDict(EnumMachine.PASTURE.getItemStack(), "F4F", "3M3", "F4F",
                   '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent,
                   'F', Blocks.spruce_fence);
-    addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
+    addRecipeDict(EnumMachine.PASTURE.getItemStack(), "F4F", "3M3", "F4F",
                   '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent,
                   'F', Blocks.birch_fence);
-    addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
+    addRecipeDict(EnumMachine.PASTURE.getItemStack(), "F4F", "3M3", "F4F",
                   '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent,
                   'F', Blocks.jungle_fence);
-    addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
+    addRecipeDict(EnumMachine.PASTURE.getItemStack(), "F4F", "3M3", "F4F",
                   '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent,
                   'F', Blocks.dark_oak_fence);
-    addRecipeDict(new ItemStack(IABlocks.machine, 1, 3), "F4F", "3M3", "F4F",
+    addRecipeDict(EnumMachine.PASTURE.getItemStack(), "F4F", "3M3", "F4F",
                   '3', alloys[3], '4', alloys[4], 'M', IAItems.machineComponent,
                   'F', Blocks.acacia_fence);
 
     /* ESU */
-    addRecipeDict(new ItemStack(IABlocks.machine, 1, 4), "IAI", "CMC", "IAI",
+    addRecipeDict(EnumMachine.ENERGY_STORAGE.getItemStack(), "IAI", "CMC", "IAI",
                   'M', IAItems.machineComponent, 'I', Items.iron_ingot,
                   'C', "ingotCopper", 'A', "ingotAluminium");
 

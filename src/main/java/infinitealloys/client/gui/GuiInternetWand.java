@@ -20,13 +20,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import infinitealloys.block.IABlocks;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemInternetWand;
 import infinitealloys.network.MessageWand;
 import infinitealloys.tile.IHost;
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
 import infinitealloys.util.MachineHelper;
 
@@ -451,7 +451,7 @@ public final class GuiInternetWand extends GuiScreen {
       fontRenderer.drawStringWithShadow(
           machineZ, xPos + 106 - fontRenderer.getStringWidth(machineZ) / 2, yPos + 5, 0xffffff);
 
-      itemRender.renderItemIntoGUI(new ItemStack(IABlocks.machine, 1, machineID), xPos, yPos + 1);
+      itemRender.renderItemIntoGUI(EnumMachine.values()[machineID].getItemStack(), xPos, yPos + 1);
     }
   }
 }

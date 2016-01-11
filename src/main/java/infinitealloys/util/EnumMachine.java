@@ -1,5 +1,6 @@
 package infinitealloys.util;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -8,6 +9,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import infinitealloys.block.IABlocks;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.client.gui.GuiComputer;
 import infinitealloys.client.gui.GuiEnergyStorage;
@@ -120,6 +122,14 @@ public enum EnumMachine implements IStringSerializable {
       default:
         return false;
     }
+  }
+
+  public Block getBlock() {
+    return IABlocks.machines[ordinal()];
+  }
+
+  public ItemStack getItemStack() {
+    return new ItemStack(getBlock());
   }
 
   @SideOnly(Side.CLIENT)

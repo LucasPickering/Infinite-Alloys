@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "infinitealloys:computer" },
+    "facing=east": { "model": "infinitealloys:computer", "y": 90 },
+    "facing=south": { "model": "infinitealloys:computer", "y": 180 },
+    "facing=west": { "model": "infinitealloys:computer", "y": 270 }
+  }
+}

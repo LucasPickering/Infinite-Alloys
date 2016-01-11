@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import infinitealloys.block.IABlocks;
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
 
 public final class CreativeTabIA extends CreativeTabs {
@@ -18,7 +18,7 @@ public final class CreativeTabIA extends CreativeTabs {
   @Override
   @SideOnly(Side.CLIENT)
   public ItemStack getIconItemStack() {
-    return new ItemStack(IABlocks.machine, 1, 1);
+    return EnumMachine.METAL_FORGE.getItemStack();
   }
 
   @Override

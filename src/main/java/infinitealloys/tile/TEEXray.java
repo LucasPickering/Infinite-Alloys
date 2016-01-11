@@ -57,7 +57,7 @@ public final class TEEXray extends TileEntityElectric {
   }
 
   @Override
-  public EnumMachine getEnumMachine() {
+  public EnumMachine getMachineType() {
     return EnumMachine.XRAY;
   }
 

@@ -32,7 +32,7 @@ public final class TEEMetalForge extends TileEntityElectric {
   }
 
   @Override
-  public EnumMachine getEnumMachine() {
+  public EnumMachine getMachineType() {
     return EnumMachine.METAL_FORGE;
   }
 

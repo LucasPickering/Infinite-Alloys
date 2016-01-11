@@ -25,9 +25,7 @@ public final class ClientProxy extends CommonProxy {
     }
 
     for (EnumMachine machineType : EnumMachine.values()) {
-      Funcs.registerBlockModel(IABlocks.machine, machineType.ordinal(), machineType.name);
-      ModelBakery.addVariantName(Item.getItemFromBlock(IABlocks.machine),
-                                 Consts.MOD_ID + ":" + machineType.name);
+      Funcs.registerBlockModel(machineType.getBlock(), machineType.name);
     }
   }
 

@@ -72,13 +72,13 @@ public abstract class GuiMachine extends GuiContainer {
 
   public GuiMachine(int xSize, int ySize, InventoryPlayer inventoryPlayer,
                     TileEntityMachine tileEntity) {
-    super(tileEntity.getEnumMachine().getNewContainer(inventoryPlayer, tileEntity));
+    super(tileEntity.getMachineType().getNewContainer(inventoryPlayer, tileEntity));
     this.xSize = xSize;
     this.ySize = ySize;
     tem = tileEntity;
-    background = Funcs.getGuiTexture(tem.getEnumMachine().name);
+    background = Funcs.getGuiTexture(tem.getMachineType().name);
     // Make an array with the help title and the lines of help text
-    for (EnumHelp help : tem.getEnumMachine().getHelpBoxes()) {
+    for (EnumHelp help : tem.getMachineType().getHelpBoxes()) {
       List<ColoredText> lines = new LinkedList<>();
       lines.add(new ColoredText(Funcs.getLoc("machineHelp." + help.name + ".title"), 0xffffff));
       for (String s : Funcs.getLoc("machineHelp." + help.name + ".info").split("/n")) {
@@ -167,7 +167,7 @@ public abstract class GuiMachine extends GuiContainer {
                             computerTab.width, computerTab.height)) {
 
         new GuiTextBox(mouseX - topLeft.x, mouseY - topLeft.y,
-                       Funcs.getLoc("tile." + computerTab.tem.getEnumMachine().name + ".name"),
+                       Funcs.getLoc("tile." + computerTab.tem.getMachineType().name + ".name"),
                        computerTab.tem.getPos().toString()).draw();
 
       }
@@ -188,7 +188,7 @@ public abstract class GuiMachine extends GuiContainer {
                               tab.width, tab.height)) {
 
           new GuiTextBox(mouseX - topLeft.x, mouseY - topLeft.y,
-                         Funcs.getLoc("tile." + tab.tem.getEnumMachine().name
+                         Funcs.getLoc("tile." + tab.tem.getMachineType().name
                                       + ".name"), tab.tem.getPos().toString());
 
         }
@@ -201,7 +201,7 @@ public abstract class GuiMachine extends GuiContainer {
       // The help zone that the mouse is over to render to dialogue later,
       // null if mouse is not over a zone
       EnumHelp hoveredZone = null;
-      for (EnumHelp help : tem.getEnumMachine().getHelpBoxes()) {
+      for (EnumHelp help : tem.getMachineType().getHelpBoxes()) {
         // Draw zone outline, add alpha to make the rectangles opaque
         drawRect(help.x, help.y, help.x + help.w, help.y + 1,
                  0xff000000 + help.color); // Top of outline box
