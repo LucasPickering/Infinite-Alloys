@@ -9,6 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
+import infinitealloys.block.BlockMachine;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.Funcs;
 
@@ -21,12 +22,13 @@ public final class ItemBlockMachine extends ItemBlock {
   @Override
   @SideOnly(Side.CLIENT)
   @SuppressWarnings("unchecked")
-  public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
+  public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b) {
     // If the item has stored data, display it
-    if (itemstack.hasTagCompound()) {
-      for (String field : EnumMachine.values()[itemstack.getItemDamage()].persistentFields) {
-        list.add(Funcs.getLoc("machine.fields." + field) + ": " + Funcs
-            .abbreviateNum(itemstack.getTagCompound().getInteger(field)));
+    if (stack.hasTagCompound()) {
+      for (String field : EnumMachine
+          .byBlock((BlockMachine) Block.getBlockFromItem(stack.getItem())).persistentFields) {
+        list.add(String.format("%s: %s", Funcs.getLoc("machine.fields." + field),
+                               Funcs.abbreviateNum(stack.getTagCompound().getInteger(field))));
       }
     }
   }

@@ -23,6 +23,7 @@ import infinitealloys.item.IAItems;
 import infinitealloys.tile.IHost;
 import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Consts;
+import infinitealloys.util.EnumMachine;
 import infinitealloys.util.MachineHelper;
 
 public final class BlockMachine extends BlockContainer {
@@ -34,7 +35,7 @@ public final class BlockMachine extends BlockContainer {
     super(Material.iron);
     setCreativeTab(InfiniteAlloys.creativeTab);
     setHardness(2f);
-    setDefaultState(blockState.getBaseState().withProperty(FACING_PROP, EnumFacing.NORTH));
+    setDefaultState(blockState.getBaseState().withProperty(FACING_PROP, EnumFacing.SOUTH));
   }
 
   @Override
@@ -110,7 +111,7 @@ public final class BlockMachine extends BlockContainer {
   @Override
   public TileEntity createNewTileEntity(World world, int metadata) {
     try {
-      return MachineHelper.getMachineTypeForMeta(metadata).getNewTEM();
+      return EnumMachine.byBlock(this).getNewTEM();
     } catch (Exception e) {
       e.printStackTrace();
       return null;

@@ -1,5 +1,7 @@
 package infinitealloys.util;
 
+import com.sun.istack.internal.NotNull;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -9,6 +11,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import infinitealloys.block.BlockMachine;
 import infinitealloys.block.IABlocks;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.client.gui.GuiComputer;
@@ -152,5 +155,22 @@ public enum EnumMachine implements IStringSerializable {
       default:
         return null;
     }
+  }
+
+  /**
+   * Gets the machine type for the given block.
+   *
+   * @param block the machine block
+   * @return the machine type of the block
+   * @throws IllegalArgumentException if no machine type is found for the block
+   */
+  @NotNull
+  public static EnumMachine byBlock(BlockMachine block) {
+    for (EnumMachine machineType : values()) {
+      if (block == machineType.getBlock()) {
+        return machineType;
+      }
+    }
+    throw new IllegalArgumentException("Unknown machine block!");
   }
 }
