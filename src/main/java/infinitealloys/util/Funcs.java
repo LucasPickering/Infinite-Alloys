@@ -22,10 +22,6 @@ import io.netty.buffer.ByteBuf;
 
 public final class Funcs {
 
-  public static void registerBlock(Block block, String unlocalizedName) {
-    registerBlock(block, ItemBlock.class, unlocalizedName);
-  }
-
   public static void registerBlock(Block block, Class<? extends ItemBlock> itemClass,
                                    String unlocalizedName) {
     block.setUnlocalizedName(unlocalizedName);

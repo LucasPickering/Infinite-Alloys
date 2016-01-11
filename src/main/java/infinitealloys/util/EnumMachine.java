@@ -153,8 +153,4 @@ public enum EnumMachine implements IStringSerializable {
         return null;
     }
   }
-
-  public static EnumMachine byMetadata(int meta) {
-    return values()[0 <= meta && meta < Consts.MACHINE_COUNT ? meta : 0];
-  }
 }

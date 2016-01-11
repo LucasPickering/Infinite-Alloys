@@ -41,19 +41,12 @@ public class CommonProxy {
                           ItemBlockMachine.class, machineType.getName());
     }
 
-    for (int i = 0; i < Consts.METAL_COUNT; i++) {
-      OreDictionary.registerOre("ore" + EnumMetal.values()[i].getName(),
-                                new ItemStack(IABlocks.ore, 1, i));
+    for (EnumMetal metalType : EnumMetal.values()) {
+      final int meta = metalType.ordinal();
+      OreDictionary.registerOre("ore" + metalType.getName(), new ItemStack(IABlocks.ore, 1, meta));
+      IABlocks.ore.setHarvestLevel("pickaxe", metalType.harvestLevel,
+                                   IABlocks.ore.getStateFromMeta(meta));
     }
-
-    IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(1));
-    IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(1));
-    IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(2));
-    IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(3));
-    IABlocks.ore.setHarvestLevel("pickaxe", 2, IABlocks.ore.getStateFromMeta(4));
-    IABlocks.ore.setHarvestLevel("pickaxe", 2, IABlocks.ore.getStateFromMeta(5));
-    IABlocks.ore.setHarvestLevel("pickaxe", 2, IABlocks.ore.getStateFromMeta(6));
-    IABlocks.ore.setHarvestLevel("pickaxe", 3, IABlocks.ore.getStateFromMeta(7));
   }
 
   public void initItems() {
