@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "infinitealloys:energystorage" },
+    "facing=east": { "model": "infinitealloys:energystorage", "y": 90 },
+    "facing=south": { "model": "infinitealloys:energystorage", "y": 180 },
+    "facing=west": { "model": "infinitealloys:energystorage", "y": 270 }
+  }
+}
