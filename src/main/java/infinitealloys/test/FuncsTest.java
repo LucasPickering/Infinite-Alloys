@@ -23,6 +23,14 @@ public final class FuncsTest {
   }
 
   @Test
+  public void testFormatLoc() {
+    assertEquals("Test", Funcs.formatLoc("Test"));
+    assertEquals("Test with string", Funcs.formatLoc("Test with %s", "string"));
+    assertEquals("Test with 2 things", Funcs.formatLoc("Test with %d %s", 2, "things"));
+    assertEquals("Test with 2 things and %", Funcs.formatLoc("Test with %d %s and %%", 2, "things"));
+  }
+
+  @Test
   public void testMouseInZone() throws Exception {
     assertTrue(Funcs.mouseInZone(10, 5, 10, 5, 20, 20));
     assertTrue(Funcs.mouseInZone(30, 25, 10, 5, 20, 20));

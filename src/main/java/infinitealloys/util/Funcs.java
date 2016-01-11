@@ -16,6 +16,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.LanguageRegistry;
 
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import infinitealloys.network.NetworkHandler;
 import io.netty.buffer.ByteBuf;
@@ -83,6 +86,34 @@ public final class Funcs {
       }
     }
     return finalKey;
+  }
+
+  public static String formatLoc(String format, Object... args) {
+    List argList = Arrays.asList(args);
+    final Iterator iter = argList.iterator();
+    StringBuilder formatBuilder = new StringBuilder(format);
+
+    for (int i = 0; iter.hasNext() && i < formatBuilder.length() - 1; i++) {
+      if (formatBuilder.charAt(i) == '%') {
+        final char nextChar = formatBuilder.charAt(i + 1);
+
+        // Having %% in the String won't use the next arg in the list
+        if (nextChar != '%') {
+          final Object arg = iter.next();
+          if (nextChar == 'k') {
+            if (arg instanceof String) {
+              formatBuilder.replace(i, i + 1,
+                                    LanguageRegistry.instance().getStringLocalization((String) arg));
+              iter.remove();
+            } else {
+              throw new IllegalArgumentException("Invalid argument for localization: " + arg);
+            }
+          }
+        }
+      }
+    }
+
+    return String.format(format, argList.toArray());
   }
 
   /**
