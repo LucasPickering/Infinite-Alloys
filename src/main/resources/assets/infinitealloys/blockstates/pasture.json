@@ -1,8 +1,8 @@
 {
   "variants": {
-    "facing=north": { "model": "infinitealloys:pasture" },
-    "facing=east": { "model": "infinitealloys:pasture", "y": 90 },
-    "facing=south": { "model": "infinitealloys:pasture", "y": 180 },
-    "facing=west": { "model": "infinitealloys:pasture", "y": 270 }
+    "facing=south": { "model": "infinitealloys:pasture" },
+    "facing=west": { "model": "infinitealloys:pasture", "y": 90 },
+    "facing=north": { "model": "infinitealloys:pasture", "y": 180 },
+    "facing=east": { "model": "infinitealloys:pasture", "y": 270 }
   }
 }

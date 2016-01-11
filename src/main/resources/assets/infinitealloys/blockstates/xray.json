@@ -1,8 +1,8 @@
 {
   "variants": {
-    "facing=north": { "model": "infinitealloys:xray" },
-    "facing=east": { "model": "infinitealloys:xray", "y": 90 },
-    "facing=south": { "model": "infinitealloys:xray", "y": 180 },
-    "facing=west": { "model": "infinitealloys:xray", "y": 270 }
+    "facing=south": { "model": "infinitealloys:xray" },
+    "facing=west": { "model": "infinitealloys:xray", "y": 90 },
+    "facing=north": { "model": "infinitealloys:xray", "y": 180 },
+    "facing=east": { "model": "infinitealloys:xray", "y": 270 }
   }
 }
