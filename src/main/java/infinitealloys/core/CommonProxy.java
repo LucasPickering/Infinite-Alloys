@@ -41,7 +41,7 @@ public class CommonProxy {
           .registerOre("ore" + EnumMetal.values()[i].name, new ItemStack(IABlocks.ore, 1, i));
     }
 
-    IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(0));
+    IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(1));
     IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(1));
     IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(2));
     IABlocks.ore.setHarvestLevel("pickaxe", 1, IABlocks.ore.getStateFromMeta(3));

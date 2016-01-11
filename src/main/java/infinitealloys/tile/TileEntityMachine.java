@@ -1,6 +1,5 @@
 package infinitealloys.tile;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -13,7 +12,6 @@ import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 
 import java.util.Arrays;
@@ -21,7 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import infinitealloys.block.BlockMachine;
 import infinitealloys.block.IABlocks;
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemUpgrade;
@@ -52,11 +49,6 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
    * A list of the upgrades that can be used on this machine
    */
   private final List<ItemUpgrade> validUpgradeItems = new LinkedList<>();
-
-  /**
-   * The direction that the machine is facing.
-   */
-  private EnumFacing orientation = EnumFacing.NORTH;
 
   /**
    * Each element in the array corresponds to an upgrade type, and represents how many tiers in the
@@ -125,18 +117,6 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
       upgrades[((ItemUpgrade) inventoryStacks[upgradeSlotIndex].getItem()).upgradeType.ordinal()]++;
       inventoryStacks[upgradeSlotIndex] = null;
       updateUpgrades();
-    }
-  }
-
-  public void updateOrientation(EnumFacing orientation) {
-    this.orientation = orientation;
-    if (worldObj != null) {
-      System.out.println(String.format("State 1 %s, %s", worldObj.getBlockState(pos), orientation));
-      IBlockState newState = worldObj.getBlockState(pos).withProperty(BlockMachine.FACING_PROP,
-                                                                      orientation);
-      System.out.println("New state: "+newState);
-      System.out.println(worldObj.setBlockState(pos, newState));
-      System.out.println(String.format("State 2 %s, %s", worldObj.getBlockState(pos), orientation));
     }
   }
 
@@ -213,7 +193,6 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
   @Override
   public void readFromNBT(NBTTagCompound tagCompound) {
     super.readFromNBT(tagCompound);
-    updateOrientation(EnumFacing.values()[tagCompound.getByte("orientation")]);
     upgrades = tagCompound.getIntArray("upgrades");
     NBTTagList nbttaglist = tagCompound.getTagList("Items", 10);
     for (int i = 0; i < nbttaglist.tagCount(); i++) {
@@ -228,7 +207,6 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
   @Override
   public void writeToNBT(NBTTagCompound tagCompound) {
     super.writeToNBT(tagCompound);
-    tagCompound.setByte("orientation", (byte) orientation.ordinal());
     tagCompound.setIntArray("upgrades", upgrades);
     NBTTagList nbttaglist = new NBTTagList();
     for (int i = 0; i < inventoryStacks.length; i++) {
@@ -265,7 +243,6 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
    * @param bytes the data from the server->client packet
    */
   public void readToClientData(ByteBuf bytes) {
-    updateOrientation(EnumFacing.values()[bytes.readByte()]);
     for (int i = 0; i < upgrades.length; i++) {
       upgrades[i] = bytes.readInt();
     }
@@ -279,7 +256,6 @@ public abstract class TileEntityMachine extends TileEntity implements IUpdatePla
    */
   public void writeToClientData(ByteBuf bytes) {
     Funcs.writeBlockPosToByteBuf(bytes, pos);
-    bytes.writeByte(orientation.ordinal());
     for (int upgrade : upgrades) {
       bytes.writeInt(upgrade);
     }

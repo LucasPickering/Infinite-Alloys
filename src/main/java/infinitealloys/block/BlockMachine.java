@@ -53,7 +53,7 @@ public final class BlockMachine extends BlockContainer {
   @Override
   @SuppressWarnings("unchecked")
   public void getSubBlocks(Item item, CreativeTabs creativetabs, List list) {
-    for (int i = 0; i < Consts.MACHINE_COUNT; i++) {
+    for (int i = 0; i < Consts.MACHINE_COUNT * 4; i++) {
       list.add(new ItemStack(item, 1, i));
     }
   }
@@ -65,12 +65,16 @@ public final class BlockMachine extends BlockContainer {
 
   @Override
   public IBlockState getStateFromMeta(int meta) {
-    return getDefaultState().withProperty(MACHINE_PROP, EnumMachine.byMetadata(meta));
+    final IBlockState state =getDefaultState().withProperty(MACHINE_PROP, MachineHelper
+        .getMachineTypeForMeta(meta));
+    return getDefaultState().withProperty(MACHINE_PROP, MachineHelper.getMachineTypeForMeta(meta));
   }
 
   @Override
   public int getMetaFromState(IBlockState state) {
-    return ((EnumMachine) state.getValue(MACHINE_PROP)).ordinal();
+    final int machineId = ((EnumMachine) state.getValue(MACHINE_PROP)).ordinal();
+    final int dir = ((EnumFacing) state.getValue(FACING_PROP)).getHorizontalIndex();
+    return machineId * 4 + dir;
   }
 
   @Override
@@ -100,12 +104,13 @@ public final class BlockMachine extends BlockContainer {
                                                   pos.getX(), pos.getY(), pos.getZ()});
 
       // Open the GUI for the wand to let the player decide what they want to do with this block
-      player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI_ID, world, (int) player.posX,
-                     (int) player.posY, (int) player.posZ);
-      return true;
+      player.openGui(InfiniteAlloys.instance, Consts.WAND_GUI_ID, world,
+                     (int) player.posX, (int) player.posY, (int) player.posZ);
+    } else {
+      // Open the regular GUI
+      openGui(world, player, tem);
     }
 
-    openGui(world, player, tem);
     return true;
   }
 
@@ -120,7 +125,7 @@ public final class BlockMachine extends BlockContainer {
   @Override
   public TileEntity createNewTileEntity(World world, int metadata) {
     try {
-      return EnumMachine.values()[metadata].getNewTEM();
+      return MachineHelper.getMachineTypeForMeta(metadata).getNewTEM();
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -138,7 +143,7 @@ public final class BlockMachine extends BlockContainer {
     final TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(pos);
     if (tem != null) {
       final EnumFacing facing = placer.getHorizontalFacing().getOpposite();
-      tem.updateOrientation(facing);
+//      world.setBlockState(pos, world.getBlockState(pos).withProperty(BlockMachine.FACING_PROP, facing));
       if (stack.hasTagCompound()) {
         tem.loadNBTData(stack.getTagCompound());
       }

@@ -141,6 +141,26 @@ public final class MachineHelper {
   }
 
   /**
+   * Gets the {@link EnumMachine machine type} for the block with the given metadata.
+   *
+   * @param metadata the metadata of the block
+   * @return the {@link EnumMachine machine type} of the block
+   */
+  public static EnumMachine getMachineTypeForMeta(int metadata) {
+    return EnumMachine.values()[metadata / 4];
+  }
+
+  /**
+   * Gets a metadata value that represents a machine block with the given {@link EnumMachine type}.
+   *
+   * @param machineType the type of the machine to be represented
+   * @return a metadata value representing the given machine type, with an unspecified direction
+   */
+  public static int getMetaForMachineType(EnumMachine machineType) {
+    return machineType.ordinal() * 4;
+  }
+
+  /**
    * A block that the x-ray can detect and identify
    */
   private static class DetectableBlock {
