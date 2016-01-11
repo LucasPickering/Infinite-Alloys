@@ -127,8 +127,8 @@ public final class BlockMachine extends BlockContainer {
                               ItemStack stack) {
     final TileEntityMachine tem = (TileEntityMachine) world.getTileEntity(pos);
     if (tem != null) {
-      final EnumFacing facing = placer.getHorizontalFacing().getOpposite();
-//      world.setBlockState(pos, world.getBlockState(pos).withProperty(BlockMachine.FACING_PROP, facing));
+      world.setBlockState(pos, world.getBlockState(pos).withProperty(
+          BlockMachine.FACING_PROP, placer.getHorizontalFacing().getOpposite()));
       if (stack.hasTagCompound()) {
         tem.loadNBTData(stack.getTagCompound());
       }
