@@ -71,41 +71,33 @@ public final class GfxHandler implements IGuiHandler {
   @SideOnly(Side.CLIENT)
   @SubscribeEvent
   public void onRenderWorldLast(RenderWorldLastEvent event) {
-    for (Map.Entry<BlockPos, Integer> entry : xrayBlocks.entrySet()) {
-      final BlockPos pos = entry.getKey();
-      renderBlockOutline(pos.getX(), pos.getY(), pos.getZ(), entry.getValue());
-    }
+    // Render an outline for each block in xrayBlocks
+    xrayBlocks.entrySet().forEach(entry -> renderBlockOutline(entry.getKey(), entry.getValue()));
   }
 
   /**
    * Draw an outline around the block at the specific coordinates. To be specific, the coordinates of
    * a block are the ones given in the debug menu while standing ON TOP OF that block. Convenience
-   * method for {@link #renderOutlineBox}.
+   * method for {@link #renderBoxOutline}.
    *
-   * @param blockX the x-coordinate of the block to be outlined
-   * @param blockY the y-coordinate of the block to be outlined
-   * @param blockZ the z-coordinate of the block to be outlined
-   * @param color  a hexcode for the color of the outline
+   * @param pos   the position of the block to be outlined
+   * @param color a hexcode for the color of the outline
    */
   @SideOnly(Side.CLIENT)
-  private void renderBlockOutline(int blockX, int blockY, int blockZ, int color) {
-    renderOutlineBox(blockX, blockY - 1, blockZ, blockX + 1, blockY, blockZ + 1, color);
+  private void renderBlockOutline(BlockPos pos, int color) {
+    renderBoxOutline(pos, pos, color);
   }
 
   /**
-   * Draw an outline around the specified set of block(s).
+   * Draw an outline around the specified set of block(s).  Passing the same argument twice will draw
+   * an outline around just that box.
    *
-   * @param minX  the x value for the first corner
-   * @param minY  the y value for the first corner
-   * @param minZ  the z value for the first corner
-   * @param maxX  the x value for the second corner
-   * @param maxY  the y value for the second corner
-   * @param maxZ  the z value for the second corner
+   * @param pos1  the first corner of the box
+   * @param pos2  the second corner of the box
    * @param color a hexcode for the color to be drawn
    */
   @SideOnly(Side.CLIENT)
-  private void renderOutlineBox(double minX, double minY, double minZ,
-                                double maxX, double maxY, double maxZ, int color) {
+  private void renderBoxOutline(BlockPos pos1, BlockPos pos2, int color) {
     final WorldRenderer renderer = Tessellator.getInstance().getWorldRenderer();
 
     GL11.glPushMatrix();
@@ -118,47 +110,56 @@ public final class GfxHandler implements IGuiHandler {
     final double renderZ = TileEntityRendererDispatcher.staticPlayerZ;
     GL11.glTranslated(-renderX, -renderY, -renderZ);
 
+    final int x1 = Math.min(pos1.getX(), pos2.getX());
+    final int y1 = Math.min(pos1.getY(), pos2.getY());
+    final int z1 = Math.min(pos1.getZ(), pos2.getZ());
+
+    // Add one to these to get the upper corner of the block
+    final int x2 = Math.max(pos1.getX(), pos2.getX()) + 1;
+    final int y2 = Math.max(pos1.getY(), pos2.getY()) + 1;
+    final int z2 = Math.max(pos1.getZ(), pos2.getZ()) + 1;
+
     renderer.startDrawing(GL11.GL_LINES);
     renderer.setColorOpaque_I(color);
 
     // Front
-    renderer.addVertex(minX, minY, minZ);
-    renderer.addVertex(minX, maxY, minZ);
+    renderer.addVertex(x1, y1, z1);
+    renderer.addVertex(x1, y2, z1);
 
-    renderer.addVertex(minX, maxY, minZ);
-    renderer.addVertex(maxX, maxY, minZ);
+    renderer.addVertex(x1, y2, z1);
+    renderer.addVertex(x2, y2, z1);
 
-    renderer.addVertex(maxX, maxY, minZ);
-    renderer.addVertex(maxX, minY, minZ);
+    renderer.addVertex(x2, y2, z1);
+    renderer.addVertex(x2, y1, z1);
 
-    renderer.addVertex(maxX, minY, minZ);
-    renderer.addVertex(minX, minY, minZ);
+    renderer.addVertex(x2, y1, z1);
+    renderer.addVertex(x1, y1, z1);
 
     // Back
-    renderer.addVertex(minX, minY, maxZ);
-    renderer.addVertex(minX, maxY, maxZ);
+    renderer.addVertex(x1, y1, z2);
+    renderer.addVertex(x1, y2, z2);
 
-    renderer.addVertex(minX, minY, maxZ);
-    renderer.addVertex(maxX, minY, maxZ);
+    renderer.addVertex(x1, y1, z2);
+    renderer.addVertex(x2, y1, z2);
 
-    renderer.addVertex(maxX, minY, maxZ);
-    renderer.addVertex(maxX, maxY, maxZ);
+    renderer.addVertex(x2, y1, z2);
+    renderer.addVertex(x2, y2, z2);
 
-    renderer.addVertex(minX, maxY, maxZ);
-    renderer.addVertex(maxX, maxY, maxZ);
+    renderer.addVertex(x1, y2, z2);
+    renderer.addVertex(x2, y2, z2);
 
     // Betweens
-    renderer.addVertex(minX, minY, minZ);
-    renderer.addVertex(minX, minY, maxZ);
+    renderer.addVertex(x1, y1, z1);
+    renderer.addVertex(x1, y1, z2);
 
-    renderer.addVertex(minX, maxY, minZ);
-    renderer.addVertex(minX, maxY, maxZ);
+    renderer.addVertex(x1, y2, z1);
+    renderer.addVertex(x1, y2, z2);
 
-    renderer.addVertex(maxX, minY, minZ);
-    renderer.addVertex(maxX, minY, maxZ);
+    renderer.addVertex(x2, y1, z1);
+    renderer.addVertex(x2, y1, z2);
 
-    renderer.addVertex(maxX, maxY, minZ);
-    renderer.addVertex(maxX, maxY, maxZ);
+    renderer.addVertex(x2, y2, z1);
+    renderer.addVertex(x2, y2, z2);
 
     Tessellator.getInstance().draw();
 
