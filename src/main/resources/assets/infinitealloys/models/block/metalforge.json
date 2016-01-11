@@ -38,7 +38,7 @@
       "faces": {
         "north": {"texture": "#brick", "uv": [15.0, 1.0, 16.0, 15.0]},
         "east": {"texture": "#stone", "uv": [0.0, 0.0, 15.0, 14.0]},
-        "south": {"texture": "#-1", "uv": [1.0, 0.0, 15.0, 1.0], "rotation": 90},
+        "south": {"texture": "#-1", "uv": [1.0, 0.0, 15.0, 1.0]},
         "west": {"texture": "#brick", "uv": [0.0, 1.0, 15.0, 15.0]},
         "up": {"texture": "#-1", "uv": [0.0, 0.0, 1.0, 15.0]},
         "down": {"texture": "#-1", "uv": [0.0, 0.0, 1.0, 15.0]}

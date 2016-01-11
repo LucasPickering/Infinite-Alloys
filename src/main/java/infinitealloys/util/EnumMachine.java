@@ -3,7 +3,6 @@ package infinitealloys.util;
 import com.sun.istack.internal.NotNull;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -20,11 +19,6 @@ import infinitealloys.client.gui.GuiMachine;
 import infinitealloys.client.gui.GuiMetalForge;
 import infinitealloys.client.gui.GuiPasture;
 import infinitealloys.client.gui.GuiXray;
-import infinitealloys.client.model.block.ModelComputer;
-import infinitealloys.client.model.block.ModelEnergyStorage;
-import infinitealloys.client.model.block.ModelMetalForge;
-import infinitealloys.client.model.block.ModelPasture;
-import infinitealloys.client.model.block.ModelXray;
 import infinitealloys.inventory.ContainerComputer;
 import infinitealloys.inventory.ContainerEnergyStorage;
 import infinitealloys.inventory.ContainerMachine;
@@ -40,21 +34,17 @@ import infinitealloys.tile.TileEntityMachine;
 
 public enum EnumMachine implements IStringSerializable {
 
-  COMPUTER("computer", TEMComputer.class, ContainerComputer.class, GuiComputer.class,
-           new ModelComputer()),
-  METAL_FORGE("metalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class,
-              new ModelMetalForge()),
-  XRAY("xray", TEEXray.class, ContainerXray.class, GuiXray.class, new ModelXray()),
-  PASTURE("pasture", TEEPasture.class, ContainerPasture.class, GuiPasture.class,
-          new ModelPasture()),
+  COMPUTER("computer", TEMComputer.class, ContainerComputer.class, GuiComputer.class),
+  METAL_FORGE("metalForge", TEEMetalForge.class, ContainerMetalForge.class, GuiMetalForge.class),
+  XRAY("xray", TEEXray.class, ContainerXray.class, GuiXray.class),
+  PASTURE("pasture", TEEPasture.class, ContainerPasture.class, GuiPasture.class),
   ENERGY_STORAGE("energyStorage", TEEEnergyStorage.class, ContainerEnergyStorage.class,
-                 GuiEnergyStorage.class, new ModelEnergyStorage(), "currentRK");
+                 GuiEnergyStorage.class, "currentRK");
 
   public final String name;
   public final Class<? extends TileEntityMachine> temClass;
   public final Class<? extends ContainerMachine> containerClass;
   public final Class<? extends GuiMachine> guiClass;
-  public final ModelBase model;
 
   /**
    * An array of the names of fields in the TE that should be saved when the block is destroyed and
@@ -65,13 +55,11 @@ public enum EnumMachine implements IStringSerializable {
   EnumMachine(String name, Class<? extends TileEntityMachine> temClass,
               Class<? extends ContainerMachine> containerClass,
               Class<? extends GuiMachine> guiClass,
-              ModelBase model,
               String... persistentFields) {
     this.name = name;
     this.temClass = temClass;
     this.containerClass = containerClass;
     this.guiClass = guiClass;
-    this.model = model;
     this.persistentFields = persistentFields;
   }
 
