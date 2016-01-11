@@ -14,6 +14,7 @@ import infinitealloys.network.MessageNetworkEditToServer;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
+import infinitealloys.util.MachineHelper;
 
 public final class TEMComputer extends TileEntityMachine implements IHost {
 
@@ -103,28 +104,23 @@ public final class TEMComputer extends TileEntityMachine implements IHost {
   public boolean addClientWithChecks(EntityPlayer player, BlockPos client, boolean sync) {
     if (networkClients.contains(client)) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
-            "machine.textOutput.error", "/: ", "machine.textOutput.error.alreadyInNetwork")));
+        MachineHelper.sendMachineErrorToPlayer(player, "machine.textOutput.error.alreadyInNetwork");
       }
     } else if (networkClients.size() >= networkCapacity) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
-            "machine.textOutput.error", "/: ", "machine.textOutput.error.networkFull")));
+        MachineHelper.sendMachineErrorToPlayer(player, "machine.textOutput.error.networkFull");
       }
     } else if (client.equals(pos)) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
-            "machine.textOutput.error", "/: ", "machine.textOutput.error.cannotAddSelf")));
+        MachineHelper.sendMachineErrorToPlayer(player, "machine.textOutput.error.cannotAddSelf");
       }
     } else if (client.distanceSq(pos) > range) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
-            "machine.textOutput.error", "/: ", "machine.textOutput.error.outOfRange")));
+        MachineHelper.sendMachineErrorToPlayer(player, "machine.textOutput.error.outOfRange");
       }
     } else if (!isClientValid(client)) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
-            "machine.textOutput.error", "/: ", "machine.textOutput.error.notWireless")));
+        MachineHelper.sendMachineErrorToPlayer(player, "machine.textOutput.error.notWireless");
       }
     } else {
       addClient(client);

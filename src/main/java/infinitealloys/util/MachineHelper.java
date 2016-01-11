@@ -1,8 +1,10 @@
 package infinitealloys.util;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashSet;
@@ -138,6 +140,17 @@ public final class MachineHelper {
       blueAvg = blueTot / colorCount;
     }
     return (redAvg << 16) + (greenAvg << 8) + blueAvg;
+  }
+
+  /**
+   * Sends an error message to the given player.
+   *
+   * @param player     the player that will receive the message
+   * @param messageKey the unlocalized key for the message that will be sent
+   */
+  public static void sendMachineErrorToPlayer(EntityPlayer player, String messageKey) {
+    player.addChatComponentMessage(new ChatComponentText(Funcs.formatLoc(
+        "%k: %k", "machine.textOutput.error", messageKey)));
   }
 
   /**

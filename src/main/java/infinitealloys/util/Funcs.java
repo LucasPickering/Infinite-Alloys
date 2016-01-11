@@ -69,23 +69,13 @@ public final class Funcs {
   }
 
   /**
-   * Get a localization or series of localizations via keys. Add '/' to the start of a key to have it
-   * added to the final string without being localized. e.g. getLoc("general.off", "/is not",
-   * "general.on") would return "Off is not On" if the language is English.
+   * Localizes the given key.
    *
-   * @param keys the list of keys to be localized and spliced together into a final string
-   * @return the final string of one or more concatenated literal and/or localized strings
+   * @param key the key to localize
+   * @return the localized string
    */
-  public static String getLoc(String... keys) {
-    String finalKey = "";
-    for (String key : keys) {
-      if (key.length() > 0 && key.charAt(0) == '/') {
-        finalKey += key.substring(1);
-      } else {
-        finalKey += LanguageRegistry.instance().getStringLocalization(key);
-      }
-    }
-    return finalKey;
+  public static String getLoc(String key) {
+    return LanguageRegistry.instance().getStringLocalization(key);
   }
 
   public static String formatLoc(String format, Object... args) {
@@ -102,8 +92,7 @@ public final class Funcs {
           final Object arg = iter.next();
           if (nextChar == 'k') {
             if (arg instanceof String) {
-              formatBuilder.replace(i, i + 1,
-                                    LanguageRegistry.instance().getStringLocalization((String) arg));
+              formatBuilder.replace(i, i + 1, getLoc((String) arg));
               iter.remove();
             } else {
               throw new IllegalArgumentException("Invalid argument for localization: " + arg);

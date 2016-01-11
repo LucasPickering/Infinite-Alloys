@@ -16,6 +16,7 @@ import infinitealloys.util.Consts;
 import infinitealloys.util.EnumMachine;
 import infinitealloys.util.EnumUpgrade;
 import infinitealloys.util.Funcs;
+import infinitealloys.util.MachineHelper;
 import io.netty.buffer.ByteBuf;
 
 public final class TEEEnergyStorage extends TileEntityElectric implements IHost {
@@ -112,28 +113,23 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
   public boolean addClientWithChecks(EntityPlayer player, BlockPos client, boolean sync) {
     if (energyHost != null && !energyHost.equals(pos)) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
-            "machine.textOutput.error", "/: ", "machine.textOutput.error.notHosting")));
+        MachineHelper.sendMachineErrorToPlayer(player, "machine.textOutput.error.notHosting");
       }
     } else if (worldObj != null && !isClientValid(client)) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
-            "machine.textOutput.error", "/: ", "machine.textOutput.error.notElectric")));
+        MachineHelper.sendMachineErrorToPlayer(player,  "machine.textOutput.error.notElectric");
       }
     } else if (networkClients.contains(client)) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
-            "machine.textOutput.error", "/: ", "machine.textOutput.error.alreadyInNetwork")));
+        MachineHelper.sendMachineErrorToPlayer(player,  "machine.textOutput.error.alreadyInNetwork");
       }
     } else if (client.equals(pos)) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
-            "machine.textOutput.error", "/: ", "machine.textOutput.error.cannotAddSelf")));
+        MachineHelper.sendMachineErrorToPlayer(player,  "machine.textOutput.error.cannotAddSelf");
       }
     } else if (client.distanceSq(pos) > range) {
       if (player != null && worldObj.isRemote) {
-        player.addChatComponentMessage(new ChatComponentText(Funcs.getLoc(
-            "machine.textOutput.error", "/: ", "machine.textOutput.error.outOfRange")));
+        MachineHelper.sendMachineErrorToPlayer(player,  "machine.textOutput.error.outOfRange");
       }
     } else {
       addClient(client);
@@ -147,7 +143,7 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
           if (player != null) {
             // Send a chat message
             player.addChatComponentMessage(new ChatComponentText(
-                Funcs.getLoc("machine.textOutput.addingMachine") + client));
+                Funcs.formatLoc("%k %s", "machine.textOutput.addingMachine", client)));
           }
         } else {
           // Sync to clients
