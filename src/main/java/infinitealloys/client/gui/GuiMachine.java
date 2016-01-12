@@ -92,8 +92,7 @@ public abstract class GuiMachine extends GuiContainer {
   public void initGui() {
     super.initGui();
     topLeft.setLocation((width - xSize) / 2, (height - ySize) / 2);
-    buttonList
-        .add(new GuiButton(0, width - 20, 0, 20, 20, "?")); // The button to enable/disable help
+    buttonList.add(new GuiButton(0, width - 20, 0, 20, 20, "?")); // The button to toggle help
   }
 
   @Override
@@ -149,8 +148,7 @@ public abstract class GuiMachine extends GuiContainer {
 
     // Draw the network icon if this GUI has one
     if (networkIcon != null) {
-      Funcs.drawTexturedModalRect(this, networkIcon.x, networkIcon.y,
-                                  NETWORK_ICON); // Draw the network icon
+      Funcs.drawTexturedModalRect(this, networkIcon.x, networkIcon.y, NETWORK_ICON);
     }
 
     // Draw the tabs of other machines on the network if this machine is connected to a computer
@@ -231,7 +229,7 @@ public abstract class GuiMachine extends GuiContainer {
       if (!computerTab.isActivated()) {
         // Open the GUI corresponding to the computer tab
         computerTab.getMachineType().getBlock().openGui(world, player, computerTab.getMachinePos());
-        Funcs.sendPacketToServer(new MessageOpenGui(computerTab.getMachinePos())); // TODO: Necessary?
+        Funcs.sendPacketToServer(new MessageOpenGui(computerTab.getMachinePos()));
       }
       return; // No need to check if anything else was clicked
     }
@@ -244,7 +242,7 @@ public abstract class GuiMachine extends GuiContainer {
         if (!tab.isActivated()) {
           // Open the GUI corresponding to this tab
           tab.getMachineType().getBlock().openGui(world, player, tab.getMachinePos());
-          Funcs.sendPacketToServer(new MessageOpenGui(tab.getMachinePos())); // TODO: Necessary?
+          Funcs.sendPacketToServer(new MessageOpenGui(tab.getMachinePos()));
         }
         return; // No need to check if anything else was clicked
       }
