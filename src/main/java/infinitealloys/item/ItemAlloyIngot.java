@@ -24,6 +24,7 @@ public final class ItemAlloyIngot extends Item {
 
   @Override
   @SideOnly(Side.CLIENT)
+  @SuppressWarnings("unchecked")
   public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean b) {
     // The each metal's content in the alloy. Each metal gets a number from 0 to Consts.ALLOY_RADIX to represent its content.
     int[] metalContent = new int[Consts.METAL_COUNT];
@@ -44,7 +45,8 @@ public final class ItemAlloyIngot extends Item {
     for (int i = 0; i < Consts.METAL_COUNT; i++) {
       float percentage = Math.round((float) metalContent[i] / (float) totalMass * 1000F) / 10F;
       if (percentage != 0) {
-        list.add(percentage + "% " + Funcs.getLoc("metal." + EnumMetal.values()[i].name + ".name"));
+        list.add(Funcs.formatLoc("%d%% %s", percentage,
+                                 "%metal." + EnumMetal.values()[i].name + ".name"));
       }
     }
   }

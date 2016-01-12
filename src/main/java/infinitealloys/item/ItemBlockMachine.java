@@ -27,8 +27,8 @@ public final class ItemBlockMachine extends ItemBlock {
     if (stack.hasTagCompound()) {
       for (String field : EnumMachine
           .byBlock((BlockMachine) Block.getBlockFromItem(stack.getItem())).persistentFields) {
-        list.add(String.format("%s: %s", Funcs.getLoc("machine.fields." + field),
-                               Funcs.abbreviateNum(stack.getTagCompound().getInteger(field))));
+        list.add(Funcs.formatLoc("%s: %s", "%machine.fields." + field,
+                                 Funcs.abbreviateNum(stack.getTagCompound().getInteger(field))));
       }
     }
   }

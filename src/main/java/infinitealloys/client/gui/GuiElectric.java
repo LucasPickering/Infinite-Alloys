@@ -82,10 +82,12 @@ public abstract class GuiElectric extends GuiMachine {
       status = Funcs.getLoc("machine.network.noconnection");
     } else {
       color = 0x00ff00;
-      status = Funcs.getLoc("machine.network.hostedby") + " " + tee.energyHost;
+      status = Funcs.formatLoc("%s %s", "%machine.network.hostedby",
+                               Funcs.getBlockPosString(tee.energyHost));
     }
 
     return new ColoredText[]{
-        new ColoredText(Funcs.getLoc("machine.network.energy") + ": " + status, color)};
+        new ColoredText(Funcs.formatLoc("%s: %s", "%machine.network.energy", status), color)
+    };
   }
 }
