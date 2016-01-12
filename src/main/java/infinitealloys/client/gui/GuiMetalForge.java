@@ -36,7 +36,7 @@ public final class GuiMetalForge extends GuiElectric {
     // For each metal, if helpis disabled and the mouse is over it, draw the metal's name
     if (!helpEnabled) {
       for (int i = 0; i < Consts.METAL_COUNT; i++) {
-        if (Funcs.mouseInZone(mouseX, mouseY,
+        if (Funcs.pointInZone(mouseX, mouseY,
                               topLeft.x + i % 4 * 18 + 65, topLeft.y + i / 4 * 18 + 42, 18, 18)) {
           new GuiTextBox(mouseX, mouseY, new ColoredText(
               Funcs.getLoc("metal." + EnumMetal.values()[i].name + ".name"),
@@ -82,7 +82,7 @@ public final class GuiMetalForge extends GuiElectric {
     super.mouseClicked(mouseX, mouseY, mouseButton);
 
     // If the preset selection slot was clicked, adjust its value accordingly
-    if (Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 39, topLeft.y + 51, 18, 18)) {
+    if (Funcs.pointInZone(mouseX, mouseY, topLeft.x + 39, topLeft.y + 51, 18, 18)) {
       if (mouseButton == 0) { // Left-click
         // If there is an unlocked alloy above this one, select it
         if (temf.recipeAlloyID + 1 < tem.getUpgradeTier(EnumUpgrade.ALLOY)) {

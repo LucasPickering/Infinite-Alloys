@@ -12,6 +12,7 @@ final class GuiTextBox extends GuiScreen {
 
   private int x;
   private int y;
+
   /**
    * The lines of text
    */
@@ -20,11 +21,11 @@ final class GuiTextBox extends GuiScreen {
   /**
    * Create a new text box, with each line being white.
    *
-   * @param x            the x-pos for the box
-   * @param y            the y-pos for the box
-   * @param text         each line to be drawn
+   * @param x    the x-pos for the box
+   * @param y    the y-pos for the box
+   * @param text each line to be drawn
    */
-  public GuiTextBox(int x, int y, String... text) {
+  GuiTextBox(int x, int y, String... text) {
     this(x, y,
          Arrays.stream(text).map(s -> new ColoredText(s, 0xffffff)).toArray(ColoredText[]::new));
   }
@@ -32,11 +33,11 @@ final class GuiTextBox extends GuiScreen {
   /**
    * Create a new text box.
    *
-   * @param x            the x-pos for the box
-   * @param y            the y-pos for the box
-   * @param text         each line to be drawn
+   * @param x    the x-pos for the box
+   * @param y    the y-pos for the box
+   * @param text each line to be drawn
    */
-  public GuiTextBox(int x, int y, ColoredText... text) {
+  GuiTextBox(int x, int y, ColoredText... text) {
     final Minecraft mc = Minecraft.getMinecraft();
     setWorldAndResolution(mc, mc.displayWidth, mc.displayHeight);
     this.x = x;

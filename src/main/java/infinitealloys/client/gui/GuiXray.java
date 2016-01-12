@@ -107,7 +107,7 @@ public final class GuiXray extends GuiElectric {
     if (mouseButton == 0) { // Was the left mouse button clicked?
       for (int i = 0; i < blockButtons.length; i++) { // Iterate though each block button
         // Was this button clicked?
-        if (Funcs.mouseInZone(mouseX - topLeft.x, mouseY - topLeft.y,
+        if (Funcs.pointInZone(mouseX - topLeft.x, mouseY - topLeft.y,
                               blockButtons[i].xPos, blockButtons[i].yPos, blockButtons[i].width,
                               blockButtons[i].height)) {
           // Was there already a selected button? If so, deselect it.
@@ -150,12 +150,12 @@ public final class GuiXray extends GuiElectric {
       setButtons();
 
       // Was the scroll up button clicked?
-      if (Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 172, topLeft.y + 40, 14, 8)) {
+      if (Funcs.pointInZone(mouseX, mouseY, topLeft.x + 172, topLeft.y + 40, 14, 8)) {
         scroll(-1); // Scroll up
       }
 
       // Was the scroll down button clicked?
-      else if (Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 172, topLeft.y + 147, 14, 8)) {
+      else if (Funcs.pointInZone(mouseX, mouseY, topLeft.x + 172, topLeft.y + 147, 14, 8)) {
         scroll(1); // Scroll down
       }
     }

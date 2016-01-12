@@ -2,7 +2,6 @@ package infinitealloys.util;
 
 import com.sun.istack.internal.NotNull;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -115,12 +114,16 @@ public enum EnumMachine implements IStringSerializable {
     }
   }
 
-  public Block getBlock() {
+  public BlockMachine getBlock() {
     return IABlocks.machines[ordinal()];
   }
 
   public ItemStack getItemStack() {
     return new ItemStack(getBlock());
+  }
+
+  public int getGuiId() {
+    return ordinal();
   }
 
   @SideOnly(Side.CLIENT)

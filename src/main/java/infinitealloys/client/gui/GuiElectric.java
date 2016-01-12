@@ -33,7 +33,7 @@ public abstract class GuiElectric extends GuiMachine {
 
     // Draw the progress and energy info if the mouse is over the progress bar and help is disabled
     if (!helpEnabled && tee.ticksToProcess > 0
-        && Funcs.mouseInZone(mouseX, mouseY,
+        && Funcs.pointInZone(mouseX, mouseY,
                              topLeft.x + progressBar.x, topLeft.y + progressBar.y,
                              PROGRESS_BAR.width, PROGRESS_BAR.height)) {
       int rkChange = tee.shouldProcess() ? tee.getRKChange() : 0;

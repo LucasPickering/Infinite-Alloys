@@ -221,7 +221,7 @@ public final class GuiInternetWand extends GuiScreen {
 
         // Set hoveredZone to this zone if it hasn't been set already and the mouse is over this zone
         if (hoveredZone == null && Funcs
-            .mouseInZone(mouseX, mouseY, topLeft.x + help.x, topLeft.y + help.y, help.w, help.h)) {
+            .pointInZone(mouseX, mouseY, topLeft.x + help.x, topLeft.y + help.y, help.w, help.h)) {
           hoveredZone = help;
         }
       }
@@ -246,7 +246,7 @@ public final class GuiInternetWand extends GuiScreen {
       for (int i = scrollPos; i < machineButtons.size() && i < scrollPos + MAX_ROWS; i++) {
         MachineButton button = machineButtons.get(i);
         if (button != null && Funcs
-            .mouseInZone(mouseX, mouseY, button.xPos, button.yPos, button.width,
+            .pointInZone(mouseX, mouseY, button.xPos, button.yPos, button.width,
                          button.height)) { // If this button was clicked
           if (!isCtrlKeyDown()
               && !isShiftKeyDown()) // If the CTRL or Shift key wasn't held, set all buttons to 0
@@ -280,12 +280,12 @@ public final class GuiInternetWand extends GuiScreen {
       }
 
       // Was the scroll up button clicked?
-      if (Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 155, topLeft.y + 40, 14, 8)) {
+      if (Funcs.pointInZone(mouseX, mouseY, topLeft.x + 155, topLeft.y + 40, 14, 8)) {
         scroll(true); // Scroll up
       }
 
       // Was the scroll down button clicked?
-      else if (Funcs.mouseInZone(mouseX, mouseY, topLeft.x + 155, topLeft.y + 147, 14, 8)) {
+      else if (Funcs.pointInZone(mouseX, mouseY, topLeft.x + 155, topLeft.y + 147, 14, 8)) {
         scroll(false); // Scroll down
       }
 

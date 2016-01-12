@@ -3,61 +3,83 @@ package infinitealloys.client.gui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 
 import org.lwjgl.opengl.GL11;
 
-import infinitealloys.tile.TileEntityMachine;
+import java.awt.*;
 
-public final class GuiMachineTab extends GuiScreen {
+import infinitealloys.util.EnumMachine;
+import infinitealloys.util.Funcs;
+
+final class GuiMachineTab extends GuiScreen {
+
+  private static int WIDTH = 24;
+  private static int HEIGHT = 20;
 
   private final RenderItem itemRenderer;
-  public TileEntityMachine tem;
-  public int xPos, yPos;
+  int xPos, yPos;
+  private final EnumMachine machineType;
+  private final BlockPos machinePos;
   private final boolean leftSide;
   private final boolean activated;
+  private final GuiTextBox textBox;
 
-  public GuiMachineTab(Minecraft mc, RenderItem itemRenderer, int xPos, int yPos,
-                       TileEntityMachine tem, boolean leftSide, boolean activated) {
+  GuiMachineTab(Minecraft mc, RenderItem itemRenderer, int xPos, int yPos, EnumMachine machineType,
+                BlockPos machinePos, boolean leftSide, boolean activated) {
     this.mc = mc;
     this.itemRenderer = itemRenderer;
     this.xPos = xPos;
     this.yPos = yPos;
-    this.tem = tem;
+    this.machineType = machineType;
+    this.machinePos = machinePos;
     this.leftSide = leftSide;
     this.activated = activated;
-    width = 20;
-    height = 20;
+    width = WIDTH;
+    height = HEIGHT;
+    textBox = new GuiTextBox(0, 0, Funcs.getLoc("tile." + machineType.getName() + ".name"),
+                             Funcs.getBlockPosString(machinePos));
   }
 
   /**
    * Draws this tab to the screen.
+   *
+   * @param mouseX the x-position of the mouse, in the same coord system as this tab's position
+   * @param mouseY the y-position of the mouse, in the same coord system as this tab's position
    */
-  public void draw() {
+  void draw(int mouseX, int mouseY) {
     GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     mc.renderEngine.bindTexture(GuiMachine.extraIcons);
+
+    Rectangle rect;
     if (leftSide) {
-      if (activated) {
-        drawTexturedModalRect(xPos, yPos, GuiElectric.TAB_LEFT_ON.x, GuiElectric.TAB_LEFT_ON.y,
-                              GuiElectric.TAB_LEFT_ON.width, GuiElectric.TAB_LEFT_ON.height);
-      } else {
-        drawTexturedModalRect(xPos, yPos, GuiElectric.TAB_LEFT_OFF.x, GuiElectric.TAB_LEFT_OFF.y,
-                              GuiElectric.TAB_LEFT_OFF.width, GuiElectric.TAB_LEFT_OFF.height);
-      }
+      rect = activated ? GuiElectric.TAB_LEFT_ON : GuiElectric.TAB_LEFT_OFF;
     } else {
-      if (activated) {
-        drawTexturedModalRect(xPos, yPos, GuiElectric.TAB_RIGHT_ON.x, GuiElectric.TAB_RIGHT_ON.y,
-                              GuiElectric.TAB_RIGHT_ON.width, GuiElectric.TAB_RIGHT_ON.height);
-      } else {
-        drawTexturedModalRect(xPos, yPos, GuiElectric.TAB_RIGHT_OFF.x, GuiElectric.TAB_RIGHT_OFF.y,
-                              GuiElectric.TAB_RIGHT_OFF.width, GuiElectric.TAB_RIGHT_OFF.height);
-      }
+      rect = activated ? GuiElectric.TAB_RIGHT_ON : GuiElectric.TAB_RIGHT_OFF;
     }
-    itemRenderer.renderItemIntoGUI(new ItemStack(tem.getBlockType(), 1, tem.getBlockMetadata()),
-                                   xPos + 5, yPos + 4);
+
+    drawTexturedModalRect(xPos, yPos, rect.x, rect.y, rect.width, rect.height);
+    itemRenderer.renderItemIntoGUI(machineType.getItemStack(), xPos + 5, yPos + 4);
+
+    if (mouseOver(mouseX, mouseY)) {
+      textBox.setPosition(mouseX, mouseY);
+      textBox.draw();
+    }
   }
 
-  public boolean mousePressed(int mouseX, int mouseY) {
-    return mouseX >= xPos && mouseY >= yPos && mouseX < xPos + width && mouseY < yPos + height;
+  boolean mouseOver(int mouseX, int mouseY) {
+    return Funcs.pointInZone(mouseX, mouseY, xPos, yPos, width, height);
+  }
+
+  EnumMachine getMachineType() {
+    return machineType;
+  }
+
+  BlockPos getMachinePos() {
+    return machinePos;
+  }
+
+  boolean isActivated() {
+    return activated;
   }
 }

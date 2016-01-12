@@ -32,10 +32,10 @@ public final class FuncsTest {
 
   @Test
   public void testMouseInZone() throws Exception {
-    assertTrue(Funcs.mouseInZone(10, 5, 10, 5, 20, 20));
-    assertTrue(Funcs.mouseInZone(30, 25, 10, 5, 20, 20));
-    assertTrue(Funcs.mouseInZone(15, 15, 10, 5, 20, 20));
-    assertFalse(Funcs.mouseInZone(10, 10, 11, 11, 10, 10));
+    assertTrue(Funcs.pointInZone(10, 5, 10, 5, 20, 20));
+    assertTrue(Funcs.pointInZone(30, 25, 10, 5, 20, 20));
+    assertTrue(Funcs.pointInZone(15, 15, 10, 5, 20, 20));
+    assertFalse(Funcs.pointInZone(10, 10, 11, 11, 10, 10));
   }
 
   @Test

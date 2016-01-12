@@ -121,21 +121,19 @@ public final class Funcs {
   }
 
   /**
-   * Given a mouse X and Y, is the mouse within a zone that starts at {@code xStart}, {@code yStart},
+   * Given a point (x, y), is the point within a zone that starts at ({@code xStart}, {@code yStart}),
    * is {@code width} wide and {@code height} high? All four bounds are inclusive.
    *
-   * @param mouseX the x-coordinate of the mouse
-   * @param mouseY the y-coordinate of the mouse
+   * @param x      the x-coordinate of the mouse
+   * @param y      the y-coordinate of the mouse
    * @param xStart the left edge of the zone
    * @param yStart the top edge of the zone
    * @param width  the width of the zone
    * @param height the height of the zone
-   * @return is (mouseX, mouseY) inclusively within the zone?
+   * @return is (y, y) inclusively within the zone?
    */
-  public static boolean mouseInZone(int mouseX, int mouseY, int xStart, int yStart, int width,
-                                    int height) {
-    return xStart <= mouseX && mouseX <= xStart + width
-           && yStart <= mouseY && mouseY <= yStart + height;
+  public static boolean pointInZone(int x, int y, int xStart, int yStart, int width, int height) {
+    return xStart <= x && x <= xStart + width && yStart <= y && y <= yStart + height;
   }
 
   /**

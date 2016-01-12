@@ -94,18 +94,19 @@ public final class BlockMachine extends BlockContainer {
                      (int) player.posX, (int) player.posY, (int) player.posZ);
     } else {
       // Open the regular GUI
-      openGui(world, player, tem);
+      openGui(world, player, tem.getPos());
     }
 
     return true;
   }
 
-  public void openGui(World world, EntityPlayer player, TileEntityMachine tem) {
+  public void openGui(World world, EntityPlayer player, BlockPos machinePos) {
+    final TileEntityMachine tem = ((TileEntityMachine) world.getTileEntity(machinePos));
     if (!world.isRemote) {
       world.markBlockForUpdate(tem.getPos());
     }
-    player.openGui(InfiniteAlloys.instance, tem.getMachineType().ordinal(), world,
-                   tem.getPos().getX(), tem.getPos().getY(), tem.getPos().getZ());
+    player.openGui(InfiniteAlloys.instance, tem.getMachineType().getGuiId(), world,
+                   machinePos.getX(), machinePos.getY(), machinePos.getZ());
   }
 
   @Override

@@ -19,7 +19,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import infinitealloys.block.BlockMachine;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.network.MessageOpenGui;
 import infinitealloys.tile.TEMComputer;
@@ -105,7 +104,7 @@ public abstract class GuiMachine extends GuiContainer {
 
     // Draw the upgrade list if the mouse is over the upgrade slot and help is disabled
     Slot slot = inventorySlots.getSlot(tem.upgradeSlotIndex);
-    if (!helpEnabled && Funcs.mouseInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x,
+    if (!helpEnabled && Funcs.pointInZone(mouseX, mouseY, slot.xDisplayPosition + topLeft.x,
                                           slot.yDisplayPosition + topLeft.y, 16, 16)) {
       List<ColoredText> lines = new LinkedList<>();
       lines.add(new ColoredText(Funcs.getLoc("general.upgrades"), 0xffffff));
@@ -123,7 +122,7 @@ public abstract class GuiMachine extends GuiContainer {
 
     // Draw the network info if the mouse is over the network icon and help is disabled
     if (!helpEnabled && networkIcon != null && Funcs
-        .mouseInZone(mouseX, mouseY, topLeft.x + networkIcon.x, topLeft.y + networkIcon.y,
+        .pointInZone(mouseX, mouseY, topLeft.x + networkIcon.x, topLeft.y + networkIcon.y,
                      NETWORK_ICON.width, NETWORK_ICON.height))
     // Draw a text box with a line for each network show its status and information
     {
@@ -158,40 +157,21 @@ public abstract class GuiMachine extends GuiContainer {
     machineTabs.clear();
     if (tem.computerHost != null) {
       TEMComputer tec = (TEMComputer) mc.theWorld.getTileEntity(tem.computerHost);
-      computerTab = new GuiMachineTab(mc, itemRender, -24, 6, tec, true,
-                                      tem.getPos().equals(tem.computerHost));
-      computerTab.draw();
-      // Draw a text box with the machine's name and coordinates
-      if (Funcs.mouseInZone(mouseX, mouseY,
-                            topLeft.x + computerTab.xPos, topLeft.y + computerTab.yPos,
-                            computerTab.width, computerTab.height)) {
-
-        new GuiTextBox(mouseX - topLeft.x, mouseY - topLeft.y,
-                       Funcs.getLoc("tile." + computerTab.tem.getMachineType().name + ".name"),
-                       computerTab.tem.getPos().toString()).draw();
-
-      }
+      computerTab = new GuiMachineTab(mc, itemRender, -24, 6, tec.getMachineType(), tec.getPos(),
+                                      true, tem.getPos().equals(tem.computerHost));
+      computerTab.draw(mouseX - topLeft.x, mouseY - topLeft.y);
 
       BlockPos[] clients = tec.getClients();
       // For each client
       for (int i = 0; i < clients.length; i++) {
         GuiMachineTab tab =
             new GuiMachineTab(mc, itemRender, i / 5 * 197 - 24, i % 5 * 25 + 36,
-                              (TileEntityElectric) mc.theWorld.getTileEntity(clients[i]),
-                              i / 5 == 0, clients[i].equals(tem.getPos()));
+                              ((TileEntityElectric) mc.theWorld.getTileEntity(clients[i]))
+                                  .getMachineType(),
+                              clients[i], i / 5 == 0, clients[i].equals(tem.getPos()));
         machineTabs.add(tab);
 
-        tab.draw(); // Draw the tab
-
-        // If the mouse is over this client's tab, draw a text box with its name and coords
-        if (Funcs.mouseInZone(mouseX, mouseY, topLeft.x + tab.xPos, topLeft.y + tab.yPos,
-                              tab.width, tab.height)) {
-
-          new GuiTextBox(mouseX - topLeft.x, mouseY - topLeft.y,
-                         Funcs.getLoc("tile." + tab.tem.getMachineType().name
-                                      + ".name"), tab.tem.getPos().toString());
-
-        }
+        tab.draw(mouseX - topLeft.x, mouseY - topLeft.y); // Draw the tab
       }
     }
 
@@ -214,7 +194,7 @@ public abstract class GuiMachine extends GuiContainer {
 
         // Set hoveredZone to this zone if it hasn't been set already and the mouse is over this zone
         if (hoveredZone == null && Funcs
-            .mouseInZone(mouseX, mouseY, topLeft.x + help.x, topLeft.y + help.y, help.w, help.h)) {
+            .pointInZone(mouseX, mouseY, topLeft.x + help.x, topLeft.y + help.y, help.w, help.h)) {
           hoveredZone = help;
         }
       }
@@ -247,25 +227,28 @@ public abstract class GuiMachine extends GuiContainer {
     World world = Minecraft.getMinecraft().theWorld;
     EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
-    // Was the network tab of the controlling computer clicked? Go to that computer
-    if (computerTab != null && computerTab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
-      if (!tem.getPos().equals(computerTab.tem.getPos())) {
-        ((BlockMachine) world.getBlockState(computerTab.tem.getPos()).getBlock())
-            .openGui(world, player, computerTab.tem);
-        Funcs.sendPacketToServer(new MessageOpenGui(computerTab.tem.getPos()));
+    // If the computer tab was clicked...
+    if (computerTab != null && computerTab.mouseOver(mouseX - topLeft.x, mouseY - topLeft.y)) {
+      // If the computer tab isn't activated (it's for another GUI)
+      if (!computerTab.isActivated()) {
+        // Open the GUI corresponding to the computer tab
+        computerTab.getMachineType().getBlock().openGui(world, player, computerTab.getMachinePos());
+        Funcs.sendPacketToServer(new MessageOpenGui(computerTab.getMachinePos())); // TODO: Necessary?
       }
-      return;
+      return; // No need to check if anything else was clicked
     }
 
-    // Was the network tab of another machine clicked? Go to that machine
+    // For each machine tab...
     for (GuiMachineTab tab : machineTabs) {
-      if (tab.mousePressed(mouseX - topLeft.x, mouseY - topLeft.y)) {
-        if (!tem.getPos().equals(tab.tem.getPos())) {
-          ((BlockMachine) world.getBlockState(tab.tem.getPos()).getBlock())
-              .openGui(world, player, tab.tem);
-          Funcs.sendPacketToServer(new MessageOpenGui(tab.tem.getPos()));
+      // If this tab was clicked...
+      if (tab.mouseOver(mouseX - topLeft.x, mouseY - topLeft.y)) {
+        // If this tab isn't activated (it's for another GUI)
+        if (!tab.isActivated()) {
+          // Open the GUI corresponding to this tab
+          tab.getMachineType().getBlock().openGui(world, player, tab.getMachinePos());
+          Funcs.sendPacketToServer(new MessageOpenGui(tab.getMachinePos())); // TODO: Necessary?
         }
-        return;
+        return; // No need to check if anything else was clicked
       }
     }
   }

@@ -7,38 +7,37 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import infinitealloys.block.BlockMachine;
-import infinitealloys.tile.TileEntityMachine;
 import infinitealloys.util.Funcs;
 import io.netty.buffer.ByteBuf;
 
 public final class MessageOpenGui implements IMessage, IMessageHandler<MessageOpenGui, IMessage> {
 
-  private BlockPos machine;
+  private BlockPos machinePos;
 
   public MessageOpenGui() {
   }
 
-  public MessageOpenGui(BlockPos machine) {
-    this.machine = machine;
+  public MessageOpenGui(BlockPos machinePos) {
+    this.machinePos = machinePos;
   }
 
   @Override
   public void fromBytes(ByteBuf bytes) {
-    machine = Funcs.readBlockPosFromByteBuf(bytes);
+    machinePos = Funcs.readBlockPosFromByteBuf(bytes);
   }
 
   @Override
   public void toBytes(ByteBuf bytes) {
-    Funcs.writeBlockPosToByteBuf(bytes, machine);
+    Funcs.writeBlockPosToByteBuf(bytes, machinePos);
   }
 
   @Override
   public IMessage onMessage(MessageOpenGui message, MessageContext context) {
-    machine = message.machine;
+    machinePos = message.machinePos;
 
     EntityPlayer player = context.getServerHandler().playerEntity;
-    ((BlockMachine) player.worldObj.getBlockState(machine).getBlock())
-        .openGui(player.worldObj, player, (TileEntityMachine) player.worldObj.getTileEntity(machine));
+    ((BlockMachine) player.worldObj.getBlockState(machinePos).getBlock()).openGui(player.worldObj,
+                                                                                  player, machinePos);
 
     return null;
   }
