@@ -1,5 +1,5 @@
 {
-  "parent": "infinitealloys:block/energystorage",
+  "parent": "infinitealloys:block/metalForge",
   "display": {
     "thirdperson": {
       "rotation": [10, -45, 170],

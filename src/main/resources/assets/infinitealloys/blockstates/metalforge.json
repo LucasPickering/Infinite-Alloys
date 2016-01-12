@@ -1,8 +1,0 @@
-{
-  "variants": {
-    "facing=north": { "model": "infinitealloys:metalforge" },
-    "facing=east": { "model": "infinitealloys:metalforge", "y": 90 },
-    "facing=south": { "model": "infinitealloys:metalforge", "y": 180 },
-    "facing=west": { "model": "infinitealloys:metalforge", "y": 270 }
-  }
-}
