@@ -182,19 +182,17 @@ public abstract class GuiMachine extends GuiContainer {
       // null if mouse is not over a zone
       EnumHelp hoveredZone = null;
       for (EnumHelp help : tem.getMachineType().getHelpBoxes()) {
-        // Draw zone outline, add alpha to make the rectangles opaque
-        drawRect(help.x, help.y, help.x + help.w, help.y + 1,
-                 0xff000000 + help.color); // Top of outline box
-        drawRect(help.x, help.y + help.h, help.x + help.w, help.y + help.h - 1,
-                 0xff000000 + help.color); // Bottom of outline box
-        drawRect(help.x, help.y, help.x + 1, help.y + help.h - 1,
-                 0xff000000 + help.color); // Left side of outline box
-        drawRect(help.x + help.w - 1, help.y, help.x + help.w, help.y + help.h,
-                 0xff000000 + help.color); // Right side of outline box
+        final int color = 0xff000000 + help.color; // Add alpha to make it opaque
+
+        // Draw the outline box
+        drawHorizontalLine(help.x, help.x + help.w - 1, help.y, color); // Top
+        drawHorizontalLine(help.x, help.x + help.w - 1, help.y + help.h - 1, color); // Bottom
+        drawVerticalLine(help.x, help.y, help.y + help.h - 1, color); // Left
+        drawVerticalLine(help.x + help.w - 1, help.y, help.y + help.h - 1, color); // Right
 
         // Set hoveredZone to this zone if it hasn't been set already and the mouse is over this zone
-        if (hoveredZone == null && Funcs
-            .pointInZone(mouseX, mouseY, topLeft.x + help.x, topLeft.y + help.y, help.w, help.h)) {
+        if (hoveredZone == null && Funcs.pointInZone(
+            mouseX, mouseY, topLeft.x + help.x, topLeft.y + help.y, help.w, help.h)) {
           hoveredZone = help;
         }
       }
