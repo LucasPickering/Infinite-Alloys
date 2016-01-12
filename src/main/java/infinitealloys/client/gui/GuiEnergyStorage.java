@@ -27,8 +27,8 @@ public final class GuiEnergyStorage extends GuiElectric {
     mc.renderEngine.bindTexture(extraIcons);
 
     // Draw the energy amount
-    drawString(fontRendererObj, Funcs.abbreviateNum(tees.getCurrentRK()) + "/"
-                                +                                          Funcs.abbreviateNum(tees.getMaxRK()) + " RK",
+    drawString(fontRendererObj, String.format("%s/%sRK", Funcs.abbreviateNum(tees.getCurrentRK()),
+                                              Funcs.abbreviateNum(tees.getMaxRK())),
                topLeft.x + 70, topLeft.y + 26, 0xffffff);
 
     GL11.glEnable(GL11.GL_LIGHTING);
