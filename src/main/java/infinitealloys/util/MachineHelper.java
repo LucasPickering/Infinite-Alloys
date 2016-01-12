@@ -150,7 +150,7 @@ public final class MachineHelper {
    */
   public static void sendMachineErrorToPlayer(EntityPlayer player, String messageKey) {
     player.addChatComponentMessage(new ChatComponentText(Funcs.formatLoc(
-        "%k: %k", "machine.textOutput.error", messageKey)));
+        "%s: %s", "%machine.textOutput.error", '%' + messageKey)));
   }
 
   /**

@@ -16,9 +16,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.common.registry.LanguageRegistry;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 
 import infinitealloys.network.NetworkHandler;
 import io.netty.buffer.ByteBuf;
@@ -78,31 +75,34 @@ public final class Funcs {
     return LanguageRegistry.instance().getStringLocalization(key);
   }
 
+  /**
+   * Formats the given arguments into the given string, localizing all strings that begin with '%'.
+   *
+   * @param format the string to be formatted
+   * @param args   the arguments to be formatted into {@code format}
+   * @return the formatted string, with specified arguments being localized
+   */
   public static String formatLoc(String format, Object... args) {
-    List argList = Arrays.asList(args);
-    final Iterator iter = argList.iterator();
-    StringBuilder formatBuilder = new StringBuilder(format);
-
-    for (int i = 0; iter.hasNext() && i < formatBuilder.length() - 1; i++) {
-      if (formatBuilder.charAt(i) == '%') {
-        final char nextChar = formatBuilder.charAt(i + 1);
-
-        // Having %% in the String won't use the next arg in the list
-        if (nextChar != '%') {
-          final Object arg = iter.next();
-          if (nextChar == 'k') {
-            if (arg instanceof String) {
-              formatBuilder.replace(i, i + 1, getLoc((String) arg));
-              iter.remove();
-            } else {
-              throw new IllegalArgumentException("Invalid argument for localization: " + arg);
-            }
-          }
+    for (int i = 0; i < args.length; i++) {
+      if (args[i] instanceof String) {
+        final String s = (String) args[i];
+        if (s.length() > 0 && s.charAt(0) == '%') {
+          args[i] = getLoc(s.substring(1, s.length()));
         }
       }
     }
 
-    return String.format(format, argList.toArray());
+    return String.format(format, args);
+  }
+
+  /**
+   * Gets a neat string representing the given {@link BlockPos}. The format used is (x, y, z).
+   *
+   * @param pos the position to be represented
+   * @return a string representing {@code pos}
+   */
+  public static String getBlockPosString(BlockPos pos) {
+    return String.format("(%d, %d, %d)", pos.getX(), pos.getY(), pos.getZ());
   }
 
   /**

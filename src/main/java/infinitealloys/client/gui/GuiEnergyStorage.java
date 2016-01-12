@@ -28,7 +28,7 @@ public final class GuiEnergyStorage extends GuiElectric {
 
     // Draw the energy amount
     drawString(fontRendererObj, Funcs.abbreviateNum(tees.getCurrentRK()) + "/"
-                                + Funcs.abbreviateNum(tees.getMaxRK()) + " RK",
+                                +                                          Funcs.abbreviateNum(tees.getMaxRK()) + " RK",
                topLeft.x + 70, topLeft.y + 26, 0xffffff);
 
     GL11.glEnable(GL11.GL_LIGHTING);
@@ -44,14 +44,15 @@ public final class GuiEnergyStorage extends GuiElectric {
       int clients = tees.getNetworkSize();
 
       // A string that says this TE is hosting a network and how many clients are connected
-      status = Funcs.getLoc("machine.network.hosting") + " " + clients + " " +
-               (clients == 1 ? Funcs.getLoc("machine.network.client") : Funcs
-                   .getLoc("machine.network.clients")); // A switch between "Client" and "Clients"
+      status = Funcs.formatLoc("%s %d %s", "%machine.network.hosting", clients,
+                               clients == 1 ? "%machine.network.client" : "%machine.network.clients");
     } else {
-      status = Funcs.getLoc("machine.network.hostedby") + " " + tees.energyHost;
+      status = Funcs.formatLoc("%s %s", "%machine.network.hostedby",
+                               Funcs.getBlockPosString(tees.energyHost));
     }
 
     return new ColoredText[]{
-        new ColoredText(Funcs.getLoc("machine.network.energy") + ": " + status, color)};
+        new ColoredText(Funcs.formatLoc("%s: %s", "%machine.network.energy", status), color)
+    };
   }
 }

@@ -117,19 +117,19 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
       }
     } else if (worldObj != null && !isClientValid(client)) {
       if (player != null && worldObj.isRemote) {
-        MachineHelper.sendMachineErrorToPlayer(player,  "machine.textOutput.error.notElectric");
+        MachineHelper.sendMachineErrorToPlayer(player, "machine.textOutput.error.notElectric");
       }
     } else if (networkClients.contains(client)) {
       if (player != null && worldObj.isRemote) {
-        MachineHelper.sendMachineErrorToPlayer(player,  "machine.textOutput.error.alreadyInNetwork");
+        MachineHelper.sendMachineErrorToPlayer(player, "machine.textOutput.error.alreadyInNetwork");
       }
     } else if (client.equals(pos)) {
       if (player != null && worldObj.isRemote) {
-        MachineHelper.sendMachineErrorToPlayer(player,  "machine.textOutput.error.cannotAddSelf");
+        MachineHelper.sendMachineErrorToPlayer(player, "machine.textOutput.error.cannotAddSelf");
       }
     } else if (client.distanceSq(pos) > range) {
       if (player != null && worldObj.isRemote) {
-        MachineHelper.sendMachineErrorToPlayer(player,  "machine.textOutput.error.outOfRange");
+        MachineHelper.sendMachineErrorToPlayer(player, "machine.textOutput.error.outOfRange");
       }
     } else {
       addClient(client);
@@ -143,7 +143,8 @@ public final class TEEEnergyStorage extends TileEntityElectric implements IHost 
           if (player != null) {
             // Send a chat message
             player.addChatComponentMessage(new ChatComponentText(
-                Funcs.formatLoc("%k %s", "machine.textOutput.addingMachine", client)));
+                Funcs.formatLoc("%k %s", "machine.textOutput.addingMachine",
+                                Funcs.getBlockPosString(client))));
           }
         } else {
           // Sync to clients
