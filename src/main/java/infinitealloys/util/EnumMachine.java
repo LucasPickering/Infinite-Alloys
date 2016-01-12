@@ -143,8 +143,9 @@ public enum EnumMachine implements IStringSerializable {
       case ENERGY_STORAGE:
         return new EnumHelp[]{EnumHelp.ES_UPGRADE, EnumHelp.ES_PROGRESS, EnumHelp.ES_ENERGY,
                               EnumHelp.ES_SUPPLY, EnumHelp.ES_RK};
+      default:
+        throw new IllegalStateException("Unknown machine type: " + this);
     }
-    throw new IllegalStateException("Unknown machine type: " + this);
   }
 
   /**

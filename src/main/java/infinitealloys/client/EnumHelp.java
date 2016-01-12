@@ -68,7 +68,7 @@ public enum EnumHelp {
    */
   public final int h;
 
-  private EnumHelp(String name, int color, int x, int y, int w, int h) {
+  EnumHelp(String name, int color, int x, int y, int w, int h) {
     this.name = name;
     this.color = color;
     this.x = x;
