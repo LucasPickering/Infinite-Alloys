@@ -10,6 +10,8 @@ import java.util.Arrays;
  */
 final class GuiTextBox extends GuiScreen {
 
+  private static final int DEFAULT_TEXT_COLOR = 0xffffff;
+
   private int x;
   private int y;
 
@@ -27,7 +29,8 @@ final class GuiTextBox extends GuiScreen {
    */
   GuiTextBox(int x, int y, String... text) {
     this(x, y,
-         Arrays.stream(text).map(s -> new ColoredText(s, 0xffffff)).toArray(ColoredText[]::new));
+         Arrays.stream(text).map(s -> new ColoredText(s, DEFAULT_TEXT_COLOR))
+             .toArray(ColoredText[]::new));
   }
 
   /**
@@ -46,8 +49,8 @@ final class GuiTextBox extends GuiScreen {
   }
 
   void draw() {
-    int drawingX = x;
-    int drawingY = y;
+    int drawingX = x + 12;
+    int drawingY = y - 12;
     // Set the width of the box to the length of the longest line
     int boxWidth = 0;
     for (ColoredText line : lines) {
@@ -55,8 +58,6 @@ final class GuiTextBox extends GuiScreen {
     }
 
     // This is from vanilla, I have no idea what it does, other than make it work
-    drawingX += 12;
-    drawingY -= 12;
     int var9 = 8;
     if (lines.length > 1) {
       var9 += 2 + (lines.length - 1) * 10;
@@ -85,9 +86,9 @@ final class GuiTextBox extends GuiScreen {
 
     // Draw each line
     for (int i = 0; i < lines.length; i++) {
-      fontRendererObj
-          .drawStringWithShadow(lines[i].text, drawingX, drawingY + i * 10 + (i == 0 ? 0 : 2),
-                                lines[i].color);
+      fontRendererObj.drawStringWithShadow(lines[i].text,
+                                           drawingX, drawingY + i * 10 + (i == 0 ? 0 : 2),
+                                           lines[i].color);
     }
 
     zLevel = 0F;
