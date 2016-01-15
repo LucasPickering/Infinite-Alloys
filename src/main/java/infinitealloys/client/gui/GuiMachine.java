@@ -76,6 +76,7 @@ public abstract class GuiMachine extends GuiContainer {
     this.ySize = ySize;
     tem = tileEntity;
     background = Funcs.getGuiTexture(tem.getMachineType().name);
+
     // Make an array with the help title and the lines of help text
     for (EnumHelp help : tem.getMachineType().getHelpBoxes()) {
       List<ColoredText> lines = new LinkedList<>();

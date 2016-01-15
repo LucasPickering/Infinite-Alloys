@@ -12,17 +12,21 @@ import infinitealloys.util.Funcs;
 
 public abstract class GuiElectric extends GuiMachine {
 
+  protected TileEntityElectric tee;
+
   /**
-   * Coordinates of the progress bar texture, changes by machine but still otherwise
+   * Coordinates of the progress bar texture, changes by machine but stationary otherwise.
    */
   protected Point progressBar = new Point();
-
-  protected TileEntityElectric tee;
+  private final GuiTextBox energyTextBox;
+  private final DecimalFormat rkFormat = new DecimalFormat("0.0%");
 
   public GuiElectric(int xSize, int ySize, InventoryPlayer inventoryPlayer,
                      TileEntityElectric tileEntity) {
     super(xSize, ySize, inventoryPlayer, tileEntity);
     tee = tileEntity;
+    energyTextBox = new GuiTextBox(0, 0, new ColoredText(null, 0xffffff),
+                                   new ColoredText(null, 0xffffff));
   }
 
   @Override
@@ -36,19 +40,18 @@ public abstract class GuiElectric extends GuiMachine {
         && Funcs.pointInZone(mouseX, mouseY,
                              topLeft.x + progressBar.x, topLeft.y + progressBar.y,
                              PROGRESS_BAR.width, PROGRESS_BAR.height)) {
-      int rkChange = tee.shouldProcess() ? tee.getRKChange() : 0;
+      energyTextBox.setPosition(mouseX, mouseY); // Move the box to the mouse cursor
+
+      final int rkChange = tee.shouldProcess() ? tee.getRKChange() : 0;
 
       // The current process progress displayed as a percent
-      String line1 = new DecimalFormat("0.0").format(tee.getProcessProgressScaled(100F)) + "%";
+      energyTextBox.setText(0, rkFormat.format(tee.getProcessProgressScaled(1f)));
 
       // If the rk change is positive, add '+', then display the rate of change of RK
-      String line2 = (rkChange > 0 ? "+" : "") + rkChange + " RK/t";
+      energyTextBox.setText(1, (rkChange > 0 ? "+" : "") + rkChange + " RK/t");
+      energyTextBox.setColor(1, rkChange < 0 ? 0xff0000 : rkChange > 0 ? 0x00ff00 : 0xffffff);
 
-      // Draw all the information, with colors for the change based on pos/neg
-      new GuiTextBox(mouseX, mouseY, new ColoredText(line1, 0xffffff),
-                     new ColoredText(line2,
-                                     rkChange < 0 ? 0xff0000 : rkChange > 0 ? 0x00ff00 : 0xffffff))
-          .draw();
+      energyTextBox.draw();
     }
 
     GL11.glEnable(GL11.GL_DEPTH_TEST);

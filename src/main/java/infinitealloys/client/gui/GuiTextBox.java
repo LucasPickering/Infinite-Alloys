@@ -20,7 +20,7 @@ final class GuiTextBox extends GuiScreen {
   /**
    * The lines of text
    */
-  private final ColoredText[] lines;
+  private ColoredText[] lines;
 
   /**
    * Create a new text box, with each line being white.
@@ -89,5 +89,13 @@ final class GuiTextBox extends GuiScreen {
   void setPosition(int x, int y) {
     this.x = x;
     this.y = y;
+  }
+
+  void setText(int lineNum, String text) {
+    lines[lineNum].text = text;
+  }
+
+  void setColor(int lineNum, int color) {
+    lines[lineNum].color = color;
   }
 }
