@@ -11,6 +11,8 @@ import java.util.Arrays;
 final class GuiTextBox extends GuiScreen {
 
   private static final int DEFAULT_TEXT_COLOR = 0xffffff;
+  private static final int X_OFFSET = 12;
+  private static final int Y_OFFSET = -12;
 
   private int x;
   private int y;
@@ -43,51 +45,40 @@ final class GuiTextBox extends GuiScreen {
   GuiTextBox(int x, int y, ColoredText... text) {
     final Minecraft mc = Minecraft.getMinecraft();
     setWorldAndResolution(mc, mc.displayWidth, mc.displayHeight);
-    this.x = x;
-    this.y = y;
+    this.x = x + X_OFFSET;
+    this.y = y + Y_OFFSET;
     this.lines = text;
   }
 
   void draw() {
-    int drawingX = x + 12;
-    int drawingY = y - 12;
     // Set the width of the box to the length of the longest line
-    int boxWidth = 0;
-    for (ColoredText line : lines) {
-      boxWidth = Math.max(boxWidth, fontRendererObj.getStringWidth(line.text));
-    }
+    final int boxWidth = Arrays.stream(lines)
+        .mapToInt(line -> fontRendererObj.getStringWidth(line.text)).max().orElse(0);
+    final int boxHeight = lines.length <= 1 ? 8 : lines.length * 10;
 
-    // This is from vanilla, I have no idea what it does, other than make it work
-    int var9 = 8;
-    if (lines.length > 1) {
-      var9 += 2 + (lines.length - 1) * 10;
-    }
-    int var10 = -267386864;
-    drawGradientRect(drawingX - 3, drawingY - 4, drawingX + boxWidth + 3, drawingY - 3, var10,
-                     var10);
-    drawGradientRect(drawingX - 3, drawingY + var9 + 3, drawingX + boxWidth + 3,
-                     drawingY + var9 + 4, var10, var10);
-    drawGradientRect(drawingX - 3, drawingY - 3, drawingX + boxWidth + 3, drawingY + var9 + 3,
-                     var10, var10);
-    drawGradientRect(drawingX - 4, drawingY - 3, drawingX - 3, drawingY + var9 + 3, var10, var10);
-    drawGradientRect(drawingX + boxWidth + 3, drawingY - 3, drawingX + boxWidth + 4,
-                     drawingY + var9 + 3, var10, var10);
-    int var11 = 1347420415;
-    int var12 = (var11 & 16711422) >> 1 | var11 & -16777216;
-    drawGradientRect(drawingX - 3, drawingY - 3 + 1, drawingX - 3 + 1, drawingY + var9 + 3 - 1,
-                     var11, var12);
-    drawGradientRect(drawingX + boxWidth + 2, drawingY - 3 + 1, drawingX + boxWidth + 3,
-                     drawingY + var9 + 3 - 1, var11, var12);
-    drawGradientRect(drawingX - 3, drawingY - 3, drawingX + boxWidth + 3, drawingY - 3 + 1, var11,
-                     var11);
-    drawGradientRect(drawingX - 3, drawingY + var9 + 2, drawingX + boxWidth + 3,
-                     drawingY + var9 + 3, var12, var12);
-    // The vanilla stuff stops here
+    final int leftX = x - 3;
+    final int rightX = x + boxWidth + 3;
+    final int topY = y - 3;
+    final int bottomY = y + boxHeight + 3;
+
+    final int bgColor = 0xf0100010;
+    drawRect(leftX, topY - 1, rightX, topY, bgColor); // Top
+    drawRect(leftX, bottomY, rightX, bottomY + 1, bgColor); // Bottom
+    drawRect(leftX, topY, rightX, bottomY, bgColor); // Middle
+    drawRect(leftX - 1, topY, leftX, bottomY, bgColor); // Left
+    drawRect(rightX, topY, rightX + 1, bottomY, bgColor); // Right
+
+    int fgColor1 = 0x505000ff;
+    int fgColor2 = 0x5028007f;
+    drawGradientRect(leftX, y - 3, rightX, y - 3 + 1, fgColor1, fgColor1); // Top
+    drawGradientRect(leftX, bottomY - 1, rightX, bottomY, fgColor2, fgColor2); // Bottom
+    drawGradientRect(leftX, topY + 1, leftX + 1, bottomY - 1, fgColor1, fgColor2); // Left
+    drawGradientRect(rightX - 1, topY + 1, rightX, bottomY - 1, fgColor1, fgColor2); // Right
 
     // Draw each line
     for (int i = 0; i < lines.length; i++) {
       fontRendererObj.drawStringWithShadow(lines[i].text,
-                                           drawingX, drawingY + i * 10 + (i == 0 ? 0 : 2),
+                                           x, y + i * 10 + (i == 0 ? 0 : 2),
                                            lines[i].color);
     }
 
