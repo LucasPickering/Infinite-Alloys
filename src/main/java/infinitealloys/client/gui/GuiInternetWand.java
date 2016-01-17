@@ -1,6 +1,5 @@
 package infinitealloys.client.gui;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -20,6 +19,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import infinitealloys.block.BlockMachine;
 import infinitealloys.client.EnumHelp;
 import infinitealloys.item.IAItems;
 import infinitealloys.item.ItemInternetWand;
@@ -157,8 +157,9 @@ public final class GuiInternetWand extends GuiScreen {
         // If the selected machine is not valid for the block that was clicked
         machineButtons.stream().filter(
             button -> button != null && (selectedButtons >> button.buttonID & 1) == 1
-                      && (!(te instanceof IHost) || button.dimensionID != te.getWorld().provider.getDimensionId() || !((IHost) te)
-            .isClientValid(button.machinePos))).forEach(button -> addSelected.enabled = false);
+                      &&                (!(te instanceof IHost) || button.dimensionID != te.getWorld().provider
+                .getDimensionId() || !((IHost) te)
+                .isClientValid(button.machinePos))).forEach(button -> addSelected.enabled = false);
       }
 
       if (0 <= machineButtons.size() - MAX_ROWS && machineButtons.size() - MAX_ROWS < scrollPos) {
@@ -376,7 +377,7 @@ public final class GuiInternetWand extends GuiScreen {
 
     int dimensionID;
     BlockPos machinePos;
-    int machineID;
+    EnumMachine machineType;
 
     GuiButton removeButton;
 
@@ -388,8 +389,8 @@ public final class GuiInternetWand extends GuiScreen {
       this.yPos = yPos;
       this.dimensionID = dimensionID;
       this.machinePos = machinePos;
-      final IBlockState state = DimensionManager.getWorld(dimensionID).getBlockState(machinePos);
-      machineID = state.getBlock().getMetaFromState(state);
+      machineType = EnumMachine.byBlock((BlockMachine) DimensionManager.getWorld(dimensionID)
+          .getBlockState(machinePos).getBlock());
 
       visible = scrollPos <= buttonID && buttonID < scrollPos + MAX_ROWS;
 
@@ -399,12 +400,12 @@ public final class GuiInternetWand extends GuiScreen {
     }
 
     void drawButton() {
-      mc.renderEngine.bindTexture(GuiMachine.extraIcons);
-
       // If the button isn't currently in the scroll window, don't draw it
       if (!visible) {
         return;
       }
+
+      mc.renderEngine.bindTexture(GuiMachine.extraIcons);
 
       // If this button is selected...
       if ((selectedButtons >> buttonID & 1) == 1) {
@@ -451,7 +452,7 @@ public final class GuiInternetWand extends GuiScreen {
       fontRenderer.drawStringWithShadow(
           machineZ, xPos + 106 - fontRenderer.getStringWidth(machineZ) / 2, yPos + 5, 0xffffff);
 
-      itemRender.renderItemIntoGUI(EnumMachine.values()[machineID].getItemStack(), xPos, yPos + 1);
+      itemRender.renderItemIntoGUI(machineType.getItemStack(), xPos, yPos + 1);
     }
   }
 }
