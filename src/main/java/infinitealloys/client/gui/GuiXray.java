@@ -84,6 +84,7 @@ public final class GuiXray extends GuiElectric {
 
     GL11.glDisable(GL11.GL_LIGHTING);
     GL11.glDisable(GL11.GL_DEPTH_TEST);
+
     if (tex.shouldProcess()) {
       drawCenteredString(fontRendererObj, Funcs.getLoc("machine.xray.searching"), xSize / 2, 56,
                          0xffffff);
@@ -99,6 +100,9 @@ public final class GuiXray extends GuiElectric {
         }
       }
     }
+
+    GL11.glEnable(GL11.GL_LIGHTING);
+    GL11.glEnable(GL11.GL_DEPTH_TEST);
   }
 
   @Override

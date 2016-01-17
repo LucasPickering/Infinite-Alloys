@@ -31,7 +31,6 @@ public final class GuiEnergyStorage extends GuiElectric {
                                               Funcs.abbreviateNum(tees.getMaxRK())),
                topLeft.x + 70, topLeft.y + 26, 0xffffff);
 
-    GL11.glEnable(GL11.GL_LIGHTING);
   }
 
   @Override
